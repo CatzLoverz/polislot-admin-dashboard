@@ -12,15 +12,21 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $table = 'users';
+    protected $primaryKey = 'user_id';
+    public $timestamps = true;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'name',
+        'avatar',
+        'role'
     ];
 
     /**
@@ -45,4 +51,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relationships
+    
 }

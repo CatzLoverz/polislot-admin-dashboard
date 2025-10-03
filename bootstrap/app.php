@@ -12,7 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            # Default Laravel Middleware
+            'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+            # Custom Middleware
+            'setDBConnByRole' => App\Http\Middleware\SetDBConnByRole::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
