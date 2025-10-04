@@ -15,8 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             # Default Laravel Middleware
             'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+            'guest' => \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class,
             # Custom Middleware
-            'setDBConnByRole' => App\Http\Middleware\SetDBConnByRole::class
+            'setDBConnByRole' => App\Http\Middleware\SetDBConnByRole::class,
+            'forcePasswordChange' => App\Http\Middleware\ForcePasswordChange::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
