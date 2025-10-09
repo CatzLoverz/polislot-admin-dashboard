@@ -19,7 +19,6 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user']);
             $table->string('name');
             $table->string('avatar')->nullable();
-            $table->boolean('pass_change')->default(false);
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
 

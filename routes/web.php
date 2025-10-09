@@ -11,20 +11,26 @@ Route::get('/', function () {
 });
 
 Route::middleware('guest')->group(function () {
-    // Rute Registrasi
-    Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register.show');
-    Route::post('register', [AuthController::class, 'register'])->name('register.attempt');
-
     // Rute Login
     Route::get('login', [AuthController::class, 'showLoginForm'])->name('login.show');
     Route::post('login', [AuthController::class, 'login'])->name('login.attempt');
 
-    // Rute Verifikasi OTP
-    Route::get('otp-verification', [AuthController::class, 'showOtpForm'])->name('otp.show');
-    Route::post('otp-verification', [AuthController::class, 'verifyOtp'])->name('otp.verify');
+    // Rute Registrasi
+    Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register.show');
+    Route::post('register', [AuthController::class, 'register'])->name('register.attempt');
+
+    // Rute Verifikasi Register OTP
+    Route::get('register-otp-verification', [AuthController::class, 'showRegisterOtpForm'])->name('otp_register.show');
+    Route::post('register-otp-verification', [AuthController::class, 'verifyRegisterOtp'])->name('otp_register.verify');
+
+    // Rute Forgot Password
+    Route::get('forgot-pass', [AuthController::class, 'showForgotPasswordForm'])->name('forgot_pass.show');
+    Route::post('forgot-pass', [AuthController::class, 'sendResetOtp'])->name('forgot_pass.otp');
+
+    Route::post('resend-otp' ,[AuthController::class, 'resendOtp'])->name('resendOtp');
 });
 
-Route::middleware(['auth', 'setDBConnByRole', 'forcePasswordChange'])->group(function () {
+Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
     // Rute Logout
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     
@@ -35,7 +41,7 @@ Route::middleware(['auth', 'setDBConnByRole', 'forcePasswordChange'])->group(fun
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::middleware(['can:access-admin-features'])->group(function () {
+    Route::prefix('admin')->as('admin.')->middleware(['can:access-admin-features'])->group(function () {
         // placeholder
     });
 });

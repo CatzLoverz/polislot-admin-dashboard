@@ -33,11 +33,6 @@
                                 </ul>
                             </div>
                         @endif
-                        @if(!Auth::user()->pass_change)
-                            <div class="alert alert-warning" role="alert">
-                                <strong><i class="fas fa-exclamation-triangle"></i> Tindakan Diperlukan:</strong> Anda harus mengganti password default Anda sebelum dapat mengakses fitur lain.
-                            </div>
-                        @endif
 
                         <div class="row">
                             <div class="col-md-3 text-center align-self-start">
@@ -171,8 +166,9 @@
 {{-- Style khusus untuk halaman profil --}}
 <style>
     /* Mengatur tampilan form yang terkunci/readonly */
-    .form-group-locked .form-control[readonly] { background-color: #f0f1f5 !important; cursor: not-allowed; }
-    .form-group-locked label[for="image"] { cursor: not-allowed; opacity: 0.65; pointer-events: none; }
+    /* .form-group-locked .form-control[readonly] { background-color: #f0f1f5 !important; cursor: not-allowed; }
+    .form-group-locked label[for="image"] { cursor: not-allowed; opacity: 0.65; pointer-events: none; } */
+
     /* Style untuk checklist password */
     #password-rules ul { padding-left: 0; }
     #password-rules li { transition: all 0.2s ease-in-out; }
@@ -325,18 +321,18 @@ document.addEventListener('DOMContentLoaded', function() {
      * FITUR 5: PENGUNCIAN FORM JIKA BELUM GANTI PASSWORD
      * Menonaktifkan form informasi pribadi.
      */
-    function setupFormLocking() {
-        // Fungsi ini hanya dijalankan jika kondisi terpenuhi
-        @if(!Auth::user()->pass_change)
-            const personalInfoCard = document.querySelector('#personal-info-card');
-            if (personalInfoCard) {
-                personalInfoCard.querySelectorAll('.form-group').forEach(fg => fg.classList.add('form-group-locked'));
-                personalInfoCard.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]').forEach(input => input.readOnly = true);
-                const avatarInput = document.getElementById('image');
-                if(avatarInput) avatarInput.disabled = true;
-            }
-        @endif
-    }
+    // function setupFormLocking() {
+    //     // Fungsi ini hanya dijalankan jika kondisi terpenuhi
+    //     @if(!Auth::user()->pass_change)
+    //         const personalInfoCard = document.querySelector('#personal-info-card');
+    //         if (personalInfoCard) {
+    //             personalInfoCard.querySelectorAll('.form-group').forEach(fg => fg.classList.add('form-group-locked'));
+    //             personalInfoCard.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]').forEach(input => input.readOnly = true);
+    //             const avatarInput = document.getElementById('image');
+    //             if(avatarInput) avatarInput.disabled = true;
+    //         }
+    //     @endif
+    // }
 
 
     // =================================================================
@@ -346,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupPasswordVisibilityToggle();
     setupPasswordStrengthMeter();
     setupRealtimePasswordConfirmation();
-    setupFormLocking();
+    // setupFormLocking();
 
 });
 </script>

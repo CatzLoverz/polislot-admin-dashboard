@@ -112,11 +112,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             @if (session('swal_success_crud'))
                 Swal.fire({
-                    title: 'Registrasi Berhasil!',
+                    title: 'Berhasil!',
                     text: "{{ session('swal_success_crud') }}",
                     icon: 'success',
-                    timer: 2000, // Notifikasi akan hilang setelah 2 detik
-                    showConfirmButton: false, // Tampilkan tombol OK jika ingin pengguna menutup manual -catz: ngga perlu
+                    timer: 2000,
+                    showConfirmButton: false, 
                     timerProgressBar: true
                 });
             @endif

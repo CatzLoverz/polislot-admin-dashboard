@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest' => \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class,
             # Custom Middleware
             'setDBConnByRole' => App\Http\Middleware\SetDBConnByRole::class,
-            'forcePasswordChange' => App\Http\Middleware\ForcePasswordChange::class,
+            // 'forcePasswordChange' => App\Http\Middleware\ForcePasswordChange::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

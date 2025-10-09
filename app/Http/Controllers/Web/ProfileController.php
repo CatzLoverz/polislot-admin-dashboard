@@ -38,34 +38,22 @@ class ProfileController extends Controller
         $user = Auth::user();
         Log::info('[ProfileController@update] Menerima permintaan update profil.', ['user_id' => $user->user_id]);
 
-        $rules = [];
-        $isPasswordChangeForced = !$user->pass_change;
-
-        // --- 2. Buat satu set aturan password yang lengkap dan bisa dipakai ulang ---
         $passwordRules = [
             'required',
             'confirmed',
             new NotCurrentPassword(), // Aturan: Tidak boleh sama dengan password lama
-            PasswordRule::min(8)->mixedCase()->numbers()->symbols(), // Aturan: Komposisi karakter
-            new ZxcvbnPassword(3), // Aturan: Kekuatan minimal 'Kuat' (skor 3)
+            PasswordRule::min(8)->mixedCase()->numbers()->symbols(), 
+            new ZxcvbnPassword(2), // Aturan: Kekuatan minimal 'medium' (skor 2)
         ];
 
-        // Jika pengguna dipaksa ganti password, HANYA validasi password
-        if ($isPasswordChangeForced) {
-            $rules = [
-                'current_password' => ['required', 'current_password'],
-                'new_password' => $passwordRules, // <-- 3. Terapkan aturan password
-            ];
-        } else {
-            // Jika tidak, jalankan validasi normal
-            $rules = [
-                'name' => ['required', 'string', 'max:255'],
-                'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            ];
-            if ($request->filled('new_password')) {
-                $rules['current_password'] = ['required', 'current_password'];
-                $rules['new_password'] = $passwordRules; // <-- 3. Terapkan aturan password
-            }
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+        ];
+
+        if ($request->filled('new_password')) {
+            $rules['current_password'] = ['required', 'current_password'];
+            $rules['new_password'] = $passwordRules; // <-- 3. Terapkan aturan password
         }
 
         DB::beginTransaction();
@@ -74,37 +62,29 @@ class ProfileController extends Controller
             Log::info('[ProfileController@update] Validasi data profil berhasil.', ['user_id' => $user->user_id]);
 
             // HANYA update data pribadi jika TIDAK dalam mode paksa ganti password
-            if (!$isPasswordChangeForced) {
-                $user->name = $validatedData['name'];
 
-                if ($request->hasFile('avatar')) {
-                    Log::info('[ProfileController@update] Mengunggah avatar baru.', ['user_id' => $user->user_id]);
-                    if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
-                        Storage::disk('public')->delete($user->avatar);
-                    }
-                    $path = $request->file('avatar')->store('avatars', 'public');
-                    $user->avatar = $path;
+            if ($request->hasFile('avatar')) {
+                Log::info('[ProfileController@update] Mengunggah avatar baru.', ['user_id' => $user->user_id]);
+                if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
+                    Storage::disk('public')->delete($user->avatar);
                 }
+                $path = $request->file('avatar')->store('avatars', 'public');
+                $user->avatar = $path;
             }
             
-            // Selalu update password jika diisi
+            // update password jika diisi
             if (isset($validatedData['new_password'])) {
                 $user->password = Hash::make($validatedData['new_password']);
-                $user->pass_change = true; 
-                Log::info('[ProfileController@update] Password dan status `pass_change` diupdate.', ['user_id' => $user->user_id]);
+                Log::info('[ProfileController@update] Password diupdate.', ['user_id' => $user->user_id]);
             }
 
+            /** @var \App\Models\User $user */
             $user->save();
-            Auth::login($user); // Refresh sesi
+
+            Auth::login($user);
             DB::commit();
 
             Log::info('[ProfileController@update] SUKSES: Profil berhasil diperbarui.', ['user_id' => $user->user_id]);
-            
-            // Arahkan ke dashboard jika ini adalah proses ganti password paksa
-            if ($isPasswordChangeForced) {
-                return redirect()->route('dashboard')->with('swal_success_crud', 'Password berhasil diubah! Selamat datang di dashboard.');
-            }
-
             return redirect()->route('profile.edit')->with('swal_success_crud', 'Profil Anda berhasil diperbarui.');
 
         } catch (ValidationException $e) {

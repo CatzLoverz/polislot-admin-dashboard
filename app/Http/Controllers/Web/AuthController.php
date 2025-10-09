@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules\Password as PasswordRule;
+use App\Rules\ZxcvbnPassword;
 
 class AuthController extends Controller
 {
     // --- BAGIAN REGISTRASI & OTP ---
-
     public function showRegisterForm()
     {
         Log::info('[AuthController@showRegisterForm] Menampilkan halaman registrasi.');
@@ -31,17 +31,21 @@ class AuthController extends Controller
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users,email',
+                'password' => [
+                    'required', 
+                    'confirmed', 
+                    PasswordRule::min(8)->mixedCase()->numbers()->symbols(), 
+                    new ZxcvbnPassword(2)
+                ]
             ]);
 
-            $defaultPassword = Str::slug($validatedData['name'], '_') . '_123';
             $otpCode = rand(100000, 999999);
 
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
-                'password' => Hash::make($defaultPassword),
+                'password' => Hash::make($validatedData['password']),
                 'role' => 'user',
-                'pass_change' => false,
                 'otp_code' => $otpCode,
                 'otp_expires_at' => Carbon::now()->addMinutes(10),
             ]);
@@ -60,19 +64,19 @@ class AuthController extends Controller
         }
     }
 
-    public function showOtpForm()
+    public function showRegisterOtpForm()
     {
         if (!session('email_for_otp_verification')) {
             return redirect()->route('register.show');
         }
-        Log::info('[AuthController@showOtpForm] Menampilkan halaman verifikasi OTP.');
-        return view('Contents.Auth.otp');
+        Log::info('[AuthController@showRegisterOtpForm] Menampilkan halaman verifikasi OTP.');
+        return view('Contents.Auth.otp_in');
     }
 
-    public function verifyOtp(Request $request)
+    public function verifyRegisterOtp(Request $request)
     {
         $email = session('email_for_otp_verification');
-        Log::info('[AuthController@verifyOtp] Menerima permintaan verifikasi OTP.', ['email' => $email]);
+        Log::info('[AuthController@verifyRegisterOtp] Menerima permintaan verifikasi OTP.', ['email' => $email]);
         try {
             $request->validate(['otp' => 'required|numeric|digits:6']);
             $user = User::where('email', $email)->firstOrFail();
@@ -92,11 +96,102 @@ class AuthController extends Controller
             session()->forget('email_for_otp_verification');
             Auth::login($user);
 
-            Log::info('[AuthController@verifyOtp] SUKSES: Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
+            Log::info('[AuthController@verifyRegisterOtp] SUKSES: Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
             return redirect()->route('dashboard')->with('swal_success_login', 'Verifikasi berhasil! Selamat datang.');
         } catch (\Exception $e) {
-            Log::error('[AuthController@verifyOtp] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('[AuthController@verifyRegisterOtp] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
+        }
+    }
+
+    public function resendOtp(Request $request)
+    {
+        $email = session('email_for_otp_verification');
+        if (!$email) return redirect()->route('register.show')->with('swal_error_crud', 'Sesi Anda telah berakhir.');
+        
+        Log::info('[AuthController@resendOtp] Menerima permintaan kirim ulang OTP registrasi.', ['email' => $email]);
+        try {
+            $user = User::where('email', $email)->firstOrFail();
+            $newOtpCode = rand(100000, 999999);
+            $user->otp_code = $newOtpCode;
+            $user->otp_expires_at = Carbon::now()->addMinutes(10);
+            $user->save();
+
+            Mail::to($user->email)->send((new SendOtpMail($newOtpCode))->view('emails.registration_otp'));
+            Log::info('[AuthController@resendOtp] SUKSES: OTP registrasi baru dikirim.', ['user_id' => $user->user_id]);
+            return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim.');
+        } catch (\Exception $e) {
+            Log::error('[AuthController@resendOtp] GAGAL.', ['email' => $email, 'error' => $e->getMessage()]);
+            return back()->with('swal_error_crud', 'Gagal mengirim ulang OTP.');
+        }
+    }
+
+    public function showForgotPasswordForm()
+    {
+        Log::info('[AuthController@showForgotPasswordForm] Menampilkan halaman lupa password.');
+        return view('Contents.Auth.forgot_pass');
+    }
+
+    public function sendResetOtp(Request $request)
+    {
+        Log::info('[AuthController@sendResetOtp] Menerima permintaan reset password.');
+        try {
+            $validatedData = $request->validate(['email' => 'required|email|exists:users,email']);
+            $user = User::where('email', $validatedData['email'])->first();
+            $otpCode = rand(100000, 999999);
+
+            $user->otp_code = $otpCode;
+            $user->otp_expires_at = Carbon::now()->addMinutes(10);
+            $user->save();
+
+            Log::info('Mengirim OTP reset password.', ['user_id' => $user->user_id]);
+            Mail::to($user->email)->send((new SendOtpMail($otpCode))->view('emails.reset_password_otp'));
+            
+            $request->session()->put('email_for_password_reset', $user->email);
+            return redirect()->route('password.reset.show')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
+        } catch (\Exception $e) {
+            Log::error('[AuthController@sendResetOtp] Gagal.', ['error' => $e->getMessage()]);
+            return back()->with('swal_error_crud', 'Gagal mengirim OTP.');
+        }
+    }
+
+    public function showResetPasswordForm()
+    {
+        if (!session('email_for_password_reset')) return redirect()->route('password.request');
+        Log::info('[AuthController@showResetPasswordForm] Menampilkan halaman reset password.');
+        return view('Contents.Auth.passwords.reset');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $email = session('email_for_password_reset');
+        Log::info('[AuthController@resetPassword] Memproses reset password.', ['email' => $email]);
+        try {
+            $request->validate([
+                'otp' => 'required|numeric|digits:6',
+                'password' => [
+                    'required', 
+                    'confirmed', 
+                    PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
+                    new ZxcvbnPassword(2)
+                ],
+            ]);
+            
+            $user = User::where('email', $email)->firstOrFail();
+            if ($user->otp_code !== $request->otp || Carbon::now()->gt($user->otp_expires_at)) {
+                return back()->withErrors(['otp' => 'Kode OTP tidak valid atau telah kedaluwarsa.']);
+            }
+
+            $user->password = Hash::make($request->password);
+            $user->otp_code = null;
+            $user->otp_expires_at = null;
+            $user->save();
+
+            session()->forget('email_for_password_reset');
+            return redirect()->route('login.show')->with('swal_success_crud', 'Password berhasil direset! Silakan login.');
+        } catch (\Exception $e) {
+            Log::error('[AuthController@resetPassword] Gagal.', ['error' => $e->getMessage()]);
+            return back()->with('swal_error_crud', 'Gagal mereset password.');
         }
     }
 

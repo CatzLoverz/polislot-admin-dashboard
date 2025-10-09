@@ -20,7 +20,6 @@ class User extends Authenticatable
         'role',
         'name',
         'avatar',
-        'pass_change',
         'otp_code',        
         'otp_expires_at',
     ];

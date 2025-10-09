@@ -41,7 +41,7 @@
         {{-- Header --}}
         <div class="main-header">
             <div class="logo-header" data-background-color="dark">
-                <a href="#" class="logo"> <img src="{{ asset('assets/img/Polibatam.png') }}" alt="Polibatam Logo"
+                <a href="#" class="logo"> <img src="{{ asset('assets/img/PoliSlot.png') }}" alt="Polibatam Logo"
                         class="navbar-brand" style="width: 195px; height: 40px;" />
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
@@ -54,8 +54,7 @@
                 <div class="container-fluid">
                     <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
                         <li class="nav-item dropdown hidden-caret">
-                            <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"
-                                aria-expanded="false">
+                            <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
                                 <div class="avatar-sm">
                                     <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/img/default_avatar.jpg') }}"
                                         alt="User Avatar" class="avatar-img rounded-circle" />
@@ -79,9 +78,9 @@
                                     </li>
                                     <li>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a> 
+                                            <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a> 
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#"
+                                            <a class="dropdown-item" href="#"
                                             onclick="event.preventDefault(); document.getElementById('logout-form-dropdown').submit();">
                                             Keluar
                                         </a>
@@ -149,10 +148,6 @@
                                     <ul class="nav nav-collapse">
                                         <li class="{{ Route::is('admin.daily.*') ? 'active' : '' }}">
                                             <a href="#"> <span class="sub-item">Misi Harian</span>
-                                            </a>
-                                        </li>
-                                        <li class="{{ Route::is('admin.weekly.*') ? 'active' : '' }}">
-                                            <a href="#"> <span class="sub-item">Misi Mingguan</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.points.*') ? 'active' : '' }}">
@@ -278,7 +273,6 @@
 
             $(document).on('submit', '.delete-form', function(event) {
                 event.preventDefault(); // Mencegah form dikirim langsung
-
                 const form = this; // 'this' merujuk pada elemen <form>
                 const entityName = $(form).data('entity-name') || 'data ini';
 
