@@ -46,9 +46,14 @@
                                 <i class="fa fa-eye" id="togglePasswordIcon"></i>
                             </button>
                         </div>
-                            @error('password') {{-- Error spesifik untuk password jika validasi Laravel gagal --}}
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
+                        @error('password')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+
+                        {{-- 🔹 Tambahan tombol "Lupa Password?" --}}
+                        <div class="text-end mt-2">
+                            <a href="{{ route('password.request') }}" class="small fw-bold mt-3 pt-1 mb-0 link-danger">Lupa Password?</a>
+                        </div>
                     </div>
 
                     <div class="text-left text-lg-start mt-3 pt-2">

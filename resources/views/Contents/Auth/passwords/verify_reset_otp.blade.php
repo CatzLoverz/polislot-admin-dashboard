@@ -1,15 +1,11 @@
 @extends('Layouts.auth_layout')
 
-{{-- Judul Halaman --}}
-@section('title', 'Verifikasi OTP')
-
-{{-- Menggunakan class .container pada content-wrap --}}
+@section('title', 'Verifikasi OTP Reset Password')
 @section('use_container', true)
 
-{{-- CSS Khusus untuk Halaman OTP --}}
 @push('styles')
 <style>
-    .otp-form-container {
+ .otp-form-container {
         max-width: 500px;
         margin: 40px auto;
     }
@@ -47,26 +43,20 @@
 </style>
 @endpush
 
-
-{{-- Konten Utama Halaman --}}
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
         <div class="otp-form-container">
             <div class="card">
                 <div class="card-header text-center">
-                    <h4 class="card-title">Verifikasi Kode OTP</h4>
-                    <p class="card-category mb-0">Masukkan 6 digit kode yang telah kami kirimkan.</p>
+                    <h4 class="card-title">Verifikasi OTP Reset Password</h4>
+                    <p class="card-category mb-0">Masukkan 6 digit kode OTP yang dikirim ke email Anda.</p>
                 </div>
                 <div class="card-body">
-                    {{-- Ganti action dengan route yang sesuai di proyek Anda --}}
-                    <form id="otp-form" method="POST" action="{{ route('otp_register.verify') }}">
+                    <form id="otp-form" method="POST" action="{{ route('password.otp.verify') }}">
                         @csrf
-                        {{-- Tambahkan input lain jika diperlukan, contoh: email atau no. hp --}}
-                        {{-- <input type="hidden" name="email" value="{{ $email }}"> --}}
-                        
                         <div class="form-group">
-                            <label for="otp" class="mb-3">Kode Verifikasi</label>
+                            <label for="otp" class="mb-3">Kode OTP</label>
                             <div class="otp-input-container">
                                 <input name="otp_digits[]" type="number" class="form-control otp-input" required>
                                 <input name="otp_digits[]" type="number" class="form-control otp-input" required>
@@ -77,23 +67,22 @@
                             </div>
                         </div>
 
-                        {{-- Hidden input untuk menampung kode OTP gabungan --}}
                         <input type="hidden" name="otp" id="otp-value">
 
                         <div class="form-group mt-4">
                             <button type="submit" class="btn btn-primary btn-block btn-round">
                                 <span class="spinner-border spinner-border-sm loading-indicator" role="status" aria-hidden="true"></span>
-                                Verifikasi
+                                Verifikasi OTP
                             </button>
                         </div>
                     </form>
 
                     <div class="text-center mt-3">
-                         {{-- Ganti action dengan route yang sesuai di proyek Anda --}}
-                        <form method="POST" action="{{ route('resendOtp') }}" style="display: inline;">
+                        <form method="POST" action="{{ route('resendResetOtp') }}" style="display: inline;">
                             @csrf
-                            {{-- <input type="hidden" name="email" value="{{ $email }}"> --}}
-                            <p>Tidak menerima kode? <button type="submit" class="btn btn-link p-0">Kirim Ulang</button></p>
+                            <p>Tidak menerima kode? 
+                                <button type="submit" class="btn btn-link p-0">Kirim Ulang</button>
+                            </p>
                         </form>
                     </div>
                 </div>
@@ -103,11 +92,9 @@
 </div>
 @endsection
 
-
-{{-- JavaScript Khusus untuk Halaman OTP --}}
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('otp-form');
         const inputs = [...form.querySelectorAll('.otp-input')];
         const otpValueInput = document.getElementById('otp-value');

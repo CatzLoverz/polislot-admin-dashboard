@@ -22,6 +22,8 @@ class User extends Authenticatable
         'avatar',
         'otp_code',        
         'otp_expires_at',
+        'failed_attempts',
+        'locked_until',
     ];
 
     protected $hidden = [
@@ -33,6 +35,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'locked_until'      => 'datetime',
             'password' => 'hashed',
         ];
     }

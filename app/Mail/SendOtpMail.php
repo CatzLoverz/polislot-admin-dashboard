@@ -30,7 +30,7 @@ class SendOtpMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.send_otp',
+            view: 'emails.registration_otp',
         );
     }
 
