@@ -14,10 +14,12 @@ class SendOtpMail extends Mailable
     use Queueable, SerializesModels;
 
     public $otpCode;
+    public $viewName;
 
-    public function __construct($otpCode)
+    public function __construct($otpCode, $viewName)
     {
         $this->otpCode = $otpCode;
+        $this->viewName = $viewName;
     }
 
     public function envelope(): Envelope
@@ -30,7 +32,7 @@ class SendOtpMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.registration_otp',
+            view: $this->viewName,
         );
     }
 

@@ -1,10 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\Admin\InfoBoardController;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Controllers\Web\Admin\ParkAreaController;
+
 
 Route::get('/', function () {
     return view('test');
@@ -22,6 +25,7 @@ Route::middleware('guest')->group(function () {
     // Rute Verifikasi Register OTP
     Route::get('register-otp-verification', [AuthController::class, 'showRegisterOtpForm'])->name('otp_register.show');
     Route::post('register-otp-verification', [AuthController::class, 'verifyRegisterOtp'])->name('otp_register.verify');
+    Route::post('resend-register-otp', [AuthController::class, 'resendOtp'])->name('resendRegisterOtp');
 
     // Rute Forgot Password
     Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
@@ -45,6 +49,9 @@ Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::prefix('admin')->as('admin.')->middleware(['can:access-admin-features'])->group(function () {
-        // placeholder
+        
+        Route::resource('park', ParkAreaController::class);
+
+        Route::resource('board', InfoBoardController::class);
     });
 });

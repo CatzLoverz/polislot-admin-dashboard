@@ -131,12 +131,12 @@
                                 <h4 class="text-section">Kelola</h4>
                             </li>
                             <li class="nav-item {{ Route::is('admin.park.*') ? 'active' : '' }}">
-                                <a href="#"> <i class="fas fa-id-badge"></i>
+                                <a href="{{ Route('admin.park.index') }}"> <i class="fas fa-id-badge"></i>
                                     <p>Manajemen Area Parkir</p>
                                 </a>
                             </li>
                             <li class="nav-item {{ Route::is('admin.board.*') ? 'active' : '' }}">
-                                <a href="#"> <i class="fas fa-bullhorn"></i>
+                                <a href="{{ Route('admin.board.index') }}"> <i class="fas fa-bullhorn"></i>
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>

@@ -90,7 +90,7 @@
 
                     <div class="text-center mt-3">
                          {{-- Ganti action dengan route yang sesuai di proyek Anda --}}
-                        <form method="POST" action="{{ route('resendOtp') }}" style="display: inline;">
+                        <form method="POST" action="{{ route('resendRegisterOtp') }}" style="display: inline;">
                             @csrf
                             {{-- <input type="hidden" name="email" value="{{ $email }}"> --}}
                             <p>Tidak menerima kode? <button type="submit" class="btn btn-link p-0">Kirim Ulang</button></p>

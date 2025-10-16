@@ -26,7 +26,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         Log::info('[ProfileController@edit] Menampilkan form edit profil.', ['user_id' => $user->user_id]);
         
-        return view('Contents.profile', compact('user'));
+        return view('Contents.Profile.index', compact('user'));
     }
 
 

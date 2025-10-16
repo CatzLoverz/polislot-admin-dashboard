@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Info_board;
@@ -14,5 +14,7 @@ use Illuminate\Validation\ValidationException;
 
 class InfoBoardController extends Controller
 {
-    
+    public function index(){
+        return view('Contents.InfoBoard.index');
+    }
 }
