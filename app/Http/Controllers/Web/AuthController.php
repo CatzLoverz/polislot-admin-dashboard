@@ -265,52 +265,72 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $email = $request->input('email');
-        Log::info("[AuthController@login] Menerima percobaan login untuk email: {$email}");
-        try {
-            $credentials = $request->validate(['email' => 'required|string|email', 'password' => 'required|string']);
-            $user = User::where('email', $email)->first();
+{
+    $email = $request->input('email');
+    Log::info("[AuthController@login] Menerima percobaan login untuk email: {$email}");
 
-            if (!$user) {
-                return back()->with('swal_error_crud', 'Email tidak ditemukan.')->withInput($request->only('email'));
-            }
+    try {
+        $credentials = $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string'
+        ]);
 
-            // Logika baru: Mencegah login jika belum verifikasi email
-            if (is_null($user->email_verified_at)) {
-                Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
-                $request->session()->put('email_for_otp_verification', $user->email);
-                return back()
-                    ->with('swal_error_crud', 'Akun Anda belum diverifikasi. Silakan Lakukan Pendaftaran Ulang.');
-            }
+        $user = User::where('email', $email)->first();
 
-            if ($user->locked_until && now()->lt($user->locked_until)) {
-                $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
-                return back()->with('swal_error_crud', "Akun Anda dikunci. Coba lagi dalam {$minutes} menit.")->withInput($request->only('email'));
-            }
-
-            if (Auth::attempt($credentials, $request->filled('remember'))) {
-                $request->session()->regenerate();
-                $user->update(['failed_attempts' => 0, 'locked_until' => null]);
-                Log::info('[AuthController@login] SUKSES.', ['user_id' => $user->user_id]);
-                return redirect()->intended(route('dashboard'))->with('swal_success_login', 'Login Berhasil! Selamat datang, ' . $user->name . '.');
-            }
-
-            $user->increment('failed_attempts');
-            Log::warning('[AuthController@login] GAGAL: Password salah.', ['attempts' => $user->failed_attempts]);
-            if ($user->failed_attempts >= 3) {
-                $lockMinutes = 15;
-                $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
-                return back()->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")->withInput($request->only('email'));
-            }
-            $sisa = 3 - $user->failed_attempts;
-            return back()->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")->withInput($request->only('email'));
-
-        } catch (\Exception $e) {
-            Log::error('[AuthController@login] ERROR SISTEM.', ['error' => $e->getMessage()]);
-            return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.')->withInput($request->only('email'));
+        if (!$user) {
+            return back()->with('swal_error_crud', 'Email tidak ditemukan.')->withInput($request->only('email'));
         }
+
+        // ✅ Logika baru: Admin tidak perlu verifikasi akun
+        if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
+            Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
+            $request->session()->put('email_for_otp_verification', $user->email);
+            return back()
+                ->with('swal_error_crud', 'Akun Anda belum diverifikasi. Silakan Lakukan Pendaftaran Ulang.');
+        }
+
+        // 🔒 Cek apakah akun sedang dikunci
+        if ($user->locked_until && now()->lt($user->locked_until)) {
+            $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
+            return back()->with('swal_error_crud', "Akun Anda dikunci. Coba lagi dalam {$minutes} menit.")
+                ->withInput($request->only('email'));
+        }
+
+        // 🔐 Proses login
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
+            $request->session()->regenerate();
+            $user->update(['failed_attempts' => 0, 'locked_until' => null]);
+
+            Log::info('[AuthController@login] SUKSES.', [
+                'user_id' => $user->user_id,
+                'role' => $user->role
+            ]);
+
+            return redirect()->intended(route('dashboard'))
+                ->with('swal_success_login', 'Login Berhasil! Selamat datang, ' . $user->name . '.');
+        }
+
+        // ❌ Password salah
+        $user->increment('failed_attempts');
+        Log::warning('[AuthController@login] GAGAL: Password salah.', ['attempts' => $user->failed_attempts]);
+
+        if ($user->failed_attempts >= 3) {
+            $lockMinutes = 15;
+            $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
+            return back()->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")
+                ->withInput($request->only('email'));
+        }
+
+        $sisa = 3 - $user->failed_attempts;
+        return back()->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")
+            ->withInput($request->only('email'));
+
+    } catch (\Exception $e) {
+        Log::error('[AuthController@login] ERROR SISTEM.', ['error' => $e->getMessage()]);
+        return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.')
+            ->withInput($request->only('email'));
     }
+}
 
     public function logout(Request $request)
     {
