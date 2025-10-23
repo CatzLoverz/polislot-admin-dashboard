@@ -28,7 +28,6 @@
         border-radius: 8px;
         background-color: #f8f9fa;
         transition: all 0.2s ease-in-out;
-        /* Hapus panah di input number */
         -moz-appearance: textfield;
     }
     .otp-input::-webkit-inner-spin-button,
@@ -55,12 +54,12 @@
         <div class="otp-form-container">
             <div class="card">
                 <div class="card-header text-center">
-                    <h4 class="card-title">Verifikasi Kode OTP</h4>
-                    <p class="card-category mb-0">Masukkan 6 digit kode yang telah kami kirimkan.</p>
+                    <h4 class="card-title">Verifikasi Kode OTP Registrasi</h4>
+                    <p class="card-category mb-0">Masukkan 6 digit kode yang telah kami kirimkan ke Email Anda.</p>
                 </div>
                 <div class="card-body">
                     {{-- Ganti action dengan route yang sesuai di proyek Anda --}}
-                    <form id="otp-form" method="POST" action="{{ route('otp_register.verify') }}">
+                    <form id="otp-form" method="POST" action="{{ route('register_otp.verify') }}">
                         @csrf
                         {{-- Tambahkan input lain jika diperlukan, contoh: email atau no. hp --}}
                         {{-- <input type="hidden" name="email" value="{{ $email }}"> --}}
@@ -90,7 +89,7 @@
 
                     <div class="text-center mt-3">
                          {{-- Ganti action dengan route yang sesuai di proyek Anda --}}
-                        <form method="POST" action="{{ route('resendRegisterOtp') }}" style="display: inline;">
+                        <form method="POST" action="{{ route('register_otp.resend') }}" style="display: inline;">
                             @csrf
                             {{-- <input type="hidden" name="email" value="{{ $email }}"> --}}
                             <p>Tidak menerima kode? <button type="submit" class="btn btn-link p-0">Kirim Ulang</button></p>
@@ -150,14 +149,15 @@
             // Gabungkan semua digit sebelum form disubmit
             const otp = inputs.map(input => input.value).join('');
             
+            // Memastikan semua 6 digit telah diisi
             if (otp.length === 6) {
                 otpValueInput.value = otp;
-                // Tampilkan loading indicator saat submit
                 loadingIndicator.style.display = 'inline-block';
                 submitButton.disabled = true;
-                return true; // Lanjutkan submit
+                return true;
             } else {
-                e.preventDefault(); // Hentikan submit jika OTP tidak lengkap
+                //Jika tidak lengkap menampilkan alert
+                e.preventDefault(); 
                 Swal.fire({
                     title: 'Gagal!',
                     text: "Silakan masukkan 6 digit kode OTP dengan lengkap.",

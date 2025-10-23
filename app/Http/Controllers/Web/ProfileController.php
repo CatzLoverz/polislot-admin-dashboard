@@ -61,8 +61,6 @@ class ProfileController extends Controller
             $validatedData = $request->validate($rules);
             Log::info('[ProfileController@update] Validasi data profil berhasil.', ['user_id' => $user->user_id]);
 
-            // HANYA update data pribadi jika TIDAK dalam mode paksa ganti password
-
             if ($request->hasFile('avatar')) {
                 Log::info('[ProfileController@update] Mengunggah avatar baru.', ['user_id' => $user->user_id]);
                 if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {

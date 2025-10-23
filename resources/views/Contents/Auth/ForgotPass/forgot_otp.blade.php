@@ -5,7 +5,7 @@
 
 @push('styles')
 <style>
- .otp-form-container {
+    .otp-form-container {
         max-width: 500px;
         margin: 40px auto;
     }
@@ -50,10 +50,10 @@
             <div class="card">
                 <div class="card-header text-center">
                     <h4 class="card-title">Verifikasi OTP Reset Password</h4>
-                    <p class="card-category mb-0">Masukkan 6 digit kode OTP yang dikirim ke email Anda.</p>
+                    <p class="card-category mb-0">Masukkan 6 digit kode yang telah kami kirimkan ke Email Anda.</p>
                 </div>
                 <div class="card-body">
-                    <form id="otp-form" method="POST" action="{{ route('password.otp.verify') }}">
+                    <form id="otp-form" method="POST" action="{{ route('forgot_otp.verify') }}">
                         @csrf
                         <div class="form-group">
                             <label for="otp" class="mb-3">Kode OTP</label>
@@ -78,7 +78,7 @@
                     </form>
 
                     <div class="text-center mt-3">
-                        <form method="POST" action="{{ route('resendResetOtp') }}" style="display: inline;">
+                        <form method="POST" action="{{ route('forgot_otp.resend') }}" style="display: inline;">
                             @csrf
                             <p>Tidak menerima kode? 
                                 <button type="submit" class="btn btn-link p-0">Kirim Ulang</button>

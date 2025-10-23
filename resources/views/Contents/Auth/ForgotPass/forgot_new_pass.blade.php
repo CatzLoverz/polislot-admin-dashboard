@@ -41,7 +41,7 @@
             </div>
 
             <div class="card-body">
-                <form action="{{ route('password.reset.submit') }}" method="POST">
+                <form action="{{ route('reset_pass.attempt') }}" method="POST">
                     @csrf
 
                     {{-- Pesan Notifikasi --}}
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="text-center mt-3">
-                        <a href="{{ route('login.show') }}" class="text-danger small">
+                        <a href="{{ route('login.form') }}" class="text-danger small">
                             Kembali ke Login
                         </a>
                     </div>

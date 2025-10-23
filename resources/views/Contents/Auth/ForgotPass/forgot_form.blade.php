@@ -11,7 +11,7 @@
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 
-                <form action="{{ route('password.send.otp') }}" method="POST">
+                <form action="{{ route('forgot.attempt') }}" method="POST">
                     @csrf
                     <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                         <p class="lead fw-normal mb-1 mt-5 me-3">Lupa Password</p>
@@ -39,7 +39,7 @@
                             Kirim Kode OTP ke Email
                         </button>
                         <p class="small fw-bold mt-4 pt-3 mb-2">
-                            Sudah ingat password? <a href="{{ route('login.show') }}" class="link-danger">Masuk di sini</a>
+                            Sudah ingat password? <a href="{{ route('login.form') }}" class="link-danger">Masuk di sini</a>
                         </p>
                         <p class="small fw-bold mt-3 pt-1 mb-0">
                             <a href="{{ url('/') }}" class="link-danger">Kembali ke Beranda</a>

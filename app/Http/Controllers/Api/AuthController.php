@@ -219,7 +219,7 @@ class AuthController extends Controller
         }
     }
 
-   public function login(Request $request): JsonResponse 
+    public function login(Request $request): JsonResponse 
 {
     $email = $request->input('email');
     Log::info("[AuthController@login] Menerima percobaan login (API) untuk email: {$email}");

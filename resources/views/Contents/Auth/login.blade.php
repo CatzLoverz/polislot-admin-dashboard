@@ -24,7 +24,8 @@
                             {{ session('error') }}
                         </div>
                     @endif
-                    @if ($errors->has('auth_error')) {{-- Digunakan untuk menampilkan error 'auth.failed' --}}
+                    {{-- Digunakan untuk menampilkan error 'auth.failed' --}}
+                    @if ($errors->has('auth_error')) 
                         <div class="alert alert-danger">
                             {{ $errors->first('auth_error') }}
                         </div>
@@ -52,13 +53,13 @@
 
                         {{-- 🔹 Tambahan tombol "Lupa Password?" --}}
                         <div class="text-end mt-2">
-                            <a href="{{ route('password.request') }}" class="small fw-bold mt-3 pt-1 mb-0 link-danger">Lupa Password?</a>
+                            <a href="{{ route('forgot.form') }}" class="small fw-bold mt-3 pt-1 mb-0 link-danger">Lupa Password?</a>
                         </div>
                     </div>
 
                     <div class="text-left text-lg-start mt-3 pt-2">
                         <button type="submit" class="btn btn-dark form-control btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;">Masuk</button>
-                        <p class="small fw-bold mt-4 pt-3 mb-2">Tidak punya akun? <a href="{{ route('register.show') }}" class="link-danger">Klik disini</a></p>
+                        <p class="small fw-bold mt-4 pt-3 mb-2">Tidak punya akun? <a href="{{ route('register.form') }}" class="link-danger">Klik disini</a></p>
                         <p class="small fw-bold mt-3 pt-1 mb-0"> <a href="{{ url('/') }}" class="link-danger">Kembali ke Beranda</a></p>
                     </div>
                 </form>

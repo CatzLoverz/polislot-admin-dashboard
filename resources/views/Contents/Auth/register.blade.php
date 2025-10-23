@@ -57,7 +57,7 @@
                             <button type="submit" class="btn btn-dark btn-lg btn-block">Daftar</button>
                         </div>
                         <div class="text-center mt-3">
-                            <p>Sudah punya akun? <a href="{{ route('login.show') }}">Masuk disini</a></p>
+                            <p>Sudah punya akun? <a href="{{ route('login.form') }}">Masuk disini</a></p>
                             <p><a href="{{ url('/') }}">Kembali ke Beranda</a></p>
                         </div>
                     </form>

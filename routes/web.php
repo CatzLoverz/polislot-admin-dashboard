@@ -16,26 +16,31 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function () {
     // Rute Login
-    Route::get('login', [AuthController::class, 'showLoginForm'])->name('login.show');
-    Route::post('login', [AuthController::class, 'login'])->name('login.attempt');
+    Route::get('/login-form', [AuthController::class, 'loginForm'])->name('login.form');
+    Route::post('/login-attempt', [AuthController::class, 'login'])->name('login.attempt');
 
     // Rute Registrasi
-    Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register.show');
-    Route::post('register', [AuthController::class, 'register'])->name('register.attempt');
+    Route::get('/register-form', [AuthController::class, 'registerForm'])->name('register.form');
+    Route::post('/register-attempt', [AuthController::class, 'register'])->name('register.attempt');
 
     // Rute Verifikasi Register OTP
-    Route::get('register-otp-verification', [AuthController::class, 'showRegisterOtpForm'])->name('otp_register.show');
-    Route::post('register-otp-verification', [AuthController::class, 'verifyRegisterOtp'])->name('otp_register.verify');
-    Route::post('resend-register-otp', [AuthController::class, 'resendOtp'])->name('resendRegisterOtp');
+    Route::get('/register-otp-form', [AuthController::class, 'registerOtpForm'])->name('register_otp.form');
+    Route::post('/register-otp-verify', [AuthController::class, 'registerOtpVerify'])->name('register_otp.verify');
+    Route::post('/register-otp-resend', [AuthController::class, 'registerOtpResend'])->name('register_otp.resend');
 
     // Rute Forgot Password
-    Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
-    Route::post('/forgot-password/send-otp', [AuthController::class, 'sendResetOtp'])->name('password.send.otp');
-    Route::get('/password/verify-otp', [AuthController::class, 'showVerifyResetOtpForm'])->name('password.otp.verify.show');
-    Route::post('/password/verify-otp', [AuthController::class, 'verifyResetOtp'])->name('password.otp.verify');
-    Route::get('/reset-password', [AuthController::class, 'showResetPasswordForm'])->name('password.reset.show');
-    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset.submit');
-    Route::post('/resend-reset-otp', [AuthController::class, 'resendResetOtp'])->name('resendResetOtp');
+    // Form & pengiriman OTP forgot password
+    Route::get('/forgot-form', [AuthController::class, 'forgotPasswordForm'])->name('forgot.form');
+    Route::post('/forgot-attempt', [AuthController::class, 'forgotPasswordVerify'])->name('forgot.attempt');
+
+    // Form verifikasi OTP forgot password
+    Route::get('/forgot-otp-form', [AuthController::class, 'forgotPasswordOtpForm'])->name('forgot_otp.form');
+    Route::post('/forgot-otp-verify', [AuthController::class, 'forgotPasswordOtpVerify'])->name('forgot_otp.verify');
+    Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend'])->name('forgot_otp.resend');
+
+    // Form & pengiriman reset password 
+    Route::get('/reset-pass-form', [AuthController::class, 'resetPasswordForm'])->name('reset_pass.form');
+    Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword'])->name('reset_pass.attempt');
 });
 
 Route::middleware(['auth', 'setDBConnByRole'])->group(function () {

@@ -234,7 +234,6 @@
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Notifikasi SweetAlert2 untuk berbagai kondisi
             @if (session('swal_success_login'))
                 Swal.fire({
                     toast: true,
@@ -247,7 +246,7 @@
                 });
             @endif
 
-            @if (session('swal_success_crud')) // Notifikasi umum untuk operasi CRUD
+            @if (session('swal_success_crud'))
                 Swal.fire({
                     title: 'Berhasil!',
                     text: "{{ session('swal_success_crud') }}",
@@ -257,7 +256,7 @@
                 });
             @endif
 
-            @if (session('swal_error_crud')) // Notifikasi error umum untuk operasi CRUD
+            @if (session('swal_error_crud')) 
                 Swal.fire({
                     title: 'Gagal!',
                     text: "{{ session('swal_error_crud') }}",
@@ -277,8 +276,7 @@
             @endif
 
             $(document).on('submit', '.delete-form', function(event) {
-                event.preventDefault(); // Mencegah form dikirim langsung
-                const form = this; // 'this' merujuk pada elemen <form>
+                const form = this;  
                 const entityName = $(form).data('entity-name') || 'data ini';
 
                 Swal.fire({
@@ -292,7 +290,6 @@
                     cancelButtonText: 'Batal',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Jika dikonfirmasi, lanjutkan submit form
                         form.submit();
                     }
                 });
@@ -314,11 +311,9 @@
                 });
             }
 
-            // --- LOGIKA UNTUK TOMBOL RESET FORM (Dibuat lebih umum) ---
             const formWithReset = document.querySelector('form button[type="reset"]');
             if (formWithReset) {
                 formWithReset.closest('form').addEventListener('reset', function() {
-                    // Reset semua preview gambar di dalam form
                     const previews = this.querySelectorAll('img[id^="preview-"]');
                     previews.forEach(preview => {
                         preview.src = '#';

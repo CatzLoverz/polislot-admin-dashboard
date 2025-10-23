@@ -10,14 +10,14 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // Route Registrasi
-Route::post('/register', [AuthController::class, 'register'])->name('register.attempt');
+Route::post('/register', [AuthController::class, 'register']);
 //  Memverifikasi Kode OTP yang dikirim pengguna
-Route::post('/verify-register-otp', [AuthController::class, 'verifyRegisterOtp'])->name('otp_register.verify'); 
+Route::post('/verify-register-otp', [AuthController::class, 'verifyRegisterOtp']);
 // Mengirim ulang Kode OTP 
-Route::post('/resend-register-otp', [AuthController::class, 'resendRegisterOtp'])->name('otp_register.resend');
+Route::post('/resend-register-otp', [AuthController::class, 'resendRegisterOtp']);
 
 // Route Login
-Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+Route::post('/login', [AuthController::class, 'login']);
 // Mengirim Kode OTP ke email pengguna
 Route::post('/password/send-reset-otp', [AuthController::class, 'sendResetOtp'])->name('password.send_otp');
 // Mengirim ulang Kode OTP 
@@ -29,7 +29,7 @@ Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('
 
 Route::middleware('setDBConnByRole', 'auth:sanctum')->group(function () {
     // Route Logout (Protected, untuk mencabut token)
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout']);
     
     // placeholder
 });

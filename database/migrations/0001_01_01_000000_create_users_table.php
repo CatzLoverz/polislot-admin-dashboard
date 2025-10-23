@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
-
+            $table->integer('failed_attempts')->default(0);
+            $table->timestamp('locked_until')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

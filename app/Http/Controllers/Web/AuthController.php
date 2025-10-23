@@ -18,10 +18,11 @@ use App\Rules\ZxcvbnPassword;
 class AuthController extends Controller
 {
     // --- BAGIAN REGISTRASI & VERIFIKASI OTP ---
+    // (Tidak ada perubahan di bagian ini, sudah sinkron)
 
-    public function showRegisterForm()
+    public function registerForm()
     {
-        Log::info('[AuthController@showRegisterForm] Menampilkan halaman registrasi.');
+        Log::info('[AuthController@registerForm] Menampilkan halaman registrasi.');
         return view('Contents.Auth.register');
     }
 
@@ -60,7 +61,7 @@ class AuthController extends Controller
             Log::info('[AuthController@register] SUKSES: User dibuat, mengirim OTP.', ['user_id' => $user->user_id]);
             Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.registration_otp'));
             $request->session()->put('email_for_otp_verification', $user->email);
-            return redirect()->route('otp_register.show')->with('swal_success_crud', 'Registrasi berhasil! Cek email Anda untuk kode OTP.');
+            return redirect()->route('register_otp.form')->with('swal_success_crud', 'Registrasi berhasil! Cek email Anda untuk kode OTP.');
 
         } catch (ValidationException $e) {
             Log::warning('[AuthController@register] GAGAL: Validasi gagal.', ['errors' => $e->errors()]);
@@ -71,19 +72,19 @@ class AuthController extends Controller
         }
     }
 
-    public function showRegisterOtpForm()
+    public function registerOtpForm()
     {
         if (!session('email_for_otp_verification')) {
-            return redirect()->route('register.show');
+            return redirect()->route('register.form');
         }
-        Log::info('[AuthController@showRegisterOtpForm] Menampilkan halaman verifikasi OTP.');
-        return view('Contents.Auth.otp_in');
+        Log::info('[AuthController@registerOtpForm] Menampilkan halaman verifikasi OTP.');
+        return view('Contents.Auth.register_otp');
     }
 
-    public function verifyRegisterOtp(Request $request)
+    public function registerOtpVerify(Request $request)
     {
         $email = session('email_for_otp_verification');
-        Log::info('[AuthController@verifyRegisterOtp] Menerima permintaan verifikasi OTP.', ['email' => $email]);
+        Log::info('[AuthController@registerOtpVerify] Menerima permintaan verifikasi OTP.', ['email' => $email]);
         try {
             $request->validate(['otp' => 'required|numeric|digits:6']);
             $user = User::where('email', $email)->firstOrFail();
@@ -100,20 +101,20 @@ class AuthController extends Controller
             session()->forget('email_for_otp_verification');
             Auth::login($user);
 
-            Log::info('[AuthController@verifyRegisterOtp] SUKSES: Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
+            Log::info('[AuthController@registerOtpVerify] SUKSES: Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
             return redirect()->route('dashboard')->with('swal_success_login', 'Verifikasi berhasil! Selamat datang.');
         } catch (\Exception $e) {
-            Log::error('[AuthController@verifyRegisterOtp] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('[AuthController@registerOtpVerify] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
         }
     }
 
-    public function resendOtp(Request $request)
+    public function registerOtpResend(Request $request)
     {
         $email = session('email_for_otp_verification');
-        if (!$email) return redirect()->route('register.show')->with('swal_error_crud', 'Sesi Anda telah berakhir.');
-        
-        Log::info('[AuthController@resendOtp] Menerima permintaan kirim ulang OTP registrasi.', ['email' => $email]);
+        if (!$email) return redirect()->route('register.form')->with('swal_error_crud', 'Sesi Anda telah berakhir.');
+
+        Log::info('[AuthController@registerOtpResend] Menerima permintaan kirim ulang OTP registrasi.', ['email' => $email]);
         try {
             $user = User::where('email', $email)->firstOrFail();
             $newOtpCode = rand(100000, 999999);
@@ -122,25 +123,25 @@ class AuthController extends Controller
             $user->save();
 
             Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.registration_otp'));
-            Log::info('[AuthController@resendOtp] SUKSES: OTP registrasi baru dikirim.', ['user_id' => $user->user_id]);
+            Log::info('[AuthController@registerOtpResend] SUKSES: OTP registrasi baru dikirim.', ['user_id' => $user->user_id]);
             return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim.');
         } catch (\Exception $e) {
-            Log::error('[AuthController@resendOtp] GAGAL.', ['email' => $email, 'error' => $e->getMessage()]);
+            Log::error('[AuthController@registerOtpResend] GAGAL.', ['email' => $email, 'error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal mengirim ulang OTP.');
         }
     }
 
     // --- BAGIAN LUPA & RESET PASSWORD ---
 
-    public function showForgotPasswordForm()
+    public function forgotPasswordForm()
     {
-        Log::info('[AuthController@showForgotPasswordForm] Menampilkan halaman lupa password.');
-        return view('Contents.Auth.forgot_pass');
+        Log::info('[AuthController@forgotPasswordForm] Menampilkan halaman lupa password.');
+        return view('Contents.Auth.ForgotPass.forgot_form');
     }
 
-    public function sendResetOtp(Request $request)
+    public function forgotPasswordVerify(Request $request)
     {
-        Log::info('[AuthController@sendResetOtp] Menerima permintaan reset password.');
+        Log::info('[AuthController@forgotPasswordVerify] Menerima permintaan reset password.');
         try {
             $validatedData = $request->validate(['email' => 'required|email|exists:users,email']);
             $user = User::where('email', $validatedData['email'])->first();
@@ -152,20 +153,20 @@ class AuthController extends Controller
 
             Log::info('Mengirim OTP reset password.', ['user_id' => $user->user_id]);
             Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.reset_password_otp'));
-            
+
             $request->session()->put('email_for_password_reset', $user->email);
-            return redirect()->route('password.otp.verify.show')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
+            return redirect()->route('forgot_otp.form')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
         } catch (\Exception $e) {
             Log::error('[AuthController@sendResetOtp] Gagal.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal mengirim OTP.');
         }
     }
 
-    public function resendResetOtp(Request $request)
+    public function forgotPasswordOtpResend(Request $request)
     {
         $email = session('email_for_password_reset');
         if (!$email) {
-            return redirect()->route('password.request')->with('swal_error_crud', 'Sesi OTP Anda sudah berakhir.');
+            return redirect()->route('forgot.form')->with('swal_error_crud', 'Sesi OTP Anda sudah berakhir.');
         }
         try {
             $user = User::where('email', $email)->firstOrFail();
@@ -183,16 +184,16 @@ class AuthController extends Controller
         }
     }
 
-    public function showVerifyResetOtpForm()
+    public function forgotPasswordOtpForm()
     {
         if (!session('email_for_password_reset')) {
-            return redirect()->route('password.request');
+            return redirect()->route('forgot.form');
         }
         Log::info('[AuthController@showVerifyResetOtpForm] Menampilkan halaman verifikasi OTP reset password.');
-        return view('Contents.Auth.passwords.verify_reset_otp');
+        return view('Contents.Auth.ForgotPass.forgot_otp');
     }
 
-    public function verifyResetOtp(Request $request)
+    public function forgotPasswordOtpVerify(Request $request)
     {
         $request->validate(['otp' => 'required|numeric|digits:6']);
         $email = session('email_for_password_reset');
@@ -203,27 +204,28 @@ class AuthController extends Controller
             }
             session()->put('otp_verified', true);
             Log::info('[AuthController@verifyResetOtp] OTP valid, lanjut ke reset password.', ['email' => $email]);
-            return redirect()->route('password.reset.show')->with('swal_success_crud', 'OTP berhasil diverifikasi!');
+            return redirect()->route('reset_pass.form')->with('swal_success_crud', 'OTP berhasil diverifikasi!');
         } catch (\Exception $e) {
             Log::error('[AuthController@verifyResetOtp] Gagal verifikasi.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan sistem.');
         }
     }
-    
-    public function showResetPasswordForm()
+
+    public function resetPasswordForm()
     {
         if (!session('email_for_password_reset') || !session('otp_verified')) {
-            return redirect()->route('password.request');
+            // PENYESUAIAN ROUTE: 'password.request' diubah menjadi 'forgot.form'
+            return redirect()->route('forgot.form');
         }
         Log::info('[AuthController@showResetPasswordForm] Menampilkan halaman reset password.');
-        return view('Contents.Auth.passwords.reset');
+        return view('Contents.Auth.ForgotPass.forgot_new_pass');
     }
 
     public function resetPassword(Request $request)
     {
         $email = session('email_for_password_reset');
         if (!$email || !session('otp_verified')) {
-            return redirect()->route('password.request')->with('swal_error_crud', 'Sesi tidak valid.');
+            return redirect()->route('forgot.form')->with('swal_error_crud', 'Sesi tidak valid.');
         }
         try {
             $request->validate([
@@ -236,7 +238,7 @@ class AuthController extends Controller
             $user->save();
             session()->forget(['email_for_password_reset', 'otp_verified']);
             Log::info('[AuthController@resetPassword] SUKSES: Password direset.', ['email' => $email]);
-            return redirect()->route('login.show')->with('swal_success_crud', 'Password berhasil direset! Silakan login.');
+            return redirect()->route('login.form')->with('swal_success_crud', 'Password berhasil direset! Silakan login.');
         } catch (ValidationException $e) {
             $errorMessage = collect($e->errors())->flatten()->first();
             return back()->with('swal_error_crud', $errorMessage ?? 'Input tidak valid.');
@@ -247,90 +249,91 @@ class AuthController extends Controller
     }
 
     // --- BAGIAN LOGIN & LOGOUT ---
-    
-    public function showLoginForm()
+    // (Tidak ada perubahan di bagian ini, sudah sinkron)
+
+    public function loginForm()
     {
         try{
             if (Auth::check()) {
-                Log::info('[AuthController@showLoginForm] Pengguna sudah login, mengalihkan ke dashboard.', ['user_id' => Auth::id()]);
+                Log::info('[AuthController@loginForm] Pengguna sudah login, mengalihkan ke dashboard.', ['user_id' => Auth::id()]);
                 return redirect()->route('dashboard');
             }
-            Log::info('[AuthController@showLoginForm] Menampilkan halaman login.');
+            Log::info('[AuthController@loginForm] Menampilkan halaman login.');
             return view('Contents.Auth.login');
         } catch (\Exception $e) {
-            Log::error('[AuthController@showLoginForm] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('[AuthController@loginForm] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
         }
-        
+
     }
 
     public function login(Request $request)
-{
-    $email = $request->input('email');
-    Log::info("[AuthController@login] Menerima percobaan login untuk email: {$email}");
+    {
+        $email = $request->input('email');
+        Log::info("[AuthController@login] Menerima percobaan login untuk email: {$email}");
 
-    try {
-        $credentials = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string'
-        ]);
-
-        $user = User::where('email', $email)->first();
-
-        if (!$user) {
-            return back()->with('swal_error_crud', 'Email tidak ditemukan.')->withInput($request->only('email'));
-        }
-
-        // ✅ Logika baru: Admin tidak perlu verifikasi akun
-        if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
-            Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
-            $request->session()->put('email_for_otp_verification', $user->email);
-            return back()
-                ->with('swal_error_crud', 'Akun Anda belum diverifikasi. Silakan Lakukan Pendaftaran Ulang.');
-        }
-
-        // 🔒 Cek apakah akun sedang dikunci
-        if ($user->locked_until && now()->lt($user->locked_until)) {
-            $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
-            return back()->with('swal_error_crud', "Akun Anda dikunci. Coba lagi dalam {$minutes} menit.")
-                ->withInput($request->only('email'));
-        }
-
-        // 🔐 Proses login
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
-            $user->update(['failed_attempts' => 0, 'locked_until' => null]);
-
-            Log::info('[AuthController@login] SUKSES.', [
-                'user_id' => $user->user_id,
-                'role' => $user->role
+        try {
+            $credentials = $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string'
             ]);
 
-            return redirect()->intended(route('dashboard'))
-                ->with('swal_success_login', 'Login Berhasil! Selamat datang, ' . $user->name . '.');
-        }
+            $user = User::where('email', $email)->first();
 
-        // ❌ Password salah
-        $user->increment('failed_attempts');
-        Log::warning('[AuthController@login] GAGAL: Password salah.', ['attempts' => $user->failed_attempts]);
+            if (!$user) {
+                return back()->with('swal_error_crud', 'Email tidak ditemukan.')->withInput($request->only('email'));
+            }
 
-        if ($user->failed_attempts >= 3) {
-            $lockMinutes = 15;
-            $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
-            return back()->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")
+            // ✅ Logika baru: Admin tidak perlu verifikasi akun
+            if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
+                Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
+                $request->session()->put('email_for_otp_verification', $user->email);
+                return back()
+                    ->with('swal_error_crud', 'Akun Anda belum diverifikasi. Silakan Lakukan Pendaftaran Ulang.');
+            }
+
+            // 🔒 Cek apakah akun sedang dikunci
+            if ($user->locked_until && now()->lt($user->locked_until)) {
+                $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
+                return back()->with('swal_error_crud', "Akun Anda dikunci. Coba lagi dalam {$minutes} menit.")
+                    ->withInput($request->only('email'));
+            }
+
+            // 🔐 Proses login
+            if (Auth::attempt($credentials, $request->filled('remember'))) {
+                $request->session()->regenerate();
+                $user->update(['failed_attempts' => 0, 'locked_until' => null]);
+
+                Log::info('[AuthController@login] SUKSES.', [
+                    'user_id' => $user->user_id,
+                    'role' => $user->role
+                ]);
+
+                return redirect()->intended(route('dashboard'))
+                    ->with('swal_success_login', 'Login Berhasil! Selamat datang, ' . $user->name . '.');
+            }
+
+            // ❌ Password salah
+            $user->increment('failed_attempts');
+            Log::warning('[AuthController@login] GAGAL: Password salah.', ['attempts' => $user->failed_attempts]);
+
+            if ($user->failed_attempts >= 3) {
+                $lockMinutes = 15;
+                $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
+                return back()->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")
+                    ->withInput($request->only('email'));
+            }
+
+            $sisa = 3 - $user->failed_attempts;
+            return back()->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")
+                ->withInput($request->only('email'));
+
+        } catch (\Exception $e) {
+            Log::error('[AuthController@login] ERROR SISTEM.', ['error' => $e->getMessage()]);
+            return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.')
                 ->withInput($request->only('email'));
         }
-
-        $sisa = 3 - $user->failed_attempts;
-        return back()->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")
-            ->withInput($request->only('email'));
-
-    } catch (\Exception $e) {
-        Log::error('[AuthController@login] ERROR SISTEM.', ['error' => $e->getMessage()]);
-        return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.')
-            ->withInput($request->only('email'));
     }
-}
 
     public function logout(Request $request)
     {
@@ -340,6 +343,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         Log::info('[AuthController@logout] SUKSES: Pengguna telah logout.');
-        return redirect()->route('login.show');
+        return redirect()->route('login.form');
     }
 }
