@@ -10,7 +10,7 @@
                 <img src="{{ asset("assets/img/3d-render-secure-login-password-illustration.jpg") }}" class="img-fluid" alt="Sample image" />
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                <form action="{{ route('login.attempt') }}" method="POST">
+                <form action="{{ url('/login') }}" method="POST">
                     @csrf
                     <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                         <p class="lead fw-normal mb-1 mt-5 me-3">Masuk ke Akun Anda</p>

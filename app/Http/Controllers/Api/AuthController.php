@@ -19,59 +19,84 @@ use Illuminate\Http\JsonResponse;
 class AuthController extends Controller
 {
     public function register(Request $request): JsonResponse
-    {
-        Log::info('[AuthController@register] Menerima permintaan registrasi API baru.');
+{
+    Log::info('[AuthController@register] Menerima permintaan registrasi API baru.');
 
-        try {
-            $existingUnverifiedUser = User::where('email', $request->email)->whereNull('email_verified_at')->first();
-            if ($existingUnverifiedUser) {
-                Log::info('Menghapus pengguna lama yang belum terverifikasi untuk registrasi ulang.', ['email' => $request->email]);
-                $existingUnverifiedUser->delete();
-            }
+    try {
+        // Hapus user lama yang belum verifikasi
+        $existingUnverifiedUser = User::where('email', $request->email)
+            ->whereNull('email_verified_at')
+            ->first();
 
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users,email',
-                'password' => [
-                    'required',
-                    'confirmed',
-                    PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
-                    new ZxcvbnPassword(2)
-                ]
+        if ($existingUnverifiedUser) {
+            Log::info('Menghapus pengguna lama yang belum terverifikasi untuk registrasi ulang.', [
+                'email' => $request->email
             ]);
-
-            $otpCode = rand(100000, 999999);
-            $user = User::create([
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'password' => Hash::make($validatedData['password']),
-                'role' => 'user',
-                'otp_code' => $otpCode,
-                'otp_expires_at' => Carbon::now()->addMinutes(10),
-            ]);
-
-            Log::info('[AuthController@register] SUKSES: User dibuat, mengirim OTP.', ['user_id' => $user->user_id]);
-            Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.registration_otp'));
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Registrasi berhasil! Cek email Anda untuk kode OTP.',
-                'data' => [
-                    'email' => $user->email
-                ]
-            ], 201);
-
-        } catch (ValidationException $e) {
-            Log::warning('[AuthController@register] GAGAL: Validasi gagal.', ['errors' => $e->errors()]);
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error('[AuthController@register] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan pada server.'
-            ], 500);
+            $existingUnverifiedUser->delete();
         }
+
+        // Validasi input
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => [
+                'required',
+                'confirmed',
+                PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
+                new ZxcvbnPassword(2)
+            ]
+        ]);
+
+        // Buat user baru + kirim OTP
+        $otpCode = rand(100000, 999999);
+
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'role' => 'user',
+            'otp_code' => $otpCode,
+            'otp_expires_at' => Carbon::now()->addMinutes(10),
+        ]);
+
+        Log::info('[AuthController@register] SUKSES: User dibuat, mengirim OTP.', [
+            'user_id' => $user->user_id
+        ]);
+
+        Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.registration_otp'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Registrasi berhasil! Cek email Anda untuk kode OTP.',
+            'data' => [
+                'email' => $user->email
+            ]
+        ], 201);
+
+    } catch (ValidationException $e) {
+        Log::warning('[AuthController@register] GAGAL: Validasi gagal.', [
+            'errors' => $e->errors()
+        ]);
+
+        // ✅ Ambil hanya 1 pesan error pertama
+        $firstError = collect($e->errors())->flatten()->first();
+
+        return response()->json([
+            'status' => 'error',
+            'message' => $firstError ?? 'Validasi gagal. Periksa input Anda.'
+        ], 422);
+
+    } catch (\Exception $e) {
+        Log::error('[AuthController@register] GAGAL: Error sistem.', [
+            'error' => $e->getMessage()
+        ]);
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Terjadi kesalahan pada server.'
+        ], 500);
     }
+}
 
     public function verifyRegisterOtp(Request $request): JsonResponse
     {
@@ -195,92 +220,300 @@ class AuthController extends Controller
     }
 
    public function login(Request $request): JsonResponse 
-    {
-        $email = $request->input('email');
-        Log::info("[AuthController@login] Menerima percobaan login (API) untuk email: {$email}");
+{
+    $email = $request->input('email');
+    Log::info("[AuthController@login] Menerima percobaan login (API) untuk email: {$email}");
 
-        try {
-            $credentials = $request->validate([
-                'email' => 'required|string|email',
-                'password' => 'required|string'
-            ]);
+    try {
+        $credentials = $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string'
+        ]);
 
-            $user = User::where('email', $email)->first();
+        $user = User::where('email', $email)->first();
 
-            // Cek 1: User ada dan password benar
-            if (!$user || !Hash::check($credentials['password'], $user->password)) {
-                Log::warning('[AuthController@login] GAGAL: Email atau password salah.', ['email' => $email]);
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Email atau password salah.'
-                ], 401);
-            }
-
-            // Cek 2: Akun belum diverifikasi (hanya untuk non-admin)
-            if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
-                Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
-                
-                // Daripada mengarahkan ke verifikasi, kembalikan respons 403 (Forbidden)
-                // dan berikan kode khusus agar Flutter bisa mengarahkan ke VerifyOtpScreen.
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Akun Anda belum diverifikasi. Silakan verifikasi akun Anda.',
-                    'code' => 'UNVERIFIED', 
-                    'data' => [
-                        'email' => $user->email // Kirim email agar Flutter bisa navigasi ke VerifyOtpScreen
-                    ]
-                ], 403);
-            }
-            
-            // Cek 3: Akun dikunci
-            if ($user->locked_until && now()->lt($user->locked_until)) {
-                $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
-                return response()->json([
-                    'status' => 'error',
-                    'message' => "Akun Anda dikunci. Coba lagi dalam {$minutes} menit."
-                ], 403);
-            }
-            
-            // --- Logika Token Sanctum (Pengganti Sesi Web) ---
-            
-            // Hapus token lama dan buat token baru
-            $user->tokens()->delete();
-            $token = $user->createToken('auth_token')->plainTextToken;
-            
-            // Reset percobaan gagal
-            $user->update(['failed_attempts' => 0, 'locked_until' => null]);
-
-            Log::info('[AuthController@login] SUKSES (API).', [
-                'user_id' => $user->user_id,
-                'role' => $user->role
-            ]);
-            
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Login berhasil!',
-                'data' => [
-                    'access_token' => $token,
-                    'token_type' => 'Bearer',
-                    'user' => [
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'role' => $user->role,
-                    ]
-                ]
-            ], 200);
-
-        } catch (ValidationException $e) {
-            // Laravel akan secara otomatis menangani ValidationException dengan respons 422 JSON jika ini adalah rute API
-            Log::warning('[AuthController@login] GAGAL: Validasi gagal.', ['errors' => $e->errors()]);
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error('[AuthController@login] ERROR SISTEM.', ['error' => $e->getMessage()]);
+        // 🔹 Cek 1: Jika email tidak ditemukan
+        if (!$user) {
+            Log::warning('[AuthController@login] GAGAL: Email tidak ditemukan.', ['email' => $email]);
             return response()->json([
                 'status' => 'error',
-                'message' => 'Terjadi kesalahan pada server.'
-            ], 500);
+                'message' => 'Email tidak terdaftar. Silakan periksa kembali atau daftar akun baru.'
+            ], 404);
         }
+
+        // 🔹 Cek 2: Akun dikunci
+        if ($user->locked_until && now()->lt($user->locked_until)) {
+            $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
+            return response()->json([
+                'status' => 'error',
+                'message' => "Akun Anda dikunci. Coba lagi dalam {$minutes} menit."
+            ], 403);
+        }
+
+        // 🔹 Cek 3: Password salah
+        if (!Hash::check($credentials['password'], $user->password)) {
+            $user->increment('failed_attempts');
+
+            $maxAttempts = 4;
+            $remaining = $maxAttempts - $user->failed_attempts;
+
+            // Jika sudah mencapai batas -> kunci akun
+            if ($user->failed_attempts >= $maxAttempts) {
+                $user->update([
+                    'locked_until' => now()->addMinutes(10),
+                    'failed_attempts' => 0
+                ]);
+
+                Log::warning('[AuthController@login] GAGAL: Akun dikunci setelah 4x gagal login.', ['email' => $email]);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Akun Anda telah dikunci selama 10 menit karena 4 kali percobaan login gagal.'
+                ], 403);
+            }
+
+            Log::warning('[AuthController@login] GAGAL: Password salah.', [
+                'email' => $email,
+                'failed_attempts' => $user->failed_attempts
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => "Email atau password salah. Tersisa {$remaining} percobaan lagi sebelum akun dikunci."
+            ], 401);
+        }
+
+        // 🔹 Cek 4: Akun belum diverifikasi
+        if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
+            Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akun Anda belum diverifikasi. Silakan verifikasi akun Anda.',
+                'code' => 'UNVERIFIED',
+                'data' => [
+                    'email' => $user->email
+                ]
+            ], 403);
+        }
+
+        // 🔹 Login berhasil
+        $user->tokens()->delete();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Reset percobaan gagal
+        $user->update(['failed_attempts' => 0, 'locked_until' => null]);
+
+        Log::info('[AuthController@login] SUKSES (API).', [
+            'user_id' => $user->user_id,
+            'role' => $user->role
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Login berhasil!',
+            'data' => [
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'user' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                ]
+            ]
+        ], 200);
+
+    } catch (ValidationException $e) {
+        Log::warning('[AuthController@login] GAGAL: Validasi gagal.', ['errors' => $e->errors()]);
+        throw $e;
+    } catch (\Exception $e) {
+        Log::error('[AuthController@login] ERROR SISTEM.', ['error' => $e->getMessage()]);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Terjadi kesalahan pada server.'
+        ], 500);
     }
+}
+
+    // --- LUPA & RESET PASSWORD ---
+
+public function sendResetOtp(Request $request): JsonResponse
+{
+    Log::info('[AuthController@sendResetOtp] Permintaan reset password (API).');
+
+    try {
+        $validated = $request->validate(['email' => 'required|email|exists:users,email']);
+        $user = User::where('email', $validated['email'])->first();
+
+        $otpCode = rand(100000, 999999);
+        $user->update([
+            'otp_code' => $otpCode,
+            'otp_expires_at' => now()->addMinutes(10)
+        ]);
+
+        Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.reset_password_otp'));
+        Log::info('[AuthController@sendResetOtp] OTP reset dikirim.', ['email' => $user->email]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Kode OTP telah dikirim ke email Anda.',
+            'data' => [
+                'email' => $user->email,
+                'expires_in' => 600 // 10 menit dalam detik
+            ]
+        ], 200);
+    } catch (ValidationException $e) {
+        Log::warning('[AuthController@sendResetOtp] Validasi gagal.', ['errors' => $e->errors()]);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Email tidak valid atau belum terdaftar.'
+        ], 422);
+    } catch (\Exception $e) {
+        Log::error('[AuthController@sendResetOtp] Gagal sistem.', ['error' => $e->getMessage()]);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Gagal mengirim OTP. Coba lagi nanti.'
+        ], 500);
+    }
+}
+
+public function resendResetOtp(Request $request): JsonResponse
+{
+    try {
+        $validated = $request->validate(['email' => 'required|email|exists:users,email']);
+        $user = User::where('email', $validated['email'])->first();
+
+        $otpCode = rand(100000, 999999);
+        $user->update([
+            'otp_code' => $otpCode,
+            'otp_expires_at' => now()->addMinutes(10)
+        ]);
+
+        Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.reset_password_otp'));
+        Log::info('[AuthController@resendResetOtp] OTP baru dikirim.', ['email' => $user->email]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Kode OTP baru telah dikirim ke email Anda.',
+            'data' => [
+                'email' => $user->email,
+                'expires_in' => 600
+            ]
+        ], 200);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Email tidak valid atau belum terdaftar.'
+        ], 422);
+    } catch (\Exception $e) {
+        Log::error('[AuthController@resendResetOtp] Gagal sistem.', ['error' => $e->getMessage()]);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Gagal mengirim ulang OTP.'
+        ], 500);
+    }
+}
+
+public function verifyResetOtp(Request $request): JsonResponse
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+        'otp' => 'required|numeric|digits:6'
+    ]);
+
+    try {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || $user->otp_code !== $request->otp) {
+            Log::warning('[AuthController@verifyResetOtp] OTP salah.', ['email' => $request->email]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Kode OTP salah.'
+            ], 400);
+        }
+
+        if (now()->gt($user->otp_expires_at)) {
+            Log::warning('[AuthController@verifyResetOtp] OTP kedaluwarsa.', ['email' => $request->email]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Kode OTP telah kedaluwarsa.'
+            ], 400);
+        }
+
+        Log::info('[AuthController@verifyResetOtp] OTP valid.', ['email' => $request->email]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'OTP berhasil diverifikasi. Silakan lanjut reset password.',
+            'data' => [
+                'email' => $user->email
+            ]
+        ], 200);
+    } catch (\Exception $e) {
+        Log::error('[AuthController@verifyResetOtp] Gagal sistem.', ['error' => $e->getMessage()]);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Terjadi kesalahan sistem.'
+        ], 500);
+    }
+}
+
+    public function resetPassword(Request $request): JsonResponse
+{
+    try {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => [
+                'required',
+                'confirmed',
+                PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
+                new ZxcvbnPassword(2)
+            ]
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        // 🔴 Pastikan user dan OTP masih valid
+        if (!$user || !$user->otp_code || now()->gt($user->otp_expires_at)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Sesi OTP tidak valid atau telah kedaluwarsa.'
+            ], 400);
+        }
+
+        // 🧩 Tambahkan validasi: Password baru tidak boleh sama dengan password lama
+        if (Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Password baru tidak boleh sama dengan password sebelumnya.'
+            ], 400);
+        }
+
+        // 🔵 Update password baru
+        $user->update([
+            'password' => Hash::make($request->password),
+            'otp_code' => null,
+            'otp_expires_at' => null
+        ]);
+
+        Log::info('[AuthController@resetPassword] Password berhasil direset.', ['email' => $user->email]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password berhasil direset. Silakan login kembali.'
+        ], 200);
+
+    } catch (ValidationException $e) {
+        $error = collect($e->errors())->flatten()->first();
+        return response()->json([
+            'status' => 'error',
+            'message' => $error ?? 'Input tidak valid.'
+        ], 422);
+    } catch (\Exception $e) {
+        Log::error('[AuthController@resetPassword] Gagal sistem.', ['error' => $e->getMessage()]);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Terjadi kesalahan pada server.'
+        ], 500);
+    }
+}
 
     public function logout(Request $request): JsonResponse // Ubah tipe kembalian menjadi JsonResponse
     {

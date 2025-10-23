@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\Admin\InfoBoardController;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Controllers\Web\Admin\ParkAreaController;
+use App\Http\Controllers\Web\Admin\TierController;
 
 
 Route::get('/', function () {
@@ -51,7 +52,9 @@ Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
     Route::prefix('admin')->as('admin.')->middleware(['can:access-admin-features'])->group(function () {
         
         Route::resource('park', ParkAreaController::class);
-
-        Route::resource('board', InfoBoardController::class);
+        // Route info_board
+        Route::resource('info_board', InfoBoardController::class)->except(['show']);
+        // Route tiers
+        Route::resource('tiers', TierController::class)->except(['show']);
     });
 });
