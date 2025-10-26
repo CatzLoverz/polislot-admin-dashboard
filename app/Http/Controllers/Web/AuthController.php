@@ -222,31 +222,34 @@ class AuthController extends Controller
     }
 
     public function resetPassword(Request $request)
-    {
-        $email = session('email_for_password_reset');
-        if (!$email || !session('otp_verified')) {
-            return redirect()->route('forgot.form')->with('swal_error_crud', 'Sesi tidak valid.');
-        }
-        try {
-            $request->validate([
-                'password' => ['required','confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols(), new ZxcvbnPassword(2)],
-            ]);
-            $user = User::where('email', $email)->firstOrFail();
-            $user->password = Hash::make($request->password);
-            $user->otp_code = null;
-            $user->otp_expires_at = null;
-            $user->save();
-            session()->forget(['email_for_password_reset', 'otp_verified']);
-            Log::info('[AuthController@resetPassword] SUKSES: Password direset.', ['email' => $email]);
-            return redirect()->route('login.form')->with('swal_success_crud', 'Password berhasil direset! Silakan login.');
-        } catch (ValidationException $e) {
-            $errorMessage = collect($e->errors())->flatten()->first();
-            return back()->with('swal_error_crud', $errorMessage ?? 'Input tidak valid.');
-        } catch (\Exception $e) {
-            Log::error('[AuthController@resetPassword] Gagal sistem.', ['error' => $e->getMessage()]);
-            return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
-        }
+{
+    $email = session('email_for_password_reset');
+    if (!$email || !session('otp_verified')) {
+        return redirect()->route('forgot.form')->with('swal_error_crud', 'Sesi tidak valid.');
     }
+    try {
+        $request->validate([
+            'password' => ['required','confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols(), new ZxcvbnPassword(2)],
+        ]);
+        $user = User::where('email', $email)->firstOrFail();
+        
+        $user->password = Hash::make($request->password);
+        $user->otp_code = null;
+        $user->otp_expires_at = null;
+        $user->failed_attempts = 0;
+        $user->locked_until = null;
+        $user->save();
+        session()->forget(['email_for_password_reset', 'otp_verified']);
+        Log::info('[AuthController@resetPassword] SUKSES: Password direset.', ['email' => $email]);
+        return redirect()->route('login.form')->with('swal_success_crud', 'Password berhasil direset! Silakan login.');
+    } catch (ValidationException $e) {
+        $errorMessage = collect($e->errors())->flatten()->first();
+        return back()->with('swal_error_crud', $errorMessage ?? 'Input tidak valid.');
+    } catch (\Exception $e) {
+        Log::error('[AuthController@resetPassword] Gagal sistem.', ['error' => $e->getMessage()]);
+        return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
+    }
+}
 
     // --- BAGIAN LOGIN & LOGOUT ---
     // (Tidak ada perubahan di bagian ini, sudah sinkron)
@@ -281,21 +284,24 @@ class AuthController extends Controller
             $user = User::where('email', $email)->first();
 
             if (!$user) {
-                return back()->with('swal_error_crud', 'Email tidak ditemukan.')->withInput($request->only('email'));
+                // Perubahan 1: Arahkan ke route yang benar saat Email tidak ditemukan
+                return redirect()->route('login.form')->with('swal_error_crud', 'Email tidak ditemukan.')->withInput($request->only('email'));
             }
 
             // ✅ Logika baru: Admin tidak perlu verifikasi akun
             if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
                 Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
                 $request->session()->put('email_for_otp_verification', $user->email);
-                return back()
+                // Perubahan 2: Arahkan ke route yang benar saat Akun belum diverifikasi
+                return redirect()->route('login.form')
                     ->with('swal_error_crud', 'Akun Anda belum diverifikasi. Silakan Lakukan Pendaftaran Ulang.');
             }
 
             // 🔒 Cek apakah akun sedang dikunci
             if ($user->locked_until && now()->lt($user->locked_until)) {
                 $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
-                return back()->with('swal_error_crud', "Akun Anda dikunci. Coba lagi dalam {$minutes} menit.")
+                // Perubahan 3: Arahkan ke route yang benar saat Akun terkunci
+                return redirect()->route('login.form')->with('swal_error_crud', "Akun Anda dikunci. Coba lagi dalam {$minutes} menit.")
                     ->withInput($request->only('email'));
             }
 
@@ -320,17 +326,20 @@ class AuthController extends Controller
             if ($user->failed_attempts >= 3) {
                 $lockMinutes = 15;
                 $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
-                return back()->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")
+                // Perubahan 4: Arahkan ke route yang benar saat Akun dikunci (karena terlalu banyak gagal)
+                return redirect()->route('login.form')->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")
                     ->withInput($request->only('email'));
             }
 
             $sisa = 3 - $user->failed_attempts;
-            return back()->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")
+            // Perubahan 5: Arahkan ke route yang benar saat Password salah (kurang dari 3x)
+            return redirect()->route('login.form')->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")
                 ->withInput($request->only('email'));
 
         } catch (\Exception $e) {
             Log::error('[AuthController@login] ERROR SISTEM.', ['error' => $e->getMessage()]);
-            return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.')
+            // Perubahan 6: Arahkan ke route yang benar saat Error Sistem
+            return redirect()->route('login.form')->with('swal_error_crud', 'Terjadi kesalahan pada server.')
                 ->withInput($request->only('email'));
         }
     }
