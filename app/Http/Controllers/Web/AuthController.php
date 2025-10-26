@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password as PasswordRule;
-use App\Rules\ZxcvbnPassword;
+
 
 class AuthController extends Controller
 {
@@ -43,8 +43,7 @@ class AuthController extends Controller
                 'password' => [
                     'required', 
                     'confirmed', 
-                    PasswordRule::min(8)->mixedCase()->numbers()->symbols(), 
-                    new ZxcvbnPassword(2)
+                    PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
                 ]
             ]);
 
@@ -229,7 +228,7 @@ class AuthController extends Controller
     }
     try {
         $request->validate([
-            'password' => ['required','confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols(), new ZxcvbnPassword(2)],
+            'password' => ['required','confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols()],
         ]);
         $user = User::where('email', $email)->firstOrFail();
         

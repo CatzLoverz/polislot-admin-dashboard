@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password as PasswordRule;
-use App\Rules\ZxcvbnPassword;
 use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
@@ -43,7 +42,6 @@ class AuthController extends Controller
                 'required',
                 'confirmed',
                 PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
-                new ZxcvbnPassword(2)
             ]
         ]);
 
@@ -464,7 +462,6 @@ public function verifyResetOtp(Request $request): JsonResponse
                 'required',
                 'confirmed',
                 PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
-                new ZxcvbnPassword(2)
             ]
         ]);
 

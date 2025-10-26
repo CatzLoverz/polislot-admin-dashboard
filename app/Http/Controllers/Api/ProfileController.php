@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Rules\NotCurrentPassword;
-use App\Rules\ZxcvbnPassword;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,9 +59,6 @@ class ProfileController extends Controller
         'confirmed',
         new NotCurrentPassword(), // Tidak boleh sama dengan password lama
         PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
-        // Rule ZxcvbnPassword(2) bisa jadi penyebab pesan kompleksitas, 
-        // tapi kita biarkan saja karena sudah dihandle di fallback
-        new ZxcvbnPassword(2), 
     ];
 
     $rules = [
