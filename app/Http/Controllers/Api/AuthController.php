@@ -76,7 +76,7 @@ class AuthController extends Controller
             'errors' => $e->errors()
         ]);
 
-        // ✅ Ambil hanya 1 pesan error pertama
+
         $firstError = collect($e->errors())->flatten()->first();
 
         return response()->json([
@@ -204,11 +204,11 @@ class AuthController extends Controller
             ], 200);
 
         } catch (ValidationException $e) {
-            // Laravel secara otomatis melempar respons 422 untuk validasi.
+
             Log::warning('[AuthController@resendRegisterOtp] GAGAL: Validasi gagal.', ['errors' => $e->errors()]);
             throw $e;
         } catch (\Exception $e) {
-            // Error sistem tak terduga
+        
             Log::error('[AuthController@resendRegisterOtp] GAGAL: Error sistem.', ['email' => $request->email, 'error' => $e->getMessage()]);
             return response()->json([
                 'status' => 'error',
@@ -230,7 +230,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $email)->first();
 
-        // 🔹 Cek 1: Jika email tidak ditemukan
+        //  Cek 1: Jika email tidak ditemukan
         if (!$user) {
             Log::warning('[AuthController@login] GAGAL: Email tidak ditemukan.', ['email' => $email]);
             return response()->json([
@@ -239,7 +239,7 @@ class AuthController extends Controller
             ], 404);
         }
 
-        // 🔹 Cek 2: Akun dikunci
+        //  Cek 2: Akun dikunci
         if ($user->locked_until && now()->lt($user->locked_until)) {
             $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
             return response()->json([
@@ -248,7 +248,7 @@ class AuthController extends Controller
             ], 403);
         }
 
-        // 🔹 Cek 3: Password salah
+        //  Cek 3: Password salah
         if (!Hash::check($credentials['password'], $user->password)) {
             $user->increment('failed_attempts');
 
@@ -280,7 +280,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // 🔹 Cek 4: Akun belum diverifikasi
+        // Cek 4: Akun belum diverifikasi
         if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
             Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
             return response()->json([
@@ -293,7 +293,7 @@ class AuthController extends Controller
             ], 403);
         }
 
-        // 🔹 Login berhasil
+        //  Login berhasil
         $user->tokens()->delete();
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -355,7 +355,7 @@ public function sendResetOtp(Request $request): JsonResponse
             'message' => 'Kode OTP telah dikirim ke email Anda.',
             'data' => [
                 'email' => $user->email,
-                'expires_in' => 600 // 10 menit dalam detik
+                'expires_in' => 600 // 10 menit
             ]
         ], 200);
     } catch (ValidationException $e) {
@@ -467,7 +467,7 @@ public function verifyResetOtp(Request $request): JsonResponse
 
         $user = User::where('email', $request->email)->first();
 
-        // 🔴 Pastikan user dan OTP masih valid
+        // Pastikan user dan OTP masih valid
         if (!$user || !$user->otp_code || now()->gt($user->otp_expires_at)) {
             return response()->json([
                 'status' => 'error',
@@ -475,7 +475,7 @@ public function verifyResetOtp(Request $request): JsonResponse
             ], 400);
         }
 
-        // 🧩 Tambahkan validasi: Password baru tidak boleh sama dengan password lama
+        // Tambahkan validasi: Password baru tidak boleh sama dengan password lama
         if (Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => 'error',
@@ -483,7 +483,7 @@ public function verifyResetOtp(Request $request): JsonResponse
             ], 400);
         }
 
-        // 🔵 Update password baru
+        //  Update password baru
         $user->update([
             'password' => Hash::make($request->password),
             'otp_code' => null,
@@ -512,9 +512,8 @@ public function verifyResetOtp(Request $request): JsonResponse
     }
 }
 
-    public function logout(Request $request): JsonResponse // Ubah tipe kembalian menjadi JsonResponse
+    public function logout(Request $request): JsonResponse 
     {
-        // Pengguna harus sudah diotentikasi oleh Sanctum (middleware 'auth:sanctum')
         // Dapatkan pengguna dari token saat ini
         $user = $request->user();
         
@@ -524,14 +523,12 @@ public function verifyResetOtp(Request $request): JsonResponse
             $user->currentAccessToken()->delete();
             Log::info('[AuthController@logout] SUKSES: Token dicabut.', ['user_id' => $user->user_id]);
 
-            // Ganti sesi/redirect dengan respons JSON
             return response()->json([
                 'status' => 'success',
                 'message' => 'Berhasil logout.'
             ], 200);
         }
         
-        // Respons jika token tidak valid/tidak ada (meskipun seharusnya dihandle middleware)
         return response()->json([
             'status' => 'error',
             'message' => 'Pengguna tidak terotentikasi.'
