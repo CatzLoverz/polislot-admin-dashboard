@@ -8,21 +8,21 @@ use Illuminate\Support\Facades\File;
 
 class BackupClean extends Command
 {
-    protected $signature = 'backup:clean {--days=7 : Hapus backup yang lebih tua dari jumlah hari ini}';
+    protected $signature = 'backup:clean {--days=7 : Hapus backup manual yang lebih tua dari jumlah hari ini}';
 
-    protected $description = 'Hapus file backup lama dari folder storage/app/backups';
+    protected $description = 'Hapus file backup lama dari folder storage/app/backups/manual';
 
     public function handle()
     {
         $days = (int) $this->option('days');
-        $path = storage_path('app/backups'); // ✅ UBAH DI SINI
+        $path = storage_path('app/backups/manual');
 
         if (!File::exists($path)) {
             $this->error("❌ Folder {$path} tidak ditemukan.");
             return Command::FAILURE;
         }
 
-        $this->info("🧹 Membersihkan file backup lebih dari {$days} hari di {$path} ...");
+        $this->info("🧹 Membersihkan file backup manual lebih dari {$days} hari di {$path} ...");
 
         $files = File::files($path);
         $deletedCount = 0;

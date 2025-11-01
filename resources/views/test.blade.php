@@ -70,14 +70,13 @@
                 <ul>
                   <li><a href="#beranda">Beranda</a></li>
                   <li><a href="#tentang">Tentang</a></li>
-                  <li class="dropdown masuk-desktop"><a class="getstarted scrollto"><span>Masuk</span> <i class="bi bi-chevron-down"></i></a>
+                  <li><a href="{{ route('login.form') }}">Masuk</a></li>
+                  {{-- <li class="dropdown masuk-desktop"><a class="getstarted scrollto"><span>Masuk</span> <i class="bi bi-chevron-down"></i></a>
                       <ul>
                           <li><a href="{{ route('login.form') }}" class="text-dark fw-medium fs-13">Masuk</a></li>
-                          <li><a href="{{ route('register.form') }}" class="text-dark fw-medium fs-13">Daftar</a></li>
                       </ul>
-                  </li>
+                  </li> --}}
                   <li class="masuk-mobile"><a href="{{ route('login.form') }}">Masuk</a></li>
-                  <li class="masuk-mobile"><a href="{{ route('register.form') }}">Daftar</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>

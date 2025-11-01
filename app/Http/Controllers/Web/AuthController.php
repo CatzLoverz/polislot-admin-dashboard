@@ -17,120 +17,115 @@ use Illuminate\Validation\Rules\Password as PasswordRule;
 
 class AuthController extends Controller
 {
-    // --- BAGIAN REGISTRASI & VERIFIKASI OTP ---
-    // (Tidak ada perubahan di bagian ini, sudah sinkron)
+    // public function registerForm()
+    // {
+    //     Log::info('[AuthController@registerForm] Menampilkan halaman registrasi.');
+    //     return view('Contents.Auth.register');
+    // }
 
-    public function registerForm()
-    {
-        Log::info('[AuthController@registerForm] Menampilkan halaman registrasi.');
-        return view('Contents.Auth.register');
-    }
+    // public function register(Request $request)
+    // {
+    //     Log::info('[AuthController@register] Menerima permintaan registrasi baru.');
+    //     try {
+    //         // Logika untuk mengizinkan pendaftaran ulang jika akun belum terverifikasi
+    //         $existingUnverifiedUser = User::where('email', $request->email)->whereNull('email_verified_at')->first();
+    //         if ($existingUnverifiedUser) {
+    //             Log::info('Menghapus pengguna lama yang belum terverifikasi untuk registrasi ulang.', ['email' => $request->email]);
+    //             $existingUnverifiedUser->delete();
+    //         }
 
-    public function register(Request $request)
-    {
-        Log::info('[AuthController@register] Menerima permintaan registrasi baru.');
-        try {
-            // Logika untuk mengizinkan pendaftaran ulang jika akun belum terverifikasi
-            $existingUnverifiedUser = User::where('email', $request->email)->whereNull('email_verified_at')->first();
-            if ($existingUnverifiedUser) {
-                Log::info('Menghapus pengguna lama yang belum terverifikasi untuk registrasi ulang.', ['email' => $request->email]);
-                $existingUnverifiedUser->delete();
-            }
+    //         $validatedData = $request->validate([
+    //             'name' => 'required|string|max:255',
+    //             'email' => 'required|string|email|max:255|unique:users,email',
+    //             'password' => [
+    //                 'required', 
+    //                 'confirmed', 
+    //                 PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
+    //             ]
+    //         ]);
 
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users,email',
-                'password' => [
-                    'required', 
-                    'confirmed', 
-                    PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
-                ]
-            ]);
+    //         $otpCode = rand(100000, 999999);
+    //         $user = User::create([
+    //             'name' => $validatedData['name'],
+    //             'email' => $validatedData['email'],
+    //             'password' => Hash::make($validatedData['password']),
+    //             'role' => 'user',
+    //             'otp_code' => $otpCode,
+    //             'otp_expires_at' => Carbon::now()->addMinutes(10),
+    //         ]);
 
-            $otpCode = rand(100000, 999999);
-            $user = User::create([
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'password' => Hash::make($validatedData['password']),
-                'role' => 'user',
-                'otp_code' => $otpCode,
-                'otp_expires_at' => Carbon::now()->addMinutes(10),
-            ]);
+    //         Log::info('[AuthController@register] SUKSES: User dibuat, mengirim OTP.', ['user_id' => $user->user_id]);
+    //         Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.registration_otp'));
+    //         $request->session()->put('email_for_otp_verification', $user->email);
+    //         return redirect()->route('register_otp.form')->with('swal_success_crud', 'Registrasi berhasil! Cek email Anda untuk kode OTP.');
 
-            Log::info('[AuthController@register] SUKSES: User dibuat, mengirim OTP.', ['user_id' => $user->user_id]);
-            Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.registration_otp'));
-            $request->session()->put('email_for_otp_verification', $user->email);
-            return redirect()->route('register_otp.form')->with('swal_success_crud', 'Registrasi berhasil! Cek email Anda untuk kode OTP.');
+    //     } catch (ValidationException $e) {
+    //         Log::warning('[AuthController@register] GAGAL: Validasi gagal.', ['errors' => $e->errors()]);
+    //         throw $e;
+    //     } catch (\Exception $e) {
+    //         Log::error('[AuthController@register] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
+    //         return redirect()->back()->with('swal_error_crud', 'Terjadi kesalahan pada server.')->withInput();
+    //     }
+    // }
 
-        } catch (ValidationException $e) {
-            Log::warning('[AuthController@register] GAGAL: Validasi gagal.', ['errors' => $e->errors()]);
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error('[AuthController@register] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
-            return redirect()->back()->with('swal_error_crud', 'Terjadi kesalahan pada server.')->withInput();
-        }
-    }
+    // public function registerOtpForm()
+    // {
+    //     if (!session('email_for_otp_verification')) {
+    //         return redirect()->route('register.form');
+    //     }
+    //     Log::info('[AuthController@registerOtpForm] Menampilkan halaman verifikasi OTP.');
+    //     return view('Contents.Auth.register_otp');
+    // }
 
-    public function registerOtpForm()
-    {
-        if (!session('email_for_otp_verification')) {
-            return redirect()->route('register.form');
-        }
-        Log::info('[AuthController@registerOtpForm] Menampilkan halaman verifikasi OTP.');
-        return view('Contents.Auth.register_otp');
-    }
+    // public function registerOtpVerify(Request $request)
+    // {
+    //     $email = session('email_for_otp_verification');
+    //     Log::info('[AuthController@registerOtpVerify] Menerima permintaan verifikasi OTP.', ['email' => $email]);
+    //     try {
+    //         $request->validate(['otp' => 'required|numeric|digits:6']);
+    //         $user = User::where('email', $email)->firstOrFail();
 
-    public function registerOtpVerify(Request $request)
-    {
-        $email = session('email_for_otp_verification');
-        Log::info('[AuthController@registerOtpVerify] Menerima permintaan verifikasi OTP.', ['email' => $email]);
-        try {
-            $request->validate(['otp' => 'required|numeric|digits:6']);
-            $user = User::where('email', $email)->firstOrFail();
+    //         if ($user->otp_code !== $request->otp || Carbon::now()->gt($user->otp_expires_at)) {
+    //             return back()->withErrors(['otp' => 'Kode OTP salah atau telah kedaluwarsa.']);
+    //         }
 
-            if ($user->otp_code !== $request->otp || Carbon::now()->gt($user->otp_expires_at)) {
-                return back()->withErrors(['otp' => 'Kode OTP salah atau telah kedaluwarsa.']);
-            }
+    //         $user->email_verified_at = now();
+    //         $user->otp_code = null;
+    //         $user->otp_expires_at = null;
+    //         $user->save();
 
-            $user->email_verified_at = now();
-            $user->otp_code = null;
-            $user->otp_expires_at = null;
-            $user->save();
+    //         session()->forget('email_for_otp_verification');
+    //         Auth::login($user);
 
-            session()->forget('email_for_otp_verification');
-            Auth::login($user);
+    //         Log::info('[AuthController@registerOtpVerify] SUKSES: Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
+    //         return redirect()->route('dashboard')->with('swal_success_login', 'Verifikasi berhasil! Selamat datang.');
+    //     } catch (\Exception $e) {
+    //         Log::error('[AuthController@registerOtpVerify] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
+    //         return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
+    //     }
+    // }
 
-            Log::info('[AuthController@registerOtpVerify] SUKSES: Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
-            return redirect()->route('dashboard')->with('swal_success_login', 'Verifikasi berhasil! Selamat datang.');
-        } catch (\Exception $e) {
-            Log::error('[AuthController@registerOtpVerify] GAGAL: Error sistem.', ['error' => $e->getMessage()]);
-            return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
-        }
-    }
+    // public function registerOtpResend(Request $request)
+    // {
+    //     $email = session('email_for_otp_verification');
+    //     if (!$email) return redirect()->route('register.form')->with('swal_error_crud', 'Sesi Anda telah berakhir.');
 
-    public function registerOtpResend(Request $request)
-    {
-        $email = session('email_for_otp_verification');
-        if (!$email) return redirect()->route('register.form')->with('swal_error_crud', 'Sesi Anda telah berakhir.');
+    //     Log::info('[AuthController@registerOtpResend] Menerima permintaan kirim ulang OTP registrasi.', ['email' => $email]);
+    //     try {
+    //         $user = User::where('email', $email)->firstOrFail();
+    //         $newOtpCode = rand(100000, 999999);
+    //         $user->otp_code = $newOtpCode;
+    //         $user->otp_expires_at = Carbon::now()->addMinutes(10);
+    //         $user->save();
 
-        Log::info('[AuthController@registerOtpResend] Menerima permintaan kirim ulang OTP registrasi.', ['email' => $email]);
-        try {
-            $user = User::where('email', $email)->firstOrFail();
-            $newOtpCode = rand(100000, 999999);
-            $user->otp_code = $newOtpCode;
-            $user->otp_expires_at = Carbon::now()->addMinutes(10);
-            $user->save();
-
-            Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.registration_otp'));
-            Log::info('[AuthController@registerOtpResend] SUKSES: OTP registrasi baru dikirim.', ['user_id' => $user->user_id]);
-            return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim.');
-        } catch (\Exception $e) {
-            Log::error('[AuthController@registerOtpResend] GAGAL.', ['email' => $email, 'error' => $e->getMessage()]);
-            return back()->with('swal_error_crud', 'Gagal mengirim ulang OTP.');
-        }
-    }
-
-    // --- BAGIAN LUPA & RESET PASSWORD ---
+    //         Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.registration_otp'));
+    //         Log::info('[AuthController@registerOtpResend] SUKSES: OTP registrasi baru dikirim.', ['user_id' => $user->user_id]);
+    //         return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim.');
+    //     } catch (\Exception $e) {
+    //         Log::error('[AuthController@registerOtpResend] GAGAL.', ['email' => $email, 'error' => $e->getMessage()]);
+    //         return back()->with('swal_error_crud', 'Gagal mengirim ulang OTP.');
+    //     }
+    // }
 
     public function forgotPasswordForm()
     {

@@ -4,10 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\DashboardController;
-use App\Http\Controllers\Web\Admin\InfoBoardController;
+use App\Http\Controllers\Web\InfoBoardController;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Controllers\Web\Admin\ParkAreaController;
-use App\Http\Controllers\Web\Admin\TierController;
+use App\Http\Controllers\Web\ParkAreaController;
+use App\Http\Controllers\Web\TierController;
 
 
 Route::get('/', function () {
@@ -20,13 +20,13 @@ Route::middleware('guest')->group(function () {
     Route::post('/login-attempt', [AuthController::class, 'login'])->name('login.attempt');
 
     // Rute Registrasi
-    Route::get('/register-form', [AuthController::class, 'registerForm'])->name('register.form');
-    Route::post('/register-attempt', [AuthController::class, 'register'])->name('register.attempt');
+    // Route::get('/register-form', [AuthController::class, 'registerForm'])->name('register.form');
+    // Route::post('/register-attempt', [AuthController::class, 'register'])->name('register.attempt');
 
     // Rute Verifikasi Register OTP
-    Route::get('/register-otp-form', [AuthController::class, 'registerOtpForm'])->name('register_otp.form');
-    Route::post('/register-otp-verify', [AuthController::class, 'registerOtpVerify'])->name('register_otp.verify');
-    Route::post('/register-otp-resend', [AuthController::class, 'registerOtpResend'])->name('register_otp.resend');
+    // Route::get('/register-otp-form', [AuthController::class, 'registerOtpForm'])->name('register_otp.form');
+    // Route::post('/register-otp-verify', [AuthController::class, 'registerOtpVerify'])->name('register_otp.verify');
+    // Route::post('/register-otp-resend', [AuthController::class, 'registerOtpResend'])->name('register_otp.resend');
 
     // Rute Forgot Password
     // Form & pengiriman OTP forgot password

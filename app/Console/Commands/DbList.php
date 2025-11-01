@@ -11,7 +11,7 @@ class DbList extends Command
 
     public function handle()
     {
-        $backupPath = storage_path('backups');
+        $backupPath = storage_path('app/backups/manual/');
 
         if (!is_dir($backupPath)) {
             $this->error("❌ Folder backup belum ada: {$backupPath}");

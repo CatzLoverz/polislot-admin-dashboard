@@ -10,7 +10,7 @@
                 <img src="{{ asset("assets/img/3d-render-secure-login-password-illustration.jpg") }}" class="img-fluid" alt="Sample image" />
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                <form action="{{ url('/login-attempt') }}" method="POST">
+                <form action="{{ route('login.attempt') }}" method="POST">
                     @csrf
                     <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                         <p class="lead fw-normal mb-1 mt-5 me-3">Masuk ke Akun Anda</p>
@@ -51,7 +51,6 @@
                             <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
 
-                        {{-- 🔹 Tambahan tombol "Lupa Password?" --}}
                         <div class="text-end mt-2">
                             <a href="{{ route('forgot.form') }}" class="small fw-bold mt-3 pt-1 mb-0 link-danger">Lupa Password?</a>
                         </div>
@@ -59,7 +58,6 @@
 
                     <div class="text-left text-lg-start mt-3 pt-2">
                         <button type="submit" class="btn btn-dark form-control btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;">Masuk</button>
-                        <p class="small fw-bold mt-4 pt-3 mb-2">Tidak punya akun? <a href="{{ route('register.form') }}" class="link-danger">Klik disini</a></p>
                         <p class="small fw-bold mt-3 pt-1 mb-0"> <a href="{{ url('/') }}" class="link-danger">Kembali ke Beranda</a></p>
                     </div>
                 </form>

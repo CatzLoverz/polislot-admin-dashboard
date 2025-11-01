@@ -16,7 +16,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <div class="card-title">Informasi Pribadi</div>
-                            <a href="{{ route('dashboard') }}" class="btn btn-md btn-round btn-primary ml-auto">
+                            <a href="{{ route('dashboard') }}" class="btn btn-md btn-round btn-dark ml-auto">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>
                         </div>
@@ -45,7 +45,7 @@
                                              class="img-fluid rounded-circle mb-2" 
                                              style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #eee;">
                                     </div>
-                                    <label for="avatar" class="btn btn-sm text-white btn-primary mt-2">Pilih Foto Baru</label>
+                                    <label for="avatar" class="btn btn-sm text-white btn-dark mt-2">Pilih Foto Baru</label>
                                     <input type="file" name="avatar" class="form-control-file @error('avatar') is-invalid @enderror" id="avatar" style="display: none;" accept=".png, .jpg, .jpeg">
                                     <small class="form-text text-muted d-block">Maks. 2MB (PNG, JPG, JPEG)</small>
                                     @error('avatar') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
@@ -76,7 +76,6 @@
                     <div class="card-header">
                         <div class="card-title">Ubah Password</div>
                         <div class="card-category">Kosongkan jika Anda tidak ingin mengubah password.</div>
-                        <div class="card-category">(Password harus mengandung 8 karakter dengan setidaknya satu huruf besar, satu huruf kecil, satu angka dan satu simbol).</div>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -94,12 +93,6 @@
                             <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror" id="new_password">
                             @error('new_password') <div class="invalid-feedback">{{ $message }}</div> @enderror
 
-                            <div class="mt-2">
-                                <div class="progress" style="height: 5px;">
-                                    <div id="password-strength-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
-                                </div>
-                                <small id="password-strength-text" class="form-text text-muted"></small>
-                            </div>
                             <div id="password-rules" class="mt-2">
                                 <div class="row">
                                     <div class="col-6 pr-1">
@@ -141,7 +134,7 @@
                 </div>
 
                 <div class="card-action text-right mt-3">
-                    <button type="submit" class="btn btn-success"><i class="fas fa-save mr-1"></i> Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-dark"><i class="fas fa-save mr-1"></i> Simpan Perubahan</button>
                     <button type="reset" class="btn btn-danger ml-2"><i class="fas fa-times mr-1"></i> Batal</button>
                 </div>
             </form>
@@ -180,10 +173,11 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * FITUR 1: PREVIEW GAMBAR AVATAR
      * Menangani preview gambar saat file baru dipilih.
+     * (FIXED: Menggunakan ID 'avatar' dan 'preview-avatar' yang benar)
      */
     function setupAvatarPreview() {
-        const imageInput = document.getElementById('image');
-        const imagePreview = document.getElementById('preview-image');
+        const imageInput = document.getElementById('avatar'); // <-- DIUBAH
+        const imagePreview = document.getElementById('preview-avatar'); // <-- DIUBAH
 
         if (!imageInput || !imagePreview) return;
 
@@ -225,21 +219,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * FITUR 3: INDIKATOR KEKUATAN & KRITERIA PASSWORD
+     * FITUR 3: INDIKATOR KRITERIA PASSWORD
      * Memberikan feedback real-time saat pengguna mengetik password baru.
      */
-    function setupPasswordStrengthMeter() {
+    function setupPasswordStrength() {
         const newPasswordInput = document.getElementById('new_password');
         if (!newPasswordInput) return;
 
         // Deklarasi elemen khusus untuk fitur ini
-        const strengthBar = document.getElementById('password-strength-bar');
-        const strengthText = document.getElementById('password-strength-text');
+
         const rules = {
             length: document.getElementById('rule-length'), uppercase: document.getElementById('rule-uppercase'),
             lowercase: document.getElementById('rule-lowercase'), number: document.getElementById('rule-number'),
             symbol: document.getElementById('rule-symbol'), previous: document.getElementById('rule-previous'),
-            strength: document.getElementById('rule-strength'),
         };
         const currentPasswordInput = document.getElementById('current_password');
 
@@ -258,31 +250,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const validateAllPasswordRules = () => {
             const password = newPasswordInput.value;
             const currentPassword = currentPasswordInput ? currentPasswordInput.value : '';
-            
+
             validateRule(rules.length, password.length >= 8);
             validateRule(rules.uppercase, /[A-Z]/.test(password));
             validateRule(rules.lowercase, /[a-z]/.test(password));
             validateRule(rules.number, /\d/.test(password));
             validateRule(rules.symbol, /[\W_]/.test(password));
             validateRule(rules.previous, password.length > 0 && password !== currentPassword);
-
-            if (password.length === 0) {
-                if (strengthBar) strengthBar.style.width = '0%';
-                if (strengthText) strengthText.textContent = '';
-                validateRule(rules.strength, false);
-                return;
-            }
-            const result = zxcvbn(password);
-            const score = result.score;
-            const strengthLevels = { 0: { text: 'Sangat Lemah', class: 'bg-danger', width: '10%' }, 1: { text: 'Lemah', class: 'bg-danger', width: '25%' }, 2: { text: 'Sedang', class: 'bg-warning', width: '50%' }, 3: { text: 'Kuat', class: 'bg-info', width: '75%' }, 4: { text: 'Sangat Kuat', class: 'bg-success', width: '100%' } };
-            const level = strengthLevels[score];
-
-            if (strengthBar) {
-                strengthBar.style.width = level.width;
-                strengthBar.className = 'progress-bar ' + level.class;
-            }
-            if (strengthText) strengthText.textContent = 'Kekuatan: ' + level.text;
-            validateRule(rules.strength, score >= 3);
         };
         
         newPasswordInput.addEventListener('keyup', validateAllPasswordRules);
@@ -317,32 +291,13 @@ document.addEventListener('DOMContentLoaded', function() {
         newPasswordConfirmationInput.addEventListener('keyup', checkPasswordMatch);
     }
 
-    /**
-     * FITUR 5: PENGUNCIAN FORM JIKA BELUM GANTI PASSWORD
-     * Menonaktifkan form informasi pribadi.
-     */
-    // function setupFormLocking() {
-    //     // Fungsi ini hanya dijalankan jika kondisi terpenuhi
-    //     @if(!Auth::user()->pass_change)
-    //         const personalInfoCard = document.querySelector('#personal-info-card');
-    //         if (personalInfoCard) {
-    //             personalInfoCard.querySelectorAll('.form-group').forEach(fg => fg.classList.add('form-group-locked'));
-    //             personalInfoCard.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]').forEach(input => input.readOnly = true);
-    //             const avatarInput = document.getElementById('image');
-    //             if(avatarInput) avatarInput.disabled = true;
-    //         }
-    //     @endif
-    // }
-
-
     // =================================================================
     // EKSEKUSI SEMUA FUNGSI SETUP
     // =================================================================
     setupAvatarPreview();
     setupPasswordVisibilityToggle();
-    setupPasswordStrengthMeter();
+    setupPasswordStrength();
     setupRealtimePasswordConfirmation();
-    // setupFormLocking();
 
 });
 </script>

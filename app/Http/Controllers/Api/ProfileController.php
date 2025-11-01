@@ -37,7 +37,7 @@ class ProfileController extends Controller
             'data' => [
                 'name' => $user->name,
                 'email' => $maskedEmail,
-                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : asset('storage/default_avatar.jpg'),
+                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/img/default_avatar.jpg'),
             ],
         ]);
     }
@@ -115,7 +115,7 @@ class ProfileController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 // Pastikan asset() bekerja dengan benar untuk URL storage
-                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : asset('storage/default_avatar.jpg'),
+                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/img/default_avatar.jpg'),
             ],
         ]);
     } catch (ValidationException $e) {

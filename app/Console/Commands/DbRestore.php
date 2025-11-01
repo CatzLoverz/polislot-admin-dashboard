@@ -12,7 +12,7 @@ class DbRestore extends Command
     public function handle()
     {
         $filename = $this->argument('filename');
-        $filePath = storage_path('backups/' . $filename);
+        $filePath = storage_path('app/backups/' . $filename);
 
         if (!file_exists($filePath)) {
             $this->error("❌ File tidak ditemukan: {$filePath}");
