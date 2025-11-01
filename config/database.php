@@ -59,7 +59,7 @@ return [
             'strict' => true,
             'engine' => null,
             'dump' => [
-                'dump_binary_path' => 'C:/laragon/bin/mysql/mysql-8.0.30-winx64/bin/', 
+                'dump_binary_path' => env('DUMP_BINARY_PATH'),
                 'use_single_transaction' => true,
                 'timeout' => 60 * 5, // 5 menit
             ],
@@ -84,7 +84,7 @@ return [
             'strict' => true,
             'engine' => null,
             'dump' => [
-                'dump_binary_path' => 'C:/laragon/bin/mysql/mariadb-12.0.2-winx64/bin/', 
+                'dump_binary_path' => env('DUMP_BINARY_PATH'), 
                 'use_single_transaction' => true,
                 'timeout' => 60 * 5, // 5 menit
             ],
