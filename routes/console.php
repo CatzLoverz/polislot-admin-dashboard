@@ -11,36 +11,25 @@ Schedule::call(function () {
     );
 })->everyMinute();
 
-/*
-|--------------------------------------------------------------------------
-| Jadwal Backup Otomatis (Mode Override)
-|--------------------------------------------------------------------------
-*/
-
 // 1. BACKUP PER JAM (OVERRIDE)
 // Akan menimpa file 'backup.sql' di dalam folder 'hourly'
-Schedule::command('db:backup-auto hourly/hourly-backup.sql') // <-- UBAH DI SINI
-    ->everyMinute()
+Schedule::command('db:backup-auto hourly/hourly-backup.sql')
+    ->hourly()
     ->appendOutputTo(storage_path('logs/backup.log'));
 
 // 2. BACKUP HARIAN (OVERRIDE)
 // Akan menimpa file 'backup.sql' di dalam folder 'daily'
-Schedule::command('db:backup-auto daily/daily-backup.sql') // <-- UBAH DI SINI
-    ->everyMinute()
+Schedule::command('db:backup-auto daily/daily-backup.sql')
+    ->daily()
     ->appendOutputTo(storage_path('logs/backup.log'));
 
 // 3. BACKUP PER 3 HARI (OVERRIDE)
 // Akan menimpa file 'backup.sql' di dalam folder 'every_3days'
-Schedule::command('db:backup-auto every_3days/every_3days-backup.sql') // <-- UBAH DI SINI
-    ->everyMinute()
+Schedule::command('db:backup-auto every_3days/every_3days-backup.sql')
+    ->cron('0 0 */3 * *')
     ->appendOutputTo(storage_path('logs/backup.log'));
 
-// -------------------------------------------------------------------------
-
-// CLEANUP (UNTUK BACKUP MANUAL ANDA)
-// Perintah ini akan membersihkan backup MANUAL (yang bertanggal)
-// dari folder utama 'storage/app/backups'.
-// Folder 'hourly', 'daily', dll tidak akan tersentuh.
+// 4. CLEAN UP BACKUP MANUAL LAMA (OLDER THAN 7 DAYS)
 Schedule::command('backup:clean --days=7')
     ->dailyAt('03:00')
     ->appendOutputTo(storage_path('logs/backup-clean.log'));
