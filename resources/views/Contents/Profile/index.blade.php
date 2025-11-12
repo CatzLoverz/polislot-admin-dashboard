@@ -158,9 +158,6 @@
 @push('scripts')
 {{-- Style khusus untuk halaman profil --}}
 <style>
-    /* Mengatur tampilan form yang terkunci/readonly */
-    /* .form-group-locked .form-control[readonly] { background-color: #f0f1f5 !important; cursor: not-allowed; }
-    .form-group-locked label[for="image"] { cursor: not-allowed; opacity: 0.65; pointer-events: none; } */
 
     /* Style untuk checklist password */
     #password-rules ul { padding-left: 0; }
@@ -204,15 +201,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const icon = toggleButton.querySelector('i');
         const currentPasswordInput = document.getElementById('current_password');
-        const newPasswordInput = document.getElementById('new_password');
-        const newPasswordConfirmationInput = document.getElementById('new_password_confirmation');
 
         toggleButton.addEventListener('click', function() {
             const isPassword = currentPasswordInput.type === 'password';
             const newType = isPassword ? 'text' : 'password';
             currentPasswordInput.type = newType;
-            newPasswordInput.type = newType;
-            newPasswordConfirmationInput.type = newType;
             icon.classList.toggle('fa-eye');
             icon.classList.toggle('fa-eye-slash');
         });

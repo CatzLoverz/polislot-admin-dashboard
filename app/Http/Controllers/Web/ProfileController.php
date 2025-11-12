@@ -40,7 +40,7 @@ class ProfileController extends Controller
         $passwordRules = [
             'required',
             'confirmed',
-            new NotCurrentPassword(), // Aturan: Tidak boleh sama dengan password lama
+            new NotCurrentPassword(),
             PasswordRule::min(8)->mixedCase()->numbers()->symbols(), 
         ];
 
@@ -51,7 +51,7 @@ class ProfileController extends Controller
 
         if ($request->filled('new_password')) {
             $rules['current_password'] = ['required', 'current_password'];
-            $rules['new_password'] = $passwordRules; // <-- 3. Terapkan aturan password
+            $rules['new_password'] = $passwordRules; 
         }
 
         DB::beginTransaction();
@@ -75,6 +75,7 @@ class ProfileController extends Controller
             }
 
             /** @var \App\Models\User $user */
+            $user->name = $validatedData['name'];
             $user->save();
 
             Auth::login($user);

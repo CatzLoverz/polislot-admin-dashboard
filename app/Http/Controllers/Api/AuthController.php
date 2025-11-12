@@ -487,7 +487,9 @@ public function verifyResetOtp(Request $request): JsonResponse
         $user->update([
             'password' => Hash::make($request->password),
             'otp_code' => null,
-            'otp_expires_at' => null
+            'otp_expires_at' => null,
+            'failed_attempts' => 0,
+            'locked_until' => null,
         ]);
 
         Log::info('[AuthController@resetPassword] Password berhasil direset.', ['email' => $user->email]);
