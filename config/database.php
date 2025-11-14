@@ -59,7 +59,7 @@ return [
             'strict' => true,
             'engine' => null,
             'dump' => [
-                'dump_binary_path' => env('DUMP_BINARY_PATH'),
+                'dump_binary_path' => env('DUMP_BINARY_PATH', null),
                 'use_single_transaction' => true,
                 'timeout' => 60 * 5, // 5 menit
             ],
@@ -84,7 +84,7 @@ return [
             'strict' => true,
             'engine' => null,
             'dump' => [
-                'dump_binary_path' => env('DUMP_BINARY_PATH'), 
+                'dump_binary_path' => env('DUMP_BINARY_PATH', null), 
                 'use_single_transaction' => true,
                 'timeout' => 60 * 5, // 5 menit
             ],

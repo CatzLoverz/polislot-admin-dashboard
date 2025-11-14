@@ -5,15 +5,15 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process; 
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Illuminate\Support\Facades\File; 
 
 class BackupDatabase extends Command
 {
     protected $signature = 'db:backup';
-    protected $description = 'Backup database MySQL/MariaDB';
+    protected $description = 'Backup database MySQL/MariaDB (Fleksibel Win/Linux)';
 
     public function handle()
     {
-        // Ambil konfigurasi dari 'mariadb'
         $config = config('database.connections.mariadb');
 
         $database = $config['database'];
@@ -27,31 +27,35 @@ class BackupDatabase extends Command
 
         $this->info(" Membuat backup database '{$database}'...");
 
-        $filename  = 'backup-' . date('Y-m-d-H-i-s') . '.sql';
-        $backupDir = storage_path('app/backups/manual');
+        $backupFile = storage_path('app/backups/manual' . DIRECTORY_SEPARATOR . 'backup-' . date('Y-m-d-H-i-s') . '.sql');
+        $backupDir = File::dirname($backupFile);
 
-        if (!file_exists($backupDir)) {
-            mkdir($backupDir, 0755, true);
-        }
-        
-        $backupFile = $backupDir . DIRECTORY_SEPARATOR . $filename;
-
-        // Cek path dumper
-        if (!$dumpDir) {
-            $this->error("❌ 'dump_binary_path' tidak diatur di config/database.php > connections.mariadb.dump");
-            return 1;
-        }
-        
-        $dumper = rtrim($dumpDir, '\\/') . DIRECTORY_SEPARATOR . 'mariadb-dump.exe';
-
-        if (!file_exists($dumper)) {
-            $this->error("❌ mariadb-dump.exe tidak ditemukan di: {$dumper}");
-            $this->error(" Pastikan 'dump_binary_path' di config/database.php sudah benar.");
-            return 1;
+        if (!File::exists($backupDir)) {
+            File::makeDirectory($backupDir, 0755, true, true);
         }
 
-        // 2. REFAKTOR COMMAND MENGGUNAKAN SYMFONY PROCESS
-        $this->info(" Menjalankan backup...");
+        // 1. Tentukan nama executable berdasarkan OS
+        $baseDumperName = 'mariadb-dump';
+        $dumperName = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? $baseDumperName . '.exe' : $baseDumperName;
+
+        // 2. Tentukan path executable
+        $dumper = $dumperName; 
+
+        if ($dumpDir) {
+            $this->info(" Menggunakan 'dump_binary_path' dari config: {$dumpDir}");
+            $dumper = rtrim($dumpDir, '\\/') . DIRECTORY_SEPARATOR . $dumperName;
+            
+            // 4. Validasi file ada
+            if (!File::exists($dumper)) {
+                $this->error("❌ Executable '{$dumperName}' tidak ditemukan di path: {$dumper}");
+                $this->error(" Pastikan 'dump_binary_path' di config/database.php sudah benar.");
+                return 1;
+            }
+        } else {
+            $this->info(" 'dump_binary_path' tidak diatur. Mengandalkan '{$dumperName}' dari PATH sistem.");
+        }
+
+        $this->info(" Menjalankan backup dengan: {$dumper}...");
 
         $process = Process::fromShellCommandline(
             sprintf(
@@ -65,30 +69,25 @@ class BackupDatabase extends Command
         $process->setTimeout(3600); // Set timeout 1 jam
 
         try {
-            // Jalankan command. 'mustRun()' akan melempar exception jika gagal.
             $process->mustRun(); 
 
-            // Cek ulang file setelah command sukses
             if (file_exists($backupFile) && filesize($backupFile) > 0) {
-                $this->info("✅ Database backup created: {$filename}");
+                $this->info("✅ Database backup created: {$backupFile}");
                 $this->info(" Size: " . number_format(filesize($backupFile) / 1024, 2) . " KB");
-                $this->info(" Location: {$backupFile}");
                 return 0;
             } else {
                 $this->error("❌ File dibuat tapi kosong (0 bytes) atau tidak ada.");
-                @unlink($backupFile); // Hapus file kosong
+                @unlink($backupFile);
                 return 1;
             }
 
         } catch (ProcessFailedException $exception) {
-            // Jika command GAGAL (return code != 0)
             $this->error("❌ Backup GAGAL!");
             $this->error("================= PESAN ERROR (stderr) =================");
-            // Ini akan menampilkan error "Access Denied" atau error lainnya
             $this->error($exception->getProcess()->getErrorOutput()); 
             $this->error("======================================================");
+            $this->error("Pastikan '{$dumper}' valid dan kredensial database benar.");
 
-            // Hapus file 0-byte yang mungkin terbuat
             if (file_exists($backupFile)) {
                 @unlink($backupFile);
             }

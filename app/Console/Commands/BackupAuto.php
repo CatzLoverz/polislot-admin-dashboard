@@ -9,11 +9,8 @@ use Illuminate\Support\Facades\File;
 
 class BackupAuto extends Command
 {
-    /**
-     * Signature untuk menerima nama file (termasuk subfolder)
-     */
     protected $signature = 'db:backup-auto {filename}';
-    protected $description = 'Backup database dan override file (dipakai oleh scheduler)';
+    protected $description = 'Backup database (Fleksibel Win/Linux) untuk scheduler';
 
     public function handle()
     {
@@ -22,7 +19,6 @@ class BackupAuto extends Command
             $filename .= '.sql';
         }
 
-        // Ambil konfigurasi dari 'mariadb'
         $config = config('database.connections.mariadb');
         $database = $config['database'];
         $username = $config['username'];
@@ -40,16 +36,21 @@ class BackupAuto extends Command
             File::makeDirectory($backupDir, 0755, true, true);
         }
 
-        if (!$dumpDir) {
-            $this->error("❌ 'dump_binary_path' tidak diatur di config/database.php > connections.mariadb.dump");
-            return 1;
-        }
-        
-        $dumper = rtrim($dumpDir, '\\/') . DIRECTORY_SEPARATOR . 'mariadb-dump.exe';
+        $baseDumperName = 'mariadb-dump';
+        $dumperName = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? $baseDumperName . '.exe' : $baseDumperName;
+        $dumper = $dumperName; 
 
-        if (!file_exists($dumper)) {
-            $this->error("❌ mariadb-dump.exe tidak ditemukan di: {$dumper}");
-            return 1;
+        if ($dumpDir) {
+            $this->info(" Menggunakan 'dump_binary_path' dari config: {$dumpDir}");
+            $dumper = rtrim($dumpDir, '\\/') . DIRECTORY_SEPARATOR . $dumperName;
+            
+            if (!File::exists($dumper)) {
+                $this->error("❌ Executable '{$dumperName}' tidak ditemukan di path: {$dumper}");
+                $this->error(" Pastikan 'dump_binary_path' di config/database.php sudah benar.");
+                return 1;
+            }
+        } else {
+            $this->info(" 'dump_binary_path' tidak diatur. Mengandalkan '{$dumperName}' dari PATH sistem.");
         }
 
         $process = Process::fromShellCommandline(
