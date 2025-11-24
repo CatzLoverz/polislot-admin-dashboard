@@ -9,23 +9,19 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// Route Registrasi
-Route::post('/register', [AuthController::class, 'register']);
-//  Memverifikasi Kode OTP yang dikirim pengguna
-Route::post('/verify-register-otp', [AuthController::class, 'verifyRegisterOtp']);
-// Mengirim ulang Kode OTP 
-Route::post('/resend-register-otp', [AuthController::class, 'resendRegisterOtp']);
+// Rute Login
+Route::post('/login-attempt', [AuthController::class, 'login']);
 
-// Route Login
-Route::post('/login', [AuthController::class, 'login']);
-// Mengirim Kode OTP ke email pengguna
-Route::post('/password/send-reset-otp', [AuthController::class, 'sendResetOtp']);
-// Mengirim ulang Kode OTP 
-Route::post('/password/resend-reset-otp', [AuthController::class, 'resendResetOtp']);
-//  Memverifikasi Kode OTP yang dikirim pengguna
-Route::post('/password/verify-reset-otp', [AuthController::class, 'verifyResetOtp']);
-//  Mengatur ulang password baru (setelah OTP diverifikasi)
-Route::post('/password/reset', [AuthController::class, 'resetPassword']);
+// Rute Registrasi
+Route::post('/register-attempt', [AuthController::class, 'register']);
+Route::post('/register-otp-verify', [AuthController::class, 'registerOtpVerify']);
+Route::post('/register-otp-resend', [AuthController::class, 'registerOtpResend']);
+
+// Rute Forgot Password
+Route::post('/forgot-attempt', [AuthController::class, 'forgotPasswordVerify']);
+Route::post('/forgot-otp-verify', [AuthController::class, 'forgotPasswordOtpVerify']);
+Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend']);
+Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword']);
 
 Route::middleware('setDBConnByRole', 'auth:sanctum')->group(function () {
     // Route Logout (Protected, untuk mencabut token)

@@ -144,7 +144,7 @@ class AuthController extends Controller
             $user->save();
 
             Log::info('Mengirim OTP reset password.', ['user_id' => $user->user_id]);
-            Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.reset_password_otp'));
+            Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.reset_password_otp', 'Kode Reset Password Anda'));
 
             $request->session()->put('email_for_password_reset', $user->email);
             return redirect()->route('forgot_otp.form')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
@@ -203,7 +203,7 @@ class AuthController extends Controller
             $user->otp_expires_at = Carbon::now()->addMinutes(10);
             $user->save();
 
-            Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.reset_password_otp'));
+            Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.reset_password_otp', 'Kode Reset Password Anda'));
             Log::info('[AuthController@resendResetOtp] SUKSES: OTP reset baru dikirim.', ['email' => $email]);
             return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim ke email Anda.');
         } catch (\Exception $e) {

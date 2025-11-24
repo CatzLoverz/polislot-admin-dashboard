@@ -15,17 +15,19 @@ class SendOtpMail extends Mailable
 
     public $otpCode;
     public $viewName;
+    public $subject;
 
-    public function __construct($otpCode, $viewName)
+    public function __construct($otpCode, $viewName, $subject)
     {
         $this->otpCode = $otpCode;
         $this->viewName = $viewName;
+        $this->subject = $subject;
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Kode Verifikasi Akun Anda',
+            subject: $this->subject,
         );
     }
 
