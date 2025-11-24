@@ -23,11 +23,11 @@ class AuthController extends Controller
 
     /**
      * Memproses registrasi pengguna baru.
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function register(Request $request): JsonResponse
     {
-        Log::info('[AuthController@register] Permintaan registrasi baru.');
-
         try {
             return DB::transaction(function () use ($request) {
                 $existingUnverifiedUser = User::where('email', $request->email)
@@ -61,7 +61,7 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.registration_otp', 'Kode Verifikasi Akun Anda'));
 
-                Log::info('[AuthController@register] SUKSES.', ['user_id' => $user->user_id]);
+                Log::info('[API AuthController@register] Sukses: Registrasi berhasil.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess(
                     'Registrasi berhasil! Cek email Anda untuk kode OTP.',
@@ -71,20 +71,21 @@ class AuthController extends Controller
             });
 
         } catch (ValidationException $e) {
+            Log::warning('[API AuthController@register] Gagal: Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
         } catch (\Exception $e) {
-            Log::error('[AuthController@register] ERROR.', ['error' => $e->getMessage()]);
+            Log::error('[API AuthController@register] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan pada server.', 500);
         }
     }
 
     /**
      * Memverifikasi OTP Registrasi.
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function registerOtpVerify(Request $request): JsonResponse
     {
-        Log::info('[AuthController@registerOtpVerify] Menerima permintaan verifikasi OTP.');
-
         try {
             return DB::transaction(function () use ($request) {
                 $request->validate([
@@ -95,10 +96,12 @@ class AuthController extends Controller
                 $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
 
                 if ($user->hasVerifiedEmail()) {
+                    Log::warning('[API AuthController@registerOtpVerify] Gagal: Email sudah terverifikasi.', ['email' => $request->email]);
                     return $this->sendError('Email ini sudah terverifikasi.', 400);
                 }
 
                 if ($user->otp_code != $request->otp || Carbon::now()->gt($user->otp_expires_at)) {
+                    Log::warning('[API AuthController@registerOtpVerify] Gagal: Kode OTP salah atau kedaluwarsa.', ['email' => $request->email]);
                     return $this->sendError('Kode OTP salah atau telah kedaluwarsa.', 422);
                 }
 
@@ -109,7 +112,7 @@ class AuthController extends Controller
 
                 $token = $user->createToken('auth_token')->plainTextToken;
 
-                Log::info('[AuthController@registerOtpVerify] SUKSES: Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
+                Log::info('[API AuthController@registerOtpVerify] Sukses: Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Verifikasi berhasil! Selamat datang.', [
                     'access_token' => $token,
@@ -121,13 +124,15 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             return $this->sendValidationError($e);
         } catch (\Exception $e) {
-            Log::error('[VerifyOtp] Error.', ['error' => $e->getMessage()]);
+            Log::error('[API AuthController@registerOtpVerify] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan sistem.', 500);
         }
     }
 
     /**
      * Mengirim ulang OTP Registrasi.
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function registerOtpResend(Request $request): JsonResponse
     {
@@ -138,6 +143,7 @@ class AuthController extends Controller
                 $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
 
                 if ($user->hasVerifiedEmail()) {
+                    Log::warning('[API AuthController@registerOtpResend] Gagal: Email sudah terverifikasi.', ['email' => $request->email]);
                     return $this->sendError('Email sudah terverifikasi.', 400);
                 }
 
@@ -149,7 +155,7 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.registration_otp', 'Kode Verifikasi Akun Anda'));
                 
-                Log::info('[AuthController@registerOtpResend] SUKSES: OTP registrasi baru dikirim.', ['user_id' => $user->user_id]);
+                Log::info('[API AuthController@registerOtpResend] Sukses: OTP registrasi baru dikirim.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Kode OTP baru telah dikirim.', ['email' => $user->email]);
             });
@@ -157,7 +163,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             return $this->sendValidationError($e);
         } catch (\Exception $e) {
-            Log::error('[AuthController@registerOtpResend] GAGAL.', ['error' => $e->getMessage()]);
+            Log::error('[API AuthController@registerOtpResend] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal mengirim ulang OTP.', 500);
         }
     }
@@ -168,11 +174,12 @@ class AuthController extends Controller
 
     /**
      * Memproses Login.
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function login(Request $request): JsonResponse
     {
         $email = $request->input('email');
-        Log::info("[AuthController@login] Menerima percobaan login untuk email: {$email}");
 
         try {
             return DB::transaction(function () use ($request, $email) {
@@ -184,30 +191,39 @@ class AuthController extends Controller
                 $user = User::where('email', $email)->lockForUpdate()->first();
 
                 if (!$user) {
+                    Log::warning('[API AuthController@login] Gagal: Email tidak ditemukan.', ['email' => $email]);
                     return $this->sendError('Email tidak ditemukan.', 404);
                 }
 
+                $lastUpdate = $user->updated_at;
+                if ($user->failed_attempts > 0 && $lastUpdate->lt(now()->subMinutes(10))) {
+                    $user->failed_attempts = 0;
+                    $user->save();
+                }
+
                 if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
-                    Log::warning('[AuthController@login] GAGAL: Akun belum diverifikasi.', ['email' => $email]);
+                    Log::warning('[API AuthController@login] Gagal: Akun belum diverifikasi.', ['email' => $email]);
                     return $this->sendError('Akun Anda belum diverifikasi.', 403, ['email' => $user->email], 'UNVERIFIED');
                 }
 
                 if ($user->locked_until && now()->lt($user->locked_until)) {
                     $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
+                    Log::warning('[API AuthController@login] Gagal: Akun dikunci.', ['email' => $email]);
                     return $this->sendError("Akun Anda dikunci. Coba lagi dalam {$minutes} menit.", 403);
                 }
 
                 if (!Hash::check($credentials['password'], $user->password)) {
                     $user->increment('failed_attempts');
-                    Log::warning('[AuthController@login] GAGAL: Password salah.', ['attempts' => $user->failed_attempts]);
-
+                    
                     if ($user->failed_attempts >= 4) {
                         $lockMinutes = 10;
                         $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
+                        Log::warning('[API AuthController@login] Gagal: Password salah, akun dikunci.', ['email' => $email]);
                         return $this->sendError("Akun Anda dikunci selama {$lockMinutes} menit.", 403);
                     }
 
                     $sisa = 4 - $user->failed_attempts;
+                    Log::warning('[API AuthController@login] Gagal: Password salah.', ['email' => $email, 'sisa' => $sisa]);
                     return $this->sendError("Password salah. Sisa percobaan: {$sisa} kali.", 401);
                 }
 
@@ -216,7 +232,7 @@ class AuthController extends Controller
                 
                 $user->update(['failed_attempts' => 0, 'locked_until' => null]);
 
-                Log::info('[AuthController@login] SUKSES.', ['user_id' => $user->user_id]);
+                Log::info('[API AuthController@login] Sukses: Login berhasil.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Login berhasil!', [
                     'access_token' => $token,
@@ -228,26 +244,29 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             return $this->sendValidationError($e);
         } catch (\Exception $e) {
-            Log::error('[AuthController@login] ERROR SISTEM.', ['error' => $e->getMessage()]);
+            Log::error('[API AuthController@login] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan pada server.', 500);
         }
     }
 
     /**
      * Memproses Logout.
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function logout(Request $request): JsonResponse
     {
        $user = $request->user();
         if ($user) {
-            Log::info('[AuthController@logout] Memulai proses logout.', ['user_id' => $user->user_id]);
             /** @var \Laravel\Sanctum\PersonalAccessToken|null $token */
             $token = $user->currentAccessToken();
             if ($token) {
                 $token->delete();
             }
+            Log::info('[API AuthController@logout] Sukses: Pengguna logout.', ['user_id' => $user->user_id]);
             return $this->sendSuccess('Berhasil logout.');
         }
+        Log::warning('[API AuthController@logout] Gagal: Token tidak valid.');
         return $this->sendError('Token tidak valid.', 401);
     }
 
@@ -257,11 +276,11 @@ class AuthController extends Controller
 
     /**
      * Memproses permintaan email untuk reset password (mengirim OTP).
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function forgotPasswordVerify(Request $request): JsonResponse
     {
-        Log::info('[AuthController@forgotPasswordVerify] Menerima permintaan reset password.');
-
         try {
             return DB::transaction(function () use ($request) {
                 $validatedData = $request->validate(['email' => 'required|email|exists:users,email']);
@@ -272,22 +291,26 @@ class AuthController extends Controller
                 $user->otp_expires_at = Carbon::now()->addMinutes(10);
                 $user->save();
 
-                Log::info('Mengirim OTP reset password.', ['user_id' => $user->user_id]);
                 Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.reset_password_otp', 'Kode Reset Password'));
+
+                Log::info('[API AuthController@forgotPasswordVerify] Sukses: OTP reset password dikirim.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Kode OTP telah dikirim ke email Anda.', ['email' => $user->email]);
             });
 
         } catch (ValidationException $e) {
+             Log::warning('[API AuthController@forgotPasswordVerify] Gagal: Email tidak ditemukan.', ['email' => $request->email]);
              return $this->sendError('Email tidak ditemukan.', 422);
         } catch (\Exception $e) {
-            Log::error('[AuthController@sendResetOtp] Gagal.', ['error' => $e->getMessage()]);
+            Log::error('[API AuthController@forgotPasswordVerify] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal mengirim OTP.', 500);
         }
     }
 
     /**
      * Memverifikasi OTP untuk reset password.
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function forgotPasswordOtpVerify(Request $request): JsonResponse
     {
@@ -296,21 +319,24 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->firstOrFail();
 
             if ($user->otp_code != $request->otp || Carbon::now()->gt($user->otp_expires_at)) {
+                Log::warning('[API AuthController@forgotPasswordOtpVerify] Gagal: OTP salah atau kedaluwarsa.', ['email' => $request->email]);
                 return $this->sendError('Kode OTP salah atau telah kedaluwarsa.', 400);
             }
 
-            Log::info('[AuthController@verifyResetOtp] OTP valid, lanjut ke reset password.', ['email' => $request->email]);
+            Log::info('[API AuthController@forgotPasswordOtpVerify] Sukses: OTP valid.', ['email' => $request->email]);
 
             return $this->sendSuccess('OTP valid. Silakan reset password.', ['email' => $user->email]);
 
         } catch (\Exception $e) {
-            Log::error('[AuthController@verifyResetOtp] Gagal verifikasi.', ['error' => $e->getMessage()]);
+            Log::error('[API AuthController@forgotPasswordOtpVerify] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan sistem.', 500);
         }
     }
 
     /**
      * Mengirim ulang OTP untuk reset password.
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function forgotPasswordOtpResend(Request $request): JsonResponse
     {
@@ -327,7 +353,7 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.reset_password_otp', 'Kode Reset Password'));
                 
-                Log::info('[AuthController@resendResetOtp] SUKSES: OTP reset baru dikirim.', ['email' => $request->email]);
+                Log::info('[API AuthController@forgotPasswordOtpResend] Sukses: OTP reset baru dikirim.', ['email' => $request->email]);
 
                 return $this->sendSuccess('Kode OTP baru telah dikirim ke email Anda.', ['email' => $user->email]);
             });
@@ -335,13 +361,15 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             return $this->sendValidationError($e);
         } catch (\Exception $e) {
-            Log::error('[AuthController@resendResetOtp] Gagal.', ['error' => $e->getMessage()]);
+            Log::error('[API AuthController@forgotPasswordOtpResend] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal mengirim ulang OTP.', 500);
         }
     }
 
     /**
      * Memproses penyimpanan password baru.
+     * * @param Request $request
+     * @return JsonResponse
      */
     public function resetPassword(Request $request): JsonResponse
     {
@@ -355,6 +383,7 @@ class AuthController extends Controller
                 $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
 
                 if (Hash::check($request->password, $user->password)) {
+                     Log::warning('[API AuthController@resetPassword] Gagal: Password baru sama dengan lama.', ['email' => $request->email]);
                      return $this->sendError('Password baru tidak boleh sama dengan yang lama.', 400);
                 }
 
@@ -365,7 +394,7 @@ class AuthController extends Controller
                 $user->locked_until = null; 
                 $user->save();
 
-                Log::info('[AuthController@resetPassword] SUKSES: Password direset.', ['email' => $request->email]);
+                Log::info('[API AuthController@resetPassword] Sukses: Password direset.', ['email' => $request->email]);
 
                 return $this->sendSuccess('Password berhasil direset. Silakan login.');
             });
@@ -373,7 +402,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             return $this->sendValidationError($e);
         } catch (\Exception $e) {
-            Log::error('[AuthController@resetPassword] Gagal sistem.', ['error' => $e->getMessage()]);
+            Log::error('[API AuthController@resetPassword] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal mereset password.', 500);
         }
     }
