@@ -85,14 +85,14 @@ class AuthController extends Controller
             $user->increment('failed_attempts');
             Log::warning('[AuthController@login] GAGAL: Password salah.', ['attempts' => $user->failed_attempts]);
 
-            if ($user->failed_attempts >= 3) {
-                $lockMinutes = 15;
+            if ($user->failed_attempts >= 4) {
+                $lockMinutes = 10;
                 $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
                 return redirect()->route('login.form')->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")
                     ->withInput($request->only('email'));
             }
 
-            $sisa = 3 - $user->failed_attempts;
+            $sisa = 4 - $user->failed_attempts;
             return redirect()->route('login.form')->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")
                 ->withInput($request->only('email'));
         } catch (\Exception $e) {

@@ -201,13 +201,13 @@ class AuthController extends Controller
                     $user->increment('failed_attempts');
                     Log::warning('[AuthController@login] GAGAL: Password salah.', ['attempts' => $user->failed_attempts]);
 
-                    if ($user->failed_attempts >= 3) {
-                        $lockMinutes = 15;
+                    if ($user->failed_attempts >= 4) {
+                        $lockMinutes = 10;
                         $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
                         return $this->sendError("Akun Anda dikunci selama {$lockMinutes} menit.", 403);
                     }
 
-                    $sisa = 3 - $user->failed_attempts;
+                    $sisa = 4 - $user->failed_attempts;
                     return $this->sendError("Password salah. Sisa percobaan: {$sisa} kali.", 401);
                 }
 
@@ -238,10 +238,14 @@ class AuthController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        $user = $request->user();
+       $user = $request->user();
         if ($user) {
             Log::info('[AuthController@logout] Memulai proses logout.', ['user_id' => $user->user_id]);
-            $user->currentAccessToken()->delete();
+            /** @var \Laravel\Sanctum\PersonalAccessToken|null $token */
+            $token = $user->currentAccessToken();
+            if ($token) {
+                $token->delete();
+            }
             return $this->sendSuccess('Berhasil logout.');
         }
         return $this->sendError('Token tidak valid.', 401);
