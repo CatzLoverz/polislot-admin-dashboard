@@ -17,17 +17,26 @@ use Illuminate\Http\JsonResponse;
 
 class ProfileController extends Controller
 {
+    /**
+     * Menampilkan data profil pengguna.
+     * * @param Request $request
+     * @return JsonResponse
+     */
     public function show(Request $request): JsonResponse
     {
         $user = $request->user();
+        Log::info('[API ProfileController@show] Berhasil menampilkan profil. User ID: ' . $user->user_id);
         return $this->sendSuccess('Data profil berhasil diambil.', $this->formatUser($user));
     }
 
+    /**
+     * Memperbarui data profil pengguna.
+     * * @param Request $request
+     * @return JsonResponse
+     */
     public function update(Request $request): JsonResponse
     {
         $user = $request->user();
-        Log::info('[Profile@update] User ID: ' . $user->user_id);
-
         // Fix method PUT form-data
         if ($request->isMethod('put') || $request->isMethod('patch')) {
              // Laravel handle ini otomatis, tapi request harus multipart/form-data
@@ -43,7 +52,8 @@ class ProfileController extends Controller
             $rules['new_password'] = [
                 'required', 
                 'confirmed', 
-                PasswordRule::min(8)->mixedCase()->numbers()->symbols()
+                PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
+                new NotCurrentPassword(),
             ];
         }
 

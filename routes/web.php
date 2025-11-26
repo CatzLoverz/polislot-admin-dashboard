@@ -43,7 +43,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword'])->name('reset_pass.attempt');
 });
 
-Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Rute Logout
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     

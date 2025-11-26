@@ -16,10 +16,9 @@ use Illuminate\Validation\Rules\Password as PasswordRule;
 
 class AuthController extends Controller
 {
-    // --- AUTENTIKASI UTAMA (LOGIN & LOGOUT) ---
-
     /**
      * Menampilkan halaman login.
+     * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function loginForm()
     {
@@ -36,6 +35,8 @@ class AuthController extends Controller
 
     /**
      * Memproses permintaan login pengguna.
+     * * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function login(Request $request)
     {
@@ -110,6 +111,8 @@ class AuthController extends Controller
 
     /**
      * Memproses permintaan logout pengguna.
+     * * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request)
     {
@@ -122,11 +125,13 @@ class AuthController extends Controller
         return redirect()->route('login.form');
     }
 
-
-    // --- ALUR LUPA & RESET PASSWORD ---
+    // =========================================================================
+    // 🟡 ALUR LUPA & RESET PASSWORD
+    // =========================================================================
 
     /**
      * Menampilkan halaman form lupa password.
+     * * @return \Illuminate\View\View
      */
     public function forgotPasswordForm()
     {
@@ -135,6 +140,8 @@ class AuthController extends Controller
 
     /**
      * Memproses permintaan email untuk reset password (mengirim OTP).
+     * * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function forgotPasswordVerify(Request $request)
     {
@@ -162,6 +169,7 @@ class AuthController extends Controller
 
     /**
      * Menampilkan halaman form verifikasi OTP untuk reset password.
+     * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function forgotPasswordOtpForm()
     {
@@ -173,6 +181,8 @@ class AuthController extends Controller
 
     /**
      * Memproses verifikasi OTP untuk reset password.
+     * * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function forgotPasswordOtpVerify(Request $request)
     {
@@ -196,6 +206,8 @@ class AuthController extends Controller
 
     /**
      * Mengirim ulang OTP untuk reset password.
+     * * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function forgotPasswordOtpResend(Request $request)
     {
@@ -223,6 +235,7 @@ class AuthController extends Controller
 
     /**
      * Menampilkan halaman form untuk memasukkan password baru.
+     * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function resetPasswordForm()
     {
@@ -235,6 +248,8 @@ class AuthController extends Controller
 
     /**
      * Memproses penyimpanan password baru setelah reset.
+     * * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function resetPassword(Request $request)
     {

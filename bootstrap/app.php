@@ -18,8 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest' => \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class,
             # Custom Middleware
             'setDBConnByRole' => App\Http\Middleware\SetDBConnByRole::class,
-            // 'forcePasswordChange' => App\Http\Middleware\ForcePasswordChange::class,
+            # API Encyption
+            'encryptApi' => App\Http\Middleware\ApiEncryption::class,
         ]);
+        $middleware->redirectGuestsTo(fn () => route('login.form'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
