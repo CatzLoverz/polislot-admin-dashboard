@@ -24,7 +24,7 @@ class TierController extends Controller
         $request->validate([
             'tier_name' => 'required|string|max:50|unique:tiers,tier_name',
             'min_points' => 'required|integer|min:0',
-            'color_theme' => 'required|string|in:blue,gold,silver,bronze,red,purple,green,orange,pink,cyan,indigo,teal,lime,amber,rainbow',
+            'color_theme' => 'required|string', // Hanya 6 digit Hex
             'icon' => 'required|string|max:50',
         ]);
 
@@ -47,7 +47,7 @@ class TierController extends Controller
         $request->validate([
             'tier_name' => 'required|string|max:50|unique:tiers,tier_name,' . $id . ',tier_id',
             'min_points' => 'required|integer|min:0',
-            'color_theme' => 'required|string|in:blue,gold,silver,bronze,red,purple,green,orange,pink,dark,rainbow',
+            'color_theme' => 'required|string', // Hanya 6 digit Hex
             'icon' => 'required|string|max:50',
         ]);
 

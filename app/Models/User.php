@@ -26,6 +26,8 @@ class User extends Authenticatable
         'otp_expires_at',
         'failed_attempts',
         'locked_until',
+        'current_points',
+        'lifetime_points'
     ];
 
     protected $hidden = [

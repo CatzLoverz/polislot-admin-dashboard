@@ -177,23 +177,24 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Tema Warna <span class="text-danger">*</span></label>
-                                                            <select name="color_theme" class="form-control color-selector" required>
-                                                                <option value="blue" {{ ($tier->color_theme ?? 'blue') == 'blue' ? 'selected' : '' }}>🔵 Blue (Default)</option>
-                                                                <option value="gold" {{ ($tier->color_theme ?? '') == 'gold' ? 'selected' : '' }}>🥇 Gold</option>
-                                                                <option value="silver" {{ ($tier->color_theme ?? '') == 'silver' ? 'selected' : '' }}>🥈 Silver</option>
-                                                                <option value="bronze" {{ ($tier->color_theme ?? '') == 'bronze' ? 'selected' : '' }}>🥉 Bronze</option>
-                                                                <option value="red" {{ ($tier->color_theme ?? '') == 'red' ? 'selected' : '' }}>🔴 Red (Legend)</option>
-                                                                <option value="purple" {{ ($tier->color_theme ?? '') == 'purple' ? 'selected' : '' }}>🟣 Purple (Master)</option>
-                                                                <option value="green" {{ ($tier->color_theme ?? '') == 'green' ? 'selected' : '' }}>🟢 Green (Pro)</option>
-                                                                <option value="orange" {{ ($tier->color_theme ?? '') == 'orange' ? 'selected' : '' }}>🟠 Orange (Elite)</option>
-                                                                <option value="pink" {{ ($tier->color_theme ?? '') == 'pink' ? 'selected' : '' }}>🩷 Pink (VIP)</option>
-                                                                <option value="cyan" {{ ($tier->color_theme ?? '') == 'cyan' ? 'selected' : '' }}>🔵 Cyan (Diamond)</option>
-                                                                <option value="indigo" {{ ($tier->color_theme ?? '') == 'indigo' ? 'selected' : '' }}>🔷 Indigo (Platinum)</option>
-                                                                <option value="teal" {{ ($tier->color_theme ?? '') == 'teal' ? 'selected' : '' }}>💎 Teal (Emerald)</option>
-                                                                <option value="lime" {{ ($tier->color_theme ?? '') == 'lime' ? 'selected' : '' }}>🟢 Lime (Fresh)</option>
-                                                                <option value="amber" {{ ($tier->color_theme ?? '') == 'amber' ? 'selected' : '' }}>🟡 Amber (Supreme)</option>
-                                                                <option value="rainbow" {{ ($tier->color_theme ?? '') == 'rainbow' ? 'selected' : '' }}>🌈 Rainbow (Champion)</option>
-                                                            </select>
+                                                            <select name="color_theme" class="form-control edit-color-selector" required>
+            {{-- VALUE DIUBAH MENJADI HEX COLOR --}}
+            <option value="#6c63ff" {{ ($tier->color_theme ?? 'blue') == 'blue' ? 'selected' : '' }}>🔵 Blue (Default)</option>
+            <option value="#FFD700" {{ ($tier->color_theme ?? '') == 'gold' ? 'selected' : '' }}>🥇 Gold</option>
+            <option value="#C0C0C0" {{ ($tier->color_theme ?? '') == 'silver' ? 'selected' : '' }}>🥈 Silver</option>
+            <option value="#CD7F32" {{ ($tier->color_theme ?? '') == 'bronze' ? 'selected' : '' }}>🥉 Bronze</option>
+            <option value="#e74c3c" {{ ($tier->color_theme ?? '') == 'red' ? 'selected' : '' }}>🔴 Red (Legend)</option>
+            <option value="#9b59b6" {{ ($tier->color_theme ?? '') == 'purple' ? 'selected' : '' }}>🟣 Purple (Master)</option>
+            <option value="#27ae60" {{ ($tier->color_theme ?? '') == 'green' ? 'selected' : '' }}>🟢 Green (Pro)</option>
+            <option value="#f39c12" {{ ($tier->color_theme ?? '') == 'orange' ? 'selected' : '' }}>🟠 Orange (Elite)</option>
+            <option value="#e91e63" {{ ($tier->color_theme ?? '') == 'pink' ? 'selected' : '' }}>🩷 Pink (VIP)</option>
+            <option value="#00bcd4" {{ ($tier->color_theme ?? '') == 'cyan' ? 'selected' : '' }}>🔵 Cyan (Diamond)</option>
+            <option value="#3f51b5" {{ ($tier->color_theme ?? '') == 'indigo' ? 'selected' : '' }}>🔷 Indigo (Platinum)</option>
+            <option value="#009688" {{ ($tier->color_theme ?? '') == 'teal' ? 'selected' : '' }}>💎 Teal (Emerald)</option>
+            <option value="#cddc39" {{ ($tier->color_theme ?? '') == 'lime' ? 'selected' : '' }}>🟢 Lime (Fresh)</option>
+            <option value="#ffc107" {{ ($tier->color_theme ?? '') == 'amber' ? 'selected' : '' }}>🟡 Amber (Supreme)</option>
+            <option value="#FFD700" {{ ($tier->color_theme ?? '') == 'rainbow' ? 'selected' : '' }}>🌈 Rainbow (Champion)</option>
+        </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -345,22 +346,21 @@
                             <div class="form-group">
                                 <label>Tema Warna <span class="text-danger">*</span></label>
                                 <select name="color_theme" id="colorThemeCreate" class="form-control" required>
-                                    <option value="blue">🔵 Blue (Default)</option>
-                                    <option value="gold">🥇 Gold</option>
-                                    <option value="silver">🥈 Silver</option>
-                                    <option value="bronze">🥉 Bronze</option>
-                                    <option value="red">🔴 Red (Legend)</option>
-                                    <option value="purple">🟣 Purple (Master)</option>
-                                    <option value="green">🟢 Green (Pro)</option>
-                                    <option value="orange">🟠 Orange (Elite)</option>
-                                    <option value="pink">🩷 Pink (VIP)</option>
-                                    <option value="cyan">🔵 Cyan (Diamond)</option>
-                                    <option value="indigo">🔷 Indigo (Platinum)</option>
-                                    <option value="teal">💎 Teal (Emerald)</option>
-                                    <option value="lime">🟢 Lime (Fresh)</option>
-                                    <option value="amber">🟡 Amber (Supreme)</option>
-                                    <option value="rainbow">🌈 Rainbow (Champion)</option>
-                                </select>
+    <option value="#6c63ff">🔵 Blue (Default)</option>
+    <option value="#FFD700">🥇 Gold</option>
+    <option value="#C0C0C0">🥈 Silver</option>
+    <option value="#CD7F32">🥉 Bronze</option>
+    <option value="#e74c3c">🔴 Red (Legend)</option>
+    <option value="#9b59b6">🟣 Purple (Master)</option>
+    <option value="#27ae60">🟢 Green (Pro)</option>
+    <option value="#f39c12">🟠 Orange (Elite)</option>
+    <option value="#e91e63">🩷 Pink (VIP)</option>
+    <option value="#00bcd4">🔵 Cyan (Diamond)</option>
+    <option value="#3f51b5">🔷 Indigo (Platinum)</option>
+    <option value="#009688">💎 Teal (Emerald)</option>
+    <option value="#cddc39">🟢 Lime (Fresh)</option>
+    <option value="#ffc107">🟡 Amber (Supreme)</option>
+    <option value="#FFD700">🌈 Rainbow (Champion)</option> </select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -437,23 +437,23 @@
 
         // Definisi warna gradient
         const colorGradients = {
-            'blue': { bg: 'linear-gradient(135deg, #eef3ff 0%, #d8e0ff 100%)', icon: '#6c63ff' },
-            'gold': { bg: 'linear-gradient(135deg, #fff4e6 0%, #ffe0b2 100%)', icon: '#FFD700' },
-            'silver': { bg: 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)', icon: '#C0C0C0' },
-            'bronze': { bg: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)', icon: '#CD7F32' },
-            'red': { bg: 'linear-gradient(135deg, #ffe5e5 0%, #ffcccc 100%)', icon: '#e74c3c' },
-            'purple': { bg: 'linear-gradient(135deg, #f3e5ff 0%, #e1ccff 100%)', icon: '#9b59b6' },
-            'green': { bg: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)', icon: '#27ae60' },
-            'orange': { bg: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)', icon: '#f39c12' },
-            'pink': { bg: 'linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%)', icon: '#e91e63' },
-            'cyan': { bg: 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)', icon: '#00bcd4' },
-            'indigo': { bg: 'linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%)', icon: '#3f51b5' },
-            'teal': { bg: 'linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%)', icon: '#009688' },
-            'lime': { bg: 'linear-gradient(135deg, #f9fbe7 0%, #f0f4c3 100%)', icon: '#cddc39' },
-            'amber': { bg: 'linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%)', icon: '#ffc107' },
-            'rainbow': { bg: 'linear-gradient(135deg, #ffd89b 0%, #19547b 100%)', icon: '#FFD700' }
-        };
-
+    // KEY DIUBAH DARI NAMA TEMA -> HEX COLOR
+    '#6c63ff': { bg: 'linear-gradient(135deg, #eef3ff 0%, #d8e0ff 100%)', icon: '#6c63ff' }, // Blue
+    '#FFD700': { bg: 'linear-gradient(135deg, #fff4e6 0%, #ffe0b2 100%)', icon: '#FFD700' }, // Gold (Juga digunakan untuk Rainbow icon color)
+    '#C0C0C0': { bg: 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)', icon: '#C0C0C0' }, // Silver
+    '#CD7F32': { bg: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)', icon: '#CD7F32' }, // Bronze
+    '#e74c3c': { bg: 'linear-gradient(135deg, #ffe5e5 0%, #ffcccc 100%)', icon: '#e74c3c' }, // Red
+    '#9b59b6': { bg: 'linear-gradient(135deg, #f3e5ff 0%, #e1ccff 100%)', icon: '#9b59b6' }, // Purple
+    '#27ae60': { bg: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)', icon: '#27ae60' }, // Green
+    '#f39c12': { bg: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)', icon: '#f39c12' }, // Orange
+    '#e91e63': { bg: 'linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%)', icon: '#e91e63' }, // Pink
+    '#00bcd4': { bg: 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)', icon: '#00bcd4' }, // Cyan
+    '#3f51b5': { bg: 'linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%)', icon: '#3f51b5' }, // Indigo
+    '#009688': { bg: 'linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%)', icon: '#009688' }, // Teal
+    '#cddc39': { bg: 'linear-gradient(135deg, #f9fbe7 0%, #f0f4c3 100%)', icon: '#cddc39' }, // Lime
+    '#ffc107': { bg: 'linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%)', icon: '#ffc107' }, // Amber
+    'rainbow': { bg: 'linear-gradient(135deg, #ffd89b 0%, #19547b 100%)', icon: '#FFD700' }
+};
         // ========== PREVIEW MODAL CREATE ==========
         function updateCreatePreview() {
             const colorSelect = $('#colorThemeCreate');

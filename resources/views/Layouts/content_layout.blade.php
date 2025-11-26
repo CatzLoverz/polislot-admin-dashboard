@@ -145,8 +145,8 @@
                                 </a>
                                 <div class="collapse show" id="menuDropdown">
                                     <ul class="nav nav-collapse">
-                                        <li class="{{ Route::is('admin.daily.*') ? 'active' : '' }}">
-                                            <a href="#"> <span class="sub-item">Misi Harian</span>
+                                        <li class="{{ Route::is('admin.missions.*') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.missions.index') }}"> <span class="sub-item">Manajemen Misi</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.points.*') ? 'active' : '' }}">
@@ -154,11 +154,11 @@
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.rewards.*') ? 'active' : '' }}">
-                                            <a href="#"> <span class="sub-item">Manajemen Hadiah</span>
+                                            <a href="{{ route('admin.rewards.index') }}"> <span class="sub-item">Manajemen Hadiah</span>
                                             </a>
                                         </li>
-                                        <li class="{{ Route::is('admin.winner.*') ? 'active' : '' }}">
-                                            <a href="#"> <span class="sub-item">Penerima Hadiah</span>
+                                        <li class="{{ Route::is('admin.reward-verification.*') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.reward_verification.index') }}"> <span class="sub-item">Penerima Hadiah</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.tiers.*') ? 'active' : '' }}">
@@ -169,8 +169,8 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.suggestion.*') ? 'active' : '' }}">
-                                <a href="#"> <i class="fas fa-comments"></i>
+                            <li class="nav-item {{ Route::is('admin.feedback.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.feedback.index') }}"> <i class="fas fa-comments"></i>
                                     <p>Kritik & Saran</p>
                                 </a>
                             </li>

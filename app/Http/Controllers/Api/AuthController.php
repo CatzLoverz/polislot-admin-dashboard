@@ -453,7 +453,7 @@ public function verifyResetOtp(Request $request): JsonResponse
     }
 }
 
-    public function resetPassword(Request $request): JsonResponse
+   public function resetPassword(Request $request): JsonResponse
 {
     try {
         $request->validate([
@@ -483,7 +483,6 @@ public function verifyResetOtp(Request $request): JsonResponse
             ], 400);
         }
 
-        //  Update password baru
         $user->update([
             'password' => Hash::make($request->password),
             'otp_code' => null,
@@ -492,7 +491,11 @@ public function verifyResetOtp(Request $request): JsonResponse
             'locked_until' => null,
         ]);
 
-        Log::info('[AuthController@resetPassword] Password berhasil direset.', ['email' => $user->email]);
+        Log::info('[AuthController@resetPassword] Password berhasil direset dan akun di-unlock.', [
+            'email' => $user->email,
+            'locked_until_before' => $user->getOriginal('locked_until'),
+            'failed_attempts_before' => $user->getOriginal('failed_attempts'),
+        ]);
 
         return response()->json([
             'status' => 'success',

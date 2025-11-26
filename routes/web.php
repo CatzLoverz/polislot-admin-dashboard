@@ -8,7 +8,10 @@ use App\Http\Controllers\Web\InfoBoardController;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Controllers\Web\ParkAreaController;
 use App\Http\Controllers\Web\TierController;
-
+use App\Http\Controllers\Web\RewardController;
+use App\Http\Controllers\Web\RewardVerificationController;
+use App\Http\Controllers\Web\FeedbackController;
+use App\Http\Controllers\Web\MissionController;
 
 Route::get('/', function () {
     return view('test');
@@ -61,5 +64,17 @@ Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
         Route::resource('info_board', InfoBoardController::class)->except(['show']);
         // Route tiers
         Route::resource('tiers', TierController::class)->except(['show']);
+        // Route Reward
+        Route::resource('rewards', RewardController::class)->except(['show']);
+         // Route Verifikasi Kode Reward
+        Route::prefix('reward-verification')->as('reward_verification.')->group(function () {
+            Route::get('/', [RewardVerificationController::class, 'index'])->name('index');
+            Route::post('/{userReward}/verify', [RewardVerificationController::class, 'verify'])->name('verify');
+            Route::post('/search', [RewardVerificationController::class, 'search'])->name('search');
+        });
+        // Route Feedback(Masukan dan Saran)
+        Route::Resource('feedback', FeedbackController::class)->except('show');
+        // Route Missions
+        Route::Resource('missions', MissionController::class)->except('show');
     });
 });

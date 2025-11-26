@@ -25,7 +25,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         Log::info('[API ProfileController@show] Mengambil data profil.', ['user_id' => $user->user_id]);
 
-        // Masking email (contoh: rafi***@gmail.com)
+        // Masking email
         $email = $user->email;
         $emailParts = explode('@', $email);
         $maskedLocal = substr($emailParts[0], 0, 3) . str_repeat('*', max(strlen($emailParts[0]) - 3, 0));
@@ -33,7 +33,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data profil berhasil diambil.',
+            'message' => 'Data profil berhasil diambil.',               
             'data' => [
                 'name' => $user->name,
                 'email' => $maskedEmail,
@@ -62,7 +62,7 @@ class ProfileController extends Controller
     ];
 
     $rules = [
-        'name' => ['required', 'string', 'max:255'],
+        'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s]+$/'],
         'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
     ];
 
@@ -76,7 +76,9 @@ class ProfileController extends Controller
     DB::beginTransaction();
     try {
         // Validasi data
-        $validatedData = $request->validate($rules);
+        $validatedData = $request->validate($rules, [
+            'name.regex' => 'Nama hanya boleh mengandung huruf dan spasi.',
+        ]);
         Log::info('[API ProfileController@update] Validasi data berhasil.', ['user_id' => $user->user_id]);
 
         // ... (Logika Upload Avatar dan Update Nama/Password) ...
