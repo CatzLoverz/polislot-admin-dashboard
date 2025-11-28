@@ -1,0 +1,69 @@
+# Copy this file to docker-compose.yaml and adjust as needed
+services:
+  app:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: polislot_admin_app
+    restart: unless-stopped
+    ports:
+      - "192.168.137.1:8001:80" # IP default wifi sharing windows dan port host : port container
+    volumes:
+      # Mount semua kode proyek
+      - ./:/var/www/html
+      # Mount file .env khusus untuk Docker
+      - ./.env.docker:/var/www/html/.env
+      # Gunakan named volume untuk vendor
+      # Ini akan "mengisolasi" folder-folder ini dari komputer host Anda
+      - vendor_data:/var/www/html/vendor
+      - ./storage/app/public:/var/www/html/public/storage
+    depends_on:
+      - db
+    networks:
+      - polislot_admin_net
+    env_file:
+      - .env.docker
+
+  db:
+    image: mariadb:12.0
+    container_name: polislot_admin_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_DATABASE: '' # samakan dengan env.docker
+      MYSQL_USER: ''
+      MYSQL_PASSWORD: ''
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./docker-init:/docker-entrypoint-initdb.d
+    ports:
+      - "192.168.137.1:3307:3306"
+    networks:
+      - polislot_admin_net
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: polislot_admin_scheduler
+    command: php artisan schedule:work
+    volumes:
+      - ./:/var/www/html
+      - ./.env.docker:/var/www/html/.env
+      - vendor_data:/var/www/html/vendor
+      - ./storage/app/public:/var/www/html/public/storage
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - polislot_admin_net
+
+networks:
+  polislot_admin_net:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+  vendor_data:
+    driver: local

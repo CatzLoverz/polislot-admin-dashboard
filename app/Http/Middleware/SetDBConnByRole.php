@@ -24,6 +24,7 @@ class SetDBConnByRole
             };
 
             config(['database.default' => $connection]);
+            $user->setConnection($connection);
         }
         return $next($request);
     }

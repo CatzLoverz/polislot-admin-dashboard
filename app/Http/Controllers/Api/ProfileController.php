@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Rules\NotCurrentPassword;
@@ -13,200 +13,133 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
 
 class ProfileController extends Controller
 {
     /**
-     * Menampilkan profil pengguna (API JSON)
+     * Menampilkan data profil pengguna.
+     * * @param Request $request
+     * @return JsonResponse
      */
-    public function show()
+    public function show(Request $request): JsonResponse
     {
-        /** @var User $user */
-        $user = Auth::user();
-        Log::info('[API ProfileController@show] Mengambil data profil.', ['user_id' => $user->user_id]);
-
-        // Masking email
-        $email = $user->email;
-        $emailParts = explode('@', $email);
-        $maskedLocal = substr($emailParts[0], 0, 3) . str_repeat('*', max(strlen($emailParts[0]) - 3, 0));
-        $maskedEmail = $maskedLocal . '@' . $emailParts[1];
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data profil berhasil diambil.',               
-            'data' => [
-                'name' => $user->name,
-                'email' => $maskedEmail,
-                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/img/default_avatar.jpg'),
-            ],
-        ]);
+        $user = $request->user();
+        Log::info('[API ProfileController@show] Berhasil menampilkan profil. User ID: ' . $user->user_id);
+        return $this->sendSuccess('Data profil berhasil diambil.', $this->formatUser($user));
     }
 
-    public function update(Request $request)
-{
-    /** @var User $user */
-    $user = Auth::user();
-    Log::info('[API ProfileController@update] Menerima permintaan update profil (PUT).', ['user_id' => $user->user_id]);
+    /**
+     * Memperbarui data profil pengguna.
+     * * @param Request $request
+     * @return JsonResponse
+     */
+    public function update(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        // Fix method PUT form-data
+        if ($request->isMethod('put') || $request->isMethod('patch')) {
+             // Laravel handle ini otomatis, tapi request harus multipart/form-data
+        }
 
-    // Pastikan request dari multipart/form-data tetap bisa divalidasi
-    if ($request->isMethod('put') || $request->isMethod('patch')) {
-        $request->merge($request->all());
-    }
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+        ];
 
-    // Menggunakan koleksi rule
-    $passwordRules = [
-        'required',
-        'confirmed',
-        new NotCurrentPassword(), // Tidak boleh sama dengan password lama
-        PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
-    ];
+        if ($request->filled('new_password')) {
+            $rules['current_password'] = ['required', 'current_password'];
+            $rules['new_password'] = [
+                'required', 
+                'confirmed', 
+                PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
+                new NotCurrentPassword(),
+            ];
+        }
 
-    $rules = [
-        'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s]+$/'],
-        'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-    ];
+        DB::beginTransaction();
+        try {
+            $validated = $request->validate($rules);
 
-    // Jika user ingin mengganti password
-    if ($request->filled('new_password')) {
-        // Menggunakan rule 'current_password' bawaan Laravel
-        $rules['current_password'] = ['required', 'current_password']; 
-        $rules['new_password'] = $passwordRules;
-    }
-
-    DB::beginTransaction();
-    try {
-        // Validasi data
-        $validatedData = $request->validate($rules, [
-            'name.regex' => 'Nama hanya boleh mengandung huruf dan spasi.',
-        ]);
-        Log::info('[API ProfileController@update] Validasi data berhasil.', ['user_id' => $user->user_id]);
-
-        // ... (Logika Upload Avatar dan Update Nama/Password) ...
-        
-        // Upload avatar baru (jika ada)
-        if ($request->hasFile('avatar')) {
-            Log::info('[API ProfileController@update] Mengunggah avatar baru.', ['user_id' => $user->user_id]);
-
-            // Hapus avatar lama (kecuali default)
-            if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
-                Storage::disk('public')->delete($user->avatar);
+            // 1. Upload Avatar
+            if ($request->hasFile('avatar')) {
+                if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+                $user->avatar = $request->file('avatar')->store('avatars', 'public');
             }
 
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $path;
+            // 2. Password
+            if ($request->filled('new_password')) {
+                $user->password = Hash::make($request->new_password);
+            }
+
+            // 3. Nama
+            $user->name = $request->name;
+            $user->save();
+
+            DB::commit();
+
+            // ⚠️ PERBAIKAN UTAMA DISINI:
+            // Gunakan formatUser($user) agar 'user_id' TERKIRIM ke Flutter.
+            // Sebelumnya manual array dan lupa memasukkan ID, itulah penyebab crash.
+            return $this->sendSuccess(
+                'Profil berhasil diperbarui.',
+                [
+                    'user' => $this->formatUser($user) 
+                ]
+            );
+
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return $this->sendValidationError($e);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('[Profile@update] Error: ' . $e->getMessage());
+            return $this->sendError('Gagal memperbarui profil.', 500);
         }
+    }
 
-        // Update password jika diisi
-        if (isset($validatedData['new_password'])) {
-            $user->password = Hash::make($validatedData['new_password']);
-            Log::info('[API ProfileController@update] Password diupdate.', ['user_id' => $user->user_id]);
-        }
+    // --- HELPER ---
 
-        // Update nama
-        $user->name = $validatedData['name'];
-        $user->save();
-        
-        DB::commit();
-
-        Log::info('[API ProfileController@update] SUKSES: Profil berhasil diperbarui.', ['user_id' => $user->user_id]);
-
+    private function sendSuccess($message, $data = null, $code = 200)
+    {
         return response()->json([
-            'success' => true,
-            'message' => 'Profil berhasil diperbarui.',
-            'data' => [
-                'name' => $user->name,
-                'email' => $user->email,
-                // Pastikan asset() bekerja dengan benar untuk URL storage
-                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/img/default_avatar.jpg'),
-            ],
-        ]);
-    } catch (ValidationException $e) {
-        DB::rollBack();
-        
+            'status' => 'success',
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
+
+    private function sendError($message, $code = 400, $data = null)
+    {
+        return response()->json([
+            'status' => 'error',
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
+
+    private function sendValidationError(ValidationException $e)
+    {
         $errors = $e->errors();
-        $customErrorMessage = 'Validasi data gagal.';
-
-        // --- PRIORITAS PENENTUAN PESAN TUNGGAL (REVISI) ---
-        
-        // 1. PRIORITAS TINGGI: Password lama salah ('current_password' rule gagal)
-        if (isset($errors['current_password'])) {
-            // Karena rule 'current_password' Laravel biasanya mengembalikan pesan "The current password field is incorrect." 
-            // atau yang sudah dilokalisasi: "Kata sandi lama salah."
-            $customErrorMessage = 'Kata sandi lama salah.'; 
-        } 
-        // 2. PRIORITAS KEDUA: Error pada Password Baru
-        else if (isset($errors['new_password'])) {
-            $newPasswordErrors = collect($errors['new_password']);
-
-            // 2A. Cek Konfirmasi tidak cocok ('confirmed' rule). Cari kata kunci dari pesan default Laravel.
-            $isConfirmationError = $newPasswordErrors->contains(function ($message) {
-                // Mencari kata kunci 'confirmation' (English) atau 'konfirmasi' (Indo) jika lokalisasi gagal.
-                return str_contains(strtolower($message), 'confirmation') || str_contains(strtolower($message), 'konfirmasi'); 
-            });
-
-            // 2B. Cek Password sama dengan yang lama ('NotCurrentPassword' rule). Cari kata kunci dari pesan default rule.
-            $isSameAsCurrent = $newPasswordErrors->contains(function ($message) {
-                // Mencari kata kunci 'different from the current' atau 'tidak boleh sama' dari pesan custom rule.
-                return str_contains(strtolower($message), 'different from the current') || str_contains(strtolower($message), 'tidak boleh sama'); 
-            });
-            
-            // Urutan prioritas penentuan pesan untuk new_password
-            if ($isConfirmationError) {
-                // Prioritas 1: Konfirmasi tidak cocok
-                $customErrorMessage = 'Konfirmasi kata sandi baru tidak cocok.';
-            } else if ($isSameAsCurrent) {
-                // Prioritas 2: Password Baru Sama dengan Lama (INI YANG ANDA CARI)
-                $customErrorMessage = 'Kata sandi baru tidak boleh sama dengan kata sandi sebelumnya.';
-            } else {
-                // Prioritas 3: Kompleksitas (Min, MixedCase, Numbers, Symbols, Zxcvbn)
-                // Ini adalah fallback default untuk semua kegagalan validasi kompleksitas lainnya
-                $customErrorMessage = 'Kata sandi baru tidak valid. Pastikan minimal 8 karakter dan mengandung huruf besar/kecil, angka, dan simbol.';
-            }
-
-        }
-        // 3. PRIORITAS KETIGA: Error pada Nama
-        else if (isset($errors['name'])) {
-            // Ambil pesan error pertama dari field name
-            $customErrorMessage = $errors['name'][0];
-        }
-        // 4. PRIORITAS KEEMPAT: Error pada Avatar
-        else if (isset($errors['avatar'])) {
-            // Ambil pesan error pertama dari field avatar
-            $customErrorMessage = $errors['avatar'][0];
-        }
-        // 5. DEFAULT: Ambil pesan error pertama dari field manapun yang gagal
-        else {
-            $firstErrorKey = array_key_first($errors);
-            // Pastikan ada error sebelum mencoba mengambil index [0]
-            if ($firstErrorKey !== null && !empty($errors[$firstErrorKey])) {
-                $customErrorMessage = $errors[$firstErrorKey][0];
-            }
-        }
-
-        Log::warning('[API ProfileController@update] GAGAL: Validasi data gagal.', [
-            'user_id' => $user->user_id,
-            'errors' => $errors,
-        ]);
-
-        // Mengembalikan respons dengan satu pesan error tunggal
+        $message = collect($errors)->flatten()->first();
         return response()->json([
-            'success' => false,
-            'message' => $customErrorMessage, // HANYA SATU PESAN
-            'errors' => $errors, // Tetap sertakan detail errors untuk debugging
+            'status' => 'error',
+            'message' => $message,
+            'errors' => $errors
         ], 422);
-    } catch (\Exception $e) {
-        DB::rollBack();
-        
-        Log::error('[API ProfileController@update] GAGAL: Terjadi error sistem.', [
-            'user_id' => $user->user_id,
-            'error' => $e->getMessage(),
-        ]);
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Terjadi kesalahan pada server saat memperbarui profil.',
-            'error' => $e->getMessage(),
-        ], 500);
     }
-}
+
+    // Format User Konsisten (Wajib ada user_id)
+    private function formatUser($user)
+    {
+        return [
+            'user_id' => (int) $user->user_id, // Casting ke int agar aman
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'avatar' => $user->avatar,
+        ];
+    }
 }

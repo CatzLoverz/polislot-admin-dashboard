@@ -58,8 +58,8 @@
                                     @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Alamat Email <span class="text-danger">*</span></label>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email', $user->email) }}" required>
+                                    <label for="email">Alamat Email </label>
+                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email', $user->email) }}" disabled>
                                     @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="form-group">
