@@ -5,12 +5,28 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProfileController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 // Rute Login
 Route::middleware('encryptApi')->group(function () {
+
+    Route::get('/user', function (Request $request) {
+        $user = $request->user();
+        return response()->json([
+        'status' => 'success',
+        'message' => 'Data profil berhasil diambil.',
+        'data' => [
+            'user_id' => (int) $user->user_id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'email_verified_at' => $user->email_verified_at,
+            'role' => $user->role,
+            'avatar' => $user->avatar,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ]
+    ]);
+    })->middleware('auth:sanctum');
+
     Route::post('/login-attempt', [AuthController::class, 'login']);
 
     // Rute Registrasi
