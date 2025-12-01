@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class ApiEncryption
 {
@@ -16,7 +17,6 @@ class ApiEncryption
         $iv = env('API_SECRET_IV');
 
         // 1. DEKRIPSI REQUEST (Dari Flutter -> Laravel)
-        // Cek apakah request methodnya POST/PUT/PATCH dan punya field 'payload'
         if (in_array($request->method(), ['POST', 'PUT', 'PATCH']) && $request->has('payload')) {
             try {
                 $encrypted = $request->input('payload');
@@ -32,16 +32,15 @@ class ApiEncryption
                     }
                 }
             } catch (\Exception $e) {
-                // Jika gagal dekripsi, biarkan error atau return bad request
+                Log::error('[API Encryption Middleware] Gagal mendekripsi payload. Error: ' . $e->getMessage());
             }
         }
 
-        // Lanjut ke Controller...
         $response = $next($request);
 
         // 2. ENKRIPSI RESPONSE (Dari Laravel -> Flutter)
         if ($response instanceof JsonResponse) {
-            $originalData = $response->getData(true); // Ambil data asli
+            $originalData = $response->getData(true);
             
             // Hanya enkripsi jika sukses dan data valid
             if (is_array($originalData)) {
@@ -51,10 +50,9 @@ class ApiEncryption
                     // Enkripsi AES
                     $encrypted = openssl_encrypt($jsonString, $this->method, $key, 0, $iv);
 
-                    // Bungkus response jadi { "payload": "..." }
                     $response->setData(['payload' => $encrypted]);
                 } catch (\Exception $e) {
-                    // Log error jika perlu
+                    Log::error('[API Encryption Middleware] Gagal mengenkripsi response. Error: ' . $e->getMessage());
                 }
             }
         }

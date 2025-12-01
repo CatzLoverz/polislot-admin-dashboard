@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Info_board extends Model
+class InfoBoard extends Model
 {
     protected $table = 'info_boards';
     protected $primaryKey = 'info_id';

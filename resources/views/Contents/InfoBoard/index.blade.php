@@ -45,26 +45,26 @@
                                                 $color = '#6c63ff';
                                             }
 
-                                            $shortContent = strlen($info->content) > 100 
-                                                ? substr($info->content, 0, 100) . '...' 
-                                                : $info->content;
+                                            $shortContent = strlen($info->info_content) > 100 
+                                                ? substr($info->info_content, 0, 100) . '...' 
+                                                : $info->info_content;
                                         @endphp
                                         <i class="fa {{ $icon }} fa-4x" style="color: {{ $color }};"></i>
                                     </div>
 
                                     {{-- Konten Pengumuman --}}
                                     <div class="flex-fill">
-                                        <h5 class="font-weight-bold mb-2">{{ $info->title }}</h5>
+                                        <h5 class="font-weight-bold mb-2">{{ $info->info_title }}</h5>
                                         <p class="text-dark mb-2" style="font-size: 0.95rem; max-width: 95%;">
                                             "{!! nl2br(e($shortContent)) !!}"
                                         </p>
-                                        @if(strlen($info->content) > 100)
+                                        @if(strlen($info->info_content) > 100)
                                             <a href="#" data-toggle="modal" data-target="#detailModal{{ $info->info_id }}" class="text-primary" style="font-size: 0.9rem;">Lihat selengkapnya</a>
                                         @endif
                                         <br>
                                         <small class="text-muted">
-                                            <strong>Time:</strong> {{ \Carbon\Carbon::parse($info->created_at)->format('H:i') }} <br>
-                                            <strong>Update:</strong> {{ \Carbon\Carbon::parse($info->updated_at)->format('d-M-Y') }}
+                                            <strong>Time:</strong> {{ ($info->created_at)->format('H:i') }} <br>
+                                            <strong>Update:</strong> {{ ($info->updated_at)->format('d-M-Y') }}
                                         </small>
                                     </div>
 
@@ -91,13 +91,13 @@
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">{{ $info->title }}</h5>
+                                            <h5 class="modal-title">{{ $info->info_title }}</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span>&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>{!! nl2br(e($info->content)) !!}</p>
+                                            <p>{!! nl2br(e($info->info_content)) !!}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                             <div class="modal fade" id="editModal{{ $info->info_id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content">
-                                        <form action="{{ route('admin.info_board.update', $info->info_id) }}" method="POST">
+                                        <form action="{{ route('admin.info-board.update', $info->info_id) }}" method="POST">
                                             @csrf
                                             @method('PUT')
                                             <div class="modal-header">
@@ -119,11 +119,11 @@
                                             <div class="modal-body">
                                                 <div class="form-group">
                                                     <label>Judul Pengumuman</label>
-                                                    <input type="text" name="title" class="form-control" value="{{ $info->title }}" required>
+                                                    <input type="text" name="info_title" class="form-control" value="{{ $info->info_title }}" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Isi Pengumuman</label>
-                                                    <textarea name="content" rows="5" class="form-control" required>{{ $info->content }}</textarea>
+                                                    <textarea name="info_content" rows="5" class="form-control" required>{{ $info->info_content }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -142,7 +142,7 @@
                             <div class="modal fade" id="deleteModal{{ $info->info_id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
-                                        <form action="{{ route('admin.info_board.destroy', $info->info_id) }}" method="POST">
+                                        <form action="{{ route('admin.info-board.destroy', $info->info_id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <div class="modal-header">
@@ -152,7 +152,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body text-center">
-                                                <p>Apakah kamu yakin ingin menghapus <strong>{{ $info->title }}</strong>?</p>
+                                                <p>Apakah kamu yakin ingin menghapus <strong>{{ $info->info_title }}</strong>?</p>
                                             </div>
                                             <div class="modal-footer justify-content-center">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -185,7 +185,7 @@
 <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('admin.info_board.store') }}" method="POST">
+            <form action="{{ route('admin.info-board.store') }}" method="POST">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Pengumuman Baru</h5>
@@ -196,11 +196,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Judul Pengumuman</label>
-                        <input type="text" name="title" class="form-control" placeholder="Masukkan judul..." required>
+                        <input type="text" name="info_title" class="form-control" placeholder="Masukkan judul..." required>
                     </div>
                     <div class="form-group">
                         <label>Isi Pengumuman</label>
-                        <textarea name="content" rows="5" class="form-control" placeholder="Masukkan isi pengumuman..." required></textarea>
+                        <textarea name="info_content" rows="5" class="form-control" placeholder="Masukkan isi pengumuman..." required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

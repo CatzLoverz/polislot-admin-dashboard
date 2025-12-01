@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Rules\NotCurrentPassword;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -24,9 +23,14 @@ class ProfileController extends Controller
      */
     public function show(Request $request): JsonResponse
     {
-        $user = $request->user();
-        Log::info('[API ProfileController@show] Berhasil menampilkan profil. User ID: ' . $user->user_id);
-        return $this->sendSuccess('Data profil berhasil diambil.', $this->formatUser($user));
+        try {
+            $user = $request->user();
+            Log::info('[API ProfileController@show] Berhasil menampilkan profil.');
+            return $this->sendSuccess('Data profil berhasil diambil.', $this->formatUser($user));
+        } catch (\Exception $e) {
+            Log::error('[API ProfileController@show] Gagal menampilkan profil. Error: ' . $e->getMessage());
+            return $this->sendError('Gagal mengambil data profil.', 500);
+        }
     }
 
     /**
@@ -57,45 +61,34 @@ class ProfileController extends Controller
             ];
         }
 
-        DB::beginTransaction();
         try {
-            $validated = $request->validate($rules);
+            return DB::transaction(function () use ($request, $rules, $user) {
+                $validated = $request->validate($rules);
 
-            // 1. Upload Avatar
-            if ($request->hasFile('avatar')) {
-                if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
-                    Storage::disk('public')->delete($user->avatar);
+                // 1. Upload Avatar
+                if ($request->hasFile('avatar')) {
+                    if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
+                        Storage::disk('public')->delete($user->avatar);
+                    }
+                    $user->avatar = $request->file('avatar')->store('avatars', 'public');
                 }
-                $user->avatar = $request->file('avatar')->store('avatars', 'public');
-            }
 
-            // 2. Password
-            if ($request->filled('new_password')) {
-                $user->password = Hash::make($request->new_password);
-            }
+                // 2. Password
+                if ($request->filled('new_password')) {
+                    $user->password = Hash::make($request->new_password);
+                }
 
-            // 3. Nama
-            $user->name = $request->name;
-            $user->save();
-
-            DB::commit();
-
-            // ⚠️ PERBAIKAN UTAMA DISINI:
-            // Gunakan formatUser($user) agar 'user_id' TERKIRIM ke Flutter.
-            // Sebelumnya manual array dan lupa memasukkan ID, itulah penyebab crash.
-            return $this->sendSuccess(
-                'Profil berhasil diperbarui.',
-                [
-                    'user' => $this->formatUser($user) 
-                ]
-            );
+                // 3. Nama
+                $user->name = $request->name;
+                $user->save();
+                Log::info('[API ProfileController@update] Profil berhasil diperbarui.');
+                return $this->sendSuccess('Profil berhasil diperbarui.', ['user' => $this->formatUser($user)]);
+            });
 
         } catch (ValidationException $e) {
-            DB::rollBack();
             return $this->sendValidationError($e);
         } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('[Profile@update] Error: ' . $e->getMessage());
+            Log::error('[API ProfileController@update] Error: ' . $e->getMessage());
             return $this->sendError('Gagal memperbarui profil.', 500);
         }
     }

@@ -134,8 +134,8 @@
                                     <p>Manajemen Area Parkir</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.info_board.*') ? 'active' : '' }}">
-                                <a href="{{ Route('admin.info_board.index') }}"> <i class="fas fa-bullhorn"></i>
+                            <li class="nav-item {{ Route::is('admin.info-board.*') ? 'active' : '' }}">
+                                <a href="{{ Route('admin.info-board.index') }}"> <i class="fas fa-bullhorn"></i>
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>

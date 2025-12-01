@@ -14,22 +14,13 @@ use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\MissionController;
 
 Route::get('/', function () {
-    return view('test');
+    return view('welcome');
 });
 
 Route::middleware('guest')->group(function () {
     // Rute Login
     Route::get('/login-form', [AuthController::class, 'loginForm'])->name('login.form');
     Route::post('/login-attempt', [AuthController::class, 'login'])->name('login.attempt');
-
-    // Rute Registrasi
-    // Route::get('/register-form', [AuthController::class, 'registerForm'])->name('register.form');
-    // Route::post('/register-attempt', [AuthController::class, 'register'])->name('register.attempt');
-
-    // Rute Verifikasi Register OTP
-    // Route::get('/register-otp-form', [AuthController::class, 'registerOtpForm'])->name('register_otp.form');
-    // Route::post('/register-otp-verify', [AuthController::class, 'registerOtpVerify'])->name('register_otp.verify');
-    // Route::post('/register-otp-resend', [AuthController::class, 'registerOtpResend'])->name('register_otp.resend');
 
     // Rute Forgot Password
     // Form & pengiriman OTP forgot password
@@ -61,7 +52,7 @@ Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
         
         Route::resource('park', ParkAreaController::class);
         // Route info_board
-        Route::resource('info_board', InfoBoardController::class)->except(['show']);
+        Route::resource('info-board', InfoBoardController::class)->except(['show']);
         // Route tiers
         Route::resource('tiers', TierController::class)->except(['show']);
         // Route Reward

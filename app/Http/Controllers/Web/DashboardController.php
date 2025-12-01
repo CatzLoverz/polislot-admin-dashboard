@@ -13,7 +13,6 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        Log::info('[DashboardController@index] Menampilkan dashboard.', ['user_id' => $user->user_id]);
         return view('Contents.Dashboard.index', compact('user'));
     }
 }

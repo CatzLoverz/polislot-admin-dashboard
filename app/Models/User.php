@@ -47,6 +47,6 @@ class User extends Authenticatable
     
     public function info_boards()
     {
-        return $this->hasMany(Info_board::class, 'user_id', 'user_id');
+        return $this->hasMany(InfoBoard::class, 'user_id', 'user_id');
     }
 }
