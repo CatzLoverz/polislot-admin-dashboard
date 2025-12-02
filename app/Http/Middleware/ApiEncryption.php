@@ -15,7 +15,7 @@ class ApiEncryption
         $decryptedAesIv = null;
 
         // 1. LOAD RSA PRIVATE KEY
-        $keyPath = base_path(env('RSA_PRIVATE_KEY_PATH'));
+        $keyPath = base_path('storage/app/private/keys/private_key.pem');
         if (file_exists($keyPath)) {
             $privateKey = file_get_contents($keyPath);
 
