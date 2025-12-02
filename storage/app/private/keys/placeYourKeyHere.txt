@@ -1,0 +1,1 @@
+Letakkan private key dalam directory ini

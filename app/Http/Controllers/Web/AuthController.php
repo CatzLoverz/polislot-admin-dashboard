@@ -124,7 +124,7 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             
-            Log::info('[WEB AuthController@logout] Sukses: Pengguna telah logout.', ['user_id' => $user ? $user->user_id : 'unknown']);
+            Log::info('[WEB AuthController@logout] Sukses: Pengguna telah logout.');
             return redirect()->route('login.form');    
         });
         } catch (\Exception $e) {
@@ -302,7 +302,7 @@ class AuthController extends Controller
                 return redirect()->route('login.form')->with('swal_success_crud', 'Password berhasil direset! Silakan login.');
             });
         } catch (ValidationException $e) {
-            Log::warning('[WEB AuthController@resetPassword] Gagal: Validasi data gagal.', [ 'email' => $email, 'errors' => $e->errors() ]);
+            Log::warning('[WEB AuthController@resetPassword] Gagal: Validasi data gagal.', [ 'errors' => $e->errors() ]);
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             Log::error('[WEB AuthController@resetPassword] Gagal: Error sistem.', ['error' => $e->getMessage()]);

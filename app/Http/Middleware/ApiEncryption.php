@@ -9,50 +9,80 @@ use Illuminate\Support\Facades\Log;
 
 class ApiEncryption
 {
-    private $method = 'AES-256-CBC';
-
     public function handle(Request $request, Closure $next)
     {
-        $key = env('API_SECRET_KEY');
-        $iv = env('API_SECRET_IV');
+        $decryptedAesKey = null;
+        $decryptedAesIv = null;
 
-        // 1. DEKRIPSI REQUEST (Dari Flutter -> Laravel)
-        if (in_array($request->method(), ['POST', 'PUT', 'PATCH']) && $request->has('payload')) {
-            try {
-                $encrypted = $request->input('payload');
-                
-                // Dekripsi AES
-                $decrypted = openssl_decrypt($encrypted, $this->method, $key, 0, $iv);
+        // 1. LOAD RSA PRIVATE KEY
+        $keyPath = base_path(env('RSA_PRIVATE_KEY_PATH'));
+        if (file_exists($keyPath)) {
+            $privateKey = file_get_contents($keyPath);
 
-                if ($decrypted) {
-                    $data = json_decode($decrypted, true);
-                    // Ganti input request enkripsi dengan data asli JSON
-                    if (is_array($data)) {
-                        $request->replace($data); 
+            // 2. AMBIL KUNCI SESI DARI HEADER (X-Session-Key)
+            $encryptedSession = $request->header('X-Session-Key');
+
+            if ($encryptedSession) {
+                try {
+                    $encryptedKeyBin = base64_decode($encryptedSession);
+                    
+                    // Dekripsi RSA
+                    if (openssl_private_decrypt($encryptedKeyBin, $decryptedSession, $privateKey)) {
+                        $parts = explode('|', $decryptedSession);
+                        if (count($parts) === 2) {
+                            $decryptedAesKey = $parts[0];
+                            $decryptedAesIv = $parts[1];
+                            
+                            // Kunci Sesi Ditemukan! Sekarang kita bisa mendekripsi body (jika ada)
+                            // dan mengenkripsi response nanti.
+                        }
                     }
+                } catch (\Exception $e) {
+                    Log::error('[ApiEncryption] Key Decryption Failed: ' . $e->getMessage());
                 }
-            } catch (\Exception $e) {
-                Log::error('[API Encryption Middleware] Gagal mendekripsi payload. Error: ' . $e->getMessage());
+            }
+
+            // 3. DEKRIPSI BODY (Jika method POST/PUT/PATCH dan ada payload)
+            if ($decryptedAesKey && $request->has('payload')) {
+                try {
+                    $encryptedPayload = base64_decode($request->input('payload'));
+                    $decryptedData = openssl_decrypt(
+                        $encryptedPayload, 'AES-256-CBC', $decryptedAesKey, OPENSSL_RAW_DATA, $decryptedAesIv
+                    );
+
+                    if ($decryptedData) {
+                        $json = json_decode($decryptedData, true);
+                        if (is_array($json)) {
+                            $request->merge($json); // Merge data asli ke request
+                            $request->request->remove('payload'); // Bersihkan payload terenkripsi
+                        }
+                    }
+                } catch (\Exception $e) {
+                    Log::error('[ApiEncryption] Body Decryption Failed');
+                }
             }
         }
 
+        // Lanjut ke Controller...
         $response = $next($request);
 
-        // 2. ENKRIPSI RESPONSE (Dari Laravel -> Flutter)
-        if ($response instanceof JsonResponse) {
+        // 4. ENKRIPSI RESPONSE
+        // Syarat: Kita punya kunci AES dari header request tadi
+        if ($response instanceof JsonResponse && $decryptedAesKey && $decryptedAesIv) {
             $originalData = $response->getData(true);
             
-            // Hanya enkripsi jika sukses dan data valid
             if (is_array($originalData)) {
                 try {
                     $jsonString = json_encode($originalData);
                     
-                    // Enkripsi AES
-                    $encrypted = openssl_encrypt($jsonString, $this->method, $key, 0, $iv);
+                    $encryptedResponse = openssl_encrypt(
+                        $jsonString, 'AES-256-CBC', $decryptedAesKey, 0, $decryptedAesIv
+                    );
 
-                    $response->setData(['payload' => $encrypted]);
+                    // Ganti respon jadi terenkripsi
+                    $response->setData(['payload' => $encryptedResponse]);
                 } catch (\Exception $e) {
-                    Log::error('[API Encryption Middleware] Gagal mengenkripsi response. Error: ' . $e->getMessage());
+                    Log::error('[ApiEncryption] Response Encryption Failed');
                 }
             }
         }

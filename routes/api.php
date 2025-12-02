@@ -50,7 +50,7 @@ Route::middleware('encryptApi')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         // Route Profil
         Route::get('/profile', [ProfileController::class, 'show']); 
-        Route::put('/profile', [ProfileController::class, 'update']);
+        Route::match(['put', 'post'], '/profile', [ProfileController::class, 'update']);
         // Route InfoBoard
         Route::get('/info-board/latest', [InfoBoardController::class, 'showLatest']);
         // Route Tiers

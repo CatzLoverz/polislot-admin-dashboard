@@ -92,47 +92,4 @@ class ProfileController extends Controller
             return $this->sendError('Gagal memperbarui profil.', 500);
         }
     }
-
-    // --- HELPER ---
-
-    private function sendSuccess($message, $data = null, $code = 200)
-    {
-        return response()->json([
-            'status' => 'success',
-            'message' => $message,
-            'data' => $data,
-        ], $code);
-    }
-
-    private function sendError($message, $code = 400, $data = null)
-    {
-        return response()->json([
-            'status' => 'error',
-            'message' => $message,
-            'data' => $data,
-        ], $code);
-    }
-
-    private function sendValidationError(ValidationException $e)
-    {
-        $errors = $e->errors();
-        $message = collect($errors)->flatten()->first();
-        return response()->json([
-            'status' => 'error',
-            'message' => $message,
-            'errors' => $errors
-        ], 422);
-    }
-
-    // Format User Konsisten (Wajib ada user_id)
-    private function formatUser($user)
-    {
-        return [
-            'user_id' => (int) $user->user_id, // Casting ke int agar aman
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role,
-            'avatar' => $user->avatar,
-        ];
-    }
 }
