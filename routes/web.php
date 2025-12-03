@@ -52,7 +52,7 @@ Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
         
         Route::resource('park', ParkAreaController::class);
         // Route info_board
-        Route::resource('info-board', InfoBoardController::class)->except(['show']);
+        Route::resource('info-board', InfoBoardController::class)->except(['create', 'show', 'edit']);
         // Route tiers
         Route::resource('tiers', TierController::class)->except(['show']);
         // Route Reward

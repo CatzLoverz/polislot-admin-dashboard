@@ -52,7 +52,7 @@ Route::middleware('encryptApi')->group(function () {
         Route::get('/profile', [ProfileController::class, 'show']); 
         Route::match(['put', 'post'], '/profile', [ProfileController::class, 'update']);
         // Route InfoBoard
-        Route::get('/info-board/latest', [InfoBoardController::class, 'showLatest']);
+        Route::get('/info-board', [InfoBoardController::class, 'index']);
         // Route Tiers
         Route::get('/user/tier', [UserTierController::class, 'show']);
         Route::post('/user/tier/update', [UserTierController::class, 'updateTier'])

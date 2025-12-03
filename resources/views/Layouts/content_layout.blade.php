@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>@yield('title', 'Dashboard') | PoliSlot</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="{{ asset('assets/img/Polibatam.png') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('assets/img/PoliSlot Pin.png') }}" type="image/x-icon" />
 
     <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
@@ -39,9 +39,9 @@
     <div class="wrapper">
         {{-- Header --}}
         <div class="main-header">
-            <div class="logo-header" data-background-color="dark">
-                <a href="#" class="logo"> <img src="{{ asset('assets/img/PoliSlot.png') }}" alt="Polibatam Logo"
-                        class="navbar-brand" style="width: 195px; height: 40px;" />
+            <div class="logo-header" data-background-color="dark2">
+                <a href="#" class="logo"> <img src="{{ asset('assets/img/PoliSlot2.png') }}" alt="Polibatam Logo"
+                        class="navbar-brand" style="width: 180px; height: 62px;" />
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
                     data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
                 </button>
             </div>
             {{-- Navbar --}}
-            <nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark">
+            <nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark2">
                 <div class="container-fluid">
                     <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
                         <li class="nav-item dropdown hidden-caret">
@@ -79,13 +79,12 @@
                                         <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a> 
                                         <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form-dropdown').submit();">
-                                            Keluar
-                                        </a>
-                                        <form id="logout-form-dropdown" action="{{ route('logout') }}" method="POST"
-                                            style="display: none;"> @csrf
-                                        </form>
+                                            <a class="dropdown-item btn-logout" href="#" data-form-target="#logout-form-dropdown">
+                                                Keluar
+                                            </a>
+                                            <form id="logout-form-dropdown" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
                                     </li>
                                 </div>
                             </ul>
@@ -178,13 +177,12 @@
                         {{-- Akhir menu khusus Admin --}}
 
                         <li class="nav-item">
-                            <a href="#"
-                                onclick="event.preventDefault(); document.getElementById('logout-form-sidebar').submit();">
+                            <a href="#" class="btn-logout" data-form-target="#logout-form-sidebar">
                                 <i class="fas fa-door-open text-danger"></i>
                                 <p class="text-danger">Keluar</p>
                             </a>
-                            <form id="logout-form-sidebar" action="{{ route('logout') }}" method="POST"
-                                class="d-none"> @csrf
+                            <form id="logout-form-sidebar" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
                             </form>
                         </li>
                     </ul>
@@ -276,6 +274,7 @@
             @endif
 
             $(document).on('submit', '.delete-form', function(event) {
+                event.preventDefault();
                 const form = this;  
                 const entityName = $(form).data('entity-name') || 'data ini';
 
@@ -291,6 +290,30 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
+                    }
+                });
+            });
+
+            // === LOGIKA LOGOUT CONFIRMATION ===
+            $(document).on('click', '.btn-logout', function(e) {
+                e.preventDefault(); // Mencegah link bekerja langsung
+                
+                const formSelector = $(this).data('form-target'); // Ambil ID form dari atribut data
+
+                Swal.fire({
+                    title: 'Konfirmasi Keluar',
+                    text: "Apakah Anda yakin ingin mengakhiri sesi ini?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Keluar!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true // Opsi agar tombol batal di kiri (opsional)
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit form logout yang sesuai (sidebar atau navbar)
+                        document.querySelector(formSelector).submit();
                     }
                 });
             });

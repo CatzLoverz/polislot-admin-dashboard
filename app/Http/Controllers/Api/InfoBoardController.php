@@ -11,26 +11,34 @@ use Illuminate\Support\Facades\Log;
 class InfoBoardController extends Controller
 {
     /**
-     * Ambil 1 data info board terbaru.
+     * Ambil data info board dari yang terbaru.
      * * @return JsonResponse
      */
-    public function showLatest(): JsonResponse
+    public function index(): JsonResponse
     {
         try {
-            // Mengambil data terakhir berdasarkan updated_at paling baru
-            $latest = InfoBoard::orderBy('updated_at', 'desc')->first();
+            // Ambil semua data, urutkan dari yang paling baru dibuat
+            $infoBoards = InfoBoard::orderBy('created_at', 'desc')->get();
 
-            if (!$latest) {
-                return $this->sendSuccess('Tidak ada pengumuman tersedia.', null);
+            if ($infoBoards->isEmpty()) {
+                return $this->sendSuccess('Tidak ada pengumuman tersedia.', []);
             }
 
-            // Format data menggunakan helper
-            $formattedData = $this->formatInfoBoard($latest);
-            Log::info('[API InfoBoardController@showLatest] Sukses: Data info board diambil.');
-            return $this->sendSuccess('Data info board terbaru berhasil diambil.', $formattedData);
+            // Format data (Mapping collection)
+            $formattedData = $infoBoards->map(function ($item) {
+                return [
+                    'info_id'      => $item->info_id,
+                    'info_title'   => $item->info_title,
+                    'info_content' => $item->info_content,
+                    'created_at'   => $item->created_at,
+                    'updated_at'   => $item->updated_at,
+                ];
+            });
+            
+            return $this->sendSuccess('Data info board berhasil diambil.', $formattedData);
 
         } catch (\Exception $e) {
-            Log::error('[API InfoBoardController@showLatest] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('[API InfoBoardController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan saat mengambil info board.', 500);
         }
     }

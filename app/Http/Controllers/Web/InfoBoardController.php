@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Yajra\DataTables\Facades\DataTables;
 use Exception;
 
 class InfoBoardController extends Controller
@@ -17,30 +18,57 @@ class InfoBoardController extends Controller
      * Menampilkan halaman daftar semua info board.
      * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            $infoBoards = InfoBoard::with('user')
-                ->orderBy('updated_at', 'desc')
-                ->paginate(3);
+        if ($request->ajax()) {
+            $data = InfoBoard::with('user')->orderBy('created_at', 'desc');
 
-            Log::info('[WEB InfoBoardController@index] Sukses: Halaman daftar info board berhasil dimuat.');
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('creator_name', function($row){
+                    return $row->user->name ?? 'Unknown';
+                })
+                ->editColumn('created_at', function($row){
+                    return $row->created_at ? $row->created_at->format('d-M-Y H:i') : '-';
+                })
+                ->editColumn('updated_at', function($row){
+                    return $row->updated_at ? $row->updated_at->format('d-M-Y H:i') : '-';
+                })
+                ->addColumn('action', function($row){
+                    $infoTitle = e($row->info_title);
+                    // Tombol Edit
+                    $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit" 
+                                    data-id="'.$row->info_id.'"
+                                    data-title="'.$infoTitle.'"
+                                    data-content="'.e($row->info_content).'"
+                                    data-update-url="'.route('admin.info-board.update', $row->info_id).'"
+                                    data-toggle="tooltip" 
+                                    title="Edit '.$infoTitle.'"> 
+                                    <i class="fa fa-edit"></i>
+                                </button>';
+                    
+                    // Tombol Delete
+                    $btnDelete = '<form action="'.route('admin.info-board.destroy', $row->info_id).'" 
+                                        method="POST" 
+                                        class="delete-form d-inline" 
+                                        data-entity-name=" '.$infoTitle.'">
+                                        '.csrf_field().'
+                                        '.method_field('DELETE').'
+                                        <button type="submit" 
+                                            class="btn btn-link btn-danger btn-lg" 
+                                            data-toggle="tooltip" 
+                                            title="Hapus '.$infoTitle.'">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                  </form>';
 
-            return view('Contents.InfoBoard.index', compact('infoBoards'));
-
-        } catch (Exception $e) {
-            Log::error('[WEB InfoBoardController@index] Gagal: Terjadi kesalahan sistem.', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat memuat data.');
+                    return '<div class="form-button-action d-flex justify-content-center">'.$btnEdit.$btnDelete.'</div>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
-    }
 
-    /**
-     * Menampilkan form untuk menambahkan info board baru.
-     * * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        return view('Contents.InfoBoard.create');
+        return view('Contents.InfoBoard.index');
     }
 
     /**
@@ -54,13 +82,13 @@ class InfoBoardController extends Controller
             return DB::transaction(function () use ($request) {
                 $validated = $request->validate([
                     'info_title'   => 'required|string|max:255',
-                    'content' => 'required|string',
+                    'info_content' => 'required|string',
                 ]);
 
                 InfoBoard::create([
                     'user_id'      => Auth::id(),
-                    'info_title'   => $validated['title'],
-                    'info_content' => $validated['content'],
+                    'info_title'   => $validated['info_title'],
+                    'info_content' => $validated['info_content'],
                 ]);
 
                 Log::info('[WEB InfoBoardController@store] Sukses: Data info board baru berhasil disimpan.');
@@ -69,29 +97,10 @@ class InfoBoardController extends Controller
             });
 
         } catch (ValidationException $e) {
-            Log::warning('[WEB InfoBoardController@store] Gagal: Validasi input tidak terpenuhi.');
-            return back()->withErrors($e->errors())->withInput();
-
+            return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB InfoBoardController@store] Gagal: Terjadi kesalahan sistem.', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Gagal menambahkan informasi.');
-        }
-    }
-
-    /**
-     * Menampilkan form untuk mengedit info board.
-     * * @param int $id
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
-     */
-    public function edit($id)
-    {
-        try {
-            $info = InfoBoard::findOrFail($id);
-            return view('Contents.info_board.edit', compact('info'));
-
-        } catch (Exception $e) {
-            Log::error('[WEB InfoBoardController@edit] Gagal: Data tidak ditemukan atau error sistem.', ['error' => $e->getMessage()]);
-            return redirect()->route('admin.info-board.index')->with('error', 'Informasi tidak ditemukan.');
+            Log::error('[WEB InfoBoardController@store] Gagal: ' . $e->getMessage());
+            return back()->with('swal_error_crud', 'Gagal menambahkan informasi.')->withInput();
         }
     }
 
@@ -105,17 +114,16 @@ class InfoBoardController extends Controller
     {
         try {
             return DB::transaction(function () use ($request, $id) {
-                // Validasi Input
                 $validated = $request->validate([
-                    'title'   => 'required|string|max:255',
-                    'content' => 'required|string',
+                    'info_title'   => 'required|string|max:255',
+                    'info_content' => 'required|string',
                 ]);
 
                 $infoBoard = InfoBoard::findOrFail($id);
                 
                 $infoBoard->update([
-                    'info_title'   => $validated['title'],
-                    'info_content' => $validated['content'],
+                    'info_title'   => $validated['info_title'],
+                    'info_content' => $validated['info_content'],
                 ]);
 
                 Log::info('[WEB InfoBoardController@update] Sukses: Data info board berhasil diperbarui.');
@@ -125,12 +133,10 @@ class InfoBoardController extends Controller
             });
 
         } catch (ValidationException $e) {
-            Log::warning('[WEB InfoBoardController@update] Gagal: Validasi input edit tidak terpenuhi.');
-            return back()->withErrors($e->errors())->withInput();
-
+            return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB InfoBoardController@update] Gagal: Terjadi kesalahan sistem.', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat memperbarui data.');
+            Log::error('[WEB InfoBoardController@update] Gagal: ' . $e->getMessage());
+            return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
 
@@ -153,8 +159,8 @@ class InfoBoardController extends Controller
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB InfoBoardController@destroy] Gagal: Terjadi kesalahan sistem.', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat menghapus data.');
+            Log::error('[WEB InfoBoardController@destroy] Gagal: ' . $e->getMessage());
+            return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }
 }
