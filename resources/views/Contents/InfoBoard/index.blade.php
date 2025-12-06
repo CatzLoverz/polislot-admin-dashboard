@@ -9,27 +9,25 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <div class="d-flex align-items-center">
-                        <h4 class="card-title">Daftar Pengumuman</h4>
-                        <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#createModal">
-                            <i class="fa fa-plus"></i>
-                            Tambah Pengumuman
-                        </button>
-                    </div>
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+                    <h4 class="card-title">Daftar Pengumuman</h4>
+                    <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#createModal">
+                        <i class="fa fa-plus"></i>
+                        Tambah Pengumuman
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="infoboard-table" class="display table table-striped table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th style="width: 5%">No</th>
-                                    <th style="width: 20%">Judul</th>
-                                    <th style="width: 30%">Isi Pengumuman</th>
-                                    <th style="width: 15%">Dibuat Oleh</th>
-                                    <th style="width: 15%">Dibuat Pada</th>
-                                    <th style="width: 20%">Terakhir Update</th>
-                                    <th style="width: 10%; text-align: center">Aksi</th>
+                                    <th class="text-center">No</th>
+                                    <th>Judul</th>
+                                    <th>Isi Pengumuman</th>
+                                    <th>Dibuat Oleh</th>
+                                    <th>Dibuat Pada</th>
+                                    <th>Terakhir Update</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,19 +115,18 @@
             processing: true,
             serverSide: true,
             ajax: "{{ route('admin.info-board.index') }}",
+            order: [[4, 'desc']], 
+
             columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center' },
                 { data: 'info_title', name: 'info_title' },
                 { 
                     data: 'info_content', 
                     name: 'info_content',
                     render: function(data, type, row) {
-                        // Pastikan data tidak null
                         if (!data) return '';
 
-                        // 1. white-space: pre-line -> merender baris baru (Enter).
-                        // 2. word-break: break-word -> Memaksa kata panjang putus ke bawah.
-                        // 3. min-width & max-width -> Menjaga agar kolom tidak terlalu lebar atau sempit.
+                        // Style agar enter terbaca (pre-line) dan text turun (break-word)
                         var style = 'white-space: pre-line; word-break: break-word; min-width: 300px; max-width: 500px;';
 
                         // Jika teks pendek (< 50 karakter), tampilkan langsung
@@ -137,7 +134,7 @@
                             return `<div style="${style}">${data}</div>`;
                         }
 
-                        // Jika teks panjang, siapkan versi pendek dan penuh
+                        // Jika teks panjang (> 50 karakter), potong dan tambahkan tombol
                         var shortText = data.substr(0, 50) + '...';
                         var fullText = data; 
 
@@ -150,7 +147,7 @@
                                 `</a>`;
                     }
                 },
-                { data: 'creator_name', name: 'user.name' },
+                { data: 'creator_name', name: 'user.name', orderable: false },
                 { data: 'created_at', name: 'created_at' },
                 { data: 'updated_at', name: 'updated_at' },
                 { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }

@@ -6,7 +6,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>PoliSlot</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" href="{{ asset('assets/img/Polibatam.png') }}" type="image/x-icon" />
+  <link rel="icon" href="{{ asset('assets/img/PoliSlot Pin.png') }}" type="image/x-icon" />
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -63,13 +63,12 @@
         <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
             <a href="#" class="logo d-flex align-items-center">
-                <img src="assets/img/Polibatam.png" alt="">
+                <img src="assets/img/PoliSlot Pin.png" alt="">
             </a>
 
             <nav id="navmenu" class="navmenu">
                 <ul>
                   <li><a href="#beranda">Beranda</a></li>
-                  <li><a href="#tentang">Tentang</a></li>
                   <li><a href="{{ route('login.form') }}">Masuk</a></li>
                   <li class="masuk-mobile"><a href="{{ route('login.form') }}">Masuk</a></li>
                 </ul>
@@ -85,7 +84,7 @@
         <div class="container">
             <div class="row gy-4 justify-content-between">
                 <div class="col-lg-4 order-lg-last hero-img" data-aos="zoom-out" data-aos-delay="100">
-                    <img src="assets/img/Polibatam.png" class="img-fluid animated" alt="">
+                    <img src="assets/img/PoliSlot2.png" class="img-fluid animated" alt="">
                 </div>
                 <div class="col-lg-6  d-flex flex-column justify-content-center" data-aos="fade-in">
                     <h1>Permudah pencarian parkir kendaraan Anda dengan <span>PoliSlot</span></h1>
@@ -114,176 +113,6 @@
             </g>
         </svg>
     </section>
-
-    <style>
-        .partner-logo {
-          max-height: 130px;
-          object-fit: contain;
-          padding: 10px;
-        }
-    </style>
-
-    <section id="tentang" class="tentang py-5 bg-light">
-        <div class="container">
-          <!-- Judul -->
-          <div class="text-center mb-5">
-            <h1 class="fw-bold">Tentang</h1>
-            <hr class="w-25 mx-auto border-3">
-          </div>
-
-          <!-- Paragraf Tentang -->
-          <div class="row g-4 mb-5">
-            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
-              <p class="text-justify">
-                <strong>MyInternship</strong> adalah aplikasi manajer magang yang mengelola semua tahapan magang, mulai dari proses pendaftaran, pelaksanaan, hingga penilaian. Per 5 Oktober 2022, MyInternship telah digunakan oleh lebih dari 6000 mahasiswa yang melibatkan 300 dosen pembimbing industri dan 200 dosen pembimbing magang di Politeknik. MyInternship juga merupakan platform komunikasi antara mahasiswa, dosen dan dosen pembimbing.
-              </p>
-            </div>
-            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-              <p class="text-justify">
-                Perguruan tinggi dapat menugaskan pengawas magang, serta industri juga dapat menugaskan dosen pembimbing untuk setiap mahasiswa di tempat magang mereka. Melalui MyInternship, akan lebih mudah bagi politeknik dan industri untuk memantau dan mengevaluasi magang mahasiswa. Kinerja siswa dapat dilaporkan secara berkala melalui laporan kinerja. Melalui laporan kinerja ini, dosen pembimbing magang dapat memantau kemajuan belajar mahasiswa selama magang.
-              </p>
-            </div>
-          </div>
-
-          <!-- Statistik dan Gambar -->
-          <div class="row align-items-center">
-            <div class="col-xl-5 mb-4 mb-xl-0 text-center" data-aos="fade-right" data-aos-delay="150">
-              <img src="assets/img/goals.png" alt="Goals" class="img-fluid rounded shadow-sm">
-            </div>
-            <div class="col-xl-7" data-aos="fade-left" data-aos-delay="300">
-              <div class="row g-4">
-                <div class="col-md-6">
-                  <div class="count-box p-4 bg-white rounded shadow-sm text-center">
-                    <i class="bi bi-mortarboard display-5 text-primary mb-2"></i>
-                    <h2 class="purecounter" data-purecounter-start="0" data-purecounter-end="5074" data-purecounter-duration="1">5074</h2>
-                    <p class="mb-0"><strong>Mahasiswa</strong> magang terdaftar</p>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="count-box p-4 bg-white rounded shadow-sm text-center">
-                    <i class="bi bi-building display-5 text-success mb-2"></i>
-                    <h2 class="purecounter" data-purecounter-start="0" data-purecounter-end="1301" data-purecounter-duration="1">1301</h2>
-                    <p class="mb-0"><strong>Industri</strong> Terlibat</p>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="count-box p-4 bg-white rounded shadow-sm text-center">
-                    <i class="bi bi-people display-5 text-warning mb-2"></i>
-                    <h2 class="purecounter" data-purecounter-start="0" data-purecounter-end="298" data-purecounter-duration="1">298</h2>
-                    <p class="mb-0"><strong>Dosen</strong> Pembimbing</p>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="count-box p-4 bg-white rounded shadow-sm text-center">
-                    <i class="bi bi-hospital display-5 text-danger mb-2"></i>
-                    <h2 class="purecounter" data-purecounter-start="0" data-purecounter-end="7" data-purecounter-duration="1">7</h2>
-                    <p class="mb-0"><strong>Universitas</strong> Bekerja Sama</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </section>
-
-
-    <style>
-        .section-title img {
-          max-width: 100%;
-          height: auto;
-          margin-bottom: 1rem;
-        }
-
-        .judul-fitur img {
-          max-width: 100%;
-          border-radius: 10px;
-          margin: 20px 0;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .fitur-card {
-          background: #fff;
-          border: none;
-          border-radius: 20px;
-          padding: 30px;
-          transition: all 0.3s ease-in-out;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-          text-align: center;
-        }
-
-        .fitur-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-        }
-
-        .fitur-icon {
-          font-size: 40px;
-          margin-bottom: 20px;
-          color: #0d6efd;
-        }
-
-        .fitur-card h3 {
-          font-size: 1.2rem;
-          font-weight: 600;
-          color: #0d6efd;
-          margin-bottom: 10px;
-        }
-
-        .fitur-card p {
-          font-size: 0.95rem;
-          color: #555;
-        }
-    </style>
-
-    <style>
-        .card-team {
-          border: none;
-          border-radius: 20px;
-          overflow: hidden;
-          transition: all 0.4s ease;
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-          background: rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(6px);
-        }
-
-        .card-team:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-team img {
-          height: 280px;
-          object-fit: cover;
-          border-bottom: 4px solid #0d6efd;
-          transition: transform 0.3s ease;
-        }
-
-        .card-team:hover img {
-          transform: scale(1.05);
-        }
-
-        .card-title {
-          font-weight: 700;
-          color: #0d6efd;
-        }
-
-        .card-text {
-          font-size: 0.95rem;
-          color: #555;
-        }
-
-        .contribution-icon {
-          margin-right: 6px;
-          color: #0d6efd;
-        }
-
-        .section-title-line {
-          width: 50px;
-          height: 4px;
-          background-color: #0d6efd;
-          border-radius: 10px;
-        }
-    </style>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <!-- Scroll Top -->

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->index('user_id', 'idx_info_board_user_id');
         });
     }
 

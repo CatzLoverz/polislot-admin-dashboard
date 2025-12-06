@@ -21,7 +21,7 @@ class InfoBoardController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = InfoBoard::with('user')->orderBy('created_at', 'desc');
+            $data = InfoBoard::with('user');
 
             return DataTables::of($data)
                 ->addIndexColumn()

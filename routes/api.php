@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\InfoBoardController;
 use App\Http\Controllers\Api\UserTierController;
 use App\Http\Controllers\Api\UserRewardController;
+use App\Http\Controllers\Api\FeedbackCategoryController;
 use App\Http\Controllers\Api\FeedbackController;
 
 
@@ -48,20 +49,24 @@ Route::middleware('encryptApi')->group(function () {
     Route::middleware('setDBConnByRole', 'auth:sanctum')->group(function () {
         // Route Logout (Protected, untuk mencabut token)
         Route::post('/logout', [AuthController::class, 'logout']);
+
         // Route Profil
         Route::get('/profile', [ProfileController::class, 'show']); 
         Route::match(['put', 'post'], '/profile', [ProfileController::class, 'update']);
+
         // Route InfoBoard
         Route::get('/info-board', [InfoBoardController::class, 'index']);
+        
+        // Route Masukan dan Saran
+        Route::get('/feedback-categories', [FeedbackCategoryController::class, 'index']);
+        Route::post('/feedback', [FeedbackController::class, 'store']);
+        
         // Route Tiers
         Route::get('/user/tier', [UserTierController::class, 'show']);
         Route::post('/user/tier/update', [UserTierController::class, 'updateTier'])
         ->middleware('throttle:5,1');
         // Route Leadboard
         Route::get('/user/leaderboard', [UserTierController::class, 'leaderboard']);
-        // Route Masukan dan Saran
-        Route::post('/user/feedback', [FeedbackController::class, 'store'])
-        ->middleware('throttle:3,1');
         // Route Reward dan Riwayat Penukaran
         Route::prefix('rewards')->group(function () {
             // Katalog reward

@@ -9,29 +9,33 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-        public function up(): void
-{
-    Schema::create('feedback', function (Blueprint $table) {
-        $table->id('feedback_id');
-        $table->unsignedBigInteger('user_id');
-        $table->string('category', 255);
-        $table->string('feedback_type', 255);
-        $table->string('title', 255);
-        $table->text('description')->nullable();
-        $table->timestamp('created_at')->useCurrent();
-        $table->timestamp('updated_at')->nullable();
+    public function up(): void
+    {   
+        Schema::create('feedback_categories', function (Blueprint $table) {
+            $table->id('fbk_category_id');
+            $table->string('fbk_category_name', 255);
+            $table->timestamps();
 
-        $table->foreign('user_id')
-              ->references('user_id')
-              ->on('users')
-              ->onDelete('cascade');
-    });
-}
+            $table->unique('fbk_category_name');
+        });
+
+        Schema::create('feedbacks', function (Blueprint $table) {
+            $table->id('feedback_id');
+            $table->unsignedBigInteger('fbk_category_id');
+            $table->string('feedback_title', 255);
+            $table->text('feedback_description');
+            $table->timestamps();
+
+            $table->foreign('fbk_category_id')->references('fbk_category_id')->on('feedback_categories')->onDelete('cascade')->onUpdate('cascade');
+        });
+    }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('feedbacks');
+        Schema::dropIfExists('feedback_categories');
     }
 };
