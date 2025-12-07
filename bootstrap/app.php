@@ -17,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
             'guest' => \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class,
             # Custom Middleware
-            'setDBConnByRole' => App\Http\Middleware\SetDBConnByRole::class,
+            'role' => App\Http\Middleware\RBAC::class,
             # API Encyption
             'encryptApi' => App\Http\Middleware\ApiEncryption::class,
         ]);

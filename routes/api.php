@@ -46,7 +46,7 @@ Route::middleware('encryptApi')->group(function () {
     Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend']);
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword']);
 
-    Route::middleware('setDBConnByRole', 'auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum', 'role:admin,user')->group(function () {
         // Route Logout (Protected, untuk mencabut token)
         Route::post('/logout', [AuthController::class, 'logout']);
 

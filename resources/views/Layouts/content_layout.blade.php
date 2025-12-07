@@ -121,7 +121,7 @@
                         </li>
 
                         {{-- Menu khusus Admin --}}
-                        @can('access-admin-features')
+                        @can('role:admin')
                             <li class="nav-section">
                                 <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
                                 <h4 class="text-section">Kelola</h4>

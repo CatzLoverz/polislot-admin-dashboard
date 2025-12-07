@@ -38,7 +38,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword'])->name('reset_pass.attempt');
 });
 
-Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
+Route::middleware(['auth', 'role:admin,user'])->group(function () {
     // Rute Logout
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     
@@ -49,7 +49,7 @@ Route::middleware(['auth', 'setDBConnByRole'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::prefix('admin')->as('admin.')->middleware(['can:access-admin-features'])->group(function () {
+    Route::prefix('admin')->as('admin.')->middleware(['role:admin'])->group(function () {
         
         Route::resource('park', ParkAreaController::class);
         // Route info_board
