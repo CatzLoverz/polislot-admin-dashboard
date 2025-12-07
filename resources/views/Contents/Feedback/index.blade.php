@@ -12,10 +12,31 @@
                 <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
                     <h4 class="card-title">Daftar Feedback</h4>
                     <a href="{{ route('admin.feedback-category.index') }}" class="btn btn-primary btn-round ml-auto text-white" style="text-decoration: none;">
-                        Kelola Kategori 
+                        <i class="fa fa-list mr-2"></i> Kelola Kategori 
                     </a>
                 </div>
                 <div class="card-body">
+                    
+                    {{-- === BAGIAN FILTER === --}}
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="category_filter">Filter Berdasarkan Kategori</label>
+                                <select class="form-control" id="category_filter" name="category_filter">
+                                    <option value="">-- Semua Kategori --</option>
+                                    @foreach ($categories as $cat)
+                                        <option value="{{ $cat->fbk_category_id }}">{{ $cat->fbk_category_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-4 d-flex align-items-end justify-content-end">
+                            <div class="form-group">
+                                <button id="apply_filter" class="btn btn-primary">Terapkan Filter</button>
+                                <button id="reset_filter" class="btn btn-danger ml-2">Batal</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table id="feedback-table" class="display table table-striped table-hover" style="width:100%">
                             <thead>
@@ -49,8 +70,14 @@
         var table = $('#feedback-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('admin.feedback.index') }}",
-            order: [[4, 'desc']],
+            // Update AJAX untuk mengirim filter
+            ajax: {
+                url: "{{ route('admin.feedback.index') }}",
+                data: function(d) {
+                    d.category_filter = $('#category_filter').val(); // Kirim value dropdown
+                }
+            },
+            order: [[4, 'desc']], // Default sort by Created At
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center' },
                 { data: 'feedback_title', name: 'feedback_title' },
@@ -58,22 +85,16 @@
                     data: 'feedback_description', 
                     name: 'feedback_description',
                     render: function(data, type, row) {
-                        // Pastikan data tidak null
                         if (!data) return '-';
-
-                        // Style agar enter terbaca (pre-line) dan text turun (break-word)
                         var style = 'white-space: pre-line; word-break: break-word; min-width: 300px; max-width: 500px;';
 
-                        // Jika teks pendek, tampilkan langsung
                         if (type !== 'display' || data.length <= 50) {
                             return `<div style="${style}">${data}</div>`;
                         }
 
-                        // Jika teks panjang (> 50 karakter), potong dan tambahkan tombol
                         var shortText = data.substr(0, 50) + '...';
                         var fullText = data; 
 
-                        // Render HTML toggle
                         return `<div class="content-wrapper" style="${style}">` +
                                     `<span class="text-short">${shortText}</span>` +
                                     `<span class="text-full" style="display: none;">${fullText}</span>` +
@@ -83,12 +104,21 @@
                                 `</a>`;
                     }
                 },
-                
                 { data: 'category_name', name: 'feedbackCategory.fbk_category_name', orderable: false },
                 { data: 'created_at', name: 'created_at', className: 'text-center' },
                 { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
             ],
             language: { url: "{{ asset('assets/js/plugin/datatables/indonesian.json') }}" }
+        });
+
+        // === EVENT LISTENER FILTER ===
+        $('#apply_filter').click(function() {
+            table.draw(); // Refresh tabel dengan parameter filter baru
+        });
+
+        $('#reset_filter').click(function() {
+            $('#category_filter').val(''); // Reset dropdown
+            table.draw(); // Refresh tabel
         });
 
         // === EVENT LISTENER TOMBOL "LIHAT SELENGKAPNYA" ===
@@ -97,12 +127,10 @@
             var isExpanded = $(this).hasClass('expanded');
 
             if (isExpanded) {
-                // Tutup
                 wrapper.find('.text-short').show();
                 wrapper.find('.text-full').hide();
                 $(this).text('Lihat Selengkapnya').removeClass('expanded');
             } else {
-                // Buka
                 wrapper.find('.text-short').hide();
                 wrapper.find('.text-full').show(); 
                 $(this).text('Tutup').addClass('expanded');

@@ -121,7 +121,7 @@
                         </li>
 
                         {{-- Menu khusus Admin --}}
-                        @can('role:admin')
+                        @can('access-admin-features')
                             <li class="nav-section">
                                 <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
                                 <h4 class="text-section">Kelola</h4>
@@ -143,23 +143,27 @@
                                 <div class="collapse show" id="menuDropdown">
                                     <ul class="nav nav-collapse">
                                         <li class="{{ Route::is('admin.missions.*') ? 'active' : '' }}">
-                                            <a href="{{ route('admin.missions.index') }}"> <span class="sub-item">Manajemen Misi</span>
+                                            <a href="{{ route('admin.missions.index') }}"> 
+                                                <span class="sub-item">Manajemen Misi</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.points.*') ? 'active' : '' }}">
-                                            <a href="#"> <span class="sub-item">Ketentuan Poin per-Aktivitas</span>
+                                            <a href="#"> 
+                                                <span class="sub-item">Ketentuan Poin per-Aktivitas</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.rewards.*') ? 'active' : '' }}">
-                                            <a href="{{ route('admin.rewards.index') }}"> <span class="sub-item">Manajemen Hadiah</span>
+                                            <a href="#"> 
+                                                <span class="sub-item">Manajemen Hadiah</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.reward-verification.*') ? 'active' : '' }}">
-                                            <a href="{{ route('admin.reward_verification.index') }}"> <span class="sub-item">Penerima Hadiah</span>
+                                            <a href="#"> 
+                                                <span class="sub-item">Penerima Hadiah</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.tiers.*') ? 'active' : '' }}">
-                                            <a href="{{ route('admin.tiers.index') }}">
+                                            <a href="#">
                                                 <span class="sub-item">Penentuan Tiers</span>
                                             </a>
                                         </li>

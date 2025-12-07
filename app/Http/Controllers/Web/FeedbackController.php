@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
+use App\Models\FeedbackCategory; // Tambahkan Model Kategori
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,10 +20,17 @@ class FeedbackController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Mengambil data Feedback dengan relasi Kategori
-            $data = Feedback::with('feedbackCategory');
+            // 1. Query Dasar
+            $query = Feedback::with('feedbackCategory')
+                ->select('feedbacks.*')
+                ->orderBy('created_at', 'desc');
 
-            return DataTables::of($data)
+            // 2. Logika Filter (Jika ada input dari dropdown)
+            if ($request->has('category_filter') && !empty($request->category_filter)) {
+                $query->where('fbk_category_id', $request->category_filter);
+            }
+
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('category_name', function($row){
                     return $row->feedbackCategory->fbk_category_name ?? '-';
@@ -31,11 +39,10 @@ class FeedbackController extends Controller
                     return $row->created_at ? $row->created_at->format('d M Y, H:i') : '-';
                 })
                 ->addColumn('action', function($row){
-                    // Persiapan data untuk modal detail
                     $title = e($row->feedback_title);
-
+                    
                     // Tombol Hapus
-                    $btnDelete =    '<form action="'.route('admin.feedback.destroy', $row->feedback_id).'" 
+                    $btnDelete = '<form action="'.route('admin.feedback.destroy', $row->feedback_id).'" 
                                         method="POST" 
                                         class="delete-form d-inline" 
                                         data-entity-name="'.$title.'">
@@ -47,7 +54,7 @@ class FeedbackController extends Controller
                                             title="Hapus '.$title.'">
                                             <i class="fa fa-trash"></i>
                                         </button>
-                                    </form>';
+                                  </form>';
 
                     return '<div class="form-button-action d-flex justify-content-center">'.$btnDelete.'</div>';
                 })
@@ -55,7 +62,10 @@ class FeedbackController extends Controller
                 ->make(true);
         }
 
-        return view('Contents.feedback.index');
+        // 3. Ambil Data Kategori untuk Dropdown
+        $categories = FeedbackCategory::orderBy('fbk_category_name')->get();
+
+        return view('Contents.feedback.index', compact('categories'));
     }
 
     /**

@@ -53,11 +53,14 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         
         Route::resource('park', ParkAreaController::class);
         // Route info_board
-        Route::resource('info-board', InfoBoardController::class)->except(['create', 'show', 'edit']);
+        Route::resource('info-board', InfoBoardController::class)->only(['index', 'store', 'update', 'destroy']);
 
-        // Route Feedback(Masukan dan Saran)
-        Route::Resource('feedback-category', FeedbackCategoryController::class)->except('show');
-        Route::Resource('feedback', FeedbackController::class)->except('show');
+        // Route Feedback (Masukan dan Saran)
+        Route::Resource('feedback-category', FeedbackCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::Resource('feedback', FeedbackController::class)->only(['index', 'store', 'update', 'destroy']);
+
+        // Route Mission
+        Route::Resource('missions', MissionController::class)->only(['index', 'store', 'update', 'destroy']);
 
         // Route tiers
         Route::resource('tiers', TierController::class)->except(['show']);
@@ -69,7 +72,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
             Route::post('/{userReward}/verify', [RewardVerificationController::class, 'verify'])->name('verify');
             Route::post('/search', [RewardVerificationController::class, 'search'])->name('search');
         });
-        // Route Missions
-        Route::Resource('missions', MissionController::class)->except('show');
+
     });
+
 });

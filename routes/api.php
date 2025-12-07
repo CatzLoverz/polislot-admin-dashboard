@@ -13,24 +13,6 @@ use App\Http\Controllers\Api\FeedbackController;
 
 
 Route::middleware('encryptApi')->group(function () {
-    // Auth Check
-    Route::get('/user', function (Request $request) {
-        $user = $request->user();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data profil berhasil diambil.',
-            'data' => [
-                'user_id' => (int) $user->user_id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'email_verified_at' => $user->email_verified_at,
-                'role' => $user->role,
-                'avatar' => $user->avatar,
-                'created_at' => $user->created_at,
-                'updated_at' => $user->updated_at,
-            ]
-        ]);
-    })->middleware('auth:sanctum');
 
     // Rute Login
     Route::post('/login-attempt', [AuthController::class, 'login']);
@@ -45,8 +27,29 @@ Route::middleware('encryptApi')->group(function () {
     Route::post('/forgot-otp-verify', [AuthController::class, 'forgotPasswordOtpVerify']);
     Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend']);
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword']);
+});
 
-    Route::middleware('auth:sanctum', 'role:admin,user')->group(function () {
+    Route::middleware('auth:sanctum', 'role:admin,user', 'encryptApi')->group(function () {
+
+        // Auth Check
+        Route::get('/user', function (Request $request) {
+            $user = $request->user();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data profil berhasil diambil.',
+                'data' => [
+                    'user_id' => (int) $user->user_id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'email_verified_at' => $user->email_verified_at,
+                    'role' => $user->role,
+                    'avatar' => $user->avatar,
+                    'created_at' => $user->created_at,
+                    'updated_at' => $user->updated_at,
+                ]
+            ]);
+        });
+
         // Route Logout (Protected, untuk mencabut token)
         Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -81,4 +84,3 @@ Route::middleware('encryptApi')->group(function () {
         });
         // placeholder
     });
-});

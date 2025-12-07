@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Mission extends Model
 {
@@ -11,86 +13,59 @@ class Mission extends Model
 
     protected $table = 'missions';
     protected $primaryKey = 'mission_id';
-    public $timestamps = false; // Karena hanya ada created_at
+    public $timestamps = true;
+
+    // DEFINISI KONSTANTA METRIC (Agar konsisten di Controller & View)
+    public const METRICS = [
+        'VALIDATION_STREAK' => 'Validasi Berturut-turut (Sequence)',
+        'VALIDATION_TOTAL'  => 'Total Validasi (Target)',
+        'PROFILE_UPDATE'    => 'Lengkapi Profil (Target)',
+        'LOGIN_APP'         => 'Login Aplikasi (Sequence)',
+    ];
+
+    public const METRIC_TYPES = [
+        'TARGET' => [
+            'VALIDATION_TOTAL', 
+            'PROFILE_UPDATE', 
+        ],
+        'SEQUENCE' => [
+            'VALIDATION_STREAK', 
+            'LOGIN_APP'
+        ],
+    ];
 
     protected $fillable = [
-        'mission_name',
-        'description',
-        'mission_type',
-        'target_value',
-        'reward_points',
-        'period_type',
-        'reset_time',
-        'start_date',
-        'end_date',
-        'is_active',
+        'mission_title',
+        'mission_description',
+        'mission_points',
+        'mission_type',        // ENUM: TARGET, SEQUENCE
+        'mission_metric_code', // ENUM: VALIDATION_STREAK, dll
+        'mission_is_active',
+        'mission_start_date',
+        'mission_end_date',
     ];
 
     protected $casts = [
-        'target_value' => 'integer',
-        'reward_points' => 'integer',
-        'is_active' => 'boolean',
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'created_at' => 'datetime',
+        'mission_points'     => 'integer',
+        'mission_is_active'  => 'boolean',
+        'mission_start_date' => 'datetime',
+        'mission_end_date'   => 'datetime',
     ];
 
-    /**
-     * Relasi ke user_missions (progress user).
-     */
-    public function userMissions()
+    // --- RELASI ---
+
+    public function missionTarget(): HasOne
+    {
+        return $this->hasOne(MissionTarget::class, 'mission_id', 'mission_id');
+    }
+
+    public function missionSequence(): HasOne
+    {
+        return $this->hasOne(MissionSequence::class, 'mission_id', 'mission_id');
+    }
+
+    public function userMissions(): HasMany
     {
         return $this->hasMany(UserMission::class, 'mission_id', 'mission_id');
-    }
-
-    /**
-     * Scope untuk mission yang aktif.
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true)
-                     ->where('start_date', '<=', now())
-                     ->where('end_date', '>=', now());
-    }
-
-    /**
-     * Scope untuk filter berdasarkan tipe mission.
-     */
-    public function scopeOfType($query, $type)
-    {
-        return $query->where('mission_type', $type);
-    }
-
-    /**
-     * Scope untuk mission berdasarkan period type.
-     */
-    public function scopeByPeriod($query, $periodType)
-    {
-        return $query->where('period_type', $periodType);
-    }
-
-    /**
-     * Check apakah mission sedang aktif.
-     */
-    public function isActive()
-    {
-        return $this->is_active 
-            && now()->between($this->start_date, $this->end_date);
-    }
-
-    /**
-     * Get progress percentage untuk user tertentu.
-     */
-    public function getProgressForUser($userId)
-    {
-        $userMission = $this->userMissions()
-            ->where('user_id', $userId)
-            ->first();
-
-        if (!$userMission) {
-            return 0;
-        }
-
-        return round(($userMission->progress_value / $this->target_value) * 100, 2);
     }
 }

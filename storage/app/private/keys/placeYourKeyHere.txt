@@ -1,1 +1,1 @@
-Letakkan private key dalam directory ini
+Letakkan private key bernama private_key.pem dalam directory ini

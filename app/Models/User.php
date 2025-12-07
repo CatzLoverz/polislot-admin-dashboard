@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(InfoBoard::class, 'user_id', 'user_id');
     }
+
+    public function userMission()
+    {
+        return $this->hasMany(userMission::class, 'user_id', 'user_id');
+    }
 }
