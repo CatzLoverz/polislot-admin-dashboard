@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\FeedbackCategory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class FeedbackCategorySeeder extends Seeder
 {
@@ -13,11 +13,33 @@ class FeedbackCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('feedback_categories')->insert([
-            ['fbk_category_name' => 'Kategori A', 'created_at' => now(), 'updated_at' => now()],
-            ['fbk_category_name' => 'Kategori B', 'created_at' => now(), 'updated_at' => now()],
-            ['fbk_category_name' => 'Kategori C', 'created_at' => now(), 'updated_at' => now()],
-            ['fbk_category_name' => 'Lainnya', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        $now = Carbon::now();
+        $categories = [];
+
+        // Pertama buat "Lainnya" agar id-nya pertama
+        $categories[] = [
+            'fbk_category_name' => 'Lainnya',
+            'created_at' => $now->copy()->subMinutes(5), // Buat lebih awal sedikit
+            'updated_at' => $now->copy()->subMinutes(5),
+        ];
+
+        // Buat kategori lainnya
+        $otherCategories = ['Bug / Error', 'Fitur Baru', 'Peningkatan UI/UX'];
+        
+        foreach ($otherCategories as $category) {
+            $categories[] = [
+                'fbk_category_name' => $category,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        // Insert semua kategori
+        foreach ($categories as $category) {
+            FeedbackCategory::create($category);
+        }
+
+        $this->command->info('Seeder berhasil: ' . count($categories) . ' kategori feedback telah dibuat.');
+        $this->command->info('Kategori "Lainnya" dibuat pertama untuk memastikan urutan dropdown.');
     }
 }

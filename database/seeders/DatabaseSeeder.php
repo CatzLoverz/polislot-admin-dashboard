@@ -2,9 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\FeedbackCategory;
+use App\Models\Feedback;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +18,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        Schema::disableForeignKeyConstraints();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::truncate();
+        FeedbackCategory::truncate();
+        Feedback::truncate();
+
+        Schema::enableForeignKeyConstraints();
+
+        $this->call([
+            UserSeeder::class,
+            FeedbackCategorySeeder::class,
+            FeedbackSeeder::class
         ]);
     }
 }
