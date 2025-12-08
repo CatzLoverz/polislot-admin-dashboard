@@ -136,10 +136,6 @@ class FeedbackCategoryController extends Controller
             return DB::transaction(function () use ($id) {
                 $category = FeedbackCategory::findOrFail($id);
                 
-                if ($category->feedback()->exists()) {
-                    return back()->with('swal_error_crud', 'Gagal: Kategori ini sedang digunakan oleh data Feedback.');
-                }
-
                 $category->delete();
 
                 Log::info('[WEB FeedbackCategoryController@destroy] Sukses: Kategori berhasil dihapus.');
