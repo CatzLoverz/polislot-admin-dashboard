@@ -108,7 +108,6 @@
         var table = $('#category-table').DataTable({
             processing: true,
             serverSide: true,
-            order: [[2, 'desc']],
             ajax: "{{ route('admin.feedback-category.index') }}",
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center' },

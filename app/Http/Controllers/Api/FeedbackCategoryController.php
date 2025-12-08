@@ -17,7 +17,7 @@ class FeedbackCategoryController extends Controller
     {
         try {
             // Ambil id dan nama kategori saja
-            $categories = FeedbackCategory::select('fbk_category_id', 'fbk_category_name')->orderBy('created_at', 'desc')->get();
+            $categories = FeedbackCategory::select('fbk_category_id', 'fbk_category_name')->get();
             
             return $this->sendSuccess('Data kategori berhasil diambil.', $categories);
         } catch (\Exception $e) {

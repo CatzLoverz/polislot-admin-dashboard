@@ -19,8 +19,6 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user']);
             $table->string('name');
             $table->string('avatar')->nullable();
-            $table->integer('current_points')->default(0);
-            $table->integer('lifetime_points')->default(0);
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->integer('failed_attempts')->default(0);
