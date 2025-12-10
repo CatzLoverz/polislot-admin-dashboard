@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Rules\NotCurrentPassword;
 use App\Models\User;
+use App\Services\MissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +17,13 @@ use Illuminate\Http\JsonResponse;
 
 class ProfileController extends Controller
 {
+    protected $missionService;
+
+    public function __construct(MissionService $missionService)
+    {
+        $this->missionService = $missionService;
+    }
+
     /**
      * Menampilkan data profil pengguna.
      * * @param Request $request
@@ -71,6 +79,14 @@ class ProfileController extends Controller
                         Storage::disk('public')->delete($user->avatar);
                     }
                     $user->avatar = $request->file('avatar')->store('avatars', 'public');
+                    try {
+                        $this->missionService->updateProgress($user->user_id, 'PROFILE_UPDATE');
+                        Log::info("[API ProfileController@update] Misi Profile Update ditrigger untuk User {$user->user_id}");
+                    } catch (\Exception $e) {
+                        // Kita catch error misi agar tidak membatalkan update profil utama
+                        // Log errornya saja untuk debugging
+                        Log::error("[API ProfileController@update] Gagal trigger misi: " . $e->getMessage());
+                    }
                 }
 
                 // 2. Password

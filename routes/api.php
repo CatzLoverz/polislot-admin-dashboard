@@ -3,12 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MissionController;
 use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\InfoBoardController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\UserTierController;
+use App\Http\Controllers\Api\InfoBoardController;
 use App\Http\Controllers\Api\UserRewardController;
 use App\Http\Controllers\Api\FeedbackCategoryController;
-use App\Http\Controllers\Api\FeedbackController;
 
 
 
@@ -59,6 +60,9 @@ Route::middleware('encryptApi')->group(function () {
 
         // Route InfoBoard
         Route::get('/info-board', [InfoBoardController::class, 'index']);
+
+        // Route Mission & Leaderboard
+        Route::get('/missions', [MissionController::class, 'index']);
         
         // Route Masukan dan Saran
         Route::get('/feedback-categories', [FeedbackCategoryController::class, 'index']);

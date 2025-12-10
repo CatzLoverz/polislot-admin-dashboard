@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
 
         // Buat 1 admin
         User::create([
-            'email' => 'akunyt123gue@gmail.com', // isi email sebenarnya
+            'email' => '...', // isi email sebenarnya
             'password' => Hash::make('Testing_12'),
             'role' => 'admin',
             'name' => 'Admin PoliSlot',

@@ -22,67 +22,50 @@ class MissionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Eager load relasi child (missionTarget & missionSequence) untuk efisiensi query
-            $data = Mission::with(['missionTarget', 'missionSequence'])
-                ->select('missions.*');
+            $data = Mission::select('*'); // Query simple, tidak perlu with()
 
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->editColumn('mission_points', function($row){
-                    return number_format($row->mission_points) . ' Poin';
-                })
+                ->editColumn('mission_points', fn($row) => number_format($row->mission_points) . ' Poin')
                 ->editColumn('mission_type', function($row){
-                    // Badge warna sesuai tipe
+                    // Badge Tipe
+                    $color = $row->mission_type === 'TARGET' ? 'info' : 'warning';
+                    return "<span class='badge badge-{$color}'>{$row->mission_type}</span>";
+                })
+                ->addColumn('cycle_info', function($row){
+                    // Kolom Info Siklus
+                    return Mission::CYCLES[$row->mission_reset_cycle] ?? $row->mission_reset_cycle;
+                })
+                ->addColumn('rules_detail', function($row){
+                    // Logic Display Satu Kolom
                     if ($row->mission_type === 'TARGET') {
-                        return '<span class="badge badge-primary">Target (Akumulasi)</span>';
+                        return "Target: <b>{$row->mission_threshold}</b> <br><small>Metric: {$row->mission_metric_code}</small>";
+                    } else {
+                        $mode = $row->mission_is_consecutive ? '(Berurut)' : '(Acak)';
+                        return "Durasi: <b>{$row->mission_threshold} Hari</b> {$mode} <br><small>Metric: {$row->mission_metric_code}</small>";
                     }
-                    return '<span class="badge badge-secondary">Sequence (Trigger harian)</span>';
                 })
                 ->editColumn('mission_is_active', function($row){
                     return $row->mission_is_active 
                         ? '<span class="badge badge-success">Aktif</span>' 
                         : '<span class="badge badge-danger">Non-Aktif</span>';
                 })
-                ->addColumn('rule_detail', function($row){
-                    // Menampilkan ringkasan aturan berdasarkan tipe misi
-                    if ($row->mission_type === 'TARGET' && $row->missionTarget) {
-                        return 'Target: ' . number_format($row->missionTarget->mission_target_amount) . ' (Total)';
-                    } elseif ($row->mission_type === 'SEQUENCE' && $row->missionSequence) {
-                        $status = $row->missionSequence->mission_is_consecutive ? 'Berurut' : 'Acak/Total';
-                        return 'Durasi: ' . $row->missionSequence->mission_days_required . ' Hari <br><small class="text-muted">(' . $status . ')</small>';
-                    }
-                    return '-';
-                })
                 ->addColumn('action', function($row){
                     $title = e($row->mission_title);
                     
-                    // Siapkan data attributes untuk Modal Edit (JS)
-                    $targetAmount  = $row->missionTarget ? $row->missionTarget->mission_target_amount : '';
-                    $daysRequired  = $row->missionSequence ? $row->missionSequence->mission_days_required : '';
-                    // Ambil status consecutive (1 atau 0)
-                    $isConsecutive = $row->missionSequence ? $row->missionSequence->mission_is_consecutive : '0'; 
-
+                    // Kita kirim seluruh object row sebagai JSON di data-row untuk memudahkan JS mengisi form Edit
+                    $jsonData = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
+                    
+                    // Tombol Edit dengan Tooltip
                     $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit" 
-                                    data-id="'.$row->mission_id.'"
-                                    data-title="'.$title.'"
-                                    data-description="'.e($row->mission_description).'"
-                                    data-points="'.$row->mission_points.'"
-                                    data-type="'.$row->mission_type.'"
-                                    data-metric="'.$row->mission_metric_code.'"
-                                    data-active="'.$row->mission_is_active.'"
-                                    data-start="'.$row->mission_start_date?->format('Y-m-d\TH:i').'"
-                                    data-end="'.$row->mission_end_date?->format('Y-m-d\TH:i').'"
-                                    
-                                    data-target-amount="'.$targetAmount.'"
-                                    data-days-required="'.$daysRequired.'"
-                                    data-is-consecutive="'.$isConsecutive.'"
-
+                                    data-row="'.$jsonData.'" 
                                     data-update-url="'.route('admin.missions.update', $row->mission_id).'"
                                     data-toggle="tooltip" 
                                     title="Edit '.$title.'"> 
                                     <i class="fa fa-edit"></i>
                                 </button>';
                     
+                    // Tombol Delete dengan Tooltip & Form
                     $btnDelete = '<form action="'.route('admin.missions.destroy', $row->mission_id).'" 
                                         method="POST" 
                                         class="delete-form d-inline" 
@@ -99,14 +82,13 @@ class MissionController extends Controller
 
                     return '<div class="form-button-action d-flex justify-content-center">'.$btnEdit.$btnDelete.'</div>';
                 })
-                ->rawColumns(['mission_type', 'mission_is_active', 'rule_detail', 'action'])
+                ->rawColumns(['mission_type', 'mission_is_active', 'rules_detail', 'action'])
                 ->make(true);
         }
 
-        // Ambil konstanta METRICS dari Model untuk mengisi dropdown di View
         $metrics = Mission::METRICS;
-        $metricTypes = Mission::METRIC_TYPES;
-        return view('Contents.missions.index', compact('metrics', 'metricTypes'));
+        $cycles = Mission::CYCLES;
+        return view('Contents.missions.index', compact('metrics', 'cycles'));
     }
 
     /**
@@ -118,64 +100,37 @@ class MissionController extends Controller
     {
         try {
             return DB::transaction(function () use ($request) {
-                // 1. Validasi Input
+                // Validasi Flat
                 $validated = $request->validate([
                     'mission_title'       => 'required|string|max:255',
                     'mission_description' => 'nullable|string',
                     'mission_points'      => 'required|integer|min:0',
                     'mission_type'        => 'required|in:TARGET,SEQUENCE',
-                    // Validasi Metric Code harus ada di daftar CONST Model
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
-                    'mission_is_active'   => 'nullable|boolean',
-                    'mission_start_date'  => 'nullable|date',
-                    'mission_end_date'    => 'nullable|date|after_or_equal:mission_start_date',
+                    'mission_reset_cycle' => ['required', Rule::in(array_keys(Mission::CYCLES))],
                     
-                    // Validasi Kondisional (Hanya wajib jika tipe sesuai)
-                    'mission_target_amount'  => 'required_if:mission_type,TARGET|nullable|integer|min:1',
-                    'mission_days_required'  => 'required_if:mission_type,SEQUENCE|nullable|integer|min:1',
-                    'mission_is_consecutive' => 'nullable', // Checkbox mengirim value jika dicentang
+                    // Threshold dipakai untuk kedua tipe
+                    'mission_threshold'   => 'required|integer|min:1',
+                    
+                    // Consecutive opsional (default false di DB)
+                    'mission_is_consecutive' => 'nullable', 
+                    'mission_is_active'   => 'nullable',
                 ]);
 
-                // 2. Simpan Parent (Missions)
-                $mission = Mission::create([
-                    'mission_title'       => $validated['mission_title'],
-                    'mission_description' => $validated['mission_description'],
-                    'mission_points'      => $validated['mission_points'],
-                    'mission_type'        => $validated['mission_type'],
-                    'mission_metric_code' => $validated['mission_metric_code'], // Disimpan di Parent
-                    'mission_is_active'   => $request->has('mission_is_active') ? 1 : 0,
-                    'mission_start_date'  => $validated['mission_start_date'],
-                    'mission_end_date'    => $validated['mission_end_date'],
-                ]);
+                // Mapping Checkbox
+                $validated['mission_is_active'] = $request->has('mission_is_active');
+                $validated['mission_is_consecutive'] = $request->has('mission_is_consecutive');
 
-                // 3. Simpan Child sesuai Tipe
-                if ($mission->mission_type === 'TARGET') {
-                    $mission->missionTarget()->create([
-                        'mission_target_amount' => $request->mission_target_amount,
-                    ]);
-                } elseif ($mission->mission_type === 'SEQUENCE') {
-                    $mission->missionSequence()->create([
-                        'mission_days_required'  => $request->mission_days_required,
-                        // Cek checkbox (1 jika dicentang, 0 jika tidak)
-                        'mission_is_consecutive' => $request->has('mission_is_consecutive') ? 1 : 0,
-                        'mission_reset_time'     => '00:00:00', // Default reset tengah malam
-                    ]);
-                }
+                // Simpan (Tanpa Transaction!)
+                Mission::create($validated);
 
-                Log::info('[MissionController@store] Sukses: Mission baru dibuat.', [
-                    'id' => $mission->mission_id,
-                    'title' => $mission->mission_title
-                ]);
-
-                return redirect()->route('admin.missions.index')
-                    ->with('swal_success_crud', 'Misi berhasil ditambahkan.');
+                return redirect()->back()->with('swal_success_crud', 'Misi berhasil ditambahkan.');
             });
-
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
             Log::error('[MissionController@store] Gagal: ' . $e->getMessage());
-            return back()->with('swal_error_crud', 'Terjadi kesalahan sistem saat menyimpan data.')->withInput();
+            return back()->with('swal_error_crud', 'Gagal menyimpan data.');
         }
     }
 
@@ -191,53 +146,27 @@ class MissionController extends Controller
     {
         try {
             return DB::transaction(function () use ($request, $id) {
-                // 1. Validasi Input (Serupa dengan store)
+                $mission = Mission::findOrFail($id);
+
                 $validated = $request->validate([
                     'mission_title'       => 'required|string|max:255',
                     'mission_description' => 'nullable|string',
                     'mission_points'      => 'required|integer|min:0',
+                    'mission_type'        => 'required|in:TARGET,SEQUENCE',
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
-                    'mission_is_active'   => 'nullable|boolean',
-                    'mission_start_date'  => 'nullable|date',
-                    'mission_end_date'    => 'nullable|date|after_or_equal:mission_start_date',
-                    
-                    'mission_target_amount'  => 'nullable|integer|min:1',
-                    'mission_days_required'  => 'nullable|integer|min:1',
+                    'mission_reset_cycle' => ['required', Rule::in(array_keys(Mission::CYCLES))],
+                    'mission_threshold'   => 'required|integer|min:1',
                     'mission_is_consecutive' => 'nullable',
+                    'mission_is_active'   => 'nullable',
                 ]);
 
-                // Eager load child agar bisa diupdate
-                $mission = Mission::with(['missionTarget', 'missionSequence'])->findOrFail($id);
+                $validated['mission_is_active'] = $request->has('mission_is_active');
+                $validated['mission_is_consecutive'] = $request->has('mission_is_consecutive');
 
-                // 2. Update Parent
-                $mission->update([
-                    'mission_title'       => $validated['mission_title'],
-                    'mission_description' => $validated['mission_description'],
-                    'mission_points'      => $validated['mission_points'],
-                    'mission_metric_code' => $validated['mission_metric_code'],
-                    'mission_is_active'   => $request->has('mission_is_active') ? 1 : 0,
-                    'mission_start_date'  => $validated['mission_start_date'],
-                    'mission_end_date'    => $validated['mission_end_date'],
-                ]);
+                $mission->update($validated);
 
-                // 3. Update Child (Tergantung tipe misi awal)
-                if ($mission->mission_type === 'TARGET' && $mission->missionTarget) {
-                    $mission->missionTarget->update([
-                        'mission_target_amount' => $request->mission_target_amount,
-                    ]);
-                } elseif ($mission->mission_type === 'SEQUENCE' && $mission->missionSequence) {
-                    $mission->missionSequence->update([
-                        'mission_days_required'  => $request->mission_days_required,
-                        'mission_is_consecutive' => $request->has('mission_is_consecutive') ? 1 : 0,
-                    ]);
-                }
-
-                Log::info('[MissionController@update] Sukses: Mission diperbarui.', ['id' => $id]);
-
-                return redirect()->route('admin.missions.index')
-                    ->with('swal_success_crud', 'Misi berhasil diperbarui.');
+                return redirect()->back()->with('swal_success_crud', 'Misi berhasil diperbarui.');
             });
-
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
