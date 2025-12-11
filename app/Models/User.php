@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(userMission::class, 'user_id', 'user_id');
     }
+
+    public function userReward()
+    {
+        return $this->hasMany(userReward::class, 'user_id', 'user_id');
+    }
 }

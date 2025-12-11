@@ -36,14 +36,14 @@ class MissionService
                 return; // Tidak ada misi aktif untuk event ini
             }
 
-            Log::info("[MissionService] Triggered '{$metricCode}' for User {$userId}. Found {$missions->count()} active missions.");
+            Log::info("[SERVICE MissionService@updateProgress] Triggered '{$metricCode}' for User {$userId}. Found {$missions->count()} active missions.");
 
             foreach ($missions as $mission) {
                 $this->processMission($userId, $mission, $incrementValue);
             }
 
         } catch (Exception $e) {
-            Log::error("[MissionService] Global Error: " . $e->getMessage(), [
+            Log::error("[SERVICE MissionService@updateProgress] Global Error: " . $e->getMessage(), [
                 'user_id' => $userId,
                 'metric' => $metricCode
             ]);
@@ -125,7 +125,7 @@ class MissionService
                     if ($mission->mission_is_consecutive) {
                         // Reset Streak ke 1 (Mulai dari awal hari ini karena putus)
                         $userMission->user_mission_current_value = 1;
-                        Log::info("[MissionService] Streak Broken: User {$userId} reset mission {$mission->mission_id} to 1.");
+                        Log::info("[SERVICE MissionService@processMission] Streak Broken: User {$userId} reset mission {$mission->mission_id} to 1.");
                     } else {
                         // Kalau tidak wajib berurut, lanjut akumulasi hari
                         $userMission->user_mission_current_value += 1;
@@ -155,7 +155,7 @@ class MissionService
                         $this->awardPoints($userId, $mission->mission_points);
                     }
 
-                    Log::info("[MissionService] COMPLETED: Mission '{$mission->mission_title}' for User {$userId}");
+                    Log::info("[SERVICE MissionService@processMission] COMPLETED: Mission '{$mission->mission_title}' for User {$userId}");
                 }
             }
 
@@ -163,7 +163,7 @@ class MissionService
 
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error("[MissionService] Error processing mission ID {$mission->mission_id}: " . $e->getMessage());
+            Log::error("[SERVICE MissionService@processMission] Error processing mission ID {$mission->mission_id}: " . $e->getMessage());
         }
     }
 
@@ -218,7 +218,7 @@ class MissionService
             $userMission->user_mission_completed_at = null;
             $userMission->save(); // updated_at berubah jadi NOW() di DB
             
-            Log::info("[MissionService] Cycle Reset Triggered", [
+            Log::info("[SERVICE MissionService@checkAndResetCycle] Cycle Reset Triggered", [
                 'user_id' => $userMission->user_id,
                 'mission_id' => $userMission->mission_id,
                 'cycle' => $cycle

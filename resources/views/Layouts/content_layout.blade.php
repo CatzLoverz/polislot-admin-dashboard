@@ -136,7 +136,7 @@
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Request::is('admin/daily*') || Request::is('admin/weekly*') || Request::is('admin/points*') || Request::is('admin/rewards*') || Request::is('admin/winner*') ? 'active submenu' : '' }}">
+                            <li class="nav-item {{ Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*') ? 'active submenu' : '' }}">
                                 <a data-toggle="collapse" href="#menuDropdown" aria-expanded="true">
                                     <i class="fas fa-gamepad"></i><p>Manajemen Gamifikasi</p><span class="caret"></span>
                                 </a>
@@ -152,13 +152,13 @@
                                                 <span class="sub-item">Ketentuan Poin per-Aktivitas</span>
                                             </a>
                                         </li>
-                                        <li class="{{ Route::is('admin.rewards.*') ? 'active' : '' }}">
-                                            <a href="#"> 
+                                        <li class="{{ Route::is('admin.rewards.index') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.rewards.index') }}"> 
                                                 <span class="sub-item">Manajemen Hadiah</span>
                                             </a>
                                         </li>
-                                        <li class="{{ Route::is('admin.reward-verification.*') ? 'active' : '' }}">
-                                            <a href="#"> 
+                                        <li class="{{ Route::is('admin.rewards.verify.*') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.rewards.verify.index') }}"> 
                                                 <span class="sub-item">Penerima Hadiah</span>
                                             </a>
                                         </li>

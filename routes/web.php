@@ -8,11 +8,11 @@ use App\Http\Controllers\Web\InfoBoardController;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Controllers\Web\ParkAreaController;
 use App\Http\Controllers\Web\TierController;
-use App\Http\Controllers\Web\RewardController;
-use App\Http\Controllers\Web\RewardVerificationController;
 use App\Http\Controllers\Web\FeedbackCategoryController;
 use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\MissionController;
+use App\Http\Controllers\Web\RewardController;
+use App\Http\Controllers\Web\RewardVerificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,7 +49,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::prefix('admin')->as('admin.')->middleware(['role:admin'])->group(function () {
+    Route::prefix('admin/')->as('admin.')->middleware(['role:admin'])->group(function () {
         
         Route::resource('park', ParkAreaController::class);
         // Route info_board
@@ -62,15 +62,13 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         // Route Mission
         Route::Resource('missions', MissionController::class)->only(['index', 'store', 'update', 'destroy']);
 
-        // Route tiers
-        Route::resource('tiers', TierController::class)->except(['show']);
         // Route Reward
-        Route::resource('rewards', RewardController::class)->except(['show']);
-         // Route Verifikasi Kode Reward
-        Route::prefix('reward-verification')->as('reward_verification.')->group(function () {
-            Route::get('/', [RewardVerificationController::class, 'index'])->name('index');
-            Route::post('/{userReward}/verify', [RewardVerificationController::class, 'verify'])->name('verify');
-            Route::post('/search', [RewardVerificationController::class, 'search'])->name('search');
+        Route::resource('rewards', RewardController::class)->only(['index', 'store', 'update', 'destroy']);
+
+        // Route Reward Verification
+        Route::prefix('rewards/verify')->as('rewards.verify.')->controller(RewardVerificationController::class)->group(function() {
+            Route::get('/', 'index')->name('index');       // Halaman antrian
+            Route::post('/{id}', 'process')->name('process'); // Proses ACC/Reject
         });
 
     });

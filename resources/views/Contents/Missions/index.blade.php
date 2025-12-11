@@ -7,7 +7,7 @@
 @section('content')
 <div class="page-inner mt--5">
     <div class="card">
-        <div class="card-header d-flex justify-content-between">
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
             <h4 class="card-title">Daftar Misi Tersedia</h4>
             <button class="btn btn-primary btn-round" data-toggle="modal" data-target="#modalMission" id="btnAdd">
                 <i class="fa fa-plus"></i> Tambah Misi
@@ -17,14 +17,14 @@
             <table id="tableMission" class="table table-striped" style="width:100%">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th class="text-center">No</th>
                         <th>Judul</th>
                         <th>Tipe</th>
                         <th>Detail Aturan</th>
                         <th>Siklus Reset</th>
                         <th>Reward</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -86,7 +86,7 @@
                         <label>Tipe Perhitungan <span class="text-danger">*</span></label>
                         <select name="mission_type" id="inputType" class="form-control" required>
                             <option value="TARGET">TARGET (Akumulasi Biasa)</option>
-                            <option value="SEQUENCE">SEQUENCE (Hari/Waktu)</option>
+                            <option value="SEQUENCE">SEQUENCE (Progress +1 per-hari sampai durasi yang ditentukan)</option>
                         </select>
                     </div>
 
@@ -124,8 +124,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Simpan</button>
                 </div>
             </form>
         </div>

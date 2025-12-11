@@ -3,203 +3,174 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Reward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use Yajra\DataTables\Facades\DataTables;
 use Exception;
 
 class RewardController extends Controller
 {
     /**
-     * Tampilkan semua data rewards.
+     * Menampilkan halaman daftar master reward.
+     * * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            $rewards = DB::table('rewards')
-                ->orderByDesc(DB::raw('COALESCE(rewards.updated_at, rewards.created_at)'))
-                ->paginate(6);
+        if ($request->ajax()) {
+            $data = Reward::select('*')->orderByDesc('created_at');
 
-            Log::info('Menampilkan daftar rewards', ['user_id' => Auth::id()]);
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn('reward_point_required', function($row){
+                    return number_format($row->reward_point_required) . ' Poin';
+                })
+                ->editColumn('reward_image', function($row){
+                    if($row->reward_image) {
+                        $url = asset('storage/' . $row->reward_image);
+                        return '<img src="'.$url.'" class="img-thumbnail" width="60" alt="Reward Image">';
+                    }
+                    return '<span class="text-muted text-small">No Image</span>';
+                })
+                ->editColumn('reward_type', function($row){
+                    $badge = $row->reward_type == 'Voucher' ? 'info' : 'primary';
+                    return '<span class="badge badge-'.$badge.'">'.$row->reward_type.'</span>';
+                })
+                ->addColumn('action', function($row){
+                    $json = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
+                    $title = e($row->reward_name);
+                    
+                    $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit" 
+                                    data-row="'.$json.'" 
+                                    data-update-url="'.route('admin.rewards.update', $row->reward_id).'"
+                                    data-toggle="tooltip" 
+                                    title="Edit '.$title.'">
+                                    <i class="fa fa-edit"></i>
+                                </button>';
+                    
+                    $btnDelete = '<form action="'.route('admin.rewards.destroy', $row->reward_id).'" 
+                                        method="POST" class="delete-form d-inline"
+                                        data-entity-name=" '.$title.'">
+                                    '.csrf_field().method_field('DELETE').'
+                                    <button type="submit" class="btn btn-link btn-danger btn-lg" 
+                                        data-toggle="tooltip" title="Hapus '.$title.'">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                  </form>';
 
-            return view('Contents.rewards.index', compact('rewards'));
-        } catch (Exception $e) {
-            Log::error('Gagal menampilkan data rewards', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat memuat data.');
+                    return '<div class="form-button-action d-flex justify-content-center">'.$btnEdit.$btnDelete.'</div>';
+                })
+                ->rawColumns(['reward_image', 'reward_type', 'action'])
+                ->make(true);
         }
+
+        return view('Contents.rewards.index');
     }
 
     /**
-     * Tampilkan form tambah reward.
-     */
-    public function create()
-    {
-        Log::info('Membuka form tambah reward', ['user_id' => Auth::id()]);
-        return view('Contents.rewards.create');
-    }
-
-    /**
-     * Simpan data baru reward.
+     * Menyimpan data reward baru.
+     * * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'reward_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'points_required' => 'required|integer|min:0',
-            'reward_type' => 'required|in:merchandise,voucher',
-            'reward_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
         try {
-            $imagePath = null;
-            
-            // Upload gambar jika ada
-            if ($request->hasFile('reward_image')) {
-                $imagePath = $request->file('reward_image')->store('rewards', 'public');
-            }
+            return DB::transaction(function () use ($request) {
+                $validated = $request->validate([
+                    'reward_name' => 'required|string|max:255',
+                    'reward_type' => 'required|in:Voucher,Barang',
+                    'reward_point_required' => 'required|integer|min:1',
+                    'reward_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                ]);
 
-            DB::table('rewards')->insert([
-                'reward_name' => $request->reward_name,
-                'description' => $request->description,
-                'points_required' => $request->points_required,
-                'reward_type' => $request->reward_type,
-                'reward_image' => $imagePath,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+                if ($request->hasFile('reward_image')) {
+                    $validated['reward_image'] = $request->file('reward_image')->store('rewards', 'public');
+                }
 
-            Log::info('Berhasil menambah reward', [
-                'user_id' => Auth::id(),
-                'reward_name' => $request->reward_name
-            ]);
+                $reward = Reward::create($validated);
 
-            return redirect()->route('admin.rewards.index')
-                ->with('swal_success_crud', 'Reward berhasil ditambahkan.');
+                Log::info('[WEB RewardController@store] Sukses: Reward berhasil ditambahkan.', ['reward_id' => $reward->reward_id]);
+                
+                return back()->with('swal_success_crud', 'Reward berhasil ditambahkan.');
+            });
+
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('Gagal menambah reward', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Gagal menambahkan reward.');
+            Log::error('[WEB RewardController@store] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            return back()->with('swal_error_crud', 'Gagal menyimpan data.');
         }
     }
 
     /**
-     * Tampilkan form edit reward tertentu.
-     */
-    public function edit($id)
-    {
-        try {
-            $reward = DB::table('rewards')->where('reward_id', $id)->first();
-
-            if (!$reward) {
-                Log::warning('Reward tidak ditemukan untuk diedit', ['reward_id' => $id]);
-                return redirect()->route('admin.rewards.index')->with('error', 'Reward tidak ditemukan.');
-            }
-
-            Log::info('Membuka form edit reward', ['user_id' => Auth::id(), 'reward_id' => $id]);
-
-            return view('Contents.rewards.edit', compact('reward'));
-        } catch (Exception $e) {
-            Log::error('Gagal membuka form edit reward', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan.');
-        }
-    }
-
-    /**
-     * Update reward.
+     * Memperbarui data reward.
+     * * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'reward_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'points_required' => 'required|integer|min:0',
-            'reward_type' => 'required|in:merchandise,voucher',
-            'reward_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
         try {
-            $reward = DB::table('rewards')->where('reward_id', $id)->first();
+            return DB::transaction(function () use ($request, $id) {
+                $reward = Reward::findOrFail($id);
 
-            if (!$reward) {
-                Log::warning('Reward tidak ditemukan untuk diupdate', ['reward_id' => $id]);
-                return back()->with('error', 'Data tidak ditemukan.');
-            }
+                $validated = $request->validate([
+                    'reward_name' => 'required|string|max:255',
+                    'reward_type' => 'required|in:Voucher,Barang',
+                    'reward_point_required' => 'required|integer|min:1',
+                    'reward_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                ]);
 
-            $imagePath = $reward->reward_image;
-
-            // Upload gambar baru jika ada
-            if ($request->hasFile('reward_image')) {
-                // Hapus gambar lama jika ada
-                if ($imagePath && Storage::disk('public')->exists($imagePath)) {
-                    Storage::disk('public')->delete($imagePath);
+                if ($request->hasFile('reward_image')) {
+                    if ($reward->reward_image && Storage::disk('public')->exists($reward->reward_image)) {
+                        Storage::disk('public')->delete($reward->reward_image);
+                    }
+                    $validated['reward_image'] = $request->file('reward_image')->store('rewards', 'public');
                 }
-                $imagePath = $request->file('reward_image')->store('rewards', 'public');
-            }
 
-            $updated = DB::table('rewards')
-                ->where('reward_id', $id)
-                ->update([
-                    'reward_name' => $request->reward_name,
-                    'description' => $request->description,
-                    'points_required' => $request->points_required,
-                    'reward_type' => $request->reward_type,
-                    'reward_image' => $imagePath,
-                    'updated_at' => now(),
-                ]);
+                $reward->update($validated);
 
-            if ($updated) {
-                Log::info('Reward berhasil diperbarui', [
-                    'user_id' => Auth::id(),
-                    'reward_id' => $id,
-                ]);
-                return redirect()->route('admin.rewards.index')
-                    ->with('swal_success_crud', 'Reward berhasil diperbarui.');
-            } else {
-                Log::warning('Gagal memperbarui reward - tidak ada perubahan', ['reward_id' => $id]);
-                return back()->with('info', 'Tidak ada perubahan data.');
-            }
+                Log::info('[WEB RewardController@update] Sukses: Reward berhasil diperbarui.', ['reward_id' => $id]);
+                
+                return back()->with('swal_success_crud', 'Reward berhasil diperbarui.');
+            });
+
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
-            Log::error('Gagal memperbarui reward', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat memperbarui data.');
+            Log::error('[WEB RewardController@update] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
 
     /**
-     * Hapus reward.
+     * Menghapus data reward.
+     * * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         try {
-            $reward = DB::table('rewards')->where('reward_id', $id)->first();
+            return DB::transaction(function () use ($id) {
+                $reward = Reward::findOrFail($id);
+                
+                if ($reward->reward_image && Storage::disk('public')->exists($reward->reward_image)) {
+                    Storage::disk('public')->delete($reward->reward_image);
+                }
 
-            if (!$reward) {
-                Log::warning('Reward tidak ditemukan untuk dihapus', ['reward_id' => $id]);
-                return back()->with('error', 'Data tidak ditemukan.');
-            }
-
-            // Hapus gambar jika ada
-            if ($reward->reward_image && Storage::disk('public')->exists($reward->reward_image)) {
-                Storage::disk('public')->delete($reward->reward_image);
-            }
-
-            $deleted = DB::table('rewards')->where('reward_id', $id)->delete();
-
-            if ($deleted) {
-                Log::info('Reward berhasil dihapus', [
-                    'user_id' => Auth::id(),
-                    'reward_id' => $id
-                ]);
-                return redirect()->route('admin.rewards.index')
-                    ->with('swal_success_crud', 'Reward berhasil dihapus.');
-            } else {
-                Log::warning('Gagal menghapus reward', ['reward_id' => $id]);
-                return back()->with('error', 'Gagal menghapus data.');
-            }
+                $reward->delete();
+                
+                Log::info('[WEB RewardController@destroy] Sukses: Reward berhasil dihapus.', ['reward_id' => $id]);
+                
+                return back()->with('swal_success_crud', 'Reward berhasil dihapus.');
+            });
         } catch (Exception $e) {
-            Log::error('Gagal menghapus reward', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat menghapus data.');
+            Log::error('[WEB RewardController@destroy] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            return back()->with('swal_error_crud', 'Gagal menghapus reward.');
         }
     }
 }

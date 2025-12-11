@@ -3,199 +3,143 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserReward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
 use Exception;
 
 class RewardVerificationController extends Controller
 {
     /**
-     * Tampilkan halaman verifikasi kode reward untuk admin
+     * Menampilkan daftar antrian klaim reward.
+     * * @param Request $request
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            // Ambil semua user rewards dengan status belum dipakai
-            $pendingRewards = DB::table('user_rewards')
-                ->join('rewards', 'user_rewards.reward_id', '=', 'rewards.reward_id')
-                ->join('users', 'user_rewards.user_id', '=', 'users.user_id')
-                ->where('user_rewards.redeemed_status', 'belum dipakai')
-                ->select(
-                    'user_rewards.*',
-                    'rewards.reward_name',
-                    'rewards.reward_type',
-                    'rewards.reward_image',
-                    'rewards.points_required',
-                    'users.name as user_name',
-                    'users.email as user_email'
-                )
-                ->orderByDesc('user_rewards.created_at')
-                ->paginate(10, ['*'], 'pending');
-            
-            // Ambil riwayat yang sudah terpakai
-            $usedRewards = DB::table('user_rewards')
-                ->join('rewards', 'user_rewards.reward_id', '=', 'rewards.reward_id')
-                ->join('users', 'user_rewards.user_id', '=', 'users.user_id')
-                ->where('user_rewards.redeemed_status', 'terpakai')
-                ->select(
-                    'user_rewards.*',
-                    'rewards.reward_name',
-                    'rewards.reward_type',
-                    'users.name as user_name'
-                )
-                ->orderByDesc('user_rewards.updated_at')
-                ->paginate(10, ['*'], 'used');
+        if ($request->ajax()) {
+            $query = UserReward::with(['user', 'reward'])
+                ->select('user_rewards.*');
 
-            Log::info('Admin membuka halaman verifikasi reward', ['admin_id' => Auth::id()]);
+            if ($request->filled('filter_status')) {
+                $query->where('user_reward_status', $request->filter_status);
+            }
+            if ($request->filled('filter_type')) {
+                $query->whereHas('reward', function($q) use ($request) {
+                    $q->where('reward_type', $request->filter_type);
+                });
+            }
 
-            return view('Contents.reward_verification.index', compact('pendingRewards', 'usedRewards'));
-        } catch (Exception $e) {
-            Log::error('Gagal menampilkan data verifikasi reward', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat memuat data.');
+            if (!$request->order) {
+                $query->orderByRaw("FIELD(user_reward_status, 'pending', 'accepted', 'rejected')")
+                      ->orderBy('created_at', 'asc');
+            }
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('user_name', fn($row) => $row->user->name ?? 'Unknown')
+                ->addColumn('reward_info', function($row){
+                    $name = $row->reward->reward_name ?? '-';
+                    $type = $row->reward->reward_type ?? '-';
+                    return "<b>{$name}</b> <br><small class='text-muted'>{$type}</small>";
+                })
+                ->editColumn('user_reward_code', fn($row) => "<code>{$row->user_reward_code}</code>")
+                ->editColumn('user_reward_status', function($row){
+                    $status = $row->user_reward_status;
+                    $badges = ['pending' => 'warning', 'accepted' => 'success', 'rejected' => 'danger'];
+                    $color = $badges[$status] ?? 'secondary';
+                    return "<span class='badge badge-{$color}'>" . strtoupper($status) . "</span>";
+                })
+                ->editColumn('created_at', fn($row) => $row->created_at->format('d M Y H:i'))
+                // PERUBAHAN: Menambahkan kolom Updated At
+                ->editColumn('updated_at', function($row) {
+                    // Jika status masih pending, tampilkan strip agar lebih bersih
+                    if ($row->user_reward_status === 'pending') {
+                        return '<span class="text-muted">-</span>';
+                    }
+                    return $row->updated_at ? $row->updated_at->format('d M Y H:i') : '-';
+                })
+                ->addColumn('action', function($row){
+                    if ($row->user_reward_status !== 'pending') {
+                        return '<span class="text-muted"><i class="fa fa-check-circle"></i> Selesai</span>';
+                    }
+
+                    $btnAcc = '<form action="'.route('admin.rewards.verify.process', $row->user_reward_id).'" method="POST" class="d-inline">
+                                '.csrf_field().'
+                                <input type="hidden" name="status" value="accepted">
+                                <button type="submit" class="btn btn-icon btn-round btn-success btn-sm mr-1" 
+                                    data-toggle="tooltip" title="Terima Klaim">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                               </form>';
+
+                    $rewardName = $row->reward->reward_name ?? 'Reward ini';
+                    $userName = $row->user->name ?? 'User';
+                    $confirmMsg = "Tolak klaim <b>{$rewardName}</b> dari <b>{$userName}</b>? <br>Poin akan dikembalikan ke user.";
+
+                    $btnRej = '<form action="'.route('admin.rewards.verify.process', $row->user_reward_id).'" method="POST" class="d-inline reject-form" data-msg="'.$confirmMsg.'">
+                                '.csrf_field().'
+                                <input type="hidden" name="status" value="rejected">
+                                <button type="submit" class="btn btn-icon btn-round btn-danger btn-sm" 
+                                    data-toggle="tooltip" title="Tolak Klaim">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                               </form>';
+
+                    return '<div class="form-button-action d-flex justify-content-center">'.$btnAcc.$btnRej.'</div>';
+                })
+                ->rawColumns(['reward_info', 'user_reward_code', 'user_reward_status', 'updated_at', 'action'])
+                ->make(true);
         }
+
+        return view('Contents.rewards.verify');
     }
 
     /**
-     * Verifikasi dan ubah status reward menjadi terpakai
+     * Memproses persetujuan atau penolakan klaim reward.
+     * * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function verify(Request $request, $userRewardId)
+    public function process(Request $request, $id)
     {
         try {
-            $userReward = DB::table('user_rewards')->where('user_reward_id', $userRewardId)->first();
-            
-            if (!$userReward) {
-                return back()->with('error', 'Data penukaran tidak ditemukan.');
-            }
-            
-            if ($userReward->redeemed_status === 'terpakai') {
-                return back()->with('error', 'Kode voucher ini sudah digunakan sebelumnya.');
-            }
-            
-            // Update status menjadi terpakai
-            DB::table('user_rewards')
-                ->where('user_reward_id', $userRewardId)
-                ->update([
-                    'redeemed_status' => 'terpakai',
-                    'updated_at' => now(),
-                ]);
-            
-            Log::info('Admin memverifikasi reward', [
-                'admin_id' => Auth::id(),
-                'user_reward_id' => $userRewardId,
-                'voucher_code' => $userReward->voucher_code
-            ]);
-            
-            return redirect()->route('admin.reward_verification.index')
-                ->with('swal_success_crud', 'Reward berhasil diverifikasi dan ditandai sebagai terpakai.');
+            return DB::transaction(function () use ($request, $id) {
+                $claim = UserReward::with(['user', 'reward'])->lockForUpdate()->findOrFail($id);
+                $newStatus = $request->status;
+
+                if (!in_array($newStatus, ['accepted', 'rejected'])) {
+                    return back()->with('swal_error_crud', 'Status tidak valid.');
+                }
+
+                if ($claim->user_reward_status !== 'pending') {
+                    return back()->with('swal_error_crud', 'Klaim ini sudah diproses sebelumnya.');
+                }
+
+                $claim->user_reward_status = $newStatus;
+                $claim->save();
+
+                if ($newStatus === 'rejected') {
+                    $pointsToRefund = $claim->reward->reward_point_required ?? 0;
+                    
+                    if ($pointsToRefund > 0 && $claim->user) {
+                        $claim->user->increment('current_points', $pointsToRefund);
+                        Log::info('[WEB RewardVerificationController@process] Info: Poin dikembalikan ke user.', ['user_id' => $claim->user_id]);
+                    }
+                }
+
+                $msg = $newStatus === 'accepted' ? 'Klaim berhasil diterima.' : 'Klaim ditolak, poin telah dikembalikan.';
                 
-        } catch (Exception $e) {
-            Log::error('Gagal memverifikasi reward', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat memverifikasi reward.');
-        }
-    }
+                Log::info('[WEB RewardVerificationController@process] Sukses: Status klaim diperbarui.', ['id' => $id, 'status' => $newStatus]);
 
-    /**
-     * Cari kode voucher (untuk verifikasi cepat)
-     */
-    public function search(Request $request)
-    {
-        $request->validate([
-            'voucher_code' => 'required|string|max:100',
-        ]);
+                return back()->with('swal_success_crud', $msg);
+            });
 
-        try {
-            $voucherCode = strtoupper(trim($request->voucher_code));
-            
-            $userReward = DB::table('user_rewards')
-                ->join('rewards', 'user_rewards.reward_id', '=', 'rewards.reward_id')
-                ->join('users', 'user_rewards.user_id', '=', 'users.user_id')
-                ->where('user_rewards.voucher_code', $voucherCode)
-                ->select(
-                    'user_rewards.*',
-                    'rewards.reward_name',
-                    'rewards.reward_type',
-                    'rewards.reward_image',
-                    'rewards.points_required',
-                    'users.name as user_name',
-                    'users.email as user_email'
-                )
-                ->first();
-            
-            if (!$userReward) {
-                return back()->with('error', 'Kode voucher tidak ditemukan.');
-            }
-            
-            Log::info('Admin mencari kode voucher', [
-                'admin_id' => Auth::id(),
-                'voucher_code' => $voucherCode
-            ]);
-            
-            return back()->with('search_result', $userReward);
-            
         } catch (Exception $e) {
-            Log::error('Gagal mencari kode voucher', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat mencari kode.');
-        }
-    }
-
-    /**
-     * Hapus reward yang sudah terverifikasi/terpakai
-     */
-    public function destroy($userRewardId)
-    {
-        try {
-            $userReward = DB::table('user_rewards')->where('user_reward_id', $userRewardId)->first();
-            
-            if (!$userReward) {
-                return back()->with('error', 'Data penukaran tidak ditemukan.');
-            }
-            
-            // Hanya bisa hapus yang sudah terpakai
-            if ($userReward->redeemed_status !== 'terpakai') {
-                return back()->with('error', 'Hanya reward yang sudah terpakai yang bisa dihapus.');
-            }
-            
-            // Hapus data
-            DB::table('user_rewards')->where('user_reward_id', $userRewardId)->delete();
-            
-            Log::info('Admin menghapus reward terverifikasi', [
-                'admin_id' => Auth::id(),
-                'user_reward_id' => $userRewardId,
-                'voucher_code' => $userReward->voucher_code
-            ]);
-            
-            return redirect()->route('admin.reward_verification.index')
-                ->with('swal_success_crud', 'Reward yang sudah terpakai berhasil dihapus.');
-                
-        } catch (Exception $e) {
-            Log::error('Gagal menghapus reward terverifikasi', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat menghapus data.');
-        }
-    }
-
-    /**
-     * Hapus semua reward yang sudah terpakai (bulk delete)
-     */
-    public function destroyAll()
-    {
-        try {
-            $deleted = DB::table('user_rewards')
-                ->where('redeemed_status', 'terpakai')
-                ->delete();
-            
-            Log::info('Admin menghapus semua reward terverifikasi', [
-                'admin_id' => Auth::id(),
-                'total_deleted' => $deleted
-            ]);
-            
-            return redirect()->route('admin.reward_verification.index')
-                ->with('swal_success_crud', "Berhasil menghapus {$deleted} reward yang sudah terpakai.");
-                
-        } catch (Exception $e) {
-            Log::error('Gagal menghapus semua reward terverifikasi', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat menghapus data.');
+            Log::error('[WEB RewardVerificationController@process] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            return back()->with('swal_error_crud', 'Terjadi kesalahan sistem.');
         }
     }
 }

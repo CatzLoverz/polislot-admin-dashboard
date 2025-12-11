@@ -129,7 +129,7 @@ class MissionController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[MissionController@store] Gagal: ' . $e->getMessage());
+            Log::error('[WEB MissionController@store] Gagal: ' . $e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menyimpan data.');
         }
     }
@@ -170,7 +170,7 @@ class MissionController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
-            Log::error('[MissionController@update] Gagal: ' . $e->getMessage());
+            Log::error('[WEB MissionController@update] Gagal: ' . $e->getMessage());
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
@@ -189,7 +189,7 @@ class MissionController extends Controller
                 
                 $mission->delete();
 
-                Log::info('[MissionController@destroy] Sukses: Mission dihapus.', [
+                Log::info('[WEB MissionController@destroy] Sukses: Mission dihapus.', [
                     'id' => $id, 
                     'title' => $title
                 ]);
@@ -199,7 +199,7 @@ class MissionController extends Controller
             });
 
         } catch (Exception $e) {
-            Log::error('[MissionController@destroy] Gagal: ' . $e->getMessage());
+            Log::error('[WEB MissionController@destroy] Gagal: ' . $e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }
