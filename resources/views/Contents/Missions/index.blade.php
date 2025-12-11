@@ -2,7 +2,7 @@
 
 @section('title', 'Manajemen Misi')
 @section('page_title', 'Manajemen Misi')
-@section('page_subtitle', 'Kelola daftar misi, aturan target, dan poin reward.')
+@section('page_subtitle', 'Kelola daftar misi, aturan target, dan koin reward.')
 
 @section('content')
 <div class="page-inner mt--5">
@@ -53,7 +53,7 @@
                             <input type="text" name="mission_title" class="form-control" placeholder="Masukkan Judul Misi" required>
                         </div>
                         <div class="col-md-4 form-group">
-                            <label>Reward Poin <span class="text-danger">*</span></label>
+                            <label>Reward Koin <span class="text-danger">*</span></label>
                             <input type="number" name="mission_points" class="form-control" placeholder="0" min="0" required>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Deskripsi<span class="text-danger">*</span></label>
+                        <label>Deskripsi</label>
                         <textarea name="mission_description" class="form-control" rows="2" placeholder="Masukkan Deskripsi Misi"></textarea>
                     </div>
 
