@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\MissionController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\FeedbackController;
@@ -68,23 +69,7 @@ Route::middleware('encryptApi')->group(function () {
         Route::get('/feedback-categories', [FeedbackCategoryController::class, 'index']);
         Route::post('/feedback', [FeedbackController::class, 'store']);
         
-        // Route Tiers
-        Route::get('/user/tier', [UserTierController::class, 'show']);
-        Route::post('/user/tier/update', [UserTierController::class, 'updateTier'])
-        ->middleware('throttle:5,1');
-        // Route Leadboard
-        Route::get('/user/leaderboard', [UserTierController::class, 'leaderboard']);
-        // Route Reward dan Riwayat Penukaran
-        Route::prefix('rewards')->group(function () {
-            // Katalog reward
-            Route::get('/', [UserRewardController::class, 'index']);
-            // Tukar reward (generate voucher code)
-            Route::post('/exchange', [UserRewardController::class, 'exchange'])
-            ->middleware('throttle:3,1');
-            // Riwayat reward user
-            Route::get('/my-rewards', [UserRewardController::class, 'myRewards']);
-            // Cek detail voucher
-            Route::post('/check-voucher', [UserRewardController::class, 'checkVoucher']);
-        });
-        // placeholder
+        Route::get('/rewards', [RewardController::class, 'index']);
+        Route::post('/rewards/redeem', [RewardController::class, 'redeem']);
+        Route::get('/rewards/history', [RewardController::class, 'history']);
     });

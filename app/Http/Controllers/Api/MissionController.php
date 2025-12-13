@@ -40,7 +40,7 @@ class MissionController extends Controller
             ];
 
             // 2. Missions List
-            $missionsRaw = Mission::where('mission_is_active', true)->get();
+            $missionsRaw = Mission::where('mission_is_active', true)->orderBy('created_at', 'desc')->get();
             
             $missions = $missionsRaw->map(function ($mission) use ($user) {
                 // Ambil progress user untuk misi ini

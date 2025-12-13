@@ -2,7 +2,7 @@
 
 @section('title', 'Verifikasi Reward')
 @section('page_title', 'Verifikasi Kode Reward')
-@section('page_subtitle', 'Verifikasi dan ubah status kode voucher pengguna.')
+@section('page_subtitle', 'Verifikasi dan ubah status kode reward pengguna.')
 
 @section('content')
 <div class="page-inner mt--5">

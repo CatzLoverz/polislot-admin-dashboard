@@ -22,7 +22,7 @@ class MissionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Mission::select('*')->orderByDesc('mission_id');
+            $data = Mission::select('*')->orderBy('created_at', 'desc');
 
             return DataTables::of($data)
                 ->addIndexColumn()
