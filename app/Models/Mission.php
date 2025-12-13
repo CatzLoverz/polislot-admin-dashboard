@@ -13,10 +13,9 @@ class Mission extends Model
     
     // Konstanta untuk UI
     public const METRICS = [
-        'VALIDATION_STREAK' => 'Validasi (Harian/Streak)',
-        'VALIDATION_TOTAL'  => 'Validasi (Total Akumulasi)',
-        'PROFILE_UPDATE'    => 'Update Profil',
-        'LOGIN_APP'         => 'Login Aplikasi',
+        'VALIDATION_ACTION' => 'Melakukan Validasi Parkir',
+        'LOGIN_ACTION'      => 'Membuka Aplikasi (Login)',
+        'PROFILE_UPDATE'    => 'Memperbarui Profil (Avatar)',
     ];
 
     public const CYCLES = [
@@ -30,11 +29,11 @@ class Mission extends Model
         'mission_title',
         'mission_description',
         'mission_points',
-        'mission_type',        // TARGET / SEQUENCE
-        'mission_reset_cycle', // DAILY / WEEKLY...
-        'mission_metric_code', // LOGIN / VALIDATION...
-        'mission_threshold',   // Angka Target / Hari
-        'mission_is_consecutive', // Boolean
+        'mission_type',
+        'mission_reset_cycle',
+        'mission_metric_code',
+        'mission_threshold',
+        'mission_is_consecutive',
         'mission_is_active',
     ];
 
@@ -45,7 +44,6 @@ class Mission extends Model
         'mission_is_active' => 'boolean',
     ];
 
-    // Relasi ke Tracker User
     public function userMissions()
     {
         return $this->hasMany(UserMission::class, 'mission_id', 'mission_id');

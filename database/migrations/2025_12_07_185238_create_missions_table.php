@@ -8,7 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // 1. Tabel Master Misi (Single Table)
         Schema::create('missions', function (Blueprint $table) {
             $table->id('mission_id');
             $table->string('mission_title');
@@ -16,15 +15,13 @@ return new class extends Migration
             $table->integer('mission_points')->default(0);
             
             // Konfigurasi Logic
-            $table->enum('mission_type', ['TARGET', 'SEQUENCE'])->index()->comment('Target=Akumulasi, Sequence=Harian');
+            $table->enum('mission_type', ['TARGET', 'SEQUENCE'])->index();
             $table->enum('mission_reset_cycle', ['NONE', 'DAILY', 'WEEKLY', 'MONTHLY'])->default('NONE');
             
-            // Metric (Pemicu)
             $table->enum('mission_metric_code', [
-                'VALIDATION_STREAK', // Pemicu untuk Sequence
-                'VALIDATION_TOTAL',  // Pemicu untuk Target
-                'PROFILE_UPDATE',
-                'LOGIN_APP',
+                'VALIDATION_ACTION', // Menangani baik Total maupun Streak Validasi
+                'LOGIN_ACTION',      // Menangani Login Harian
+                'PROFILE_UPDATE',    // Menangani Update Profil
             ])->index();
 
             // Untuk Target: Ini adalah "Total Amount"
@@ -32,8 +29,6 @@ return new class extends Migration
             $table->integer('mission_threshold'); 
 
             // Flag Khusus Sequence
-            // True: Harus berurut (Streak). False: Boleh bolong-bolong.
-            // Untuk Tipe Target, ini diabaikan (set default false).
             $table->boolean('mission_is_consecutive')->default(false);
 
             $table->boolean('mission_is_active')->default(true);
@@ -46,10 +41,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade');
             $table->foreignId('mission_id')->constrained('missions', 'mission_id')->onDelete('cascade');
             
-            // Progress saat ini (Angka akumulasi atau Hari ke-berapa)
             $table->integer('user_mission_current_value')->default(0);
             $table->boolean('user_mission_is_completed')->default(false);
-            $table->timestamp('user_mmission_completed_at')->nullable();
+            $table->timestamp('user_mission_completed_at')->nullable();
+            
             $table->timestamps();
 
             $table->unique(['user_id', 'mission_id']);

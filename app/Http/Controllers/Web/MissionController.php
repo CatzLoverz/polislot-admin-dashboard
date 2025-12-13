@@ -22,27 +22,24 @@ class MissionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Mission::select('*'); // Query simple, tidak perlu with()
+            $data = Mission::select('*')->orderByDesc('mission_id');
 
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->editColumn('mission_points', fn($row) => number_format($row->mission_points) . ' Poin')
                 ->editColumn('mission_type', function($row){
-                    // Badge Tipe
                     $color = $row->mission_type === 'TARGET' ? 'info' : 'warning';
                     return "<span class='badge badge-{$color}'>{$row->mission_type}</span>";
                 })
                 ->addColumn('cycle_info', function($row){
-                    // Kolom Info Siklus
                     return Mission::CYCLES[$row->mission_reset_cycle] ?? $row->mission_reset_cycle;
                 })
                 ->addColumn('rules_detail', function($row){
-                    // Logic Display Satu Kolom
                     if ($row->mission_type === 'TARGET') {
-                        return "Target: <b>{$row->mission_threshold}</b> <br><small>Metric: {$row->mission_metric_code}</small>";
+                        return "Target: <b>{$row->mission_threshold}</b> <br><small class='text-muted'>Metric: {$row->mission_metric_code}</small>";
                     } else {
                         $mode = $row->mission_is_consecutive ? '(Berurut)' : '(Acak)';
-                        return "Durasi: <b>{$row->mission_threshold} Hari</b> {$mode} <br><small>Metric: {$row->mission_metric_code}</small>";
+                        return "Durasi: <b>{$row->mission_threshold} Hari</b> {$mode} <br><small class='text-muted'>Metric: {$row->mission_metric_code}</small>";
                     }
                 })
                 ->editColumn('mission_is_active', function($row){
@@ -52,11 +49,8 @@ class MissionController extends Controller
                 })
                 ->addColumn('action', function($row){
                     $title = e($row->mission_title);
-                    
-                    // Kita kirim seluruh object row sebagai JSON di data-row untuk memudahkan JS mengisi form Edit
                     $jsonData = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
                     
-                    // Tombol Edit dengan Tooltip
                     $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit" 
                                     data-row="'.$jsonData.'" 
                                     data-update-url="'.route('admin.missions.update', $row->mission_id).'"
@@ -65,7 +59,6 @@ class MissionController extends Controller
                                     <i class="fa fa-edit"></i>
                                 </button>';
                     
-                    // Tombol Delete dengan Tooltip & Form
                     $btnDelete = '<form action="'.route('admin.missions.destroy', $row->mission_id).'" 
                                         method="POST" 
                                         class="delete-form d-inline" 
@@ -92,7 +85,7 @@ class MissionController extends Controller
     }
 
     /**
-     * Memproses penyimpanan data Misi baru beserta aturan detailnya.
+     * Memproses penyimpanan data Misi baru.
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -100,7 +93,6 @@ class MissionController extends Controller
     {
         try {
             return DB::transaction(function () use ($request) {
-                // Validasi Flat
                 $validated = $request->validate([
                     'mission_title'       => 'required|string|max:255',
                     'mission_description' => 'nullable|string',
@@ -108,20 +100,14 @@ class MissionController extends Controller
                     'mission_type'        => 'required|in:TARGET,SEQUENCE',
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
                     'mission_reset_cycle' => ['required', Rule::in(array_keys(Mission::CYCLES))],
-                    
-                    // Threshold dipakai untuk kedua tipe
                     'mission_threshold'   => 'required|integer|min:1',
-                    
-                    // Consecutive opsional (default false di DB)
                     'mission_is_consecutive' => 'nullable', 
                     'mission_is_active'   => 'nullable',
                 ]);
 
-                // Mapping Checkbox
                 $validated['mission_is_active'] = $request->has('mission_is_active');
                 $validated['mission_is_consecutive'] = $request->has('mission_is_consecutive');
 
-                // Simpan (Tanpa Transaction!)
                 Mission::create($validated);
 
                 return redirect()->back()->with('swal_success_crud', 'Misi berhasil ditambahkan.');
@@ -136,8 +122,6 @@ class MissionController extends Controller
 
     /**
      * Memproses pembaruan data Misi.
-     * Mengupdate Parent dan Child yang terkait.
-     *
      * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
@@ -189,13 +173,9 @@ class MissionController extends Controller
                 
                 $mission->delete();
 
-                Log::info('[WEB MissionController@destroy] Sukses: Mission dihapus.', [
-                    'id' => $id, 
-                    'title' => $title
-                ]);
+                Log::info('[WEB MissionController@destroy] Sukses: Mission dihapus.', ['id' => $id, 'title' => $title]);
 
-                return redirect()->route('admin.missions.index')
-                    ->with('swal_success_crud', 'Misi berhasil dihapus.');
+                return redirect()->route('admin.missions.index')->with('swal_success_crud', 'Misi berhasil dihapus.');
             });
 
         } catch (Exception $e) {

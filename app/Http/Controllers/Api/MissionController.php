@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Mission;
 use App\Models\User;
 use App\Models\UserMission;
+use App\Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -80,8 +81,9 @@ class MissionController extends Controller
 
             // 3. Leaderboard & Rank (Logic Tetap Sama)
             $leaderboardRaw = User::select('user_id', 'name', 'avatar', 'lifetime_points')
+                ->whereNotNull('email_verified_at')
                 ->orderBy('lifetime_points', 'desc')
-                ->take(20)
+                ->take(10)
                 ->get();
 
             $leaderboard = $leaderboardRaw->map(function ($u, $index) use ($user) {
@@ -94,7 +96,9 @@ class MissionController extends Controller
                 ];
             });
 
-            $userRankPos = User::where('lifetime_points', '>', $user->lifetime_points)->count() + 1;
+            $userRankPos = User::whereNotNull('email_verified_at')
+                ->where('lifetime_points', '>', $user->lifetime_points)
+                ->count() + 1;
             
             $userRankData = [
                 'rank' => $userRankPos,
