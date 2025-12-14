@@ -98,7 +98,8 @@
                 { data: 'reward_type', className: 'text-center' },
                 { data: 'reward_point_required'},
                 { data: 'action', className: 'text-center', orderable: false, searchable: false }
-            ]
+            ],
+            language: { url: "{{ asset('assets/js/plugin/datatables/indonesian.json') }}" }
         });
 
         // Re-init Tooltip saat table draw

@@ -112,7 +112,7 @@ class RewardController extends Controller
                     'redeem', 
                     $reward->reward_name, 
                     $reward->reward_point_required, 
-                    false
+                    true
                 );
                 return $this->sendSuccess('Penukaran berhasil!', [
                     'voucher_code' => $code,

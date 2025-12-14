@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\InfoBoardController;
 use App\Http\Controllers\Api\FeedbackCategoryController;
+use App\Http\Controllers\Api\HistoryController;
 
 
 
@@ -55,4 +56,7 @@ Route::middleware('encryptApi')->group(function () {
         Route::get('/rewards', [RewardController::class, 'index']);
         Route::post('/rewards/redeem', [RewardController::class, 'redeem']);
         Route::get('/rewards/history', [RewardController::class, 'history']);
+
+        //Route history
+        Route::get('/history', [HistoryController::class, 'index']);
     });

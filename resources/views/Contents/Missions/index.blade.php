@@ -150,7 +150,8 @@
                 { data: 'mission_points', className: 'text-right' },
                 { data: 'mission_is_active', className: 'text-center' },
                 { data: 'action', className: 'text-center', orderable: false, searchable: false }
-            ]
+            ],
+            language: { url: "{{ asset('assets/js/plugin/datatables/indonesian.json') }}" }
         });
 
         // 1. Logic Tampilan Dinamis (Create & Edit)

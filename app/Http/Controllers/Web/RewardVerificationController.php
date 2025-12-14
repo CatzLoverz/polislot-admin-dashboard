@@ -133,9 +133,9 @@ class RewardVerificationController extends Controller
                     $this->historyService->log(
                         $claim->user_id,
                         'redeem',
-                        $claim->reward->reward_name . ' (Diterima)',
+                        $claim->reward->reward_name,
                         null,
-                        false
+                        true
                     );
                     
                     $msg = 'Klaim berhasil diterima.';
@@ -153,9 +153,9 @@ class RewardVerificationController extends Controller
                         $this->historyService->log(
                             $claim->user_id, 
                             'redeem', 
-                            $claim->reward->reward_name . ' (Ditolak/Refund)', 
+                            $claim->reward->reward_name, 
                             $pointsToRefund,
-                            true
+                            false
                         );
                     }
                     $msg = 'Klaim ditolak, poin telah dikembalikan.';
