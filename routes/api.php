@@ -7,9 +7,7 @@ use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\MissionController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\FeedbackController;
-use App\Http\Controllers\Api\UserTierController;
 use App\Http\Controllers\Api\InfoBoardController;
-use App\Http\Controllers\Api\UserRewardController;
 use App\Http\Controllers\Api\FeedbackCategoryController;
 
 
@@ -34,23 +32,7 @@ Route::middleware('encryptApi')->group(function () {
     Route::middleware('auth:sanctum', 'role:admin,user', 'encryptApi')->group(function () {
 
         // Auth Check
-        Route::get('/user', function (Request $request) {
-            $user = $request->user();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Data profil berhasil diambil.',
-                'data' => [
-                    'user_id' => (int) $user->user_id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'email_verified_at' => $user->email_verified_at,
-                    'role' => $user->role,
-                    'avatar' => $user->avatar,
-                    'created_at' => $user->created_at,
-                    'updated_at' => $user->updated_at,
-                ]
-            ]);
-        });
+        Route::get('/user', [AuthController::class, 'authCheck']); 
 
         // Route Logout (Protected, untuk mencabut token)
         Route::post('/logout', [AuthController::class, 'logout']);
@@ -69,6 +51,7 @@ Route::middleware('encryptApi')->group(function () {
         Route::get('/feedback-categories', [FeedbackCategoryController::class, 'index']);
         Route::post('/feedback', [FeedbackController::class, 'store']);
         
+        // Route rewards
         Route::get('/rewards', [RewardController::class, 'index']);
         Route::post('/rewards/redeem', [RewardController::class, 'redeem']);
         Route::get('/rewards/history', [RewardController::class, 'history']);

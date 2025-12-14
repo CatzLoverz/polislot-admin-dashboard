@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\MissionService;
 use App\Models\User;
 use App\Mail\SendOtpMail;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password as PasswordRule;
@@ -17,6 +19,51 @@ use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
+    protected $missionService;
+
+    // Inject MissionService via Constructor
+    public function __construct(MissionService $missionService)
+    {
+        $this->missionService = $missionService;
+    }
+
+    /**
+     * Endpoint untuk mendapatkan data user saat ini (pengganti route /user).
+     * Sekaligus mentrigger misi login harian.
+     * * @param Request $request
+     * @return JsonResponse
+     */
+    public function authCheck(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        // === LOGIC MISI LOGIN ===
+        // Key unik: user_id + tanggal hari ini (Y-m-d)
+        $cacheKey = 'daily_login_' . $user->user_id . '_' . now()->format('Y-m-d');
+
+        // Cek apakah user sudah tercatat login hari ini?
+        if (!Cache::has($cacheKey)) {
+            
+            // Jika BELUM, catat progress misi
+            try {
+                $this->missionService->updateProgress($user->user_id, 'LOGIN_ACTION');
+                // Simpan penanda di cache selama 24 jam
+                Cache::put($cacheKey, true, now()->addDay());
+            } catch (\Exception $e) {
+                Log::error('[API AuthController@authCheck] Gagal update misi: ' . $e->getMessage());
+            }
+        }
+
+        $userData = $this->formatUser($user);
+
+        $userData['email_verified_at'] = $user->email_verified_at;
+        $userData['created_at'] = $user->created_at;
+        $userData['updated_at'] = $user->updated_at;
+
+        return $this->sendSuccess('Data profil berhasil diambil.', $userData);
+    }
+
     // =========================================================================
     // 🟢 REGISTRASI & VERIFIKASI OTP
     // =========================================================================
@@ -225,7 +272,7 @@ class AuthController extends Controller
                     }
 
                     $sisa = 4 - $user->failed_attempts;
-                    Log::warning('[API AuthController@login] Gagal: Password salah.', ['email' => $email, 'sisa' => $sisa]);
+                    Log::warning('[API AuthController@login] Gagal: Password salah.', ['sisa' => $sisa]);
                     return $this->sendError("Password salah. Sisa percobaan: {$sisa} kali.", 401);
                 }
 
@@ -234,7 +281,7 @@ class AuthController extends Controller
                 
                 $user->update(['failed_attempts' => 0, 'locked_until' => null]);
 
-                Log::info('[API AuthController@login] Sukses: Login berhasil.');
+                Log::info('[API AuthController@login] Sukses: Login berhasil.', ['user' => $user->user_id]);
 
                 return $this->sendSuccess('Login berhasil!', [
                     'access_token' => $token,

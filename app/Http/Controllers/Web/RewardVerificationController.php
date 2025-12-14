@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Services\HistoryService;
 use App\Models\UserReward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,13 @@ use Exception;
 
 class RewardVerificationController extends Controller
 {
+    protected $historyService;
+
+    public function __construct(HistoryService $historyService)
+    {
+        $this->historyService = $historyService;
+    }
+
     /**
      * Menampilkan daftar antrian klaim reward.
      * * @param Request $request
@@ -121,16 +129,37 @@ class RewardVerificationController extends Controller
                 $claim->user_reward_status = $newStatus;
                 $claim->save();
 
-                if ($newStatus === 'rejected') {
+                if ($newStatus === 'accepted') {
+                    $this->historyService->log(
+                        $claim->user_id,
+                        'redeem',
+                        $claim->reward->reward_name . ' (Diterima)',
+                        null,
+                        false
+                    );
+                    
+                    $msg = 'Klaim berhasil diterima.';
+                } 
+                
+                // KASUS 2: DITOLAK (REJECTED)
+                elseif ($newStatus === 'rejected') {
                     $pointsToRefund = $claim->reward->reward_point_required ?? 0;
                     
                     if ($pointsToRefund > 0 && $claim->user) {
                         $claim->user->increment('current_points', $pointsToRefund);
                         Log::info('[WEB RewardVerificationController@process] Info: Poin dikembalikan ke user.', ['user_id' => $claim->user_id]);
-                    }
-                }
 
-                $msg = $newStatus === 'accepted' ? 'Klaim berhasil diterima.' : 'Klaim ditolak, poin telah dikembalikan.';
+                        // Catat History Refund
+                        $this->historyService->log(
+                            $claim->user_id, 
+                            'redeem', 
+                            $claim->reward->reward_name . ' (Ditolak/Refund)', 
+                            $pointsToRefund,
+                            true
+                        );
+                    }
+                    $msg = 'Klaim ditolak, poin telah dikembalikan.';
+                }
                 
                 Log::info('[WEB RewardVerificationController@process] Sukses: Status klaim diperbarui.', ['id' => $id, 'status' => $newStatus]);
 

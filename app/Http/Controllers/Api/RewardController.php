@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\HistoryService;
 use App\Models\Reward;
 use App\Models\User;
 use App\Models\UserReward;
@@ -15,6 +16,14 @@ use Illuminate\Support\Str;
 
 class RewardController extends Controller
 {
+    protected $historyService;
+
+
+    public function __construct(HistoryService $historyService)
+    {
+        $this->historyService = $historyService;
+    }
+
     /**
      * Mengambil daftar reward yang tersedia dan poin user saat ini.
      *
@@ -26,7 +35,7 @@ class RewardController extends Controller
             /** @var User $user */
             $user = Auth::user();
 
-            $rewards = Reward::all();
+            $rewards = DB::table('rewards')->orderBy('created_at', 'desc')->get();
 
             // Format data reward agar siap pakai di frontend
             $formattedRewards = $rewards->map(function ($reward) {
@@ -38,8 +47,6 @@ class RewardController extends Controller
                     'image' => $reward->reward_image, // Path gambar
                 ];
             });
-
-            Log::info("[API RewardController@index] Sukses: User {$user->user_id} mengambil data reward.");
 
             return $this->sendSuccess('Data reward berhasil diambil.', [
                 'current_points' => $user->current_points,
@@ -60,54 +67,59 @@ class RewardController extends Controller
      */
     public function redeem(Request $request): JsonResponse
     {
-        DB::beginTransaction();
         try {
-            $request->validate([
-                'reward_id' => 'required|exists:rewards,reward_id',
-            ]);
+            return DB::transaction(function () use ($request) {
+                $request->validate([
+                    'reward_id' => 'required|exists:rewards,reward_id',
+                ]);
 
-            /** @var User $user */
-            $user = Auth::user();
-            
-            // Lock row user untuk mencegah race condition saldo
-            $user = User::where('user_id', $user->user_id)->lockForUpdate()->first();
-            
-            $reward = Reward::where('reward_id', $request->reward_id)->first();
+                /** @var User $user */
+                $user = Auth::user();
+                
+                // Lock row user untuk mencegah race condition saldo
+                $user = User::where('user_id', $user->user_id)->lockForUpdate()->first();
+                
+                $reward = Reward::where('reward_id', $request->reward_id)->first();
 
-            // Cek Poin Cukup
-            if ($user->current_points < $reward->reward_point_required) {
-                DB::rollBack();
-                Log::warning("[API RewardController@redeem] Gagal: Poin tidak cukup. User: {$user->user_id}, Reward: {$reward->reward_id}");
-                return $this->sendError('Poin Anda tidak mencukupi untuk reward ini.', 400);
-            }
+                // Cek Poin Cukup
+                if ($user->current_points < $reward->reward_point_required) {
+                    DB::rollBack();
+                    Log::warning("[API RewardController@redeem] Gagal: Poin tidak cukup. User: {$user->user_id}, Reward: {$reward->reward_id}");
+                    return $this->sendError('Poin Anda tidak mencukupi untuk reward ini.', 400);
+                }
 
-            // Kurangi Poin
-            $user->current_points -= $reward->reward_point_required;
-            $user->save();
+                // Kurangi Poin
+                $user->current_points -= $reward->reward_point_required;
+                $user->save();
 
-            // Generate Kode Unik
-            if ($reward->reward_type=='Voucher'){
-                $code = 'VCR-' . strtoupper(Str::random(6));
-            } else {
-                $code = 'BRG-' . strtoupper(Str::random(6));
-            }
-            // Buat Record UserReward
-            $userReward = UserReward::create([
-                'user_id' => $user->user_id,
-                'reward_id' => $reward->reward_id,
-                'user_reward_code' => $code,
-                'user_reward_status' => UserReward::STATUS_PENDING,
-            ]);
+                // Generate Kode Unik
+                if ($reward->reward_type=='Voucher'){
+                    $code = 'VCR-' . strtoupper(Str::random(6));
+                } else {
+                    $code = 'BRG-' . strtoupper(Str::random(6));
+                }
+                // Buat Record UserReward
+                $userReward = UserReward::create([
+                    'user_id' => $user->user_id,
+                    'reward_id' => $reward->reward_id,
+                    'user_reward_code' => $code,
+                    'user_reward_status' => UserReward::STATUS_PENDING,
+                ]);
 
-            DB::commit();
-            Log::info("[API RewardController@redeem] Sukses: User {$user->user_id} menukar {$reward->reward_name}.");
-
-            return $this->sendSuccess('Penukaran berhasil!', [
-                'voucher_code' => $code,
-                'current_points' => $user->current_points,
-                'reward_name' => $reward->reward_name
-            ]);
-
+                Log::info("[API RewardController@redeem] Sukses: User {$user->user_id} menukar {$reward->reward_name}.");
+                $this->historyService->log(
+                    $user->user_id, 
+                    'redeem', 
+                    $reward->reward_name, 
+                    $reward->reward_point_required, 
+                    false
+                );
+                return $this->sendSuccess('Penukaran berhasil!', [
+                    'voucher_code' => $code,
+                    'current_points' => $user->current_points,
+                    'reward_name' => $reward->reward_name
+                ]);
+            });
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("[API RewardController@redeem] Gagal: " . $e->getMessage());

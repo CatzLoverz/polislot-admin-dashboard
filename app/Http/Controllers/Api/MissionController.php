@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Mission;
 use App\Models\User;
 use App\Models\UserMission;
+use App\Models\UserHistory;
 use App\Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -30,8 +31,8 @@ class MissionController extends Controller
             $user = Auth::user();
 
             // 1. Header Stats
-            $completedMissionsCount = UserMission::where('user_id', $user->user_id)
-                ->where('user_mission_is_completed', true)
+            $completedMissionsCount = UserHistory::where('user_id', $user->user_id)
+                ->where('user_history_type', 'mission')
                 ->count();
             
             $stats = [

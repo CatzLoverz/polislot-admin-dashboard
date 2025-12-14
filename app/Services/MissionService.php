@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Mission;
 use App\Models\User;
 use App\Models\UserMission;
+use App\Services\HistoryService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -12,6 +13,15 @@ use Exception;
 
 class MissionService
 {
+
+    protected $historyService; // <--- 2. Property
+
+    // 3. Inject via Constructor
+    public function __construct(HistoryService $historyService)
+    {
+        $this->historyService = $historyService;
+    }
+
     /**
      * Entry Point: Update progress misi user berdasarkan aksi.
      * Service ini mencari SEMUA misi aktif dengan metric code tersebut,
@@ -129,7 +139,15 @@ class MissionService
                     if ($mission->mission_points > 0) {
                         $this->awardPoints($userId, $mission->mission_points);
                     }
-                    
+                    // Log History
+                    $this->historyService->log(
+                        $userId,
+                        'mission',
+                        $mission->mission_title,
+                        $mission->mission_points,
+                        false
+                    );
+
                     Log::info("[SERVICE MissionService@processMission] COMPLETED: {$mission->mission_title}");
                 }
             }

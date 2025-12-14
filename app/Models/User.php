@@ -52,11 +52,16 @@ class User extends Authenticatable
 
     public function userMission()
     {
-        return $this->hasMany(userMission::class, 'user_id', 'user_id');
+        return $this->hasMany(UserMission::class, 'user_id', 'user_id');
     }
 
     public function userReward()
     {
-        return $this->hasMany(userReward::class, 'user_id', 'user_id');
+        return $this->hasMany(UserReward::class, 'user_id', 'user_id');
+    }
+
+    public function userHistory()
+    {
+        return $this->hasMany(UserHistory::class, 'user_id', 'user_id');
     }
 }

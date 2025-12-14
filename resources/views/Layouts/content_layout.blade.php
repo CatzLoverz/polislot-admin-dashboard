@@ -149,7 +149,7 @@
                                         </li>
                                         <li class="{{ Route::is('admin.points.*') ? 'active' : '' }}">
                                             <a href="#"> 
-                                                <span class="sub-item">Ketentuan Poin per-Aktivitas</span>
+                                                <span class="sub-item">Ketentuan Poin per-Validasi</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.rewards.index') ? 'active' : '' }}">
@@ -160,11 +160,6 @@
                                         <li class="{{ Route::is('admin.rewards.verify.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.rewards.verify.index') }}"> 
                                                 <span class="sub-item">Penerima Hadiah</span>
-                                            </a>
-                                        </li>
-                                        <li class="{{ Route::is('admin.tiers.*') ? 'active' : '' }}">
-                                            <a href="#">
-                                                <span class="sub-item">Penentuan Tiers</span>
                                             </a>
                                         </li>
                                     </ul>
