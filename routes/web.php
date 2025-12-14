@@ -2,16 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\RewardController;
+use App\Http\Controllers\Web\MissionController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\FeedbackController;
+use App\Http\Controllers\Web\ParkAreaController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\InfoBoardController;
-use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Controllers\Web\ParkAreaController;
-use App\Http\Controllers\Web\TierController;
+use App\Http\Controllers\Web\ParkAmenityController;
+use App\Http\Controllers\Web\ParkSubareaController;
 use App\Http\Controllers\Web\FeedbackCategoryController;
-use App\Http\Controllers\Web\FeedbackController;
-use App\Http\Controllers\Web\MissionController;
-use App\Http\Controllers\Web\RewardController;
 use App\Http\Controllers\Web\RewardVerificationController;
 
 Route::get('/', function () {
@@ -67,9 +67,19 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
 
         // Route Reward Verification
         Route::prefix('rewards/verify')->as('rewards.verify.')->controller(RewardVerificationController::class)->group(function() {
-            Route::get('/', 'index')->name('index');       // Halaman antrian
-            Route::post('/{id}', 'process')->name('process'); // Proses ACC/Reject
+            Route::get('/', 'index')->name('index');
+            Route::post('/{id}', 'process')->name('process');
         });
+
+        // Route Park Area
+        Route::resource('park-area', ParkAreaController::class);
+
+        // Route Park Subarea
+        Route::post('park-area/{park_area}/subarea', [ParkSubareaController::class, 'store'])->name('park-area.subarea.store');
+        Route::resource('park-subarea', ParkSubareaController::class)->only(['update', 'destroy']);
+
+        // Route Park Amenity
+        Route::resource('park-amenity', ParkAmenityController::class)->only(['store', 'destroy']);
 
     });
 

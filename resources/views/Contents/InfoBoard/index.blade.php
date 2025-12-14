@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
-                    <h4 class="card-title">Daftar Pengumuman</h4>
+                    <h4 class="card-title font-weight-bold text-dark">Daftar Pengumuman</h4>
                     <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#createModal">
                         <i class="fa fa-plus"></i>
                         Tambah Pengumuman

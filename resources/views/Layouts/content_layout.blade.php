@@ -126,8 +126,8 @@
                                 <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
                                 <h4 class="text-section">Kelola</h4>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.park.*') ? 'active' : '' }}">
-                                <a href="{{ Route('admin.park.index') }}"> <i class="fas fa-id-badge"></i>
+                            <li class="nav-item {{ Route::is('admin.park-area.*') ? 'active' : '' }}">
+                                <a href="{{ Route('admin.park-area.index') }}"> <i class="fas fa-id-badge"></i>
                                     <p>Manajemen Area Parkir</p>
                                 </a>
                             </li>
@@ -147,7 +147,7 @@
                                                 <span class="sub-item">Manajemen Misi</span>
                                             </a>
                                         </li>
-                                        <li class="{{ Route::is('admin.points.*') ? 'active' : '' }}">
+                                        <li class="{{ Route::is('admin.validation.*') ? 'active' : '' }}">
                                             <a href="#"> 
                                                 <span class="sub-item">Ketentuan Poin per-Validasi</span>
                                             </a>

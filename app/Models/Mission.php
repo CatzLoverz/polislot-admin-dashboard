@@ -9,6 +9,7 @@ class Mission extends Model
 {
     use HasFactory;
 
+    protected $table = 'missions';
     protected $primaryKey = 'mission_id';
     
     // Konstanta untuk UI

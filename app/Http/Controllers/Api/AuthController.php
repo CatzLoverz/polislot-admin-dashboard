@@ -61,6 +61,7 @@ class AuthController extends Controller
         $userData['created_at'] = $user->created_at;
         $userData['updated_at'] = $user->updated_at;
 
+        Log::info('[API AuthController@authCheck] Sukses: Akun masuk ke Aplikasi', ['user_id' => $user->user_id ?? null]);
         return $this->sendSuccess('Data profil berhasil diambil.', $userData);
     }
 
