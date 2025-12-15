@@ -153,8 +153,6 @@ class RewardController extends Controller
                     ];
                 });
 
-            Log::info("[API RewardController@history] Sukses: User {$user->user_id} mengambil history.");
-
             return $this->sendSuccess('Riwayat penukaran berhasil diambil.', $history);
 
         } catch (\Exception $e) {

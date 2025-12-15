@@ -48,8 +48,8 @@ class AuthController extends Controller
             // Jika BELUM, catat progress misi
             try {
                 $this->missionService->updateProgress($user->user_id, 'LOGIN_ACTION');
-                // Simpan penanda di cache selama 24 jam
-                Cache::put($cacheKey, true, now()->addDay());
+                // Simpan penanda di cache sampai akhir hari
+                Cache::put($cacheKey, true, now()->endOfDay());
             } catch (\Exception $e) {
                 Log::error('[API AuthController@authCheck] Gagal update misi: ' . $e->getMessage());
             }

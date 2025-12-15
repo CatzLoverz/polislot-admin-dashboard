@@ -13,8 +13,7 @@ use Exception;
 
 class MissionService
 {
-
-    protected $historyService; // <--- 2. Property
+    protected $historyService;
 
     // 3. Inject via Constructor
     public function __construct(HistoryService $historyService)
@@ -35,14 +34,11 @@ class MissionService
     public function updateProgress(int $userId, string $metricCode, int $incrementValue = 1)
     {
         try {
-            // Ambil SEMUA Misi yang COCOK dengan Metric Code & AKTIF
             $missions = Mission::where('mission_metric_code', $metricCode)
                 ->where('mission_is_active', true)
                 ->get();
 
-            if ($missions->isEmpty()) {
-                return;
-            }
+            if ($missions->isEmpty()) return;
 
             Log::info("[SERVICE MissionService@updateProgress] Trigger: {$metricCode} for User {$userId}. Found: {$missions->count()} missions.");
 
@@ -67,7 +63,6 @@ class MissionService
     {
         DB::beginTransaction();
         try {
-            // 1. Lock & Get Tracker
             $userMission = UserMission::where('user_id', $userId)
                 ->where('mission_id', $mission->mission_id)
                 ->lockForUpdate()
@@ -82,43 +77,55 @@ class MissionService
                 ]);
             }
 
-            // 2. Cek Siklus Reset
-            $this->checkAndResetCycle($userMission, $mission->mission_reset_cycle);
+            // 1. Snapshot Waktu Sebelum Diubah
+            $lastActionAt = $userMission->updated_at ? $userMission->updated_at->copy() : null;
+
+            // 2. CEK SIKLUS RESET
+            // Mengembalikan TRUE jika reset terjadi (Ganti Hari/Minggu/Bulan)
+            $isReset = $this->checkAndResetCycle($userMission, $mission->mission_reset_cycle);
 
             if ($userMission->user_mission_is_completed) {
                 DB::commit(); return;
             }
 
-            // 3. BRANCHING LOGIC BERDASARKAN TIPE
+            // 3. LOGIC UPDATE PROGRESS
             $shouldCheck = false;
 
-            // === TIPE TARGET (Akumulasi Biasa) ===
             if ($mission->mission_type === 'TARGET') {
+                // Tipe Target: Selalu tambah (akumulasi)
                 $userMission->user_mission_current_value += $incrementValue;
                 $shouldCheck = true;
             } 
-            
-            // === TIPE SEQUENCE (Harian / Waktu) ===
             elseif ($mission->mission_type === 'SEQUENCE') {
-                $lastAction = $userMission->updated_at;
+                // Tipe Sequence: Butuh penanganan khusus saat Reset Siklus
                 
-                if ($userMission->user_mission_current_value == 0) {
+                if ($isReset) {
+                    // KASUS A: Baru saja Reset Siklus (Misal: Senin Pagi)
+                    // Maka Streak dipaksa mulai dari 1 lagi.
                     $userMission->user_mission_current_value = 1;
                     $shouldCheck = true;
-                } elseif ($lastAction->isToday()) {
-                    // Anti-Spam: Sudah aksi hari ini
-                } elseif ($lastAction->isYesterday()) {
-                    // Kemarin aksi -> Lanjut streak
+                } 
+                elseif ($userMission->user_mission_current_value == 0) {
+                    // KASUS B: Baru pertama kali main
+                    $userMission->user_mission_current_value = 1;
+                    $shouldCheck = true;
+                } 
+                elseif ($lastActionAt && $lastActionAt->isToday()) {
+                    // KASUS C: Anti-Spam (Sudah aksi hari ini, dan tidak ada reset)
+                    // Skip
+                } 
+                elseif ($lastActionAt && $lastActionAt->isYesterday()) {
+                    // KASUS D: Streak Lanjut (Aksi kemarin)
                     $userMission->user_mission_current_value += 1;
                     $shouldCheck = true;
-                } else {
-                    // Bolos > 1 hari
+                } 
+                else {
+                    // KASUS E: Bolos > 1 hari (Streak Putus di tengah minggu)
                     if ($mission->mission_is_consecutive) {
                         $userMission->user_mission_current_value = 1;
                         Log::info("[SERVICE MissionService@processMission] Streak Reset: User {$userId} Mission {$mission->mission_id}");
                     } else {
-                        // Tidak wajib berurut -> Lanjut hitungan hari
-                        $userMission->user_mission_current_value += 1;
+                        $userMission->user_mission_current_value += 1; // Akumulasi Hari (Tidak Wajib Urut)
                     }
                     $shouldCheck = true;
                 }
@@ -126,20 +133,18 @@ class MissionService
 
             $userMission->save();
 
-            // 4. Cek Finish
+            // 4. CEK FINISH
             if ($shouldCheck) {
                 $userMission->refresh(); 
-                
                 if ($userMission->user_mission_current_value >= $mission->mission_threshold) {
                     $userMission->user_mission_is_completed = true;
                     $userMission->user_mission_completed_at = now();
                     $userMission->save();
 
-                    // Reward Auto Claim
                     if ($mission->mission_points > 0) {
                         $this->awardPoints($userId, $mission->mission_points);
                     }
-                    // Log History
+                    
                     $this->historyService->log(
                         $userId,
                         'mission',
@@ -167,9 +172,10 @@ class MissionService
      * @param UserMission $userMission
      * @param string $cycle ENUM: 'NONE', 'DAILY', 'WEEKLY', 'MONTHLY'
      */
-    private function checkAndResetCycle(UserMission $userMission, string $cycle)
+    private function checkAndResetCycle(UserMission $userMission, string $cycle): bool
     {
-        if ($userMission->wasRecentlyCreated) return;
+        if ($userMission->wasRecentlyCreated) return false;
+        
         $lastUpdate = $userMission->updated_at;
         $shouldReset = false;
 
@@ -183,8 +189,11 @@ class MissionService
             $userMission->user_mission_current_value = 0;
             $userMission->user_mission_is_completed = false;
             $userMission->user_mission_completed_at = null;
-            $userMission->save();
+            $userMission->save(); // updated_at berubah jadi NOW
+            return true; // Reset Terjadi
         }
+
+        return false; // Tidak ada Reset
     }
 
     private function awardPoints(int $userId, int $points)

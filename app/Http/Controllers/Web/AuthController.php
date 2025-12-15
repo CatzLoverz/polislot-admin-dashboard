@@ -50,7 +50,7 @@ class AuthController extends Controller
                     'password' => 'required|string'
                 ]);
 
-                $user = User::where('email', $email)->first();
+                $user = User::where('email', $email)->where('role', 'admin')->first();
 
                 if (!$user) {
                     Log::warning('[WEB AuthController@login] Gagal: Email tidak ditemukan.');
