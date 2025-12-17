@@ -75,7 +75,8 @@ class ParkAreaController extends Controller
      */
     public function create()
     {
-        return view('Contents.ParkArea.create');
+        $mapsApiKey = config('services.google.maps_api_key');
+        return view('Contents.ParkArea.create', compact('mapsApiKey'));
     }
 
     /**
@@ -133,13 +134,51 @@ class ParkAreaController extends Controller
     public function show($id)
     {
         try {
-            $area = ParkArea::with('parkSubarea.parkAmenity')->findOrFail($id);
-            return view('Contents.ParkArea.show', compact('area'));
+            // Eager Load: Subarea -> Validasi (1 jam terakhir) & Komentar (terbaru + user info) & Amenities
+            $area = ParkArea::with([
+                'parkSubarea.parkAmenity',
+                'parkSubarea.userValidation' => function($query) {
+                    $query->where('created_at', '>=', now()->subHour());
+                },
+                'parkSubarea.subareaComment.user' => function($query) {
+                    $query->select('user_id', 'name', 'avatar');
+                }
+            ])->findOrFail($id);
+
+            $mapsApiKey = config('services.google.maps_api_key');
+
+            // --- LOGIKA WARNA POLYGON ---
+            // Kita inject attribute 'status_color' ke setiap subarea object
+            foreach ($area->parkSubarea as $sub) {
+                $validations = $sub->userValidation; // Collection validasi 1 jam terakhir
+                
+                if ($validations->isEmpty()) {
+                    $sub->status_color = '#1572e8'; // Default Blue (Netral/Belum ada info)
+                } else {
+                    // Hitung jumlah status
+                    $counts = $validations->countBy('user_validation_content');
+                    $banyak = $counts->get('banyak', 0);
+                    $terbatas = $counts->get('terbatas', 0);
+                    $penuh = $counts->get('penuh', 0);
+
+                    // Tentukan Mayoritas
+                    // Prioritas jika seri: Penuh > Terbatas > Banyak
+                    if ($penuh >= $terbatas && $penuh >= $banyak) {
+                        $sub->status_color = '#f25961'; // Merah (Penuh)
+                    } elseif ($terbatas >= $banyak) {
+                        $sub->status_color = '#ffad46'; // Kuning (Terbatas)
+                    } else {
+                        $sub->status_color = '#31ce36'; // Hijau (Banyak Kosong)
+                    }
+                }
+            }
+
+            return view('Contents.ParkArea.show', compact('area', 'mapsApiKey'));
 
         } catch (Exception $e) {
-            Log::error('[WEB ParkAreaController@show] Gagal: Area tidak ditemukan atau error lain.', ['id' => $id, 'error' => $e->getMessage()]);
+            Log::error('[WEB ParkAreaController@show] Error: ' . $e->getMessage());
             return redirect()->route('admin.park-area.index')
-                ->with('swal_error_crud', 'Area parkir tidak ditemukan.');
+                ->with('swal_error_crud', 'Terjadi kesalahan memuat data.');
         }
     }
 

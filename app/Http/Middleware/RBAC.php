@@ -35,6 +35,20 @@ class RBAC
             return redirect()->route('login');
         }
 
+        if (!app()->runningUnitTests()) {
+            $connection = match ($user->role) {
+                'admin' => 'mariadb',
+                'user' => 'mariadb_mobile',
+                default => config('database.default'),
+            };
+
+            config(['database.default' => $connection]);
+            
+            if (method_exists($user, 'setConnection')) {
+                $user->setConnection($connection);
+            }
+        }
+
         // Atur koneksi database berdasarkan role user
         $connection = match ($user->role) {
             'admin' => 'mariadb',

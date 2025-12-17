@@ -64,4 +64,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserHistory::class, 'user_id', 'user_id');
     }
+
+    public function userValidation()
+    {
+        return $this->hasMany(UserValidation::class, 'user_id', 'user_id');
+    }
+
+    public function subareaComment()
+    {
+        return $this->hasMany(SubareaComment::class, 'user_id', 'user_id');
+    }
 }

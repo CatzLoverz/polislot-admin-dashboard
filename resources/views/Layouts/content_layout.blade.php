@@ -136,20 +136,20 @@
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*') ? 'active submenu' : '' }}">
+                            <li class="nav-item {{ Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*') ? 'active submenu' : '' }}">
                                 <a data-toggle="collapse" href="#menuDropdown" aria-expanded="true">
                                     <i class="fas fa-gamepad"></i><p>Manajemen Gamifikasi</p><span class="caret"></span>
                                 </a>
                                 <div class="collapse show" id="menuDropdown">
                                     <ul class="nav nav-collapse">
+                                        <li class="{{ Route::is('admin.validation.*') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.validation.index') }}"> 
+                                                <span class="sub-item">Ketentuan Koin per-Validasi</span>
+                                            </a>
+                                        </li>
                                         <li class="{{ Route::is('admin.missions.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.missions.index') }}"> 
                                                 <span class="sub-item">Manajemen Misi</span>
-                                            </a>
-                                        </li>
-                                        <li class="{{ Route::is('admin.validation.*') ? 'active' : '' }}">
-                                            <a href="#"> 
-                                                <span class="sub-item">Ketentuan Poin per-Validasi</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.rewards.index') ? 'active' : '' }}">

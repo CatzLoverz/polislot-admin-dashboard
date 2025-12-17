@@ -73,61 +73,57 @@
 </div>
 @endsection
 
-@push('styles')
-{{-- Leaflet CSS --}}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-@endpush
-
 @push('scripts')
-{{-- Leaflet JS --}}
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+{{-- Google Maps API --}}
+<script src="https://maps.googleapis.com/maps/api/js?key={{$mapsApiKey}}"></script>
 <script>
     let map;
     let marker;
 
     function initMap() {
         // Lokasi Default (Batam)
-        let defaultLoc = [1.118902, 104.048494]; 
+        let defaultLoc = { lat: 1.118902, lng: 104.048494 }; 
         
-        // Inisialisasi Map
-        map = L.map('map').setView(defaultLoc, 16);
-
-        // Tambahkan Tile Layer (Esri World Imagery - Satelit)
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-            maxZoom: 19
-        }).addTo(map);
-
-        // Tambahkan Marker di tengah
-        var redIcon = new L.Icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: defaultLoc,
+            zoom: 16,
+            mapTypeId: 'satellite',
+            streetViewControl: false,
+            mapTypeControl: false
         });
 
-        marker = L.marker(defaultLoc, {icon: redIcon}).addTo(map);
+        // Set nilai awal input hidden
+        updateInput(defaultLoc, 16);
 
-        // Update input awal
-        updateInput(defaultLoc[0], defaultLoc[1], 16);
-
-        // Event Listener: Saat peta digeser
-        map.on('move', function() {
-            let center = map.getCenter();
-            marker.setLatLng(center); // Marker ikut ke tengah
-            updateInput(center.lat, center.lng, map.getZoom());
+        // Tambahkan Marker Visual di tengah peta (Statis)
+        marker = new google.maps.Marker({
+            position: defaultLoc,
+            map: map,
+            title: "Pusat Area",
+            // Icon default Google Maps sudah merah
         });
 
-        // Event Listener: Saat zoom berubah
-        map.on('zoomend', function() {
+        // Event Listener: Saat peta digeser/zoom
+        map.addListener("center_changed", () => {
             let center = map.getCenter();
-            updateInput(center.lat, center.lng, map.getZoom());
+            // Konversi ke object {lat, lng}
+            let pos = { lat: center.lat(), lng: center.lng() };
+            marker.setPosition(pos); 
+            updateInput(pos, map.getZoom());
+        });
+        
+        map.addListener("zoom_changed", () => {
+            let center = map.getCenter();
+            let pos = { lat: center.lat(), lng: center.lng() };
+            updateInput(pos, map.getZoom());
         });
     }
 
-    function updateInput(lat, lng, zoom) {
+    function updateInput(latLng, zoom) {
+        // Pastikan latLng adalah object atau method
+        let lat = typeof latLng.lat === 'function' ? latLng.lat() : latLng.lat;
+        let lng = typeof latLng.lng === 'function' ? latLng.lng() : latLng.lng;
+        
         // Update Hidden Input
         document.getElementById("lat").value = lat.toFixed(6);
         document.getElementById("lng").value = lng.toFixed(6);
@@ -139,9 +135,7 @@
         document.getElementById("display-zoom").innerText = zoom;
     }
 
-    // Load Map
-    document.addEventListener("DOMContentLoaded", function() {
-        initMap();
-    });
+    // Load Map via window onload agar aman
+    window.onload = initMap;
 </script>
 @endpush

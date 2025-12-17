@@ -4,12 +4,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RewardController;
+use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\Api\MissionController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\InfoBoardController;
+use App\Http\Controllers\Api\SubareaCommentController;
+use App\Http\Controllers\Api\UserValidationController;
 use App\Http\Controllers\Api\FeedbackCategoryController;
-use App\Http\Controllers\Api\HistoryController;
 
 
 
@@ -57,6 +59,14 @@ Route::middleware('encryptApi')->group(function () {
         Route::post('/rewards/redeem', [RewardController::class, 'redeem']);
         Route::get('/rewards/history', [RewardController::class, 'history']);
 
-        //Route history
+        // Route history
         Route::get('/history', [HistoryController::class, 'index']);
+
+        // Route Visualisasi Parkir
+
+        // Route Validasi Parkir
+        Route::post('validation', [UserValidationController::class, 'store']);
+
+        // Route Komentar Subarea Parkir
+        Route::post('comment', [SubareaCommentController::class, 'store']);
     });

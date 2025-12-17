@@ -13,7 +13,7 @@
     <div class="row">
         {{-- Kolom Peta (Kiri) --}}
         <div class="col-md-9">
-            <div class="card shadow-sm" style="border-radius: 15px;">
+            <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center text-dark" style="border-radius: 15px 15px 0 0;">
                     <h4 class="card-title font-weight-bold mb-0">
                         <i class="fas fa-map-marked-alt mr-2"></i> Peta Editor (Satelit)
@@ -30,7 +30,7 @@
 
         {{-- Kolom Daftar Subarea (Kanan) --}}
         <div class="col-md-3">
-            <div class="card shadow-sm" style="border-radius: 15px; height: 100%;">
+            <div class="card shadow-sm" style="height: 100%;">
                 <div class="card-header">
                     <h4 class="card-title font-weight-bold">Daftar Sub Area</h4>
                 </div>
@@ -39,17 +39,22 @@
                         @forelse($area->parkSubarea as $sub)
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between align-items-start">
-                                    {{-- Info Nama & Amenities --}}
-                                    <div style="width: 75%;">
-                                        <span class="font-weight-bold d-block text-dark" style="font-size: 1rem;">
-                                            {{ $sub->park_subarea_name }}
-                                        </span>
+                                    <div style="width: 65%;">
+                                        <span class="font-weight-bold d-block text-dark">{{ $sub->park_subarea_name }}</span>
+                                        {{-- Indikator Status Teks Kecil --}}
+                                        <small class="d-block mt-1" style="color: {{ $sub->status_color }}">
+                                            <i class="fas fa-circle" style="font-size: 8px;"></i> 
+                                            @if($sub->status_color == '#f25961') Penuh
+                                            @elseif($sub->status_color == '#ffad46') Terbatas
+                                            @elseif($sub->status_color == '#31ce36') Banyak Kosong
+                                            @else Tidak ada info @endif
+                                        </small>
                                         
-                                        {{-- Loop Amenities Di Sini (Dibawah Nama) --}}
+                                        {{-- Amenities --}}
                                         <div class="mt-2">
                                             @forelse($sub->parkAmenity as $amenity)
-                                                <span class="badge badge-count text-secondary border border-secondary mr-1 mb-1 p-1" style="font-size: 10px; background: #f8f9fa;">
-                                                    <i class="fas fa-check text-success mr-1"></i>{{ $amenity->park_amenity_name }}
+                                                <span class="badge badge-count text-secondary border border-secondary mr-1 mb-1 p-1" style="font-size: 9px;">
+                                                    {{ $amenity->park_amenity_name }}
                                                 </span>
                                             @empty
                                                 <small class="text-muted font-italic" style="font-size: 11px;">Tidak ada fasilitas.</small>
@@ -57,21 +62,27 @@
                                         </div>
                                     </div>
                                     
-                                    {{-- Action Buttons --}}
-                                    <div class="d-flex align-items-center ml-2">
-                                        {{-- Tombol Edit --}}
+                                    <div class="d-flex align-items-center ml-1">
+                                        {{-- Tombol Lihat Komentar --}}
+                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs mr-1" 
+                                            onclick="openCommentModal('{{ $sub->park_subarea_name }}', {{ json_encode($sub->subareaComment) }})"
+                                            data-toggle="tooltip" title="Lihat Komentar">
+                                            <i class="fas fa-comments"></i>
+                                        </button>
+
+                                        {{-- Tombol Edit (Existing) --}}
                                         <button type="button" class="btn btn-icon btn-round btn-primary btn-xs mr-1" 
                                             onclick="openEditModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}', {{ json_encode($sub->parkAmenity) }})"
-                                            data-toggle="tooltip" title="Ubah & Fasilitas">
+                                            data-toggle="tooltip" title="Edit Subarea">
                                             <i class="fa fa-edit"></i>
                                         </button>
 
-                                        {{-- Tombol Hapus --}}
+                                        {{-- [MODIFIKASI] Tombol Hapus dengan Class Penanda --}}
                                         <form action="{{ route('admin.park-subarea.destroy', $sub->park_subarea_id) }}" 
                                               method="POST" 
-                                              class="delete-form d-inline"
-                                              data-entity-name="Subarea: {{ $sub->park_subarea_name }}">
-                                            @csrf
+                                              class="d-inline delete-subarea-form"
+                                              data-name="{{ $sub->park_subarea_name }}">
+                                            @csrf 
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-icon btn-round btn-danger btn-xs" 
                                                 data-toggle="tooltip" title="Hapus Subarea">
@@ -141,27 +152,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                {{-- Form Ganti Nama Subarea --}}
                 <div class="form-group">
                     <label class="font-weight-bold">Nama Sub Area</label>
                     <div class="input-group mb-3">
                         <input type="text" id="edit_subarea_name" class="form-control" required>
                         <div class="input-group-append">
-                            <button type="button" class="btn-primary " onclick="updateSubareaName()">
+                            <button type="button" class="btn btn-primary" onclick="updateSubareaName()">
                                 <i class="fas fa-save mr-1"></i> Simpan
                             </button>
                         </div>
                     </div>
-                    <small class="text-muted">Klik "Simpan Nama" untuk memperbarui nama area ini.</small>
                 </div>
                 
                 <hr>
                 
-                {{-- Form Amenities (Langsung CRUD) --}}
                 <div class="form-group">
                     <label class="font-weight-bold">Kelola Fasilitas (Amenities)</label>
-                    
-                    {{-- Input Tambah Baru --}}
                     <div class="input-group mb-3">
                         <input type="text" id="new_amenity_name" class="form-control" placeholder="Nama fasilitas baru...">
                         <div class="input-group-append">
@@ -170,14 +176,8 @@
                             </button>
                         </div>
                     </div>
-
-                    {{-- List Fasilitas Existing --}}
-                    <label class="small text-muted mb-2">Daftar Fasilitas:</label>
-                    <div id="amenities_list_container" style="max-height: 200px; overflow-y: auto;">
-                        {{-- List akan di-render lewat JS --}}
-                    </div>
+                    <div id="amenities_list_container" style="max-height: 200px; overflow-y: auto;"></div>
                 </div>
-
                 <input type="hidden" id="edit_subarea_id">
             </div>
             <div class="modal-footer">
@@ -186,97 +186,123 @@
         </div>
     </div>
 </div>
+
+{{-- Modal Komentar --}}
+<div class="modal fade" id="modalComments" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content" style="border-radius: 15px;">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white font-weight-bold">
+                    <i class="fas fa-comments mr-2"></i> Komentar: <span id="comment_subarea_title"></span>
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body bg-light" id="comments_container" style="min-height: 200px;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-round" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
-@push('styles')
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.14.2/dist/leaflet-geoman.css" />
-@endpush
-
 @push('scripts')
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.14.2/dist/leaflet-geoman.min.js"></script>
+{{-- Google Maps API --}}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ $mapsApiKey }}&libraries=drawing,geometry"></script>
 
 <script>
     let map;
-    // Data dari Controller
     let centerData = @json($area->park_area_data);
-    let center = [parseFloat(centerData.lat), parseFloat(centerData.lng)];
-    
-    // Data Subarea & Relasi Amenities
+    let center = { lat: parseFloat(centerData.lat), lng: parseFloat(centerData.lng) };
     let existingSubareas = @json($area->parkSubarea);
-    
-    let currentLayer = null; 
+    let drawingManager;
+    let currentPolygonObj = null;
 
     // === 1. INISIALISASI PETA ===
     function initMap() {
-        map = L.map('map').setView(center, parseInt(centerData.zoom));
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: center,
+            zoom: parseInt(centerData.zoom),
+            mapTypeId: 'satellite',
+            streetViewControl: false,
+            mapTypeControl: false
+        });
 
-        // Tile Layer Satelit (Esri)
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri',
-            maxZoom: 19
-        }).addTo(map);
+       existingSubareas.forEach(sub => {
+            let polygonColor = sub.status_color || '#1572e8';
 
-        // Render Subarea yang ada
-        existingSubareas.forEach(sub => {
-            let polygon = L.polygon(sub.park_subarea_polygon, {
-                color: '#31ce36', 
-                fillColor: '#31ce36',
-                fillOpacity: 0.35,
-                weight: 2
-            }).addTo(map);
+            let polygon = new google.maps.Polygon({
+                paths: sub.park_subarea_polygon, 
+                strokeColor: polygonColor,
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: polygonColor,
+                fillOpacity: 0.35, 
+                editable: true, 
+                draggable: false, 
+                map: map
+            });
 
-            polygon.subareaId = sub.park_subarea_id;
-            polygon.subareaName = sub.park_subarea_name;
+            let infoWindow = new google.maps.InfoWindow({
+                content: `<b>${sub.park_subarea_name}</b>`
+            });
+            polygon.addListener("click", (event) => {
+                infoWindow.setPosition(event.latLng);
+                infoWindow.open(map);
+            });
 
-            polygon.bindPopup(`<b>${sub.park_subarea_name}</b>`);
-
-            // Event Listener: Auto-Update saat Polygon Diedit di Peta
-            const saveChanges = function(e) {
-                let rawCoords = e.layer.getLatLngs()[0];
-                let coords = rawCoords.map(p => ({ lat: p.lat, lng: p.lng }));
-                updatePolygonDirectly(polygon.subareaId, polygon.subareaName, JSON.stringify(coords));
+            const saveChanges = function() {
+                let path = polygon.getPath();
+                let coords = [];
+                for (let i = 0; i < path.getLength(); i++) {
+                    let xy = path.getAt(i);
+                    coords.push({ lat: xy.lat(), lng: xy.lng() });
+                }
+                updatePolygonDirectly(sub.park_subarea_id, sub.park_subarea_name, JSON.stringify(coords));
             };
 
-            polygon.on('pm:edit', saveChanges);
-            polygon.on('pm:vertexremoved', saveChanges); 
-            polygon.on('pm:vertexadded', saveChanges);
-            polygon.on('pm:dragend', saveChanges);
+            polygon.getPath().addListener('set_at', saveChanges);
+            polygon.getPath().addListener('insert_at', saveChanges);
+            polygon.getPath().addListener('remove_at', saveChanges);
+
+            polygon.addListener('contextmenu', function(e) {
+                if (typeof e.vertex === 'number') {
+                    polygon.getPath().removeAt(e.vertex);
+                }
+            });
         });
 
-        // Setup Toolbar Geoman
-        map.pm.addControls({
-            position: 'topleft',
-            drawPolygon: true,
-            drawCircleMarker: false,
-            drawMarker: false,
-            drawPolyline: false,
-            drawRectangle: false,
-            drawCircle: false,
-            drawText: false,
-            editMode: true,      
-            dragMode: false,
-            cutPolygon: false,
-            removalMode: true,   
+        drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: google.maps.drawing.OverlayType.POLYGON,
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_LEFT,
+                drawingModes: ['polygon'],
+            },
+            polygonOptions: {
+                fillColor: "#1572e8",
+                fillOpacity: 0.5,
+                strokeWeight: 2,
+                editable: true,
+                zIndex: 1
+            }
         });
-        map.pm.setLang('id');
+        drawingManager.setMap(map);
 
-        // Event: Selesai Gambar Polygon Baru -> Buka Modal
-        map.on('pm:create', function(e) {
-            currentLayer = e.layer;
-            let rawCoords = e.layer.getLatLngs()[0]; 
-            let coords = rawCoords.map(p => ({ lat: p.lat, lng: p.lng }));
-
+        google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
+            currentPolygonObj = event.overlay;
+            let paths = event.overlay.getPath().getArray();
+            let coords = paths.map(p => ({ lat: p.lat(), lng: p.lng() }));
             document.getElementById('polygon_data').value = JSON.stringify(coords);
             $('#subarea_name').val('');
             $('#modalSubarea').modal('show');
+            drawingManager.setDrawingMode(null);
         });
     }
 
-    // === 2. LOGIKA SUBAREA (CREATE, UPDATE POLYGON, UPDATE NAME) ===
-
-    // Simpan Subarea Baru
+    // === 2. LOGIKA SUBAREA ===
     function saveSubarea() {
         let name = $('#subarea_name').val();
         let polygon = $('#polygon_data').val();
@@ -289,11 +315,7 @@
         $.ajax({
             url: "{{ route('admin.park-area.subarea.store', $area->park_area_id) }}",
             type: "POST",
-            data: { 
-                _token: "{{ csrf_token() }}", 
-                name: name, 
-                polygon: polygon 
-            },
+            data: { _token: "{{ csrf_token() }}", name: name, polygon: polygon },
             success: function(res) {
                 $('#modalSubarea').modal('hide');
                 Swal.fire({
@@ -304,23 +326,17 @@
             error: function(xhr) {
                 $('#modalSubarea').modal('hide');
                 Swal.fire('Error', 'Gagal menyimpan.', 'error');
-                if(currentLayer) map.removeLayer(currentLayer); 
+                if(currentPolygonObj) currentPolygonObj.setMap(null);
             }
         });
     }
 
-    // Update Polygon Langsung (saat geser peta)
     function updatePolygonDirectly(id, name, polygonJson) {
         let updateUrl = "{{ url('admin/park-subarea') }}/" + id;
         $.ajax({
             url: updateUrl,
             type: "POST",
-            data: { 
-                _token: "{{ csrf_token() }}", 
-                _method: "PUT", 
-                name: name, 
-                polygon: polygonJson 
-            },
+            data: { _token: "{{ csrf_token() }}", _method: "PUT", name: name, polygon: polygonJson },
             success: function(res) {
                 const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
                 Toast.fire({ icon: 'success', title: 'Peta tersimpan otomatis!' });
@@ -328,7 +344,6 @@
         });
     }
 
-    // Update Nama Subarea (dari Modal Edit)
     function updateSubareaName() {
         let id = $('#edit_subarea_id').val();
         let name = $('#edit_subarea_name').val();
@@ -338,11 +353,7 @@
         $.ajax({
             url: "{{ url('admin/park-subarea') }}/" + id,
             type: "POST",
-            data: { 
-                _token: "{{ csrf_token() }}", 
-                _method: "PUT", 
-                name: name 
-            },
+            data: { _token: "{{ csrf_token() }}", _method: "PUT", name: name },
             success: function(res) {
                 Swal.fire({
                     icon: 'success', title: 'Berhasil', text: 'Nama subarea diperbarui.',
@@ -353,20 +364,15 @@
         });
     }
 
-    // === 3. LOGIKA AMENITIES (SIMPLE CRUD RESOURCE) ===
-
-    // Buka Modal & Render List
+    // === 3. LOGIKA AMENITIES ===
     function openEditModal(id, name, amenities = []) {
         $('#edit_subarea_id').val(id);
         $('#edit_subarea_name').val(name);
-        $('#new_amenity_name').val(''); // Reset input tambah
-        
-        renderAmenitiesList(amenities); // Tampilkan list yang ada
-        
+        $('#new_amenity_name').val(''); 
+        renderAmenitiesList(amenities);
         $('#modalEditSubarea').modal('show');
     }
 
-    // Helper: Render HTML List Amenities
     function renderAmenitiesList(amenities) {
         let html = '';
         if (!Array.isArray(amenities) || amenities.length === 0) {
@@ -376,63 +382,32 @@
             amenities.forEach(function(item) {
                 let amenityName = (typeof item === 'object' && item !== null) ? item.park_amenity_name : item;
                 let amenityId = (typeof item === 'object' && item !== null) ? item.park_amenity_id : null;
+                let deleteButton = amenityId ? `<button class="btn btn-xs btn-danger btn-round" onclick="deleteAmenity(${amenityId})"><i class="fas fa-trash"></i></button>` : '';
 
-                // Jika ID null (karena data string lama), tombol hapus tidak bisa berfungsi normal
-                let deleteButton = '';
-                if(amenityId) {
-                    deleteButton = `
-                        <button class="btn btn-xs btn-danger btn-round" onclick="deleteAmenity(${amenityId})">
-                            <i class="fas fa-trash"></i>
-                        </button>`;
-                }
-
-                html += `
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-2" id="amenity_item_${amenityId}">
-                        <span><i class="fas fa-check text-success mr-2"></i>${amenityName}</span>
-                        ${deleteButton}
-                    </li>
-                `;
+                html += `<li class="list-group-item d-flex justify-content-between align-items-center p-2" id="amenity_item_${amenityId}">
+                        <span><i class="fas fa-check text-success mr-2"></i>${amenityName}</span>${deleteButton}</li>`;
             });
             html += '</ul>';
         }
         $('#amenities_list_container').html(html);
     }
 
-    // Tambah Amenity (POST ke Controller)
     function addAmenity() {
         let subareaId = $('#edit_subarea_id').val();
         let name = $('#new_amenity_name').val();
-
         if(!name) { Swal.fire('Gagal', 'Nama fasilitas kosong.', 'warning'); return; }
-
         $.ajax({
             url: "{{ route('admin.park-amenity.store') }}",
             type: "POST",
-            data: { 
-                _token: "{{ csrf_token() }}", 
-                park_subarea_id: subareaId, 
-                park_amenity_name: name 
-            },
+            data: { _token: "{{ csrf_token() }}", park_subarea_id: subareaId, park_amenity_name: name },
             success: function(res) {
-                // Tambahkan elemen baru ke list UI secara manual (agar instan)
                 let newItem = res.data;
-                
-                // Jika sebelumnya kosong, buat wrapper ul baru
-                if ($('#amenities_list_container ul').length === 0) {
-                    $('#amenities_list_container').html('<ul class="list-group list-group-flush border rounded"></ul>');
-                }
-
-                let newHtml = `
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-2" id="amenity_item_${newItem.park_amenity_id}">
+                let newHtml = `<li class="list-group-item d-flex justify-content-between align-items-center p-2" id="amenity_item_${newItem.park_amenity_id}">
                         <span><i class="fas fa-check text-success mr-2"></i>${newItem.park_amenity_name}</span>
-                        <button class="btn btn-xs btn-danger btn-round" onclick="deleteAmenity(${newItem.park_amenity_id})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </li>
-                `;
+                        <button class="btn btn-xs btn-danger btn-round" onclick="deleteAmenity(${newItem.park_amenity_id})"><i class="fas fa-trash"></i></button></li>`;
+                if ($('#amenities_list_container ul').length === 0) $('#amenities_list_container').html('<ul class="list-group list-group-flush border rounded"></ul>');
                 $('#amenities_list_container ul').append(newHtml);
-                
-                $('#new_amenity_name').val(''); // Reset input
+                $('#new_amenity_name').val(''); 
                 const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
                 Toast.fire({ icon: 'success', title: 'Fasilitas ditambahkan' });
             },
@@ -440,9 +415,7 @@
         });
     }
 
-    // Hapus Amenity (DELETE ke Controller)
     function deleteAmenity(id) {
-        // Konfirmasi Hapus
         Swal.fire({
             title: 'Hapus Fasilitas?',
             text: "Data akan dihapus permanen.",
@@ -457,18 +430,10 @@
                 $.ajax({
                     url: "{{ url('admin/park-amenity') }}/" + id,
                     type: "POST",
-                    data: { 
-                        _token: "{{ csrf_token() }}", 
-                        _method: "DELETE" 
-                    },
+                    data: { _token: "{{ csrf_token() }}", _method: "DELETE" },
                     success: function(res) {
-                        $('#amenity_item_' + id).remove(); // Hapus dari UI
-                        
-                        // Cek jika habis, tampilkan pesan kosong
-                        if ($('#amenities_list_container li').length === 0) {
-                             $('#amenities_list_container').html('<div class="text-center text-muted p-3 small">Belum ada fasilitas.<br>Silakan tambah baru.</div>');
-                        }
-
+                        $('#amenity_item_' + id).remove();
+                        if ($('#amenities_list_container li').length === 0) $('#amenities_list_container').html('<div class="text-center text-muted p-3 small">Belum ada fasilitas.<br>Silakan tambah baru.</div>');
                         const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
                         Toast.fire({ icon: 'success', title: 'Fasilitas dihapus' });
                     },
@@ -478,14 +443,67 @@
         });
     }
 
-    function cancelDrawing() {
-        if(currentLayer) map.removeLayer(currentLayer);
+    function openCommentModal(name, comments) {
+        $('#comment_subarea_title').text(name);
+        let html = '';
+        if (!Array.isArray(comments) || comments.length === 0) {
+            html = `<div class="text-center py-5"><i class="fas fa-comment-slash fa-3x text-muted mb-3"></i><p class="text-muted">Belum ada komentar untuk area ini.</p></div>`;
+        } else {
+            comments.sort((a, b) => b.subarea_comment_id - a.subarea_comment_id);
+            html = '<div class="list-group list-group-flush">';
+            comments.forEach(c => {
+                let userName = c.user ? c.user.name : 'User Terhapus';
+                let userAvatar = c.user && c.user.avatar ? c.user.avatar : 'https://ui-avatars.com/api/?name='+userName; 
+                let date = new Date(c.created_at).toLocaleString('id-ID');
+                html += `<div class="list-group-item flex-column align-items-start p-3 mb-2 border rounded shadow-sm bg-white">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar avatar-sm mr-2"><img src="${userAvatar}" alt="..." class="avatar-img rounded-circle"></div>
+                                <h6 class="mb-1 font-weight-bold text-primary">${userName}</h6>
+                            </div>
+                            <small class="text-muted">${date}</small>
+                        </div>
+                        <p class="mb-1 text-dark">${c.subarea_comment_content}</p>
+                    </div>`;
+            });
+            html += '</div>';
+        }
+        $('#comments_container').html(html);
+        $('#modalComments').modal('show');
     }
 
-    // Init saat halaman siap
+    function cancelDrawing() {
+        if(currentPolygonObj) {
+            currentPolygonObj.setMap(null);
+            drawingManager.setDrawingMode(null);
+        }
+    }
+
+    // [TAMBAHAN] Event Listener untuk Konfirmasi Hapus Subarea
     document.addEventListener("DOMContentLoaded", function() {
         initMap();
         $(function () { $('[data-toggle="tooltip"]').tooltip() });
+
+        // Handler tombol hapus subarea
+        $(document).on('submit', '.delete-subarea-form', function(e) {
+            e.preventDefault();
+            let form = this;
+            let name = $(this).data('name');
+
+            Swal.fire({
+                title: 'Hapus Subarea?',
+                text: "Subarea '" + name + "' akan dihapus permanen.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
     });
 </script>
 @endpush

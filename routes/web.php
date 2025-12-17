@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\ParkAmenityController;
 use App\Http\Controllers\Web\ParkSubareaController;
 use App\Http\Controllers\Web\FeedbackCategoryController;
 use App\Http\Controllers\Web\RewardVerificationController;
+use App\Http\Controllers\Web\ValidationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -81,6 +82,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         // Route Park Amenity
         Route::resource('park-amenity', ParkAmenityController::class)->only(['store', 'destroy']);
 
+        Route::resource('validation', ValidationController::class)->only(['index', 'update']);
     });
 
 });
