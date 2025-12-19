@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\UserValidation;
 use App\Models\Validation;
+use App\Models\ParkSubarea;
 use App\Services\MissionService;
 use App\Services\HistoryService;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class UserValidationController extends Controller
         $user = $request->user();
 
         try {
-            // Cek Cooldown (15 Menit)
+            // 1. Cek Cooldown (15 Menit)
             $lastValidation = UserValidation::where('user_id', $user->user_id)
                 ->latest()
                 ->first();
@@ -48,16 +49,21 @@ class UserValidationController extends Controller
                 $diffInMinutes = Carbon::parse($lastValidation->created_at)->diffInMinutes(now());
                 if ($diffInMinutes < 15) {
                     $wait = 15 - $diffInMinutes;
-                    return $this->sendError("Anda baru saja melakukan validasi. Tunggu $wait menit lagi.", 429);
+                    // Pesan ini akan muncul di Snackbar Gagal (Merah)
+                    return $this->sendError("Anda baru saja melakukan validasi. Mohon tunggu $wait menit lagi.", 429);
                 }
             }
 
             return DB::transaction(function () use ($request, $user) {
-                // Ambil Poin Setting
+                // 2. Ambil Info Subarea & Area (Untuk History Name)
+                $subarea = ParkSubarea::with('parkArea')->find($request->park_subarea_id);
+                $areaName = $subarea->parkArea ? $subarea->parkArea->park_area_name : 'Area Parkir';
+
+                // 3. Ambil Poin Setting
                 $validationSetting = Validation::first();
                 $points = $validationSetting ? $validationSetting->validation_points : 0;
 
-                // Simpan Validasi
+                // 4. Simpan Validasi
                 UserValidation::create([
                     'user_id' => $user->user_id,
                     'validation_id' => $validationSetting ? $validationSetting->validation_id : 1,
@@ -65,7 +71,7 @@ class UserValidationController extends Controller
                     'user_validation_content' => $request->user_validation_content,
                 ]);
 
-                // Tambah Poin & History
+                // 5. Tambah Poin & History
                 if ($points > 0) {
                     $user->increment('current_points', $points);
                     $user->increment('lifetime_points', $points);
@@ -73,12 +79,12 @@ class UserValidationController extends Controller
                     $this->historyService->log(
                         $user->user_id,
                         'validation',
-                        'Validasi Area Parkir',
+                        "Validasi $areaName", 
                         $points
                     );
                 }
 
-                // Update Misi
+                // 6. Update Misi
                 $this->missionService->updateProgress($user->user_id, 'VALIDATION_ACTION');
 
                 return $this->sendSuccess("Validasi berhasil! Anda mendapatkan $points poin.", [
@@ -89,8 +95,8 @@ class UserValidationController extends Controller
             });
 
         } catch (Exception $e) {
-            Log::error('[API UserValidation] Error: ' . $e->getMessage());
-            return $this->sendError('Terjadi kesalahan server.', 500);
+            Log::error('[API UserValidation@store] Error: ' . $e->getMessage());
+            return $this->sendError('Terjadi kesalahan server saat memproses validasi.', 500);
         }
     }
 }

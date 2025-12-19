@@ -68,7 +68,7 @@ class RewardController extends Controller
                 ->make(true);
         }
 
-        return view('Contents.rewards.index');
+        return view('Contents.Rewards.index');
     }
 
     /**

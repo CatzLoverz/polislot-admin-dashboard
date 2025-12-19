@@ -12,8 +12,7 @@ use App\Http\Controllers\Api\InfoBoardController;
 use App\Http\Controllers\Api\SubareaCommentController;
 use App\Http\Controllers\Api\UserValidationController;
 use App\Http\Controllers\Api\FeedbackCategoryController;
-
-
+use App\Http\Controllers\Api\MapVisualizationController;
 
 Route::middleware('encryptApi')->group(function () {
 
@@ -32,7 +31,7 @@ Route::middleware('encryptApi')->group(function () {
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword']);
 });
 
-    Route::middleware('auth:sanctum', 'role:admin,user', 'encryptApi')->group(function () {
+    Route::middleware(['auth:sanctum', 'role:admin,user', 'encryptApi'])->group(function () {
 
         // Auth Check
         Route::get('/user', [AuthController::class, 'authCheck']); 
@@ -63,7 +62,8 @@ Route::middleware('encryptApi')->group(function () {
         Route::get('/history', [HistoryController::class, 'index']);
 
         // Route Visualisasi Parkir
-        // placeholder
+        Route::get('/map-visualization/', [MapVisualizationController::class, 'index']);
+        Route::get('/map-visualization/{id}', [MapVisualizationController::class, 'show']);
 
         // Route Validasi Parkir
         Route::post('/validation', [UserValidationController::class, 'store']);
