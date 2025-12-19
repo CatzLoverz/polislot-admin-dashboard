@@ -79,7 +79,7 @@ class UserValidationController extends Controller
                     $this->historyService->log(
                         $user->user_id,
                         'validation',
-                        "Validasi $areaName", 
+                        $areaName,
                         $points
                     );
                 }

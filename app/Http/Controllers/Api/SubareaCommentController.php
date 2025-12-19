@@ -41,6 +41,7 @@ class SubareaCommentController extends Controller
                 return [
                     'id'      => $item->subarea_comment_id,
                     'user'    => [
+                        'id'     => $item->user->user_id, // Add ID for ownership check
                         'name'   => $item->user->name ?? 'Unknown User',
                         'avatar' => $item->user->avatar ?? null, // Frontend bisa handle default avatar
                     ],
@@ -119,6 +120,10 @@ class SubareaCommentController extends Controller
      */
     public function update(Request $request, SubareaComment $comment)
     {
+        if ($request->isMethod('put') || $request->isMethod('patch')) {
+             // Laravel handle ini otomatis, tapi request harus multipart/form-data
+        }
+
         $request->validate([
             'subarea_comment_content' => 'required|string|max:500',
             'subarea_comment_image'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'

@@ -69,5 +69,6 @@ Route::middleware('encryptApi')->group(function () {
         Route::post('/validation', [UserValidationController::class, 'store']);
 
         // Route Komentar Subarea Parkir
-        Route::apiResource('comment', SubareaCommentController::class)->only('index', 'store', 'update', 'destroy'); 
+        Route::apiResource('comment', SubareaCommentController::class)->only('index', 'store', 'destroy');
+        Route::match(['put', 'post'], '/comment/{comment}', [SubareaCommentController::class, 'update']);
     });
