@@ -63,10 +63,11 @@ Route::middleware('encryptApi')->group(function () {
         Route::get('/history', [HistoryController::class, 'index']);
 
         // Route Visualisasi Parkir
+        // placeholder
 
         // Route Validasi Parkir
-        Route::post('validation', [UserValidationController::class, 'store']);
+        Route::post('/validation', [UserValidationController::class, 'store']);
 
         // Route Komentar Subarea Parkir
-        Route::post('comment', [SubareaCommentController::class, 'store']);
+        Route::apiResource('comment', SubareaCommentController::class)->only('index', 'store', 'update', 'destroy'); 
     });

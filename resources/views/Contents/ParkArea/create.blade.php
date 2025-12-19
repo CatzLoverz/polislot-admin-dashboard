@@ -74,20 +74,31 @@
 @endsection
 
 @push('scripts')
-{{-- Google Maps API --}}
-<script src="https://maps.googleapis.com/maps/api/js?key={{$mapsApiKey}}"></script>
+{{-- Google Maps Dynamic Loader (Standard) --}}
+<script>
+  (function(g){var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+    key: "{{ $mapsApiKey }}",
+    v: "weekly",
+  });
+</script>
+
 <script>
     let map;
     let marker;
 
-    function initMap() {
-        // Lokasi Default (Batam)
+    async function initMap() {
+        // Load Libraries via ImportLibrary (Async)
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
         let defaultLoc = { lat: 1.118902, lng: 104.048494 }; 
         
-        map = new google.maps.Map(document.getElementById("map"), {
+        // Inisialisasi Peta
+        map = new Map(document.getElementById("map"), {
             center: defaultLoc,
             zoom: 16,
             mapTypeId: 'satellite',
+            mapId: "DEMO_MAP_ID", // Required for AdvancedMarkerElement
             streetViewControl: false,
             mapTypeControl: false
         });
@@ -95,20 +106,21 @@
         // Set nilai awal input hidden
         updateInput(defaultLoc, 16);
 
-        // Tambahkan Marker Visual di tengah peta (Statis)
-        marker = new google.maps.Marker({
-            position: defaultLoc,
+        // AdvancedMarkerElement (Pengganti google.maps.Marker)
+        marker = new AdvancedMarkerElement({
             map: map,
+            position: defaultLoc,
             title: "Pusat Area",
-            // Icon default Google Maps sudah merah
         });
 
         // Event Listener: Saat peta digeser/zoom
         map.addListener("center_changed", () => {
             let center = map.getCenter();
-            // Konversi ke object {lat, lng}
             let pos = { lat: center.lat(), lng: center.lng() };
-            marker.setPosition(pos); 
+            
+            // Update posisi marker
+            marker.position = pos; 
+            
             updateInput(pos, map.getZoom());
         });
         
@@ -120,22 +132,18 @@
     }
 
     function updateInput(latLng, zoom) {
-        // Pastikan latLng adalah object atau method
         let lat = typeof latLng.lat === 'function' ? latLng.lat() : latLng.lat;
         let lng = typeof latLng.lng === 'function' ? latLng.lng() : latLng.lng;
         
-        // Update Hidden Input
         document.getElementById("lat").value = lat.toFixed(6);
         document.getElementById("lng").value = lng.toFixed(6);
         document.getElementById("zoom").value = zoom;
 
-        // Update Display Text
         document.getElementById("display-lat").innerText = lat.toFixed(6);
         document.getElementById("display-lng").innerText = lng.toFixed(6);
         document.getElementById("display-zoom").innerText = zoom;
     }
 
-    // Load Map via window onload agar aman
-    window.onload = initMap;
+    initMap();
 </script>
 @endpush

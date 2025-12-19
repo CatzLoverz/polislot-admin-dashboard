@@ -92,10 +92,16 @@ class MissionService
             $shouldCheck = false;
 
             if ($mission->mission_type === 'TARGET') {
-                // Tipe Target: Selalu tambah (akumulasi)
-                $userMission->user_mission_current_value += $incrementValue;
+                // Explicit Reset Handling untuk TARGET
+                if ($isReset) {
+                    // Jika baru saja direset (Ganti hari/minggu), mulai dari awal
+                    $userMission->user_mission_current_value = $incrementValue;
+                } else {
+                    // Akumulasi normal
+                    $userMission->user_mission_current_value += $incrementValue;
+                }
                 $shouldCheck = true;
-            } 
+            }
             elseif ($mission->mission_type === 'SEQUENCE') {
                 // Tipe Sequence: Butuh penanganan khusus saat Reset Siklus
                 

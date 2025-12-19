@@ -13,6 +13,65 @@ use Illuminate\Support\Facades\Storage;
 class SubareaCommentController extends Controller
 {
     /**
+     * Menampilkan daftar komentar berdasarkan Subarea dengan Paginasi.
+     * Mirip dengan HistoryController, output diformat ulang.
+     * * @param Request $request (park_subarea_id, limit, page)
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        // Validasi: Kita butuh ID Subarea untuk tahu komentar mana yang diambil
+        $request->validate([
+            'park_subarea_id' => 'required|exists:park_subareas,park_subarea_id',
+            'limit' => 'integer|min:1|max:100'
+        ]);
+
+        try {
+            $subareaId = $request->park_subarea_id;
+            $limit = $request->input('limit', 10); // Default 10 komentar per halaman
+
+            // Query dengan Eager Loading User
+            $comments = SubareaComment::with('user:user_id,name,avatar')
+                ->where('park_subarea_id', $subareaId)
+                ->orderBy('created_at', 'desc')
+                ->paginate($limit);
+
+            // Format data (Transformasi Collection)
+            $formattedData = $comments->getCollection()->map(function ($item) {
+                return [
+                    'id'      => $item->subarea_comment_id,
+                    'user'    => [
+                        'name'   => $item->user->name ?? 'Unknown User',
+                        'avatar' => $item->user->avatar ?? null, // Frontend bisa handle default avatar
+                    ],
+                    'content' => $item->subarea_comment_content,
+                    'image'   => $item->subarea_comment_image ? asset('storage/' . $item->subarea_comment_image) : null,
+                    'date'    => $item->created_at->format('d M Y'),
+                    'time'    => $item->created_at->format('H:i'),
+                    'timestamp' => $item->created_at->toIso8601String(),
+                ];
+            });
+
+            // Susun Metadata Pagination
+            $responseData = [
+                'list' => $formattedData,
+                'pagination' => [
+                    'current_page' => $comments->currentPage(),
+                    'last_page'    => $comments->lastPage(),
+                    'per_page'     => $comments->perPage(),
+                    'total'        => $comments->total(),
+                ]
+            ];
+
+            return $this->sendSuccess('Daftar komentar berhasil diambil.', $responseData);
+
+        } catch (Exception $e) {
+            Log::error('[API SubareaComment@index] Error: ' . $e->getMessage());
+            return $this->sendError('Gagal memuat komentar.', 500);
+        }
+    }
+
+    /**
      * Menyimpan komentar baru (Store).
      * * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -42,6 +101,7 @@ class SubareaCommentController extends Controller
 
             $comment->load('user:user_id,name,avatar');
 
+            Log::info('[API SubareaComment@store] Sukses: Comment baru ditambahkan.');
             return $this->sendSuccess('Komentar terkirim.', $comment);
 
         } catch (Exception $e) {
@@ -57,7 +117,7 @@ class SubareaCommentController extends Controller
      * @param int $id ID SubareaComment
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, SubareaComment $comment)
     {
         $request->validate([
             'subarea_comment_content' => 'required|string|max:500',
@@ -65,8 +125,6 @@ class SubareaCommentController extends Controller
         ]);
 
         try {
-            $comment = SubareaComment::findOrFail($id);
-
             // Cek Kepemilikan (Authorization)
             if ($comment->user_id !== $request->user()->user_id) {
                 return $this->sendError('Anda tidak berhak mengedit komentar ini.', 403);
@@ -90,6 +148,7 @@ class SubareaCommentController extends Controller
             $comment->update($dataToUpdate);
             $comment->load('user:user_id,name,avatar');
 
+            Log::info('[API SubareaComment@update] Sukses: Comment Berhasil Diupdate.');
             return $this->sendSuccess('Komentar berhasil diperbarui.', $comment);
 
         } catch (Exception $e) {
@@ -105,10 +164,9 @@ class SubareaCommentController extends Controller
      * @param int $id ID SubareaComment
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, SubareaComment $comment)
     {
         try {
-            $comment = SubareaComment::findOrFail($id);
 
             // Cek Kepemilikan (Authorization)
             if ($comment->user_id !== $request->user()->user_id) {
@@ -122,6 +180,7 @@ class SubareaCommentController extends Controller
 
             $comment->delete();
 
+            Log::info('[API SubareaComment@destroy] Sukses: Comment baru ditambahkan.');
             return $this->sendSuccess('Komentar berhasil dihapus.');
 
         } catch (Exception $e) {

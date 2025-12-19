@@ -52,16 +52,24 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
 
     Route::prefix('admin/')->as('admin.')->middleware(['role:admin'])->group(function () {
         
-        Route::resource('park', ParkAreaController::class);
+        // Route Park Area
+        Route::resource('park-area', ParkAreaController::class);
+
+        // Route Park Subarea
+        Route::post('park-area/{park_area}/subarea', [ParkSubareaController::class, 'store'])->name('park-area.subarea.store');
+        Route::resource('park-subarea', ParkSubareaController::class)->only(['update', 'destroy']);
+
+        // Route Park Amenity
+        Route::resource('park-amenity', ParkAmenityController::class)->only(['store', 'destroy']);
+        
         // Route info_board
         Route::resource('info-board', InfoBoardController::class)->only(['index', 'store', 'update', 'destroy']);
-
-        // Route Feedback (Masukan dan Saran)
-        Route::Resource('feedback-category', FeedbackCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
-        Route::Resource('feedback', FeedbackController::class)->only(['index', 'store', 'update', 'destroy']);
+        
+        // Route Setel Poin Validasi
+        Route::resource('validation', ValidationController::class)->only(['index', 'update']);
 
         // Route Mission
-        Route::Resource('missions', MissionController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('missions', MissionController::class)->only(['index', 'store', 'update', 'destroy']);
 
         // Route Reward
         Route::resource('rewards', RewardController::class)->only(['index', 'store', 'update', 'destroy']);
@@ -72,17 +80,9 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
             Route::post('/{id}', 'process')->name('process');
         });
 
-        // Route Park Area
-        Route::resource('park-area', ParkAreaController::class);
-
-        // Route Park Subarea
-        Route::post('park-area/{park_area}/subarea', [ParkSubareaController::class, 'store'])->name('park-area.subarea.store');
-        Route::resource('park-subarea', ParkSubareaController::class)->only(['update', 'destroy']);
-
-        // Route Park Amenity
-        Route::resource('park-amenity', ParkAmenityController::class)->only(['store', 'destroy']);
-
-        Route::resource('validation', ValidationController::class)->only(['index', 'update']);
+        // Route Feedback (Masukan dan Saran)
+        Route::resource('feedback-category', FeedbackCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('feedback', FeedbackController::class)->only(['index', 'store', 'update', 'destroy']);
     });
 
 });

@@ -4,7 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>@yield('title', 'PoliSlot')</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="{{ asset('assets/img/Polibatam.png') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('assets/img/PoliSlot Pin.png') }}" type="image/x-icon" />
     <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"> </script>
     <script>

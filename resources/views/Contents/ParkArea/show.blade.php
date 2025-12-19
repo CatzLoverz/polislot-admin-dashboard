@@ -77,7 +77,7 @@
                                             <i class="fa fa-edit"></i>
                                         </button>
 
-                                        {{-- [MODIFIKASI] Tombol Hapus dengan Class Penanda --}}
+                                        {{-- Tombol Hapus --}}
                                         <form action="{{ route('admin.park-subarea.destroy', $sub->park_subarea_id) }}" 
                                               method="POST" 
                                               class="d-inline delete-subarea-form"
@@ -187,9 +187,9 @@
     </div>
 </div>
 
-{{-- Modal Komentar --}}
+{{-- Modal Komentar (FIX BOX + SCROLLABLE) --}}
 <div class="modal fade" id="modalComments" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" style="border-radius: 15px;">
             <div class="modal-header bg-dark">
                 <h5 class="modal-title text-white font-weight-bold">
@@ -199,7 +199,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body bg-light" id="comments_container" style="min-height: 200px;"></div>
+            {{-- [PERUBAHAN] Height Fix + Overflow Auto --}}
+            <div class="modal-body bg-light" id="comments_container" style="height: 500px; overflow-y: auto;"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-round" data-dismiss="modal">Tutup</button>
             </div>
@@ -209,8 +210,13 @@
 @endsection
 
 @push('scripts')
-{{-- Google Maps API --}}
-<script src="https://maps.googleapis.com/maps/api/js?key={{ $mapsApiKey }}&libraries=drawing,geometry"></script>
+{{-- Google Maps API Async Loader --}}
+<script>
+  (function(g){var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+    key: "{{ $mapsApiKey }}",
+    v: "weekly",
+  });
+</script>
 
 <script>
     let map;
@@ -220,8 +226,14 @@
     let drawingManager;
     let currentPolygonObj = null;
 
-    // === 1. INISIALISASI PETA ===
-    function initMap() {
+    // Definisikan Base URL Storage untuk akses gambar
+    const storageBaseUrl = "{{ asset('storage') }}";
+
+    async function initMap() {
+        await google.maps.importLibrary("maps");
+        await google.maps.importLibrary("drawing");
+        await google.maps.importLibrary("geometry");
+
         map = new google.maps.Map(document.getElementById("map"), {
             center: center,
             zoom: parseInt(centerData.zoom),
@@ -332,9 +344,8 @@
     }
 
     function updatePolygonDirectly(id, name, polygonJson) {
-        let updateUrl = "{{ url('admin/park-subarea') }}/" + id;
         $.ajax({
-            url: updateUrl,
+            url: "{{ url('admin/park-subarea') }}/" + id,
             type: "POST",
             data: { _token: "{{ csrf_token() }}", _method: "PUT", name: name, polygon: polygonJson },
             success: function(res) {
@@ -347,9 +358,7 @@
     function updateSubareaName() {
         let id = $('#edit_subarea_id').val();
         let name = $('#edit_subarea_name').val();
-
         if(!name) { Swal.fire('Gagal', 'Nama kosong.', 'warning'); return; }
-
         $.ajax({
             url: "{{ url('admin/park-subarea') }}/" + id,
             type: "POST",
@@ -409,7 +418,7 @@
                 $('#amenities_list_container ul').append(newHtml);
                 $('#new_amenity_name').val(''); 
                 const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-                Toast.fire({ icon: 'success', title: 'Fasilitas ditambahkan' });
+                Toast.fire({ icon: 'success', title: 'Fasilitas ditambahkan' }).then(() => { location.reload(); });;
             },
             error: function(err) { Swal.fire('Error', 'Gagal menyimpan fasilitas.', 'error'); }
         });
@@ -435,7 +444,7 @@
                         $('#amenity_item_' + id).remove();
                         if ($('#amenities_list_container li').length === 0) $('#amenities_list_container').html('<div class="text-center text-muted p-3 small">Belum ada fasilitas.<br>Silakan tambah baru.</div>');
                         const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-                        Toast.fire({ icon: 'success', title: 'Fasilitas dihapus' });
+                        Toast.fire({ icon: 'success', title: 'Fasilitas dihapus' }).then(() => { location.reload(); });;
                     },
                     error: function(err) { Swal.fire('Error', 'Gagal menghapus.', 'error'); }
                 });
@@ -443,28 +452,51 @@
         });
     }
 
+    // [PERBAIKAN] Logika Gambar Komentar & Avatar
     function openCommentModal(name, comments) {
         $('#comment_subarea_title').text(name);
+        
         let html = '';
         if (!Array.isArray(comments) || comments.length === 0) {
             html = `<div class="text-center py-5"><i class="fas fa-comment-slash fa-3x text-muted mb-3"></i><p class="text-muted">Belum ada komentar untuk area ini.</p></div>`;
         } else {
             comments.sort((a, b) => b.subarea_comment_id - a.subarea_comment_id);
+            
             html = '<div class="list-group list-group-flush">';
             comments.forEach(c => {
                 let userName = c.user ? c.user.name : 'User Terhapus';
-                let userAvatar = c.user && c.user.avatar ? c.user.avatar : 'https://ui-avatars.com/api/?name='+userName; 
+                
+                // [FIX] Cek Avatar path
+                let rawAvatar = c.user && c.user.avatar ? c.user.avatar : null;
+                let userAvatar = rawAvatar 
+                    ? (rawAvatar.startsWith('http') ? rawAvatar : storageBaseUrl + '/' + rawAvatar) 
+                    : 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userName);
+                
                 let date = new Date(c.created_at).toLocaleString('id-ID');
-                html += `<div class="list-group-item flex-column align-items-start p-3 mb-2 border rounded shadow-sm bg-white">
+
+                // [FIX] Cek Bukti Gambar Komentar
+                let commentImageHtml = '';
+                if (c.subarea_comment_image) {
+                    let rawImage = c.subarea_comment_image;
+                    let imageUrl = rawImage.startsWith('http') ? rawImage : storageBaseUrl + '/' + rawImage;
+                    commentImageHtml = `<div class="mt-2"><img src="${imageUrl}" class="img-fluid rounded border" style="max-height: 200px;" alt="Bukti Foto"></div>`;
+                }
+
+                html += `
+                    <div class="list-group-item flex-column align-items-start p-3 mb-2 border rounded shadow-sm bg-white">
                         <div class="d-flex w-100 justify-content-between">
                             <div class="d-flex align-items-center mb-2">
-                                <div class="avatar avatar-sm mr-2"><img src="${userAvatar}" alt="..." class="avatar-img rounded-circle"></div>
+                                <div class="avatar avatar-sm mr-2">
+                                    <img src="${userAvatar}" alt="..." class="avatar-img rounded-circle border">
+                                </div>
                                 <h6 class="mb-1 font-weight-bold text-primary">${userName}</h6>
                             </div>
                             <small class="text-muted">${date}</small>
                         </div>
                         <p class="mb-1 text-dark">${c.subarea_comment_content}</p>
-                    </div>`;
+                        ${commentImageHtml}
+                    </div>
+                `;
             });
             html += '</div>';
         }
@@ -479,7 +511,7 @@
         }
     }
 
-    // [TAMBAHAN] Event Listener untuk Konfirmasi Hapus Subarea
+    // Event Listener untuk Konfirmasi Hapus Subarea
     document.addEventListener("DOMContentLoaded", function() {
         initMap();
         $(function () { $('[data-toggle="tooltip"]').tooltip() });

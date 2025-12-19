@@ -75,7 +75,7 @@ class ParkAreaController extends Controller
      */
     public function create()
     {
-        $mapsApiKey = config('services.google.maps_api_key');
+        $mapsApiKey = config('services.google.js_api_key');
         return view('Contents.ParkArea.create', compact('mapsApiKey'));
     }
 
@@ -138,25 +138,38 @@ class ParkAreaController extends Controller
             $area = ParkArea::with([
                 'parkSubarea.parkAmenity',
                 'parkSubarea.userValidation' => function($query) {
-                    $query->where('created_at', '>=', now()->subHour());
+                    $query->orderBy('created_at', 'desc');
                 },
                 'parkSubarea.subareaComment.user' => function($query) {
                     $query->select('user_id', 'name', 'avatar');
                 }
             ])->findOrFail($id);
 
-            $mapsApiKey = config('services.google.maps_api_key');
+            $mapsApiKey = config('services.google.js_api_key');
 
             // --- LOGIKA WARNA POLYGON ---
             // Kita inject attribute 'status_color' ke setiap subarea object
             foreach ($area->parkSubarea as $sub) {
-                $validations = $sub->userValidation; // Collection validasi 1 jam terakhir
+                $allValidations = $sub->userValidation; // Collection validasi 1 jam terakhir
                 
-                if ($validations->isEmpty()) {
+                if ($allValidations->isEmpty()) {
                     $sub->status_color = '#1572e8'; // Default Blue (Netral/Belum ada info)
                 } else {
+                    // 1. Ambil Validasi Paling Baru sebagai "Anchor"
+                    $latestValidation = $allValidations->first(); // Karena sudah di-orderby desc
+                    $anchorTime = $latestValidation->created_at;
+
+                    // 2. Tentukan Batas Waktu (1 Jam sebelum Validasi Terakhir)
+                    $cutoffTime = $anchorTime->copy()->subHour();
+
+                    // 3. Filter Validasi yang masuk dalam rentang [Cutoff -> Anchor]
+                    //    Kita filter dari collection yang sudah di-load (PHP side filtering)
+                    $validVotes = $allValidations->filter(function ($val) use ($cutoffTime) {
+                        return $val->created_at >= $cutoffTime;
+                    });
+
                     // Hitung jumlah status
-                    $counts = $validations->countBy('user_validation_content');
+                    $counts = $validVotes->countBy('user_validation_content');
                     $banyak = $counts->get('banyak', 0);
                     $terbatas = $counts->get('terbatas', 0);
                     $penuh = $counts->get('penuh', 0);
