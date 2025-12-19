@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
+use App\Models\UserValidation;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class MapVisualizationController extends Controller
 {
@@ -35,12 +38,14 @@ class MapVisualizationController extends Controller
 
     /**
      * Menampilkan detail Area beserta Subarea, Polygon, Amenities, Status, dan Jumlah Komentar.
+     * @param Request $request
      * @param int $id (park_area_id)
      * @return JsonResponse
      */
-    public function show($id): JsonResponse
+    public function show(Request $request, $id): JsonResponse
     {
         try {
+            $user = $request->user();
             $area = ParkArea::with([
                 'parkSubarea' => function($query) {
                     $query->withCount('subareaComment') // Hitung jumlah komentar
@@ -94,10 +99,32 @@ class MapVisualizationController extends Controller
                 ];
             });
 
+            // Hitung Cooldown User
+            $canValidate = true;
+            $waitMinutes = 0;
+
+            if ($user) {
+                $lastValidation = UserValidation::where('user_id', $user->user_id)
+                    ->latest()
+                    ->first();
+
+                if ($lastValidation) {
+                    $diffInMinutes = Carbon::parse($lastValidation->created_at)->diffInMinutes(now());
+                    if ($diffInMinutes < 15) {
+                        $canValidate = false;
+                        $waitMinutes = 15 - $diffInMinutes;
+                    }
+                }
+            }
+
             $data = [
                 'area_id'   => $area->park_area_id,
                 'area_name' => $area->park_area_name,
-                'area_code' => $area->park_area_code, // Pastikan area code terkirim
+                'area_code' => $area->park_area_code,
+                'validation_cooldown' => [
+                    'can_validate' => $canValidate,
+                    'wait_minutes' => $waitMinutes,
+                ],
                 'subareas'  => $formattedSubareas
             ];
 
