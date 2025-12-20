@@ -31,7 +31,7 @@ Route::middleware('encryptApi')->group(function () {
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword']);
 });
 
-    Route::middleware(['auth:sanctum', 'role:admin,user', 'encryptApi'])->group(function () {
+    Route::middleware(['encryptApi', 'auth:sanctum', 'role:admin,user'])->group(function () {
 
         // Auth Check
         Route::get('/user', [AuthController::class, 'authCheck']); 

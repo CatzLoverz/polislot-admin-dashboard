@@ -21,6 +21,13 @@ return Application::configure(basePath: dirname(__DIR__))
             # API Encyption
             'encryptApi' => App\Http\Middleware\ApiEncryption::class,
         ]);
+        
+        // PRIORITAS MIDDLEWARE
+        // Pastikan ApiEncryption jalan DULUAN sebelum Auth
+        $middleware->priority([
+            \App\Http\Middleware\ApiEncryption::class,
+            \Illuminate\Auth\Middleware\Authenticate::class,
+        ]);
         $middleware->redirectGuestsTo(fn () => route('login.form'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {

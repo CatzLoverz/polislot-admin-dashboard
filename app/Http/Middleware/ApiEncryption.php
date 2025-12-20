@@ -118,6 +118,40 @@ class ApiEncryption
             ], 400);
         }
         
+        // 🚨 DEKRIPSI AUTH TOKEN (Jika ada)
+        // Mencegah token terlihat di MITM
+        if ($request->hasHeader('X-Auth-Token')) {
+            try {
+                $encryptedToken = base64_decode($request->header('X-Auth-Token'));
+                
+                if ($encryptedToken) {
+                    $decryptedToken = openssl_decrypt(
+                        $encryptedToken, 
+                        'AES-256-CBC', 
+                        $decryptedAesKey, 
+                        OPENSSL_RAW_DATA, 
+                        $decryptedAesIv
+                    );
+                    
+                    if ($decryptedToken !== false) {
+                        // CLEANUP: Potential padding issues
+                        $decryptedToken = trim($decryptedToken);
+
+                        // Restore ke Authorization header standard
+                        $request->headers->set('Authorization', 'Bearer ' . $decryptedToken);
+                        // Failsafe: Set SERVER var juga (untuk library yang baca $_SERVER langsung)
+                        $request->server->set('HTTP_AUTHORIZATION', 'Bearer ' . $decryptedToken);
+                    } else {
+                         Log::warning('[ApiEncryption] Auth Token Decryption Failed');
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('[ApiEncryption] Auth Token processing error', [
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+        
         // 4. DEKRIPSI BODY
         if ($request->has('payload')) {
             try {
