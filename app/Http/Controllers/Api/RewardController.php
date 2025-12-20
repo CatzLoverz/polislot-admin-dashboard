@@ -118,7 +118,7 @@ class RewardController extends Controller
                     'voucher_code' => $code,
                     'current_points' => $user->current_points,
                     'reward_name' => $reward->reward_name
-                ]);
+                ], 201);
             });
         } catch (\Exception $e) {
             DB::rollBack();

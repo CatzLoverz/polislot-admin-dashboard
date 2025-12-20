@@ -105,7 +105,7 @@ class SubareaCommentController extends Controller
                 $comment->load('user:user_id,name,avatar');
 
                 Log::info('[API SubareaComment@store] Sukses: Comment baru ditambahkan.');
-                return $this->sendSuccess('Komentar terkirim.', $comment);
+                return $this->sendSuccess('Komentar terkirim.', $comment, 201);
             });
         } catch (Exception $e) {
             Log::error('[API SubareaComment@store] Error: ' . $e->getMessage());

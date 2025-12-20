@@ -91,7 +91,7 @@ class UserValidationController extends Controller
                     'points_earned' => $points,
                     'current_points' => $user->current_points,
                     'status' => $request->user_validation_content
-                ]);
+                ], 201);
             });
 
         } catch (Exception $e) {
