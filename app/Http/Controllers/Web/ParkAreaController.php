@@ -168,17 +168,37 @@ class ParkAreaController extends Controller
                         return $val->created_at >= $cutoffTime;
                     });
 
-                    // Hitung jumlah status
+                    // 1. Hitung Vote per Status
                     $counts = $validVotes->countBy('user_validation_content');
-                    $banyak = $counts->get('banyak', 0);
-                    $terbatas = $counts->get('terbatas', 0);
-                    $penuh = $counts->get('penuh', 0);
+                    
+                    // 2. Cari Nilai Vote Tertinggi (Mayoritas)
+                    $maxVote = $counts->max();
 
-                    // Tentukan Mayoritas
-                    // Prioritas jika seri: Penuh > Terbatas > Banyak
-                    if ($penuh >= $terbatas && $penuh >= $banyak) {
+                    // 3. Cari Status apa saja yang punya nilai Max tersebut
+                    $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
+                        return $counts[$key] === $maxVote;
+                    });
+
+                    $status = 'banyak'; // Default jika logic fall-through
+
+                    // 4. Penentuan Pemenang
+                    if ($candidates->count() === 1) {
+                        $status = $candidates->first();
+                    } else {
+                        // Jika SERI (Tie), ambil status dari vote TERBARU di antara kandidat yang seri
+                        $latestDecider = $validVotes->first(function ($vote) use ($candidates) {
+                            return $candidates->contains($vote->user_validation_content);
+                        });
+                        
+                        if ($latestDecider) {
+                            $status = $latestDecider->user_validation_content;
+                        }
+                    }
+
+                    // 5. Mapping Status ke Warna
+                    if ($status === 'penuh') {
                         $sub->status_color = '#f25961'; // Merah (Penuh)
-                    } elseif ($terbatas >= $banyak) {
+                    } elseif ($status === 'terbatas') {
                         $sub->status_color = '#ffad46'; // Kuning (Terbatas)
                     } else {
                         $sub->status_color = '#31ce36'; // Hijau (Banyak Kosong)

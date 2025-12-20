@@ -74,17 +74,31 @@ class MapVisualizationController extends Controller
                     });
 
                     if ($validVotes->isNotEmpty()) {
+                        // 1. Hitung Vote per Status
                         $counts = $validVotes->countBy('user_validation_content');
-                        $banyak = $counts->get('banyak', 0);
-                        $terbatas = $counts->get('terbatas', 0);
-                        $penuh = $counts->get('penuh', 0);
+                        
+                        // 2. Cari Nilai Vote Tertinggi (Mayoritas)
+                        $maxVote = $counts->max();
 
-                        if ($penuh >= $terbatas && $penuh >= $banyak) {
-                            $status = 'penuh';
-                        } elseif ($terbatas >= $banyak) {
-                            $status = 'terbatas';
+                        // 3. Cari Status apa saja yang punya nilai Max tersebut (Bisa lebih dari 1 jika seri)
+                        $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
+                            return $counts[$key] === $maxVote;
+                        });
+
+                        // 4. Penentuan Pemenang
+                        if ($candidates->count() === 1) {
+                            // Jika TIDAK seri, ambil langsung pemenangnya
+                            $status = $candidates->first();
                         } else {
-                            $status = 'banyak';
+                            // Jika SERI (Tie), ambil status dari vote TERBARU di antara kandidat yang seri
+                            // Karena $validVotes sudah urut descending (terbaru diatas), kita loop cari yang pertama ketemu
+                            $latestDecider = $validVotes->first(function ($vote) use ($candidates) {
+                                return $candidates->contains($vote->user_validation_content);
+                            });
+                            
+                            if ($latestDecider) {
+                                $status = $latestDecider->user_validation_content;
+                            }
                         }
                     }
                 }
