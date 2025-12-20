@@ -120,7 +120,7 @@ class SubareaCommentController extends Controller
      * @param int $id ID SubareaComment
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, SubareaComment $comment)
+    public function update(Request $request, $id)
     {
         if ($request->isMethod('put') || $request->isMethod('patch')) {
              // Laravel handle ini otomatis, tapi request harus multipart/form-data
@@ -130,6 +130,8 @@ class SubareaCommentController extends Controller
             'subarea_comment_content' => 'required|string|max:500',
             'subarea_comment_image'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        $comment = SubareaComment::findOrFail($id);
 
         try {
             return DB::transaction(function () use ($request, $comment) {
@@ -174,8 +176,10 @@ class SubareaCommentController extends Controller
      * @param int $id ID SubareaComment
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request, SubareaComment $comment)
+    public function destroy(Request $request, $id)
     {
+        $comment = SubareaComment::findOrFail($id);
+
         try {
             return DB::transaction(function () use ($request, $comment) {
                 // Cek Kepemilikan (Authorization)

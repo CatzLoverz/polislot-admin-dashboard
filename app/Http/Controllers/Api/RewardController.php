@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\HistoryService;
 use App\Models\Reward;
 use App\Models\User;
 use App\Models\UserReward;
-use Illuminate\Http\Request;
+use App\Services\HistoryService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +17,6 @@ use Illuminate\Support\Str;
 class RewardController extends Controller
 {
     protected $historyService;
-
 
     public function __construct(HistoryService $historyService)
     {
@@ -50,11 +49,12 @@ class RewardController extends Controller
 
             return $this->sendSuccess('Data reward berhasil diambil.', [
                 'current_points' => $user->current_points,
-                'rewards' => $formattedRewards
+                'rewards' => $formattedRewards,
             ]);
 
         } catch (\Exception $e) {
-            Log::error("[API RewardController@index] Gagal: " . $e->getMessage());
+            Log::error('[API RewardController@index] Gagal: '.$e->getMessage());
+
             return $this->sendError('Terjadi kesalahan server.', 500);
         }
     }
@@ -75,17 +75,18 @@ class RewardController extends Controller
 
                 /** @var User $user */
                 $user = Auth::user();
-                
+
                 // Lock row user untuk mencegah race condition saldo
                 $user = User::where('user_id', $user->user_id)->lockForUpdate()->first();
-                
+
                 $reward = Reward::where('reward_id', $request->reward_id)->first();
 
                 // Cek Poin Cukup
                 if ($user->current_points < $reward->reward_point_required) {
                     DB::rollBack();
                     Log::warning("[API RewardController@redeem] Gagal: Poin tidak cukup. User: {$user->user_id}, Reward: {$reward->reward_id}");
-                    return $this->sendError('Poin Anda tidak mencukupi untuk reward ini.', 400);
+
+                    return $this->sendError('Poin Anda tidak mencukupi untuk reward ini.', 422);
                 }
 
                 // Kurangi Poin
@@ -93,10 +94,10 @@ class RewardController extends Controller
                 $user->save();
 
                 // Generate Kode Unik
-                if ($reward->reward_type=='Voucher'){
-                    $code = 'VCR-' . strtoupper(Str::random(6));
+                if ($reward->reward_type == 'Voucher') {
+                    $code = 'VCR-'.strtoupper(Str::random(6));
                 } else {
-                    $code = 'BRG-' . strtoupper(Str::random(6));
+                    $code = 'BRG-'.strtoupper(Str::random(6));
                 }
                 // Buat Record UserReward
                 $userReward = UserReward::create([
@@ -108,29 +109,29 @@ class RewardController extends Controller
 
                 Log::info("[API RewardController@redeem] Sukses: User {$user->user_id} menukar {$reward->reward_name}.");
                 $this->historyService->log(
-                    $user->user_id, 
-                    'redeem', 
-                    $reward->reward_name, 
-                    $reward->reward_point_required, 
+                    $user->user_id,
+                    'redeem',
+                    $reward->reward_name,
+                    $reward->reward_point_required,
                     true
                 );
+
                 return $this->sendSuccess('Penukaran berhasil!', [
                     'voucher_code' => $code,
                     'current_points' => $user->current_points,
-                    'reward_name' => $reward->reward_name
+                    'reward_name' => $reward->reward_name,
                 ], 201);
             });
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error("[API RewardController@redeem] Gagal: " . $e->getMessage());
-            return $this->sendError('Gagal memproses penukaran: ' . $e->getMessage(), 500);
+            Log::error('[API RewardController@redeem] Gagal: '.$e->getMessage());
+
+            return $this->sendError('Gagal memproses penukaran: '.$e->getMessage(), 422);
         }
     }
 
     /**
      * Mengambil riwayat penukaran reward user.
-     *
-     * @return JsonResponse
      */
     public function history(): JsonResponse
     {
@@ -156,7 +157,8 @@ class RewardController extends Controller
             return $this->sendSuccess('Riwayat penukaran berhasil diambil.', $history);
 
         } catch (\Exception $e) {
-            Log::error("[API RewardController@history] Gagal: " . $e->getMessage());
+            Log::error('[API RewardController@history] Gagal: '.$e->getMessage());
+
             return $this->sendError('Gagal memuat riwayat.', 500);
         }
     }

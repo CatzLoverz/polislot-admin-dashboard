@@ -35,7 +35,7 @@ class InfoBoardController extends Controller
                 ];
             });
             
-            return $this->sendSuccess('Data info board berhasil diambil.', $formattedData);
+            return $this->sendSuccess('Data info board berhasil diambil.', $formattedData, 200);
 
         } catch (\Exception $e) {
             Log::error('[API InfoBoardController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);

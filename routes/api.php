@@ -1,18 +1,17 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\RewardController;
+use App\Http\Controllers\Api\FeedbackCategoryController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\HistoryController;
+use App\Http\Controllers\Api\InfoBoardController;
+use App\Http\Controllers\Api\MapVisualizationController;
 use App\Http\Controllers\Api\MissionController;
 use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\FeedbackController;
-use App\Http\Controllers\Api\InfoBoardController;
+use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\SubareaCommentController;
 use App\Http\Controllers\Api\UserValidationController;
-use App\Http\Controllers\Api\FeedbackCategoryController;
-use App\Http\Controllers\Api\MapVisualizationController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('encryptApi')->group(function () {
 
@@ -29,18 +28,18 @@ Route::middleware('encryptApi')->group(function () {
     Route::post('/forgot-otp-verify', [AuthController::class, 'forgotPasswordOtpVerify']);
     Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend']);
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword']);
-});
 
-    Route::middleware(['encryptApi', 'auth:sanctum', 'role:admin,user'])->group(function () {
+
+    Route::middleware(['auth:sanctum', 'role:admin,user'])->group(function () {
 
         // Auth Check
-        Route::get('/user', [AuthController::class, 'authCheck']); 
+        Route::get('/user', [AuthController::class, 'authCheck']);
 
         // Route Logout (Protected, untuk mencabut token)
         Route::post('/logout', [AuthController::class, 'logout']);
 
         // Route Profil
-        Route::get('/profile', [ProfileController::class, 'show']); 
+        Route::get('/profile', [ProfileController::class, 'show']);
         Route::match(['put', 'post'], '/profile', [ProfileController::class, 'update']);
 
         // Route InfoBoard
@@ -48,11 +47,11 @@ Route::middleware('encryptApi')->group(function () {
 
         // Route Mission & Leaderboard
         Route::get('/missions', [MissionController::class, 'index']);
-        
+
         // Route Masukan dan Saran
         Route::get('/feedback-categories', [FeedbackCategoryController::class, 'index']);
         Route::post('/feedback', [FeedbackController::class, 'store']);
-        
+
         // Route rewards
         Route::get('/rewards', [RewardController::class, 'index']);
         Route::post('/rewards/redeem', [RewardController::class, 'redeem']);
@@ -70,5 +69,6 @@ Route::middleware('encryptApi')->group(function () {
 
         // Route Komentar Subarea Parkir
         Route::apiResource('comment', SubareaCommentController::class)->only('index', 'store', 'destroy');
-        Route::match(['put', 'post'], '/comment/{comment}', [SubareaCommentController::class, 'update']);
+        Route::match(['put', 'post'], '/comment/{id}', [SubareaCommentController::class, 'update']);
     });
+});

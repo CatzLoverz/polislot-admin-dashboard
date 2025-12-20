@@ -35,6 +35,25 @@ class MissionTest extends TestCase
     }
 
     #[Test]
+    public function mission_dapat_dibaca()
+    {
+        $mission = Mission::create([
+            'mission_title' => 'Read Mission',
+            'mission_type' => 'SEQUENCE',
+            'mission_metric_code' => 'LOGIN_ACTION',
+            'mission_points' => 10,
+            'mission_threshold' => 1,
+            'mission_is_active' => true,
+            'mission_reset_cycle' => 'DAILY'
+        ]);
+
+        $found = Mission::find($mission->mission_id);
+        
+        $this->assertNotNull($found);
+        $this->assertEquals('Read Mission', $found->mission_title);
+    }
+
+    #[Test]
     public function mission_dapat_diubah()
     {
         $mission = Mission::create([
