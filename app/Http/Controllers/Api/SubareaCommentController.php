@@ -8,6 +8,7 @@ use App\Models\SubareaComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 
 class SubareaCommentController extends Controller
@@ -86,25 +87,26 @@ class SubareaCommentController extends Controller
         ]);
 
         try {
-            $imagePath = null;
+            return DB::transaction(function () use ($request) {
+                $imagePath = null;
 
-            // Logika Upload Image Baru
-            if ($request->hasFile('subarea_comment_image')) {
-                $imagePath = $request->file('subarea_comment_image')->store('Comments', 'public');
-            }
+                // Logika Upload Image Baru
+                if ($request->hasFile('subarea_comment_image')) {
+                    $imagePath = $request->file('subarea_comment_image')->store('Comments', 'public');
+                }
 
-            $comment = SubareaComment::create([
-                'user_id'                 => $request->user()->user_id,
-                'park_subarea_id'         => $request->park_subarea_id,
-                'subarea_comment_content' => $request->subarea_comment_content,
-                'subarea_comment_image'   => $imagePath
-            ]);
+                $comment = SubareaComment::create([
+                    'user_id'                 => $request->user()->user_id,
+                    'park_subarea_id'         => $request->park_subarea_id,
+                    'subarea_comment_content' => $request->subarea_comment_content,
+                    'subarea_comment_image'   => $imagePath
+                ]);
 
-            $comment->load('user:user_id,name,avatar');
+                $comment->load('user:user_id,name,avatar');
 
-            Log::info('[API SubareaComment@store] Sukses: Comment baru ditambahkan.');
-            return $this->sendSuccess('Komentar terkirim.', $comment);
-
+                Log::info('[API SubareaComment@store] Sukses: Comment baru ditambahkan.');
+                return $this->sendSuccess('Komentar terkirim.', $comment);
+            });
         } catch (Exception $e) {
             Log::error('[API SubareaComment@store] Error: ' . $e->getMessage());
             return $this->sendError('Gagal mengirim komentar.', 500);
@@ -130,35 +132,38 @@ class SubareaCommentController extends Controller
         ]);
 
         try {
-            // Cek Kepemilikan (Authorization)
-            if ($comment->user_id !== $request->user()->user_id) {
-                return $this->sendError('Anda tidak berhak mengedit komentar ini.', 403);
-            }
-
-            $dataToUpdate = [
-                'subarea_comment_content' => $request->subarea_comment_content
-            ];
-
-            // Logika Update Image (Hapus Lama -> Simpan Baru)
-            if ($request->hasFile('subarea_comment_image')) {
-                // 1. Hapus gambar lama jika ada
-                if ($comment->subarea_comment_image && Storage::disk('public')->exists($comment->subarea_comment_image)) {
-                    Storage::disk('public')->delete($comment->subarea_comment_image);
+            return DB::transaction(function () use ($request, $comment) {
+                // Cek Kepemilikan (Authorization)
+                if ($comment->user_id !== $request->user()->user_id) {
+                    throw new Exception('Anda tidak berhak mengedit komentar ini.', 403);
                 }
 
-                // 2. Simpan gambar baru
-                $dataToUpdate['subarea_comment_image'] = $request->file('subarea_comment_image')->store('Comments', 'public');
-            }
+                $dataToUpdate = [
+                    'subarea_comment_content' => $request->subarea_comment_content
+                ];
 
-            $comment->update($dataToUpdate);
-            $comment->load('user:user_id,name,avatar');
+                // Logika Update Image (Hapus Lama -> Simpan Baru)
+                if ($request->hasFile('subarea_comment_image')) {
+                    // 1. Hapus gambar lama jika ada
+                    if ($comment->subarea_comment_image && Storage::disk('public')->exists($comment->subarea_comment_image)) {
+                        Storage::disk('public')->delete($comment->subarea_comment_image);
+                    }
 
-            Log::info('[API SubareaComment@update] Sukses: Comment Berhasil Diupdate.');
-            return $this->sendSuccess('Komentar berhasil diperbarui.', $comment);
+                    // 2. Simpan gambar baru
+                    $dataToUpdate['subarea_comment_image'] = $request->file('subarea_comment_image')->store('Comments', 'public');
+                }
+
+                $comment->update($dataToUpdate);
+                $comment->load('user:user_id,name,avatar');
+
+                Log::info('[API SubareaComment@update] Sukses: Comment Berhasil Diupdate.');
+                return $this->sendSuccess('Komentar berhasil diperbarui.', $comment);
+            });
 
         } catch (Exception $e) {
             Log::error('[API SubareaComment@update] Error: ' . $e->getMessage());
-            return $this->sendError('Gagal memperbarui komentar.', 500);
+            $code = $e->getCode() === 403 ? 403 : 500;
+            return $this->sendError($e->getMessage(), $code);
         }
     }
 
@@ -172,25 +177,27 @@ class SubareaCommentController extends Controller
     public function destroy(Request $request, SubareaComment $comment)
     {
         try {
+            return DB::transaction(function () use ($request, $comment) {
+                // Cek Kepemilikan (Authorization)
+                if ($comment->user_id !== $request->user()->user_id) {
+                    throw new Exception('Anda tidak berhak menghapus komentar ini.', 403);
+                }
 
-            // Cek Kepemilikan (Authorization)
-            if ($comment->user_id !== $request->user()->user_id) {
-                return $this->sendError('Anda tidak berhak menghapus komentar ini.', 403);
-            }
+                // Logika Hapus Image
+                if ($comment->subarea_comment_image && Storage::disk('public')->exists($comment->subarea_comment_image)) {
+                    Storage::disk('public')->delete($comment->subarea_comment_image);
+                }
 
-            // Logika Hapus Image
-            if ($comment->subarea_comment_image && Storage::disk('public')->exists($comment->subarea_comment_image)) {
-                Storage::disk('public')->delete($comment->subarea_comment_image);
-            }
+                $comment->delete();
 
-            $comment->delete();
-
-            Log::info('[API SubareaComment@destroy] Sukses: Comment baru ditambahkan.');
-            return $this->sendSuccess('Komentar berhasil dihapus.');
+                Log::info('[API SubareaComment@destroy] Sukses: Comment dihapus.');
+                return $this->sendSuccess('Komentar berhasil dihapus.');
+            });
 
         } catch (Exception $e) {
             Log::error('[API SubareaComment@destroy] Error: ' . $e->getMessage());
-            return $this->sendError('Gagal menghapus komentar.', 500);
+            $code = $e->getCode() === 403 ? 403 : 500;
+            return $this->sendError($e->getMessage(), $code);
         }
     }
 }
