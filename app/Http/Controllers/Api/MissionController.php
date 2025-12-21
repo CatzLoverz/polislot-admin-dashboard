@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
 use App\Models\User;
-use App\Models\UserMission;
 use App\Models\UserHistory;
-use App\Illuminate\Support\Carbon;
-use Illuminate\Http\Request;
+use App\Models\UserMission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +32,7 @@ class MissionController extends Controller
             $completedMissionsCount = UserHistory::where('user_id', $user->user_id)
                 ->where('user_history_type', 'mission')
                 ->count();
-            
+
             $stats = [
                 'total_completed' => $completedMissionsCount,
                 'lifetime_points' => $user->lifetime_points,
@@ -42,17 +40,17 @@ class MissionController extends Controller
 
             // 2. Missions List
             $missionsRaw = Mission::where('mission_is_active', true)->orderBy('created_at', 'desc')->get();
-            
+
             $missions = $missionsRaw->map(function ($mission) use ($user) {
                 // Ambil progress user untuk misi ini
                 // Gunakan latest() jika ada kemungkinan multiple record (history), ambil yang paling baru
                 $userProgress = UserMission::where('user_id', $user->user_id)
                     ->where('mission_id', $mission->mission_id)
-                    ->latest('updated_at') 
+                    ->latest('updated_at')
                     ->first();
 
                 $currentValue = $userProgress ? $userProgress->user_mission_current_value : 0;
-                $isCompleted = $userProgress ? (bool)$userProgress->user_mission_is_completed : false;
+                $isCompleted = $userProgress ? (bool) $userProgress->user_mission_is_completed : false;
                 $completedAt = $userProgress ? $userProgress->user_mission_completed_at : null;
 
                 // 🛑 LOGIKA PERSENTASE (PERBAIKAN UTAMA)
@@ -61,8 +59,8 @@ class MissionController extends Controller
                     $percentage = 1.0;
                 } else {
                     // Jika belum, hitung normal
-                    $percentage = $mission->mission_threshold > 0 
-                        ? min(1, $currentValue / $mission->mission_threshold) 
+                    $percentage = $mission->mission_threshold > 0
+                        ? min(1, $currentValue / $mission->mission_threshold)
                         : 0;
                 }
 
@@ -78,7 +76,7 @@ class MissionController extends Controller
                     'is_completed' => $isCompleted,
                     'completed_at' => $completedAt ? \Carbon\Carbon::parse($completedAt)->format('d M Y, H:i') : null,
                 ];
-            });
+            })->sortBy('is_completed')->values();
 
             // 3. Leaderboard & Rank (Logic Tetap Sama)
             $leaderboardRaw = User::select('user_id', 'name', 'avatar', 'lifetime_points')
@@ -100,7 +98,7 @@ class MissionController extends Controller
             $userRankPos = User::whereNotNull('email_verified_at')
                 ->where('lifetime_points', '>', $user->lifetime_points)
                 ->count() + 1;
-            
+
             $userRankData = [
                 'rank' => $userRankPos,
                 'name' => $user->name,
@@ -111,11 +109,11 @@ class MissionController extends Controller
                 'stats' => $stats,
                 'missions' => $missions,
                 'leaderboard' => $leaderboard,
-                'user_rank' => $userRankData
+                'user_rank' => $userRankData,
             ]);
 
         } catch (\Exception $e) {
-            return $this->sendError('Gagal memuat data misi: ' . $e->getMessage(), 500);
+            return $this->sendError('Gagal memuat data misi: '.$e->getMessage(), 500);
         }
     }
 }

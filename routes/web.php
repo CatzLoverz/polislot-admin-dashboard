@@ -45,6 +45,9 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
     
     // Rute Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/chart', [DashboardController::class, 'getChartData'])->name('dashboard.chart');
+    Route::get('/dashboard/leaderboard', [DashboardController::class, 'getLeaderboard'])->name('dashboard.leaderboard');
+    Route::get('/dashboard/realtime', [DashboardController::class, 'getRealtimeValidations'])->name('dashboard.realtime');
 
     // Rute Profil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

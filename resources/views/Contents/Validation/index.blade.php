@@ -87,7 +87,8 @@
                 { data: 'validation_points', name: 'validation_points' },
                 { data: 'updated_at', name: 'updated_at' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
-            ]
+            ],
+            language: { url: "{{ asset('assets/js/plugin/datatables/indonesian.json') }}" }
         });
 
         // Handle Tombol Edit (Populate Modal)
