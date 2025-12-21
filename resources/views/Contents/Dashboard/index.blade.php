@@ -36,7 +36,7 @@
                                     <div class="row">
                                         <div class="col-5">
                                             <div class="icon-big text-center">
-                                                <i class="fas fa-parking text-success"></i>
+                                                <i class="fas fa-parking text-primary"></i>
                                             </div>
                                         </div>
                                         <div class="col-7 col-stats d-flex align-items-center justify-content-center">
