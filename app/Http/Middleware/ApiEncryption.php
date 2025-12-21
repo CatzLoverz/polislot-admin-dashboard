@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class ApiEncryption
@@ -12,158 +12,134 @@ class ApiEncryption
     public function handle(Request $request, Closure $next)
     {
         // Cek jika request ke API route
-        if (!$this->isApiRequest($request)) {
+        if (! $this->isApiRequest($request)) {
             return $next($request);
         }
-        
+
         $decryptedAesKey = null;
         $decryptedAesIv = null;
-        
+
         // 1. LOAD RSA PRIVATE KEY
         $privateKey = $this->loadPrivateKey();
-        if (!$privateKey) {
-            return response()->json([
-                'error' => 'server_error',
-                'message' => 'Server configuration error'
-            ], 500);
+        if (! $privateKey) {
+            // Generic Server Error
+            return response()->json(['message' => 'Server Error'], 500);
         }
-        
-        // 2. AMBIL DAN VALIDASI SESSION KEY
-        $encryptedSession = $request->header('X-Session-Key');
-        
-        if (!$encryptedSession) {
-            return response()->json([
-                'error' => 'encryption_required',
-                'message' => 'X-Session-Key header is required'
-            ], 400);
-        }
-        
-        // 3. DEKRIPSI SESSION KEY DENGAN RSA
+
+        // 2. CHECK & LOAD KEYS (Obscured)
         try {
-            // Decode base64
+            // A. VALIDASI KEY HEADER
+            $encryptedSession = $request->header('X-Session-Key');
+            if (! $encryptedSession) {
+                // Silent fail or generic bad request
+                return response()->json(['message' => 'Invalid Request'], 400);
+            }
+
+            // B. DEKRIPSI RSA (Session Key)
             $encryptedKeyBin = base64_decode($encryptedSession);
             if ($encryptedKeyBin === false) {
-                return response()->json([
-                    'error' => 'invalid_format',
-                    'message' => 'Invalid base64 encoding'
-                ], 400);
+                throw new \Exception('Invalid Base64');
             }
-            
-            // Dekripsi RSA
+
             $success = openssl_private_decrypt(
                 $encryptedKeyBin,
                 $decryptedSession,
                 $privateKey,
                 OPENSSL_PKCS1_PADDING
             );
-            
-            if (!$success) {
-                $error = openssl_error_string();
-                Log::error('[ApiEncryption] RSA Decryption Failed', [
-                    'error' => $error,
-                    'key_length' => strlen($encryptedSession)
-                ]);
-                
-                return response()->json([
-                    'error' => 'decryption_failed',
-                    'message' => 'Failed to decrypt session key'
-                ], 400);
+
+            if (! $success) {
+                throw new \Exception('RSA Decrypt Failed');
             }
-            
-            // Bersihkan dan parse session data
+
+            // C. PARSE SESSION DATA
             $decryptedSession = trim($decryptedSession);
-            
             $parts = explode('|', $decryptedSession);
-            
+
             if (count($parts) !== 2) {
-                Log::error('[ApiEncryption] Invalid session format', [
-                    'parts_count' => count($parts),
-                    'session_data' => $decryptedSession
-                ]);
-                
-                return response()->json([
-                    'error' => 'invalid_session_format'
-                ], 400);
+                throw new \Exception('Invalid Session Format');
             }
-            
+
             $decryptedAesKey = trim($parts[0]);
             $decryptedAesIv = trim($parts[1]);
-            
-            // Validasi panjang
-            if (strlen($decryptedAesKey) !== 32) {
-                return response()->json([
-                    'error' => 'invalid_key_length',
-                    'message' => 'AES key must be 32 characters',
-                    'actual_length' => strlen($decryptedAesKey)
-                ], 400);
+
+            // Validasi panjang key (AES-256 = 32 bytes, IV = 16 bytes)
+            if (strlen($decryptedAesKey) !== 32 || strlen($decryptedAesIv) !== 16) {
+                throw new \Exception('Invalid Key/IV Length');
             }
-            
-            if (strlen($decryptedAesIv) !== 16) {
-                return response()->json([
-                    'error' => 'invalid_iv_length',
-                    'message' => 'AES IV must be 16 characters',
-                    'actual_length' => strlen($decryptedAesIv)
-                ], 400);
-            }
-            
+
         } catch (\Exception $e) {
-            Log::error('[ApiEncryption] Session key processing error', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return response()->json([
-                'error' => 'session_key_error',
-                'message' => 'Error processing session key'
-            ], 400);
+            // Log detail untuk admin, tapi return generic ke client
+            Log::error('[ApiEncryption] Handshake Failed: '.$e->getMessage());
+
+            return response()->json(['message' => 'Invalid Request Signature'], 400);
         }
-        
+
+        // 🚨 SECURITY HARDENING: Security through Obscurity
+        // Logic cleanup: Stop giving hints to attackers.
+
+        // 1. Cek Anomaly: Raw Auth Header tanpa X-Auth-Token
+        // Indikasi percobaan bypass / replay attack.
+        // Return 404 Not Found seolah-olah endpoint tidak ada/salah.
+        if ($request->hasHeader('Authorization') && ! $request->hasHeader('X-Auth-Token')) {
+            Log::warning('[ApiEncryption] Suspicious request: Raw Authorization without X-Auth-Token');
+
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
+        // Hapus header Authorization bawaan untuk memastikan bersih
+        // Kita hanya akan menset ulang jika X-Auth-Token valid berhasil didekripsi.
+        $request->headers->remove('Authorization');
+        $request->server->remove('HTTP_AUTHORIZATION');
+
         // 🚨 DEKRIPSI AUTH TOKEN (Jika ada)
         // Mencegah token terlihat di MITM
         if ($request->hasHeader('X-Auth-Token')) {
             try {
                 $encryptedToken = base64_decode($request->header('X-Auth-Token'));
-                
+
                 if ($encryptedToken) {
                     $decryptedToken = openssl_decrypt(
-                        $encryptedToken, 
-                        'AES-256-CBC', 
-                        $decryptedAesKey, 
-                        OPENSSL_RAW_DATA, 
+                        $encryptedToken,
+                        'AES-256-CBC',
+                        $decryptedAesKey,
+                        OPENSSL_RAW_DATA,
                         $decryptedAesIv
                     );
-                    
+
                     if ($decryptedToken !== false) {
                         // CLEANUP: Potential padding issues
                         $decryptedToken = trim($decryptedToken);
 
                         // Restore ke Authorization header standard
-                        $request->headers->set('Authorization', 'Bearer ' . $decryptedToken);
+                        $request->headers->set('Authorization', 'Bearer '.$decryptedToken);
                         // Failsafe: Set SERVER var juga (untuk library yang baca $_SERVER langsung)
-                        $request->server->set('HTTP_AUTHORIZATION', 'Bearer ' . $decryptedToken);
+                        $request->server->set('HTTP_AUTHORIZATION', 'Bearer '.$decryptedToken);
                     } else {
-                         Log::warning('[ApiEncryption] Auth Token Decryption Failed');
+                        Log::warning('[ApiEncryption] Auth Token Decryption Failed');
+
+                        // Obscure: Generic 400
+                        return response()->json(['message' => 'Invalid Request Signature'], 400);
                     }
                 }
             } catch (\Exception $e) {
                 Log::error('[ApiEncryption] Auth Token processing error', [
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ]);
+
+                return response()->json(['message' => 'Invalid Request Signature'], 400);
             }
         }
-        
-        // 4. DEKRIPSI BODY
+
+        // 3. DECRYPT PAYLOAD (Obscured)
         if ($request->has('payload')) {
             try {
                 $encryptedPayload = base64_decode($request->input('payload'));
-                
+
                 if ($encryptedPayload === false) {
-                    return response()->json([
-                        'error' => 'invalid_payload',
-                        'message' => 'Payload is not valid base64'
-                    ], 400);
+                    throw new \Exception('Invalid Payload Base64');
                 }
-                
+
                 $decryptedData = openssl_decrypt(
                     $encryptedPayload,
                     'AES-256-CBC',
@@ -171,62 +147,42 @@ class ApiEncryption
                     OPENSSL_RAW_DATA,
                     $decryptedAesIv
                 );
-                
+
                 if ($decryptedData === false) {
-                    return response()->json([
-                        'error' => 'decryption_failed',
-                        'message' => 'Failed to decrypt request body'
-                    ], 400);
+                    throw new \Exception('Body Decryption Failed');
                 }
-                
+
                 // Parse JSON
                 $json = json_decode($decryptedData, true);
-                
-                if (json_last_error() !== JSON_ERROR_NONE) {
-                    return response()->json([
-                        'error' => 'invalid_json',
-                        'message' => 'Decrypted data is not valid JSON'
-                    ], 400);
+
+                if (json_last_error() !== JSON_ERROR_NONE || ! is_array($json)) {
+                    throw new \Exception('Invalid JSON in Payload');
                 }
-                
-                if (!is_array($json)) {
-                    return response()->json([
-                        'error' => 'invalid_data',
-                        'message' => 'Decrypted data must be a JSON object'
-                    ], 400);
-                }
-                
+
                 // Ganti request data
                 $request->replace($json);
-                
+
             } catch (\Exception $e) {
-                Log::error('[ApiEncryption] Body decryption error', [
-                    'error' => $e->getMessage()
-                ]);
-                
-                return response()->json([
-                    'error' => 'body_decryption_error',
-                    'message' => 'Failed to decrypt request body'
-                ], 400);
+                Log::error('[ApiEncryption] Payload Processing Failed: '.$e->getMessage());
+
+                return response()->json(['message' => 'Invalid Request Data'], 400);
             }
         }
-        
+
         // 5. PROSES REQUEST
         $response = $next($request);
-        
+
         // 6. ENKRIPSI RESPONSE
         if ($response instanceof JsonResponse && $decryptedAesKey && $decryptedAesIv) {
             try {
                 $originalData = $response->getData(true);
-                
-                if (!is_array($originalData)) {
+
+                if (! is_array($originalData)) {
                     $originalData = ['data' => $originalData];
                 }
-                
-                // Tambahkan metadata
-                
+
                 $jsonString = json_encode($originalData);
-                
+
                 $encryptedResponse = openssl_encrypt(
                     $jsonString,
                     'AES-256-CBC',
@@ -234,53 +190,52 @@ class ApiEncryption
                     OPENSSL_RAW_DATA,
                     $decryptedAesIv
                 );
-                
+
                 if ($encryptedResponse === false) {
                     throw new \Exception('openssl_encrypt failed');
                 }
-                
+
                 $response->setData([
                     'payload' => base64_encode($encryptedResponse),
                 ]);
-                
+
             } catch (\Exception $e) {
                 Log::error('[ApiEncryption] Response encryption failed', [
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ]);
-                
-                // Fallback: return error tanpa enkripsi
-                return response()->json([
-                    'error' => 'response_encryption_error',
-                    'message' => 'Failed to encrypt response'
-                ], 500);
+
+                // Fallback: return Generic Error tanpa enkripsi
+                return response()->json(['message' => 'Server Error'], 500);
             }
         }
-        
+
         return $response;
     }
-    
+
     /**
      * Load private key from storage
      */
     private function loadPrivateKey()
     {
         $keyPath = storage_path('app/private/keys/private_key.pem');
-        
-        if (!file_exists($keyPath)) {
-            Log::critical('[ApiEncryption] Private key not found at: ' . $keyPath);
+
+        if (! file_exists($keyPath)) {
+            Log::critical('[ApiEncryption] Private key not found at: '.$keyPath);
+
             return null;
         }
-        
+
         $privateKey = file_get_contents($keyPath);
-        
-        if (!$privateKey) {
+
+        if (! $privateKey) {
             Log::critical('[ApiEncryption] Failed to read private key');
+
             return null;
         }
-        
+
         return $privateKey;
     }
-    
+
     /**
      * Check if request is for API
      */
@@ -290,7 +245,7 @@ class ApiEncryption
                $request->expectsJson() ||
                $request->hasHeader('X-Session-Key');
     }
-    
+
     /**
      * Check if request method should have body
      */
