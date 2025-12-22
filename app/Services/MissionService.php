@@ -31,6 +31,26 @@ class MissionService
      * @param int $incrementValue Jumlah penambahan progress (default 1)
      * @return void
      */
+    /**
+     * Memeriksa dan mereset semua misi user yang siklusnya sudah kadaluwarsa.
+     * Dipanggil saat user membuka halaman misi.
+     *
+     * @param int $userId
+     * @return void
+     */
+    public function checkResetAllMissions(int $userId)
+    {
+        $userMissions = UserMission::with('mission')
+            ->where('user_id', $userId)
+            ->get();
+
+        foreach ($userMissions as $um) {
+            if ($um->mission) {
+                $this->checkAndResetCycle($um, $um->mission->mission_reset_cycle);
+            }
+        }
+    }
+
     public function updateProgress(int $userId, string $metricCode, int $incrementValue = 1)
     {
         try {

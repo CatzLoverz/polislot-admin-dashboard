@@ -70,7 +70,7 @@
                 <ul>
                   <li><a href="#beranda">Beranda</a></li>
                   <li><a href="{{ route('login.form') }}">Masuk</a></li>
-                  <li class="masuk-mobile"><a href="{{ route('login.form') }}">Masuk</a></li>
+                  {{-- <li class="masuk-mobile"><a href="{{ route('login.form') }}">Masuk</a></li> --}}
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>

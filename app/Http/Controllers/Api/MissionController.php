@@ -10,8 +10,17 @@ use App\Models\UserMission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
+use App\Services\MissionService;
+
 class MissionController extends Controller
 {
+    protected $missionService;
+
+    public function __construct(MissionService $missionService)
+    {
+        $this->missionService = $missionService;
+    }
+
     /**
      * Mengambil data halaman Misi & Leaderboard secara agregat.
      * * Data mencakup:
@@ -27,6 +36,9 @@ class MissionController extends Controller
         try {
             /** @var User $user */
             $user = Auth::user();
+
+            // 0. RESET CHECK (Penting: Lakukan sebelum load data)
+            $this->missionService->checkResetAllMissions($user->user_id);
 
             // 1. Header Stats
             $completedMissionsCount = UserHistory::where('user_id', $user->user_id)

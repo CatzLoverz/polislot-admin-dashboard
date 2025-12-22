@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
-                    <h4 class="card-title font-weight-bold text-dark">Daftar Area Parkir</h4>
+                    <h4 class="card-title">Daftar Area Parkir</h4>
                     <a href="{{ route('admin.park-area.create') }}" class="btn btn-primary btn-round ml-auto">
                         <i class="fa fa-plus mr-2"></i> Tambah Area Baru
                     </a>
