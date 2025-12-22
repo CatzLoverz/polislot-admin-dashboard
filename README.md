@@ -133,6 +133,32 @@ php artisan schedule:work
 ```
 *Catatan: Di production, tambahkan entri ke Crontab server.*
 
+## Manajemen Database (Backup & Restore)
+
+Aplikasi ini dilengkapi fitur built-in untuk backup dan restore database.
+
+### 1. Backup Manual
+Untuk melakukan backup database saat ini juga:
+```bash
+php artisan db:backup
+```
+File backup akan tersimpan di `storage/app/backups/manual/`.
+
+### 2. Lihat Daftar Backup
+Untuk melihat file backup yang tersedia:
+```bash
+php artisan db:list
+```
+
+### 3. Restore Database
+**Perhatian**: Restore akan menimpa seluruh data database saat ini.
+Gunakan nama file yang didapat dari perintah `db:list`.
+
+```bash
+# Format: php artisan db:restore <path/to/filename.sql>
+php artisan db:restore manual/2025-12-22-23-59-59_backup.sql
+```
+
 ## Struktur Direktori
 
 Berikut adalah gambaran umum struktur direktori penting proyek ini:
