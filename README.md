@@ -1,61 +1,164 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Polislot Admin Dashboard
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Dashboard administrasi untuk mengelola aplikasi Polislot, termasuk manajemen pengguna, area parkir, misi, hadiah, dan pemantauan validasi secara realtime.
 
-## About Laravel
+## Prerequisites (Prasyarat)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sebelum memulai instalasi, pastikan sistem Anda memiliki:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **PHP**: Versi 8.1 atau lebih baru.
+- **Composer**: Untuk manajemen dependensi PHP.
+- **MySQL / MariaDB**: Sebagai database.
+- **OpenSSL**: Untuk men-generate kunci enkripsi API.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Instalasi
 
-## Learning Laravel
+Ikuti langkah-langkah berikut untuk menjalankan proyek di local environment:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Setup Awal Laravel
+Clone repositori dan install dependensi:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+git clone <repository_url>
+cd polislot-admin-dashboard
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Install PHP Dependencies
+composer install
+```
 
-## Laravel Sponsors
+Salin konfigurasi environment dan generate Key aplikasi:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Linux / Mac / Git Bash:**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-### Premium Partners
+**Windows (CMD / PowerShell):**
+```powershell
+copy .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Konfigurasi Database & Migrasi
+Buat database baru di MySQL (misal: `polislot_db`), lalu sesuaikan file `.env`:
 
-## Contributing
+```ini
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=polislot_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### Penting: Setup Akun Admin
+Karena aplikasi **tidak memiliki fitur pendaftaran untuk Admin**, Anda harus mengatur email dan password admin secara manual melalui seeder.
+1. Buka file `database/seeders/UserSeeder.php`.
+2. Ubah bagian `email` dan `password` pada blok `User::create` untuk admin.
+3. Simpan perubahan.
 
-## Code of Conduct
+Jalankan migrasi dan seeder:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan migrate --seed
+```
 
-## Security Vulnerabilities
+### 3. Pemisahan Akun Database (RBAC)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Gunakan command Laravel yang telah disiapkan untuk membuat user database aplikasi secara otomatis.
 
-## License
+> [!WARNING]
+> **Catatan Keamanan**: Menjalankan command dengan password sebagai argumen dapat menyimpannya di *history terminal* Anda.
+> Gunakan command ini di environment development aman, atau bersihkan history setelahnya (`history -c` di Linux/Mac). Jika di Production, disarankan menggunakan input interaktif atau SQL manual untuk keamanan maksimal.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+# Format: php artisan db:setup-user <username> <password>
+php artisan db:setup-user polislot_app password_kuat_anda
+```
+
+Setelah sukses, update `.env` Anda dengan kredensial baru tersebut:
+```ini
+DB_USERNAME=polislot_app
+DB_PASSWORD=password_kuat_anda
+```
+
+### 4. Setup Enkripsi API (Private Key)
+Aplikasi ini menggunakan enkripsi *End-to-End* untuk komunikasi API. Anda perlu men-generate pasangan kunci RSA 4096-bit.
+
+**Linux / Mac / Laragon Terminal:**
+```bash
+# Buat folder
+mkdir -p storage/app/private/keys
+
+# Generate Private Key (4096 bit)
+openssl genrsa -out storage/app/private/keys/private_key.pem 4096
+
+# Extract Public Key (Opsional, untuk dibagikan ke Mobile App)
+openssl rsa -in storage/app/private/keys/private_key.pem -pubout -out storage/app/private/keys/public_key.pem
+
+# Set Permissions (Linux/Mac Only)
+chmod 600 storage/app/private/keys/private_key.pem
+```
+
+**Windows (CMD / PowerShell):**
+Pastikan `openssl` sudah terinstall (biasanya bawaan Git/Laragon).
+
+```powershell
+# Buat folder
+mkdir storage\app\private\keys
+
+# Generate Private Key
+openssl genrsa -out storage/app/private/keys/private_key.pem 4096
+
+# Extract Public Key
+openssl rsa -in storage/app/private/keys/private_key.pem -pubout -out storage/app/private/keys/public_key.pem
+```
+*Catatan: Windows tidak memerlukan `chmod`. Akses file dilindungi oleh ACL sistem operasi.*
+
+## Menjalankan Aplikasi
+
+### 1. Jalankan Web Server
+Gunakan perintah bawaan Laravel:
+```bash
+php artisan serve
+```
+Akses dashboard di: `http://localhost:8000`
+
+### 2. Aktifkan Backup Otomatis & Scheduler
+Agar fitur **Backup Database Otomatis** berjalan, worker scheduler harus aktif:
+
+```bash
+php artisan schedule:work
+```
+*Catatan: Di production, tambahkan entri ke Crontab server.*
+
+## Struktur Direktori
+
+Berikut adalah gambaran umum struktur direktori penting proyek ini:
+
+```
+polislot-admin-dashboard/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Api/          # Controller untuk Endpoint Mobile App
+│   │   │   └── Web/          # Controller untuk Dashboard Admin Web
+│   │   └── Middleware/
+│   │       └── ApiEncryption.php # Logic enkripsi dekripsi request/response
+│   ├── Models/               # Eloquent Models (User, Mission, ParkArea, dll)
+│   └── Services/             # Business Logic (MissionService, HistoryService)
+├── database/
+│   ├── migrations/           # Struktur tabel database
+│   └── seeders/              # Data dummy/awal
+├── resources/
+│   └── views/
+│       ├── Contents/         # Halaman-halaman Dashboard (Dashboard, Rewards, Users)
+│       └── Layouts/          # Template utama (Header, Sidebar, Footer)
+├── routes/
+│   ├── api.php               # Rute API (Mobile)
+│   └── web.php               # Rute Web (Dashboard)
+└── storage/
+    └── app/
+        └── private/keys/     # Lokasi penyimpanan Kunci Enkripsi (Rahasia!)
+```

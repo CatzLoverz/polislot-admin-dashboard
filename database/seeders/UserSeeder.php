@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         // Buat 1 admin
         User::create([
             'email' => '...', // isi email sebenarnya
-            'password' => Hash::make('Testing_12'),
+            'password' => Hash::make('Password_12'),
             'role' => 'admin',
             'name' => 'Admin PoliSlot',
             'avatar' => null,
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             User::create([
                 'email' => $faker->unique()->safeEmail(),
-                'password' => Hash::make('Testing_12'),
+                'password' => Hash::make('Password_12'),
                 'role' => 'user',
                 'name' => $faker->name(),
                 'avatar' => null,
@@ -51,6 +51,6 @@ class UserSeeder extends Seeder
         }
 
         $this->command->info('Seeder berhasil: 1 admin dan 10 user telah dibuat dengan Faker.');
-        $this->command->info('User login: gunakan email yang terdaftar dengan password: Testing_12');
+        $this->command->info('User login: gunakan email yang terdaftar dengan password: Password_12');
     }
 }

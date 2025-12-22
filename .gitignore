@@ -26,5 +26,3 @@ Thumbs.db
 docker-compose.yaml
 docker-compose.yml
 init-db.sql
-*SetupDatabaseUser.php
-*SetupDatabaseAdmin.php
