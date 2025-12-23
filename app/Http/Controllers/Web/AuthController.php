@@ -164,7 +164,7 @@ class AuthController extends Controller
                 $user->otp_expires_at = Carbon::now()->addMinutes(10);
                 $user->save();
 
-                Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.reset_password_otp', 'Kode Reset Password Anda'));
+                Mail::to($user->email)->send(new SendOtpMail($otpCode, 'Emails.reset_password_otp', 'Kode Reset Password Anda'));
 
                 $request->session()->put('email_for_password_reset', $user->email);
                 
@@ -236,7 +236,7 @@ class AuthController extends Controller
                 $user->otp_expires_at = Carbon::now()->addMinutes(10);
                 $user->save();
 
-                Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.reset_password_otp', 'Kode Reset Password Anda'));
+                Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'Emails.reset_password_otp', 'Kode Reset Password Anda'));
                 
                 Log::info('[WEB AuthController@forgotPasswordOtpResend] Sukses: OTP reset baru dikirim.');
                 

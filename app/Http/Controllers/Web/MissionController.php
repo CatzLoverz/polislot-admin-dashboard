@@ -81,7 +81,7 @@ class MissionController extends Controller
 
         $metrics = Mission::METRICS;
         $cycles = Mission::CYCLES;
-        return view('Contents.missions.index', compact('metrics', 'cycles'));
+        return view('Contents.Missions.index', compact('metrics', 'cycles'));
     }
 
     /**

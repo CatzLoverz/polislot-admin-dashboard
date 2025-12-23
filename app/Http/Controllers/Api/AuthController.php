@@ -107,7 +107,7 @@ class AuthController extends Controller
                     'otp_expires_at' => Carbon::now()->addMinutes(10),
                 ]);
 
-                Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.registration_otp', 'Kode Verifikasi Akun Anda'));
+                Mail::to($user->email)->send(new SendOtpMail($otpCode, 'Emails.registration_otp', 'Kode Verifikasi Akun Anda'));
 
                 Log::info('[API AuthController@register] Sukses: Registrasi berhasil.');
 
@@ -202,7 +202,7 @@ class AuthController extends Controller
                     'otp_expires_at' => Carbon::now()->addMinutes(10)
                 ]);
 
-                Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.registration_otp', 'Kode Verifikasi Akun Anda'));
+                Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'Emails.registration_otp', 'Kode Verifikasi Akun Anda'));
                 
                 Log::info('[API AuthController@registerOtpResend] Sukses: OTP registrasi baru dikirim.');
 
@@ -342,7 +342,7 @@ class AuthController extends Controller
                 $user->otp_expires_at = Carbon::now()->addMinutes(10);
                 $user->save();
 
-                Mail::to($user->email)->send(new SendOtpMail($otpCode, 'emails.reset_password_otp', 'Kode Reset Password'));
+                Mail::to($user->email)->send(new SendOtpMail($otpCode, 'Emails.reset_password_otp', 'Kode Reset Password'));
 
                 Log::info('[API AuthController@forgotPasswordVerify] Sukses: OTP reset password dikirim.');
 
@@ -402,7 +402,7 @@ class AuthController extends Controller
                     'otp_expires_at' => Carbon::now()->addMinutes(10)
                 ]);
 
-                Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'emails.reset_password_otp', 'Kode Reset Password'));
+                Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'Emails.reset_password_otp', 'Kode Reset Password'));
                 
                 Log::info('[API AuthController@forgotPasswordOtpResend] Sukses: OTP reset baru dikirim.');
 

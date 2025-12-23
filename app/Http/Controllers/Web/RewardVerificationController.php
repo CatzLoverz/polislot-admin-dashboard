@@ -102,7 +102,7 @@ class RewardVerificationController extends Controller
                 ->make(true);
         }
 
-        return view('Contents.rewards.verify');
+        return view('Contents.Rewards.verify');
     }
 
     /**

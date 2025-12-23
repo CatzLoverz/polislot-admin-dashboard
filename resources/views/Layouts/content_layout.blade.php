@@ -127,7 +127,7 @@
                                 <h4 class="text-section">Kelola</h4>
                             </li>
                             <li class="nav-item {{ Route::is('admin.park-area.*') ? 'active' : '' }}">
-                                <a href="{{ Route('admin.park-area.index') }}"> <i class="fas fa-id-badge"></i>
+                                <a href="{{ Route('admin.park-area.index') }}"> <i class="fas fa-parking"></i>
                                     <p>Manajemen Area Parkir</p>
                                 </a>
                             </li>
