@@ -24,6 +24,16 @@ services:
     env_file:
       - .env.docker
 
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: polislot_tunnel
+    restart: unless-stopped
+    command: tunnel run
+    env_file:
+      - .env.docker
+    networks:
+      - polislot_admin_net
+
   db:
     image: mariadb:12.0
     container_name: polislot_admin_db
