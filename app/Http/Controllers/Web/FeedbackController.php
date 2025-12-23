@@ -65,7 +65,7 @@ class FeedbackController extends Controller
         // 3. Ambil Data Kategori untuk Dropdown
         $categories = FeedbackCategory::orderBy('created_at', 'desc')->get();
 
-        return view('Contents.feedback.index', compact('categories'));
+        return view('Contents.Feedback.index', compact('categories'));
     }
 
     /**
