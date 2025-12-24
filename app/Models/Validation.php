@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Validation extends Model
 {
     protected $table = 'validations';
+
     protected $primaryKey = 'validation_id';
-    
-    protected $fillable = ['validation_points'];
+
+    protected $fillable = [
+        'validation_points',
+        'validation_is_geofence_active',
+    ];
 }

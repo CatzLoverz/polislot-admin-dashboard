@@ -35,22 +35,30 @@ class ValidationController extends Controller
                 ->editColumn('updated_at', function($row){
                     return $row->updated_at ? $row->updated_at->format('d-M-Y H:i') : '-';
                 })
+                ->addColumn('geofencing', function($row){
+                    $status = $row->validation_is_geofence_active 
+                        ? '<span class="badge badge-success">Aktif</span>' 
+                        : '<span class="badge badge-secondary">Nonaktif</span>';
+                    return $status;
+                })
                 ->addColumn('action', function($row){
                     $points = $row->validation_points;
+                    $isGeofence = $row->validation_is_geofence_active ? 1 : 0;
                     $updateUrl = route('admin.validation.update', $row->validation_id);
 
                     $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit" 
                                     data-id="'.$row->validation_id.'"
                                     data-points="'.$points.'"
+                                    data-geofence="'.$isGeofence.'"
                                     data-update-url="'.$updateUrl.'"
                                     data-toggle="tooltip" 
-                                    title="Edit Poin"> 
+                                    title="Edit Pengaturan"> 
                                     <i class="fa fa-edit"></i>
                                 </button>';
 
                     return '<div class="form-button-action d-flex justify-content-center">'.$btnEdit.'</div>';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['geofencing', 'action'])
                 ->make(true);
         }
 
@@ -69,19 +77,24 @@ class ValidationController extends Controller
         try {
             return DB::transaction(function () use ($request, $id) {
                 $validated = $request->validate([
-                    'validation_points' => 'required|integer|min:1'
+                    'validation_points' => 'required|integer|min:1',
+                    'validation_is_geofence_active' => 'nullable|boolean'
                 ]);
 
                 $validation = Validation::findOrFail($id);
                 
+                // Handle checkbox (jika tidak dicentang, value null/absent, kita anggap false)
+                $isGeofence = $request->has('validation_is_geofence_active');
+
                 $validation->update([
-                    'validation_points' => $validated['validation_points']
+                    'validation_points' => $validated['validation_points'],
+                    'validation_is_geofence_active' => $isGeofence,
                 ]);
 
-                Log::info('[WEB ValidationController@update] Sukses: Poin validasi diperbarui.');
+                Log::info('[WEB ValidationController@update] Sukses: Pengaturan validasi diperbarui.');
 
                 return redirect()->route('admin.validation.index')
-                    ->with('swal_success_crud', 'Poin validasi berhasil diperbarui.');
+                    ->with('swal_success_crud', 'Pengaturan validasi berhasil diperbarui.');
             });
 
         } catch (ValidationException $e) {

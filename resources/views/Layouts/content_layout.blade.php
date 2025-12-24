@@ -144,7 +144,7 @@
                                     <ul class="nav nav-collapse">
                                         <li class="{{ Route::is('admin.validation.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.validation.index') }}"> 
-                                                <span class="sub-item">Ketentuan Koin per-Validasi</span>
+                                                <span class="sub-item">Ketentuan Validasi Parkir</span>
                                             </a>
                                         </li>
                                         <li class="{{ Route::is('admin.missions.*') ? 'active' : '' }}">

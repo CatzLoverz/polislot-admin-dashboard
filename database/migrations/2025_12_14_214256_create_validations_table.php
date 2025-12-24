@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('validations', function (Blueprint $table) {
             $table->id('validation_id');
             $table->integer('validation_points');
+            $table->boolean('validation_is_geofence_active')->default(false);
             $table->timestamps();
         });
 

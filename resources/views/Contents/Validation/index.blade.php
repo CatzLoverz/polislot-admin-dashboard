@@ -21,6 +21,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Koin per Validasi</th>
+                                    <th>Geofencing</th>
                                     <th>Terakhir Diupdate</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -62,6 +63,16 @@
                         </div>
                         <small class="form-text text-muted">User akan mendapatkan poin ini setiap kali validasi.</small>
                     </div>
+
+                    {{-- Geofence Toggle --}}
+                    <div class="form-group">
+                        <label>Batasan Lokasi (Geofencing)</label>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="edit_geofence" name="validation_is_geofence_active" value="1">
+                            <label class="custom-control-label" for="edit_geofence">Wajib berada di lokasi parkir</label>
+                        </div>
+                        <small class="form-text text-muted">Jika aktif, user harus berada dalam radius area parkir untuk melakukan validasi.</small>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
@@ -85,6 +96,7 @@
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'validation_points', name: 'validation_points' },
+                { data: 'geofencing', name: 'geofencing' },
                 { data: 'updated_at', name: 'updated_at' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
@@ -95,9 +107,11 @@
         $('body').on('click', '.btn-edit', function() {
             var id = $(this).data('id');
             var points = $(this).data('points');
+            var isGeofence = $(this).data('geofence'); // 0 or 1
             var url = $(this).data('update-url');
 
             $('#edit_points').val(points);
+            $('#edit_geofence').prop('checked', isGeofence == 1); // Set checkbox state
             $('#editForm').attr('action', url); // Set action form ke URL update spesifik ID
             $('#modalEdit').modal('show');
         });
