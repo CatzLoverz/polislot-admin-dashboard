@@ -77,22 +77,44 @@ class ParkSubareaController extends Controller
                 $subarea = ParkSubarea::findOrFail($id);
 
                 $request->validate([
-                    'name'    => 'required|string|max:255',
-                    'polygon' => 'nullable|json' // Polygon opsional jika hanya ganti nama
+                    'name'      => 'required|string|max:255',
+                    'polygon'   => 'nullable|json',
+                    'amenities' => 'nullable|array',
+                    'amenities.*'=> 'string|max:255'
                 ]);
 
                 $dataToUpdate = [
                     'park_subarea_name' => $request->name,
                 ];
 
-                // Update polygon hanya jika dikirim (misal admin menggambar ulang)
+                // Update polygon hanya jika dikirim
                 if ($request->filled('polygon')) {
                     $dataToUpdate['park_subarea_polygon'] = json_decode($request->polygon);
                 }
 
                 $subarea->update($dataToUpdate);
 
-                Log::info('[WEB ParkSubareaController@update] Sukses: Subarea diperbarui.', [
+                // === LOGIKA SYNC AMENITIES ===
+                if ($request->has('amenities')) {
+                    $newAmenities = $request->amenities ?? [];
+                    
+                    // 1. Hapus yang tidak ada di list baru
+                    $subarea->parkAmenity()
+                        ->whereNotIn('park_amenity_name', $newAmenities)
+                        ->delete();
+
+                    // 2. Tambah yang belum ada
+                    $existingNames = $subarea->parkAmenity()->pluck('park_amenity_name')->toArray();
+                    foreach ($newAmenities as $amenityName) {
+                        if (!in_array($amenityName, $existingNames)) {
+                            $subarea->parkAmenity()->create([
+                                'park_amenity_name' => $amenityName
+                            ]);
+                        }
+                    }
+                }
+
+                Log::info('[WEB ParkSubareaController@update] Sukses: Subarea & Fasilitas diperbarui.', [
                     'subarea_id' => $id,
                     'name'       => $subarea->park_subarea_name
                 ]);

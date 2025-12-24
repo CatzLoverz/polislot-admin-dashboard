@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\FeedbackCategory;
 use App\Models\Feedback;
+use App\Models\Validation;
 
 
 class DatabaseSeeder extends Seeder
@@ -23,13 +24,15 @@ class DatabaseSeeder extends Seeder
         User::truncate();
         FeedbackCategory::truncate();
         Feedback::truncate();
+        Validation::truncate();
 
         Schema::enableForeignKeyConstraints();
 
         $this->call([
             UserSeeder::class,
             FeedbackCategorySeeder::class,
-            FeedbackSeeder::class
+            FeedbackSeeder::class,
+            ValidationSeeder::class
         ]);
     }
 }

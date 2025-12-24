@@ -154,14 +154,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="font-weight-bold">Nama Sub Area</label>
-                    <div class="input-group mb-3">
-                        <input type="text" id="edit_subarea_name" class="form-control" required>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-primary" onclick="updateSubareaName()">
-                                <i class="fas fa-save mr-1"></i> Simpan
-                            </button>
-                        </div>
-                    </div>
+                    <input type="text" id="edit_subarea_name" class="form-control" required>
                 </div>
                 
                 <hr>
@@ -171,17 +164,21 @@
                     <div class="input-group mb-3">
                         <input type="text" id="new_amenity_name" class="form-control" placeholder="Nama fasilitas baru...">
                         <div class="input-group-append">
-                            <button class="btn btn-success" type="button" onclick="addAmenity()">
+                            <button class="btn btn-success" type="button" onclick="addAmenityLocal()">
                                 <i class="fas fa-plus"></i> Tambah
                             </button>
                         </div>
                     </div>
+                    {{-- Temp List Container --}}
                     <div id="amenities_list_container" style="max-height: 200px; overflow-y: auto;"></div>
                 </div>
                 <input type="hidden" id="edit_subarea_id">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-round" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-danger btn-round" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary btn-round" onclick="saveSubareaChanges()">
+                    <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                </button>
             </div>
         </div>
     </div>
@@ -355,100 +352,84 @@
         });
     }
 
-    function updateSubareaName() {
-        let id = $('#edit_subarea_id').val();
-        let name = $('#edit_subarea_name').val();
-        if(!name) { Swal.fire('Gagal', 'Nama kosong.', 'warning'); return; }
-        $.ajax({
-            url: "{{ url('admin/park-subarea') }}/" + id,
-            type: "POST",
-            data: { _token: "{{ csrf_token() }}", _method: "PUT", name: name },
-            success: function(res) {
-                Swal.fire({
-                    icon: 'success', title: 'Berhasil', text: 'Nama subarea diperbarui.',
-                    timer: 1000, showConfirmButton: false
-                }).then(() => { location.reload(); });
-            },
-            error: function(err) { Swal.fire('Error', 'Gagal update nama.', 'error'); }
-        });
-    }
+    // === 3. LOGIKA AMENITIES (BATCH SAVE) ===
+    let tempAmenities = [];
 
-    // === 3. LOGIKA AMENITIES ===
     function openEditModal(id, name, amenities = []) {
         $('#edit_subarea_id').val(id);
         $('#edit_subarea_name').val(name);
-        $('#new_amenity_name').val(''); 
-        renderAmenitiesList(amenities);
+        $('#new_amenity_name').val('');
+        
+        // Initialize Temp State
+        tempAmenities = amenities.map(item => 
+            (typeof item === 'object' && item !== null) ? item.park_amenity_name : item
+        );
+        
+        renderAmenitiesListLocal();
         $('#modalEditSubarea').modal('show');
     }
 
-    function renderAmenitiesList(amenities) {
+    function renderAmenitiesListLocal() {
         let html = '';
-        if (!Array.isArray(amenities) || amenities.length === 0) {
+        if (tempAmenities.length === 0) {
             html = '<div class="text-center text-muted p-3 small">Belum ada fasilitas.<br>Silakan tambah baru.</div>';
         } else {
             html = '<ul class="list-group list-group-flush border rounded">';
-            amenities.forEach(function(item) {
-                let amenityName = (typeof item === 'object' && item !== null) ? item.park_amenity_name : item;
-                let amenityId = (typeof item === 'object' && item !== null) ? item.park_amenity_id : null;
-                let deleteButton = amenityId ? `<button class="btn btn-xs btn-danger btn-round" onclick="deleteAmenity(${amenityId})"><i class="fas fa-trash"></i></button>` : '';
-
-                html += `<li class="list-group-item d-flex justify-content-between align-items-center p-2" id="amenity_item_${amenityId}">
-                        <span><i class="fas fa-check text-success mr-2"></i>${amenityName}</span>${deleteButton}</li>`;
+            tempAmenities.forEach((name, index) => {
+                html += `<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                        <span><i class="fas fa-check text-success mr-2"></i>${name}</span>
+                        <button class="btn btn-xs btn-danger btn-round" onclick="removeAmenityLocal(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </li>`;
             });
             html += '</ul>';
         }
         $('#amenities_list_container').html(html);
     }
 
-    function addAmenity() {
-        let subareaId = $('#edit_subarea_id').val();
-        let name = $('#new_amenity_name').val();
+    function addAmenityLocal() {
+        let name = $('#new_amenity_name').val().trim();
         if(!name) { Swal.fire('Gagal', 'Nama fasilitas kosong.', 'warning'); return; }
-        $.ajax({
-            url: "{{ route('admin.park-amenity.store') }}",
-            type: "POST",
-            data: { _token: "{{ csrf_token() }}", park_subarea_id: subareaId, park_amenity_name: name },
-            success: function(res) {
-                let newItem = res.data;
-                let newHtml = `<li class="list-group-item d-flex justify-content-between align-items-center p-2" id="amenity_item_${newItem.park_amenity_id}">
-                        <span><i class="fas fa-check text-success mr-2"></i>${newItem.park_amenity_name}</span>
-                        <button class="btn btn-xs btn-danger btn-round" onclick="deleteAmenity(${newItem.park_amenity_id})"><i class="fas fa-trash"></i></button></li>`;
-                if ($('#amenities_list_container ul').length === 0) $('#amenities_list_container').html('<ul class="list-group list-group-flush border rounded"></ul>');
-                $('#amenities_list_container ul').append(newHtml);
-                $('#new_amenity_name').val(''); 
-                const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-                Toast.fire({ icon: 'success', title: 'Fasilitas ditambahkan' }).then(() => { location.reload(); });;
-            },
-            error: function(err) { Swal.fire('Error', 'Gagal menyimpan fasilitas.', 'error'); }
-        });
+        
+        if(tempAmenities.includes(name)) {
+             Swal.fire('Info', 'Fasilitas sudah ada.', 'info');
+             return;
+        }
+
+        tempAmenities.push(name);
+        $('#new_amenity_name').val('');
+        renderAmenitiesListLocal();
     }
 
-    function deleteAmenity(id) {
-        Swal.fire({
-            title: 'Hapus Fasilitas?',
-            text: "Data akan dihapus permanen.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'Ya, Hapus',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "{{ url('admin/park-amenity') }}/" + id,
-                    type: "POST",
-                    data: { _token: "{{ csrf_token() }}", _method: "DELETE" },
-                    success: function(res) {
-                        $('#amenity_item_' + id).remove();
-                        if ($('#amenities_list_container li').length === 0) $('#amenities_list_container').html('<div class="text-center text-muted p-3 small">Belum ada fasilitas.<br>Silakan tambah baru.</div>');
-                        const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-                        Toast.fire({ icon: 'success', title: 'Fasilitas dihapus' }).then(() => { location.reload(); });;
-                    },
-                    error: function(err) { Swal.fire('Error', 'Gagal menghapus.', 'error'); }
-                });
-            }
+    function removeAmenityLocal(index) {
+        tempAmenities.splice(index, 1);
+        renderAmenitiesListLocal();
+    }
+
+    function saveSubareaChanges() {
+        let id = $('#edit_subarea_id').val();
+        let name = $('#edit_subarea_name').val();
+        
+        if(!name) { Swal.fire('Gagal', 'Nama subarea kosong.', 'warning'); return; }
+
+        $.ajax({
+            url: "{{ url('admin/park-subarea') }}/" + id,
+            type: "POST",
+            data: { 
+                _token: "{{ csrf_token() }}", 
+                _method: "PUT", 
+                name: name,
+                amenities: tempAmenities // Kirim array amenities baru
+            },
+            success: function(res) {
+                $('#modalEditSubarea').modal('hide');
+                Swal.fire({
+                    icon: 'success', title: 'Berhasil', text: 'Perubahan disimpan.',
+                    timer: 1000, showConfirmButton: false
+                }).then(() => { location.reload(); });
+            },
+            error: function(err) { Swal.fire('Error', 'Gagal menyimpan perubahan.', 'error'); }
         });
     }
 
