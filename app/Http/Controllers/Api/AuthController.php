@@ -253,7 +253,7 @@ class AuthController extends Controller
 
                 if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
                     Log::warning('[API AuthController@login] Gagal: Akun belum diverifikasi.');
-                    return $this->sendError('Akun Anda belum diverifikasi.', 403, ['email' => $user->email], 'UNVERIFIED');
+                    return $this->sendError('Akun Anda belum diverifikasi, silakan daftar ulang.', 403, ['email' => $user->email], 'UNVERIFIED');
                 }
 
                 if ($user->locked_until && now()->lt($user->locked_until)) {

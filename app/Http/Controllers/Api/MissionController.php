@@ -9,6 +9,7 @@ use App\Models\UserHistory;
 use App\Models\UserMission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 use App\Services\MissionService;
 
@@ -125,6 +126,7 @@ class MissionController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            Log::error('[API MissionController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat data misi: '.$e->getMessage(), 500);
         }
     }

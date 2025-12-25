@@ -125,7 +125,7 @@ class DashboardController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('[Dashboard] Chart Error: ' . $e->getMessage());
+            Log::error('[WEB DashboardController@getChartData] Error: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to load chart data'], 500);
         }
     }

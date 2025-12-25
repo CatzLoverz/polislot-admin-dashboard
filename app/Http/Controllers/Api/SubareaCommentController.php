@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 
 class SubareaCommentController extends Controller
@@ -68,7 +69,7 @@ class SubareaCommentController extends Controller
             return $this->sendSuccess('Daftar komentar berhasil diambil.', $responseData);
 
         } catch (Exception $e) {
-            Log::error('[API SubareaComment@index] Error: ' . $e->getMessage());
+            Log::error('[API SubareaCommentController@index] Error: ' . $e->getMessage());
             return $this->sendError('Gagal memuat komentar.', 500);
         }
     }
@@ -104,11 +105,14 @@ class SubareaCommentController extends Controller
 
                 $comment->load('user:user_id,name,avatar');
 
-                Log::info('[API SubareaComment@store] Sukses: Comment baru ditambahkan.');
+                Log::info('[API SubareaCommentController@store] Sukses: Comment baru ditambahkan.');
                 return $this->sendSuccess('Komentar terkirim.', $comment, 201);
             });
+        } catch (ValidationException $e) {
+            Log::warning('[API SubareaCommentController@store] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            return $this->sendValidationError($e);
         } catch (Exception $e) {
-            Log::error('[API SubareaComment@store] Error: ' . $e->getMessage());
+            Log::error('[API SubareaCommentController@store] Error: ' . $e->getMessage());
             return $this->sendError('Gagal mengirim komentar.', 500);
         }
     }
@@ -158,12 +162,14 @@ class SubareaCommentController extends Controller
                 $comment->update($dataToUpdate);
                 $comment->load('user:user_id,name,avatar');
 
-                Log::info('[API SubareaComment@update] Sukses: Comment Berhasil Diupdate.');
+                Log::info('[API SubareaCommentController@update] Sukses: Comment Berhasil Diupdate.');
                 return $this->sendSuccess('Komentar berhasil diperbarui.', $comment);
             });
-
+        } catch (ValidationException $e) {
+            Log::warning('[API SubareaCommentController@update] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            return $this->sendValidationError($e);
         } catch (Exception $e) {
-            Log::error('[API SubareaComment@update] Error: ' . $e->getMessage());
+            Log::error('[API SubareaCommentController@update] Error: ' . $e->getMessage());
             $code = $e->getCode() === 403 ? 403 : 500;
             return $this->sendError($e->getMessage(), $code);
         }
@@ -194,12 +200,14 @@ class SubareaCommentController extends Controller
 
                 $comment->delete();
 
-                Log::info('[API SubareaComment@destroy] Sukses: Comment dihapus.');
+                Log::info('[API SubareaCommentController@destroy] Sukses: Comment dihapus.');
                 return $this->sendSuccess('Komentar berhasil dihapus.');
             });
-
+        } catch (ValidationException $e) {
+            Log::warning('[API SubareaCommentController@destroy] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            return $this->sendValidationError($e);
         } catch (Exception $e) {
-            Log::error('[API SubareaComment@destroy] Error: ' . $e->getMessage());
+            Log::error('[API SubareaCommentController@destroy] Error: ' . $e->getMessage());
             $code = $e->getCode() === 403 ? 403 : 500;
             return $this->sendError($e->getMessage(), $code);
         }

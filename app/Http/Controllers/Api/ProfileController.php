@@ -33,7 +33,6 @@ class ProfileController extends Controller
     {
         try {
             $user = $request->user();
-            Log::info('[API ProfileController@show] Berhasil menampilkan profil.');
             return $this->sendSuccess('Data profil berhasil diambil.', $this->formatUser($user));
         } catch (\Exception $e) {
             Log::error('[API ProfileController@show] Gagal menampilkan profil. Error: ' . $e->getMessage());
@@ -81,7 +80,7 @@ class ProfileController extends Controller
                     $user->avatar = $request->file('avatar')->store('avatars', 'public');
                     try {
                         $this->missionService->updateProgress($user->user_id, 'PROFILE_UPDATE');
-                        Log::info("[API ProfileController@update] Misi Profile Update ditrigger untuk User {$user->user_id}");
+                
                     } catch (\Exception $e) {
                         // Kita catch error misi agar tidak membatalkan update profil utama
                         // Log errornya saja untuk debugging

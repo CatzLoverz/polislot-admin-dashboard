@@ -79,7 +79,7 @@ class UserValidationController extends Controller
 
                 if (empty($polygon)) {
                     // Fallback jika polygon kosong, skip atau deny (di sini kita skip agar aman)
-                    Log::warning("[UserValidation] Polygon kosong untuk Subarea ID {$subarea->park_subarea_id}");
+                    Log::warning("[API UserValidationController@store] Polygon kosong untuk Subarea ID {$subarea->park_subarea_id}");
                 } else {
                     $centerLat = 0;
                     $centerLng = 0;
@@ -136,7 +136,7 @@ class UserValidationController extends Controller
             });
 
         } catch (Exception $e) {
-            Log::error('[API UserValidation@store] Error: '.$e->getMessage());
+            Log::error('[API UserValidationController@store] Error: '.$e->getMessage());
 
             return $this->sendError('Terjadi kesalahan server saat memproses validasi.', 500);
         }

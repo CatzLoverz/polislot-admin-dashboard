@@ -23,7 +23,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        Log::info('[ProfileController@edit] Menampilkan form edit profil.', ['user_id' => $user->user_id]);
+
         
         return view('Contents.Profile.index', compact('user'));
     }
@@ -35,7 +35,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        Log::info('[ProfileController@update] Menerima permintaan update profil.', ['user_id' => $user->user_id]);
+        Log::info('[WEB ProfileController@update] Menerima permintaan update profil.', ['user_id' => $user->user_id]);
 
         $passwordRules = [
             'required',
@@ -57,10 +57,10 @@ class ProfileController extends Controller
         DB::beginTransaction();
         try {
             $validatedData = $request->validate($rules);
-            Log::info('[ProfileController@update] Validasi data profil berhasil.', ['user_id' => $user->user_id]);
+            Log::info('[WEB ProfileController@update] Validasi data profil berhasil.', ['user_id' => $user->user_id]);
 
             if ($request->hasFile('avatar')) {
-                Log::info('[ProfileController@update] Mengunggah avatar baru.', ['user_id' => $user->user_id]);
+                Log::info('[WEB ProfileController@update] Mengunggah avatar baru.', ['user_id' => $user->user_id]);
                 if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
                     Storage::disk('public')->delete($user->avatar);
                 }
@@ -71,7 +71,7 @@ class ProfileController extends Controller
             // update password jika diisi
             if (isset($validatedData['new_password'])) {
                 $user->password = Hash::make($validatedData['new_password']);
-                Log::info('[ProfileController@update] Password diupdate.', ['user_id' => $user->user_id]);
+                Log::info('[WEB ProfileController@update] Password diupdate.', ['user_id' => $user->user_id]);
             }
 
             /** @var \App\Models\User $user */
@@ -81,16 +81,16 @@ class ProfileController extends Controller
             Auth::login($user);
             DB::commit();
 
-            Log::info('[ProfileController@update] SUKSES: Profil berhasil diperbarui.', ['user_id' => $user->user_id]);
+            Log::info('[WEB ProfileController@update] SUKSES: Profil berhasil diperbarui.', ['user_id' => $user->user_id]);
             return redirect()->route('profile.edit')->with('swal_success_crud', 'Profil Anda berhasil diperbarui.');
 
         } catch (ValidationException $e) {
             DB::rollBack();
-            Log::warning('[ProfileController@update] GAGAL: Validasi data gagal.', [ 'user_id' => $user->user_id, 'errors' => $e->errors() ]);
+            Log::warning('[WEB ProfileController@update] GAGAL: Validasi data gagal.', [ 'user_id' => $user->user_id, 'errors' => $e->errors() ]);
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('[ProfileController@update] GAGAL: Terjadi error sistem saat memperbarui profil.', [ 'user_id' => $user->user_id, 'error' => $e->getMessage() ]);
+            Log::error('[WEB ProfileController@update] GAGAL: Terjadi error sistem saat memperbarui profil.', [ 'user_id' => $user->user_id, 'error' => $e->getMessage() ]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server saat memperbarui profil.');
         }
     }

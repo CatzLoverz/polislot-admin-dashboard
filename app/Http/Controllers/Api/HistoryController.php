@@ -7,6 +7,7 @@ use App\Models\UserHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class HistoryController extends Controller
 {
@@ -55,6 +56,7 @@ class HistoryController extends Controller
             return $this->sendSuccess('Riwayat aktivitas berhasil diambil.', $responseData);
 
         } catch (\Exception $e) {
+            Log::error('[API HistoryController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat riwayat: ' . $e->getMessage(), 500);
         }
     }

@@ -8,6 +8,7 @@ use App\Models\UserValidation;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MapVisualizationController extends Controller
 {
@@ -145,6 +146,7 @@ class MapVisualizationController extends Controller
             return $this->sendSuccess('Data visualisasi berhasil diambil.', $data);
 
         } catch (\Exception $e) {
+            Log::error('[API MapVisualizationController@show] Gagal: Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat visualisasi: ' . $e->getMessage(), 500);
         }
     }
