@@ -33,7 +33,7 @@ class SetupDatabaseAdmin extends Command
         try {
             DB::statement("CREATE USER IF NOT EXISTS '$username'@'$host' IDENTIFIED BY '$password';");
 
-            DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON `$dbName`.* TO '$username'@'$host';");
+            DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE, LOCK TABLES ON `$dbName`.* TO '$username'@'$host';");
 
             DB::statement("FLUSH PRIVILEGES;");
 
