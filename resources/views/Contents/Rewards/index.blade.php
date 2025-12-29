@@ -91,6 +91,7 @@
             processing: true,
             serverSide: true,
             ajax: "{{ route('admin.rewards.index') }}",
+            order: [[2, 'asc']],
             columns: [
                 { data: 'DT_RowIndex', className: 'text-center', orderable: false, searchable: false },
                 { data: 'reward_image', className: 'text-center', orderable: false, searchable: false },

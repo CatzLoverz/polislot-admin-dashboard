@@ -22,7 +22,7 @@ class RewardController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Reward::select('*')->orderByDesc('created_at');
+            $data = Reward::get();
 
             return DataTables::of($data)
                 ->addIndexColumn()

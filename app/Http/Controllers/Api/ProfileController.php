@@ -101,6 +101,7 @@ class ProfileController extends Controller
             });
 
         } catch (ValidationException $e) {
+            Log::warning('[API ProfileController@update] Gagal: Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
         } catch (\Exception $e) {
             Log::error('[API ProfileController@update] Error: ' . $e->getMessage());

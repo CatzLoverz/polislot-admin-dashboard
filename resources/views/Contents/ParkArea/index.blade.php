@@ -47,6 +47,7 @@
             processing: true,
             serverSide: true,
             ajax: "{{ route('admin.park-area.index') }}",
+            order: [[1, 'asc']],
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center' },
                 { data: 'park_area_name', name: 'park_area_name', className: 'font-weight-bold' },

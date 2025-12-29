@@ -19,7 +19,7 @@ class MapVisualizationController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $areas = ParkArea::withCount('parkSubarea')->get();
+            $areas = ParkArea::withCount('parkSubarea')->orderBy('park_area_name', 'asc')->get();
 
             $data = $areas->map(function ($area) {
                 return [

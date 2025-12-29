@@ -34,7 +34,7 @@ class RewardController extends Controller
             /** @var User $user */
             $user = Auth::user();
 
-            $rewards = DB::table('rewards')->orderBy('created_at', 'desc')->get();
+            $rewards = DB::table('rewards')->orderBy('reward_name')->get();
 
             // Format data reward agar siap pakai di frontend
             $formattedRewards = $rewards->map(function ($reward) {

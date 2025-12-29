@@ -24,7 +24,7 @@ class ParkAreaController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $data = ParkArea::query()->orderBy('created_at', 'desc');
+                $data = ParkArea::get();
 
                 return DataTables::of($data)
                     ->addIndexColumn()

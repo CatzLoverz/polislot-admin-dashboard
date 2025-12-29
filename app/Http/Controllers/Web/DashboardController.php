@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         // 1. Summary Cards Data
-        $totalUsers = User::count();
+        $totalUsers = User::whereNotNull('email_verified_at')->where('role', 'user')->count();
         $totalParkAreas = ParkArea::count();
         $totalSubareas = ParkSubarea::count();
         $pendingRewards = UserReward::where('user_reward_status', 'pending')->count();
