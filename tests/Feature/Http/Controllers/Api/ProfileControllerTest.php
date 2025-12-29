@@ -24,7 +24,7 @@ class ProfileControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function show_profile_mengembalikan_data_user()
+    public function show_profile_returns_200_and_user_data()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
@@ -45,7 +45,7 @@ class ProfileControllerTest extends TestCase
     }
 
     #[Test]
-    public function show_profile_menangani_exception()
+    public function show_profile_returns_200_handling_exceptions()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
@@ -67,7 +67,7 @@ class ProfileControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function update_profile_basic_tanpa_file()
+    public function update_profile_returns_200_basic_without_file()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create(['name' => 'Old Name']);
@@ -84,7 +84,7 @@ class ProfileControllerTest extends TestCase
     }
 
     #[Test]
-    public function update_profile_avatar_memicu_misi_profile_update()
+    public function update_profile_returns_200_and_triggers_mission_on_avatar_update()
     {
         Storage::fake('public');
         /** @var \App\Models\User $user */
@@ -111,7 +111,7 @@ class ProfileControllerTest extends TestCase
     }
 
     #[Test]
-    public function update_profile_avatar_tetap_sukses_meski_misi_gagal()
+    public function update_profile_returns_200_even_if_mission_service_fails()
     {
         Storage::fake('public');
         /** @var \App\Models\User $user */
@@ -143,7 +143,7 @@ class ProfileControllerTest extends TestCase
     }
 
     #[Test]
-    public function update_password_api_berhasil()
+    public function update_password_returns_200_on_success()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -163,7 +163,7 @@ class ProfileControllerTest extends TestCase
     }
 
     #[Test]
-    public function update_password_api_gagal_validasi()
+    public function update_password_returns_422_if_validation_fails()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create(['password' => Hash::make('Pass')]);
@@ -188,7 +188,7 @@ class ProfileControllerTest extends TestCase
     }
 
     #[Test]
-    public function update_profile_menangani_fatal_error()
+    public function update_profile_returns_500_on_fatal_error()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create();

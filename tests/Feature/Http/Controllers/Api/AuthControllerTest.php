@@ -25,7 +25,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function auth_check_sukses_dan_memicu_misi_jika_cache_kosong()
+    public function auth_check_returns_200_and_triggers_mission_if_cache_empty()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
@@ -53,7 +53,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function auth_check_sukses_tapi_tidak_memicu_misi_jika_cache_ada()
+    public function auth_check_returns_200_but_no_mission_if_cache_exists()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
@@ -75,7 +75,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function auth_check_tetap_sukses_meski_service_error()
+    public function auth_check_returns_200_even_if_service_fails()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
@@ -99,7 +99,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function register_berhasil_user_baru()
+    public function register_attempt_returns_201_for_new_user()
     {
         Mail::fake();
         $data = [
@@ -119,7 +119,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function register_menimpa_user_lama_yang_belum_verifikasi()
+    public function register_attempt_returns_201_overwriting_unverified_user()
     {
         Mail::fake();
         // User lama yg belum verif
@@ -147,7 +147,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function register_gagal_validasi()
+    public function register_attempt_returns_422_if_validation_fails()
     {
         $response = $this->postJson('/api/register-attempt', [
             'email' => 'invalid-email',
@@ -159,7 +159,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function register_gagal_error_sistem()
+    public function register_attempt_returns_500_on_system_error()
     {
         DB::shouldReceive('transaction')->andThrow(new \Exception('DB Error'));
 
@@ -179,7 +179,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function register_otp_verify_sukses()
+    public function register_otp_verify_returns_200_on_success()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->unverified()->create([
@@ -201,7 +201,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function register_otp_verify_gagal_sudah_verifikasi()
+    public function register_otp_verify_returns_400_if_already_verified()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create(); // Verified by default
@@ -216,7 +216,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function register_otp_verify_gagal_otp_salah_atau_expired()
+    public function register_otp_verify_returns_422_if_otp_invalid_or_expired()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->unverified()->create([
@@ -238,7 +238,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function register_otp_resend_sukses()
+    public function register_otp_resend_returns_200_on_success()
     {
         Mail::fake();
         /** @var \App\Models\User $user */
@@ -255,7 +255,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function register_otp_resend_gagal_sudah_verifikasi()
+    public function register_otp_resend_returns_400_if_already_verified()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
@@ -269,7 +269,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function register_otp_resend_gagal_email_tidak_ada()
+    public function register_otp_resend_returns_422_if_email_missing()
     {
         $response = $this->postJson('/api/register-otp-resend', [
             'email' => 'ghost@example.com'
@@ -283,7 +283,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function login_berhasil_dan_reset_failed_attempts()
+    public function login_attempt_returns_200_and_resets_failures()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -305,7 +305,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_reset_failed_attempts_otomatis_jika_waktu_berlalu()
+    public function login_attempt_resets_failures_automatically_if_time_passed()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -327,7 +327,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_gagal_email_tidak_ditemukan()
+    public function login_attempt_returns_404_if_email_not_found()
     {
         $response = $this->postJson('/api/login-attempt', [
             'email' => 'missing@example.com',
@@ -337,7 +337,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_gagal_unverified()
+    public function login_attempt_returns_403_if_unverified()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->unverified()->create([
@@ -353,7 +353,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_gagal_terkunci_waktu()
+    public function login_attempt_returns_403_if_locked()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -368,7 +368,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_gagal_password_salah_dan_lock_setelah_4x()
+    public function login_attempt_returns_403_and_locks_after_4_failures()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -392,7 +392,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function logout_sukses()
+    public function logout_returns_200_on_success()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
@@ -403,7 +403,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function logout_gagal_token_invalid()
+    public function logout_returns_401_if_token_invalid()
     {
         // Tanpa actingAs / Token
         $response = $this->postJson('/api/logout');
@@ -417,7 +417,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function forgot_password_kirim_otp_sukses()
+    public function forgot_attempt_returns_200_on_success()
     {
         Mail::fake();
         /** @var \App\Models\User $user */
@@ -436,7 +436,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function forgot_password_gagal_email_tidak_ada()
+    public function forgot_attempt_returns_422_if_email_not_found()
     {
         $response = $this->postJson('/api/forgot-attempt', [
             'email' => 'nohere@example.com'
@@ -451,7 +451,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function forgot_otp_verify_sukses()
+    public function forgot_otp_verify_returns_200_on_success()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -468,7 +468,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function forgot_otp_verify_gagal_salah_atau_expired()
+    public function forgot_otp_verify_returns_400_if_invalid_or_expired()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -489,7 +489,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function forgot_otp_resend_sukses()
+    public function forgot_otp_resend_returns_200_on_success()
     {
         Mail::fake();
         /** @var \App\Models\User $user */
@@ -504,7 +504,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function forgot_otp_resend_gagal_error_sistem()
+    public function forgot_otp_resend_returns_500_on_system_error()
     {
         DB::shouldReceive('transaction')->andThrow(new \Exception('Error'));
         /** @var \App\Models\User $user */
@@ -522,7 +522,7 @@ class AuthControllerTest extends TestCase
     // =========================================================================
 
     #[Test]
-    public function reset_password_sukses()
+    public function reset_pass_attempt_returns_200_on_success()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -546,7 +546,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function reset_password_gagal_jika_sama_dengan_lama()
+    public function reset_pass_attempt_returns_400_if_password_same_as_old()
     {
         /** @var \App\Models\User $user */
         $user = User::factory()->create([
@@ -564,7 +564,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function reset_password_gagal_validasi()
+    public function reset_pass_attempt_returns_422_if_validation_fails()
     {
         $response = $this->postJson('/api/reset-pass-attempt', [
             'email' => 'mail@mail.com',

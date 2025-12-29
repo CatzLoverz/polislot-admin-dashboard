@@ -39,7 +39,7 @@ class SubareaCommentControllerTest extends TestCase
     }
 
     #[Test]
-    public function index_returns_validation_error_if_no_id()
+    public function index_returns_422_if_no_id()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -50,7 +50,7 @@ class SubareaCommentControllerTest extends TestCase
     }
 
     #[Test]
-    public function store_comment_berhasil_return_201()
+    public function store_comment_returns_201_on_success()
     {
         $user = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
@@ -74,7 +74,7 @@ class SubareaCommentControllerTest extends TestCase
     }
 
     #[Test]
-    public function update_comment_berhasil_return_200()
+    public function update_comment_returns_200_on_success()
     {
         $user = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
@@ -104,7 +104,7 @@ class SubareaCommentControllerTest extends TestCase
     }
 
     #[Test]
-    public function destroy_comment_berhasil_return_200()
+    public function destroy_comment_returns_200_on_success()
     {
         $user = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
@@ -127,7 +127,7 @@ class SubareaCommentControllerTest extends TestCase
     }
 
     #[Test]
-    public function update_fails_if_not_owner()
+    public function update_returns_403_if_not_owner()
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -152,7 +152,7 @@ class SubareaCommentControllerTest extends TestCase
     }
 
     #[Test]
-    public function destroy_fails_if_not_owner()
+    public function destroy_returns_403_if_not_owner()
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
