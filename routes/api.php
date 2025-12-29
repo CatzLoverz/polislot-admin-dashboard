@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\SubareaCommentController;
 use App\Http\Controllers\Api\UserValidationController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('encryptApi')->group(function () {
+Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
 
     // Rute Login
     Route::post('/login-attempt', [AuthController::class, 'login']);
