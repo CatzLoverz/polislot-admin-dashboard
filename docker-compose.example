@@ -1,5 +1,19 @@
 # Copy this file to docker-compose.yaml and adjust as needed
 services:
+  setup:
+      image: alpine:latest
+      container_name: polislot_setup
+      command: >
+        sh -c "mkdir -p /work/storage/logs/mariadb &&
+              touch /work/storage/logs/mariadb/general.log &&
+              touch /work/storage/logs/mariadb/slow-queries.log &&
+              touch /work/storage/logs/mariadb/server-audit.log &&
+              chown -R 999:999 /work/storage/logs/mariadb &&
+              chmod -R 755 /work/storage/logs/mariadb &&
+              chmod 644 /work/storage/logs/mariadb/*.log"
+      volumes:
+        - .:/work
+
   app:
     build:
       context: .
@@ -40,12 +54,10 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ''
-      MYSQL_DATABASE: '' # samakan dengan env.docker
-      MYSQL_USER: ''
-      MYSQL_PASSWORD: ''
     volumes:
       - dbdata:/var/lib/mysql
-      - ./docker-init:/docker-entrypoint-initdb.d
+      - ./mariadb.cnf:/etc/mysql/conf.d/logging.cnf:ro
+      - ./storage/logs/mariadb:/var/log/mysql
     ports:
       - "192.168.137.1:3307:3306"
     networks:

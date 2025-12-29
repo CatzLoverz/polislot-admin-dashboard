@@ -1,1 +1,0 @@
-Letakkan SQL database di directory ini jika ingin build docker dan run dengan database langsung

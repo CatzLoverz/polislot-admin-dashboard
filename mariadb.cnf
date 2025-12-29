@@ -1,0 +1,18 @@
+[mariadb]
+# --- General Log ---
+log_output = FILE
+general_log = 1
+general_log_file = /var/log/mysql/general.log
+
+# --- Slow Query Log ---
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/slow-queries.log
+long_query_time = 2.0
+
+# --- Audit Log (Server Audit Plugin) ---
+plugin_load_add = server_audit
+server_audit_logging = ON
+server_audit_file_path = /var/log/mysql/server-audit.log
+server_audit_file_rotate_now = ON
+server_audit_file_rotate_size = 2000000
+server_audit_file_rotations = 2
