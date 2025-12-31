@@ -1,18 +1,7 @@
 # Copy this file to docker-compose.yaml and adjust as needed
+# dont forget to create port proxy and add firewall rule if running local on WSL so other device can access on same network 
+
 services:
-  setup:
-      image: alpine:latest
-      container_name: polislot_setup
-      command: >
-        sh -c "mkdir -p /work/storage/logs/mariadb &&
-              touch /work/storage/logs/mariadb/general.log &&
-              touch /work/storage/logs/mariadb/slow-queries.log &&
-              touch /work/storage/logs/mariadb/server-audit.log &&
-              chown -R 999:999 /work/storage/logs/mariadb &&
-              chmod -R 755 /work/storage/logs/mariadb &&
-              chmod 644 /work/storage/logs/mariadb/*.log"
-      volumes:
-        - .:/work
 
   app:
     build:
@@ -21,7 +10,7 @@ services:
     container_name: polislot_admin_app
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8001:80" # port host : port container
+      - "0.0.0.0:8000:80" # port host : port container
     volumes:
       # Mount semua kode proyek
       - ./:/var/www/html
@@ -58,11 +47,24 @@ services:
       - dbdata:/var/lib/mysql
       - ./docker/mariadb.cnf:/etc/mysql/conf.d/logging.cnf:ro
       - ./storage/logs/mariadb:/var/log/mysql
-    depends_on:
-      setup:
-        condition: service_completed_successfully
+    entrypoint:
+      - sh
+      - -c
+      - |
+        
+        mkdir -p /var/log/mysql
+        
+        touch /var/log/mysql/server-audit.log
+        touch /var/log/mysql/general.log
+        touch /var/log/mysql/slow-queries.log
+        
+        chown -R mysql:mysql /var/log/mysql
+        chmod 755 /var/log/mysql
+        chmod 664 /var/log/mysql/*.log
+              
+        exec /usr/local/bin/docker-entrypoint.sh mariadbd
     ports:
-      - "127.0.0.1:3307:3306"
+      - "0.0.0.0:3307:3306"
     networks:
       - polislot_admin_net
 
