@@ -13,3 +13,5 @@ long_query_time = 2.0
 plugin_load_add = server_audit
 server_audit_logging = ON
 server_audit_file_path = /var/log/mysql/server-audit.log
+server_audit_file_rotate_now = OFF 
+server_audit_file_rotations = 0
