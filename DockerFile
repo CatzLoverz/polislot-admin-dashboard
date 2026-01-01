@@ -43,6 +43,3 @@ RUN chown -R www-data:www-data /var/www/html \
 
 # Expose port default Apache
 EXPOSE 80
-
-# Jalankan Apache di foreground
-CMD ["sh", "-c", "chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache && apache2-foreground"]

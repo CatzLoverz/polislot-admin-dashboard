@@ -26,7 +26,14 @@ services:
       - polislot_admin_net
     env_file:
       - .env.docker
-
+    command: >
+      sh -c "chown -R www-data:www-data storage bootstrap/cache &&
+             chmod -R 775 storage bootstrap/cache &&
+             mkdir -p storage/logs/mariadb &&
+             chown -R 999:999 storage/logs/mariadb &&
+             chmod 755 storage/logs/mariadb &&
+             apache2-foreground"
+  
   tunnel:
     image: cloudflare/cloudflared:latest
     container_name: polislot_tunnel
@@ -38,33 +45,17 @@ services:
       - polislot_admin_net
 
   db:
-    image: mariadb:12.0
+    image: mariadb:latest
     container_name: polislot_admin_db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ''
+      MARIADB_ROOT_PASSWORD: 'IVON_PD12'
     volumes:
       - dbdata:/var/lib/mysql
       - ./docker/mariadb.cnf:/etc/mysql/conf.d/logging.cnf:ro
       - ./storage/logs/mariadb:/var/log/mysql
-    entrypoint:
-      - sh
-      - -c
-      - |
-        
-        mkdir -p /var/log/mysql
-        
-        touch /var/log/mysql/server-audit.log
-        touch /var/log/mysql/general.log
-        touch /var/log/mysql/slow-queries.log
-        
-        chown -R mysql:mysql /var/log/mysql
-        chmod 755 /var/log/mysql
-        chmod 664 /var/log/mysql/*.log
-              
-        exec /usr/local/bin/docker-entrypoint.sh mariadbd
     ports:
-      - "0.0.0.0:3307:3306"
+      - "127.0.0.1:3307:3306"
     networks:
       - polislot_admin_net
 
