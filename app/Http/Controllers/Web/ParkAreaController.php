@@ -117,8 +117,9 @@ class ParkAreaController extends Controller
             });
 
         } catch (ValidationException $e) {
+            Log::error('[WEB ParkAreaController@store] Gagal:', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors())->withInput()
-                ->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
+                ->with('swal_error_crud', 'Validasi gagal, ' . $e->getMessage());
         } catch (Exception $e) {
             Log::error('[WEB ParkAreaController@store] Gagal: ' . $e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menyimpan data area.')->withInput();

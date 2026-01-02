@@ -6,157 +6,324 @@ Dashboard administrasi untuk mengelola aplikasi Polislot, termasuk manajemen pen
 
 Sebelum memulai instalasi, pastikan sistem Anda memiliki:
 
-- **PHP**: Versi 8.1 atau lebih baru.
+- **PHP**: Versi 8.2 atau lebih baru (Untuk Manual Setup).
 - **Composer**: Untuk manajemen dependensi PHP.
 - **MySQL / MariaDB**: Sebagai database.
-- **OpenSSL**: Untuk men-generate kunci enkripsi API.
+- **Google Cloud Console Account**: Wajib, untuk **Maps SDK for JavaScript** (Admin Dashboard Map).
+- **Cloudflare Account** (Opsional): Jika ingin menggunakan fitur Tunneling publik.
 
-## Instalasi
+## Konfigurasi Environment
 
-Ikuti langkah-langkah berikut untuk menjalankan proyek di local environment:
+Sebelum menjalankan aplikasi, Anda perlu melengkapi beberapa variabel di `.env`:
 
-### 1. Setup Awal Laravel
-Clone repositori dan install dependensi:
+### 1. Google Maps (Wajib)
+Dapatkan API Key dari Google Cloud Console dengan library **Maps SDK for JavaScript** aktif.
+```ini
+GOOGLE_MAPS_API_KEY=AIzaSyDxxxx...
+```
 
-```bash
-git clone <repository_url>
+### 2. Cloudflare Tunnel (Opsional)
+Jika ingin website admin bisa diakses publik via Tunnel (tanpa expose IP):
+```ini
+TUNNEL_TOKEN=eyJhIjxxxx...
+```
+*Catatan: Jika fitur ini tidak digunakan, harap comment atau hapus service `tunnel` pada file `docker-compose.yaml`.*
+## Instalasi & Menjalankan Aplikasi
+
+Silakan pilih satu opsi instalasi di bawah ini sesuai dengan sistem operasi Anda. Ikuti langkah demi langkah secara berurutan.
+
+---
+
+### Opsi A: Windows (Manual - Tanpa Docker)
+**Cocok untuk:** Pengembangan lokal menggunakan Laragon atau XAMPP.
+
+#### 1. Persiapan Direktori & Clone
+Buka terminal (PowerShell/Command Prompt) dan masuk ke folder `www` atau `htdocs` Anda.
+```powershell
+git clone https://github.com/CatzLoverz/polislot-admin-dashboard.git
 cd polislot-admin-dashboard
-
-# Install PHP Dependencies
-composer install
 ```
 
-Salin konfigurasi environment dan generate Key aplikasi:
-
-**Linux / Mac / Git Bash:**
-```bash
-cp .env.example .env
-php artisan key:generate
+#### 2. Config Git Ownership
+Jalankan perintah ini agar tidak ada masalah permission file.
+```powershell
+git config core.fileMode false
 ```
 
-**Windows (CMD / PowerShell):**
+#### 3. Buka Code Editor
+```powershell
+code .
+```
+
+#### 4. Konfigurasi Environment (.env)
+Copy file `.env.example` ke `.env`.
 ```powershell
 copy .env.example .env
+```
+Sesuaikan konfigurasi database di file `.env` dengan database lokal Anda (misal: localhost).
+
+#### 5. Generate Keys (Gunakan Git Bash)
+⚠️ **PENTING**: Buka **Git Bash** di folder project (Klik Kanan -> Git Bash Here) dan jalankan perintah ini untuk membuat kunci enkripsi:
+```bash
+openssl genrsa -out storage/app/private/keys/private_key.pem 4096
+openssl rsa -pubout -in storage/app/private/keys/private_key.pem -out storage/app/private/keys/public_key.pem
+```
+
+#### 6. Instalasi Dependency
+Kembali ke terminal biasa/PowerShell:
+```powershell
+composer install
 php artisan key:generate
 ```
 
-### 2. Konfigurasi Database & Migrasi
-Buat database baru di MySQL (misal: `polislot_db`), lalu sesuaikan file `.env`:
-
-```ini
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=polislot_db
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-#### Penting: Setup Akun Admin
-Karena aplikasi **tidak memiliki fitur pendaftaran untuk Admin**, Anda harus mengatur email dan password admin secara manual melalui seeder.
-1. Buka file `database/seeders/UserSeeder.php`.
-2. Ubah bagian `email` dan `password` pada blok `User::create` untuk admin.
-3. Simpan perubahan.
-
-Jalankan migrasi dan seeder:
-
-```bash
-php artisan migrate --seed
-```
-
-### 3. Pemisahan Akun Database (RBAC)
-
-Gunakan command Laravel yang telah disiapkan untuk membuat user database aplikasi secara otomatis.
-
-> [!WARNING]
-> **Catatan Keamanan**: Menjalankan command dengan password sebagai argumen dapat menyimpannya di *history terminal* Anda.
-> Gunakan command ini di environment development aman, atau bersihkan history setelahnya (`history -c` di Linux/Mac). Jika di Production, disarankan menggunakan input interaktif atau SQL manual untuk keamanan maksimal.
-
-```bash
-# Format: php artisan db:setup-user <username> <password>
-php artisan db:setup-user polislot_app password_kuat_anda
-```
-
-Setelah sukses, update `.env` Anda dengan kredensial baru tersebut:
-```ini
-DB_USERNAME=polislot_app
-DB_PASSWORD=password_kuat_anda
-```
-
-### 4. Setup Enkripsi API (Private Key)
-Aplikasi ini menggunakan enkripsi *End-to-End* untuk komunikasi API. Anda perlu men-generate pasangan kunci RSA 4096-bit.
-
-**Linux / Mac / Laragon Terminal:**
-```bash
-# Buat folder
-mkdir -p storage/app/private/keys
-
-# Generate Private Key (4096 bit)
-openssl genrsa -out storage/app/private/keys/private_key.pem 4096
-
-# Extract Public Key (Opsional, untuk dibagikan ke Mobile App)
-openssl rsa -in storage/app/private/keys/private_key.pem -pubout -out storage/app/private/keys/public_key.pem
-
-# Set Permissions (Linux/Mac Only)
-chmod 600 storage/app/private/keys/private_key.pem
-```
-
-**Windows (CMD / PowerShell):**
-Pastikan `openssl` sudah terinstall (biasanya bawaan Git/Laragon).
-
+#### 7. Migrasi Database
+Pastikan database MySQL sudah dibuat (misal: `polislot_db`) dan config `.env` sudah sesuai.
 ```powershell
-# Buat folder
-mkdir storage\app\private\keys
-
-# Generate Private Key
-openssl genrsa -out storage/app/private/keys/private_key.pem 4096
-
-# Extract Public Key
-openssl rsa -in storage/app/private/keys/private_key.pem -pubout -out storage/app/private/keys/public_key.pem
+php artisan migrate
 ```
-*Catatan: Windows tidak memerlukan `chmod`. Akses file dilindungi oleh ACL sistem operasi.*
 
-## Menjalankan Aplikasi
+#### 8. Setup Akun Admin (Seeder)
+Buka file `database/seeders/UserSeeder.php` di editor Anda.
+*   Ubah email default `...` menjadi email admin valid yang Anda inginkan.
+*   Setup password jika perlu.
 
-### 1. Jalankan Web Server
-Gunakan perintah bawaan Laravel:
-```bash
+#### 9. Seeding & RBAC Setup
+Jalankan perintah ini satu per satu:
+```powershell
+# Isi data awal
+php artisan db:seed
+
+# Buat User Database Admin (Dashboard)
+php artisan db:setup-admin polislot_admin PasswordAdmin123
+
+# Buat User Database Mobile (App)
+php artisan db:setup-user polislot_mobile PasswordMobile123
+```
+
+#### 10. Update Environment (.env)
+Buka file `.env` dan **WAJIB** update credential database sekarang:
+```ini
+# Ganti user root dengan user admin baru
+DB_USERNAME=polislot_admin
+DB_PASSWORD=PasswordAdmin123
+
+# Tambahkan user mobile untuk API
+DB_USERNAME_MOBILE=polislot_mobile
+DB_PASSWORD_MOBILE=PasswordMobile123
+```
+
+#### 11. Jalankan Server
+```powershell
 php artisan serve
 ```
-Akses dashboard di: `http://localhost:8000`
+Akses di: `http://localhost:8000`
 
-### 2. Aktifkan Backup Otomatis & Scheduler
-Agar fitur **Backup Database Otomatis** berjalan, worker scheduler harus aktif:
+---
 
-```bash
-php artisan schedule:work
+### Opsi B: Windows + Docker Desktop
+**Cocok untuk:** Menggunakan Docker container di Windows dengan WSL 2 backend.
+
+#### 1. Persiapan Direktori
+Buat folder `projects` di drive pilihan Anda.
+```powershell
+mkdir projects
+cd projects
+git clone https://github.com/CatzLoverz/polislot-admin-dashboard.git
+cd polislot-admin-dashboard
 ```
-*Catatan: Di production, tambahkan entri ke Crontab server.*
+
+#### 2. Config Git & Editor
+```powershell
+code .
+git config core.fileMode false
+```
+
+#### 3. Konfigurasi Environment Docker
+Copy dan siapkan file konfigurasi.
+```powershell
+copy .env.example .env.docker
+copy docker-compose.example docker-compose.yaml
+```
+*   **Edit `.env.docker`**: Ubah `DB_HOST=127.0.0.1` menjadi `DB_HOST=db`.
+*   **Edit `docker-compose.yaml`**: Comment service `tunnel` jika tidak pakai Cloudflare.
+
+#### 4. Setup Network & Firewall (PowerShell Admin)
+Agar web admin bisa diakses dari HP/Device lain. Jalankan di **PowerShell as Administrator**:
+
+1.  Cek IP WSL: `wsl hostname -I` (Ambil IP pertama).
+2.  Jalankan command berikut (Ganti `<IP_WSL>`):
+    ```powershell
+    netsh interface portproxy add v4tov4 listenport=8000 listenaddress=0.0.0.0 connectport=8000 connectaddress=<IP_WSL>
+    New-NetFirewallRule -DisplayName "WSL Proxy 8000" -Direction Inbound -LocalPort 8000 -Protocol TCP -Action Allow -Profile Private
+    ```
+
+#### 5. Generate Keys (Gunakan Git Bash)
+⚠️ **PENTING**: Buka **Git Bash** di folder project dan jalankan command ini (Host Side):
+```bash
+openssl genrsa -out storage/app/private/keys/private_key.pem 4096
+openssl rsa -pubout -in storage/app/private/keys/private_key.pem -out storage/app/private/keys/public_key.pem
+```
+
+#### 6. Start Docker Container
+Pastikan Docker Desktop menyala.
+```powershell
+docker compose up -d --build
+```
+
+#### 7. Instalasi Dependency & Key App
+```powershell
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+```
+
+#### 8. Migrasi Database
+```powershell
+docker compose exec app php artisan migrate
+```
+
+#### 9. Setup Akun Admin (Seeder)
+Buka `database/seeders/UserSeeder.php` dan edit email/password admin sesuai keinginan.
+
+#### 10. Seeding & RBAC Setup
+```powershell
+# 1. Seeding Data
+docker compose exec app php artisan db:seed
+
+# 2. Setup Database Users
+docker compose exec app db:setup-admin polislot_admin PasswordAdmin123
+docker compose exec app db:setup-user polislot_mobile PasswordMobile123
+```
+
+#### 11. Update Environment (.env)
+Buka `.env` (atau `.env.docker` yang dimount ke `.env`) dan update:
+```ini
+DB_USERNAME=polislot_admin
+DB_PASSWORD=PasswordAdmin123
+
+DB_USERNAME_MOBILE=polislot_mobile
+DB_PASSWORD_MOBILE=PasswordMobile123
+```
+
+#### 12. Restart Server
+```powershell
+docker compose restart
+```
+Akses di: `http://localhost:8000` (atau IP Komputer untuk akses dari HP).
+
+---
+
+### Opsi C: Linux / WSL 2 + Docker (Recommended)
+**Cocok untuk:** Production server, Ubuntu, atau WSL 2 native.
+
+#### 1. Persiapan Direktori
+```bash
+mkdir projects && cd projects
+git clone https://github.com/CatzLoverz/polislot-admin-dashboard.git
+cd polislot-admin-dashboard
+code .
+```
+
+#### 2. Config Git
+```bash
+git config core.fileMode false
+```
+
+#### 3. Konfigurasi Environment & Logrotate
+```bash
+cp .env.example .env.docker
+# Edit .env.docker: Ubah DB_HOST=db
+
+cp docker-compose.example docker-compose.yaml
+# Edit docker-compose.yaml: Atur tunnel/root password
+
+cp docker/logrotate.example docker/logrotate
+# Edit docker/logrotate: Sesuaikan path project
+```
+
+#### 4. Generate Keys (Host)
+Jalankan di terminal host (bukan di dalam docker):
+```bash
+openssl genrsa -out storage/app/private/keys/private_key.pem 4096
+openssl rsa -pubout -in storage/app/private/keys/private_key.pem -out storage/app/private/keys/public_key.pem
+```
+
+#### 5. Start Server (Setup Script)
+Script ini otomatis mengatur permission.
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+#### 6. Install Dependency
+```bash
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+```
+
+#### 7. Migrasi
+```bash
+docker compose exec app php artisan migrate
+```
+
+#### 8. Setup Seeder & RBAC
+1.  **Edit Seeder**: Ubah `database/seeders/UserSeeder.php` sekarang.
+2.  **Jalankan Command**:
+    ```bash
+    docker compose exec app php artisan db:seed
+    docker compose exec app db:setup-admin polislot_admin PasswordAdmin123
+    docker compose exec app db:setup-user polislot_mobile PasswordMobile123
+    ```
+
+#### 9. Update Environment
+Update file `.env` (atau `.env.docker`) dengan credential baru:
+```ini
+DB_USERNAME=polislot_admin
+DB_PASSWORD=PasswordAdmin123
+
+DB_USERNAME_MOBILE=polislot_mobile
+DB_PASSWORD_MOBILE=PasswordMobile123
+```
+
+#### 10. Restart
+```bash
+docker compose up -d
+```
+Akses di: `http://localhost:8000`
+
+
 
 ## Manajemen Database (Backup & Restore)
 
 Aplikasi ini dilengkapi fitur built-in untuk backup dan restore database.
 
 ### 1. Backup Manual
-Untuk melakukan backup database saat ini juga:
+
+**A. Manual Setup (Local):**
 ```bash
 php artisan db:backup
 ```
-File backup akan tersimpan di `storage/app/backups/manual/`.
 
-### 2. Lihat Daftar Backup
-Untuk melihat file backup yang tersedia:
+**B. Docker Setup (Windows/Linux):**
 ```bash
-php artisan db:list
+docker compose exec app php artisan db:backup
 ```
+*File backup akan tersimpan di `storage/app/backups/manual/`.*
 
-### 3. Restore Database
+### 2. Restore Database
 **Perhatian**: Restore akan menimpa seluruh data database saat ini.
 Gunakan nama file yang didapat dari perintah `db:list`.
 
+**A. Manual Setup (Local):**
 ```bash
+php artisan db:list
 # Format: php artisan db:restore <path/to/filename.sql>
 php artisan db:restore manual/2025-12-22-23-59-59_backup.sql
+```
+
+**B. Docker Setup (Windows/Linux):**
+```bash
+docker compose exec app php artisan db:list
+docker compose exec app php artisan db:restore manual/2025-12-22-23-59-59_backup.sql
 ```
 
 ## Struktur Direktori
