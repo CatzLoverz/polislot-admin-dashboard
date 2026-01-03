@@ -18,8 +18,8 @@ class UserSeeder extends Seeder
 
         // Buat 1 admin
         User::create([
-            'email' => '...', // isi email sebenarnya
-            'password' => Hash::make('Password_12'),
+            'email' => env('ADMIN_EMAIL'),
+            'password' => Hash::make(env('ADMIN_PASSWORD')),
             'role' => 'admin',
             'name' => 'Admin PoliSlot',
             'avatar' => null,
