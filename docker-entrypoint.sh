@@ -68,6 +68,34 @@ mkdir -p "$KEY_DIR"
 chown -R www-data:www-data "$KEY_DIR"
 chmod -R 775 "$KEY_DIR"
 
+# --- 5. ENSURE STORAGE LINK ---
+# Fixes "missing link" issue after restart, especially on WSL/Windows mounts
+LINK_PATH="/var/www/html/public/storage"
+echo "Checking storage symlink at $LINK_PATH..."
+
+if [ -L "$LINK_PATH" ]; then
+    # It is a symlink, check if valid
+    if [ ! -e "$LINK_PATH" ]; then
+        echo "Found broken symlink. Recreating..."
+        rm "$LINK_PATH"
+        php artisan storage:link
+    else
+        echo "Symlink exists and is valid."
+    fi
+elif [ -d "$LINK_PATH" ]; then
+    # It is a directory (Not a symlink)
+    echo "Directory found at $LINK_PATH (likely bind-mount from docker-compose). Skipping link creation."
+else
+    # Nothing exists
+    echo "No link found. Creating..."
+    php artisan storage:link
+fi
+
+# Ensure the symlink is owned by www-data (safety net)
+if [ -L "$LINK_PATH" ]; then
+    chown -h www-data:www-data "$LINK_PATH"
+fi
+
 echo "Environment Ready. Executing Command..."
 
 exec "$@"
