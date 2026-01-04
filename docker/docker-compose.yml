@@ -1,0 +1,103 @@
+# Copy this file to docker-compose.yaml and adjust as needed
+# This version INCLUDES MariaDB logging and automatic log rotation sidecar
+
+services:
+
+  app:
+    image: catzloverz/polislot-admin-dashboard:latest
+    container_name: polislot_app
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:8080:80" # port host : port container
+    volumes:
+      # Mount file .env (Host -> Container)
+      - ./.env:/var/www/html/.env
+      # Gunakan named volume untuk storage (agar data upload persisten)
+      - ./storage/public:/var/www/html/storage/app/public
+      - ./storage/logs:/var/www/html/storage/logs
+      - ./storage/backups:/var/www/html/storage/app/backups
+      - ./private_key.pem:/var/www/html/storage/app/private/keys/private_key.pem
+    depends_on:
+      - db
+    networks:
+      - polislot_net
+    env_file:
+      - .env
+
+  
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: polislot_tunnel
+    restart: unless-stopped
+    command: tunnel run
+    env_file:
+      - .env
+    networks:
+      - polislot_net
+
+  db:
+    image: mariadb:latest
+    container_name: polislot_db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: '...' # Ganti dengan password root yang aman 
+    volumes:
+      - dbdata:/var/lib/mysql
+      # Mount Config Logging
+      - ./mariadb.cnf:/etc/mysql/conf.d/logging.cnf:ro
+      # Mount Folder Log ke Host
+      - ./storage/logs/mariadb:/var/log/mysql
+    ports:
+      - "127.0.0.1:3308:3306"
+    networks:
+      - polislot_net
+
+  # Sidecar untuk rotasi log (Alpine + Logrotate)
+  logrotate:
+    image: alpine:latest
+    container_name: polislot_logrotate
+    restart: unless-stopped
+    # Install logrotate, buat cron job tiap 15 menit, lalu fix permission awal log dir
+    command: >
+      sh -c "apk add --no-cache logrotate && 
+             echo '*/15 * * * * /usr/sbin/logrotate /etc/logrotate.d/mariadb' >> /etc/crontabs/root && 
+             echo '* * * * * chmod 644 /var/log/mysql/*.log > /dev/null 2>&1' >> /etc/crontabs/root && 
+             mkdir -p /var/log/mysql &&
+             chown -R 999:999 /var/log/mysql &&
+             chmod 775 /var/log/mysql &&
+             crond -f"
+    volumes:
+      # Mount Log folder yang sama dengan DB
+      - ./storage/logs/mariadb:/var/log/mysql
+      # Mount config logrotate yang baru kita buat
+      - ./logrotate.conf:/etc/logrotate.d/mariadb
+    depends_on:
+      - db
+    networks:
+      - polislot_net
+
+  scheduler:
+    image: catzloverz/polislot-admin-dashboard:latest
+    container_name: polislot_scheduler
+    command: php artisan schedule:work
+    volumes:
+      - ./.env:/var/www/html/.env
+      # Mount storage lengkap agar backup database & log laravel bisa jalan
+      - ./storage/public:/var/www/html/storage/app/public
+      - ./storage/logs:/var/www/html/storage/logs
+      - ./storage/backups:/var/www/html/storage/app/backups
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - polislot_net
+
+networks:
+  polislot_net:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+  vendor_data:
+    driver: local

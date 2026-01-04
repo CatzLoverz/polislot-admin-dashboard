@@ -23,6 +23,3 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
-docker-compose.yaml
-docker-compose.yml
-init-db.sql

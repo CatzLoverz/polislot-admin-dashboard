@@ -1,0 +1,8 @@
+.git
+.env
+.env.docker
+vendor
+storage/logs/mariadb/*
+docker/*
+docker-compose.yaml
+setup.sh
