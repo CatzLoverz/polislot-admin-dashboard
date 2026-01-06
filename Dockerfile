@@ -2,54 +2,53 @@
 FROM composer:2.8 AS composer
 
 # === Stage 2: App ===
-FROM php:8.3-apache
+FROM dunglas/frankenphp:php8.4
 
 WORKDIR /var/www/html
 
-# A. Install Dependensi System
-# PENTING: 'mariadb-client' wajib ada untuk menjalankan mysqldump & mysql restore
+# A. Install System Dependencies
+# We use apt-get because the default image is Debian-based
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libzip-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
     mariadb-client \
-    libexif-dev \
-    libonig-dev \
     acl \
+    curl \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 # B. Install PHP Extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install -j$(nproc) pdo_mysql mbstring zip exif pcntl bcmath
+# FrankenPHP includes 'install-php-extensions' script
+RUN install-php-extensions \
+    gd \
+    pdo_mysql \
+    mbstring \
+    zip \
+    exif \
+    pcntl \
+    bcmath \
+    opcache
 
-# C. Config Apache
-COPY apache-vhost.conf /etc/apache2/sites-available/000-default.conf
-RUN a2enmod rewrite
-
-# D. Copy Composer
+# C. Copy Composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-# E. Copy & Install Code
+# D. Copy & Install Code
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-scripts
-
 COPY . .
 RUN composer dump-autoload --optimize
 
-# F. Setup Entrypoint
+# E. Setup Entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# G. Final Ownership Fix
+# F. Final Ownership Fix
 RUN chown -R www-data:www-data /var/www/html
 
-# H. Expose Port 80 (Internal Container)
+# G. Expose Port
 EXPOSE 80
 
-# I. Jalankan Entrypoint
+# H. Start Server
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["frankenphp", "php-server", "--root", "public/"]
