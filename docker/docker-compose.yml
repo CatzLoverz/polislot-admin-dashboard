@@ -1,4 +1,3 @@
-# Copy this file to docker-compose.yaml and adjust as needed
 # This version INCLUDES MariaDB logging and automatic log rotation sidecar
 
 services:
@@ -64,19 +63,10 @@ services:
     container_name: polislot_logrotate
     restart: unless-stopped
     # Install logrotate, buat cron job tiap 15 menit, lalu fix permission awal log dir
-    command: >
-      sh -c "apk add --no-cache logrotate && 
-             echo '*/15 * * * * /usr/sbin/logrotate /etc/logrotate.d/mariadb' >> /etc/crontabs/root && 
-             echo '* * * * * chmod 644 /var/log/mysql/*.log > /dev/null 2>&1' >> /etc/crontabs/root && 
-             mkdir -p /var/log/mysql &&
-             chown -R 999:999 /var/log/mysql &&
-             chmod 775 /var/log/mysql &&
-             crond -f"
+    entrypoint: [ "sh", "/usr/local/bin/logrotate-entrypoint.sh" ]
     volumes:
-      # Mount Log folder yang sama dengan DB
       - ./storage/logs/mariadb:/var/log/mysql
-      # Mount config logrotate yang baru kita buat
-      - ./logrotate.conf:/etc/logrotate.d/mariadb
+      - ./logrotate-entrypoint.sh:/usr/local/bin/logrotate-entrypoint.sh:ro
     depends_on:
       - db
     networks:
