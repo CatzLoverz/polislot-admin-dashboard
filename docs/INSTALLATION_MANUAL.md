@@ -58,14 +58,19 @@ Buka file `.env` dan atur:
     MAIL_PASSWORD=app_password_anda
     MAIL_ENCRYPTION=tls
     ```
+5.  **External Services**:
+    - **Google Maps**: Wajib diisi agar fitur peta di dashboard berfungsi.
+    ```ini
+    GOOGLE_MAPS_JS="isi_api_key_google_cloud_anda"
+    ```
 
 ### 2. Generate RSA Keys (Wajib)
 Generate pasangan kunci RSA untuk enkripsi API agar aplikasi mobile dapat terhubung.
 ```bash
-mkdir -p storage/app/private/keys
 openssl genrsa -out storage/app/private/keys/private_key.pem 4096
 openssl rsa -pubout -in storage/app/private/keys/private_key.pem -out storage/app/private/keys/public_key.pem
 ```
+*Note: Public key bisa disimpan untuk referensi, private key wajib ada.*
 
 ### 3. Instalasi Dependency
 Install library PHP yang dibutuhkan menggunakan Composer.

@@ -30,15 +30,15 @@ services:
       timeout: 10s
       retries: 3
 
-  tunnel:
-    image: cloudflare/cloudflared:latest
-    container_name: polislot_tunnel
-    restart: unless-stopped
-    command: tunnel run
-    env_file:
-      - .env
-    networks:
-      - polislot_net
+  # tunnel:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: polislot_tunnel
+  #   restart: unless-stopped
+  #   command: tunnel run
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - polislot_net
 
   db:
     image: mariadb:latest

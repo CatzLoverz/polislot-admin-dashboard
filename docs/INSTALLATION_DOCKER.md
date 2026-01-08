@@ -15,6 +15,7 @@ Karena instalasi ini terpisah dari source code, Anda perlu **Menyalin** beberapa
 1. Copy `docker/docker-compose.yml` -> ke root.
 2. Copy `docker/mariadb.cnf` -> ke root.
 3. Copy `docker/logrotate-entrypoint.sh` -> ke root.
+4. Copy `.env.example` -> ke root (Rename menjadi `.env`).
 
 ### Khusus Pengguna Linux
 Berikan izin eksekusi pada file entrypoint yang sudah dicopy ke root:
@@ -29,12 +30,16 @@ chmod +x logrotate-entrypoint.sh
 Ikuti langkah-langkah berikut secara berurutan.
 
 ### 1. Konfigurasi Environment (.env)
-Salin file `.env.example` menjadi `.env`.
-```bash
-cp .env.example .env
-```
 Buka `.env` dan atur konfigurasi berikut:
-- **Database Root**: Samakan password dengan `docker-compose.yml`.
+- **Database Configuration (Docker)**: Ubah konfigurasi database agar sesuai dengan service container.
+    ```ini
+    DB_CONNECTION=mariadb
+    DB_HOST=db
+    DB_PORT=3306
+    DB_DATABASE=polislot
+    DB_USERNAME=root
+    DB_PASSWORD=password_root_yang_sama_dengan_compose
+    ```
 - **Admin Setup**: Isi variabel dibawah ini agar akun admin otomatis terbuat saat seeding.
     > **PENTING**: Gunakan **EMAIL YANG VALID** karena kode OTP untuk reset password akan dikirimkan ke email ini.
     ```ini
@@ -50,9 +55,46 @@ Buka `.env` dan atur konfigurasi berikut:
     MAIL_PASSWORD=app_password_anda
     MAIL_ENCRYPTION=tls
     ```
+- **External Services**:
+    - **Google Maps**: Wajib diisi agar fitur peta di dashboard berfungsi.
+    ```ini
+    GOOGLE_MAPS_JS="isi_api_key_google_cloud_anda"
+    ```
+    - **Cloudflare Tunnel (Opsional)**: Isi token ini jika Anda menggunakan fitur tunneling.
+    ```ini
+    TUNNEL_TOKEN="isi_token_cloudflare_tunnel_anda"
+    ```
 
 ### 2. Atur docker-compose.yml
-Pastikan `docker-compose.yml` (di root) memiliki konfigurasi `MARIADB_ROOT_PASSWORD` yang kuat dan sesuai dengan yang Anda inginkan.
+Pastikan file `docker-compose.yml` Anda memiliki konfigurasi seperti berikut.
+
+**PENTING**:
+1. Sesuaikan `MARIADB_ROOT_PASSWORD`.
+2. Jika ingin menggunakan **Cloudflare Tunnel**, harap **UNCOMMENT** bagian service `tunnel` di file `docker-compose.yml` Anda.
+
+```yaml
+services:
+  # ... (Services lainnya: app, tunnel) ...
+
+  db:
+    image: mariadb:latest
+    container_name: polislot_db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: '...' # <--- GANTI INI dengan password root yang aman!
+    volumes:
+      - dbdata:/var/lib/mysql
+      # Mount Config Logging
+      - ./mariadb.cnf:/etc/mysql/conf.d/logging.cnf:ro
+      # Mount Folder Log ke Host
+      - ./storage/logs/mariadb:/var/log/mysql
+    ports:
+      - "127.0.0.1:3308:3306"
+    networks:
+      - polislot_net
+
+  # ... (Services lainnya: logrotate, scheduler) ...
+```
 
 ### 3. Generate RSA Keys (Di Root)
 **Wajib:** Generate pasangan kunci RSA untuk enkripsi API di **Root Folder** (sejajar dengan `docker-compose.yml`). Docker akan memount file ini ke lokasi yang tepat di dalam container.
