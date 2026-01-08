@@ -3,12 +3,15 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Console\Traits\LoggableOutput;
 use Symfony\Component\Process\Process; 
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Support\Facades\File; 
 
 class BackupDatabase extends Command
 {
+    use LoggableOutput;
+
     protected $signature = 'db:backup';
     protected $description = 'Backup database MySQL/MariaDB (Fleksibel Win/Linux)';
 
@@ -72,8 +75,8 @@ class BackupDatabase extends Command
             $process->mustRun(); 
 
             if (file_exists($backupFile) && filesize($backupFile) > 0) {
-                $this->info("✅ Database backup created: {$backupFile}");
-                $this->info(" Size: " . number_format(filesize($backupFile) / 1024, 2) . " KB");
+                $this->logInfo("✅ Database backup created: {$backupFile}");
+                $this->logInfo(" Size: " . number_format(filesize($backupFile) / 1024, 2) . " KB");
                 return 0;
             } else {
                 $this->error("❌ File dibuat tapi kosong (0 bytes) atau tidak ada.");

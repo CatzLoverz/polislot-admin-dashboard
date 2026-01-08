@@ -3,11 +3,15 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Console\Traits\LoggableOutput;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class BackupClean extends Command
 {
+    use LoggableOutput;
+
     protected $signature = 'backup:clean {--days=7 : Hapus backup manual yang lebih tua dari jumlah hari ini}';
 
     protected $description = 'Hapus file backup lama dari folder storage/app/backups/manual';
@@ -36,10 +40,8 @@ class BackupClean extends Command
             }
         }
 
-        if ($deletedCount === 0) {
-            $this->info("✅ Tidak ada file lama yang perlu dihapus.");
-        } else {
-            $this->info("✅ Total {$deletedCount} file backup lama berhasil dihapus.");
+        if ($deletedCount > 0) {
+            $this->logInfo("✅ Total {$deletedCount} file backup lama berhasil dihapus.");
         }
 
         return Command::SUCCESS;

@@ -3,9 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Console\Traits\LoggableOutput;
 
 class DbRestore extends Command
 {
+    use LoggableOutput;
+
     protected $signature = 'db:restore {filename}';
     protected $description = 'Restore database dari file SQL di storage/backups';
 
@@ -43,7 +46,7 @@ class DbRestore extends Command
         exec($command, $output, $result);
 
         if ($result === 0) {
-            $this->info("✅ Restore database '{$db}' berhasil!");
+            $this->logInfo("✅ Restore database '{$db}' berhasil!");
         } else {
             $this->error("❌ Restore gagal!");
             $this->line("Detail error:\n" . implode("\n", $output));

@@ -3,12 +3,16 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Console\Traits\LoggableOutput;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log; 
 
 class BackupAuto extends Command
 {
+    use LoggableOutput;
+
     protected $signature = 'db:backup-auto {filename}';
     protected $description = 'Backup database (Fleksibel Win/Linux) untuk scheduler';
 
@@ -68,7 +72,7 @@ class BackupAuto extends Command
             $process->mustRun(); 
 
             if (file_exists($backupFile) && filesize($backupFile) > 0) {
-                $this->info("✅ Automatic override success: {$filename}");
+                $this->logInfo("✅ Automatic override success: {$filename}");
                 return 0;
             } else {
                 $this->error("❌ File dibuat tapi kosong (0 bytes).");
