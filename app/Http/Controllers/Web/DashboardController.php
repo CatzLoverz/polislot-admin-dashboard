@@ -139,6 +139,7 @@ class DashboardController extends Controller
     {
         try {
             $leaders = User::select('user_id', 'name', 'avatar', 'lifetime_points') // id is mapped to user_id usually, verify model
+                ->where('role', 'user')
                 ->whereNotNull('email_verified_at')
                 ->orderBy('lifetime_points', 'desc')
                 ->take(10)

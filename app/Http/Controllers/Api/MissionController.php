@@ -94,6 +94,7 @@ class MissionController extends Controller
             // 3. Leaderboard & Rank (Logic Tetap Sama)
             $leaderboardRaw = User::select('user_id', 'name', 'avatar', 'lifetime_points')
                 ->whereNotNull('email_verified_at')
+                ->where('role', 'user')
                 ->orderBy('lifetime_points', 'desc')
                 ->take(10)
                 ->get();

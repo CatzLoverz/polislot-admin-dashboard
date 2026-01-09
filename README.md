@@ -34,9 +34,6 @@ Berikut adalah gambaran umum struktur direktori penting proyek ini:
 
 ```
 polislot-admin-dashboard/
-├── docs/                     # Dokumentasi Instalasi
-│   ├── INSTALLATION_DOCKER.md
-│   └── INSTALLATION_MANUAL.md
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/      # Logic Aplikasi
@@ -44,9 +41,16 @@ polislot-admin-dashboard/
 │   └── Services/             # Business Logic
 ├── docker/                   # Konfigurasi Docker & scripts
 ├── database/                 # Migrations & Seeders
+├── docs/                     # Dokumentasi Instalasi
+│   ├── INSTALLATION_DOCKER.md
+│   └── INSTALLATION_MANUAL.md
 ├── resources/views/          # Halaman Web (Blade)
 ├── routes/                   # Definisi URL (web.php & api.php)
-└── storage/app/private/keys/ # Lokasi RSA Keys (Generated saat install)
+└── storage/
+    ├── app/
+    │   ├── private/keys      # Lokasi RSA Keys (Generated saat install)		
+    │   └── public            # Storage penyimpanan media
+    └── logs/                 # Log laravel dan mariadb
 ```
 
 ## 📖 Panduan Instalasi
