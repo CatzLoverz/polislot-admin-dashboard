@@ -78,4 +78,4 @@ Aplikasi ini dilengkapi dengan custom artisan commands untuk mempermudah mainten
 | `php artisan schedule:work` | Menjalankan scheduler (untuk Auto Backup) | `php artisan schedule:work` |
 
 ---
-*Dibuat oleh Tim PBL-TRPL409*
+*Dibuat oleh Tim PBL-TRPL409 :>*
