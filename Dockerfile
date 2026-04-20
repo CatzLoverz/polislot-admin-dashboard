@@ -41,8 +41,7 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts \
     && npm install
 
 COPY . .
-RUN cp .env.example .env \
-    && php artisan install:broadcasting --force -n \
+RUN rm -rf public/storage \
     && composer dump-autoload --optimize \
     && npm run build
 
