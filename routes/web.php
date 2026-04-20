@@ -62,6 +62,10 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         // Route Perangkat IoT (SSH Management & websocket)
         Route::resource('iot-devices', IotDeviceController::class)->except(['create', 'edit', 'show']);
 
+        // Route Pengujian WebSocket
+        Route::get('test-websocket', [\App\Http\Controllers\Web\TestWsController::class, 'index'])->name('test-ws.index');
+        Route::post('test-websocket/push', [\App\Http\Controllers\Web\TestWsController::class, 'push'])->name('test-ws.push');
+
         // Route Park Subarea
         Route::post('park-area/{park_area}/subarea', [ParkSubareaController::class, 'store'])->name('park-area.subarea.store');
         Route::resource('park-subarea', ParkSubareaController::class)->only(['update', 'destroy']);

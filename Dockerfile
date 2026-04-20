@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y \
     acl \
     curl \
     procps \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 # B. Install PHP Extensions
@@ -34,10 +36,15 @@ RUN install-php-extensions \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # D. Copy & Install Code
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+COPY composer.json composer.lock package*.json ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts \
+    && npm install
+
 COPY . .
-RUN composer dump-autoload --optimize
+RUN cp .env.example .env \
+    && php artisan install:broadcasting --force -n \
+    && composer dump-autoload --optimize \
+    && npm run build
 
 # E. Setup Entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/

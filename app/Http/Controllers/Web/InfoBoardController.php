@@ -43,9 +43,7 @@ class InfoBoardController extends Controller
                                     data-content="'.e($row->info_content).'"
                                     data-update-url="'.route('admin.info-board.update', $row->info_id).'"
                                     data-toggle="tooltip" 
-                                    title="Edit '.$infoTitle.'"> 
-                                    <i class="fa fa-edit"></i>
-                                </button>';
+                                    title="Edit '.$infoTitle.'"><i class="fa fa-edit"></i></button>';
                     
                     // Tombol Delete
                     $btnDelete = '<form action="'.route('admin.info-board.destroy', $row->info_id).'" 
@@ -57,9 +55,7 @@ class InfoBoardController extends Controller
                                         <button type="submit" 
                                             class="btn btn-link btn-danger btn-lg" 
                                             data-toggle="tooltip" 
-                                            title="Hapus '.$infoTitle.'">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                            title="Hapus '.$infoTitle.'"><i class="fa fa-trash"></i></button>
                                   </form>';
 
                     return '<div class="form-button-action d-flex justify-content-center">'.$btnEdit.$btnDelete.'</div>';

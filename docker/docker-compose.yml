@@ -93,6 +93,20 @@ services:
     networks:
       - polislot_net
 
+  reverb:
+    image: catzloverz/polislot-admin-dashboard:latest
+    container_name: polislot_reverb
+    command: php artisan reverb:start --host="0.0.0.0" --port=8080
+    ports:
+      - "0.0.0.0:84:8080" # Akses websocket bisa dicek di ws://[ip_host]:6001
+    volumes:
+      - ./.env:/var/www/html/.env
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - polislot_net
+
 networks:
   polislot_net:
     driver: bridge

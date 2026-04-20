@@ -39,9 +39,7 @@ class IotDeviceController extends Controller
                                     data-mac="'.e($row->device_mac_address).'"
                                     data-update-url="'.route('admin.iot-devices.update', $row->device_id).'"
                                     data-toggle="tooltip" 
-                                    title="Edit Perangkat"> 
-                                    <i class="fa fa-edit"></i>
-                                </button>';
+                                    title="Edit Perangkat"><i class="fa fa-edit"></i></button>';
                     
                     // Tombol Delete
                     $btnDelete = '<form action="'.route('admin.iot-devices.destroy', $row->device_id).'" 
@@ -53,9 +51,7 @@ class IotDeviceController extends Controller
                                         <button type="submit" 
                                             class="btn btn-link btn-danger btn-lg" 
                                             data-toggle="tooltip" 
-                                            title="Hapus Perangkat">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                            title="Hapus Perangkat"><i class="fa fa-trash"></i></button>
                                   </form>';
 
                     return '<div class="form-button-action d-flex justify-content-center">'.$btnEdit.$btnDelete.'</div>';
