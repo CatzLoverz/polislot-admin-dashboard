@@ -136,6 +136,11 @@
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>
+                            <li class="nav-item {{ Route::is('admin.iot-devices.*') ? 'active' : '' }}">
+                                <a href="{{ Route('admin.iot-devices.index') }}"> <i class="fas fa-microchip"></i>
+                                    <p>Manajemen Perangkat IoT</p>
+                                </a>
+                            </li>
                             <li class="nav-item {{ Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*') ? 'active submenu' : '' }}">
                                 <a data-toggle="collapse" href="#menuDropdown" aria-expanded="true">
                                     <i class="fas fa-gamepad"></i><p>Manajemen Gamifikasi</p><span class="caret"></span>

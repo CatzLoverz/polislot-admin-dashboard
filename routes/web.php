@@ -14,6 +14,7 @@ use App\Http\Controllers\Web\ParkSubareaController;
 use App\Http\Controllers\Web\FeedbackCategoryController;
 use App\Http\Controllers\Web\RewardVerificationController;
 use App\Http\Controllers\Web\ValidationController;
+use App\Http\Controllers\Web\IotDeviceController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -57,6 +58,10 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         
         // Route Park Area
         Route::resource('park-area', ParkAreaController::class);
+
+        // Route Perangkat IoT (SSH Management)
+        Route::resource('iot-devices', IotDeviceController::class)->except(['create', 'edit', 'show']);
+        Route::get('iot-devices/{id}/terminal', [IotDeviceController::class, 'terminal'])->name('iot-devices.terminal');
 
         // Route Park Subarea
         Route::post('park-area/{park_area}/subarea', [ParkSubareaController::class, 'store'])->name('park-area.subarea.store');
