@@ -38,12 +38,4 @@ class TestWebSocket implements ShouldBroadcastNow
             new Channel('iot-channel'),
         ];
     }
-    
-    /**
-     * Nama event yang akan ditangkap oleh frontend.
-     */
-    public function broadcastAs()
-    {
-        return 'test.message';
-    }
 }

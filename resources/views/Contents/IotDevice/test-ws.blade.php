@@ -51,6 +51,15 @@
 @endsection
 
 @push('scripts')
+{{-- Inject runtime environment variable untuk dipakai oleh JS (Reverb) agar tidak terikat manifest Build --}}
+<script>
+    window.AppConfig = {
+        reverbAppKey: '{{ env('REVERB_APP_KEY', 'anyrandomkeypolislot') }}',
+        reverbHost: window.location.hostname,
+        reverbPort: {{ env('VITE_REVERB_PORT', 84) }}
+    };
+</script>
+
 {{-- Hanya memuat vite dan echo JS jika modul instalasi broadcasting sudah selesai --}}
 @vite(['resources/js/app.js'])
 
@@ -70,7 +79,7 @@
                 // Mendengarkan public channel bernama 'iot-channel'
                 // Karena kita menggunakan event App\Events\TestWebSocket
                 window.Echo.channel('iot-channel')
-                    .listen('.test.message', (e) => {
+                    .listen('TestWebSocket', (e) => {
                         console.log('Message Received:', e);
                         
                         // Sembunyikan elemen kosong
