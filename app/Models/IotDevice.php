@@ -13,7 +13,18 @@ class IotDevice extends Model
     protected $primaryKey = 'device_id';
 
     protected $fillable = [
-        'device_name',
-        'ssh_url',
+        'park_subarea_id',
+        'device_url',
+        'device_mac_address',
     ];
+
+    public function subarea()
+    {
+        return $this->belongsTo(ParkSubarea::class, 'park_subarea_id', 'park_subarea_id');
+    }
+
+    public function captures()
+    {
+        return $this->hasMany(IotCapture::class, 'device_id', 'device_id');
+    }
 }

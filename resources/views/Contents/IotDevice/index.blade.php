@@ -2,7 +2,7 @@
 
 @section('title', 'Manajemen Perangkat IoT')
 @section('page_title', 'Manajemen Perangkat IoT')
-@section('page_subtitle', 'Kelola daftar alamat terminal SSH perangkat IoT dari Cloudflare Tunnel.')
+@section('page_subtitle', 'Kelola pendaftaran perangkat IoT pada setiap slot / subarea parkir.')
 
 @section('content')
 <div class="page-inner mt--5">
@@ -22,8 +22,9 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th>Nama Perangkat</th>
-                                    <th>URL SSH (Cloudflare)</th>
+                                    <th>Lokasi (Subarea)</th>
+                                    <th>URL Koneksi / WS</th>
+                                    <th>MAC Address</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -52,13 +53,22 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Nama Perangkat <span class="text-danger">*</span></label>
-                        <input type="text" name="device_name" class="form-control" placeholder="Masukkan nama perangkat..." required>
+                        <label>Subarea / Slot Parkir <span class="text-danger">*</span></label>
+                        <select name="park_subarea_id" class="form-control" required>
+                            <option value="">-- Pilih Slot Parkir --</option>
+                            @foreach($availableSubareas as $subarea)
+                                <option value="{{ $subarea['id'] }}">{{ $subarea['text'] }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">Satu slot parkir hanya bisa dipasang satu perangkat.</small>
                     </div>
                     <div class="form-group">
-                        <label>URL Akses SSH <span class="text-danger">*</span></label>
-                        <input type="url" name="ssh_url" class="form-control" placeholder="https://ssh.namadomain.com" required>
-                        <small class="form-text text-muted">Aplikasi Cloudflare Access yang mengatur Web SSH Terminal.</small>
+                        <label>URL Device / Websocket</label>
+                        <input type="text" name="device_url" class="form-control" placeholder="wss://... atau http://...">
+                    </div>
+                    <div class="form-group">
+                        <label>MAC Address Perangkat</label>
+                        <input type="text" name="device_mac_address" class="form-control" placeholder="00:1B:44:11:3A:B7">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -85,12 +95,21 @@
                 @method('PUT')
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Nama Perangkat <span class="text-danger">*</span></label>
-                        <input type="text" name="device_name" id="edit_device_name" class="form-control" required>
+                        <label>Subarea / Slot Parkir <span class="text-danger">*</span></label>
+                        <select name="park_subarea_id" id="edit_park_subarea_id" class="form-control" required>
+                            <option value="">-- Pilih Slot Parkir --</option>
+                            @foreach($allSubareas as $subarea)
+                                <option value="{{ $subarea['id'] }}">{{ $subarea['text'] }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>URL Akses SSH <span class="text-danger">*</span></label>
-                        <input type="url" name="ssh_url" id="edit_ssh_url" class="form-control" required>
+                        <label>URL Device / Websocket</label>
+                        <input type="text" name="device_url" id="edit_device_url" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>MAC Address Perangkat</label>
+                        <input type="text" name="device_mac_address" id="edit_device_mac_address" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -117,14 +136,9 @@
 
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center' },
-                { data: 'device_name', name: 'device_name' },
-                { 
-                    data: 'ssh_url', 
-                    name: 'ssh_url',
-                    render: function(data, type, row) {
-                        return '<a href="' + data + '" target="_blank">' + data + '</a>';
-                    }
-                },
+                { data: 'subarea_name', name: 'subarea.park_subarea_name' },
+                { data: 'device_url', name: 'device_url', defaultContent: '-' },
+                { data: 'device_mac_address', name: 'device_mac_address', defaultContent: '-' },
                 { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
             ],
             language: { url: "{{ asset('assets/js/plugin/datatables/indonesian.json') }}" }
@@ -133,13 +147,15 @@
         // Event Listener untuk Tombol Edit di dalam Tabel
         $(document).on('click', '.btn-edit', function() {
             var id = $(this).data('id');
-            var name = $(this).data('name');
+            var subareaId = $(this).data('subarea');
             var url = $(this).data('url');
+            var mac = $(this).data('mac');
             var updateUrl = $(this).data('update-url');
 
             // Isi nilai ke dalam form modal
-            $('#edit_device_name').val(name);
-            $('#edit_ssh_url').val(url);
+            $('#edit_park_subarea_id').val(subareaId);
+            $('#edit_device_url').val(url);
+            $('#edit_device_mac_address').val(mac);
             $('#editForm').attr('action', updateUrl);
 
             // Tampilkan modal

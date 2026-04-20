@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('iot_devices', function (Blueprint $table) {
             $table->id('device_id');
-            $table->string('device_name');
-            $table->string('ssh_url');
+            $table->foreignId('park_subarea_id')->unique()->constrained('park_subareas', 'park_subarea_id')->onDelete('cascade');
+            $table->string('device_url')->nullable(); // websocket url, dll
+            $table->string('device_mac_address')->nullable();
             $table->timestamps();
         });
     }

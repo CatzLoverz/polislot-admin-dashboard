@@ -38,4 +38,9 @@ class ParkSubarea extends Model
     {
         return $this->hasMany(SubareaComment::class, 'park_subarea_id', 'park_subarea_id');
     }
+
+    public function iotDevice()
+    {
+        return $this->hasOne(IotDevice::class, 'park_subarea_id', 'park_subarea_id');
+    }
 }
