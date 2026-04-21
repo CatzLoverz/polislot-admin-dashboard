@@ -69,26 +69,23 @@ chown -R www-data:www-data "$KEY_DIR"
 chmod -R 775 "$KEY_DIR"
 
 # --- 5. ENSURE STORAGE LINK ---
-# Fixes "missing link" issue after restart, especially on WSL/Windows mounts
 LINK_PATH="/var/www/html/public/storage"
 echo "Checking storage symlink at $LINK_PATH..."
 
+# Hapus apa pun yang ada di public/storage (folder palsu/text file dari Git WSL)
+if [ -e "$LINK_PATH" ] || [ -L "$LINK_PATH" ]; then
+    echo "Cleaning up existing public/storage to ensure a fresh symlink..."
+    rm -rf "$LINK_PATH"
+fi
+
+echo "Creating storage link..."
+# Gunakan --force agar Laravel memaksa pembuatan symlink baru
+php artisan storage:link --force
+
+# Pastikan ownershipnya sesuai
 if [ -L "$LINK_PATH" ]; then
-    # It is a symlink, check if valid
-    if [ ! -e "$LINK_PATH" ]; then
-        echo "Found broken symlink. Recreating..."
-        rm "$LINK_PATH"
-        php artisan storage:link
-    else
-        echo "Symlink exists and is valid."
-    fi
-elif [ -d "$LINK_PATH" ]; then
-    # It is a directory (Not a symlink)
-    echo "Directory found at $LINK_PATH (likely bind-mount from docker-compose). Skipping link creation."
-else
-    # Nothing exists
-    echo "No link found. Creating..."
-    php artisan storage:link
+    chown -h www-data:www-data "$LINK_PATH"
+    echo "Symlink created successfully."
 fi
 
 # Ensure the symlink is owned by www-data (safety net)
