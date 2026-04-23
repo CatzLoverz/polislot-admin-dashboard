@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\SubareaCommentController;
 use App\Http\Controllers\Api\UserValidationController;
+use App\Http\Controllers\Api\UserFaqController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
@@ -70,5 +71,8 @@ Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
         // Route Komentar Subarea Parkir
         Route::apiResource('comment', SubareaCommentController::class)->only('index', 'store', 'destroy');
         Route::match(['put', 'post'], '/comment/{id}', [SubareaCommentController::class, 'update']);
+
+        // Route InfoBoard
+        Route::get('/user-faq', [UserFaqController::class, 'index']);
     });
 });

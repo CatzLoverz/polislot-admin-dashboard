@@ -175,6 +175,12 @@
                                     <p>Kritik & Saran</p>
                                 </a>
                             </li>
+                            <li class="nav-item {{ Route::is('admin.user-faq.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.user-faq.index') }}">
+                                    <i class="fas fa-question-circle"></i>
+                                    <p>FAQ</p>
+                                </a>
+                            </li>
                         @endcan
                         {{-- Akhir menu khusus Admin --}}
 
