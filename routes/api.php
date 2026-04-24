@@ -11,7 +11,11 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\SubareaCommentController;
 use App\Http\Controllers\Api\UserValidationController;
+use App\Http\Controllers\Api\IotStreamController;
 use Illuminate\Support\Facades\Route;
+
+// Rute untuk IoT Device Broadcasting
+Route::post('/iot/stream', [IotStreamController::class, 'receiveStream']);
 
 Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
 

@@ -52,12 +52,19 @@
                                         
                                         {{-- Amenities --}}
                                         <div class="mt-2">
+                                            @if($sub->iotDevice)
+                                                <span class="badge badge-success text-white mr-1 mb-1 p-1" style="font-size: 9px;" data-toggle="tooltip" title="IoT Tersambung">
+                                                    <i class="fas fa-video"></i> IoT Active
+                                                </span>
+                                            @endif
                                             @forelse($sub->parkAmenity as $amenity)
                                                 <span class="badge badge-count text-secondary border border-secondary mr-1 mb-1 p-1" style="font-size: 9px;">
                                                     {{ $amenity->park_amenity_name }}
                                                 </span>
                                             @empty
-                                                <small class="text-muted font-italic" style="font-size: 11px;">Tidak ada fasilitas.</small>
+                                                @if(!$sub->iotDevice)
+                                                    <small class="text-muted font-italic" style="font-size: 11px;">Tidak ada fasilitas/IoT.</small>
+                                                @endif
                                             @endforelse
                                         </div>
                                     </div>
@@ -72,7 +79,7 @@
 
                                         {{-- Tombol Edit (Existing) --}}
                                         <button type="button" class="btn btn-icon btn-round btn-primary btn-xs mr-1" 
-                                            onclick="openEditModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}', {{ json_encode($sub->parkAmenity) }})"
+                                            onclick="openEditModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}', {{ json_encode($sub->parkAmenity) }}, {{ json_encode($sub->iotDevice) }})"
                                             data-toggle="tooltip" title="Edit Subarea">
                                             <i class="fa fa-edit"></i>
                                         </button>
@@ -155,6 +162,17 @@
                 <div class="form-group">
                     <label class="font-weight-bold">Nama Sub Area</label>
                     <input type="text" id="edit_subarea_name" class="form-control" required>
+                </div>
+                
+                <hr>
+                
+                <div class="form-group">
+                    <label class="font-weight-bold">Device IOT (Kamera / Sensor)</label>
+                    <div class="mb-2">
+                        <small class="text-muted">Isi MAC Address jika subarea ini dipasang perangkat IoT.</small>
+                    </div>
+                    <label>MAC Address (Opsional)</label>
+                    <input type="text" id="edit_device_mac" class="form-control" placeholder="Contoh: 00:1A:2B:3C:4D:5E">
                 </div>
                 
                 <hr>
@@ -355,10 +373,16 @@
     // === 3. LOGIKA AMENITIES (BATCH SAVE) ===
     let tempAmenities = [];
 
-    function openEditModal(id, name, amenities = []) {
+    function openEditModal(id, name, amenities = [], iotDevice = null) {
         $('#edit_subarea_id').val(id);
         $('#edit_subarea_name').val(name);
         $('#new_amenity_name').val('');
+        
+        if(iotDevice) {
+            $('#edit_device_mac').val(iotDevice.device_mac_address || '');
+        } else {
+            $('#edit_device_mac').val('');
+        }
         
         // Initialize Temp State
         tempAmenities = amenities.map(item => 
@@ -410,6 +434,7 @@
     function saveSubareaChanges() {
         let id = $('#edit_subarea_id').val();
         let name = $('#edit_subarea_name').val();
+        let deviceMac = $('#edit_device_mac').val();
         
         if(!name) { Swal.fire('Gagal', 'Nama subarea kosong.', 'warning'); return; }
 
@@ -420,7 +445,8 @@
                 _token: "{{ csrf_token() }}", 
                 _method: "PUT", 
                 name: name,
-                amenities: tempAmenities // Kirim array amenities baru
+                amenities: tempAmenities, // Kirim array amenities baru
+                device_mac_address: deviceMac
             },
             success: function(res) {
                 $('#modalEditSubarea').modal('hide');

@@ -135,9 +135,10 @@ class ParkAreaController extends Controller
     public function show($id)
     {
         try {
-            // Eager Load: Subarea -> Validasi (1 jam terakhir) & Komentar (terbaru + user info) & Amenities
+            // Eager Load: Subarea -> Validasi (1 jam terakhir) & Komentar (terbaru + user info) & Amenities & IoT
             $area = ParkArea::with([
                 'parkSubarea.parkAmenity',
+                'parkSubarea.iotDevice',
                 'parkSubarea.userValidation' => function($query) {
                     $query->orderBy('created_at', 'desc');
                 },

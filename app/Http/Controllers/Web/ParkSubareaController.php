@@ -80,7 +80,8 @@ class ParkSubareaController extends Controller
                     'name'      => 'required|string|max:255',
                     'polygon'   => 'nullable|json',
                     'amenities' => 'nullable|array',
-                    'amenities.*'=> 'string|max:255'
+                    'amenities.*'=> 'string|max:255',
+                    'device_mac_address'=> 'nullable|string|max:255'
                 ]);
 
                 $dataToUpdate = [
@@ -111,6 +112,22 @@ class ParkSubareaController extends Controller
                                 'park_amenity_name' => $amenityName
                             ]);
                         }
+                    }
+                }
+
+                // === LOGIKA SYNC IOT DEVICE ===
+                if ($request->has('device_mac_address')) {
+                    $deviceMac = $request->device_mac_address;
+                    
+                    if (!empty($deviceMac)) {
+                        $subarea->iotDevice()->updateOrCreate(
+                            ['park_subarea_id' => $subarea->park_subarea_id],
+                            [
+                                'device_mac_address' => $deviceMac
+                            ]
+                        );
+                    } else {
+                        $subarea->iotDevice()->delete();
                     }
                 }
 

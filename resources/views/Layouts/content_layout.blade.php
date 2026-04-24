@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/atlantis.min.css') }}" />
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" /> --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('styles')
 </head>
@@ -134,11 +135,6 @@
                             <li class="nav-item {{ Route::is('admin.info-board.*') ? 'active' : '' }}">
                                 <a href="{{ Route('admin.info-board.index') }}"> <i class="fas fa-bullhorn"></i>
                                     <p>Manajemen Info Board</p>
-                                </a>
-                            </li>
-                            <li class="nav-item {{ Route::is('admin.iot-devices.*') ? 'active' : '' }}">
-                                <a href="{{ Route('admin.iot-devices.index') }}"> <i class="fas fa-microchip"></i>
-                                    <p>Manajemen Perangkat IoT</p>
                                 </a>
                             </li>
                             <li class="nav-item {{ Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*') ? 'active submenu' : '' }}">
