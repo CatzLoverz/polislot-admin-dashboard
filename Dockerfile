@@ -79,7 +79,7 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # H. Copy Supervisor config
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # I. Final Ownership Fix
 RUN chown -R www-data:www-data /var/www/html
