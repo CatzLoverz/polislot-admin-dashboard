@@ -352,8 +352,26 @@
             },
             error: function(xhr) {
                 $('#modalSubarea').modal('hide');
-                Swal.fire('Error', 'Gagal menyimpan.', 'error');
                 if(currentPolygonObj) currentPolygonObj.setMap(null);
+                
+                let errorMsg = 'Gagal menyimpan subarea.';
+                if (xhr.status === 422 && xhr.responseJSON.errors) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '<ul class="text-left mt-2" style="list-style-type: disc; padding-left: 20px;">';
+                    for (let key in errors) {
+                        errorMsg += `<li>${errors[key][0]}</li>`;
+                    }
+                    errorMsg += '</ul>';
+                }
+
+                Swal.fire({
+                    icon: 'error', 
+                    title: 'Gagal Menyimpan!', 
+                    html: errorMsg
+                }).then(() => {
+                    // Opsional: Buka kembali modal jika user ingin memperbaiki
+                    $('#modalSubarea').modal('show');
+                });
             }
         });
     }
@@ -445,7 +463,7 @@
                 _token: "{{ csrf_token() }}", 
                 _method: "PUT", 
                 name: name,
-                amenities: tempAmenities, // Kirim array amenities baru
+                amenities: tempAmenities,
                 device_mac_address: deviceMac
             },
             success: function(res) {
@@ -455,7 +473,25 @@
                     timer: 1000, showConfirmButton: false
                 }).then(() => { location.reload(); });
             },
-            error: function(err) { Swal.fire('Error', 'Gagal menyimpan perubahan.', 'error'); }
+            error: function(xhr) { 
+                let errorMsg = 'Gagal menyimpan perubahan.';
+                
+                // Cek apakah error dari validasi Laravel (Status 422)
+                if (xhr.status === 422 && xhr.responseJSON.errors) {
+                    let errors = xhr.responseJSON.errors;
+                    errorMsg = '<ul class="text-left mt-2" style="list-style-type: disc; padding-left: 20px;">';
+                    for (let key in errors) {
+                        errorMsg += `<li>${errors[key][0]}</li>`; // Menampilkan pesan error pertama dari tiap input
+                    }
+                    errorMsg += '</ul>';
+                }
+
+                Swal.fire({
+                    icon: 'error', 
+                    title: 'Validasi Gagal!', 
+                    html: errorMsg // Menggunakan 'html' bukan 'text' agar tag <ul> terbaca
+                }); 
+            }
         });
     }
 

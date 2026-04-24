@@ -56,7 +56,11 @@ class ParkSubareaController extends Controller
 
         } catch (ValidationException $e) {
             Log::warning('[WEB ParkSubareaController@store] Gagal: Validasi error.', ['errors' => $e->errors()]);
-            return response()->json(['status' => 'error', 'message' => 'Validasi gagal.'], 422);
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'Validasi gagal.',
+                'errors' => $e->errors()
+            ], 422);
         } catch (Exception $e) {
             Log::error('[WEB ParkSubareaController@store] Gagal: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan server.'], 500);
@@ -154,7 +158,12 @@ class ParkSubareaController extends Controller
             });
 
         } catch (ValidationException $e) {
-            return response()->json(['status' => 'error', 'message' => 'Validasi gagal.'], 422);
+            Log::warning('[WEB ParkSubareaController@update] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'Validasi gagal.',
+                'errors' => $e->errors()
+            ], 422);
         } catch (Exception $e) {
             Log::error('[WEB ParkSubareaController@update] Gagal: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan server.'], 500);
