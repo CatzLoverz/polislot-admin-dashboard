@@ -1,5 +1,13 @@
 {
     frankenphp
+    servers {
+        timeouts {
+            read_body 30s
+            read_header 10s
+            write 30s
+            idle 120s
+        }
+    }
 }
 
 :80 {
@@ -9,7 +17,14 @@
     @websocket {
         path /app/*
     }
-    reverse_proxy @websocket 127.0.0.1:8080
+    reverse_proxy @websocket 127.0.0.1:8080 {
+        flush_interval -1
+    }
+
+    # Naikkan batas upload untuk frame video base64
+    request_body {
+        max_size 10MB
+    }
 
     # Serve PHP untuk semua request lainnya
     php_server

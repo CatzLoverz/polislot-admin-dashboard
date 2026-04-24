@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('user_faq', function (Blueprint $table) {
             $table->id('faq_id');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade');
             $table->string('faq_question');
             $table->text('faq_answer');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

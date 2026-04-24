@@ -38,4 +38,8 @@ return [
         ],
     ],
 
+    'iot' => [
+        'secret' => env('IOT_API_SECRET'),
+    ],
+
 ];

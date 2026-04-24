@@ -1,11 +1,41 @@
 @extends("Layouts.content_layout")
 
-@section('title', 'Uji Coba IoT WebSockets')
-@section('page_title', 'Uji Coba Penerimaan Data IoT Real-Time')
-@section('page_subtitle', 'Halaman ini digunakan untuk menguji fungsionalitas Laravel Reverb dalam menerima frame data/teks dari device Python.')
+@section('title', 'IoT Stream Viewer')
+@section('page_title', 'Live IoT Stream Viewer')
+@section('page_subtitle', 'Monitoring real-time data/video dari perangkat IoT yang terdaftar.')
 
 @section('content')
 <div class="page-inner mt--5">
+    {{-- Pemilihan Device --}}
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body py-3 d-flex align-items-center">
+                    <i class="fas fa-microchip fa-lg text-primary mr-3"></i>
+                    <div class="mr-3">
+                        <label class="mb-0 font-weight-bold" for="device-selector">Pilih Perangkat IoT:</label>
+                    </div>
+                    <select class="form-control" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
+                        @forelse($devices as $device)
+                            <option value="{{ $device->device_mac_address }}" 
+                                {{ $targetMac === $device->device_mac_address ? 'selected' : '' }}>
+                                {{ $device->device_mac_address }}
+                                @if($device->subarea)
+                                    — {{ $device->subarea->park_subarea_name ?? '' }}
+                                @endif
+                            </option>
+                        @empty
+                            <option value="" disabled selected>Tidak ada perangkat terdaftar</option>
+                        @endforelse
+                    </select>
+                    <span class="badge badge-info ml-3">
+                        <i class="fas fa-hdd mr-1"></i> {{ $devices->count() }} Perangkat
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         {{-- Panel Kiri: Live Stream / Text Viewer --}}
         <div class="col-md-8">
@@ -19,7 +49,6 @@
                     </span>
                 </div>
                 <div class="card-body p-0 bg-light d-flex justify-content-center align-items-center" style="min-height: 400px; border-radius: 0 0 15px 15px;">
-                    {{-- Container ini bisa digunakan untuk menampilkan gambar base64 atau teks --}}
                     <div id="feed-container" class="text-center p-4">
                         <i class="fas fa-video-slash fa-4x text-muted mb-3"></i>
                         <h5 class="text-muted" id="feed-placeholder">Menunggu data masuk dari MAC Address: <strong>{{ $targetMac }}</strong>...</h5>
@@ -49,6 +78,15 @@
 @endsection
 
 @push('scripts')
+<script>
+    // Navigasi ke device lain tanpa reload penuh
+    function switchDevice(macAddress) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('mac', macAddress);
+        window.location.href = url.toString();
+    }
+</script>
+
 <script type="module">
     // Hapus titik dua dari MAC address sesuai dengan format channel di Event kita
     const cleanMac = "{{ str_replace(':', '', $targetMac) }}";

@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\IotDevice;
 use Illuminate\Http\Request;
 
 class IotStreamViewerController extends Controller
 {
     /**
-     * Menampilkan halaman khusus untuk uji coba WebSockets (Reverb)
+     * Menampilkan halaman IoT Stream Viewer.
+     * MAC Address dipilih dari daftar perangkat yang terdaftar di database.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Target MAC Address untuk uji coba
-        $targetMac = "00:1A:2B:3C:4D:5E";
+        // Ambil semua device dari database
+        $devices = IotDevice::with('subarea')->get();
         
-        return view('Contents.IotStream.viewer', compact('targetMac'));
+        // MAC Address yang dipilih (dari query string atau default ke device pertama)
+        $targetMac = $request->query('mac', $devices->first()?->device_mac_address ?? '00:00:00:00:00:00');
+        
+        return view('Contents.IotStream.viewer', compact('devices', 'targetMac'));
     }
 }
