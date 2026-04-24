@@ -76,12 +76,23 @@ class ParkSubareaController extends Controller
             return DB::transaction(function () use ($request, $id) {
                 $subarea = ParkSubarea::findOrFail($id);
 
+                // Ambil device_id milik subarea ini (untuk self-exclude unique check)
+                $currentDeviceId = $subarea->iotDevice?->device_id;
+
                 $request->validate([
                     'name'      => 'required|string|max:255',
                     'polygon'   => 'nullable|json',
                     'amenities' => 'nullable|array',
                     'amenities.*'=> 'string|max:255',
-                    'device_mac_address'=> 'nullable|string|max:255'
+                    'device_mac_address'=> [
+                        'nullable',
+                        'string',
+                        'max:17',
+                        'regex:/^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$/',
+                        $currentDeviceId 
+                            ? 'unique:iot_devices,device_mac_address,' . $currentDeviceId . ',device_id'
+                            : 'unique:iot_devices,device_mac_address',
+                    ],
                 ]);
 
                 $dataToUpdate = [

@@ -14,7 +14,6 @@ class IotDevice extends Model
 
     protected $fillable = [
         'park_subarea_id',
-        'device_url',
         'device_mac_address',
     ];
 
