@@ -2,7 +2,10 @@
 .env
 .env.docker
 vendor
+node_modules
 storage/logs/mariadb/*
 docker/*
 docker-compose.yaml
 setup.sh
+.scannerwork
+tests

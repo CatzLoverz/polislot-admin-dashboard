@@ -72,12 +72,12 @@
         
         logList.prepend(li); // Masukkan ke urutan paling atas
         
-        // Batasi maksimal log agar tidak terlalu berat (misal max 50 baris)
         if (logList.children.length > 50) {
             logList.removeChild(logList.lastChild);
         }
     }
 
+    // Menggunakan window.Echo yang telah di-bundle secara internal oleh Vite (app.js/echo.js)
     function initEcho() {
         if (typeof window.Echo !== 'undefined') {
             connectionStatus.className = "badge badge-success";
@@ -110,13 +110,13 @@
                     }
                 });
         } else {
-            // Polling setiap 500ms jika window.Echo belum siap
-            console.warn("Menunggu Vite memuat window.Echo...");
+            // Polling sampai file app.js termuat sepenuhnya tanpa harus mem-blok peramban
+            console.warn("Menunggu modul mandiri (Echo) dari Vite dimuat...");
             setTimeout(initEcho, 500);
         }
     }
 
-    // Mulai polling
+    // Mulai inisiasi
     initEcho();
 </script>
 @endpush
