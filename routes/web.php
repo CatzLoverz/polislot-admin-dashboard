@@ -15,6 +15,7 @@ use App\Http\Controllers\Web\FeedbackCategoryController;
 use App\Http\Controllers\Web\RewardVerificationController;
 use App\Http\Controllers\Web\ValidationController;
 use App\Http\Controllers\Web\IotDeviceController;
+use App\Http\Controllers\Web\UserFaqController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -90,6 +91,10 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         // Route Feedback (Masukan dan Saran)
         Route::resource('feedback-category', FeedbackCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('feedback', FeedbackController::class)->only(['index', 'store', 'update', 'destroy']);
+
+        // Route User_Faq
+        Route::resource('user-faq', UserFaqController::class)->only(['index', 'store', 'update', 'destroy']);
+        
 
         // Route Khusus Uji Coba WebSockets IoT
         Route::get('iot-stream-viewer', [\App\Http\Controllers\Web\IotStreamViewerController::class, 'index'])->name('iot-stream-viewer.index');

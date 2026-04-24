@@ -63,10 +63,16 @@ EOF
 chmod 644 /etc/logrotate.d/mariadb
 chown root:root /etc/logrotate.d/mariadb
 
-# 5. ADD MINUTELY CRON JOB TO FIX PERMISSIONS
-# Tambahkan cron job 1 menit untuk memastikan file log baru yang dibuat MariaDB 
-# selalu bisa dibaca dari host OS (chmod 644).
-echo "* * * * * find /var/log/mysql -type f -name '*.log' -exec chmod 644 {} +" >> /etc/crontabs/root
+# 5. ADD CRON JOBS
+# Tambahkan cron job untuk:
+# a) Rotate logrotate setiap jam
+# b) Fix permissions file log baru
+cat <<'CRON' >> /etc/crontabs/root
+# Logrotate every hour
+0 * * * * logrotate /etc/logrotate.d/mariadb
+# Fix permissions every minute
+* * * * * find /var/log/mysql -type f -name '*.log' -exec chmod 644 {} +
+CRON
 
 # 6. RUN CRON
 echo "Starting crond..."
