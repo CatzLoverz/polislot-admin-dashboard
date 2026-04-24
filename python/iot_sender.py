@@ -2,8 +2,12 @@ import requests
 import time
 import base64
 
-# Configuration
-API_URL = "http://127.0.0.1:8000/api/iot/stream"
+# ============================================================
+# KONFIGURASI
+# ============================================================
+# Gunakan domain Cloudflare Tunnel (HTTPS)
+# Cloudflare Tunnel otomatis meneruskan traffic ke container Docker
+API_URL = "https://raihanatmaja.my.id/api/iot/stream"
 MAC_ADDRESS = "00:1A:2B:3C:4D:5E"
 
 def send_telemetry():
@@ -25,7 +29,7 @@ def send_telemetry():
         
         try:
             print(f"Sending data to server: {simulated_data}")
-            response = requests.post(API_URL, json=payload)
+            response = requests.post(API_URL, json=payload, timeout=10)
             
             if response.status_code == 200:
                 print(f"Success: {response.json()}")

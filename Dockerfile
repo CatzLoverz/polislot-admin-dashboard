@@ -6,10 +6,10 @@ FROM composer:2.8 AS composer-stage
 WORKDIR /build
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs
 
 # ============================================================
-# Stage 2: Node — Build Vite/Tailwind Assets
+# Stage 2: Node — Build Vite Assets
 # ============================================================
 FROM node:22-alpine AS node-stage
 
@@ -22,12 +22,13 @@ RUN npm ci
 COPY vite.config.js ./
 COPY resources/ ./resources/
 
-# Dummy .env values so Vite can resolve import.meta.env during build
-ENV VITE_APP_NAME="PoliSlot"
-ENV VITE_REVERB_APP_KEY="placeholder"
-ENV VITE_REVERB_HOST="127.0.0.1"
-ENV VITE_REVERB_PORT="8080"
-ENV VITE_REVERB_SCHEME="http"
+# VITE build-time values (bukan secret — ini public key yang terekspos di browser)
+# Default sudah disetel untuk Docker deployment, tidak perlu --build-arg
+ARG VITE_APP_NAME="PoliSlot"
+ARG VITE_REVERB_APP_KEY="xcubvd4inm14ayepjhro"
+ARG VITE_REVERB_HOST="127.0.0.1"
+ARG VITE_REVERB_PORT="6001"
+ARG VITE_REVERB_SCHEME="http"
 
 RUN npm run build
 
@@ -78,14 +79,17 @@ RUN composer dump-autoload --optimize
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# H. Copy Supervisor config
+# H. Copy Supervisor config (dari root project, bukan docker/)
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# I. Final Ownership Fix
+# I. Copy Caddyfile — proxy WebSocket /app/* ke Reverb internal
+COPY Caddyfile /etc/caddy/Caddyfile
+
+# J. Final Ownership Fix
 RUN chown -R www-data:www-data /var/www/html
 
-# J. Expose Ports — 80 (Web), 8080 (Reverb WebSocket)
-EXPOSE 80 8080
+# K. Expose Port — 80 (Web + WebSocket via Caddy reverse proxy)
+EXPOSE 80
 
 # K. Start via Entrypoint
 ENTRYPOINT ["docker-entrypoint.sh"]

@@ -1,2 +1,82 @@
-copy the content of this folder for the use of installing this project using Docker
-this project image are uploaded into dockerhub registry 
+# ============================================================
+# Panduan Instalasi Docker — PoliSlot Admin Dashboard
+# ============================================================
+#
+# Image tersedia di Docker Hub: catzloverz/polislot-admin-dashboard:latest
+#
+# ============================================================
+# STRUKTUR FOLDER DEPLOY
+# ============================================================
+#
+# Salin semua isi folder docker/ ini ke server, lalu tambahkan
+# file .env dan private_key.pem:
+#
+#   polislot-deploy/
+#   ├── docker-compose.yml
+#   ├── .env                        ← salin dari .env.example, isi semua nilai
+#   ├── private_key.pem             ← RSA key untuk enkripsi API internal
+#   ├── mariadb.cnf                 ← konfigurasi logging MariaDB
+#   ├── logrotate-entrypoint.sh     ← script rotasi log
+#   └── storage/                    ← dibuat otomatis saat pertama kali compose up
+#       ├── public/
+#       ├── logs/
+#       ├── backups/
+#       └── logs/mariadb/
+#
+# ============================================================
+# KONFIGURASI .ENV UNTUK DOCKER
+# ============================================================
+#
+# Ubah nilai berikut di file .env:
+#
+#   DB_HOST=db                      ← nama service database di docker-compose
+#   DB_PORT=3306
+#   DB_DATABASE=polislot_admin_db
+#   DB_USERNAME=admin
+#   DB_PASSWORD=<password_aman>
+#
+#   REVERB_HOST="127.0.0.1"        ← internal (PHP ke Reverb dalam 1 container)
+#   REVERB_PORT=8080
+#   REVERB_SCHEME=http
+#   REVERB_SERVER_HOST="0.0.0.0"
+#
+#   VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
+#   VITE_REVERB_HOST="${REVERB_HOST}"
+#   VITE_REVERB_PORT="6001"        ← port HOST yang di-expose untuk WebSocket
+#   VITE_REVERB_SCHEME="http"
+#
+# Hapus baris DUMP_BINARY_PATH (khusus Windows/Laragon)
+#
+# ============================================================
+# CARA BUILD IMAGE (dari root project)
+# ============================================================
+#
+#   docker build -t catzloverz/polislot-admin-dashboard:latest .
+#
+# Semua VITE_* sudah punya default value di Dockerfile.
+# Tidak perlu --build-arg apapun.
+#
+# ============================================================
+# CARA MENJALANKAN
+# ============================================================
+#
+#   cd polislot-deploy/
+#   docker compose up -d
+#
+# ============================================================
+# PORTS
+# ============================================================
+#
+#   8080  → Web (FrankenPHP)
+#   6001  → WebSocket (Reverb) — untuk browser & IoT device
+#   3308  → MariaDB (localhost only, untuk debugging)
+#
+# ============================================================
+# KONEKSI DARI IOT DEVICE (Raspberry Pi)
+# ============================================================
+#
+#   POST http://<IP_SERVER>:8080/api/iot/stream
+#
+#   Browser WebSocket:
+#   ws://<IP_SERVER>:6001
+#

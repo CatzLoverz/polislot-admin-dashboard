@@ -3,8 +3,11 @@ import requests
 import base64
 import time
 
-# Configuration
-API_URL = "http://127.0.0.1:8000/api/iot/stream"
+# ============================================================
+# KONFIGURASI
+# ============================================================
+# Gunakan domain Cloudflare Tunnel (HTTPS)
+API_URL = "https://raihanatmaja.my.id/api/iot/stream"
 MAC_ADDRESS = "00:1A:2B:3C:4D:5E"
 FPS_TARGET = 10  # Membatasi frame per detik (FPS) agar server HTTP & Reverb tidak overload
 
@@ -61,7 +64,7 @@ def start_video_stream():
             # Kirim frame ke Laravel
             try:
                 # Timeout diset kecil agar tidak menumpuk jika server merespon lambat
-                requests.post(API_URL, json=payload, timeout=2)
+                requests.post(API_URL, json=payload, timeout=5)
                 # print("Frame sent.")
             except requests.exceptions.RequestException as e:
                 print(f"Error mengirim frame: {e}")

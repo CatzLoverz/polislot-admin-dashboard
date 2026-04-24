@@ -1,18 +1,34 @@
 import asyncio
 import websockets
 import json
-import time
-import socket
+import ssl
 
-# Configuration
-# Replace this with your actual Laravel Reverb WebSocket URL and Port.
-# Default Reverb usually runs on port 8080.
-# The URL path for Pusher protocol looks like: /app/{APP_KEY}
-# Check your .env file for REVERB_APP_KEY and REVERB_PORT
-REVERB_APP_KEY = "xcubvd4inm14ayepjhro" # Fetched from .env
-REVERB_HOST = "127.0.0.1"
-REVERB_PORT = 8080
-WS_URL = f"ws://{REVERB_HOST}:{REVERB_PORT}/app/{REVERB_APP_KEY}?protocol=7&client=python-iot"
+# ============================================================
+# KONFIGURASI
+# ============================================================
+# Cloudflare Tunnel mendukung WebSocket via HTTPS (WSS)
+# Tunnel meneruskan traffic ke container Docker port 6001 (Reverb)
+#
+# PENTING: Agar Cloudflare Tunnel bisa meneruskan WebSocket,
+# pastikan tunnel dikonfigurasi dengan 2 subdomain/service:
+#   1. raihanatmaja.my.id       → http://localhost:8080  (Web App)
+#   2. ws.raihanatmaja.my.id    → http://localhost:6001  (Reverb WS)
+#
+# Jika tunnel hanya 1 subdomain (mengarah ke port 8080/Web saja),
+# maka client WebSocket Python ini TIDAK bisa konek.
+# Namun browser tetap bisa konek via Reverb internal.
+# ============================================================
+
+REVERB_APP_KEY = "xcubvd4inm14ayepjhro"
+
+# Opsi 1: Koneksi via Cloudflare Tunnel (WSS) — butuh subdomain khusus WS
+# WS_URL = f"wss://ws.raihanatmaja.my.id/app/{REVERB_APP_KEY}?protocol=7&client=python-iot"
+
+# Opsi 2: Koneksi langsung via IP jaringan lokal (WS) — jika Raspi & server satu LAN
+# WS_URL = f"ws://<IP_WSL>:6001/app/{REVERB_APP_KEY}?protocol=7&client=python-iot"
+
+# Default: Cloudflare Tunnel (gunakan Opsi 2 jika satu jaringan lokal)
+WS_URL = f"wss://ws.raihanatmaja.my.id/app/{REVERB_APP_KEY}?protocol=7&client=python-iot"
 
 # Mac Address of the IoT Device (Mocked for testing)
 MAC_ADDRESS = "00:1A:2B:3C:4D:5E"
@@ -22,8 +38,12 @@ CHANNEL_NAME = f"iot.stream.{CLEAN_MAC}"
 
 async def connect_and_communicate():
     print(f"Connecting to {WS_URL}...")
+    
+    # SSL context untuk koneksi WSS via Cloudflare
+    ssl_context = ssl.create_default_context()
+    
     try:
-        async with websockets.connect(WS_URL) as websocket:
+        async with websockets.connect(WS_URL, ssl=ssl_context) as websocket:
             print("Connected to Laravel Reverb WebSocket!")
             
             # 1. Pusher Protocol: Subscribe to the channel
@@ -39,15 +59,8 @@ async def connect_and_communicate():
             # Create a task to listen for incoming messages from the server
             listen_task = asyncio.create_task(listen_for_messages(websocket))
             
-            # Keep the main loop running, periodically sending "ping" or telemetry data
+            # Keep the main loop running, periodically sending "ping"
             while True:
-                # Simulating sending data to the server
-                # NOTE: For client-to-server WS communication in Pusher/Reverb, 
-                # you typically use "client-" prefixed events on presence/private channels,
-                # OR you send data via HTTP POST API, and the server broadcasts it.
-                # If using HTTP POST to your /api/iot/stream endpoint, you'd use 'requests' library here instead.
-                
-                # To keep the connection alive
                 ping_message = {
                     "event": "pusher:ping",
                     "data": {}
@@ -60,7 +73,7 @@ async def connect_and_communicate():
     except websockets.exceptions.ConnectionClosedError as e:
         print(f"Connection closed unexpectedly: {e}")
     except ConnectionRefusedError:
-        print(f"Connection refused. Make sure Laravel Reverb is running on {REVERB_HOST}:{REVERB_PORT} (php artisan reverb:start)")
+        print(f"Connection refused. Make sure Reverb is running and tunnel is active.")
     except Exception as e:
         print(f"An error occurred: {e}")
 

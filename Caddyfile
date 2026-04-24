@@ -1,0 +1,16 @@
+{
+    frankenphp
+}
+
+:80 {
+    root * /var/www/html/public
+
+    # Reverse proxy WebSocket /app/* ke Reverb (internal port 8080)
+    @websocket {
+        path /app/*
+    }
+    reverse_proxy @websocket 127.0.0.1:8080
+
+    # Serve PHP untuk semua request lainnya
+    php_server
+}
