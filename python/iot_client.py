@@ -17,12 +17,12 @@ import sys
 #   ws://<IP_SERVER>:8080/app/{key}?protocol=7
 # ============================================================
 
-REVERB_APP_KEY = "xcubvd4inm14ayepjhro"
+REVERB_APP_KEY = ""
 
 # --- Pilih salah satu mode koneksi ---
 
 # Mode 1: Via Cloudflare Tunnel (default)
-WS_HOST = "raihanatmaja.my.id"
+WS_HOST = ""
 WS_SCHEME = "wss"  # wss untuk HTTPS, ws untuk HTTP
 WS_PORT = 443      # 443 untuk tunnel, 8080 untuk LAN
 
@@ -39,7 +39,7 @@ else:
     WS_URL = f"{WS_SCHEME}://{WS_HOST}:{WS_PORT}/app/{REVERB_APP_KEY}?protocol=7&client=python-iot"
 
 # Mac Address of the IoT Device
-MAC_ADDRESS = "00:1A:2B:3C:4D:5E"
+MAC_ADDRESS = ""
 CLEAN_MAC = MAC_ADDRESS.replace(":", "")
 CHANNEL_NAME = f"iot.stream.{CLEAN_MAC}"
 

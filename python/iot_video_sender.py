@@ -9,20 +9,21 @@ import hashlib
 # KONFIGURASI
 # ============================================================
 API_URL = "https://raihanatmaja.my.id/api/iot/stream"
-MAC_ADDRESS = "00:1A:2B:3C:4D:5E"
+MAC_ADDRESS = ""
 
 # Shared secret — HARUS SAMA dengan IOT_API_SECRET di .env server
-IOT_API_SECRET = "pOl1sL0t_ioT_s3creT_k3y_2026"
+IOT_API_SECRET = ""
 
 # === Pengaturan Kualitas Stream ===
 FRAME_WIDTH = 640
 FRAME_HEIGHT = 360
 JPEG_QUALITY = 45
-FPS_TARGET = 3
+FPS_TARGET = 10
 
-# === Session untuk reuse TCP connection ===
-session = requests.Session()
-session.headers.update({'Content-Type': 'application/json'})
+# === Session untuk reuse TCP connection (diinisialisasi di dalam fungsi) ===
+# === Pengaturan Reconnect ===
+MAX_RECONNECT_ATTEMPTS = 5
+RECONNECT_DELAY = 10  # detik
 
 def sign_request(mac_address, timestamp, frame):
     """Membuat HMAC-SHA256 signature."""
@@ -39,6 +40,15 @@ def start_video_stream():
     Menangkap video dari webcam dan mengirimkannya via HTTP POST
     dengan HMAC signature untuk keamanan.
     """
+    global session
+    
+    # Inisialisasi variabel dalam fungsi
+    reconnect_attempts = 0
+    
+    # Buat session baru
+    session = requests.Session()
+    session.headers.update({'Content-Type': 'application/json'})
+    
     print(f"Mulai mengirim stream video ke {API_URL}...")
     print(f"Device MAC: {MAC_ADDRESS}")
     print(f"Resolusi: {FRAME_WIDTH}x{FRAME_HEIGHT} | JPEG Quality: {JPEG_QUALITY} | FPS: {FPS_TARGET}")
@@ -101,12 +111,29 @@ def start_video_stream():
                     elapsed = time.time() - start_time
                     print(f"[Frame #{frame_count}] OK | {size_kb:.1f} KB | {elapsed:.2f}s")
                     error_count = 0
+                    reconnect_attempts = 0  # Reset reconnect attempts on success
                 elif response.status_code == 403:
-                    print(f"[DITOLAK] Device MAC tidak terdaftar di server!")
-                    break
+                    # Device TIDAK terdaftar di server — langsung berhenti.
+                    # Tidak perlu retry karena 403 berarti MAC memang tidak ada di database.
+                    print(f"\n{'='*60}")
+                    print(f"[FATAL] Device MAC '{MAC_ADDRESS}' TIDAK TERDAFTAR di server!")
+                    print(f"Server menolak stream dengan status 403 Forbidden.")
+                    print(f"Pastikan MAC address sudah didaftarkan di panel admin.")
+                    print(f"{'='*60}\n")
+                    break  # Langsung keluar, tidak perlu retry
                 elif response.status_code == 401:
                     print(f"[DITOLAK] Signature invalid atau request expired!")
-                    break
+                    reconnect_attempts += 1
+                    if reconnect_attempts < MAX_RECONNECT_ATTEMPTS:
+                        print(f"Mencoba reconnect dalam {RECONNECT_DELAY} detik... ({reconnect_attempts}/{MAX_RECONNECT_ATTEMPTS})")
+                        time.sleep(RECONNECT_DELAY)
+                        session.close()
+                        session = requests.Session()
+                        session.headers.update({'Content-Type': 'application/json'})
+                        continue
+                    else:
+                        print("Gagal terhubung setelah beberapa percobaan. Keluar.")
+                        break
                 else:
                     print(f"[Frame #{frame_count}] Error {response.status_code}")
                     
@@ -129,7 +156,10 @@ def start_video_stream():
         print(f"\nStream dihentikan. Total frame terkirim: {frame_count}")
     finally:
         cap.release()
-        session.close()
+        try:
+            session.close()
+        except Exception:
+            pass
         print("Kamera ditutup.")
 
 if __name__ == "__main__":

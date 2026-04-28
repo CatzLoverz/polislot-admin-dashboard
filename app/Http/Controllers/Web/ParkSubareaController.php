@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -183,6 +184,12 @@ class ParkSubareaController extends Controller
                 $subarea = ParkSubarea::findOrFail($id);
                 $areaId = $subarea->park_area_id; // Simpan ID induk untuk redirect
                 $name = $subarea->park_subarea_name;
+
+                // Hapus IoT device secara eksplisit (agar model event 'deleted' ter-trigger)
+                // sebelum menghapus subarea, karena cascade delete via DB tidak trigger Eloquent events.
+                if ($subarea->iotDevice) {
+                    $subarea->iotDevice->delete();
+                }
 
                 $subarea->delete();
 

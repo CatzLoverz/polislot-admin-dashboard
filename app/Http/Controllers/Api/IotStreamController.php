@@ -32,12 +32,23 @@ class IotStreamController extends Controller
         $macAddress = $request->mac_address;
 
         // ============================================================
-        // 1. VALIDASI MAC ADDRESS (dengan cache 5 menit untuk performa)
+        // 1. VALIDASI MAC ADDRESS (cache 60 detik, invalidasi via Model Event)
         // ============================================================
+        // Cache TTL 60 detik sebagai defense-in-depth.
+        // Invalidasi utama terjadi via IotDevice model event (deleted/updating).
+        // Hanya cache hasil 'true' — jika device belum terdaftar, selalu cek DB.
         $cacheKey = "iot_device_valid:{$macAddress}";
-        $isRegistered = Cache::remember($cacheKey, 300, function () use ($macAddress) {
-            return IotDevice::where('device_mac_address', $macAddress)->exists();
-        });
+        $isRegistered = Cache::get($cacheKey);
+
+        if ($isRegistered === null) {
+            // Cache miss → cek ke database
+            $isRegistered = IotDevice::where('device_mac_address', $macAddress)->exists();
+
+            if ($isRegistered) {
+                // Hanya cache jika terdaftar (true) — TTL 60 detik
+                Cache::put($cacheKey, true, 60);
+            }
+        }
 
         if (!$isRegistered) {
             Log::warning('[API IotStreamController] Rejected: Unregistered MAC Address', [
@@ -45,7 +56,7 @@ class IotStreamController extends Controller
                 'ip'  => $request->ip(),
             ]);
 
-            // Response 403 — bukan 404, agar device tahu ditolak
+            // Response 403 — agar device tahu ditolak dan bisa stop/retry
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Device not registered.',
