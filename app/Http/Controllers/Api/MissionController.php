@@ -109,9 +109,14 @@ class MissionController extends Controller
                 ];
             });
 
-            $userRankPos = User::whereNotNull('email_verified_at')
-                ->where('lifetime_points', '>', $user->lifetime_points)
-                ->count() + 1;
+            if ($user->role === 'user' && $user->email_verified_at !== null) {
+                $userRankPos = User::whereNotNull('email_verified_at')
+                                ->where('role', 'user')
+                                ->where('lifetime_points', '>', $user->lifetime_points)
+                                ->count() + 1;
+            } else {
+                $userRankPos = 0; 
+            }
 
             $userRankData = [
                 'rank' => $userRankPos,
