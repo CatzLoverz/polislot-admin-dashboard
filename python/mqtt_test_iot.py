@@ -117,18 +117,23 @@ def on_message(client, userdata, msg):
 
 def chat_input_thread(client):
     """Thread terpisah untuk membaca input dari keyboard dan mengirimkannya via MQTT (Live Chat)"""
+    import sys
     while True:
         try:
-            msg = input("")
-            if msg.strip():
-                # Kirim pesan balasan ke Laravel (topic chat_reply)
-                payload = {
-                    "username": "IoT Device",
-                    "message": msg.strip()
-                }
-                client.publish(f"polislot/device/{MAC_ADDRESS}/chat_reply", json.dumps(payload), qos=1)
-        except Exception:
-            pass
+            msg = sys.stdin.readline()
+            if msg:
+                msg = msg.strip()
+                if msg:
+                    # Kirim pesan balasan ke Laravel (topic chat_reply)
+                    payload = {
+                        "username": "IoT Device",
+                        "message": msg
+                    }
+                    client.publish(f"polislot/device/{MAC_ADDRESS}/chat_reply", json.dumps(payload), qos=1)
+                    print("📤 [TERKIRIM] " + msg)
+        except Exception as e:
+            print(f"⚠️ Error pada thread input chat: {e}")
+            break
 
 def process_snapshot_request(client):
     # 1. Ambil gambar dari kamera
