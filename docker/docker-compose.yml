@@ -73,6 +73,21 @@ services:
     networks:
       - polislot_net
 
+  # === MQTT Broker: Mosquitto ===
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: polislot_mosquitto
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1883:1883" # Local TCP untuk Laravel
+      - "127.0.0.1:9001:9001" # Local WebSockets untuk Cloudflare Tunnel
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - polislot_net
+
   # === Scheduler: Laravel Cron ===
   scheduler:
     image: catzloverz/polislot-admin-dashboard:latest

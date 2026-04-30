@@ -97,6 +97,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
 
         // Route Khusus Uji Coba WebSockets IoT
         Route::get('iot-stream-viewer', [\App\Http\Controllers\Web\IotStreamViewerController::class, 'index'])->name('iot-stream-viewer.index');
+        Route::post('iot-stream-viewer/trigger', [\App\Http\Controllers\Web\IotStreamViewerController::class, 'triggerSnapshot'])->name('iot-stream-viewer.trigger');
     });
 
 });

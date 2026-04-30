@@ -1,3 +1,5 @@
 websockets
 requests
 opencv-python
+paho-mqtt
+pycryptodome

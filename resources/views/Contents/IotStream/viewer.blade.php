@@ -44,9 +44,14 @@
                     <h4 class="card-title font-weight-bold mb-0">
                         <i class="fas fa-satellite-dish mr-2"></i> Live Feed
                     </h4>
-                    <span class="badge badge-success" id="connection-status">
-                        <i class="fas fa-circle-notch fa-spin mr-1"></i> Menghubungkan...
-                    </span>
+                    <div>
+                        <button class="btn btn-sm btn-primary mr-2" id="btn-request-snapshot" onclick="requestSnapshot()">
+                            <i class="fas fa-camera mr-1"></i> Ambil Snapshot
+                        </button>
+                        <span class="badge badge-success" id="connection-status">
+                            <i class="fas fa-circle-notch fa-spin mr-1"></i> Menghubungkan...
+                        </span>
+                    </div>
                 </div>
                 <div class="card-body p-0 bg-light d-flex justify-content-center align-items-center" style="min-height: 400px; border-radius: 0 0 15px 15px;">
                     <div id="feed-container" class="text-center p-4">
@@ -84,6 +89,45 @@
         const url = new URL(window.location.href);
         url.searchParams.set('mac', macAddress);
         window.location.href = url.toString();
+    }
+
+    // Fungsi untuk meminta snapshot ke server
+    function requestSnapshot() {
+        const macAddress = "{{ $targetMac }}";
+        const btn = document.getElementById('btn-request-snapshot');
+        const originalText = btn.innerHTML;
+        
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Meminta...';
+        btn.disabled = true;
+
+        fetch("{{ route('admin.iot-stream-viewer.trigger') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ mac_address: macAddress })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Tampilkan notifikasi atau log
+                if (typeof addLog === 'function') {
+                    addLog(`Perintah snapshot dikirim ke ${macAddress}`);
+                }
+            } else {
+                alert("Gagal: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Terjadi kesalahan jaringan.");
+        })
+        .finally(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
     }
 </script>
 

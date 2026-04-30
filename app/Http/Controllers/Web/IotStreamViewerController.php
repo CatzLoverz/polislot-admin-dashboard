@@ -22,4 +22,38 @@ class IotStreamViewerController extends Controller
         
         return view('Contents.IotStream.viewer', compact('devices', 'targetMac'));
     }
+
+    /**
+     * Mengirim perintah 'snapshot' ke perangkat IoT via MQTT
+     */
+    public function triggerSnapshot(Request $request)
+    {
+        $request->validate([
+            'mac_address' => 'required|string'
+        ]);
+
+        $mac = $request->mac_address;
+        $topic = "polislot/device/{$mac}/command";
+        
+        $payload = json_encode([
+            'action' => 'snapshot',
+            'timestamp' => time(),
+            'requested_by' => auth()->user()->id ?? 'admin'
+        ]);
+
+        try {
+            // Kita menggunakan facade MQTT dari php-mqtt/client
+            \PhpMqtt\Client\Facades\MQTT::publish($topic, $payload, 1); // QoS 1
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Perintah snapshot berhasil dikirim ke perangkat {$mac}"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal menghubungi MQTT Broker: " . $e->getMessage()
+            ], 500);
+        }
+    }
 }
