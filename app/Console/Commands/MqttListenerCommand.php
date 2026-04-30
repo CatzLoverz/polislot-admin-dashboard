@@ -5,7 +5,13 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotStreamReceived;
+use App\Events\ChatMessageSent;
+use App\Events\IotDeviceStatusChanged;
+use App\Models\IotDevice;
+use App\Models\IotCapture;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class MqttListenerCommand extends Command
 {
@@ -38,6 +44,10 @@ class MqttListenerCommand extends Command
 
         try {
             $mqtt = MQTT::connection();
+            
+            // Beri tahu seluruh perangkat IoT bahwa Server Laravel (Daemon) sedang ONLINE
+            $mqtt->publish('polislot/server/status', 'online', 1, true);
+            $this->info("✅ Server Status: ONLINE (Diumumkan ke MQTT)");
             
             $this->info("Terhubung ke MQTT Broker. Mendengarkan polislot/device/+/snapshot...");
             
@@ -94,17 +104,17 @@ class MqttListenerCommand extends Command
                         return;
                     }
 
-                    $device = \App\Models\IotDevice::where('device_mac_address', $payload['mac_address'])->first();
+                    $device = IotDevice::where('device_mac_address', $payload['mac_address'])->first();
                     
                     if ($device) {
                         // 3. Simpan gambar ke storage public
                         $fileName = 'capture_' . time() . '_' . str_replace(':', '', $payload['mac_address']) . '.jpg';
                         $path = 'iot_captures/' . $fileName;
                         
-                        \Illuminate\Support\Facades\Storage::disk('public')->put($path, $decryptedImageBytes);
+                        Storage::disk('public')->put($path, $decryptedImageBytes);
                         
                         // 4. Simpan ke database IotCapture
-                        \App\Models\IotCapture::create([
+                        IotCapture::create([
                             'device_id' => $device->device_id,
                             'capture_image_path' => $path,
                             'capture_is_trained' => false,
@@ -131,7 +141,7 @@ class MqttListenerCommand extends Command
                     $payload = json_decode($message, true);
                     if ($payload && isset($payload['username'], $payload['message'])) {
                         // Broadcast balasan chat ke web (Reverb)
-                        broadcast(new \App\Events\ChatMessageSent($payload['username'], $payload['message']));
+                        broadcast(new ChatMessageSent($payload['username'], $payload['message']));
                         $this->info("💬 Pesan chat diterima dari {$payload['username']}: {$payload['message']}");
                     }
                 } catch (\Exception $e) {
@@ -148,8 +158,11 @@ class MqttListenerCommand extends Command
                 
                 $this->info("⚡ Status Perangkat [{$mac}]: " . strtoupper($status));
                 
+                // Simpan status terbaru ke Cache agar web bisa tahu status awal saat halaman baru dibuka
+                Cache::forever("iot_status_{$mac}", $status);
+                
                 // Broadcast ke Reverb agar UI berubah secara real-time
-                broadcast(new \App\Events\IotDeviceStatusChanged($mac, $status));
+                broadcast(new IotDeviceStatusChanged($mac, $status));
             });
             
             $mqtt->loop(true);

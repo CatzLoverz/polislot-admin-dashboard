@@ -14,8 +14,8 @@
                     <i class="fas fa-microchip fa-lg text-primary mr-3"></i>
                     <div class="mr-3">
                         <label class="mb-0 font-weight-bold" for="device-selector">Pilih Perangkat IoT:</label>
-                        <div id="status-indicator" class="badge badge-secondary ml-2">
-                            <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> Memuat status...
+                        <div id="status-indicator" class="badge badge-{{ $initialStatus === 'online' ? 'success' : 'danger' }} ml-2">
+                            <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> {{ strtoupper($initialStatus) }}
                         </div>
                     </div>
                     <select class="form-control" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
@@ -296,8 +296,9 @@
             // Listen Status Perangkat (Online/Offline)
             window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
+                    console.log("📡 Status Received:", e);
                     const selectedMac = document.getElementById('device-selector').value;
-                    if (e.macAddress === selectedMac) {
+                    if (e.macAddress.toLowerCase() === selectedMac.toLowerCase()) {
                         updateStatusUI(e.status);
                     }
                 });

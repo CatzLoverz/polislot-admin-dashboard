@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\IotDevice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use PhpMqtt\Client\Facades\MQTT;
+use App\Events\ChatMessageSent;
 
 class IotStreamViewerController extends Controller
 {
@@ -20,7 +23,10 @@ class IotStreamViewerController extends Controller
         // MAC Address yang dipilih (dari query string atau default ke device pertama)
         $targetMac = $request->query('mac', $devices->first()?->device_mac_address ?? '00:00:00:00:00:00');
         
-        return view('Contents.IotStream.viewer', compact('devices', 'targetMac'));
+        // Ambil status terakhir dari cache (default: offline jika tidak pernah online)
+        $initialStatus = Cache::get("iot_status_{$targetMac}", 'offline');
+        
+        return view('Contents.IotStream.viewer', compact('devices', 'targetMac', 'initialStatus'));
     }
 
     /**
@@ -43,7 +49,7 @@ class IotStreamViewerController extends Controller
 
         try {
             // Gunakan QoS 0 (fire and forget) agar tidak perlu mem-block menunggu balasan (ACK) dari Broker
-            \PhpMqtt\Client\Facades\MQTT::publish($topic, $payload, 0); 
+            MQTT::publish($topic, $payload, 0); 
             
             return response()->json([
                 'success' => true,
@@ -80,10 +86,10 @@ class IotStreamViewerController extends Controller
 
         try {
             // 1. Kirim pesan chat via MQTT ke IoT Device
-            \PhpMqtt\Client\Facades\MQTT::publish($topic, $payload, 0);
+            MQTT::publish($topic, $payload, 0);
             
             // 2. Broadcast ke Web UI kita sendiri agar muncul di layar (Reverb)
-            broadcast(new \App\Events\ChatMessageSent($request->username, $request->message));
+            broadcast(new ChatMessageSent($request->username, $request->message));
             
             return response()->json([
                 'success' => true

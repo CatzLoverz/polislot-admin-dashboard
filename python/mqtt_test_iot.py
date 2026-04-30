@@ -27,6 +27,7 @@ PORT = 443  # Cloudflare Tunnel menggunakan port 443 (HTTPS/WSS)
 TOPIC_COMMAND = f"polislot/device/{MAC_ADDRESS}/command"
 TOPIC_SNAPSHOT = f"polislot/device/{MAC_ADDRESS}/snapshot"
 TOPIC_STATUS = f"polislot/device/{MAC_ADDRESS}/status"
+TOPIC_SERVER_STATUS = "polislot/server/status"
 
 # Harus SAMA persis dengan IOT_API_SECRET di Laravel .env
 # Catatan: Untuk AES-256, panjang karakter bebas karena di-hash lagi ke 32 byte menggunakan SHA256
@@ -96,8 +97,13 @@ def capture_frame():
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print(f"✅ IoT [{MAC_ADDRESS}] Terhubung ke Broker (WS)")
+        
+        # Subscribe ke perintah spesifik device ini
         client.subscribe(TOPIC_COMMAND)
         print(f"👂 Mendengarkan perintah di: {TOPIC_COMMAND}")
+        
+        # Subscribe ke status global dari Server Laravel
+        client.subscribe(TOPIC_SERVER_STATUS)
         
         # Kirim status online (Retained agar server tahu status terakhir saat baru menyala)
         client.publish(TOPIC_STATUS, "online", qos=1, retain=True)
@@ -107,6 +113,16 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     try:
+        # Jika pesan adalah status dari server (plain text)
+        if msg.topic == TOPIC_SERVER_STATUS:
+            status = msg.payload.decode('utf-8').upper()
+            if status == "ONLINE":
+                print(f"\n🌐 [SERVER LARAVEL]: {status} (Siap menerima gambar)")
+            else:
+                print(f"\n⚠️ [SERVER LARAVEL]: {status} (Server sedang mati/restart!)")
+            return
+
+        # Selain itu, pasti payload JSON untuk command
         payload = json.loads(msg.payload.decode('utf-8'))
         print(f"\n📥 Menerima perintah dari server: {payload}")
         
