@@ -50,15 +50,33 @@ def generate_hmac_signature(payload_dict):
     return signature
 
 # ==========================================
-# FUNGSI KAMERA (DUMMY)
+# FUNGSI KAMERA
 # ==========================================
 def capture_frame():
-    print("📸 Kamera mengambil gambar...")
-    img = np.zeros((480, 640, 3), dtype=np.uint8)
-    # Tambahkan teks dengan timestamp agar terlihat real-time
+    print("📸 Kamera mengambil gambar dari webcam...")
+    # Coba buka kamera default (0)
+    cap = cv2.VideoCapture(0)
+    
+    if not cap.isOpened():
+        print("❌ Gagal membuka kamera! Menggunakan gambar blank fallback.")
+        img = np.zeros((480, 640, 3), dtype=np.uint8)
+        cv2.putText(img, "Kamera Tidak Terdeteksi", (100, 240), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+    else:
+        # Pemanasan sensor kamera (buang beberapa frame awal agar brightness/focus stabil)
+        for _ in range(5):
+            cap.read()
+            
+        ret, img = cap.read()
+        cap.release()
+        
+        if not ret:
+            print("❌ Gagal membaca frame dari kamera!")
+            img = np.zeros((480, 640, 3), dtype=np.uint8)
+            cv2.putText(img, "Gagal Membaca Frame", (120, 240), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+    # Tambahkan timestamp pada gambar
     current_time = time.strftime("%Y-%m-%d %H:%M:%S")
-    cv2.putText(img, "LIVE IOT SNAPSHOT", (120, 200), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
-    cv2.putText(img, current_time, (160, 260), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+    cv2.putText(img, current_time, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     
     _, buffer = cv2.imencode('.jpg', img)
     return buffer.tobytes()

@@ -89,13 +89,32 @@ class MqttListenerCommand extends Command
                         return;
                     }
 
-                    // Ubah bytes menjadi base64 string untuk UI HTML (<img src="data:image/jpeg;base64,...">)
-                    $imageBase64String = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
-
-                    // 3. Broadcast ke Laravel Reverb
-                    broadcast(new IotStreamReceived($payload['mac_address'], $imageBase64String));
-                    $this->info("✅ Gambar berhasil didekripsi dan di-broadcast ke Web.");
+                    $device = \App\Models\IotDevice::where('device_mac_address', $payload['mac_address'])->first();
                     
+                    if ($device) {
+                        // 3. Simpan gambar ke storage public
+                        $fileName = 'capture_' . time() . '_' . str_replace(':', '', $payload['mac_address']) . '.jpg';
+                        $path = 'iot_captures/' . $fileName;
+                        
+                        \Illuminate\Support\Facades\Storage::disk('public')->put($path, $decryptedImageBytes);
+                        
+                        // 4. Simpan ke database IotCapture
+                        \App\Models\IotCapture::create([
+                            'device_id' => $device->device_id,
+                            'capture_image_path' => $path,
+                            'capture_is_trained' => false,
+                            'capture_ai_status' => 'Pending',
+                        ]);
+                        
+                        $this->info("✅ Gambar berhasil didekripsi dan disimpan ke database (IotCapture).");
+                    } else {
+                        $this->warn("⚠️ Perangkat dengan MAC {$payload['mac_address']} tidak terdaftar di database. Gambar tidak disimpan.");
+                    }
+
+                    // 5. Ubah bytes menjadi base64 string untuk UI HTML dan Broadcast ke Reverb
+                    $imageBase64String = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
+                    broadcast(new IotStreamReceived($payload['mac_address'], $imageBase64String));
+                    $this->info("📡 Gambar di-broadcast ke Web UI.");
                 } catch (\Exception $e) {
                     $this->error("Error memproses pesan: " . $e->getMessage());
                 }
