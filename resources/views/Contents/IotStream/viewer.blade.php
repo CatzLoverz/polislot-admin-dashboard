@@ -21,7 +21,8 @@
                                 {{ $targetMac === $device->device_mac_address ? 'selected' : '' }}>
                                 {{ $device->device_mac_address }}
                                 @if($device->subarea)
-                                    — {{ $device->subarea->park_subarea_name ?? '' }}
+                                    — {{ $device->subarea->parkArea->park_area_name ?? 'Area tidak diketahui' }}
+                                    / {{ $device->subarea->park_subarea_name ?? 'Subarea tidak diketahui' }}
                                 @endif
                             </option>
                         @empty

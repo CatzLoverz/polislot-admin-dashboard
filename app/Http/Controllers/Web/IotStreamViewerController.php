@@ -14,8 +14,8 @@ class IotStreamViewerController extends Controller
      */
     public function index(Request $request)
     {
-        // Ambil semua device dari database
-        $devices = IotDevice::with('subarea')->get();
+        // Ambil semua device dari database, termasuk subarea dan area induknya
+        $devices = IotDevice::with('subarea.parkArea')->get();
         
         // MAC Address yang dipilih (dari query string atau default ke device pertama)
         $targetMac = $request->query('mac', $devices->first()?->device_mac_address ?? '00:00:00:00:00:00');
