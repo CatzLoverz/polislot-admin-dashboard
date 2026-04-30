@@ -125,6 +125,20 @@ class MqttListenerCommand extends Command
                 }
             });
             
+            // Listener tambahan untuk fitur Live Chat dari IoT Device
+            $mqtt->subscribe('polislot/device/+/chat_reply', function (string $topic, string $message) {
+                try {
+                    $payload = json_decode($message, true);
+                    if ($payload && isset($payload['username'], $payload['message'])) {
+                        // Broadcast balasan chat ke web (Reverb)
+                        broadcast(new \App\Events\ChatMessageSent($payload['username'], $payload['message']));
+                        $this->info("💬 Pesan chat diterima dari {$payload['username']}: {$payload['message']}");
+                    }
+                } catch (\Exception $e) {
+                    $this->error("Error memproses chat: " . $e->getMessage());
+                }
+            });
+            
             $mqtt->loop(true);
             
         } catch (\Exception $e) {

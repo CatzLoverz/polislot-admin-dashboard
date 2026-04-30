@@ -258,6 +258,7 @@
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
+                mac_address: "{{ $targetMac }}",
                 username: "{{ auth()->user()->name ?? 'Admin' }}",
                 message: message
             })

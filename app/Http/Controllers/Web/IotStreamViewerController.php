@@ -63,12 +63,26 @@ class IotStreamViewerController extends Controller
     public function sendChat(Request $request)
     {
         $request->validate([
+            'mac_address' => 'required|string',
             'username' => 'required|string|max:50',
             'message' => 'required|string|max:500'
         ]);
 
+        $mac = $request->mac_address;
+        $topic = "polislot/device/{$mac}/command";
+        
+        $payload = json_encode([
+            'action' => 'chat',
+            'timestamp' => time(),
+            'username' => $request->username,
+            'message' => $request->message
+        ]);
+
         try {
-            // Broadcast ke Reverb
+            // 1. Kirim pesan chat via MQTT ke IoT Device
+            \PhpMqtt\Client\Facades\MQTT::publish($topic, $payload, 0);
+            
+            // 2. Broadcast ke Web UI kita sendiri agar muncul di layar (Reverb)
             broadcast(new \App\Events\ChatMessageSent($request->username, $request->message));
             
             return response()->json([

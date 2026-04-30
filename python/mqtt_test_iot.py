@@ -10,8 +10,7 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 import os
 import sys
-
-# ==========================================
+import threading
 # KONFIGURASI IOT DEVICE
 # ==========================================
 # Ambil MAC Address dari argumen terminal, atau minta input jika kosong
@@ -108,9 +107,28 @@ def on_message(client, userdata, msg):
         
         if payload.get("action") == "snapshot":
             process_snapshot_request(client)
+        elif payload.get("action") == "chat":
+            username = payload.get("username", "Admin")
+            message = payload.get("message", "")
+            print(f"💬 [LIVE CHAT] {username}: {message}")
             
     except Exception as e:
         print(f"⚠️ Error memproses pesan: {e}")
+
+def chat_input_thread(client):
+    """Thread terpisah untuk membaca input dari keyboard dan mengirimkannya via MQTT (Live Chat)"""
+    while True:
+        try:
+            msg = input("")
+            if msg.strip():
+                # Kirim pesan balasan ke Laravel (topic chat_reply)
+                payload = {
+                    "username": "IoT Device",
+                    "message": msg.strip()
+                }
+                client.publish(f"polislot/device/{MAC_ADDRESS}/chat_reply", json.dumps(payload), qos=1)
+        except Exception:
+            pass
 
 def process_snapshot_request(client):
     # 1. Ambil gambar dari kamera
@@ -162,8 +180,12 @@ client.on_message = on_message
 print(f"Menghubungkan ke ws://{BROKER}:{PORT} ...")
 client.connect(BROKER, PORT, 60)
 
+# Jalankan thread untuk fitur Live Chat dari terminal
+threading.Thread(target=chat_input_thread, args=(client,), daemon=True).start()
+
 # Loop selamanya, menunggu perintah dari server
 try:
+    print("Ketik sesuatu lalu tekan Enter untuk mengirim pesan Live Chat ke Web Admin.")
     client.loop_forever()
 except KeyboardInterrupt:
     print("\n🛑 Dihentikan oleh user.")
