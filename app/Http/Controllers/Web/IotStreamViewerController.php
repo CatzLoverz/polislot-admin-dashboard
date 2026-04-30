@@ -42,8 +42,8 @@ class IotStreamViewerController extends Controller
         ]);
 
         try {
-            // Kita menggunakan facade MQTT dari php-mqtt/client
-            \PhpMqtt\Client\Facades\MQTT::publish($topic, $payload, 1); // QoS 1
+            // Gunakan QoS 0 (fire and forget) agar tidak perlu mem-block menunggu balasan (ACK) dari Broker
+            \PhpMqtt\Client\Facades\MQTT::publish($topic, $payload, 0); 
             
             return response()->json([
                 'success' => true,
