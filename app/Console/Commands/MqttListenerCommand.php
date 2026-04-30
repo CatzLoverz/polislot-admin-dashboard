@@ -138,6 +138,19 @@ class MqttListenerCommand extends Command
                     $this->error("Error memproses chat: " . $e->getMessage());
                 }
             });
+
+            // Listener tambahan untuk status Online/Offline (LWT)
+            $mqtt->subscribe('polislot/device/+/status', function (string $topic, string $message) {
+                // Topic format: polislot/device/{MAC}/status
+                $parts = explode('/', $topic);
+                $mac = $parts[2] ?? 'unknown';
+                $status = trim(strtolower($message)); // 'online' atau 'offline'
+                
+                $this->info("⚡ Status Perangkat [{$mac}]: " . strtoupper($status));
+                
+                // Broadcast ke Reverb agar UI berubah secara real-time
+                broadcast(new \App\Events\IotDeviceStatusChanged($mac, $status));
+            });
             
             $mqtt->loop(true);
             

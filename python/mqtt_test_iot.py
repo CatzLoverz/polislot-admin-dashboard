@@ -26,6 +26,7 @@ BROKER = "mqtt.raihanatmaja.my.id"
 PORT = 443  # Cloudflare Tunnel menggunakan port 443 (HTTPS/WSS)
 TOPIC_COMMAND = f"polislot/device/{MAC_ADDRESS}/command"
 TOPIC_SNAPSHOT = f"polislot/device/{MAC_ADDRESS}/snapshot"
+TOPIC_STATUS = f"polislot/device/{MAC_ADDRESS}/status"
 
 # Harus SAMA persis dengan IOT_API_SECRET di Laravel .env
 # Catatan: Untuk AES-256, panjang karakter bebas karena di-hash lagi ke 32 byte menggunakan SHA256
@@ -97,6 +98,10 @@ def on_connect(client, userdata, flags, rc):
         print(f"✅ IoT [{MAC_ADDRESS}] Terhubung ke Broker (WS)")
         client.subscribe(TOPIC_COMMAND)
         print(f"👂 Mendengarkan perintah di: {TOPIC_COMMAND}")
+        
+        # Kirim status online (Retained agar server tahu status terakhir saat baru menyala)
+        client.publish(TOPIC_STATUS, "online", qos=1, retain=True)
+        print(f"📡 Status: ONLINE")
     else:
         print(f"❌ Gagal terhubung, kode: {rc}")
 
@@ -173,6 +178,11 @@ try:
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, transport="websockets")
 except AttributeError:
     client = mqtt.Client(transport="websockets")
+
+# === KONFIGURASI LAST WILL AND TESTAMENT (LWT) ===
+# Jika perangkat mati mendadak (lost connection), Broker akan otomatis 
+# mengirimkan pesan "offline" ke topik status.
+client.will_set(TOPIC_STATUS, payload="offline", qos=1, retain=True)
 
 # Wajib menambahkan TLS jika menggunakan Cloudflare (Port 443 / wss://)
 if PORT == 443:

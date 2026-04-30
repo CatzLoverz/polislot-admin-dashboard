@@ -14,6 +14,9 @@
                     <i class="fas fa-microchip fa-lg text-primary mr-3"></i>
                     <div class="mr-3">
                         <label class="mb-0 font-weight-bold" for="device-selector">Pilih Perangkat IoT:</label>
+                        <div id="status-indicator" class="badge badge-secondary ml-2">
+                            <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> Memuat status...
+                        </div>
                     </div>
                     <select class="form-control" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
                         @forelse($devices as $device)
@@ -284,14 +287,36 @@
     // Listen untuk Live Chat PoC setelah Echo jalan
     function initChatEcho() {
         if (typeof window.Echo !== 'undefined') {
+            // Listen Chat
             window.Echo.channel('livechat.demo')
                 .listen('.chat.message', (e) => {
                     addChatMessage(e.username, e.message, e.time);
+                });
+
+            // Listen Status Perangkat (Online/Offline)
+            window.Echo.channel('iot.status')
+                .listen('.device.status', (e) => {
+                    const selectedMac = document.getElementById('device-selector').value;
+                    if (e.macAddress === selectedMac) {
+                        updateStatusUI(e.status);
+                    }
                 });
         } else {
             setTimeout(initChatEcho, 500);
         }
     }
+
+    function updateStatusUI(status) {
+        const indicator = document.getElementById('status-indicator');
+        if (status === 'online') {
+            indicator.className = "badge badge-success ml-2";
+            indicator.innerHTML = '<i class="fas fa-circle mr-1" style="font-size: 8px;"></i> ONLINE';
+        } else {
+            indicator.className = "badge badge-danger ml-2";
+            indicator.innerHTML = '<i class="fas fa-circle mr-1" style="font-size: 8px;"></i> OFFLINE';
+        }
+    }
+    
     initChatEcho();
 </script>
 @endpush
