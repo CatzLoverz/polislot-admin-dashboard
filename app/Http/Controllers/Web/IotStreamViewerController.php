@@ -56,4 +56,29 @@ class IotStreamViewerController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Mengirim pesan Live Chat (Proof of Concept WebSockets)
+     */
+    public function sendChat(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string|max:50',
+            'message' => 'required|string|max:500'
+        ]);
+
+        try {
+            // Broadcast ke Reverb
+            broadcast(new \App\Events\ChatMessageSent($request->username, $request->message));
+            
+            return response()->json([
+                'success' => true
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal mengirim chat: " . $e->getMessage()
+            ], 500);
+        }
+    }
 }

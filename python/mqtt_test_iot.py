@@ -9,13 +9,22 @@ import hashlib
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 import os
+import sys
 
 # ==========================================
 # KONFIGURASI IOT DEVICE
 # ==========================================
-MAC_ADDRESS = "TEST-MAC-01"
-BROKER = "127.0.0.1"
-PORT = 9001  # WebSockets
+# Ambil MAC Address dari argumen terminal, atau minta input jika kosong
+if len(sys.argv) > 1:
+    MAC_ADDRESS = sys.argv[1]
+else:
+    MAC_ADDRESS = input("Masukkan MAC Address perangkat (contoh: 00:1A:2B:3C:4D:5E): ").strip()
+    if not MAC_ADDRESS:
+        print("MAC Address tidak boleh kosong!")
+        sys.exit(1)
+
+BROKER = "mqtt.raihanatmaja.my.id"
+PORT = 443  # Cloudflare Tunnel menggunakan port 443 (HTTPS/WSS)
 TOPIC_COMMAND = f"polislot/device/{MAC_ADDRESS}/command"
 TOPIC_SNAPSHOT = f"polislot/device/{MAC_ADDRESS}/snapshot"
 
@@ -136,7 +145,17 @@ def process_snapshot_request(client):
 # ==========================================
 # MAIN LOOP
 # ==========================================
-client = mqtt.Client(transport="websockets")
+# Kompatibilitas untuk paho-mqtt versi 1.x dan 2.x
+try:
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, transport="websockets")
+except AttributeError:
+    client = mqtt.Client(transport="websockets")
+
+# Wajib menambahkan TLS jika menggunakan Cloudflare (Port 443 / wss://)
+if PORT == 443:
+    import ssl
+    client.tls_set(cert_reqs=ssl.CERT_NONE) # Memastikan enkripsi diaktifkan untuk koneksi WSS
+
 client.on_connect = on_connect
 client.on_message = on_message
 

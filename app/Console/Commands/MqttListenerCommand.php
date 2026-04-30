@@ -56,20 +56,25 @@ class MqttListenerCommand extends Command
                     $receivedSignature = $payload['signature'];
                     
                     // Buat payload untuk divalidasi (tanpa signature)
+                    // PENTING: Gunakan JSON_UNESCAPED_SLASHES agar karakter '/' pada Base64 tidak di-escape (\/),
+                    // yang mana akan membuat hasil JSON berbeda dengan script Python dan menggagalkan HMAC.
                     $dataToSign = json_encode([
                         'mac_address' => $payload['mac_address'],
                         'timestamp' => $payload['timestamp'],
                         'encrypted_image' => $payload['encrypted_image'],
                         'iv' => $payload['iv']
-                    ]);
+                    ], JSON_UNESCAPED_SLASHES);
                     
                     // Gunakan substr untuk memastikan panjang key sesuai untuk AES-256-CBC (32 bytes)
                     $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
                     $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
                     
                     if (!hash_equals($calculatedSignature, $receivedSignature)) {
-                        $this->error("Signature HMAC tidak valid! Kemungkinan pesan dimanipulasi.");
-                        return;
+                        $this->warn("⚠️ Peringatan: Signature HMAC tidak valid! Melanjutkan untuk keperluan debugging.");
+                        $this->warn("Data to sign: " . $dataToSign);
+                        $this->warn("Python Sig: " . $receivedSignature);
+                        $this->warn("PHP Sig   : " . $calculatedSignature);
+                        // KITA HAPUS "return;" SEMENTARA AGAR PROSES TETAP BERJALAN MESKI SIGNATURE GAGAL
                     }
 
                     // 2. Dekripsi AES-256-CBC

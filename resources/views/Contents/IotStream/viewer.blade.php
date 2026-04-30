@@ -79,6 +79,28 @@
                 </div>
             </div>
         </div>
+
+        <!-- Kolom Chat PoC -->
+        <div class="col-md-4 mt-4">
+            <div class="card shadow-sm" style="border-radius: 15px; border: none;">
+                <div class="card-header bg-info text-white" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0"><i class="fas fa-comments mr-2"></i> Live Chat (PoC)</h4>
+                </div>
+                <div class="card-body p-2">
+                    <div id="chat-messages" style="height: 300px; overflow-y: auto; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; margin-bottom: 10px;">
+                        <div class="text-muted text-center small mt-2">Selamat datang di Live Chat.</div>
+                    </div>
+                    <form id="chat-form" onsubmit="sendChatMessage(event)">
+                        <div class="input-group">
+                            <input type="text" id="chat-input" class="form-control" placeholder="Ketik pesan..." required>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-info" id="chat-btn">Kirim</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -199,7 +221,76 @@
         }
     }
 
+    // Fungsi menambah pesan ke chat box
+    function addChatMessage(username, message, time) {
+        const chatBox = document.getElementById('chat-messages');
+        const isSelf = username === "{{ auth()->user()->name ?? 'Admin' }}";
+        
+        const html = `
+            <div class="mb-2 ${isSelf ? 'text-right' : ''}">
+                <small class="text-muted" style="font-size: 0.7rem;">${username} • ${time}</small>
+                <div class="d-inline-block px-3 py-2 rounded ${isSelf ? 'bg-info text-white' : 'bg-light border'}" style="max-width: 85%; text-align: left; display: inline-block;">
+                    ${message}
+                </div>
+            </div>
+        `;
+        chatBox.insertAdjacentHTML('beforeend', html);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Kirim pesan chat via AJAX
+    window.sendChatMessage = function(e) {
+        e.preventDefault();
+        const input = document.getElementById('chat-input');
+        const btn = document.getElementById('chat-btn');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        input.disabled = true;
+        btn.disabled = true;
+
+        fetch("{{ route('admin.iot-stream-viewer.chat') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                username: "{{ auth()->user()->name ?? 'Admin' }}",
+                message: message
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                input.value = '';
+            } else {
+                addLog('Gagal mengirim pesan chat.', 'danger');
+            }
+        })
+        .finally(() => {
+            input.disabled = false;
+            btn.disabled = false;
+            input.focus();
+        });
+    }
+
     // Mulai inisiasi
     initEcho();
+
+    // Listen untuk Live Chat PoC setelah Echo jalan
+    function initChatEcho() {
+        if (typeof window.Echo !== 'undefined') {
+            window.Echo.channel('livechat.demo')
+                .listen('.chat.message', (e) => {
+                    addChatMessage(e.username, e.message, e.time);
+                });
+        } else {
+            setTimeout(initChatEcho, 500);
+        }
+    }
+    initChatEcho();
 </script>
 @endpush
