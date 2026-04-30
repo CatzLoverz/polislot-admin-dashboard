@@ -14,8 +14,8 @@ use App\Http\Controllers\Web\ParkSubareaController;
 use App\Http\Controllers\Web\FeedbackCategoryController;
 use App\Http\Controllers\Web\RewardVerificationController;
 use App\Http\Controllers\Web\ValidationController;
-
 use App\Http\Controllers\Web\UserFaqController;
+use App\Http\Controllers\Web\IotStreamViewerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -96,9 +96,9 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         
 
         // Route Khusus Uji Coba WebSockets IoT
-        Route::get('iot-stream-viewer', [\App\Http\Controllers\Web\IotStreamViewerController::class, 'index'])->name('iot-stream-viewer.index');
-        Route::post('iot-stream-viewer/trigger', [\App\Http\Controllers\Web\IotStreamViewerController::class, 'triggerSnapshot'])->name('iot-stream-viewer.trigger');
-        Route::post('iot-stream-viewer/chat', [\App\Http\Controllers\Web\IotStreamViewerController::class, 'sendChat'])->name('iot-stream-viewer.chat');
+        Route::get('iot-stream-viewer', [IotStreamViewerController::class, 'index'])->name('iot-stream-viewer.index');
+        Route::post('iot-stream-viewer/trigger', [IotStreamViewerController::class, 'triggerSnapshot'])->name('iot-stream-viewer.trigger');
+        Route::post('iot-stream-viewer/chat', [IotStreamViewerController::class, 'sendChat'])->name('iot-stream-viewer.chat');
     });
 
 });

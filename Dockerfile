@@ -1,7 +1,7 @@
 # ============================================================
 # Stage 1: Composer — Install PHP Dependencies
 # ============================================================
-FROM composer:2.8 AS composer-stage
+FROM composer:latest AS composer-stage
 
 WORKDIR /build
 
@@ -11,7 +11,7 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # ============================================================
 # Stage 2: Node — Build Vite Assets
 # ============================================================
-FROM node:22-alpine AS node-stage
+FROM node:25-alpine AS node-stage
 
 WORKDIR /build
 
