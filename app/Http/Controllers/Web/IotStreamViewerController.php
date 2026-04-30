@@ -41,11 +41,16 @@ class IotStreamViewerController extends Controller
         $mac = $request->mac_address;
         $topic = "polislot/device/{$mac}/command";
         
-        $payload = json_encode([
+        $payloadData = [
             'action' => 'snapshot',
             'timestamp' => time(),
             'requested_by' => auth()->user()->id ?? 'admin'
-        ]);
+        ];
+        
+        $key32 = substr(hash('sha256', env('IOT_API_SECRET'), true), 0, 32);
+        $payloadData['signature'] = hash_hmac('sha256', json_encode($payloadData, JSON_UNESCAPED_SLASHES), $key32);
+
+        $payload = json_encode($payloadData, JSON_UNESCAPED_SLASHES);
 
         try {
             // Gunakan QoS 0 (fire and forget) agar tidak perlu mem-block menunggu balasan (ACK) dari Broker
@@ -77,12 +82,17 @@ class IotStreamViewerController extends Controller
         $mac = $request->mac_address;
         $topic = "polislot/device/{$mac}/command";
         
-        $payload = json_encode([
+        $payloadData = [
             'action' => 'chat',
             'timestamp' => time(),
             'username' => $request->username,
             'message' => $request->message
-        ]);
+        ];
+
+        $key32 = substr(hash('sha256', env('IOT_API_SECRET'), true), 0, 32);
+        $payloadData['signature'] = hash_hmac('sha256', json_encode($payloadData, JSON_UNESCAPED_SLASHES), $key32);
+
+        $payload = json_encode($payloadData, JSON_UNESCAPED_SLASHES);
 
         try {
             // 1. Kirim pesan chat via MQTT ke IoT Device

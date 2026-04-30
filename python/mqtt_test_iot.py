@@ -105,26 +105,41 @@ def on_connect(client, userdata, flags, rc):
         # Subscribe ke status global dari Server Laravel
         client.subscribe(TOPIC_SERVER_STATUS)
         
-        # Kirim status online (Retained agar server tahu status terakhir saat baru menyala)
-        client.publish(TOPIC_STATUS, "online", qos=1, retain=True)
-        print(f"📡 Status: ONLINE")
+        # Kirim status online dengan HMAC
+        online_payload = {"status": "online", "mac_address": MAC_ADDRESS}
+        online_payload["signature"] = generate_hmac_signature(online_payload)
+        client.publish(TOPIC_STATUS, json.dumps(online_payload, separators=(',', ':')), qos=1, retain=True)
+        print(f"📡 Status: ONLINE (Secured)")
     else:
         print(f"❌ Gagal terhubung, kode: {rc}")
 
 def on_message(client, userdata, msg):
     try:
-        # Jika pesan adalah status dari server (plain text)
+        payload_str = msg.payload.decode('utf-8')
+        payload = json.loads(payload_str)
+        
+        # EKSTRAK DAN VERIFIKASI SIGNATURE UNTUK SEMUA PESAN MASUK
+        received_signature = payload.pop("signature", None)
+        if not received_signature:
+            print("⚠️ DITOLAK: Pesan tidak memiliki HMAC Signature keamanan.")
+            return
+            
+        calculated_signature = generate_hmac_signature(payload)
+        if not hmac.compare_digest(received_signature, calculated_signature):
+            print("🚨 DITOLAK: Signature tidak valid! (Secret Key salah / Data diretas)")
+            return
+
+        # Jika pesan adalah status dari server
         if msg.topic == TOPIC_SERVER_STATUS:
-            status = msg.payload.decode('utf-8').upper()
+            status = payload.get("status", "").upper()
             if status == "ONLINE":
-                print(f"\n🌐 [SERVER LARAVEL]: {status} (Siap menerima gambar)")
+                print(f"\n🌐 [SERVER LARAVEL]: {status} (Siap menerima/mengirim data aman)")
             else:
                 print(f"\n⚠️ [SERVER LARAVEL]: {status} (Server sedang mati/restart!)")
             return
 
-        # Selain itu, pasti payload JSON untuk command
-        payload = json.loads(msg.payload.decode('utf-8'))
-        print(f"\n📥 Menerima perintah dari server: {payload}")
+        # Selain itu, pasti payload command (snapshot/chat)
+        print(f"\n📥 Menerima perintah AMAN dari server: {payload}")
         
         if payload.get("action") == "snapshot":
             process_snapshot_request(client)
@@ -150,8 +165,9 @@ def chat_input_thread(client):
                         "username": "IoT Device",
                         "message": msg
                     }
-                    client.publish(f"polislot/device/{MAC_ADDRESS}/chat_reply", json.dumps(payload), qos=1)
-                    print("📤 [TERKIRIM] " + msg)
+                    payload["signature"] = generate_hmac_signature(payload)
+                    client.publish(f"polislot/device/{MAC_ADDRESS}/chat_reply", json.dumps(payload, separators=(',', ':')), qos=1)
+                    print("📤 [TERKIRIM AMAN] " + msg)
         except Exception as e:
             print(f"⚠️ Error pada thread input chat: {e}")
             break
@@ -195,10 +211,11 @@ try:
 except AttributeError:
     client = mqtt.Client(transport="websockets")
 
-# === KONFIGURASI LAST WILL AND TESTAMENT (LWT) ===
-# Jika perangkat mati mendadak (lost connection), Broker akan otomatis 
-# mengirimkan pesan "offline" ke topik status.
-client.will_set(TOPIC_STATUS, payload="offline", qos=1, retain=True)
+# === KONFIGURASI LAST WILL AND TESTAMENT (LWT) AMAN ===
+# Kita siapkan wasiat (LWT) dalam format JSON beserta signature-nya.
+offline_payload = {"status": "offline", "mac_address": MAC_ADDRESS}
+offline_payload["signature"] = generate_hmac_signature(offline_payload)
+client.will_set(TOPIC_STATUS, payload=json.dumps(offline_payload, separators=(',', ':')), qos=1, retain=True)
 
 # Wajib menambahkan TLS jika menggunakan Cloudflare (Port 443 / wss://)
 if PORT == 443:
@@ -220,4 +237,14 @@ try:
     client.loop_forever()
 except KeyboardInterrupt:
     print("\n🛑 Dihentikan oleh user.")
+    # Karena kita melakukan disconnect secara "bersih" (graceful),
+    # Broker TIDAK akan mengirimkan Last Will. Jadi kita harus kirim manual.
+    offline_payload = {"status": "offline", "mac_address": MAC_ADDRESS}
+    offline_payload["signature"] = generate_hmac_signature(offline_payload)
+    client.publish(TOPIC_STATUS, json.dumps(offline_payload, separators=(',', ':')), qos=1, retain=True)
+    
+    # Beri waktu sedikit agar pesan offline terkirim sebelum koneksi diputus
+    import time
+    time.sleep(0.5) 
+    
     client.disconnect()

@@ -46,8 +46,12 @@ class MqttListenerCommand extends Command
             $mqtt = MQTT::connection();
             
             // Beri tahu seluruh perangkat IoT bahwa Server Laravel (Daemon) sedang ONLINE
-            $mqtt->publish('polislot/server/status', 'online', 1, true);
-            $this->info("✅ Server Status: ONLINE (Diumumkan ke MQTT)");
+            $serverPayload = ['status' => 'online'];
+            $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
+            $serverPayload['signature'] = hash_hmac('sha256', json_encode($serverPayload, JSON_UNESCAPED_SLASHES), $key32);
+            
+            $mqtt->publish('polislot/server/status', json_encode($serverPayload, JSON_UNESCAPED_SLASHES), 1, true);
+            $this->info("✅ Server Status: ONLINE (Diumumkan ke MQTT dengan HMAC)");
             
             $this->info("Terhubung ke MQTT Broker. Mendengarkan polislot/device/+/snapshot...");
             
@@ -80,11 +84,11 @@ class MqttListenerCommand extends Command
                     $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
                     
                     if (!hash_equals($calculatedSignature, $receivedSignature)) {
-                        $this->warn("⚠️ Peringatan: Signature HMAC tidak valid! Melanjutkan untuk keperluan debugging.");
+                        $this->warn("🚨 DITOLAK: Signature HMAC tidak valid! (Secret Key Salah/Manipulasi Data)");
                         $this->warn("Data to sign: " . $dataToSign);
                         $this->warn("Python Sig: " . $receivedSignature);
                         $this->warn("PHP Sig   : " . $calculatedSignature);
-                        // KITA HAPUS "return;" SEMENTARA AGAR PROSES TETAP BERJALAN MESKI SIGNATURE GAGAL
+                        return; // SEKARANG KITA BLOKIR BENAR-BENAR JIKA GAGAL
                     }
 
                     // 2. Dekripsi AES-256-CBC
@@ -136,10 +140,27 @@ class MqttListenerCommand extends Command
             });
             
             // Listener tambahan untuk fitur Live Chat dari IoT Device
-            $mqtt->subscribe('polislot/device/+/chat_reply', function (string $topic, string $message) {
+            $mqtt->subscribe('polislot/device/+/chat_reply', function (string $topic, string $message) use ($secretKey) {
                 try {
                     $payload = json_decode($message, true);
-                    if ($payload && isset($payload['username'], $payload['message'])) {
+                    if (!$payload || !isset($payload['signature'])) {
+                        $this->warn("⚠️ Pesan chat ditolak: Tidak ada signature.");
+                        return;
+                    }
+
+                    $receivedSignature = $payload['signature'];
+                    unset($payload['signature']); // Hapus signature dari payload untuk proses verifikasi
+                    
+                    $dataToSign = json_encode($payload, JSON_UNESCAPED_SLASHES);
+                    $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
+                    $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
+
+                    if (!hash_equals($calculatedSignature, $receivedSignature)) {
+                        $this->warn("🚨 DITOLAK: Signature chat tidak valid!");
+                        return;
+                    }
+
+                    if (isset($payload['username'], $payload['message'])) {
                         // Broadcast balasan chat ke web (Reverb)
                         broadcast(new ChatMessageSent($payload['username'], $payload['message']));
                         $this->info("💬 Pesan chat diterima dari {$payload['username']}: {$payload['message']}");
@@ -150,13 +171,32 @@ class MqttListenerCommand extends Command
             });
 
             // Listener tambahan untuk status Online/Offline (LWT)
-            $mqtt->subscribe('polislot/device/+/status', function (string $topic, string $message) {
+            $mqtt->subscribe('polislot/device/+/status', function (string $topic, string $message) use ($secretKey) {
                 // Topic format: polislot/device/{MAC}/status
                 $parts = explode('/', $topic);
                 $mac = $parts[2] ?? 'unknown';
-                $status = trim(strtolower($message)); // 'online' atau 'offline'
                 
-                $this->info("⚡ Status Perangkat [{$mac}]: " . strtoupper($status));
+                $payload = json_decode($message, true);
+                if (!$payload || !isset($payload['signature'])) {
+                    $this->warn("⚠️ Pesan status ditolak: Tidak ada signature. (Pesan: $message)");
+                    return;
+                }
+
+                $receivedSignature = $payload['signature'];
+                unset($payload['signature']);
+                
+                $dataToSign = json_encode($payload, JSON_UNESCAPED_SLASHES);
+                $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
+                $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
+
+                if (!hash_equals($calculatedSignature, $receivedSignature)) {
+                    $this->warn("🚨 DITOLAK: Signature status tidak valid!");
+                    return;
+                }
+                
+                $status = strtolower($payload['status'] ?? 'offline'); // 'online' atau 'offline'
+                
+                $this->info("⚡ Status Perangkat [{$mac}]: " . strtoupper($status) . " (Secured)");
                 
                 // Simpan status terbaru ke Cache agar web bisa tahu status awal saat halaman baru dibuka
                 Cache::forever("iot_status_{$mac}", $status);
