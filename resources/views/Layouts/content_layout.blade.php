@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/atlantis.min.css') }}" />
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" /> --}}
-    @vite(['resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('styles')
 </head>
@@ -137,11 +136,14 @@
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*') ? 'active submenu' : '' }}">
-                                <a data-toggle="collapse" href="#menuDropdown" aria-expanded="true">
+                            @php
+                                $isGamificationActive = Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*');
+                            @endphp
+                            <li class="nav-item {{ $isGamificationActive ? 'active' : '' }}">
+                                <a data-toggle="collapse" href="#menuDropdown" aria-expanded="{{ $isGamificationActive ? 'true' : 'false' }}">
                                     <i class="fas fa-gamepad"></i><p>Manajemen Gamifikasi</p><span class="caret"></span>
                                 </a>
-                                <div class="collapse show" id="menuDropdown">
+                                <div class="collapse {{ $isGamificationActive ? 'show' : '' }}" id="menuDropdown">
                                     <ul class="nav nav-collapse">
                                         <li class="{{ Route::is('admin.validation.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.validation.index') }}"> 
@@ -348,6 +350,7 @@
             }
         });
     </script>
+    @vite(['resources/js/app.js'])
     @stack('scripts')
 </body>
 
