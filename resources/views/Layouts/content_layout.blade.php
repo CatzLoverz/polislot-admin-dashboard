@@ -30,6 +30,14 @@
     <link rel="stylesheet" href="{{ asset('assets/css/atlantis.min.css') }}" />
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" /> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.Laravel = {
+            reverbKey: "{{ env('REVERB_APP_KEY') }}",
+            reverbHost: "{{ env('REVERB_HOST') }}",
+            reverbPort: "{{ env('REVERB_PORT') }}",
+            reverbScheme: "{{ env('REVERB_SCHEME') }}"
+        };
+    </script>
     @stack('styles')
 </head>
 
@@ -139,7 +147,7 @@
                             @php
                                 $isGamificationActive = Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*');
                             @endphp
-                            <li class="nav-item {{ $isGamificationActive ? 'active' : '' }}">
+                            <li class="nav-item submenu {{ $isGamificationActive ? 'active' : '' }}">
                                 <a data-toggle="collapse" href="#menuDropdown" aria-expanded="{{ $isGamificationActive ? 'true' : 'false' }}">
                                     <i class="fas fa-gamepad"></i><p>Manajemen Gamifikasi</p><span class="caret"></span>
                                 </a>

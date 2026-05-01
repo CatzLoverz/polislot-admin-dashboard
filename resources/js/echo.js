@@ -10,9 +10,9 @@ const isSecure = window.location.protocol === 'https:';
 
 window.Echo = new Echo({
     broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: window.location.hostname,
-    wsPort: isSecure ? 443 : (window.location.port || 80),
+    key: window.Laravel.reverbKey,
+    wsHost: window.Laravel.reverbHost || window.location.hostname,
+    wsPort: isSecure ? 443 : (window.location.port || window.Laravel.reverbPort || 80),
     wssPort: 443,
     forceTLS: isSecure,
     enabledTransports: ['ws', 'wss'],
