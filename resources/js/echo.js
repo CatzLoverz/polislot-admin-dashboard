@@ -11,7 +11,7 @@ const isSecure = window.location.protocol === 'https:';
 window.Echo = new Echo({
     broadcaster: 'reverb',
     key: window.Laravel.reverbKey,
-    wsHost: window.Laravel.reverbHost || window.location.hostname,
+    wsHost: window.location.hostname,
     wsPort: isSecure ? 443 : (window.location.port || window.Laravel.reverbPort || 80),
     wssPort: 443,
     forceTLS: isSecure,
