@@ -31,7 +31,7 @@ TOPIC_SERVER_STATUS = "polislot/server/status"
 
 # Harus SAMA persis dengan IOT_API_SECRET di Laravel .env
 # Catatan: Untuk AES-256, panjang karakter bebas karena di-hash lagi ke 32 byte menggunakan SHA256
-SHARED_SECRET = "pOl1sL0t_ioT_s3creT_k3y_2026" 
+SHARED_SECRET = "" 
 
 # ==========================================
 # FUNGSI KEAMANAN (AES & HMAC)
@@ -73,7 +73,8 @@ def capture_frame():
         cv2.putText(img, "Kamera Tidak Terdeteksi", (100, 240), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
     else:
         # Pemanasan sensor kamera (buang beberapa frame awal agar brightness/focus stabil)
-        for _ in range(5):
+        # Pada Raspberry Pi, butuh sekitar 20-30 frame agar Auto Exposure (AE) stabil
+        for _ in range(30):
             cap.read()
             
         ret, img = cap.read()
@@ -133,7 +134,13 @@ def on_message(client, userdata, msg):
         if msg.topic == TOPIC_SERVER_STATUS:
             status = payload.get("status", "").upper()
             if status == "ONLINE":
-                print(f"\n🌐 [SERVER LARAVEL]: {status} (Siap menerima/mengirim data aman)")
+                print(f"\n🌐 [SERVER LARAVEL]: {status} (Mengirim ulang status ONLINE...)")
+                # Auto-respond: kirim ulang status online agar cache server terupdate
+                # setelah server restart (cache direset ke offline saat boot)
+                online_payload = {"status": "online", "mac_address": MAC_ADDRESS}
+                online_payload["signature"] = generate_hmac_signature(online_payload)
+                client.publish(TOPIC_STATUS, json.dumps(online_payload, separators=(',', ':')), qos=1, retain=True)
+                print(f"📡 Status ONLINE dikirim ulang ke server.")
             else:
                 print(f"\n⚠️ [SERVER LARAVEL]: {status} (Server sedang mati/restart!)")
             return
@@ -143,6 +150,13 @@ def on_message(client, userdata, msg):
         
         if payload.get("action") == "snapshot":
             process_snapshot_request(client)
+        elif payload.get("action") == "connection_test":
+            # Server meminta konfirmasi bahwa device masih hidup (setelah server restart)
+            print("🏓 Connection test diterima dari server, mengirim ulang status ONLINE...")
+            online_payload = {"status": "online", "mac_address": MAC_ADDRESS}
+            online_payload["signature"] = generate_hmac_signature(online_payload)
+            client.publish(TOPIC_STATUS, json.dumps(online_payload, separators=(',', ':')), qos=1, retain=True)
+            print("📡 Status ONLINE dikirim sebagai respons connection test.")
         elif payload.get("action") == "chat":
             username = payload.get("username", "Admin")
             message = payload.get("message", "")

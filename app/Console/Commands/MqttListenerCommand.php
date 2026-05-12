@@ -43,15 +43,34 @@ class MqttListenerCommand extends Command
         }
 
         try {
+            $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
+
+            // default offline status for devices
+            $devices = IotDevice::all();
+            foreach ($devices as $device) {
+                $mac = $device->device_mac_address;
+                Cache::forever("iot_status_{$mac}", 'offline');
+                broadcast(new IotDeviceStatusChanged($mac, 'offline'));
+            }
+            $this->info("🔄 Reset {$devices->count()} device status ke OFFLINE (cache + broadcast)");
+
+            // announce server online
             $mqtt = MQTT::connection();
             
-            // Beri tahu seluruh perangkat IoT bahwa Server Laravel (Daemon) sedang ONLINE
             $serverPayload = ['status' => 'online'];
-            $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
             $serverPayload['signature'] = hash_hmac('sha256', json_encode($serverPayload, JSON_UNESCAPED_SLASHES), $key32);
             
             $mqtt->publish('polislot/server/status', json_encode($serverPayload, JSON_UNESCAPED_SLASHES), 1, true);
             $this->info("✅ Server Status: ONLINE (Diumumkan ke MQTT dengan HMAC)");
+
+            // Connection test to all listed devices
+            foreach ($devices as $device) {
+                $mac = $device->device_mac_address;
+                $testPayload = ['action' => 'connection_test', 'timestamp' => time()];
+                $testPayload['signature'] = hash_hmac('sha256', json_encode($testPayload, JSON_UNESCAPED_SLASHES), $key32);
+                $mqtt->publish("polislot/device/{$mac}/command", json_encode($testPayload, JSON_UNESCAPED_SLASHES), 1);
+            }
+            $this->info("📡 Connection test dikirim ke {$devices->count()} device");
             
             $this->info("Terhubung ke MQTT Broker. Mendengarkan polislot/device/+/snapshot...");
             

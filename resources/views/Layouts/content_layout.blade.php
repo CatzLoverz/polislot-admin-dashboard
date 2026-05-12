@@ -38,6 +38,16 @@
             reverbScheme: "{{ env('REVERB_SCHEME') }}"
         };
     </script>
+    <style>
+        /* CSS Fix untuk Akordion Sidebar yang tidak muncul di localhost */
+        .sidebar .nav .nav-item.submenu .collapse.show,
+        .sidebar .nav .nav-item.submenu .collapsing {
+            display: block !important;
+            height: auto !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    </style>
     @stack('styles')
 </head>
 
@@ -50,7 +60,7 @@
                         class="navbar-brand" style="width: 180px; height: 62px;" />
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
-                    data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    data-target="#menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"><i class="icon-menu"></i></span>
                 </button>
             </div>
