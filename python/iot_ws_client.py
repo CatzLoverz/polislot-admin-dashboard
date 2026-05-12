@@ -48,16 +48,16 @@ else:
         sys.exit(1)
 
 # Server Configuration
-SERVER_BASE_URL = "http://localhost"          # Ganti sesuai server
+SERVER_BASE_URL = "https://raihanatmaja.my.id" # Ganti sesuai tunnel Anda
 API_WS_AUTH_URL  = f"{SERVER_BASE_URL}/api/iot/ws-auth"
 API_SNAPSHOT_URL = f"{SERVER_BASE_URL}/api/iot/snapshot"
 API_CHAT_URL     = f"{SERVER_BASE_URL}/api/iot/chat-reply"
 
 # Reverb WebSocket — sesuaikan dengan .env server
 REVERB_APP_KEY = "xcubvd4inm14ayepjhro"
-REVERB_HOST    = "127.0.0.1"
-REVERB_PORT    = 8080
-REVERB_SCHEME  = "ws"       # "ws" lokal, "wss" produksi
+REVERB_HOST    = "raihanatmaja.my.id" # HANYA domain, tanpa protocol
+REVERB_PORT    = 443                  # 443 untuk WSS tunnel
+REVERB_SCHEME  = "wss"                # wss untuk tunnel/produksi
 
 # Shared secret — HARUS SAMA dengan IOT_API_SECRET di Laravel .env
 SHARED_SECRET = ""
@@ -254,7 +254,12 @@ async def websocket_client():
                 timestamp = int(time.time())
                 signature = generate_auth_signature(MAC_ADDRESS, timestamp)
 
-                auth_resp = requests.post(API_WS_AUTH_URL, json={
+                # Memastikan URL memiliki scheme https://
+                auth_url = API_WS_AUTH_URL
+                if not auth_url.startswith('http'):
+                    auth_url = f"https://{auth_url}"
+
+                auth_resp = requests.post(auth_url, json={
                     'socket_id': socket_id,
                     'channel_name': channel_name,
                     'mac_address': MAC_ADDRESS,
@@ -344,8 +349,8 @@ async def websocket_client():
 
         except websockets.exceptions.ConnectionClosedError as e:
             print(f"❌ Koneksi terputus: {e}")
-        except websockets.exceptions.InvalidStatusCode as e:
-            print(f"❌ Gagal connect (HTTP {e.status_code})")
+        except websockets.exceptions.InvalidStatus as e:
+            print(f"❌ Gagal connect (HTTP {e.response.status_code})")
         except ConnectionRefusedError:
             print(f"❌ Server menolak koneksi ({REVERB_HOST}:{REVERB_PORT})")
         except Exception as e:
