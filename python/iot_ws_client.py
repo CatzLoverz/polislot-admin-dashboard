@@ -198,27 +198,111 @@ def process_snapshot():
     print("-" * 40)
 
 
-def send_chat_message(message):
-    """Kirim pesan chat dari terminal ke server via HTTP POST."""
-    payload_base = {
-        "username": "IoT Device",
-        "message": message
-    }
-    signature = generate_hmac_signature(payload_base)
-
-    try:
-        resp = requests.post(API_CHAT_URL, json={
-            "mac_address": MAC_ADDRESS,
+def send_chat_message(ws, message):
+    """Kirim pesan chat murni via WebSocket (Client Event). Instant!"""
+    clean_mac = MAC_ADDRESS.replace(':', '')
+    channel_name = f"presence-iot.device.{clean_mac}"
+    
+    payload = {
+        "event": "client-chat-reply",
+        "channel": channel_name,
+        "data": {
             "username": "IoT Device",
             "message": message,
-            "signature": signature,
-        }, timeout=10)
-        if resp.status_code == 200:
-            print(f"📤 [TERKIRIM AMAN] {message}")
-        else:
-            print(f"❌ Chat gagal: {resp.status_code}")
-    except Exception as e:
-        print(f"❌ Error chat: {e}")
+            "time": time.strftime("%H:%M")
+        }
+    }
+    
+    # Karena ini dikirim via loop asyncio, kita perlu mengirimnya lewat queue atau menjadwalkannya
+    asyncio.run_coroutine_threadsafe(ws.send(json.dumps(payload)), ws.loop)
+    print(f"📤 [WS SENT] {message}")
+
+
+# ============================================================
+# VIDEO STREAMING (Real-time Preview for Parking Detection)
+# ============================================================
+STREAM_ENABLED = False # Ubah ke False jika ingin mematikan stream
+FPS_TARGET = 5        # FPS rendah untuk menghemat bandwidth
+JPEG_QUALITY = 40     # Kualitas menengah untuk performa
+
+def draw_parking_placeholders(frame):
+    """
+    Simulasi Deteksi Parkir (Placeholder).
+    Nantinya logika OpenCV/YOLO untuk deteksi slot parkir ditaruh di sini.
+    """
+    h, w = frame.shape[:2]
+    # Contoh 3 slot parkir simulasi
+    slots = [
+        {"id": 1, "pos": (50, 150, 150, 300), "status": "Available"},
+        {"id": 2, "pos": (200, 150, 300, 300), "status": "Occupied"},
+        {"id": 3, "pos": (350, 150, 450, 300), "status": "Available"},
+    ]
+
+    for slot in slots:
+        x1, y1, x2, y2 = slot["pos"]
+        color = (0, 255, 0) if slot["status"] == "Available" else (0, 0, 255)
+        # Gambar Kotak
+        cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+        # Gambar Label
+        cv2.putText(frame, f"P{slot['id']}: {slot['status']}", (x1, y1-10), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+
+    # Label Status AI
+    cv2.rectangle(frame, (10, 10), (220, 40), (0, 0, 0), -1)
+    cv2.putText(frame, "AI DETECTION: ACTIVE (DEMO)", (15, 30), 
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+    return frame
+
+def video_stream_thread():
+    """Thread terpisah untuk mengirim stream video preview."""
+    if not STREAM_ENABLED:
+        return
+
+    session = requests.Session()
+    print(f"\n🎥 Memulai Video Stream Preview (Parking Detection Mode)...")
+    
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("❌ Kamera tidak ditemukan, stream dibatalkan.")
+        return
+
+    # Set resolusi rendah agar enteng
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+
+    try:
+        while STREAM_ENABLED:
+            start_time = time.time()
+            ret, frame = cap.read()
+            if not ret: break
+
+            # 1. Jalankan deteksi placeholder
+            frame = draw_parking_placeholders(frame)
+
+            # 2. Encode JPEG
+            _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, JPEG_QUALITY])
+            b64_frame = f"data:image/jpeg;base64,{base64.b64encode(buffer).decode()}"
+
+            # 3. Kirim ke Server
+            ts = int(time.time())
+            data_to_sign = f"{MAC_ADDRESS}:{ts}:{len(b64_frame)}"
+            sig = hmac.new(SHARED_SECRET.encode(), data_to_sign.encode(), hashlib.sha256).hexdigest()
+
+            try:
+                session.post(f"{SERVER_BASE_URL}/api/iot/stream", json={
+                    "mac_address": MAC_ADDRESS,
+                    "frame": b64_frame,
+                    "timestamp": ts,
+                    "signature": sig
+                }, timeout=5)
+            except: pass
+
+            # Kontrol FPS
+            elapsed = time.time() - start_time
+            time.sleep(max(1./FPS_TARGET - elapsed, 0))
+    finally:
+        cap.release()
+        print("🛑 Video stream dihentikan.")
 
 
 # ============================================================
@@ -292,7 +376,6 @@ async def websocket_client():
                 print(f"📡 Subscribing ke {channel_name}...")
 
                 # ── 4. Jalankan chat input di thread terpisah ──
-                loop = asyncio.get_event_loop()
                 chat_running = True
 
                 def chat_input_loop():
@@ -302,7 +385,7 @@ async def websocket_client():
                             if line:
                                 line = line.strip()
                                 if line:
-                                    send_chat_message(line)
+                                    send_chat_message(ws, line)
                         except Exception:
                             break
 
@@ -310,7 +393,11 @@ async def websocket_client():
                 chat_thread = threading.Thread(target=chat_input_loop, daemon=True)
                 chat_thread.start()
 
-                # ── 5. Listen for events ──
+                # ── 5. Jalankan video streaming di thread terpisah ──
+                stream_thread = threading.Thread(target=video_stream_thread, daemon=True)
+                stream_thread.start()
+
+                # ── 6. Listen for events ──
                 async for raw_msg in ws:
                     msg = json.loads(raw_msg)
                     event = msg.get('event', '')

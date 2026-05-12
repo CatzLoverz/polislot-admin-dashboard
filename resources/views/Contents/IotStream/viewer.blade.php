@@ -319,6 +319,11 @@
                         updateStatusUI('offline');
                         addLog(`❌ Perangkat IoT baru saja OFFLINE (instant)`);
                     }
+                })
+                .listenForWhisper('chat-reply', (e) => {
+                    // Menerima chat murni via WebSocket (Instant)
+                    console.log("💬 Chat received via WS:", e);
+                    addChatMessage(e.username, e.message, e.time);
                 });
 
             // =====================================================
