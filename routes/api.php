@@ -12,11 +12,15 @@ use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\SubareaCommentController;
 use App\Http\Controllers\Api\UserValidationController;
 use App\Http\Controllers\Api\IotStreamController;
+use App\Http\Controllers\Api\IotWsAuthController;
 use App\Http\Controllers\Api\UserFaqController;
 use Illuminate\Support\Facades\Route;
 
 // Rute untuk IoT Device Broadcasting
 Route::post('/iot/stream', [IotStreamController::class, 'receiveStream']);
+
+// Rute autentikasi WebSocket untuk IoT Device (Presence Channel via Reverb)
+Route::post('/iot/ws-auth', [IotWsAuthController::class, 'authenticate']);
 
 Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
 

@@ -3,3 +3,4 @@ requests
 opencv-python
 paho-mqtt
 pycryptodome
+pysher

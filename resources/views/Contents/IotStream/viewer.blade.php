@@ -284,7 +284,7 @@
     // Mulai inisiasi
     initEcho();
 
-    // Listen untuk Live Chat PoC setelah Echo jalan
+    // Listen untuk Live Chat PoC + Presence Channel (instant status) setelah Echo jalan
     function initChatEcho() {
         if (typeof window.Echo !== 'undefined') {
             // Listen Chat
@@ -293,13 +293,46 @@
                     addChatMessage(e.username, e.message, e.time);
                 });
 
-            // Listen Status Perangkat (Online/Offline)
+            // =====================================================
+            // PRESENCE CHANNEL — Instant Online/Offline Detection
+            // =====================================================
+            // Digunakan oleh IoT device yang terhubung via WebSocket (iot_ws_client.py).
+            // Saat device join → ONLINE (instant), saat device leave → OFFLINE (instant).
+            const presenceChannelName = `iot.device.${cleanMac}`;
+            window.Echo.join(presenceChannelName)
+                .here((members) => {
+                    // Cek apakah IoT device sudah ada di channel saat halaman dibuka
+                    const isDeviceOnline = members.some(m => m.type === 'iot_device');
+                    if (isDeviceOnline) {
+                        updateStatusUI('online');
+                        addLog(`✅ Perangkat IoT terdeteksi ONLINE (via Presence Channel)`);
+                    }
+                })
+                .joining((member) => {
+                    if (member.type === 'iot_device') {
+                        updateStatusUI('online');
+                        addLog(`✅ Perangkat IoT baru saja ONLINE (instant)`);
+                    }
+                })
+                .leaving((member) => {
+                    if (member.type === 'iot_device') {
+                        updateStatusUI('offline');
+                        addLog(`❌ Perangkat IoT baru saja OFFLINE (instant)`);
+                    }
+                });
+
+            // =====================================================
+            // FALLBACK: Listen Status dari MQTT (MqttListenerCommand)
+            // =====================================================
+            // Untuk backward-compatibility dengan device yang menggunakan mqtt_test_iot.py.
+            // Event ini tetap dikirim oleh MqttListenerCommand saat menerima LWT.
             window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
-                    console.log("📡 Status Received:", e);
+                    console.log("📡 Status Received (MQTT):", e);
                     const selectedMac = document.getElementById('device-selector').value;
                     if (e.macAddress.toLowerCase() === selectedMac.toLowerCase()) {
                         updateStatusUI(e.status);
+                        addLog(`📡 Status ${e.status.toUpperCase()} diterima via MQTT`);
                     }
                 });
         } else {
