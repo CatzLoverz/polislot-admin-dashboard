@@ -4,13 +4,33 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\IotDevice;
+use App\Models\IotCapture;
 use Illuminate\Http\Request;
 use App\Events\IotStreamReceived;
+use App\Events\ChatMessageSent;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class IotStreamController extends Controller
 {
+    /**
+     * Helper: Validasi MAC Address terdaftar (cache-aware).
+     */
+    private function validateMacAddress(string $macAddress): bool
+    {
+        $cacheKey = "iot_device_valid:{$macAddress}";
+        $isRegistered = Cache::get($cacheKey);
+
+        if ($isRegistered === null) {
+            $isRegistered = IotDevice::where('device_mac_address', $macAddress)->exists();
+            if ($isRegistered) {
+                Cache::put($cacheKey, true, 60);
+            }
+        }
+
+        return (bool) $isRegistered;
+    }
     /**
      * Endpoint untuk menerima frame dari perangkat IoT Python
      * dan mem-broadcast-nya via Reverb WebSockets.
@@ -124,5 +144,123 @@ class IotStreamController extends Controller
                 'message' => 'Failed to broadcast frame.',
             ], 500);
         }
+    }
+
+    /**
+     * Endpoint untuk menerima snapshot terenkripsi dari IoT device.
+     * Padanan HTTP dari MQTT topic "polislot/device/{MAC}/snapshot".
+     * 
+     * Flow: Device capture → AES encrypt → HTTP POST → Decrypt → Save DB → Broadcast Reverb
+     */
+    public function receiveSnapshot(Request $request)
+    {
+        $request->validate([
+            'mac_address'     => 'required|string',
+            'timestamp'       => 'required|numeric',
+            'encrypted_image' => 'required|string',
+            'iv'              => 'required|string',
+            'signature'       => 'required|string',
+        ]);
+
+        $macAddress = $request->mac_address;
+
+        // 1. VALIDASI MAC ADDRESS
+        if (!$this->validateMacAddress($macAddress)) {
+            Log::warning('[IotSnapshot] Rejected: Unregistered MAC', ['mac' => $macAddress]);
+            return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
+        }
+
+        // 2. VALIDASI HMAC SIGNATURE (format sama dengan mqtt_test_iot.py)
+        $iotSecret = config('services.iot.secret');
+        $key32 = substr(hash('sha256', $iotSecret, true), 0, 32);
+
+        $dataToSign = json_encode([
+            'mac_address'     => $macAddress,
+            'timestamp'       => (int) $request->timestamp,
+            'encrypted_image' => $request->encrypted_image,
+            'iv'              => $request->iv,
+        ], JSON_UNESCAPED_SLASHES);
+
+        $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
+
+        if (!hash_equals($calculatedSignature, $request->signature)) {
+            Log::warning('[IotSnapshot] Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+            return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
+        }
+
+        // 3. DEKRIPSI AES-256-CBC
+        $iv = base64_decode($request->iv);
+        $encryptedImage = base64_decode($request->encrypted_image);
+        $decryptedImageBytes = openssl_decrypt($encryptedImage, 'aes-256-cbc', $key32, OPENSSL_RAW_DATA, $iv);
+
+        if ($decryptedImageBytes === false) {
+            Log::error('[IotSnapshot] Failed to decrypt image', ['mac' => $macAddress]);
+            return response()->json(['status' => 'error', 'message' => 'Decryption failed.'], 400);
+        }
+
+        // 4. SIMPAN KE STORAGE + DATABASE
+        $device = IotDevice::where('device_mac_address', $macAddress)->first();
+        if ($device) {
+            $fileName = 'capture_' . time() . '_' . str_replace(':', '', $macAddress) . '.jpg';
+            $path = 'iot_captures/' . $fileName;
+
+            Storage::disk('public')->put($path, $decryptedImageBytes);
+
+            IotCapture::create([
+                'device_id'          => $device->device_id,
+                'capture_image_path' => $path,
+                'capture_is_trained' => false,
+                'capture_ai_status'  => 'Pending',
+            ]);
+
+            Log::info('[IotSnapshot] Image saved', ['mac' => $macAddress, 'path' => $path]);
+        }
+
+        // 5. BROADCAST KE WEB UI
+        $imageBase64 = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
+        broadcast(new IotStreamReceived($macAddress, $imageBase64));
+
+        return response()->json(['status' => 'success', 'message' => 'Snapshot received and broadcasted.']);
+    }
+
+    /**
+     * Endpoint untuk menerima balasan chat dari IoT device.
+     * Padanan HTTP dari MQTT topic "polislot/device/{MAC}/chat_reply".
+     */
+    public function receiveChatReply(Request $request)
+    {
+        $request->validate([
+            'mac_address' => 'required|string',
+            'username'    => 'required|string',
+            'message'     => 'required|string',
+            'signature'   => 'required|string',
+        ]);
+
+        // VALIDASI MAC ADDRESS
+        if (!$this->validateMacAddress($request->mac_address)) {
+            return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
+        }
+
+        // VALIDASI HMAC SIGNATURE
+        $iotSecret = config('services.iot.secret');
+        $key32 = substr(hash('sha256', $iotSecret, true), 0, 32);
+
+        $dataToSign = json_encode([
+            'username' => $request->username,
+            'message'  => $request->message,
+        ], JSON_UNESCAPED_SLASHES);
+
+        $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
+
+        if (!hash_equals($calculatedSignature, $request->signature)) {
+            Log::warning('[IotChatReply] Rejected: Invalid HMAC', ['mac' => $request->mac_address]);
+            return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
+        }
+
+        // BROADCAST KE WEB UI
+        broadcast(new ChatMessageSent($request->username, $request->message));
+        Log::info("[IotChatReply] Chat from {$request->username}: {$request->message}");
+
+        return response()->json(['status' => 'success']);
     }
 }

@@ -22,6 +22,10 @@ Route::post('/iot/stream', [IotStreamController::class, 'receiveStream']);
 // Rute autentikasi WebSocket untuk IoT Device (Presence Channel via Reverb)
 Route::post('/iot/ws-auth', [IotWsAuthController::class, 'authenticate']);
 
+// Rute untuk IoT Device — Snapshot terenkripsi dan Chat Reply (padanan MQTT via HTTP)
+Route::post('/iot/snapshot', [IotStreamController::class, 'receiveSnapshot']);
+Route::post('/iot/chat-reply', [IotStreamController::class, 'receiveChatReply']);
+
 Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
 
     // Rute Login
