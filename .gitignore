@@ -25,3 +25,6 @@ Homestead.yaml
 Thumbs.db
 sonar-project.properties
 .scannerwork
+graphify-out/manifest.json
+graphify-out/cost.json
+graphify-out/cache/

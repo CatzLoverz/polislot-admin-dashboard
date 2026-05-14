@@ -118,6 +118,12 @@ class IotWsAuthController extends Controller
             'channel' => $channelName,
         ]);
 
+        // ============================================================
+        // 4. UPDATE STATUS CACHE (Instant Online)
+        // ============================================================
+        Cache::forever("iot_status_{$macAddress}", 'online');
+        broadcast(new \App\Events\IotDeviceStatusChanged($macAddress, 'online'));
+
         return response()->json([
             'auth'         => "{$reverbKey}:{$authSignature}",
             'channel_data' => $channelData,

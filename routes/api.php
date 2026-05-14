@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\UserValidationController;
 use App\Http\Controllers\Api\IotStreamController;
 use App\Http\Controllers\Api\IotWsAuthController;
 use App\Http\Controllers\Api\UserFaqController;
+use App\Http\Controllers\Api\IotWebhookController;
 use Illuminate\Support\Facades\Route;
 
 // Rute untuk IoT Device Broadcasting
@@ -25,6 +26,7 @@ Route::post('/iot/ws-auth', [IotWsAuthController::class, 'authenticate']);
 // Rute untuk IoT Device — Snapshot terenkripsi dan Chat Reply (padanan MQTT via HTTP)
 Route::post('/iot/snapshot', [IotStreamController::class, 'receiveSnapshot']);
 Route::post('/iot/chat-reply', [IotStreamController::class, 'receiveChatReply']);
+Route::post('/iot/webhook', [IotWebhookController::class, 'handle']);
 
 Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
 
