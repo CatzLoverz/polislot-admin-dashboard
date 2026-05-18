@@ -28,3 +28,7 @@ sonar-project.properties
 graphify-out/manifest.json
 graphify-out/cost.json
 graphify-out/cache/
+.agent_cmd.sh
+.agent_out.log
+windows_terminal_bridge.ps1
+wsl_terminal_bridge.sh
