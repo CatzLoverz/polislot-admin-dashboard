@@ -15,7 +15,9 @@ Karena instalasi ini terpisah dari source code, Anda perlu **Menyalin** beberapa
 1. Copy `docker/docker-compose.yml` -> ke root.
 2. Copy `docker/mariadb.cnf` -> ke root.
 3. Copy `docker/logrotate-entrypoint.sh` -> ke root.
-4. Copy `.env.example` -> ke root (Rename menjadi `.env`).
+4. Copy `docker/mosquitto.conf` -> ke root.
+5. Copy `docker/mosquitto.passwd` -> ke root.
+6. Copy `.env.example` -> ke root (Rename menjadi `.env`).
 
 ### Khusus Pengguna Linux
 Berikan izin eksekusi pada file entrypoint yang sudah dicopy ke root:
@@ -155,8 +157,22 @@ DB_USERNAME_MOBILE=polislot_mobile
 DB_PASSWORD_MOBILE=password_db_mobile
 ```
 
-### 11. Re-up Container
-Jalankan kembali docker compose untuk menerapkan perubahan environment dan memastikan koneksi user baru berhasil.
+### 11. Setup Autentikasi MQTT Broker (Mosquitto)
+Mosquitto diatur agar tidak menerima koneksi tanpa autentikasi (anonymous). Anda perlu membuat akun MQTT untuk Laravel dan perangkat IoT.
+
+Jalankan perintah berikut untuk menambahkan user baru (sesuaikan `polislot_user` dan `secure_password` dengan nilai `MQTT_AUTH_USERNAME` dan `MQTT_AUTH_PASSWORD` di `.env`):
+
+```bash
+docker compose exec mosquitto mosquitto_passwd -b /mosquitto/config/mosquitto.passwd polislot_user secure_password
+```
+
+Lalu kirim sinyal HUP untuk me-reload password file Mosquitto tanpa mematikan container:
+```bash
+docker kill -s HUP polislot_mosquitto
+```
+
+### 12. Re-up Container
+Jalankan kembali docker compose untuk menerapkan seluruh perubahan environment dan memastikan koneksi baru berhasil.
 ```bash
 docker compose up -d --force-recreate
 ```

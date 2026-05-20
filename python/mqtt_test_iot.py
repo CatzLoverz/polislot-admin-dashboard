@@ -29,6 +29,10 @@ TOPIC_SNAPSHOT = f"polislot/device/{MAC_ADDRESS}/snapshot"
 TOPIC_STATUS = f"polislot/device/{MAC_ADDRESS}/status"
 TOPIC_SERVER_STATUS = "polislot/server/status"
 
+# MQTT Authentication (sesuai dengan config Mosquitto broker)
+MQTT_USER = os.environ.get("MQTT_USER", "polislot_user")
+MQTT_PASSWORD = os.environ.get("MQTT_PASSWORD", "secure_password")
+
 # Harus SAMA persis dengan IOT_API_SECRET di Laravel .env
 # Catatan: Untuk AES-256, panjang karakter bebas karena di-hash lagi ke 32 byte menggunakan SHA256
 SHARED_SECRET = "" 
@@ -95,24 +99,40 @@ def capture_frame():
 # ==========================================
 # MQTT CALLBACKS
 # ==========================================
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print(f"✅ IoT [{MAC_ADDRESS}] Terhubung ke Broker (WS)")
-        
-        # Subscribe ke perintah spesifik device ini
-        client.subscribe(TOPIC_COMMAND)
-        print(f"👂 Mendengarkan perintah di: {TOPIC_COMMAND}")
-        
-        # Subscribe ke status global dari Server Laravel
-        client.subscribe(TOPIC_SERVER_STATUS)
-        
-        # Kirim status online dengan HMAC
-        online_payload = {"status": "online", "mac_address": MAC_ADDRESS}
-        online_payload["signature"] = generate_hmac_signature(online_payload)
-        client.publish(TOPIC_STATUS, json.dumps(online_payload, separators=(',', ':')), qos=1, retain=True)
-        print(f"📡 Status: ONLINE (Secured)")
-    else:
-        print(f"❌ Gagal terhubung, kode: {rc}")
+# Cek versi callback API untuk kompatibilitas paho-mqtt v2.x
+try:
+    CALLBACK_API_VERSION = mqtt.CallbackAPIVersion.VERSION2
+except AttributeError:
+    CALLBACK_API_VERSION = None
+
+def on_connect_success(client):
+    print(f"✅ IoT [{MAC_ADDRESS}] Terhubung ke Broker (WS)")
+    
+    # Subscribe ke perintah spesifik device ini
+    client.subscribe(TOPIC_COMMAND)
+    print(f"👂 Mendengarkan perintah di: {TOPIC_COMMAND}")
+    
+    # Subscribe ke status global dari Server Laravel
+    client.subscribe(TOPIC_SERVER_STATUS)
+    
+    # Kirim status online dengan HMAC
+    online_payload = {"status": "online", "mac_address": MAC_ADDRESS}
+    online_payload["signature"] = generate_hmac_signature(online_payload)
+    client.publish(TOPIC_STATUS, json.dumps(online_payload, separators=(',', ':')), qos=1, retain=True)
+    print(f"📡 Status: ONLINE (Secured)")
+
+if CALLBACK_API_VERSION is not None:
+    def on_connect(client, userdata, flags, reason_code, properties):
+        if reason_code == 0:
+            on_connect_success(client)
+        else:
+            print(f"❌ Gagal terhubung, kode: {reason_code}")
+else:
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            on_connect_success(client)
+        else:
+            print(f"❌ Gagal terhubung, kode: {rc}")
 
 def on_message(client, userdata, msg):
     try:
@@ -219,10 +239,10 @@ def process_snapshot_request(client):
 # ==========================================
 # MAIN LOOP
 # ==========================================
-# Kompatibilitas untuk paho-mqtt versi 1.x dan 2.x
-try:
-    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, transport="websockets")
-except AttributeError:
+# Kompatibilitas inisialisasi Client untuk paho-mqtt versi 1.x dan 2.x
+if CALLBACK_API_VERSION is not None:
+    client = mqtt.Client(CALLBACK_API_VERSION, transport="websockets")
+else:
     client = mqtt.Client(transport="websockets")
 
 # === KONFIGURASI LAST WILL AND TESTAMENT (LWT) AMAN ===
@@ -235,6 +255,10 @@ client.will_set(TOPIC_STATUS, payload=json.dumps(offline_payload, separators=(',
 if PORT == 443:
     import ssl
     client.tls_set(cert_reqs=ssl.CERT_NONE) # Memastikan enkripsi diaktifkan untuk koneksi WSS
+
+# Set credentials for MQTT broker authentication
+if MQTT_USER and MQTT_PASSWORD:
+    client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
 
 client.on_connect = on_connect
 client.on_message = on_message
