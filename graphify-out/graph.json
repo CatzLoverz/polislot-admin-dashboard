@@ -7180,7 +7180,7 @@
       "label": "Khusus Pengguna Linux",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L22",
+      "source_location": "L21",
       "id": "docs_installation_docker_khusus_pengguna_linux",
       "community": 172,
       "norm_label": "khusus pengguna linux"
@@ -7189,7 +7189,7 @@
       "label": "code:bash (chmod +x logrotate-entrypoint.sh)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L24",
+      "source_location": "L23",
       "id": "docs_installation_docker_codeblock_1",
       "community": 172,
       "norm_label": "code:bash (chmod +x logrotate-entrypoint.sh)"
@@ -7198,7 +7198,7 @@
       "label": "Langkah Instalasi",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L30",
+      "source_location": "L29",
       "id": "docs_installation_docker_langkah_instalasi",
       "community": 172,
       "norm_label": "langkah instalasi"
@@ -7207,7 +7207,7 @@
       "label": "1. Konfigurasi Environment (.env)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L34",
+      "source_location": "L33",
       "id": "docs_installation_docker_1_konfigurasi_environment_env",
       "community": 172,
       "norm_label": "1. konfigurasi environment (.env)"
@@ -7216,7 +7216,7 @@
       "label": "code:ini (DB_CONNECTION=mariadb)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L37",
+      "source_location": "L36",
       "id": "docs_installation_docker_codeblock_2",
       "community": 172,
       "norm_label": "code:ini (db_connection=mariadb)"
@@ -7225,7 +7225,7 @@
       "label": "code:ini (ADMIN_EMAIL=email_valid_anda@gmail.com)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L47",
+      "source_location": "L46",
       "id": "docs_installation_docker_codeblock_3",
       "community": 172,
       "norm_label": "code:ini (admin_email=email_valid_anda@gmail.com)"
@@ -7234,7 +7234,7 @@
       "label": "code:ini (MAIL_MAILER=smtp)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L52",
+      "source_location": "L51",
       "id": "docs_installation_docker_codeblock_4",
       "community": 172,
       "norm_label": "code:ini (mail_mailer=smtp)"
@@ -7243,7 +7243,7 @@
       "label": "code:ini (GOOGLE_MAPS_JS=\"isi_api_key_google_cloud_anda\")",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L62",
+      "source_location": "L61",
       "id": "docs_installation_docker_codeblock_5",
       "community": 172,
       "norm_label": "code:ini (google_maps_js=\"isi_api_key_google_cloud_anda\")"
@@ -7252,16 +7252,25 @@
       "label": "code:ini (TUNNEL_TOKEN=\"isi_token_cloudflare_tunnel_anda\")",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L66",
+      "source_location": "L65",
       "id": "docs_installation_docker_codeblock_6",
       "community": 172,
       "norm_label": "code:ini (tunnel_token=\"isi_token_cloudflare_tunnel_anda\")"
     },
     {
+      "label": "code:ini (MQTT_AUTH_USERNAME=MQTTPoliSlot)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L69",
+      "id": "docs_installation_docker_codeblock_7",
+      "community": 172,
+      "norm_label": "code:ini (mqtt_auth_username=mqttpolislot)"
+    },
+    {
       "label": "2. Atur docker-compose.yml",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L70",
+      "source_location": "L74",
       "id": "docs_installation_docker_2_atur_docker_compose_yml",
       "community": 172,
       "norm_label": "2. atur docker-compose.yml"
@@ -7270,8 +7279,8 @@
       "label": "code:yaml (services:)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L77",
-      "id": "docs_installation_docker_codeblock_7",
+      "source_location": "L81",
+      "id": "docs_installation_docker_codeblock_8",
       "community": 172,
       "norm_label": "code:yaml (services:)"
     },
@@ -7279,7 +7288,7 @@
       "label": "3. Generate RSA Keys (Di Root)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L101",
+      "source_location": "L105",
       "id": "docs_installation_docker_3_generate_rsa_keys_di_root",
       "community": 172,
       "norm_label": "3. generate rsa keys (di root)"
@@ -7288,8 +7297,8 @@
       "label": "code:bash (openssl genrsa -out private_key.pem 4096)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L104",
-      "id": "docs_installation_docker_codeblock_8",
+      "source_location": "L108",
+      "id": "docs_installation_docker_codeblock_9",
       "community": 172,
       "norm_label": "code:bash (openssl genrsa -out private_key.pem 4096)"
     },
@@ -7297,7 +7306,7 @@
       "label": "4. Verifikasi Credential",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L110",
+      "source_location": "L114",
       "id": "docs_installation_docker_4_verifikasi_credential",
       "community": 172,
       "norm_label": "4. verifikasi credential"
@@ -7306,7 +7315,7 @@
       "label": "5. Menjalankan Container",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L113",
+      "source_location": "L117",
       "id": "docs_installation_docker_5_menjalankan_container",
       "community": 172,
       "norm_label": "5. menjalankan container"
@@ -7315,8 +7324,8 @@
       "label": "code:bash (docker compose up -d)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L115",
-      "id": "docs_installation_docker_codeblock_9",
+      "source_location": "L119",
+      "id": "docs_installation_docker_codeblock_10",
       "community": 172,
       "norm_label": "code:bash (docker compose up -d)"
     },
@@ -7324,7 +7333,7 @@
       "label": "6. Generate Application Key",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L119",
+      "source_location": "L123",
       "id": "docs_installation_docker_6_generate_application_key",
       "community": 172,
       "norm_label": "6. generate application key"
@@ -7333,8 +7342,8 @@
       "label": "code:bash (docker compose exec app php artisan key:generate)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L121",
-      "id": "docs_installation_docker_codeblock_10",
+      "source_location": "L125",
+      "id": "docs_installation_docker_codeblock_11",
       "community": 172,
       "norm_label": "code:bash (docker compose exec app php artisan key:generate)"
     },
@@ -7342,7 +7351,7 @@
       "label": "7. Migrasi Database",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L125",
+      "source_location": "L129",
       "id": "docs_installation_docker_7_migrasi_database",
       "community": 172,
       "norm_label": "7. migrasi database"
@@ -7351,8 +7360,8 @@
       "label": "code:bash (docker compose exec app php artisan migrate --fresh)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L127",
-      "id": "docs_installation_docker_codeblock_11",
+      "source_location": "L131",
+      "id": "docs_installation_docker_codeblock_12",
       "community": 172,
       "norm_label": "code:bash (docker compose exec app php artisan migrate --fresh)"
     },
@@ -7360,7 +7369,7 @@
       "label": "8. Setup Admin User (Seeding)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L131",
+      "source_location": "L135",
       "id": "docs_installation_docker_8_setup_admin_user_seeding",
       "community": 172,
       "norm_label": "8. setup admin user (seeding)"
@@ -7369,8 +7378,8 @@
       "label": "code:bash (docker compose exec app php artisan db:seed)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L133",
-      "id": "docs_installation_docker_codeblock_12",
+      "source_location": "L137",
+      "id": "docs_installation_docker_codeblock_13",
       "community": 172,
       "norm_label": "code:bash (docker compose exec app php artisan db:seed)"
     },
@@ -7378,7 +7387,7 @@
       "label": "9. Setup Database Roles",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L137",
+      "source_location": "L141",
       "id": "docs_installation_docker_9_setup_database_roles",
       "community": 172,
       "norm_label": "9. setup database roles"
@@ -7387,8 +7396,8 @@
       "label": "code:bash (# Setup user database untuk Admin Dashboard)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L139",
-      "id": "docs_installation_docker_codeblock_13",
+      "source_location": "L143",
+      "id": "docs_installation_docker_codeblock_14",
       "community": 172,
       "norm_label": "code:bash (# setup user database untuk admin dashboard)"
     },
@@ -7396,7 +7405,7 @@
       "label": "10. Atur Ulang Environment (.env) - PENTING",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L147",
+      "source_location": "L151",
       "id": "docs_installation_docker_10_atur_ulang_environment_env_penting",
       "community": 172,
       "norm_label": "10. atur ulang environment (.env) - penting"
@@ -7405,53 +7414,26 @@
       "label": "code:ini (# Ganti dengan user \"polislot_admin\" yang dibuat di langkah )",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L150",
-      "id": "docs_installation_docker_codeblock_14",
+      "source_location": "L154",
+      "id": "docs_installation_docker_codeblock_15",
       "community": 172,
       "norm_label": "code:ini (# ganti dengan user \"polislot_admin\" yang dibuat di langkah )"
     },
     {
-      "label": "11. Setup Autentikasi MQTT Broker (Mosquitto)",
+      "label": "11. Re-up Container",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L160",
-      "id": "docs_installation_docker_11_setup_autentikasi_mqtt_broker_mosquitto",
+      "source_location": "L164",
+      "id": "docs_installation_docker_11_re_up_container",
       "community": 172,
-      "norm_label": "11. setup autentikasi mqtt broker (mosquitto)"
-    },
-    {
-      "label": "code:bash (docker compose exec mosquitto mosquitto_passwd -b /mosquitto)",
-      "file_type": "document",
-      "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L165",
-      "id": "docs_installation_docker_codeblock_15",
-      "community": 172,
-      "norm_label": "code:bash (docker compose exec mosquitto mosquitto_passwd -b /mosquitto)"
-    },
-    {
-      "label": "code:bash (docker kill -s HUP polislot_mosquitto)",
-      "file_type": "document",
-      "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L170",
-      "id": "docs_installation_docker_codeblock_16",
-      "community": 172,
-      "norm_label": "code:bash (docker kill -s hup polislot_mosquitto)"
-    },
-    {
-      "label": "12. Re-up Container",
-      "file_type": "document",
-      "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L174",
-      "id": "docs_installation_docker_12_re_up_container",
-      "community": 172,
-      "norm_label": "12. re-up container"
+      "norm_label": "11. re-up container"
     },
     {
       "label": "code:bash (docker compose up -d --force-recreate)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L176",
-      "id": "docs_installation_docker_codeblock_17",
+      "source_location": "L166",
+      "id": "docs_installation_docker_codeblock_16",
       "community": 172,
       "norm_label": "code:bash (docker compose up -d --force-recreate)"
     },
@@ -7706,6 +7688,33 @@
       "id": "docs_installation_manual_codeblock_15",
       "community": 173,
       "norm_label": "code:bash (php artisan schedule:work)"
+    },
+    {
+      "label": "11. Setup Autentikasi MQTT Broker (Mosquitto)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L159",
+      "community": 172,
+      "norm_label": "11. setup autentikasi mqtt broker (mosquitto)",
+      "id": "docs_installation_docker_11_setup_autentikasi_mqtt_broker_mosquitto"
+    },
+    {
+      "label": "12. Re-up Container",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L169",
+      "community": 172,
+      "norm_label": "12. re-up container",
+      "id": "docs_installation_docker_12_re_up_container"
+    },
+    {
+      "label": "code:bash (docker compose up -d --force-recreate)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L176",
+      "community": 172,
+      "norm_label": "code:bash (docker compose up -d --force-recreate)",
+      "id": "docs_installation_docker_codeblock_17"
     },
     {
       "label": "Thread terpisah untuk membaca input dari keyboard dan mengirimkannya via MQTT (L",
@@ -13359,9 +13368,9 @@
       "source_file": "python/mqtt_test_iot.py",
       "source_location": "L189",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "python_mqtt_test_iot_rationale_189",
-      "target": "python_mqtt_test_iot_chat_input_thread",
-      "confidence_score": 1.0
+      "target": "python_mqtt_test_iot_chat_input_thread"
     },
     {
       "relation": "rationale_for",
@@ -15401,9 +15410,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_md",
-      "target": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_polislot_admin_dashboard"
     },
     {
       "relation": "contains",
@@ -15411,9 +15420,9 @@
       "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_fitur_utama",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_fitur_utama"
     },
     {
       "relation": "contains",
@@ -15421,9 +15430,9 @@
       "source_file": "README.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_tech_stack",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_tech_stack"
     },
     {
       "relation": "contains",
@@ -15431,9 +15440,9 @@
       "source_file": "README.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_struktur_direktori",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_struktur_direktori"
     },
     {
       "relation": "contains",
@@ -15441,9 +15450,9 @@
       "source_file": "README.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_panduan_instalasi",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_panduan_instalasi"
     },
     {
       "relation": "contains",
@@ -15451,9 +15460,9 @@
       "source_file": "README.md",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_custom_utility_commands",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_custom_utility_commands"
     },
     {
       "relation": "contains",
@@ -15461,9 +15470,9 @@
       "source_file": "README.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_tech_stack",
-      "target": "polislot_admin_dashboard_readme_prerequisites_external_service",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_prerequisites_external_service"
     },
     {
       "relation": "contains",
@@ -15471,9 +15480,9 @@
       "source_file": "README.md",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_struktur_direktori",
-      "target": "polislot_admin_dashboard_readme_codeblock_1",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_codeblock_1"
     },
     {
       "relation": "contains",
@@ -15481,9 +15490,9 @@
       "source_file": ".agents/rules/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_rules_graphify_md",
-      "target": "rules_graphify_graphify",
-      "confidence_score": 1.0
+      "target": "rules_graphify_graphify"
     },
     {
       "relation": "contains",
@@ -15491,9 +15500,9 @@
       "source_file": ".agents/workflows/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_workflows_graphify_md",
-      "target": "workflows_graphify_workflow_graphify",
-      "confidence_score": 1.0
+      "target": "workflows_graphify_workflow_graphify"
     },
     {
       "relation": "contains",
@@ -15501,9 +15510,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_md",
-      "target": "docs_installation_docker_instalasi_dengan_docker",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_instalasi_dengan_docker"
     },
     {
       "relation": "contains",
@@ -15511,9 +15520,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_instalasi_dengan_docker",
-      "target": "docs_installation_docker_prasyarat",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_prasyarat"
     },
     {
       "relation": "contains",
@@ -15521,9 +15530,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_instalasi_dengan_docker",
-      "target": "docs_installation_docker_langkah_instalasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_langkah_instalasi"
     },
     {
       "relation": "contains",
@@ -15531,9 +15540,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_prasyarat",
-      "target": "docs_installation_docker_persiapan_file_konfigurasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_persiapan_file_konfigurasi"
     },
     {
       "relation": "contains",
@@ -15541,9 +15550,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_prasyarat",
-      "target": "docs_installation_docker_khusus_pengguna_linux",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_khusus_pengguna_linux"
     },
     {
       "relation": "contains",
@@ -15551,9 +15560,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_khusus_pengguna_linux",
-      "target": "docs_installation_docker_codeblock_1",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_1"
     },
     {
       "relation": "contains",
@@ -15561,9 +15570,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_1_konfigurasi_environment_env",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_1_konfigurasi_environment_env"
     },
     {
       "relation": "contains",
@@ -15571,9 +15580,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L70",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_2_atur_docker_compose_yml",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_2_atur_docker_compose_yml"
     },
     {
       "relation": "contains",
@@ -15581,9 +15590,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_3_generate_rsa_keys_di_root",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_3_generate_rsa_keys_di_root"
     },
     {
       "relation": "contains",
@@ -15591,9 +15600,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L110",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_4_verifikasi_credential",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_4_verifikasi_credential"
     },
     {
       "relation": "contains",
@@ -15601,9 +15610,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_5_menjalankan_container",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_5_menjalankan_container"
     },
     {
       "relation": "contains",
@@ -15611,9 +15620,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_6_generate_application_key",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_6_generate_application_key"
     },
     {
       "relation": "contains",
@@ -15621,9 +15630,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_7_migrasi_database",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_7_migrasi_database"
     },
     {
       "relation": "contains",
@@ -15631,9 +15640,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_8_setup_admin_user_seeding",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_8_setup_admin_user_seeding"
     },
     {
       "relation": "contains",
@@ -15641,9 +15650,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_9_setup_database_roles",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_9_setup_database_roles"
     },
     {
       "relation": "contains",
@@ -15651,8 +15660,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_10_atur_ulang_environment_env_penting",
+      "target": "docs_installation_docker_10_atur_ulang_environment_env_penting"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "docs_installation_docker_langkah_instalasi",
+      "target": "docs_installation_docker_11_re_up_container",
       "confidence_score": 1.0
     },
     {
@@ -15661,9 +15680,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L160",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_11_setup_autentikasi_mqtt_broker_mosquitto",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_11_setup_autentikasi_mqtt_broker_mosquitto"
     },
     {
       "relation": "contains",
@@ -15671,9 +15690,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L174",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_12_re_up_container",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_12_re_up_container"
     },
     {
       "relation": "contains",
@@ -15681,9 +15700,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_2",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_2"
     },
     {
       "relation": "contains",
@@ -15691,9 +15710,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_3",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_3"
     },
     {
       "relation": "contains",
@@ -15701,9 +15720,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_4",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_4"
     },
     {
       "relation": "contains",
@@ -15711,9 +15730,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_5",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_5"
     },
     {
       "relation": "contains",
@@ -15721,8 +15740,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_6",
+      "target": "docs_installation_docker_codeblock_6"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "docs_installation_docker_1_konfigurasi_environment_env",
+      "target": "docs_installation_docker_codeblock_7",
       "confidence_score": 1.0
     },
     {
@@ -15731,8 +15760,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_2_atur_docker_compose_yml",
-      "target": "docs_installation_docker_codeblock_7",
+      "target": "docs_installation_docker_codeblock_7"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "docs_installation_docker_2_atur_docker_compose_yml",
+      "target": "docs_installation_docker_codeblock_8",
       "confidence_score": 1.0
     },
     {
@@ -15741,8 +15780,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_3_generate_rsa_keys_di_root",
-      "target": "docs_installation_docker_codeblock_8",
+      "target": "docs_installation_docker_codeblock_8"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "docs_installation_docker_3_generate_rsa_keys_di_root",
+      "target": "docs_installation_docker_codeblock_9",
       "confidence_score": 1.0
     },
     {
@@ -15751,8 +15800,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L115",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_5_menjalankan_container",
-      "target": "docs_installation_docker_codeblock_9",
+      "target": "docs_installation_docker_codeblock_9"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "docs_installation_docker_5_menjalankan_container",
+      "target": "docs_installation_docker_codeblock_10",
       "confidence_score": 1.0
     },
     {
@@ -15761,8 +15820,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_6_generate_application_key",
-      "target": "docs_installation_docker_codeblock_10",
+      "target": "docs_installation_docker_codeblock_10"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "docs_installation_docker_6_generate_application_key",
+      "target": "docs_installation_docker_codeblock_11",
       "confidence_score": 1.0
     },
     {
@@ -15771,8 +15840,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L127",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_7_migrasi_database",
-      "target": "docs_installation_docker_codeblock_11",
+      "target": "docs_installation_docker_codeblock_11"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "docs_installation_docker_7_migrasi_database",
+      "target": "docs_installation_docker_codeblock_12",
       "confidence_score": 1.0
     },
     {
@@ -15781,8 +15860,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L133",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_8_setup_admin_user_seeding",
-      "target": "docs_installation_docker_codeblock_12",
+      "target": "docs_installation_docker_codeblock_12"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "docs_installation_docker_8_setup_admin_user_seeding",
+      "target": "docs_installation_docker_codeblock_13",
       "confidence_score": 1.0
     },
     {
@@ -15791,8 +15880,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_9_setup_database_roles",
-      "target": "docs_installation_docker_codeblock_13",
+      "target": "docs_installation_docker_codeblock_13"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "docs_installation_docker_9_setup_database_roles",
+      "target": "docs_installation_docker_codeblock_14",
       "confidence_score": 1.0
     },
     {
@@ -15801,8 +15900,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L150",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_10_atur_ulang_environment_env_penting",
-      "target": "docs_installation_docker_codeblock_14",
+      "target": "docs_installation_docker_codeblock_14"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "docs_installation_docker_10_atur_ulang_environment_env_penting",
+      "target": "docs_installation_docker_codeblock_15",
       "confidence_score": 1.0
     },
     {
@@ -15811,8 +15920,18 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_11_setup_autentikasi_mqtt_broker_mosquitto",
-      "target": "docs_installation_docker_codeblock_15",
+      "target": "docs_installation_docker_codeblock_15"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L166",
+      "weight": 1.0,
+      "source": "docs_installation_docker_11_re_up_container",
+      "target": "docs_installation_docker_codeblock_16",
       "confidence_score": 1.0
     },
     {
@@ -15821,19 +15940,19 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L170",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_11_setup_autentikasi_mqtt_broker_mosquitto",
-      "target": "docs_installation_docker_codeblock_16",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_16"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/INSTALLATION_DOCKER.md",
-      "source_location": "L176",
+      "source_location": "L171",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_12_re_up_container",
-      "target": "docs_installation_docker_codeblock_17",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_16"
     },
     {
       "relation": "contains",
@@ -15841,9 +15960,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_md",
-      "target": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_instalasi_manual_tanpa_docker"
     },
     {
       "relation": "contains",
@@ -15851,9 +15970,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "target": "docs_installation_manual_prasyarat",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_prasyarat"
     },
     {
       "relation": "contains",
@@ -15861,9 +15980,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "target": "docs_installation_manual_langkah_instalasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_langkah_instalasi"
     },
     {
       "relation": "contains",
@@ -15871,9 +15990,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_1_konfigurasi_environment_env",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_1_konfigurasi_environment_env"
     },
     {
       "relation": "contains",
@@ -15881,9 +16000,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_2_generate_rsa_keys_wajib",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_2_generate_rsa_keys_wajib"
     },
     {
       "relation": "contains",
@@ -15891,9 +16010,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_3_instalasi_dependency",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_3_instalasi_dependency"
     },
     {
       "relation": "contains",
@@ -15901,9 +16020,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_4_generate_application_key",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_4_generate_application_key"
     },
     {
       "relation": "contains",
@@ -15911,9 +16030,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L87",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_5_migrasi_database_seeding",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_5_migrasi_database_seeding"
     },
     {
       "relation": "contains",
@@ -15921,9 +16040,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_6_setup_database_roles_rbac",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_6_setup_database_roles_rbac"
     },
     {
       "relation": "contains",
@@ -15931,9 +16050,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_7_atur_ulang_environment_env_penting",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_7_atur_ulang_environment_env_penting"
     },
     {
       "relation": "contains",
@@ -15941,9 +16060,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_8_jalankan_aplikasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_8_jalankan_aplikasi"
     },
     {
       "relation": "contains",
@@ -15951,9 +16070,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_9_mengaktifkan_scheduler_backup_otomatis",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_9_mengaktifkan_scheduler_backup_otomatis"
     },
     {
       "relation": "contains",
@@ -15961,9 +16080,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_1",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_1"
     },
     {
       "relation": "contains",
@@ -15971,9 +16090,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_2",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_2"
     },
     {
       "relation": "contains",
@@ -15981,9 +16100,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_3",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_3"
     },
     {
       "relation": "contains",
@@ -15991,9 +16110,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_4",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_4"
     },
     {
       "relation": "contains",
@@ -16001,9 +16120,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_5",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_5"
     },
     {
       "relation": "contains",
@@ -16011,9 +16130,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_6",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_6"
     },
     {
       "relation": "contains",
@@ -16021,9 +16140,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_7",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_7"
     },
     {
       "relation": "contains",
@@ -16031,9 +16150,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_2_generate_rsa_keys_wajib",
-      "target": "docs_installation_manual_codeblock_8",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_8"
     },
     {
       "relation": "contains",
@@ -16041,9 +16160,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_3_instalasi_dependency",
-      "target": "docs_installation_manual_codeblock_9",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_9"
     },
     {
       "relation": "contains",
@@ -16051,9 +16170,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_4_generate_application_key",
-      "target": "docs_installation_manual_codeblock_10",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_10"
     },
     {
       "relation": "contains",
@@ -16061,9 +16180,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_5_migrasi_database_seeding",
-      "target": "docs_installation_manual_codeblock_11",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_11"
     },
     {
       "relation": "contains",
@@ -16071,9 +16190,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L95",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_6_setup_database_roles_rbac",
-      "target": "docs_installation_manual_codeblock_12",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_12"
     },
     {
       "relation": "contains",
@@ -16081,9 +16200,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_7_atur_ulang_environment_env_penting",
-      "target": "docs_installation_manual_codeblock_13",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_13"
     },
     {
       "relation": "contains",
@@ -16091,9 +16210,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_8_jalankan_aplikasi",
-      "target": "docs_installation_manual_codeblock_14",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_14"
     },
     {
       "relation": "contains",
@@ -16101,11 +16220,21 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_9_mengaktifkan_scheduler_backup_otomatis",
-      "target": "docs_installation_manual_codeblock_15",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_15"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_DOCKER.md",
+      "source_location": "L176",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_installation_docker_12_re_up_container",
+      "target": "docs_installation_docker_codeblock_17"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "679e83eea28db3790f434a4d2217f80531d4b4d1"
+  "built_at_commit": "b742bef3a1a356081af7f2ce4567ca6363d7451b"
 }

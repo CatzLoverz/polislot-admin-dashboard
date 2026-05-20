@@ -1,2 +1,0 @@
-# Mosquitto password file
-# Use: docker exec -it polislot_mosquitto mosquitto_passwd -b /mosquitto/config/mosquitto.passwd <username> <password>

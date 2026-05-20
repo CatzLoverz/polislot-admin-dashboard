@@ -30,8 +30,8 @@ TOPIC_STATUS = f"polislot/device/{MAC_ADDRESS}/status"
 TOPIC_SERVER_STATUS = "polislot/server/status"
 
 # MQTT Authentication (sesuai dengan config Mosquitto broker)
-MQTT_USER = os.environ.get("MQTT_USER", "polislot_user")
-MQTT_PASSWORD = os.environ.get("MQTT_PASSWORD", "secure_password")
+MQTT_USER = os.environ.get("MQTT_USER", "...")
+MQTT_PASSWORD = os.environ.get("MQTT_PASSWORD", "...")
 
 # Harus SAMA persis dengan IOT_API_SECRET di Laravel .env
 # Catatan: Untuk AES-256, panjang karakter bebas karena di-hash lagi ke 32 byte menggunakan SHA256

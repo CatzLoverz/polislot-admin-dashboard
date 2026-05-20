@@ -16,8 +16,7 @@ Karena instalasi ini terpisah dari source code, Anda perlu **Menyalin** beberapa
 2. Copy `docker/mariadb.cnf` -> ke root.
 3. Copy `docker/logrotate-entrypoint.sh` -> ke root.
 4. Copy `docker/mosquitto.conf` -> ke root.
-5. Copy `docker/mosquitto.passwd` -> ke root.
-6. Copy `.env.example` -> ke root (Rename menjadi `.env`).
+5. Copy `.env.example` -> ke root (Rename menjadi `.env`).
 
 ### Khusus Pengguna Linux
 Berikan izin eksekusi pada file entrypoint yang sudah dicopy ke root:
@@ -65,6 +64,11 @@ Buka `.env` dan atur konfigurasi berikut:
     - **Cloudflare Tunnel (Opsional)**: Isi token ini jika Anda menggunakan fitur tunneling.
     ```ini
     TUNNEL_TOKEN="isi_token_cloudflare_tunnel_anda"
+    ```
+- **MQTT Authentication (Mosquitto)**: Isi kredensial untuk broker MQTT. Autentikasi broker ini telah **diotomatisasi secara penuh** di dalam Docker kontainer pada saat kontainer dijalankan menggunakan variabel ini. Anda tidak perlu membuat berkas password secara manual.
+    ```ini
+    MQTT_AUTH_USERNAME=MQTTPoliSlot
+    MQTT_AUTH_PASSWORD=password_mqtt_yang_aman
     ```
 
 ### 2. Atur docker-compose.yml
@@ -157,22 +161,8 @@ DB_USERNAME_MOBILE=polislot_mobile
 DB_PASSWORD_MOBILE=password_db_mobile
 ```
 
-### 11. Setup Autentikasi MQTT Broker (Mosquitto)
-Mosquitto diatur agar tidak menerima koneksi tanpa autentikasi (anonymous). Anda perlu membuat akun MQTT untuk Laravel dan perangkat IoT.
-
-Jalankan perintah berikut untuk menambahkan user baru (sesuaikan `polislot_user` dan `secure_password` dengan nilai `MQTT_AUTH_USERNAME` dan `MQTT_AUTH_PASSWORD` di `.env`):
-
-```bash
-docker compose exec mosquitto mosquitto_passwd -b /mosquitto/config/mosquitto.passwd polislot_user secure_password
-```
-
-Lalu kirim sinyal HUP untuk me-reload password file Mosquitto tanpa mematikan container:
-```bash
-docker kill -s HUP polislot_mosquitto
-```
-
-### 12. Re-up Container
-Jalankan kembali docker compose untuk menerapkan seluruh perubahan environment dan memastikan koneksi baru berhasil.
+### 11. Re-up Container
+Jalankan kembali docker compose untuk menerapkan seluruh perubahan environment (termasuk kredensial MQTT dan user database baru) dan memastikan seluruh sistem berjalan dengan benar.
 ```bash
 docker compose up -d --force-recreate
 ```

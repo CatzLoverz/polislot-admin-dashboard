@@ -6,6 +6,8 @@
 #   .env                (konfigurasi rahasia)
 #   private_key.pem     (RSA key enkripsi API)
 #   mariadb.cnf         (konfigurasi logging MariaDB)
+#   mosquitto.conf      (konfigurasi Mosquitto)
+#   mosquitto.passwd    (password file Mosquitto)
 #   logrotate-entrypoint.sh
 #   storage/            (akan dibuat otomatis)
 # ============================================================
@@ -81,11 +83,20 @@ services:
     ports:
       - "127.0.0.1:1883:1883" # Local TCP untuk Laravel
       - "127.0.0.1:9001:9001" # Local WebSockets untuk Cloudflare Tunnel
+    environment:
+      - MQTT_AUTH_USERNAME=${MQTT_AUTH_USERNAME:-polislot_user}
+      - MQTT_AUTH_PASSWORD=${MQTT_AUTH_PASSWORD:-secure_password}
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - ./mosquitto.passwd:/mosquitto/config/mosquitto.passwd
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
+    command: >
+      sh -c "
+      touch /mosquitto/mosquitto.passwd &&
+      chmod 600 /mosquitto/mosquitto.passwd &&
+      mosquitto_passwd -b /mosquitto/mosquitto.passwd \$${MQTT_AUTH_USERNAME} \$${MQTT_AUTH_PASSWORD} &&
+      exec /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
+      "
     networks:
       - polislot_net
 

@@ -1,16 +1,16 @@
 # Graph Report - polislot-admin-dashboard  (2026-05-20)
 
 ## Corpus Check
-- 192 files · ~56,934 words
+- 192 files · ~56,937 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 857 nodes · 823 edges · 177 communities (81 shown, 96 thin omitted)
+- 858 nodes · 835 edges · 177 communities (81 shown, 96 thin omitted)
 - Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 115 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `679e83ee`
+- Built from commit: `b742bef3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -129,7 +129,7 @@
 2. `AuthControllerTest` - 24 edges
 3. `Validation` - 19 edges
 4. `config` - 17 edges
-5. `Langkah Instalasi` - 13 edges
+5. `Langkah Instalasi` - 14 edges
 6. `AuthController` - 12 edges
 7. `AuthController` - 11 edges
 8. `Langkah Instalasi` - 10 edges
@@ -178,8 +178,8 @@ Cohesion: 0.5
 Nodes (4): Membuat HMAC-SHA256 signature., Menangkap video dari webcam dan mengirimkannya via HTTP POST     dengan HMAC sig, sign_request(), start_video_stream()
 
 ### Community 172 - "Community 172"
-Cohesion: 0.06
-Nodes (34): 10. Atur Ulang Environment (.env) - PENTING, 11. Setup Autentikasi MQTT Broker (Mosquitto), 12. Re-up Container, 1. Konfigurasi Environment (.env), 2. Atur docker-compose.yml, 3. Generate RSA Keys (Di Root), 4. Verifikasi Credential, 5. Menjalankan Container (+26 more)
+Cohesion: 0.07
+Nodes (35): 10. Atur Ulang Environment (.env) - PENTING, 11. Re-up Container, 11. Setup Autentikasi MQTT Broker (Mosquitto), 12. Re-up Container, 1. Konfigurasi Environment (.env), 2. Atur docker-compose.yml, 3. Generate RSA Keys (Di Root), 4. Verifikasi Credential (+27 more)
 
 ### Community 173 - "Community 173"
 Cohesion: 0.07
@@ -190,7 +190,7 @@ Cohesion: 0.22
 Nodes (8): code:block1 (polislot-admin-dashboard/), 🧰 Custom Utility Commands, 🚀 Fitur Utama, 📖 Panduan Instalasi, Polislot Admin Dashboard, Prerequisites External Service, 📂 Struktur Direktori, 🛠️ Tech Stack
 
 ## Knowledge Gaps
-- **109 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+104 more)
+- **99 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+94 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -204,7 +204,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 12 inferred relationships involving `config` (e.g. with `.handle()` and `.handle()`) actually correct?**
   _`config` has 12 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
-  _109 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _99 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.05 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
