@@ -1,16 +1,16 @@
-# Graph Report - polislot-admin-dashboard  (2026-05-20)
+# Graph Report - polislot-admin-dashboard  (2026-05-24)
 
 ## Corpus Check
-- 192 files · ~56,937 words
+- 190 files · ~56,928 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 858 nodes · 835 edges · 177 communities (81 shown, 96 thin omitted)
-- Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 115 edges (avg confidence: 0.8)
+- 862 nodes · 828 edges · 178 communities (89 shown, 89 thin omitted)
+- Extraction: 87% EXTRACTED · 13% INFERRED · 0% AMBIGUOUS · INFERRED: 105 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b742bef3`
+- Built from commit: `4220349b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -98,13 +98,14 @@
 - [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
 - [[_COMMUNITY_Community 82|Community 82]]
-- [[_COMMUNITY_Community 93|Community 93]]
-- [[_COMMUNITY_Community 94|Community 94]]
+- [[_COMMUNITY_Community 83|Community 83]]
+- [[_COMMUNITY_Community 84|Community 84]]
+- [[_COMMUNITY_Community 85|Community 85]]
+- [[_COMMUNITY_Community 86|Community 86]]
+- [[_COMMUNITY_Community 96|Community 96]]
+- [[_COMMUNITY_Community 97|Community 97]]
+- [[_COMMUNITY_Community 98|Community 98]]
 - [[_COMMUNITY_Community 99|Community 99]]
-- [[_COMMUNITY_Community 100|Community 100]]
-- [[_COMMUNITY_Community 101|Community 101]]
-- [[_COMMUNITY_Community 102|Community 102]]
-- [[_COMMUNITY_Community 103|Community 103]]
 - [[_COMMUNITY_Community 104|Community 104]]
 - [[_COMMUNITY_Community 105|Community 105]]
 - [[_COMMUNITY_Community 106|Community 106]]
@@ -113,51 +114,69 @@
 - [[_COMMUNITY_Community 109|Community 109]]
 - [[_COMMUNITY_Community 110|Community 110]]
 - [[_COMMUNITY_Community 111|Community 111]]
-- [[_COMMUNITY_Community 113|Community 113]]
+- [[_COMMUNITY_Community 112|Community 112]]
 - [[_COMMUNITY_Community 114|Community 114]]
 - [[_COMMUNITY_Community 115|Community 115]]
 - [[_COMMUNITY_Community 116|Community 116]]
 - [[_COMMUNITY_Community 117|Community 117]]
-- [[_COMMUNITY_Community 172|Community 172]]
-- [[_COMMUNITY_Community 173|Community 173]]
-- [[_COMMUNITY_Community 174|Community 174]]
-- [[_COMMUNITY_Community 175|Community 175]]
+- [[_COMMUNITY_Community 118|Community 118]]
+- [[_COMMUNITY_Community 119|Community 119]]
+- [[_COMMUNITY_Community 120|Community 120]]
+- [[_COMMUNITY_Community 121|Community 121]]
+- [[_COMMUNITY_Community 122|Community 122]]
 - [[_COMMUNITY_Community 176|Community 176]]
+- [[_COMMUNITY_Community 177|Community 177]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `AuthControllerTest` - 31 edges
 2. `AuthControllerTest` - 24 edges
 3. `Validation` - 19 edges
-4. `config` - 17 edges
-5. `Langkah Instalasi` - 14 edges
-6. `AuthController` - 12 edges
-7. `AuthController` - 11 edges
-8. `Langkah Instalasi` - 10 edges
-9. `require` - 9 edges
-10. `devDependencies` - 9 edges
+4. `AuthController` - 12 edges
+5. `Langkah Instalasi` - 12 edges
+6. `AuthController` - 11 edges
+7. `Langkah Instalasi` - 10 edges
+8. `require` - 9 edges
+9. `ProfileControllerTest` - 9 edges
+10. `SubareaCommentControllerTest` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
-- None detected - all connections are within the same source files.
+- `Docker Container Deployment` --references--> `MQTT Mosquitto Broker`  [EXTRACTED]
+  docs/INSTALLATION_DOCKER.md → docker/docker-compose.yml
+- `Docker Container Deployment` --rationale_for--> `PoliSlot Admin Dashboard`  [EXTRACTED]
+  docs/INSTALLATION_DOCKER.md → README.md
+- `Manual Deployment` --rationale_for--> `PoliSlot Admin Dashboard`  [EXTRACTED]
+  docs/INSTALLATION_MANUAL.md → README.md
+- `Docker Container Deployment` --references--> `Database Backup and Restore`  [EXTRACTED]
+  docs/INSTALLATION_DOCKER.md → README.md
+- `Manual Deployment` --references--> `Database Backup and Restore`  [EXTRACTED]
+  docs/INSTALLATION_MANUAL.md → README.md
 
-## Communities (177 total, 96 thin omitted)
+## Hyperedges (group relationships)
+- **Deployment Options** — docker_deployment, manual_deployment [EXTRACTED 1.00]
+
+## Communities (178 total, 89 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.05
-Nodes (42): autoload, autoload-dev, psr-4, psr-4, description, extra, laravel, keywords (+34 more)
-
-### Community 1 - "Community 1"
 Cohesion: 0.07
 Nodes (8): UserValidationController, UserValidationControllerTest, UserValidationTest, ValidationTest, Validation, DatabaseSeeder, ValidationSeeder, ValidationController
 
-### Community 4 - "Community 4"
+### Community 3 - "Community 3"
 Cohesion: 0.13
 Nodes (22): capture_frame(), draw_parking_placeholders(), encrypt_image_aes(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command(), main() (+14 more)
 
-### Community 6 - "Community 6"
+### Community 4 - "Community 4"
 Cohesion: 0.12
 Nodes (15): devDependencies, axios, concurrently, laravel-echo, laravel-vite-plugin, pusher-js, tailwindcss, @tailwindcss/vite (+7 more)
 
-### Community 8 - "Community 8"
+### Community 5 - "Community 5"
+Cohesion: 0.15
+Nodes (3): AuthController, HistoryService, ParkSubareaController
+
+### Community 6 - "Community 6"
+Cohesion: 0.20
+Nodes (3): IotStreamController, MqttListenerCommand, IotCapture
+
+### Community 7 - "Community 7"
 Cohesion: 0.21
 Nodes (3): UserFaqController, UserFaq, UserFaqController
 
@@ -169,45 +188,81 @@ Nodes (3): BackupAuto, BackupDatabase, RewardVerificationController
 Cohesion: 0.32
 Nodes (11): capture_frame(), chat_input_thread(), encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), on_connect(), on_connect_success(), on_message() (+3 more)
 
-### Community 18 - "Community 18"
+### Community 15 - "Community 15"
+Cohesion: 0.22
+Nodes (8): description, keywords, license, minimum-stability, name, prefer-stable, $schema, type
+
+### Community 16 - "Community 16"
+Cohesion: 0.22
+Nodes (9): require, fakerphp/faker, laravel/framework, laravel/reverb, laravel/sanctum, laravel/tinker, php, php-mqtt/laravel-client (+1 more)
+
+### Community 17 - "Community 17"
+Cohesion: 0.10
+Nodes (4): IotDevice, MissionService, FeedbackController, ProfileController
+
+### Community 21 - "Community 21"
 Cohesion: 0.29
 Nodes (7): pestphp/pest-plugin, php-http/discovery, config, allow-plugins, optimize-autoloader, preferred-install, sort-packages
 
+### Community 22 - "Community 22"
+Cohesion: 0.29
+Nodes (7): require-dev, laravel/pail, laravel/pint, laravel/sail, mockery/mockery, nunomaduro/collision, phpunit/phpunit
+
+### Community 23 - "Community 23"
+Cohesion: 0.29
+Nodes (7): scripts, dev, post-autoload-dump, post-create-project-cmd, post-root-package-install, post-update-cmd, test
+
+### Community 24 - "Community 24"
+Cohesion: 0.62
+Nodes (7): Docker Container Deployment, Manual Deployment, MQTT Mosquitto Broker, API End-to-End RSA Encryption, Database Backup and Restore, Database Security and RBAC, PoliSlot Admin Dashboard
+
+### Community 58 - "Community 58"
+Cohesion: 0.06
+Nodes (32): 10. Atur Ulang Environment (.env) - PENTING, 11. Re-up Container, 1. Konfigurasi Environment (.env), 2. Atur docker-compose.yml, 3. Generate RSA Keys (Di Root), 4. Verifikasi Credential, 5. Menjalankan Container, 6. Generate Application Key (+24 more)
+
 ### Community 59 - "Community 59"
-Cohesion: 0.5
+Cohesion: 0.40
+Nodes (5): autoload, psr-4, App\\, Database\\Factories\\, Database\\Seeders\\
+
+### Community 60 - "Community 60"
+Cohesion: 0.50
 Nodes (4): Membuat HMAC-SHA256 signature., Menangkap video dari webcam dan mengirimkannya via HTTP POST     dengan HMAC sig, sign_request(), start_video_stream()
 
-### Community 172 - "Community 172"
-Cohesion: 0.07
-Nodes (35): 10. Atur Ulang Environment (.env) - PENTING, 11. Re-up Container, 11. Setup Autentikasi MQTT Broker (Mosquitto), 12. Re-up Container, 1. Konfigurasi Environment (.env), 2. Atur docker-compose.yml, 3. Generate RSA Keys (Di Root), 4. Verifikasi Credential (+27 more)
-
-### Community 173 - "Community 173"
+### Community 64 - "Community 64"
 Cohesion: 0.07
 Nodes (27): 1. Konfigurasi Environment (.env), 2. Generate RSA Keys (Wajib), 3. Instalasi Dependency, 4. Generate Application Key, 5. Migrasi Database & Seeding, 6. Setup Database Roles (RBAC), 7. Atur Ulang Environment (.env) - PENTING, 8. Jalankan Aplikasi (+19 more)
 
-### Community 174 - "Community 174"
+### Community 67 - "Community 67"
 Cohesion: 0.22
 Nodes (8): code:block1 (polislot-admin-dashboard/), 🧰 Custom Utility Commands, 🚀 Fitur Utama, 📖 Panduan Instalasi, Polislot Admin Dashboard, Prerequisites External Service, 📂 Struktur Direktori, 🛠️ Tech Stack
 
+### Community 110 - "Community 110"
+Cohesion: 0.67
+Nodes (3): autoload-dev, psr-4, Tests\\
+
+### Community 111 - "Community 111"
+Cohesion: 0.67
+Nodes (3): extra, laravel, dont-discover
+
 ## Knowledge Gaps
-- **99 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+94 more)
+- **96 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+91 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **89 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `config` connect `Community 18` to `Community 0`, `Community 9`, `Community 106`, `Community 41`, `Community 107`, `Community 109`, `Community 110`, `Community 108`, `Community 19`?**
-  _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **Are the 18 inferred relationships involving `Validation` (e.g. with `.store()` and `.index()`) actually correct?**
   _`Validation` has 18 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 12 inferred relationships involving `config` (e.g. with `.handle()` and `.handle()`) actually correct?**
-  _`config` has 12 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
-  _99 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _110 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.05 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06970128022759602 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.07 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0625 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.06 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08 - nodes in this community are weakly interconnected._
+- **Should `Community 3` be split into smaller, more focused modules?**
+  _Cohesion score 0.13438735177865613 - nodes in this community are weakly interconnected._
+- **Should `Community 4` be split into smaller, more focused modules?**
+  _Cohesion score 0.125 - nodes in this community are weakly interconnected._

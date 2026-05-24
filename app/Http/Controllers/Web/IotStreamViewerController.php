@@ -67,7 +67,9 @@ class IotStreamViewerController extends Controller
             $payloadForMqtt['signature'] = $this->generateCommandSignature($payloadData);
             $payload = json_encode($payloadForMqtt, JSON_UNESCAPED_SLASHES);
             
-            MQTT::publish($topic, $payload, 0);
+            $mqtt = MQTT::connection('publisher');
+            $mqtt->publish($topic, $payload, 0);
+            $mqtt->disconnect();
         } catch (\Exception $e) {
             $errors[] = "MQTT: " . $e->getMessage();
         }
