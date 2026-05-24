@@ -60,8 +60,6 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         // Route Park Area
         Route::resource('park-area', ParkAreaController::class);
 
-
-
         // Route Park Subarea
         Route::post('park-area/{park_area}/subarea', [ParkSubareaController::class, 'store'])->name('park-area.subarea.store');
         Route::resource('park-subarea', ParkSubareaController::class)->only(['update', 'destroy']);
@@ -93,12 +91,10 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
 
         // Route User_Faq
         Route::resource('user-faq', UserFaqController::class)->only(['index', 'store', 'update', 'destroy']);
-        
 
         // Route Khusus Uji Coba WebSockets IoT
         Route::get('iot-stream-viewer', [IotStreamViewerController::class, 'index'])->name('iot-stream-viewer.index');
         Route::post('iot-stream-viewer/trigger', [IotStreamViewerController::class, 'triggerSnapshot'])->name('iot-stream-viewer.trigger');
         Route::post('iot-stream-viewer/chat', [IotStreamViewerController::class, 'sendChat'])->name('iot-stream-viewer.chat');
     });
-
 });

@@ -93,6 +93,7 @@ services:
     command: >
       sh -c "
       touch /mosquitto/mosquitto.passwd &&
+      chown mosquitto:mosquitto /mosquitto/mosquitto.passwd &&
       chmod 600 /mosquitto/mosquitto.passwd &&
       mosquitto_passwd -b /mosquitto/mosquitto.passwd \$${MQTT_AUTH_USERNAME} \$${MQTT_AUTH_PASSWORD} &&
       exec /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf

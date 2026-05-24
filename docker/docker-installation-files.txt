@@ -1,0 +1,2 @@
+copy the content of this folder for the use of installing this project using Docker
+this project image are uploaded into dockerhub registry 
