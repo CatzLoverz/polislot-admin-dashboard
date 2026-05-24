@@ -5,6 +5,27 @@ declare(strict_types=1);
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\Repositories\MemoryRepository;
 
+// Calculate dynamic signed LWT payload for server offline status
+$secretKey = env('IOT_API_SECRET');
+$lastWillMessage = '';
+if ($secretKey) {
+    $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
+    $payload = ['status' => 'offline'];
+    $payload['signature'] = hash_hmac('sha256', json_encode($payload, JSON_UNESCAPED_SLASHES), $key32);
+    $lastWillMessage = json_encode($payload, JSON_UNESCAPED_SLASHES);
+}
+
+// Safely validate the message in env. If it's not a valid signed JSON, use the dynamic one.
+$envLastWill = env('MQTT_LAST_WILL_MESSAGE');
+$isValidJsonSig = false;
+if ($envLastWill) {
+    $decoded = json_decode($envLastWill, true);
+    if (json_last_error() === JSON_ERROR_NONE && isset($decoded['signature'])) {
+        $isValidJsonSig = true;
+    }
+}
+$activeLastWillMessage = $isValidJsonSig ? $envLastWill : $lastWillMessage;
+
 return [
 
     /*
@@ -92,7 +113,7 @@ return [
                 // (e.g. in case of a disconnect).
                 'last_will' => [
                     'topic' => env('MQTT_LAST_WILL_TOPIC'),
-                    'message' => env('MQTT_LAST_WILL_MESSAGE'),
+                    'message' => $activeLastWillMessage,
                     'quality_of_service' => env('MQTT_LAST_WILL_QUALITY_OF_SERVICE', 0),
                     'retain' => env('MQTT_LAST_WILL_RETAIN', false),
                 ],

@@ -1,16 +1,16 @@
 # Graph Report - polislot-admin-dashboard  (2026-05-24)
 
 ## Corpus Check
-- 190 files · ~56,928 words
+- 190 files · ~57,020 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 862 nodes · 828 edges · 178 communities (89 shown, 89 thin omitted)
+- 863 nodes · 829 edges · 180 communities (88 shown, 92 thin omitted)
 - Extraction: 87% EXTRACTED · 13% INFERRED · 0% AMBIGUOUS · INFERRED: 105 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4220349b`
+- Built from commit: `8820053f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -126,6 +126,8 @@
 - [[_COMMUNITY_Community 122|Community 122]]
 - [[_COMMUNITY_Community 176|Community 176]]
 - [[_COMMUNITY_Community 177|Community 177]]
+- [[_COMMUNITY_Community 178|Community 178]]
+- [[_COMMUNITY_Community 179|Community 179]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `AuthControllerTest` - 31 edges
@@ -154,7 +156,7 @@
 ## Hyperedges (group relationships)
 - **Deployment Options** — docker_deployment, manual_deployment [EXTRACTED 1.00]
 
-## Communities (178 total, 89 thin omitted)
+## Communities (180 total, 92 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -167,10 +169,6 @@ Nodes (22): capture_frame(), draw_parking_placeholders(), encrypt_image_aes(), g
 ### Community 4 - "Community 4"
 Cohesion: 0.12
 Nodes (15): devDependencies, axios, concurrently, laravel-echo, laravel-vite-plugin, pusher-js, tailwindcss, @tailwindcss/vite (+7 more)
-
-### Community 5 - "Community 5"
-Cohesion: 0.15
-Nodes (3): AuthController, HistoryService, ParkSubareaController
 
 ### Community 6 - "Community 6"
 Cohesion: 0.20
@@ -185,8 +183,8 @@ Cohesion: 0.18
 Nodes (3): BackupAuto, BackupDatabase, RewardVerificationController
 
 ### Community 10 - "Community 10"
-Cohesion: 0.32
-Nodes (11): capture_frame(), chat_input_thread(), encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), on_connect(), on_connect_success(), on_message() (+3 more)
+Cohesion: 0.28
+Nodes (12): capture_frame(), chat_input_thread(), encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), on_connect(), on_connect_success(), on_message() (+4 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.22
@@ -197,8 +195,8 @@ Cohesion: 0.22
 Nodes (9): require, fakerphp/faker, laravel/framework, laravel/reverb, laravel/sanctum, laravel/tinker, php, php-mqtt/laravel-client (+1 more)
 
 ### Community 17 - "Community 17"
-Cohesion: 0.10
-Nodes (4): IotDevice, MissionService, FeedbackController, ProfileController
+Cohesion: 0.13
+Nodes (3): IotDevice, AppServiceProvider, MissionService
 
 ### Community 21 - "Community 21"
 Cohesion: 0.29
@@ -247,7 +245,7 @@ Nodes (3): extra, laravel, dont-discover
 ## Knowledge Gaps
 - **96 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+91 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **89 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **92 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -255,7 +253,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 18 inferred relationships involving `Validation` (e.g. with `.store()` and `.index()`) actually correct?**
   _`Validation` has 18 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
-  _110 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _111 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06970128022759602 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**

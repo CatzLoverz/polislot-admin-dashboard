@@ -2013,7 +2013,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L1",
       "id": "app_http_controllers_web_feedbackcontroller_php",
-      "community": 17,
+      "community": 178,
       "norm_label": "feedbackcontroller.php"
     },
     {
@@ -2022,7 +2022,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L14",
       "id": "web_feedbackcontroller_feedbackcontroller",
-      "community": 17,
+      "community": 178,
       "norm_label": "feedbackcontroller"
     },
     {
@@ -2031,7 +2031,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L20",
       "id": "web_feedbackcontroller_feedbackcontroller_index",
-      "community": 17,
+      "community": 178,
       "norm_label": ".index()"
     },
     {
@@ -2040,7 +2040,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L76",
       "id": "web_feedbackcontroller_feedbackcontroller_destroy",
-      "community": 17,
+      "community": 178,
       "norm_label": ".destroy()"
     },
     {
@@ -2319,7 +2319,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L1",
       "id": "app_http_controllers_web_parksubareacontroller_php",
-      "community": 5,
+      "community": 72,
       "norm_label": "parksubareacontroller.php"
     },
     {
@@ -2328,7 +2328,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L15",
       "id": "web_parksubareacontroller_parksubareacontroller",
-      "community": 5,
+      "community": 72,
       "norm_label": "parksubareacontroller"
     },
     {
@@ -2337,7 +2337,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L25",
       "id": "web_parksubareacontroller_parksubareacontroller_store",
-      "community": 5,
+      "community": 72,
       "norm_label": ".store()"
     },
     {
@@ -2346,7 +2346,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L78",
       "id": "web_parksubareacontroller_parksubareacontroller_update",
-      "community": 5,
+      "community": 72,
       "norm_label": ".update()"
     },
     {
@@ -2355,7 +2355,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L180",
       "id": "web_parksubareacontroller_parksubareacontroller_destroy",
-      "community": 5,
+      "community": 72,
       "norm_label": ".destroy()"
     },
     {
@@ -2364,7 +2364,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L1",
       "id": "app_http_controllers_web_profilecontroller_php",
-      "community": 17,
+      "community": 179,
       "norm_label": "profilecontroller.php"
     },
     {
@@ -2373,7 +2373,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L18",
       "id": "web_profilecontroller_profilecontroller",
-      "community": 17,
+      "community": 179,
       "norm_label": "profilecontroller"
     },
     {
@@ -2382,7 +2382,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L23",
       "id": "web_profilecontroller_profilecontroller_edit",
-      "community": 17,
+      "community": 179,
       "norm_label": ".edit()"
     },
     {
@@ -2391,7 +2391,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L35",
       "id": "web_profilecontroller_profilecontroller_update",
-      "community": 17,
+      "community": 179,
       "norm_label": ".update()"
     },
     {
@@ -3363,7 +3363,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L1",
       "id": "app_providers_appserviceprovider_php",
-      "community": 72,
+      "community": 17,
       "norm_label": "appserviceprovider.php"
     },
     {
@@ -3372,7 +3372,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L12",
       "id": "providers_appserviceprovider_appserviceprovider",
-      "community": 72,
+      "community": 17,
       "norm_label": "appserviceprovider"
     },
     {
@@ -3381,7 +3381,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L17",
       "id": "providers_appserviceprovider_appserviceprovider_register",
-      "community": 72,
+      "community": 17,
       "norm_label": ".register()"
     },
     {
@@ -3390,7 +3390,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L25",
       "id": "providers_appserviceprovider_appserviceprovider_boot",
-      "community": 72,
+      "community": 17,
       "norm_label": ".boot()"
     },
     {
@@ -7667,6 +7667,15 @@
       "id": "docs_installation_manual_codeblock_15",
       "community": 64,
       "norm_label": "code:bash (php artisan schedule:work)"
+    },
+    {
+      "label": "Thread terpisah untuk membaca input dari keyboard dan mengirimkannya via MQTT (L",
+      "file_type": "rationale",
+      "source_file": "python/mqtt_test_iot.py",
+      "source_location": "L196",
+      "community": 10,
+      "norm_label": "thread terpisah untuk membaca input dari keyboard dan mengirimkannya via mqtt (l",
+      "id": "python_mqtt_test_iot_rationale_196"
     },
     {
       "label": ".buildSignedStatusPayload()",
@@ -13381,9 +13390,19 @@
       "source_file": "python/mqtt_test_iot.py",
       "source_location": "L189",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "python_mqtt_test_iot_rationale_189",
-      "target": "python_mqtt_test_iot_chat_input_thread",
-      "confidence_score": 1.0
+      "target": "python_mqtt_test_iot_chat_input_thread"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "python/mqtt_test_iot.py",
+      "source_location": "L196",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "python_mqtt_test_iot_rationale_196",
+      "target": "python_mqtt_test_iot_chat_input_thread"
     },
     {
       "relation": "rationale_for",
@@ -15423,9 +15442,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_md",
-      "target": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_polislot_admin_dashboard"
     },
     {
       "relation": "contains",
@@ -15433,9 +15452,9 @@
       "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_fitur_utama",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_fitur_utama"
     },
     {
       "relation": "contains",
@@ -15443,9 +15462,9 @@
       "source_file": "README.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_tech_stack",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_tech_stack"
     },
     {
       "relation": "contains",
@@ -15453,9 +15472,9 @@
       "source_file": "README.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_struktur_direktori",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_struktur_direktori"
     },
     {
       "relation": "contains",
@@ -15463,9 +15482,9 @@
       "source_file": "README.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_panduan_instalasi",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_panduan_instalasi"
     },
     {
       "relation": "contains",
@@ -15473,9 +15492,9 @@
       "source_file": "README.md",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_polislot_admin_dashboard",
-      "target": "polislot_admin_dashboard_readme_custom_utility_commands",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_custom_utility_commands"
     },
     {
       "relation": "contains",
@@ -15483,9 +15502,9 @@
       "source_file": "README.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_tech_stack",
-      "target": "polislot_admin_dashboard_readme_prerequisites_external_service",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_prerequisites_external_service"
     },
     {
       "relation": "contains",
@@ -15493,9 +15512,9 @@
       "source_file": "README.md",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "polislot_admin_dashboard_readme_struktur_direktori",
-      "target": "polislot_admin_dashboard_readme_codeblock_1",
-      "confidence_score": 1.0
+      "target": "polislot_admin_dashboard_readme_codeblock_1"
     },
     {
       "relation": "contains",
@@ -15503,9 +15522,9 @@
       "source_file": ".agents/rules/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_rules_graphify_md",
-      "target": "rules_graphify_graphify",
-      "confidence_score": 1.0
+      "target": "rules_graphify_graphify"
     },
     {
       "relation": "contains",
@@ -15513,9 +15532,9 @@
       "source_file": ".agents/workflows/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_workflows_graphify_md",
-      "target": "workflows_graphify_workflow_graphify",
-      "confidence_score": 1.0
+      "target": "workflows_graphify_workflow_graphify"
     },
     {
       "relation": "contains",
@@ -15523,9 +15542,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_md",
-      "target": "docs_installation_docker_instalasi_dengan_docker",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_instalasi_dengan_docker"
     },
     {
       "relation": "contains",
@@ -15533,9 +15552,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_instalasi_dengan_docker",
-      "target": "docs_installation_docker_prasyarat",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_prasyarat"
     },
     {
       "relation": "contains",
@@ -15543,9 +15562,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_instalasi_dengan_docker",
-      "target": "docs_installation_docker_langkah_instalasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_langkah_instalasi"
     },
     {
       "relation": "contains",
@@ -15553,9 +15572,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_prasyarat",
-      "target": "docs_installation_docker_persiapan_file_konfigurasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_persiapan_file_konfigurasi"
     },
     {
       "relation": "contains",
@@ -15563,9 +15582,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_prasyarat",
-      "target": "docs_installation_docker_khusus_pengguna_linux",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_khusus_pengguna_linux"
     },
     {
       "relation": "contains",
@@ -15573,9 +15592,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_khusus_pengguna_linux",
-      "target": "docs_installation_docker_codeblock_1",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_1"
     },
     {
       "relation": "contains",
@@ -15583,9 +15602,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_1_konfigurasi_environment_env",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_1_konfigurasi_environment_env"
     },
     {
       "relation": "contains",
@@ -15593,9 +15612,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_2_atur_docker_compose_yml",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_2_atur_docker_compose_yml"
     },
     {
       "relation": "contains",
@@ -15603,9 +15622,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_3_generate_rsa_keys_di_root",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_3_generate_rsa_keys_di_root"
     },
     {
       "relation": "contains",
@@ -15613,9 +15632,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L114",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_4_verifikasi_credential",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_4_verifikasi_credential"
     },
     {
       "relation": "contains",
@@ -15623,9 +15642,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_5_menjalankan_container",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_5_menjalankan_container"
     },
     {
       "relation": "contains",
@@ -15633,9 +15652,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_6_generate_application_key",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_6_generate_application_key"
     },
     {
       "relation": "contains",
@@ -15643,9 +15662,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_7_migrasi_database",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_7_migrasi_database"
     },
     {
       "relation": "contains",
@@ -15653,9 +15672,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L135",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_8_setup_admin_user_seeding",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_8_setup_admin_user_seeding"
     },
     {
       "relation": "contains",
@@ -15663,9 +15682,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_9_setup_database_roles",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_9_setup_database_roles"
     },
     {
       "relation": "contains",
@@ -15673,9 +15692,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_10_atur_ulang_environment_env_penting",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_10_atur_ulang_environment_env_penting"
     },
     {
       "relation": "contains",
@@ -15683,9 +15702,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L164",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_11_re_up_container",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_11_re_up_container"
     },
     {
       "relation": "contains",
@@ -15693,9 +15712,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_2",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_2"
     },
     {
       "relation": "contains",
@@ -15703,9 +15722,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_3",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_3"
     },
     {
       "relation": "contains",
@@ -15713,9 +15732,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_4",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_4"
     },
     {
       "relation": "contains",
@@ -15723,9 +15742,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_5",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_5"
     },
     {
       "relation": "contains",
@@ -15733,9 +15752,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_6",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_6"
     },
     {
       "relation": "contains",
@@ -15743,9 +15762,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_1_konfigurasi_environment_env",
-      "target": "docs_installation_docker_codeblock_7",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_7"
     },
     {
       "relation": "contains",
@@ -15753,9 +15772,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_2_atur_docker_compose_yml",
-      "target": "docs_installation_docker_codeblock_8",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_8"
     },
     {
       "relation": "contains",
@@ -15763,9 +15782,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_3_generate_rsa_keys_di_root",
-      "target": "docs_installation_docker_codeblock_9",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_9"
     },
     {
       "relation": "contains",
@@ -15773,9 +15792,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_5_menjalankan_container",
-      "target": "docs_installation_docker_codeblock_10",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_10"
     },
     {
       "relation": "contains",
@@ -15783,9 +15802,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_6_generate_application_key",
-      "target": "docs_installation_docker_codeblock_11",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_11"
     },
     {
       "relation": "contains",
@@ -15793,9 +15812,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_7_migrasi_database",
-      "target": "docs_installation_docker_codeblock_12",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_12"
     },
     {
       "relation": "contains",
@@ -15803,9 +15822,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_8_setup_admin_user_seeding",
-      "target": "docs_installation_docker_codeblock_13",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_13"
     },
     {
       "relation": "contains",
@@ -15813,9 +15832,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_9_setup_database_roles",
-      "target": "docs_installation_docker_codeblock_14",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_14"
     },
     {
       "relation": "contains",
@@ -15823,9 +15842,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_10_atur_ulang_environment_env_penting",
-      "target": "docs_installation_docker_codeblock_15",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_15"
     },
     {
       "relation": "contains",
@@ -15833,9 +15852,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L166",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_11_re_up_container",
-      "target": "docs_installation_docker_codeblock_16",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_codeblock_16"
     },
     {
       "relation": "contains",
@@ -15843,9 +15862,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_md",
-      "target": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_instalasi_manual_tanpa_docker"
     },
     {
       "relation": "contains",
@@ -15853,9 +15872,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "target": "docs_installation_manual_prasyarat",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_prasyarat"
     },
     {
       "relation": "contains",
@@ -15863,9 +15882,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "target": "docs_installation_manual_langkah_instalasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_langkah_instalasi"
     },
     {
       "relation": "contains",
@@ -15873,9 +15892,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_1_konfigurasi_environment_env",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_1_konfigurasi_environment_env"
     },
     {
       "relation": "contains",
@@ -15883,9 +15902,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_2_generate_rsa_keys_wajib",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_2_generate_rsa_keys_wajib"
     },
     {
       "relation": "contains",
@@ -15893,9 +15912,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_3_instalasi_dependency",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_3_instalasi_dependency"
     },
     {
       "relation": "contains",
@@ -15903,9 +15922,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_4_generate_application_key",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_4_generate_application_key"
     },
     {
       "relation": "contains",
@@ -15913,9 +15932,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L87",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_5_migrasi_database_seeding",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_5_migrasi_database_seeding"
     },
     {
       "relation": "contains",
@@ -15923,9 +15942,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_6_setup_database_roles_rbac",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_6_setup_database_roles_rbac"
     },
     {
       "relation": "contains",
@@ -15933,9 +15952,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_7_atur_ulang_environment_env_penting",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_7_atur_ulang_environment_env_penting"
     },
     {
       "relation": "contains",
@@ -15943,9 +15962,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_8_jalankan_aplikasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_8_jalankan_aplikasi"
     },
     {
       "relation": "contains",
@@ -15953,9 +15972,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_9_mengaktifkan_scheduler_backup_otomatis",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_9_mengaktifkan_scheduler_backup_otomatis"
     },
     {
       "relation": "contains",
@@ -15963,9 +15982,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_1",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_1"
     },
     {
       "relation": "contains",
@@ -15973,9 +15992,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_2",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_2"
     },
     {
       "relation": "contains",
@@ -15983,9 +16002,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_3",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_3"
     },
     {
       "relation": "contains",
@@ -15993,9 +16012,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_4",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_4"
     },
     {
       "relation": "contains",
@@ -16003,9 +16022,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_5",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_5"
     },
     {
       "relation": "contains",
@@ -16013,9 +16032,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_6",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_6"
     },
     {
       "relation": "contains",
@@ -16023,9 +16042,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_1_konfigurasi_environment_env",
-      "target": "docs_installation_manual_codeblock_7",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_7"
     },
     {
       "relation": "contains",
@@ -16033,9 +16052,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_2_generate_rsa_keys_wajib",
-      "target": "docs_installation_manual_codeblock_8",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_8"
     },
     {
       "relation": "contains",
@@ -16043,9 +16062,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_3_instalasi_dependency",
-      "target": "docs_installation_manual_codeblock_9",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_9"
     },
     {
       "relation": "contains",
@@ -16053,9 +16072,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_4_generate_application_key",
-      "target": "docs_installation_manual_codeblock_10",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_10"
     },
     {
       "relation": "contains",
@@ -16063,9 +16082,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_5_migrasi_database_seeding",
-      "target": "docs_installation_manual_codeblock_11",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_11"
     },
     {
       "relation": "contains",
@@ -16073,9 +16092,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L95",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_6_setup_database_roles_rbac",
-      "target": "docs_installation_manual_codeblock_12",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_12"
     },
     {
       "relation": "contains",
@@ -16083,9 +16102,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_7_atur_ulang_environment_env_penting",
-      "target": "docs_installation_manual_codeblock_13",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_13"
     },
     {
       "relation": "contains",
@@ -16093,9 +16112,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_8_jalankan_aplikasi",
-      "target": "docs_installation_manual_codeblock_14",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_14"
     },
     {
       "relation": "contains",
@@ -16103,9 +16122,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_9_mengaktifkan_scheduler_backup_otomatis",
-      "target": "docs_installation_manual_codeblock_15",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_codeblock_15"
     },
     {
       "relation": "calls",
@@ -16263,5 +16282,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "4220349be60c5128a8c4eebc375bf0808a7579e9"
+  "built_at_commit": "8820053fc8defe6d631a2ef270938bccf7e9162e"
 }
