@@ -97,11 +97,11 @@ class MqttListenerCommand extends Command
                         'encrypted_image' => $payload['encrypted_image'],
                         'iv' => $payload['iv']
                     ];
-                    if (isset($payload['save_image'])) {
-                        $payloadToSign['save_image'] = (bool) $payload['save_image'];
-                    }
                     if (isset($payload['current_count'])) {
                         $payloadToSign['current_count'] = (int) $payload['current_count'];
+                    }
+                    if (isset($payload['save_image'])) {
+                        $payloadToSign['save_image'] = (bool) $payload['save_image'];
                     }
                     
                     $key32 = substr(hash('sha256', $secretKey, true), 0, 32);

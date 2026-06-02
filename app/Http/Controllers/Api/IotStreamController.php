@@ -186,11 +186,11 @@ class IotStreamController extends Controller
             'iv'              => $request->iv,
         ];
         
-        if ($request->has('save_image')) {
-            $payloadToSign['save_image'] = filter_var($request->save_image, FILTER_VALIDATE_BOOLEAN);
-        }
         if ($request->has('current_count')) {
             $payloadToSign['current_count'] = (int) $request->current_count;
+        }
+        if ($request->has('save_image')) {
+            $payloadToSign['save_image'] = filter_var($request->save_image, FILTER_VALIDATE_BOOLEAN);
         }
 
         $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
