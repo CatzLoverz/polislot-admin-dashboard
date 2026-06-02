@@ -21,7 +21,6 @@ import base64
 import asyncio
 import os
 import threading
-import argparse
 
 import cv2
 import numpy as np
@@ -33,47 +32,43 @@ from Crypto.Util.Padding import pad
 from ultralytics import YOLO
 
 # ============================================================
-# PARSE ARGUMENTS
+# KONFIGURASI IOT DEVICE (PARKING DETECTOR - WEBSOCKET)
 # ============================================================
-parser = argparse.ArgumentParser(description="PoliSlot Headless WS Parking Detector")
-parser.add_argument("mac_address", type=str, nargs="?", help="MAC Address of the device (e.g. 00:1A:2B:3C:4D:5E)")
-parser.add_argument("--source", type=str, default="0", help="Video source: '0' for webcam, or RTSP/file path")
-parser.add_argument("--weights", type=str, default="yolov8n.pt", help="YOLO model weight file")
-parser.add_argument("--confidence", type=float, default=0.4, help="YOLO confidence threshold")
-parser.add_argument("--classes", type=str, default="2,3", help="Comma-separated YOLO class filter (2=car, 3=motorcycle)")
-parser.add_argument("--server", type=str, default="http://127.0.0.1:8080", help="Server Base URL (e.g. http://localhost:8000)")
-parser.add_argument("--reverb-host", type=str, default="127.0.0.1", help="Reverb WebSocket Host")
-parser.add_argument("--reverb-port", type=int, default=8080, help="Reverb WebSocket Port")
-parser.add_argument("--reverb-scheme", type=str, default="ws", help="Reverb WebSocket Scheme (ws or wss)")
-parser.add_argument("--secret", type=str, default="pOl1sL0t_ioT_s3creT_k3y_2026", help="Shared secret key for HMAC & AES")
-args = parser.parse_args()
-
-# Validate MAC Address
-MAC_ADDRESS = args.mac_address
-if not MAC_ADDRESS:
-    MAC_ADDRESS = os.environ.get("MAC_ADDRESS")
-if not MAC_ADDRESS:
+# Ambil MAC Address dari argumen terminal, atau minta input jika kosong
+if len(sys.argv) > 1:
+    MAC_ADDRESS = sys.argv[1]
+else:
     MAC_ADDRESS = input("Masukkan MAC Address perangkat (contoh: 00:1A:2B:3C:4D:5E): ").strip()
     if not MAC_ADDRESS:
         print("[-] MAC Address tidak boleh kosong!")
         sys.exit(1)
 
-# Server API endpoints based on Server URL
-SERVER_BASE_URL = args.server
+# Pengaturan Server Base URL (API endpoint HTTP POST)
+SERVER_BASE_URL = "http://127.0.0.1:8080" # Contoh: http://localhost:8000 atau domain produksi
+
+# Pengaturan Reverb WebSocket (Sesuai setelan Reverb di Laravel .env)
+REVERB_HOST    = "127.0.0.1"
+REVERB_PORT    = 8080
+REVERB_SCHEME  = "ws"  # Gunakan "ws" untuk lokal, "wss" untuk tunnel produksi
+
+# Keamanan (Harus SAMA persis dengan IOT_API_SECRET di Laravel .env)
+SHARED_SECRET = "pOl1sL0t_ioT_s3creT_k3y_2026"
+
+# Konfigurasi AI & Deteksi YOLOv8
+SOURCE = "0"            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
+YOLO_WEIGHTS = "yolov8n.pt"  # File weights model YOLOv8 (yolov8n.pt / custom model)
+CONFIDENCE_THRESHOLD = 0.4   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
+TARGET_CLASSES = [2, 3] # Filter index class YOLO: 2 = car (mobil), 3 = motorcycle (motor)
+
+# ============================================================
+# KONFIGURASI API ENDPOINT & VARIABEL IN-MEMORY
+# ============================================================
 API_WS_AUTH_URL  = f"{SERVER_BASE_URL}/api/iot/ws-auth"
 API_SNAPSHOT_URL = f"{SERVER_BASE_URL}/api/iot/snapshot"
 API_COUNT_URL    = f"{SERVER_BASE_URL}/api/iot/count"
 
-# Reverb Configuration (matching Laravel .env)
 REVERB_APP_KEY = "xcubvd4inm14ayepjhro"
-REVERB_HOST    = args.reverb_host
-REVERB_PORT    = args.reverb_port
-REVERB_SCHEME  = args.reverb_scheme
 
-SHARED_SECRET = args.secret
-TARGET_CLASSES = [int(c.strip()) for c in args.classes.split(",") if c.strip().isdigit()]
-
-# In-Memory Settings
 config_lock = threading.Lock()
 max_slots = 0
 detection_polygons = []
@@ -389,16 +384,16 @@ def main():
     global stream
     
     print("[+] Loading YOLOv8 weights...")
-    model = YOLO(args.weights)
+    model = YOLO(YOLO_WEIGHTS)
     print("[+] YOLOv8 Model loaded.")
 
     # Initialize camera stream
-    stream = CameraStream(args.source)
+    stream = CameraStream(SOURCE)
 
     # Start detector thread
     detector_thread = threading.Thread(
         target=detector_loop, 
-        args=(model, args.confidence), 
+        args=(model, CONFIDENCE_THRESHOLD), 
         daemon=True
     )
     detector_thread.start()

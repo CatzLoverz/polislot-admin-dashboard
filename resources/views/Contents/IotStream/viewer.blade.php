@@ -295,8 +295,35 @@
             btn.classList.add('btn-primary');
             canvas.style.pointerEvents = 'auto';
             if (typeof addLog === 'function') {
-                addLog('Mode menggambar aktif. Klik kiri pada gambar untuk menaruh titik.');
+                addLog('Mode menggambar aktif. Meminta snapshot terbaru dari perangkat IoT...');
             }
+
+            // Pemicu otomatis snapshot dari device IoT
+            fetch("{{ route('admin.iot-stream-viewer.trigger') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ mac_address: "{{ $targetMac }}" })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (typeof addLog === 'function') {
+                        addLog('Berhasil memicu pengambilan snapshot. Menunggu respons gambar...');
+                    }
+                } else {
+                    alert("Gagal memicu snapshot: " + data.message);
+                }
+            })
+            .catch(err => {
+                console.error("Error triggering snapshot:", err);
+                if (typeof addLog === 'function') {
+                    addLog('Error memicu snapshot: Terjadi masalah jaringan.');
+                }
+            });
         } else {
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-primary');

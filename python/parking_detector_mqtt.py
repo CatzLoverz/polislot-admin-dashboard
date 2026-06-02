@@ -11,50 +11,46 @@ from Crypto.Util.Padding import pad
 import os
 import sys
 import threading
-import argparse
 from ultralytics import YOLO
 
 # ============================================================
-# PARSE ARGUMENTS
+# KONFIGURASI IOT DEVICE (PARKING DETECTOR - MQTT)
 # ============================================================
-parser = argparse.ArgumentParser(description="PoliSlot Headless MQTT Parking Detector")
-parser.add_argument("mac_address", type=str, nargs="?", help="MAC Address of the device (e.g. 00:1A:2B:3C:4D:5E)")
-parser.add_argument("--source", type=str, default="0", help="Video source: '0' for webcam, or RTSP/file path")
-parser.add_argument("--weights", type=str, default="yolov8n.pt", help="YOLO model weight file")
-parser.add_argument("--confidence", type=float, default=0.4, help="YOLO confidence threshold")
-parser.add_argument("--classes", type=str, default="2,3", help="Comma-separated YOLO class filter (2=car, 3=motorcycle)")
-parser.add_argument("--broker", type=str, default="mqtt.raihanatmaja.my.id", help="MQTT Broker address")
-parser.add_argument("--port", type=int, default=443, help="MQTT Broker port (443 for WSS, 1883 for TCP)")
-parser.add_argument("--secret", type=str, default="pOl1sL0t_ioT_s3creT_k3y_2026", help="Shared secret key for HMAC & AES")
-args = parser.parse_args()
-
-# Validate MAC Address
-MAC_ADDRESS = args.mac_address
-if not MAC_ADDRESS:
-    MAC_ADDRESS = os.environ.get("MAC_ADDRESS")
-if not MAC_ADDRESS:
+# Ambil MAC Address dari argumen terminal, atau minta input jika kosong
+if len(sys.argv) > 1:
+    MAC_ADDRESS = sys.argv[1]
+else:
     MAC_ADDRESS = input("Masukkan MAC Address perangkat (contoh: 00:1A:2B:3C:4D:5E): ").strip()
     if not MAC_ADDRESS:
         print("[-] MAC Address tidak boleh kosong!")
         sys.exit(1)
 
-# Configuration & Connection Setup
-BROKER = args.broker
-PORT = args.port
-SHARED_SECRET = args.secret
-TARGET_CLASSES = [int(c.strip()) for c in args.classes.split(",") if c.strip().isdigit()]
+# Pengaturan Koneksi MQTT Broker
+BROKER = "mqtt.raihanatmaja.my.id"
+PORT = 443  # Cloudflare Tunnel menggunakan port 443 (HTTPS/WSS). Gunakan 1883 untuk local TCP.
 
+# MQTT Authentication (sesuai dengan config Mosquitto broker)
+MQTT_USER = os.environ.get("MQTT_USER", "polislot_user")
+MQTT_PASSWORD = os.environ.get("MQTT_PASSWORD", "secure_password")
+
+# Keamanan (Harus SAMA persis dengan IOT_API_SECRET di Laravel .env)
+SHARED_SECRET = "pOl1sL0t_ioT_s3creT_k3y_2026"
+
+# Konfigurasi AI & Deteksi YOLOv8
+SOURCE = "0"            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
+YOLO_WEIGHTS = "yolov8n.pt"  # File weights model YOLOv8 (yolov8n.pt / custom model)
+CONFIDENCE_THRESHOLD = 0.4   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
+TARGET_CLASSES = [2, 3] # Filter index class YOLO: 2 = car (mobil), 3 = motorcycle (motor)
+
+# ============================================================
+# KONFIGURASI TOPIK MQTT & VARIABEL IN-MEMORY
+# ============================================================
 TOPIC_COMMAND = f"polislot/device/{MAC_ADDRESS}/command"
 TOPIC_SNAPSHOT = f"polislot/device/{MAC_ADDRESS}/snapshot"
 TOPIC_STATUS = f"polislot/device/{MAC_ADDRESS}/status"
 TOPIC_COUNT = f"polislot/device/{MAC_ADDRESS}/count"
 TOPIC_SERVER_STATUS = "polislot/server/status"
 
-# MQTT Authentication (retrieved from env if available)
-MQTT_USER = os.environ.get("MQTT_USER", "polislot_user")
-MQTT_PASSWORD = os.environ.get("MQTT_PASSWORD", "secure_password")
-
-# In-Memory Settings
 config_lock = threading.Lock()
 max_slots = 0
 detection_polygons = []
@@ -102,7 +98,6 @@ def is_inside_any_polygon(point, polygons):
 # ============================================================
 class CameraStream:
     def __init__(self, source):
-        # Handle string integer vs path/RTSP
         src = int(source) if source.isdigit() else source
         self.cap = cv2.VideoCapture(src)
         self.ret = False
@@ -122,7 +117,6 @@ class CameraStream:
         while self.running:
             ret, frame = self.cap.read()
             if not ret:
-                # If source is file, seek to start; otherwise retry
                 self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
                 time.sleep(0.1)
                 continue
@@ -138,11 +132,9 @@ class CameraStream:
     def capture_jpeg(self):
         ret, frame = self.read()
         if not ret or frame is None:
-            # Fallback blank frame
             frame = np.zeros((480, 640, 3), dtype=np.uint8)
             cv2.putText(frame, "Camera offline", (180, 240), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         else:
-            # Add timestamp overlay to screenshot
             timestamp_str = time.strftime("%Y-%m-%d %H:%M:%S")
             cv2.putText(frame, timestamp_str, (15, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
@@ -181,7 +173,7 @@ def send_status_update(client, status):
     payload = {"status": status, "mac_address": MAC_ADDRESS}
     payload["signature"] = generate_hmac_signature(payload)
     client.publish(TOPIC_STATUS, json.dumps(payload, separators=(',', ':')), qos=1, retain=True)
-    print(f"[📡] Status terkirim: {status.upper()}")
+    print(f"[📡] Status presence terkirim: {status.upper()}")
 
 if CALLBACK_API_VERSION is not None:
     def on_connect(client, userdata, flags, reason_code, properties):
@@ -266,11 +258,11 @@ def main():
     global stream, current_vehicle_count
     
     print("[+] Loading YOLOv8 model...")
-    model = YOLO(args.weights)
+    model = YOLO(YOLO_WEIGHTS)
     print("[+] Model loaded.")
 
     # Camera Stream initialization
-    stream = CameraStream(args.source)
+    stream = CameraStream(SOURCE)
 
     # Initialize MQTT client
     if CALLBACK_API_VERSION is not None:
@@ -308,8 +300,8 @@ def main():
             
             ret, frame = stream.read()
             if ret and frame is not None:
-                # Run YOLO prediction (classes filter: e.g. 2=car, 3=motorcycle)
-                results = model.predict(frame, conf=args.confidence, classes=TARGET_CLASSES, verbose=False)
+                # Run YOLO prediction
+                results = model.predict(frame, conf=CONFIDENCE_THRESHOLD, classes=TARGET_CLASSES, verbose=False)
                 
                 vehicles_inside = 0
                 
@@ -326,11 +318,6 @@ def main():
                         if len(polys) > 0:
                             if is_inside_any_polygon(ref_point, polys):
                                 vehicles_inside += 1
-                        else:
-                            # If no polygon defined yet, count all detected vehicles as fallback or 0?
-                            # The rule says: "perhitungan kendaraan terparkir ... di dalam bounding box"
-                            # If there are no polygons defined yet, count is 0 inside the zones.
-                            pass
                 
                 current_vehicle_count = vehicles_inside
                 print(f"[🤖] Detection: {vehicles_inside} kendaraan di dalam zona deteksi")
@@ -352,7 +339,7 @@ def main():
     except KeyboardInterrupt:
         print("\n[!] Dihentikan oleh user.")
     finally:
-        # Graceful disconnect: send offline status manually since LWT only fires on ungraceful disconnects
+        # Graceful disconnect
         send_status_update(client, "offline")
         time.sleep(0.5)
         stream.stop()
