@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\IotDevice;
+use App\Models\IotCapture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Events\ChatMessageSent;
 use App\Events\IotCommandSent;
+use ZipArchive;
 
 class IotStreamViewerController extends Controller
 {
@@ -33,9 +35,16 @@ class IotStreamViewerController extends Controller
         $thresholdBanyak = $selectedDevice?->subarea?->threshold_banyak ?? 30.0;
         $thresholdTerbatas = $selectedDevice?->subarea?->threshold_terbatas ?? 80.0;
         
+        $captures = [];
+        if ($selectedDevice) {
+            $captures = IotCapture::where('device_id', $selectedDevice->device_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+        
         return view('Contents.IotStream.viewer', compact(
             'devices', 'targetMac', 'initialStatus', 'maxSlots', 
-            'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas'
+            'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas', 'captures'
         ));
     }
 
@@ -234,7 +243,7 @@ class IotStreamViewerController extends Controller
 
         // Simpan validation content ke Cache agar saat snapshot datang kita bisa menyimpannya ke user_validations
         $cleanMac = str_replace(':', '', $mac);
-        \Illuminate\Support\Facades\Cache::put("pending_validation_{$cleanMac}", [
+        Cache::put("pending_validation_{$cleanMac}", [
             'content' => $content,
             'user_id' => auth()->user()->user_id ?? 1, // pastikan admin user id tersimpan
         ], 120); // 2 menit timeout
@@ -249,7 +258,7 @@ class IotStreamViewerController extends Controller
         $errors = $this->sendCommandToDevice($mac, 'snapshot', $payloadData);
 
         if (count($errors) === 2) {
-            \Illuminate\Support\Facades\Cache::forget("pending_validation_{$cleanMac}");
+            Cache::forget("pending_validation_{$cleanMac}");
             return response()->json([
                 'success' => false,
                 'message' => "Gagal mengirim perintah: " . implode(' | ', $errors)
@@ -259,6 +268,118 @@ class IotStreamViewerController extends Controller
         return response()->json([
             'success' => true,
             'message' => "Validasi {$content} dipicu, menunggu snapshot dari perangkat IoT..."
+        ]);
+    }
+
+    /**
+     * Batch Download snapshot images as a ZIP file.
+     */
+    public function downloadBatch(Request $request)
+    {
+        $request->validate([
+            'mac_address'      => 'required|string',
+            'capture_ids'      => 'nullable|array',
+            'capture_ids.*'    => 'integer',
+            'filter_trained'   => 'nullable|string|in:all,yes,no',
+            'filter_cv_status' => 'nullable|string|in:all,banyak,terbatas,penuh',
+            'mark_as_trained'  => 'nullable|string', // received as string from HTML form
+        ]);
+
+        $mac = $request->mac_address;
+        $device = IotDevice::where('device_mac_address', $mac)->first();
+
+        if (!$device) {
+            return abort(404, 'Device not found.');
+        }
+
+        $query = IotCapture::where('device_id', $device->device_id);
+
+        if ($request->has('capture_ids') && !empty($request->capture_ids)) {
+            $query->whereIn('capture_id', $request->capture_ids);
+        } else {
+            if ($request->filled('filter_trained') && $request->filter_trained !== 'all') {
+                $isTrained = $request->filter_trained === 'yes';
+                $query->where('capture_is_trained', $isTrained);
+            }
+            if ($request->filled('filter_cv_status') && $request->filter_cv_status !== 'all') {
+                $query->where('capture_ai_status', $request->filter_cv_status);
+            }
+        }
+
+        $captures = $query->get();
+
+        if ($captures->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada gambar yang cocok dengan kriteria unduh.');
+        }
+
+        $zip = new ZipArchive();
+        $zipFileName = 'polislot_dataset_' . time() . '_' . str_replace(':', '', $mac) . '.zip';
+        $zipFilePath = storage_path('app/public/' . $zipFileName);
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            return abort(500, 'Gagal membuat file ZIP.');
+        }
+
+        $addedFiles = 0;
+        $idsToUpdate = [];
+
+        foreach ($captures as $capture) {
+            $filePath = storage_path('app/public/' . $capture->capture_image_path);
+            if (file_exists($filePath)) {
+                $trainedStr = $capture->capture_is_trained ? 'trained' : 'untrained';
+                $statusStr = $capture->capture_ai_status ?: 'unknown';
+                $localName = "capture_{$capture->capture_id}_{$statusStr}_{$trainedStr}.jpg";
+
+                $zip->addFile($filePath, $localName);
+                $addedFiles++;
+
+                if ($request->mark_as_trained === '1' || $request->mark_as_trained === 'true') {
+                    $idsToUpdate[] = $capture->capture_id;
+                }
+            }
+        }
+
+        $zip->close();
+
+        if ($addedFiles === 0) {
+            if (file_exists($zipFilePath)) {
+                unlink($zipFilePath);
+            }
+            return redirect()->back()->with('error', 'Semua berkas gambar terpilih tidak ditemukan di disk server.');
+        }
+
+        if (!empty($idsToUpdate)) {
+            IotCapture::whereIn('capture_id', $idsToUpdate)->update(['capture_is_trained' => true]);
+        }
+
+        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Batch Delete snapshots from database and local storage.
+     */
+    public function deleteBatch(Request $request)
+    {
+        $request->validate([
+            'capture_ids'   => 'required|array',
+            'capture_ids.*' => 'integer',
+        ]);
+
+        $captures = IotCapture::whereIn('capture_id', $request->capture_ids)->get();
+        $deletedCount = 0;
+
+        foreach ($captures as $capture) {
+            $filePath = storage_path('app/public/' . $capture->capture_image_path);
+            if (file_exists($filePath)) {
+                @unlink($filePath);
+            }
+            $capture->delete();
+            $deletedCount++;
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "{$deletedCount} gambar berhasil dihapus."
         ]);
     }
 }

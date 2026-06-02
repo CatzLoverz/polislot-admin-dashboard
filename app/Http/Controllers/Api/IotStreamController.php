@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\IotDevice;
 use App\Models\IotCapture;
+use App\Models\UserValidation;
+use App\Models\Validation;
 use Illuminate\Http\Request;
 use App\Events\IotStreamReceived;
 use App\Events\ChatMessageSent;
+use App\Events\IotCountUpdated;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -216,23 +219,35 @@ class IotStreamController extends Controller
 
             Storage::disk('public')->put($path, $decryptedImageBytes);
 
+            $subarea = $device->subarea;
+            $cvStatus = null;
+            if ($subarea && $subarea->max_slots > 0) {
+                $count = $request->has('current_count') ? (int) $request->current_count : ($subarea->current_count ?? 0);
+                $occupancy = ($count / $subarea->max_slots) * 100;
+                
+                if ($occupancy < ($subarea->threshold_banyak ?? 30.0)) {
+                    $cvStatus = 'banyak';
+                } elseif ($occupancy >= ($subarea->threshold_terbatas ?? 80.0)) {
+                    $cvStatus = 'penuh';
+                } else {
+                    $cvStatus = 'terbatas';
+                }
+            }
+
             IotCapture::create([
                 'device_id'          => $device->device_id,
                 'capture_image_path' => $path,
                 'capture_is_trained' => false,
-                'capture_ai_status'  => 'Pending',
+                'capture_ai_status'  => $cvStatus,
             ]);
 
-            Log::info('[IotSnapshot] Image saved', ['mac' => $macAddress, 'path' => $path]);
+            Log::info('[IotSnapshot] Image saved', ['mac' => $macAddress, 'path' => $path, 'cv_status' => $cvStatus]);
 
             // Save the current count if present in payload
-            if ($request->has('current_count')) {
-                $subarea = $device->subarea;
-                if ($subarea) {
-                    $subarea->current_count = (int) $request->current_count;
-                    $subarea->save();
-                    broadcast(new \App\Events\IotCountUpdated($macAddress, $request->current_count));
-                }
+            if ($request->has('current_count') && $subarea) {
+                $subarea->current_count = (int) $request->current_count;
+                $subarea->save();
+                broadcast(new IotCountUpdated($macAddress, $request->current_count));
             }
 
             // Check if there is a pending validation for this device
@@ -245,9 +260,9 @@ class IotStreamController extends Controller
                 $subarea = $device->subarea;
                 if ($subarea) {
                     // Create UserValidation record
-                    \App\Models\UserValidation::create([
+                    UserValidation::create([
                         'user_id' => $pending['user_id'],
-                        'validation_id' => \App\Models\Validation::first()->validation_id ?? 1,
+                        'validation_id' => Validation::first()->validation_id ?? 1,
                         'park_subarea_id' => $subarea->park_subarea_id,
                         'user_validation_content' => $pending['content'],
                     ]);
@@ -313,7 +328,7 @@ class IotStreamController extends Controller
             Log::info("[IotCount] Updated subarea {$subarea->park_subarea_name} count to {$request->count}");
 
             // Broadcast count updated
-            broadcast(new \App\Events\IotCountUpdated($macAddress, $request->count));
+            broadcast(new IotCountUpdated($macAddress, $request->count));
         }
 
         return response()->json(['status' => 'success']);

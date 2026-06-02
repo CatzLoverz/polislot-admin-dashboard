@@ -805,7 +805,7 @@
       "label": "MqttListenerCommand",
       "file_type": "code",
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
-      "source_location": "L16",
+      "source_location": "L19",
       "id": "commands_mqttlistenercommand_mqttlistenercommand",
       "community": 6,
       "norm_label": "mqttlistenercommand"
@@ -814,7 +814,7 @@
       "label": ".handle()",
       "file_type": "code",
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
-      "source_location": "L35",
+      "source_location": "L38",
       "id": "commands_mqttlistenercommand_mqttlistenercommand_handle",
       "community": 6,
       "norm_label": ".handle()"
@@ -1435,7 +1435,7 @@
       "label": "IotStreamController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L15",
+      "source_location": "L18",
       "id": "api_iotstreamcontroller_iotstreamcontroller",
       "community": 6,
       "norm_label": "iotstreamcontroller"
@@ -1444,7 +1444,7 @@
       "label": ".validateMacAddress()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L20",
+      "source_location": "L23",
       "id": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress",
       "community": 6,
       "norm_label": ".validatemacaddress()"
@@ -1453,7 +1453,7 @@
       "label": ".receiveStream()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L43",
+      "source_location": "L46",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivestream",
       "community": 6,
       "norm_label": ".receivestream()"
@@ -1462,7 +1462,7 @@
       "label": ".receiveSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L155",
+      "source_location": "L158",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
       "community": 6,
       "norm_label": ".receivesnapshot()"
@@ -1471,7 +1471,7 @@
       "label": ".receiveCount()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L273",
+      "source_location": "L288",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
       "community": 6,
       "norm_label": ".receivecount()"
@@ -1480,7 +1480,7 @@
       "label": ".receiveChatReply()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L326",
+      "source_location": "L341",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply",
       "community": 6,
       "norm_label": ".receivechatreply()"
@@ -1498,7 +1498,7 @@
       "label": "IotWebhookController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
-      "source_location": "L11",
+      "source_location": "L13",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller",
       "community": 65,
       "norm_label": "iotwebhookcontroller"
@@ -1507,7 +1507,7 @@
       "label": ".handle()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
-      "source_location": "L17",
+      "source_location": "L19",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller_handle",
       "community": 65,
       "norm_label": ".handle()"
@@ -1516,7 +1516,7 @@
       "label": ".updateStatus()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
-      "source_location": "L55",
+      "source_location": "L57",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller_updatestatus",
       "community": 65,
       "norm_label": ".updatestatus()"
@@ -2157,80 +2157,98 @@
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
       "source_location": "L1",
       "id": "app_http_controllers_web_iotstreamviewercontroller_php",
-      "community": 18,
+      "community": 6,
       "norm_label": "iotstreamviewercontroller.php"
     },
     {
       "label": "IotStreamViewerController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L13",
+      "source_location": "L15",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller",
-      "community": 18,
+      "community": 6,
       "norm_label": "iotstreamviewercontroller"
     },
     {
       "label": ".index()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L19",
+      "source_location": "L21",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_index",
-      "community": 18,
+      "community": 6,
       "norm_label": ".index()"
     },
     {
       "label": ".generateCommandSignature()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L46",
+      "source_location": "L55",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_generatecommandsignature",
-      "community": 18,
+      "community": 6,
       "norm_label": ".generatecommandsignature()"
     },
     {
       "label": ".sendCommandToDevice()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L58",
+      "source_location": "L67",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
-      "community": 18,
+      "community": 6,
       "norm_label": ".sendcommandtodevice()"
     },
     {
       "label": ".triggerSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L92",
+      "source_location": "L101",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_triggersnapshot",
-      "community": 18,
+      "community": 6,
       "norm_label": ".triggersnapshot()"
     },
     {
       "label": ".sendChat()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L125",
+      "source_location": "L134",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat",
-      "community": 18,
+      "community": 6,
       "norm_label": ".sendchat()"
     },
     {
       "label": ".saveSettings()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L167",
+      "source_location": "L176",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_savesettings",
-      "community": 18,
+      "community": 6,
       "norm_label": ".savesettings()"
     },
     {
       "label": ".validateStream()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L217",
+      "source_location": "L226",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_validatestream",
-      "community": 18,
+      "community": 6,
       "norm_label": ".validatestream()"
+    },
+    {
+      "label": ".downloadBatch()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L277",
+      "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_downloadbatch",
+      "community": 6,
+      "norm_label": ".downloadbatch()"
+    },
+    {
+      "label": ".deleteBatch()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L361",
+      "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_deletebatch",
+      "community": 6,
+      "norm_label": ".deletebatch()"
     },
     {
       "label": "MissionController.php",
@@ -2391,7 +2409,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L1",
       "id": "app_http_controllers_web_parksubareacontroller_php",
-      "community": 72,
+      "community": 18,
       "norm_label": "parksubareacontroller.php"
     },
     {
@@ -2400,7 +2418,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L15",
       "id": "web_parksubareacontroller_parksubareacontroller",
-      "community": 72,
+      "community": 18,
       "norm_label": "parksubareacontroller"
     },
     {
@@ -2409,7 +2427,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L25",
       "id": "web_parksubareacontroller_parksubareacontroller_store",
-      "community": 72,
+      "community": 18,
       "norm_label": ".store()"
     },
     {
@@ -2418,7 +2436,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L78",
       "id": "web_parksubareacontroller_parksubareacontroller_update",
-      "community": 72,
+      "community": 18,
       "norm_label": ".update()"
     },
     {
@@ -2427,7 +2445,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L180",
       "id": "web_parksubareacontroller_parksubareacontroller_destroy",
-      "community": 72,
+      "community": 18,
       "norm_label": ".destroy()"
     },
     {
@@ -3055,7 +3073,7 @@
       "label": "ParkSubarea",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L7",
+      "source_location": "L10",
       "id": "models_parksubarea_parksubarea",
       "community": 20,
       "norm_label": "parksubarea"
@@ -3064,7 +3082,7 @@
       "label": ".parkArea()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L32",
+      "source_location": "L35",
       "id": "models_parksubarea_parksubarea_parkarea",
       "community": 20,
       "norm_label": ".parkarea()"
@@ -3073,7 +3091,7 @@
       "label": ".parkAmenity()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L37",
+      "source_location": "L40",
       "id": "models_parksubarea_parksubarea_parkamenity",
       "community": 20,
       "norm_label": ".parkamenity()"
@@ -3082,7 +3100,7 @@
       "label": ".userValidation()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L42",
+      "source_location": "L45",
       "id": "models_parksubarea_parksubarea_uservalidation",
       "community": 20,
       "norm_label": ".uservalidation()"
@@ -3091,7 +3109,7 @@
       "label": ".subareaComment()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L47",
+      "source_location": "L50",
       "id": "models_parksubarea_parksubarea_subareacomment",
       "community": 20,
       "norm_label": ".subareacomment()"
@@ -3100,7 +3118,7 @@
       "label": ".iotDevice()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L52",
+      "source_location": "L55",
       "id": "models_parksubarea_parksubarea_iotdevice",
       "community": 20,
       "norm_label": ".iotdevice()"
@@ -3109,7 +3127,7 @@
       "label": ".evaluateThresholdShift()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L60",
+      "source_location": "L63",
       "id": "models_parksubarea_parksubarea_evaluatethresholdshift",
       "community": 20,
       "norm_label": ".evaluatethresholdshift()"
@@ -8204,7 +8222,7 @@
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
       "source_location": "L154",
-      "community": 18,
+      "community": 6,
       "norm_label": ".publishcommandviamqtt()",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_publishcommandviamqtt"
     },
@@ -9147,6 +9165,17 @@
     {
       "relation": "calls",
       "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Console/Commands/MqttListenerCommand.php",
+      "source_location": "L189",
+      "weight": 1.0,
+      "source": "commands_mqttlistenercommand_mqttlistenercommand_handle",
+      "target": "models_validation_validation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
       "source_location": "L69",
@@ -10008,6 +10037,17 @@
       "weight": 1.0,
       "source": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
       "target": "models_iotcapture_iotcapture"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
+      "source_location": "L265",
+      "weight": 1.0,
+      "source": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
+      "target": "models_validation_validation"
     },
     {
       "relation": "calls",
@@ -11100,11 +11140,42 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L275",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller",
+      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_downloadbatch"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L359",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller",
+      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_deletebatch"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
       "source_location": "L154",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "web_iotstreamviewercontroller_iotstreamviewercontroller",
       "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_publishcommandviamqtt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_index",
+      "target": "models_iotcapture_iotcapture"
     },
     {
       "relation": "calls",
@@ -11171,6 +11242,28 @@
       "confidence_score": 1.0,
       "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
       "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_publishcommandviamqtt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L295",
+      "weight": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_downloadbatch",
+      "target": "models_iotcapture_iotcapture"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L368",
+      "weight": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_deletebatch",
+      "target": "models_iotcapture_iotcapture"
     },
     {
       "relation": "contains",
@@ -12305,6 +12398,17 @@
       "confidence_score": 1.0,
       "source": "models_parksubarea_parksubarea_evaluatethresholdshift",
       "target": "models_parksubarea_parksubarea_uservalidation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Models/ParkSubarea.php",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "models_parksubarea_parksubarea_evaluatethresholdshift",
+      "target": "services_historyservice_historyservice_log"
     },
     {
       "relation": "contains",
@@ -17790,5 +17894,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "8534933e786b0d52f253e0b0abf93d8c8fb6f5b3"
+  "built_at_commit": "77e05c1e4aabb1d296651759c8d1b223ac68b6d7"
 }

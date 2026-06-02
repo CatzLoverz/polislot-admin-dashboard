@@ -93,10 +93,14 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         Route::resource('user-faq', UserFaqController::class)->only(['index', 'store', 'update', 'destroy']);
 
         // Route Khusus Uji Coba WebSockets IoT
-        Route::get('iot-stream-viewer', [IotStreamViewerController::class, 'index'])->name('iot-stream-viewer.index');
-        Route::post('iot-stream-viewer/trigger', [IotStreamViewerController::class, 'triggerSnapshot'])->name('iot-stream-viewer.trigger');
-        Route::post('iot-stream-viewer/chat', [IotStreamViewerController::class, 'sendChat'])->name('iot-stream-viewer.chat');
-        Route::post('iot-stream-viewer/save-settings', [IotStreamViewerController::class, 'saveSettings'])->name('iot-stream-viewer.save-settings');
-        Route::post('iot-stream-viewer/validate', [IotStreamViewerController::class, 'validateStream'])->name('iot-stream-viewer.validate');
+        Route::prefix('iot-stream-viewer')->as('iot-stream-viewer.')->controller(IotStreamViewerController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/trigger', 'triggerSnapshot')->name('trigger');
+            Route::post('/chat', 'sendChat')->name('chat');
+            Route::post('/save-settings', 'saveSettings')->name('save-settings');
+            Route::post('/validate', 'validateStream')->name('validate');
+            Route::post('/download-batch', 'downloadBatch')->name('download-batch');
+            Route::post('/delete-batch', 'deleteBatch')->name('delete-batch');
+        });
     });
 });

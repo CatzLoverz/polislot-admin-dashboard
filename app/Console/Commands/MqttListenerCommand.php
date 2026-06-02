@@ -7,8 +7,11 @@ use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotStreamReceived;
 use App\Events\ChatMessageSent;
 use App\Events\IotDeviceStatusChanged;
+use App\Events\IotCountUpdated;
 use App\Models\IotDevice;
 use App\Models\IotCapture;
+use App\Models\UserValidation;
+use App\Models\Validation;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
@@ -139,24 +142,36 @@ class MqttListenerCommand extends Command
                         
                         Storage::disk('public')->put($path, $decryptedImageBytes);
                         
+                        $subarea = $device->subarea;
+                        $cvStatus = null;
+                        if ($subarea && $subarea->max_slots > 0) {
+                            $count = isset($payload['current_count']) ? (int) $payload['current_count'] : ($subarea->current_count ?? 0);
+                            $occupancy = ($count / $subarea->max_slots) * 100;
+                            
+                            if ($occupancy < ($subarea->threshold_banyak ?? 30.0)) {
+                                $cvStatus = 'banyak';
+                            } elseif ($occupancy >= ($subarea->threshold_terbatas ?? 80.0)) {
+                                $cvStatus = 'penuh';
+                            } else {
+                                $cvStatus = 'terbatas';
+                            }
+                        }
+
                         // 4. Simpan ke database IotCapture
                         IotCapture::create([
                             'device_id' => $device->device_id,
                             'capture_image_path' => $path,
                             'capture_is_trained' => false,
-                            'capture_ai_status' => 'Pending',
+                            'capture_ai_status' => $cvStatus,
                         ]);
                         
-                        $this->info("✅ Gambar berhasil didekripsi dan disimpan ke database (IotCapture).");
+                        $this->info("✅ Gambar berhasil didekripsi dan disimpan ke database (IotCapture). Status CV: {$cvStatus}");
 
                         // Save the current count if present in payload
-                        if (isset($payload['current_count'])) {
-                            $subarea = $device->subarea;
-                            if ($subarea) {
-                                $subarea->current_count = (int) $payload['current_count'];
-                                $subarea->save();
-                                broadcast(new \App\Events\IotCountUpdated($payload['mac_address'], $payload['current_count']));
-                            }
+                        if (isset($payload['current_count']) && $subarea) {
+                            $subarea->current_count = (int) $payload['current_count'];
+                            $subarea->save();
+                            broadcast(new IotCountUpdated($payload['mac_address'], $payload['current_count']));
                         }
 
                         // Check pending validation in cache
@@ -169,9 +184,9 @@ class MqttListenerCommand extends Command
                             $subarea = $device->subarea;
                             if ($subarea) {
                                 // Create UserValidation record
-                                \App\Models\UserValidation::create([
+                                UserValidation::create([
                                     'user_id' => $pending['user_id'],
-                                    'validation_id' => \App\Models\Validation::first()->validation_id ?? 1,
+                                    'validation_id' => Validation::first()->validation_id ?? 1,
                                     'park_subarea_id' => $subarea->park_subarea_id,
                                     'user_validation_content' => $pending['content'],
                                 ]);
@@ -230,7 +245,7 @@ class MqttListenerCommand extends Command
                             $this->info("📈 [MQTT] Device {$mac} melaporkan count: {$count} untuk subarea {$subarea->park_subarea_name}");
                             
                             // Broadcast count update
-                            broadcast(new \App\Events\IotCountUpdated($mac, $count));
+                            broadcast(new IotCountUpdated($mac, $count));
                         }
                     }
                 } catch (\Exception $e) {

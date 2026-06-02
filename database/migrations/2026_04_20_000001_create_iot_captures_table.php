@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('device_id')->constrained('iot_devices', 'device_id')->onDelete('cascade');
             $table->string('capture_image_path');
             $table->boolean('capture_is_trained')->default(false);
-            $table->string('capture_ai_status')->nullable();
+            $table->enum('capture_ai_status', ['banyak', 'terbatas', 'penuh'])->nullable();
             $table->timestamps();
         });
     }

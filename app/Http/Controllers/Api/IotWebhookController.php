@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use App\Events\IotDeviceStatusChanged;
+use App\Events\IotCommandSent;
+use App\Models\IotDevice;
 
 class IotWebhookController extends Controller
 {
@@ -64,7 +66,7 @@ class IotWebhookController extends Controller
 
         // Auto-push config if device connects and becomes online
         if ($status === 'online') {
-            $device = \App\Models\IotDevice::where('device_mac_address', $mac)->first();
+            $device = IotDevice::where('device_mac_address', $mac)->first();
             if ($device && $device->subarea) {
                 $subarea = $device->subarea;
                 $payloadData = [
@@ -81,7 +83,7 @@ class IotWebhookController extends Controller
                     $payloadData['signature'] = hash_hmac('sha256', json_encode($payloadData, JSON_UNESCAPED_SLASHES), $key32);
 
                     // Broadcast via Reverb WS
-                    broadcast(new \App\Events\IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
+                    broadcast(new IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
                     Log::info("[IotWebhook] Auto-pushed config to device {$mac} on connection.");
                 } catch (\Exception $e) {
                     Log::error("[IotWebhook] Failed to auto-push config: " . $e->getMessage());

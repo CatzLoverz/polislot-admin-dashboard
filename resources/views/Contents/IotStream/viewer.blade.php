@@ -157,8 +157,126 @@
             </div>
         </div>
 
+        <!-- Panel Snapshot Gallery (Dataset Training) -->
+        <div class="col-md-8 mt-4">
+            <div class="card shadow-sm" style="border-radius: 15px; border: none; height: 100%;">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0">
+                        <i class="fas fa-images mr-2"></i> Koleksi Snapshot Deteksi (Dataset Training)
+                    </h4>
+                    <div>
+                        <span class="badge badge-info" id="selected-count-badge">0 Terpilih</span>
+                    </div>
+                </div>
+                <div class="card-body bg-white text-dark p-3" style="border-radius: 0 0 15px 15px;">
+                    <!-- Filter & Batch Action Form -->
+                    <form id="download-batch-form" action="{{ route('admin.iot-stream-viewer.download-batch') }}" method="POST" target="_blank">
+                        @csrf
+                        <input type="hidden" name="mac_address" value="{{ $targetMac }}">
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="font-weight-bold small mb-1 text-dark">Status Pelatihan:</label>
+                                <select class="form-control form-control-sm" name="filter_trained" id="filter-trained" onchange="filterCaptures()">
+                                    <option value="all">Semua Data</option>
+                                    <option value="no" selected>Belum Dilatih (New)</option>
+                                    <option value="yes">Sudah Dilatih (Trained)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="font-weight-bold small mb-1 text-dark">Hasil Deteksi CV:</label>
+                                <select class="form-control form-control-sm" name="filter_cv_status" id="filter-cv-status" onchange="filterCaptures()">
+                                    <option value="all">Semua Status</option>
+                                    <option value="banyak">Banyak Kosong</option>
+                                    <option value="terbatas">Terbatas</option>
+                                    <option value="penuh">Penuh</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <div class="form-check p-0 mb-1">
+                                    <label class="form-check-label font-weight-bold small text-dark d-flex align-items-center">
+                                        <input class="form-check-input mr-2" type="checkbox" name="mark_as_trained" value="true" checked style="width: 16px; height: 16px; position: static;">
+                                        Tandai sudah dilatih setelah unduh
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs btn-outline-secondary" onclick="toggleSelectAllCaptures(true)">Pilih Semua</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary ml-1" onclick="toggleSelectAllCaptures(false)">Batal Pilih</button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-xs btn-danger mr-1" onclick="deleteSelectedCaptures()">
+                                    <i class="fas fa-trash mr-1"></i> Hapus Terpilih
+                                </button>
+                                <button type="submit" class="btn btn-xs btn-primary">
+                                    <i class="fas fa-download mr-1"></i> Batch Download (ZIP)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Scrollable Capture Grid -->
+                        <div id="captures-grid-container" style="max-height: 280px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; background-color: #f8f9fa;">
+                            @if(session('error'))
+                                <div class="alert alert-danger py-2 small mb-2">{{ session('error') }}</div>
+                            @endif
+                            <div class="row" id="captures-grid-row" style="margin-left: -5px; margin-right: -5px;">
+                                @forelse($captures as $capture)
+                                    <div class="col-6 col-sm-4 col-md-3 mb-2 px-1 capture-item-card" 
+                                         data-trained="{{ $capture->capture_is_trained ? 'yes' : 'no' }}" 
+                                         data-status="{{ $capture->capture_ai_status ?: 'unknown' }}">
+                                        <div class="card p-1 m-0 border text-center position-relative bg-white" style="border-radius: 8px;">
+                                            <div class="position-absolute" style="top: 5px; left: 5px; z-index: 5;">
+                                                <input type="checkbox" name="capture_ids[]" value="{{ $capture->capture_id }}" onchange="updateSelectedCount()" class="capture-checkbox" style="width: 16px; height: 16px; cursor: pointer;">
+                                            </div>
+                                            
+                                            <a href="{{ asset('storage/' . $capture->capture_image_path) }}" target="_blank" title="Klik untuk perbesar">
+                                                <img src="{{ asset('storage/' . $capture->capture_image_path) }}" class="img-fluid rounded" style="height: 70px; width: 100%; object-fit: cover;">
+                                            </a>
+                                            
+                                            <div class="mt-1 small px-1 text-left">
+                                                <!-- Badge Status CV -->
+                                                @if($capture->capture_ai_status === 'banyak')
+                                                    <span class="badge badge-success px-1" style="font-size: 8px;">Banyak</span>
+                                                @elseif($capture->capture_ai_status === 'terbatas')
+                                                    <span class="badge badge-warning text-white px-1" style="font-size: 8px;">Terbatas</span>
+                                                @elseif($capture->capture_ai_status === 'penuh')
+                                                    <span class="badge badge-danger px-1" style="font-size: 8px;">Penuh</span>
+                                                @else
+                                                    <span class="badge badge-secondary px-1" style="font-size: 8px;">Pending</span>
+                                                @endif
+
+                                                <!-- Badge Trained Status -->
+                                                @if($capture->capture_is_trained)
+                                                    <span class="badge badge-info px-1" style="font-size: 8px;"><i class="fas fa-check"></i> Trained</span>
+                                                @else
+                                                    <span class="badge badge-light border px-1" style="font-size: 8px; color: #555;">New</span>
+                                                @endif
+
+                                                <div class="text-muted mt-1" style="font-size: 9px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ $capture->created_at->format('d/m/Y H:i:s') }}">
+                                                    {{ $capture->created_at->format('H:i:s') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="col-md-12 text-center text-muted py-4" id="no-captures-placeholder">
+                                        <i class="fas fa-images fa-2x mb-2 text-muted"></i>
+                                        <p class="mb-0 small">Belum ada snapshot gambar yang dikumpulkan.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- Kolom Chat PoC -->
         <div class="col-md-4 mt-4">
+
             <div class="card shadow-sm" style="border-radius: 15px; border: none;">
                 <div class="card-header bg-info text-white" style="border-radius: 15px 15px 0 0;">
                     <h4 class="card-title font-weight-bold mb-0"><i class="fas fa-comments mr-2"></i> Live Chat (PoC)</h4>
@@ -473,7 +591,114 @@
             alert('Terjadi kesalahan jaringan saat menyimpan konfigurasi.');
         });
     }
+
+    // --- LOGIKA GALERI & BATCH ACTIONS SNAPSHOT DATASET ---
+    function filterCaptures() {
+        const trainedVal = document.getElementById('filter-trained').value;
+        const cvVal = document.getElementById('filter-cv-status').value;
+        const cards = document.querySelectorAll('.capture-item-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const isTrained = card.getAttribute('data-trained'); // 'yes' or 'no'
+            const cvStatus = card.getAttribute('data-status');   // 'banyak' / 'terbatas' / 'penuh' / 'unknown'
+
+            let matchTrained = (trainedVal === 'all') || (trainedVal === isTrained);
+            let matchCv = (cvVal === 'all') || (cvVal === cvStatus);
+
+            if (matchTrained && matchCv) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+                const cb = card.querySelector('.capture-checkbox');
+                if (cb) cb.checked = false; // Uncheck hidden elements to avoid accidental batch operations
+            }
+        });
+
+        updateSelectedCount();
+
+        let noCapPlaceholder = document.getElementById('no-captures-placeholder');
+        if (visibleCount === 0) {
+            if (!noCapPlaceholder) {
+                const gridRow = document.getElementById('captures-grid-row');
+                gridRow.insertAdjacentHTML('beforeend', `
+                    <div class="col-md-12 text-center text-muted py-4" id="no-captures-placeholder">
+                        <i class="fas fa-images fa-2x mb-2 text-muted"></i>
+                        <p class="mb-0 small">Tidak ada gambar yang cocok dengan filter.</p>
+                    </div>
+                `);
+            } else {
+                noCapPlaceholder.style.display = 'block';
+                noCapPlaceholder.querySelector('p').innerText = "Tidak ada gambar yang cocok dengan filter.";
+            }
+        } else {
+            if (noCapPlaceholder) {
+                noCapPlaceholder.style.display = 'none';
+            }
+        }
+    }
+
+    function toggleSelectAllCaptures(status) {
+        const checkboxes = document.querySelectorAll('.capture-item-card:not([style*="display: none"]) .capture-checkbox');
+        checkboxes.forEach(cb => {
+            cb.checked = status;
+        });
+        updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+        const checkedCount = document.querySelectorAll('.capture-checkbox:checked').length;
+        document.getElementById('selected-count-badge').innerText = `${checkedCount} Terpilih`;
+    }
+
+    function deleteSelectedCaptures() {
+        const checkedCheckboxes = document.querySelectorAll('.capture-checkbox:checked');
+        if (checkedCheckboxes.length === 0) {
+            alert('Silakan pilih minimal 1 gambar untuk dihapus.');
+            return;
+        }
+
+        if (!confirm(`Apakah Anda yakin ingin menghapus ${checkedCheckboxes.length} gambar terpilih dari server?`)) {
+            return;
+        }
+
+        const ids = Array.from(checkedCheckboxes).map(cb => parseInt(cb.value));
+
+        fetch("{{ route('admin.iot-stream-viewer.delete-batch') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ capture_ids: ids })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                checkedCheckboxes.forEach(cb => {
+                    const card = cb.closest('.capture-item-card');
+                    if (card) card.remove();
+                });
+                filterCaptures();
+            } else {
+                alert('Gagal menghapus gambar: ' + data.message);
+            }
+        })
+        .catch(err => {
+            console.error('Error deleting captures:', err);
+            alert('Terjadi kesalahan jaringan saat menghapus.');
+        });
+    }
+
+    // Jalankan filter filterCaptures pertama kali saat dimuat untuk menerapkan default (Belum Dilatih)
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(filterCaptures, 300);
+    });
 </script>
+
 
 <script type="module">
     // Hapus titik dua dari MAC address sesuai dengan format channel di Event kita
@@ -647,15 +872,15 @@
                 });
 
             // =====================================================
-            // FALLBACK: Listen Status dari MQTT
+            // FALLBACK: Listen Status dari MQTT/WS
             // =====================================================
             window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
-                    console.log("📡 Status Received (MQTT):", e);
+                    console.log("📡 Status Received (MQTT/WS):", e);
                     const selectedMac = document.getElementById('device-selector').value;
                     if (e.macAddress.toLowerCase() === selectedMac.toLowerCase()) {
                         updateStatusUI(e.status);
-                        addLog(`📡 Status ${e.status.toUpperCase()} diterima via MQTT`);
+                        addLog(`📡 Status ${e.status.toUpperCase()} diterima via MQTT/WS`);
                     }
                 });
         } else {

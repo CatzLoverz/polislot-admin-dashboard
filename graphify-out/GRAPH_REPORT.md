@@ -1,16 +1,16 @@
-# Graph Report - polislot-admin-dashboard  (2026-06-02)
+# Graph Report - polislot-admin-dashboard  (2026-06-03)
 
 ## Corpus Check
-- 194 files · ~63,463 words
+- 194 files · ~64,822 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 919 nodes · 925 edges · 186 communities (90 shown, 96 thin omitted)
-- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 106 edges (avg confidence: 0.8)
+- 921 nodes · 933 edges · 185 communities (90 shown, 95 thin omitted)
+- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 112 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8534933e`
+- Built from commit: `77e05c1e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -87,7 +87,6 @@
 - [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
 - [[_COMMUNITY_Community 71|Community 71]]
-- [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
@@ -138,13 +137,13 @@
 ## God Nodes (most connected - your core abstractions)
 1. `AuthControllerTest` - 31 edges
 2. `AuthControllerTest` - 24 edges
-3. `Validation` - 19 edges
+3. `Validation` - 21 edges
 4. `AuthController` - 12 edges
 5. `Langkah Instalasi` - 12 edges
 6. `AuthController` - 11 edges
-7. `Langkah Instalasi` - 10 edges
-8. `require` - 9 edges
-9. `IotStreamViewerController` - 9 edges
+7. `IotStreamViewerController` - 11 edges
+8. `Langkah Instalasi` - 10 edges
+9. `require` - 9 edges
 10. `ProfileControllerTest` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -162,7 +161,7 @@
 ## Hyperedges (group relationships)
 - **Deployment Options** — docker_deployment, manual_deployment [EXTRACTED 1.00]
 
-## Communities (186 total, 96 thin omitted)
+## Communities (185 total, 95 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -177,8 +176,8 @@ Cohesion: 0.12
 Nodes (15): devDependencies, axios, concurrently, laravel-echo, laravel-vite-plugin, pusher-js, tailwindcss, @tailwindcss/vite (+7 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.19
-Nodes (3): IotStreamController, MqttListenerCommand, IotCapture
+Cohesion: 0.11
+Nodes (4): IotStreamController, MqttListenerCommand, IotCapture, IotStreamViewerController
 
 ### Community 7 - "Community 7"
 Cohesion: 0.21
@@ -259,13 +258,15 @@ Nodes (11): draw_hud(), is_inside_polygon(), load_config(), main(), mouse_callba
 ## Knowledge Gaps
 - **96 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+91 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **95 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Are the 18 inferred relationships involving `Validation` (e.g. with `.store()` and `.index()`) actually correct?**
-  _`Validation` has 18 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `Validation` connect `Community 0` to `Community 6`?**
+  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **Are the 20 inferred relationships involving `Validation` (e.g. with `.handle()` and `.receiveSnapshot()`) actually correct?**
+  _`Validation` has 20 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
   _117 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
@@ -276,5 +277,3 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.08 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.13438735177865613 - nodes in this community are weakly interconnected._
-- **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.125 - nodes in this community are weakly interconnected._

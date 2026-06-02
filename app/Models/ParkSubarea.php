@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use PhpMqtt\Client\Facades\MQTT;
+use App\Events\IotCommandSent;
 
 class ParkSubarea extends Model
 {
@@ -116,7 +119,7 @@ class ParkSubarea extends Model
             $this->threshold_terbatas = max($this->threshold_banyak + 5.0, min(95.0, $this->threshold_terbatas));
             $this->save();
 
-            \Illuminate\Support\Facades\Log::info("[Threshold WMA] Threshold shifted for Subarea {$this->park_subarea_name} (ID: {$this->park_subarea_id}). New thresholds: banyak={$this->threshold_banyak}%, terbatas={$this->threshold_terbatas}%.");
+            Log::info("[Threshold WMA] Threshold shifted for Subarea {$this->park_subarea_name} (ID: {$this->park_subarea_id}). New thresholds: banyak={$this->threshold_banyak}%, terbatas={$this->threshold_terbatas}%.");
 
             // 4. Kirim update_config secara otomatis ke device IoT via MQTT & WS jika device online
             $device = $this->iotDevice;
@@ -139,18 +142,18 @@ class ParkSubarea extends Model
                 try {
                     $topic = "polislot/device/{$mac}/command";
                     $payload = json_encode($payloadData, JSON_UNESCAPED_SLASHES);
-                    $mqtt = \PhpMqtt\Client\Facades\MQTT::connection('publisher');
+                    $mqtt = MQTT::connection('publisher');
                     $mqtt->publish($topic, $payload, 0);
                     $mqtt->disconnect();
                 } catch (\Exception $e) {
-                    \Illuminate\Support\Facades\Log::warning("[Threshold WMA] Failed to sync config via MQTT: " . $e->getMessage());
+                    Log::warning("[Threshold WMA] Failed to sync config via MQTT: " . $e->getMessage());
                 }
 
                 // Broadcast WS
                 try {
-                    broadcast(new \App\Events\IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
+                    broadcast(new IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
                 } catch (\Exception $e) {
-                    \Illuminate\Support\Facades\Log::warning("[Threshold WMA] Failed to sync config via WS: " . $e->getMessage());
+                    Log::warning("[Threshold WMA] Failed to sync config via WS: " . $e->getMessage());
                 }
             }
         }
