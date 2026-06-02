@@ -66,6 +66,7 @@ TARGET_CLASSES = [2, 3] # Filter index class YOLO: 2 = car (mobil), 3 = motorcyc
 API_WS_AUTH_URL  = f"{SERVER_BASE_URL}/api/iot/ws-auth"
 API_SNAPSHOT_URL = f"{SERVER_BASE_URL}/api/iot/snapshot"
 API_COUNT_URL    = f"{SERVER_BASE_URL}/api/iot/count"
+API_CONFIG_URL   = f"{SERVER_BASE_URL}/api/iot/config"
 
 REVERB_APP_KEY = "xcubvd4inm14ayepjhro"
 
@@ -75,6 +76,77 @@ detection_polygons = []
 threshold_banyak = 30.0
 threshold_terbatas = 80.0
 current_vehicle_count = 0
+
+# File cache konfigurasi lokal
+CONFIG_FILE = f"config_cache_{MAC_ADDRESS.replace(':', '')}.json"
+
+def save_local_config():
+    global max_slots, detection_polygons, threshold_banyak, threshold_terbatas
+    try:
+        with config_lock:
+            config_data = {
+                "max_slots": max_slots,
+                "detection_polygon": detection_polygons,
+                "threshold_banyak": threshold_banyak,
+                "threshold_terbatas": threshold_terbatas
+            }
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(config_data, f, indent=4)
+        print(f"[💾] Config disimpan secara lokal ke {CONFIG_FILE}")
+    except Exception as e:
+        print(f"[-] Gagal menyimpan config lokal: {e}")
+
+def load_local_config():
+    global max_slots, detection_polygons, threshold_banyak, threshold_terbatas
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, "r") as f:
+                config_data = json.load(f)
+            with config_lock:
+                max_slots = config_data.get("max_slots", max_slots)
+                detection_polygons = config_data.get("detection_polygon", detection_polygons)
+                threshold_banyak = config_data.get("threshold_banyak", threshold_banyak)
+                threshold_terbatas = config_data.get("threshold_terbatas", threshold_terbatas)
+            print(f"[💾] Berhasil memuat config lokal: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
+        except Exception as e:
+            print(f"[-] Gagal memuat config lokal: {e}")
+
+def fetch_remote_config():
+    global max_slots, detection_polygons, threshold_banyak, threshold_terbatas
+    try:
+        timestamp = int(time.time())
+        # Hitung signature menggunakan HMAC-SHA256: "mac_address:timestamp"
+        data_to_sign = f"{MAC_ADDRESS}:{timestamp}"
+        key32 = get_aes_key()
+        signature = hmac.new(key32, data_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
+
+        payload = {
+            "mac_address": MAC_ADDRESS,
+            "timestamp": timestamp,
+            "signature": signature
+        }
+        
+        print(f"[📥] Mencoba mengambil konfigurasi terbaru dari server: {API_CONFIG_URL} ...")
+        resp = requests.post(API_CONFIG_URL, json=payload, timeout=10)
+        
+        if resp.status_code == 200:
+            res_data = resp.json()
+            if res_data.get("status") == "success":
+                cfg = res_data.get("config", {})
+                with config_lock:
+                    max_slots = cfg.get("max_slots", max_slots)
+                    detection_polygons = cfg.get("detection_polygon", detection_polygons)
+                    threshold_banyak = cfg.get("threshold_banyak", threshold_banyak)
+                    threshold_terbatas = cfg.get("threshold_terbatas", threshold_terbatas)
+                print(f"[✅] Berhasil sinkronisasi config dari server: max_slots={max_slots}, polygons_count={len(detection_polygons)}")
+                save_local_config()
+            else:
+                print(f"[⚠️] Gagal sinkronisasi config: {res_data.get('message')}")
+        else:
+            print(f"[⚠️] HTTP request gagal saat sinkronisasi config: status_code={resp.status_code}")
+    except Exception as e:
+        print(f"[-] Gagal sinkronisasi config via HTTP: {e}")
+
 
 # ============================================================
 # SECURITY FUNCTIONS (AES & HMAC)
@@ -206,6 +278,7 @@ def handle_command(raw_data):
                 threshold_banyak = cmd_data.get('threshold_banyak', threshold_banyak)
                 threshold_terbatas = cmd_data.get('threshold_terbatas', threshold_terbatas)
             print(f"[⚙️] Config diupdate via WS: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
+            save_local_config()
 
         elif action == 'snapshot':
             print("[📸] Mengambil snapshot...")
@@ -220,6 +293,9 @@ def handle_command(raw_data):
                     "iv": iv_b64,
                     "current_count": current_vehicle_count
                 }
+                if "save_image" in cmd_data:
+                    response_payload["save_image"] = cmd_data["save_image"]
+
                 response_payload["signature"] = generate_hmac_signature(response_payload)
                 
                 print("[📤] Mengirim gambar terenkripsi ke server via POST...")
@@ -342,6 +418,9 @@ async def websocket_client():
                 auth_data = auth_resp.json()
                 print("[+] Auth WebSocket berhasil.")
 
+                # Sinkronisasi config terbaru dari server
+                fetch_remote_config()
+
                 # 3. Subscribe to Presence Channel
                 subscribe_msg = {
                     "event": "pusher:subscribe",
@@ -382,6 +461,9 @@ async def websocket_client():
 # ============================================================
 def main():
     global stream
+    
+    # Memuat konfigurasi dari cache lokal jika tersedia
+    load_local_config()
     
     print("[+] Loading YOLOv8 weights...")
     model = YOLO(YOLO_WEIGHTS)

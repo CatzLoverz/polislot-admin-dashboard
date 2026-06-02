@@ -101,7 +101,8 @@ class IotStreamViewerController extends Controller
     public function triggerSnapshot(Request $request)
     {
         $request->validate([
-            'mac_address' => 'required|string'
+            'mac_address' => 'required|string',
+            'save_image'  => 'nullable'
         ]);
 
         $mac = $request->mac_address;
@@ -111,6 +112,10 @@ class IotStreamViewerController extends Controller
             'timestamp' => time(),
             'requested_by' => auth()->user()->id ?? 'admin'
         ];
+
+        if ($request->has('save_image')) {
+            $payloadData['save_image'] = filter_var($request->save_image, FILTER_VALIDATE_BOOLEAN);
+        }
 
         $errors = $this->sendCommandToDevice($mac, 'snapshot', $payloadData);
 
@@ -252,7 +257,8 @@ class IotStreamViewerController extends Controller
         $payloadData = [
             'action'       => 'snapshot',
             'timestamp'    => time(),
-            'requested_by' => auth()->user()->id ?? 'admin'
+            'requested_by' => auth()->user()->id ?? 'admin',
+            'save_image'   => true
         ];
 
         $errors = $this->sendCommandToDevice($mac, 'snapshot', $payloadData);

@@ -133,69 +133,76 @@ class MqttListenerCommand extends Command
                         return;
                     }
 
-                    $device = IotDevice::where('device_mac_address', $payload['mac_address'])->first();
-                    
                     if ($device) {
-                        // 3. Simpan gambar ke storage public
-                        $fileName = 'capture_' . time() . '_' . str_replace(':', '', $payload['mac_address']) . '.jpg';
-                        $path = 'iot_captures/' . $fileName;
-                        
-                        Storage::disk('public')->put($path, $decryptedImageBytes);
-                        
-                        $subarea = $device->subarea;
-                        $cvStatus = null;
-                        if ($subarea && $subarea->max_slots > 0) {
-                            $count = isset($payload['current_count']) ? (int) $payload['current_count'] : ($subarea->current_count ?? 0);
-                            $occupancy = ($count / $subarea->max_slots) * 100;
+                        $saveImage = true;
+                        if (isset($payload['save_image'])) {
+                            $saveImage = (bool) $payload['save_image'];
+                        }
+
+                        if ($saveImage) {
+                            // 3. Simpan gambar ke storage public
+                            $fileName = 'capture_' . time() . '_' . str_replace(':', '', $payload['mac_address']) . '.jpg';
+                            $path = 'iot_captures/' . $fileName;
                             
-                            if ($occupancy < ($subarea->threshold_banyak ?? 30.0)) {
-                                $cvStatus = 'banyak';
-                            } elseif ($occupancy >= ($subarea->threshold_terbatas ?? 80.0)) {
-                                $cvStatus = 'penuh';
-                            } else {
-                                $cvStatus = 'terbatas';
-                            }
-                        }
-
-                        // 4. Simpan ke database IotCapture
-                        IotCapture::create([
-                            'device_id' => $device->device_id,
-                            'capture_image_path' => $path,
-                            'capture_is_trained' => false,
-                            'capture_ai_status' => $cvStatus,
-                        ]);
-                        
-                        $this->info("✅ Gambar berhasil didekripsi dan disimpan ke database (IotCapture). Status CV: {$cvStatus}");
-
-                        // Save the current count if present in payload
-                        if (isset($payload['current_count']) && $subarea) {
-                            $subarea->current_count = (int) $payload['current_count'];
-                            $subarea->save();
-                            broadcast(new IotCountUpdated($payload['mac_address'], $payload['current_count']));
-                        }
-
-                        // Check pending validation in cache
-                        $cleanMac = str_replace(':', '', $payload['mac_address']);
-                        $pendingKey = "pending_validation_{$cleanMac}";
-                        if (Cache::has($pendingKey)) {
-                            $pending = Cache::get($pendingKey);
-                            Cache::forget($pendingKey);
-
+                            Storage::disk('public')->put($path, $decryptedImageBytes);
+                            
                             $subarea = $device->subarea;
-                            if ($subarea) {
-                                // Create UserValidation record
-                                UserValidation::create([
-                                    'user_id' => $pending['user_id'],
-                                    'validation_id' => Validation::first()->validation_id ?? 1,
-                                    'park_subarea_id' => $subarea->park_subarea_id,
-                                    'user_validation_content' => $pending['content'],
-                                ]);
-
-                                $this->info("📈 [MQTT] Saved manual validation from admin snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
-
-                                // Evaluate WMA Threshold Shift!
-                                $subarea->evaluateThresholdShift();
+                            $cvStatus = null;
+                            if ($subarea && $subarea->max_slots > 0) {
+                                $count = isset($payload['current_count']) ? (int) $payload['current_count'] : ($subarea->current_count ?? 0);
+                                $occupancy = ($count / $subarea->max_slots) * 100;
+                                
+                                if ($occupancy < ($subarea->threshold_banyak ?? 30.0)) {
+                                    $cvStatus = 'banyak';
+                                } elseif ($occupancy >= ($subarea->threshold_terbatas ?? 80.0)) {
+                                    $cvStatus = 'penuh';
+                                } else {
+                                    $cvStatus = 'terbatas';
+                                }
                             }
+
+                            // 4. Simpan ke database IotCapture
+                            IotCapture::create([
+                                'device_id' => $device->device_id,
+                                'capture_image_path' => $path,
+                                'capture_is_trained' => false,
+                                'capture_ai_status' => $cvStatus,
+                            ]);
+                            
+                            $this->info("✅ Gambar berhasil didekripsi dan disimpan ke database (IotCapture). Status CV: {$cvStatus}");
+
+                            // Save the current count if present in payload
+                            if (isset($payload['current_count']) && $subarea) {
+                                $subarea->current_count = (int) $payload['current_count'];
+                                $subarea->save();
+                                broadcast(new IotCountUpdated($payload['mac_address'], $payload['current_count']));
+                            }
+
+                            // Check pending validation in cache
+                            $cleanMac = str_replace(':', '', $payload['mac_address']);
+                            $pendingKey = "pending_validation_{$cleanMac}";
+                            if (Cache::has($pendingKey)) {
+                                $pending = Cache::get($pendingKey);
+                                Cache::forget($pendingKey);
+
+                                $subarea = $device->subarea;
+                                if ($subarea) {
+                                    // Create UserValidation record
+                                    UserValidation::create([
+                                        'user_id' => $pending['user_id'],
+                                        'validation_id' => Validation::first()->validation_id ?? 1,
+                                        'park_subarea_id' => $subarea->park_subarea_id,
+                                        'user_validation_content' => $pending['content'],
+                                    ]);
+
+                                    $this->info("📈 [MQTT] Saved manual validation from admin snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
+
+                                    // Evaluate WMA Threshold Shift!
+                                    $subarea->evaluateThresholdShift();
+                                }
+                            }
+                        } else {
+                            $this->info("ℹ️ Snapshot diterima tetapi tidak disimpan (save_image = false).");
                         }
                     } else {
                         $this->warn("⚠️ Perangkat dengan MAC {$payload['mac_address']} tidak terdaftar di database. Gambar tidak disimpan.");

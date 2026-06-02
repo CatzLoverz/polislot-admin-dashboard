@@ -211,9 +211,15 @@ class IotStreamController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Decryption failed.'], 400);
         }
 
-        // 4. SIMPAN KE STORAGE + DATABASE
+        // 4. SIMPAN KE STORAGE + DATABASE (kondisional berdasarkan parameter save_image)
         $device = IotDevice::where('device_mac_address', $macAddress)->first();
-        if ($device) {
+        
+        $saveImage = true;
+        if ($request->has('save_image')) {
+            $saveImage = filter_var($request->save_image, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if ($device && $saveImage) {
             $fileName = 'capture_' . time() . '_' . str_replace(':', '', $macAddress) . '.jpg';
             $path = 'iot_captures/' . $fileName;
 
@@ -374,4 +380,56 @@ class IotStreamController extends Controller
 
         return response()->json(['status' => 'success']);
     }
+
+    /**
+     * Endpoint untuk memberikan konfigurasi terbaru ke IoT device pada saat startup.
+     */
+    public function receiveConfigQuery(Request $request)
+    {
+        $request->validate([
+            'mac_address' => 'required|string',
+            'timestamp'   => 'required|numeric',
+            'signature'   => 'required|string',
+        ]);
+
+        $macAddress = $request->mac_address;
+
+        if (!$this->validateMacAddress($macAddress)) {
+            return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
+        }
+
+        // Validasi HMAC Signature
+        $iotSecret = config('services.iot.secret');
+        $key32 = substr(hash('sha256', $iotSecret, true), 0, 32);
+
+        $payloadToSign = [
+            'mac_address' => $macAddress,
+            'timestamp'   => (int) $request->timestamp,
+        ];
+
+        $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
+        $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
+
+        if (!hash_equals($calculatedSignature, $request->signature)) {
+            Log::warning('[IotConfig] Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+            return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
+        }
+
+        $device = IotDevice::where('device_mac_address', $macAddress)->first();
+        if ($device && $device->subarea) {
+            $subarea = $device->subarea;
+            return response()->json([
+                'status' => 'success',
+                'config' => [
+                    'max_slots'          => (int) $subarea->max_slots,
+                    'detection_polygon'  => $subarea->detection_polygon ?? [],
+                    'threshold_banyak'   => (float) ($subarea->threshold_banyak ?? 30.0),
+                    'threshold_terbatas' => (float) ($subarea->threshold_terbatas ?? 80.0),
+                ]
+            ]);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Subarea not found.'], 404);
+    }
 }
+

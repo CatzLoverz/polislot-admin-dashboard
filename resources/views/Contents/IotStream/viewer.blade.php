@@ -47,8 +47,8 @@
         {{-- Panel Kiri: Live Stream / Text Viewer --}}
         <div class="col-md-8">
             <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0">
+                <div class="card-header d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0 text-dark">
                         <i class="fas fa-satellite-dish mr-2"></i> Live Feed
                     </h4>
                     <div class="d-flex align-items-center">
@@ -82,8 +82,8 @@
 
             {{-- Panel Config Deteksi Subarea --}}
             <div class="card shadow-sm mt-3 border-0">
-                <div class="card-header bg-dark text-white" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0">
+                <div class="card-header" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0 text-dark">
                         <i class="fas fa-cogs mr-2"></i> Pengaturan Deteksi & Threshold Subarea
                     </h4>
                 </div>
@@ -144,8 +144,8 @@
         {{-- Panel Kanan: Log Data Real-time --}}
         <div class="col-md-4">
             <div class="card shadow-sm" style="height: 100%;">
-                <div class="card-header bg-primary text-white" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0"><i class="fas fa-terminal mr-2"></i> Data Log</h4>
+                <div class="card-header" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0 text-dark"><i class="fas fa-terminal mr-2"></i> Data Log</h4>
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush" id="log-list" style="max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 12px;">
@@ -160,8 +160,8 @@
         <!-- Panel Snapshot Gallery (Dataset Training) -->
         <div class="col-md-8 mt-4">
             <div class="card shadow-sm" style="border-radius: 15px; border: none; height: 100%;">
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0">
+                <div class="card-header d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0 text-dark">
                         <i class="fas fa-images mr-2"></i> Koleksi Snapshot Deteksi (Dataset Training)
                     </h4>
                     <div>
@@ -278,8 +278,8 @@
         <div class="col-md-4 mt-4">
 
             <div class="card shadow-sm" style="border-radius: 15px; border: none;">
-                <div class="card-header bg-info text-white" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0"><i class="fas fa-comments mr-2"></i> Live Chat (PoC)</h4>
+                <div class="card-header" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0 text-dark"><i class="fas fa-comments mr-2"></i> Live Chat (PoC)</h4>
                 </div>
                 <div class="card-body p-2">
                     <div id="chat-messages" style="height: 300px; overflow-y: auto; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; margin-bottom: 10px;">
@@ -424,7 +424,10 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ mac_address: "{{ $targetMac }}" })
+                body: JSON.stringify({ 
+                    mac_address: "{{ $targetMac }}",
+                    save_image: false
+                })
             })
             .then(res => res.json())
             .then(data => {

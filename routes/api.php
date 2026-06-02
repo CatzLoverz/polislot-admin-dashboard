@@ -27,6 +27,7 @@ Route::post('/iot/ws-auth', [IotWsAuthController::class, 'authenticate']);
 Route::post('/iot/snapshot', [IotStreamController::class, 'receiveSnapshot']);
 Route::post('/iot/count', [IotStreamController::class, 'receiveCount']);
 Route::post('/iot/chat-reply', [IotStreamController::class, 'receiveChatReply']);
+Route::post('/iot/config', [IotStreamController::class, 'receiveConfigQuery']);
 Route::post('/iot/webhook', [IotWebhookController::class, 'handle']);
 
 Route::middleware(['encryptApi', 'throttle:api'])->group(function () {

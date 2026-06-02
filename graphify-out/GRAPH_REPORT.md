@@ -1,16 +1,16 @@
 # Graph Report - polislot-admin-dashboard  (2026-06-03)
 
 ## Corpus Check
-- 194 files · ~64,822 words
+- 194 files · ~65,441 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 921 nodes · 933 edges · 185 communities (90 shown, 95 thin omitted)
-- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 112 edges (avg confidence: 0.8)
+- 927 nodes · 948 edges · 185 communities (90 shown, 95 thin omitted)
+- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `77e05c1e`
+- Built from commit: `11005d05`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -244,12 +244,12 @@ Cohesion: 0.67
 Nodes (3): extra, laravel, dont-discover
 
 ### Community 180 - "Community 180"
-Cohesion: 0.22
-Nodes (12): CameraStream, detector_loop(), encrypt_image_aes(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command(), is_inside_any_polygon() (+4 more)
+Cohesion: 0.20
+Nodes (15): CameraStream, detector_loop(), encrypt_image_aes(), fetch_remote_config(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command() (+7 more)
 
 ### Community 181 - "Community 181"
-Cohesion: 0.25
-Nodes (11): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_inside_any_polygon(), is_inside_polygon(), main(), on_connect() (+3 more)
+Cohesion: 0.22
+Nodes (13): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_inside_any_polygon(), is_inside_polygon(), load_local_config(), main() (+5 more)
 
 ### Community 182 - "Community 182"
 Cohesion: 0.23

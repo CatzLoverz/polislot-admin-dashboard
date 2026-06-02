@@ -58,6 +58,41 @@ threshold_banyak = 30.0
 threshold_terbatas = 80.0
 current_vehicle_count = 0
 
+# File cache konfigurasi lokal
+CONFIG_FILE = f"config_cache_{MAC_ADDRESS.replace(':', '')}.json"
+
+def save_local_config():
+    global max_slots, detection_polygons, threshold_banyak, threshold_terbatas
+    try:
+        with config_lock:
+            config_data = {
+                "max_slots": max_slots,
+                "detection_polygon": detection_polygons,
+                "threshold_banyak": threshold_banyak,
+                "threshold_terbatas": threshold_terbatas
+            }
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(config_data, f, indent=4)
+        print(f"[💾] Config disimpan secara lokal ke {CONFIG_FILE}")
+    except Exception as e:
+        print(f"[-] Gagal menyimpan config lokal: {e}")
+
+def load_local_config():
+    global max_slots, detection_polygons, threshold_banyak, threshold_terbatas
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, "r") as f:
+                config_data = json.load(f)
+            with config_lock:
+                max_slots = config_data.get("max_slots", max_slots)
+                detection_polygons = config_data.get("detection_polygon", detection_polygons)
+                threshold_banyak = config_data.get("threshold_banyak", threshold_banyak)
+                threshold_terbatas = config_data.get("threshold_terbatas", threshold_terbatas)
+            print(f"[💾] Berhasil memuat config lokal: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
+        except Exception as e:
+            print(f"[-] Gagal memuat config lokal: {e}")
+
+
 # ============================================================
 # SECURITY FUNCTIONS (AES & HMAC)
 # ============================================================
@@ -166,6 +201,10 @@ def on_connect_success(client):
     client.subscribe(TOPIC_SERVER_STATUS)
     print(f"[+] Subscribed ke command topic: {TOPIC_COMMAND}")
     
+    # Berikan jeda 1 detik agar broker selesai mendaftarkan subscription
+    # sebelum status online dikirim (mencegah race condition push config)
+    time.sleep(1.0)
+    
     # Announce status ONLINE
     send_status_update(client, "online")
 
@@ -204,10 +243,10 @@ def on_message(client, userdata, msg):
         if not hmac.compare_digest(received_signature, calculated_signature):
             print("[🚨] DITOLAK: Signature tidak cocok!")
             return
-
+ 
         action = payload.get("action")
         print(f"\n[📥] Perintah terverifikasi: {action}")
-
+ 
         if action == "update_config":
             with config_lock:
                 max_slots = payload.get("max_slots", max_slots)
@@ -215,6 +254,7 @@ def on_message(client, userdata, msg):
                 threshold_banyak = payload.get("threshold_banyak", threshold_banyak)
                 threshold_terbatas = payload.get("threshold_terbatas", threshold_terbatas)
             print(f"[⚙️] Config diupdate: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
+            save_local_config()
 
         elif action == "snapshot":
             print("[📸] Mengambil snapshot...")
@@ -229,6 +269,9 @@ def on_message(client, userdata, msg):
                     "iv": iv_b64,
                     "current_count": current_vehicle_count
                 }
+                if "save_image" in payload:
+                    response_payload["save_image"] = payload["save_image"]
+                
                 response_payload["signature"] = generate_hmac_signature(response_payload)
                 client.publish(TOPIC_SNAPSHOT, json.dumps(response_payload), qos=1)
                 print("[📤] Snapshot terenkripsi & ditandatangani berhasil dikirim.")
@@ -256,6 +299,9 @@ def on_message(client, userdata, msg):
 # ============================================================
 def main():
     global stream, current_vehicle_count
+    
+    # Memuat konfigurasi dari cache lokal jika tersedia
+    load_local_config()
     
     print("[+] Loading YOLOv8 model...")
     model = YOLO(YOLO_WEIGHTS)
