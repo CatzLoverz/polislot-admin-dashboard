@@ -99,7 +99,7 @@
                             <div class="form-group p-0">
                                 <label class="font-weight-bold" for="threshold-banyak">Batas Status "Banyak" (%)</label>
                                 <input type="number" id="threshold-banyak" class="form-control" value="{{ $thresholdBanyak }}" min="5" max="90">
-                                <small class="text-muted">Okupansi di bawah ini dianggap "Banyak Kosong"</small>
+                                <small class="text-muted">Okupansi di bawah ini dianggap "Banyak Tersedia"</small>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -187,7 +187,7 @@
                                 <label class="font-weight-bold small mb-1 text-dark">Hasil Deteksi CV:</label>
                                 <select class="form-control form-control-sm" name="filter_cv_status" id="filter-cv-status" onchange="filterCaptures()">
                                     <option value="all">Semua Status</option>
-                                    <option value="banyak">Banyak Kosong</option>
+                                    <option value="banyak">Banyak Tersedia</option>
                                     <option value="terbatas">Terbatas</option>
                                     <option value="penuh">Penuh</option>
                                 </select>

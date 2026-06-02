@@ -45,7 +45,7 @@
                                             <i class="fas fa-circle" style="font-size: 8px;"></i> 
                                             @if($sub->status_color == '#f25961') Penuh
                                             @elseif($sub->status_color == '#ffad46') Terbatas
-                                            @elseif($sub->status_color == '#31ce36') Banyak Kosong
+                                            @elseif($sub->status_color == '#31ce36') Banyak Tersedia
                                             @else Tidak ada info / Netral @endif
 
                                             @if(isset($sub->is_validated) && $sub->is_validated)

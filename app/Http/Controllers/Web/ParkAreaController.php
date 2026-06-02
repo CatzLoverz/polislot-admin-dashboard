@@ -237,7 +237,7 @@ class ParkAreaController extends Controller
                 } elseif ($status === 'terbatas') {
                     $sub->status_color = '#ffad46'; // Kuning (Terbatas)
                 } elseif ($status === 'banyak') {
-                    $sub->status_color = '#31ce36'; // Hijau (Banyak Kosong)
+                    $sub->status_color = '#31ce36'; // Hijau (Banyak Tersedia)
                 } else {
                     $sub->status_color = '#1572e8'; // Biru (Netral / Tidak ada info)
                 }

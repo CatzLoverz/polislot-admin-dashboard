@@ -93,7 +93,7 @@ class MqttListenerCommand extends Command
                     
                     $payloadToSign = [
                         'mac_address' => $payload['mac_address'],
-                        'timestamp' => $payload['timestamp'],
+                        'timestamp' => (int) $payload['timestamp'],
                         'encrypted_image' => $payload['encrypted_image'],
                         'iv' => $payload['iv']
                     ];
@@ -101,7 +101,7 @@ class MqttListenerCommand extends Command
                         $payloadToSign['current_count'] = (int) $payload['current_count'];
                     }
                     if (isset($payload['save_image'])) {
-                        $payloadToSign['save_image'] = (bool) $payload['save_image'];
+                        $payloadToSign['save_image'] = filter_var($payload['save_image'], FILTER_VALIDATE_BOOLEAN);
                     }
                     
                     $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
@@ -133,10 +133,12 @@ class MqttListenerCommand extends Command
                         return;
                     }
 
+                    $device = IotDevice::where('device_mac_address', $payload['mac_address'])->first();
+
                     if ($device) {
                         $saveImage = true;
                         if (isset($payload['save_image'])) {
-                            $saveImage = (bool) $payload['save_image'];
+                            $saveImage = filter_var($payload['save_image'], FILTER_VALIDATE_BOOLEAN);
                         }
 
                         if ($saveImage) {
