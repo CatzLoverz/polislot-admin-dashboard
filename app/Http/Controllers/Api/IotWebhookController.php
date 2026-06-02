@@ -79,7 +79,7 @@ class IotWebhookController extends Controller
                 ];
 
                 try {
-                    $key32 = substr(hash('sha256', env('IOT_API_SECRET'), true), 0, 32);
+                    $key32 = substr(hash('sha256', config('services.iot.secret'), true), 0, 32);
                     $payloadData['signature'] = hash_hmac('sha256', json_encode($payloadData, JSON_UNESCAPED_SLASHES), $key32);
 
                     // Broadcast via Reverb WS

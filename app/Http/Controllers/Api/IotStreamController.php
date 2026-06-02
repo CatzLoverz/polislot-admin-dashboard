@@ -402,12 +402,7 @@ class IotStreamController extends Controller
         $iotSecret = config('services.iot.secret');
         $key32 = substr(hash('sha256', $iotSecret, true), 0, 32);
 
-        $payloadToSign = [
-            'mac_address' => $macAddress,
-            'timestamp'   => (int) $request->timestamp,
-        ];
-
-        $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
+        $dataToSign = "{$macAddress}:{$request->timestamp}";
         $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
         if (!hash_equals($calculatedSignature, $request->signature)) {

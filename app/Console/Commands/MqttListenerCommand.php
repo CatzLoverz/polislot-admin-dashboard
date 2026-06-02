@@ -38,10 +38,10 @@ class MqttListenerCommand extends Command
     public function handle()
     {
         $this->info("Memulai MQTT Listener...");
-        $secretKey = env('IOT_API_SECRET');
+        $secretKey = config('services.iot.secret');
         
         if (!$secretKey) {
-            $this->error("IOT_API_SECRET tidak ditemukan di .env!");
+            $this->error("IOT_API_SECRET tidak ditemukan di configuration services.php!");
             return 1;
         }
 
