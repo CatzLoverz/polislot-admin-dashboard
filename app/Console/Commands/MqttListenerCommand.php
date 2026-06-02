@@ -88,18 +88,21 @@ class MqttListenerCommand extends Command
                     // 1. Validasi HMAC Signature
                     $receivedSignature = $payload['signature'];
                     
-                    // Buat payload untuk divalidasi (tanpa signature)
-                    // PENTING: Gunakan JSON_UNESCAPED_SLASHES agar karakter '/' pada Base64 tidak di-escape (\/),
-                    // yang mana akan membuat hasil JSON berbeda dengan script Python dan menggagalkan HMAC.
-                    $dataToSign = json_encode([
+                    $payloadToSign = [
                         'mac_address' => $payload['mac_address'],
                         'timestamp' => $payload['timestamp'],
                         'encrypted_image' => $payload['encrypted_image'],
                         'iv' => $payload['iv']
-                    ], JSON_UNESCAPED_SLASHES);
+                    ];
+                    if (isset($payload['save_image'])) {
+                        $payloadToSign['save_image'] = (bool) $payload['save_image'];
+                    }
+                    if (isset($payload['current_count'])) {
+                        $payloadToSign['current_count'] = (int) $payload['current_count'];
+                    }
                     
-                    // Gunakan substr untuk memastikan panjang key sesuai untuk AES-256-CBC (32 bytes)
                     $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
+                    $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
                     $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
                     
                     if (!hash_equals($calculatedSignature, $receivedSignature)) {
@@ -107,7 +110,7 @@ class MqttListenerCommand extends Command
                         $this->warn("Data to sign: " . $dataToSign);
                         $this->warn("Python Sig: " . $receivedSignature);
                         $this->warn("PHP Sig   : " . $calculatedSignature);
-                        return; // SEKARANG KITA BLOKIR BENAR-BENAR JIKA GAGAL
+                        return;
                     }
 
                     // 2. Dekripsi AES-256-CBC
@@ -145,6 +148,40 @@ class MqttListenerCommand extends Command
                         ]);
                         
                         $this->info("✅ Gambar berhasil didekripsi dan disimpan ke database (IotCapture).");
+
+                        // Save the current count if present in payload
+                        if (isset($payload['current_count'])) {
+                            $subarea = $device->subarea;
+                            if ($subarea) {
+                                $subarea->current_count = (int) $payload['current_count'];
+                                $subarea->save();
+                                broadcast(new \App\Events\IotCountUpdated($payload['mac_address'], $payload['current_count']));
+                            }
+                        }
+
+                        // Check pending validation in cache
+                        $cleanMac = str_replace(':', '', $payload['mac_address']);
+                        $pendingKey = "pending_validation_{$cleanMac}";
+                        if (Cache::has($pendingKey)) {
+                            $pending = Cache::get($pendingKey);
+                            Cache::forget($pendingKey);
+
+                            $subarea = $device->subarea;
+                            if ($subarea) {
+                                // Create UserValidation record
+                                \App\Models\UserValidation::create([
+                                    'user_id' => $pending['user_id'],
+                                    'validation_id' => \App\Models\Validation::first()->validation_id ?? 1,
+                                    'park_subarea_id' => $subarea->park_subarea_id,
+                                    'user_validation_content' => $pending['content'],
+                                ]);
+
+                                $this->info("📈 [MQTT] Saved manual validation from admin snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
+
+                                // Evaluate WMA Threshold Shift!
+                                $subarea->evaluateThresholdShift();
+                            }
+                        }
                     } else {
                         $this->warn("⚠️ Perangkat dengan MAC {$payload['mac_address']} tidak terdaftar di database. Gambar tidak disimpan.");
                     }
@@ -155,6 +192,49 @@ class MqttListenerCommand extends Command
                     $this->info("📡 Gambar di-broadcast ke Web UI.");
                 } catch (\Exception $e) {
                     $this->error("Error memproses pesan: " . $e->getMessage());
+                }
+            });
+
+            // Listener tambahan untuk update count dari IoT Device via MQTT
+            $mqtt->subscribe('polislot/device/+/count', function (string $topic, string $message) use ($secretKey) {
+                $this->info("Pesan count diterima di topik: {$topic}");
+                try {
+                    $payload = json_decode($message, true);
+                    if (!$payload || !isset($payload['signature'])) {
+                        $this->warn("⚠️ Pesan count ditolak: Tidak ada signature.");
+                        return;
+                    }
+
+                    $receivedSignature = $payload['signature'];
+                    unset($payload['signature']);
+                    
+                    $dataToSign = json_encode($payload, JSON_UNESCAPED_SLASHES);
+                    $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
+                    $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
+
+                    if (!hash_equals($calculatedSignature, $receivedSignature)) {
+                        $this->warn("🚨 DITOLAK: Signature count tidak valid!");
+                        return;
+                    }
+
+                    if (isset($payload['mac_address'], $payload['count'])) {
+                        $mac = $payload['mac_address'];
+                        $count = (int) $payload['count'];
+                        
+                        $device = IotDevice::where('device_mac_address', $mac)->first();
+                        if ($device && $device->subarea) {
+                            $subarea = $device->subarea;
+                            $subarea->current_count = $count;
+                            $subarea->save();
+                            
+                            $this->info("📈 [MQTT] Device {$mac} melaporkan count: {$count} untuk subarea {$subarea->park_subarea_name}");
+                            
+                            // Broadcast count update
+                            broadcast(new \App\Events\IotCountUpdated($mac, $count));
+                        }
+                    }
+                } catch (\Exception $e) {
+                    $this->error("Error memproses count MQTT: " . $e->getMessage());
                 }
             });
             
@@ -222,6 +302,26 @@ class MqttListenerCommand extends Command
                 
                 // Broadcast ke Reverb agar UI berubah secara real-time
                 broadcast(new IotDeviceStatusChanged($mac, $status));
+
+                // Auto-push config if device connects and becomes online via MQTT
+                if ($status === 'online') {
+                    $device = IotDevice::where('device_mac_address', $mac)->first();
+                    if ($device && $device->subarea) {
+                        $subarea = $device->subarea;
+                        $payloadData = [
+                            'action'             => 'update_config',
+                            'max_slots'          => (int) $subarea->max_slots,
+                            'detection_polygon'  => $subarea->detection_polygon ?? [],
+                            'threshold_banyak'   => (float) ($subarea->threshold_banyak ?? 30.0),
+                            'threshold_terbatas' => (float) ($subarea->threshold_terbatas ?? 80.0),
+                            'timestamp'          => time(),
+                        ];
+                        $payloadData['signature'] = hash_hmac('sha256', json_encode($payloadData, JSON_UNESCAPED_SLASHES), $key32);
+                        
+                        $mqtt->publish("polislot/device/{$mac}/command", json_encode($payloadData, JSON_UNESCAPED_SLASHES), 1);
+                        $this->info("📈 [MQTT] Auto-pushed config to device {$mac} on connection.");
+                    }
+                }
             });
             
             $mqtt->loop(true);

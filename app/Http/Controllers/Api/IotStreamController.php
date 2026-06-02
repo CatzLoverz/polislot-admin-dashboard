@@ -160,6 +160,8 @@ class IotStreamController extends Controller
             'encrypted_image' => 'required|string',
             'iv'              => 'required|string',
             'signature'       => 'required|string',
+            'save_image'      => 'nullable',
+            'current_count'   => 'nullable|numeric',
         ]);
 
         $macAddress = $request->mac_address;
@@ -170,17 +172,25 @@ class IotStreamController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
         }
 
-        // 2. VALIDASI HMAC SIGNATURE (format sama dengan mqtt_test_iot.py)
+        // 2. VALIDASI HMAC SIGNATURE
         $iotSecret = config('services.iot.secret');
         $key32 = substr(hash('sha256', $iotSecret, true), 0, 32);
 
-        $dataToSign = json_encode([
+        $payloadToSign = [
             'mac_address'     => $macAddress,
             'timestamp'       => (int) $request->timestamp,
             'encrypted_image' => $request->encrypted_image,
             'iv'              => $request->iv,
-        ], JSON_UNESCAPED_SLASHES);
+        ];
+        
+        if ($request->has('save_image')) {
+            $payloadToSign['save_image'] = filter_var($request->save_image, FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($request->has('current_count')) {
+            $payloadToSign['current_count'] = (int) $request->current_count;
+        }
 
+        $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
         $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
         if (!hash_equals($calculatedSignature, $request->signature)) {
@@ -214,6 +224,40 @@ class IotStreamController extends Controller
             ]);
 
             Log::info('[IotSnapshot] Image saved', ['mac' => $macAddress, 'path' => $path]);
+
+            // Save the current count if present in payload
+            if ($request->has('current_count')) {
+                $subarea = $device->subarea;
+                if ($subarea) {
+                    $subarea->current_count = (int) $request->current_count;
+                    $subarea->save();
+                    broadcast(new \App\Events\IotCountUpdated($macAddress, $request->current_count));
+                }
+            }
+
+            // Check if there is a pending validation for this device
+            $cleanMac = str_replace(':', '', $macAddress);
+            $pendingKey = "pending_validation_{$cleanMac}";
+            if (Cache::has($pendingKey)) {
+                $pending = Cache::get($pendingKey);
+                Cache::forget($pendingKey);
+
+                $subarea = $device->subarea;
+                if ($subarea) {
+                    // Create UserValidation record
+                    \App\Models\UserValidation::create([
+                        'user_id' => $pending['user_id'],
+                        'validation_id' => \App\Models\Validation::first()->validation_id ?? 1,
+                        'park_subarea_id' => $subarea->park_subarea_id,
+                        'user_validation_content' => $pending['content'],
+                    ]);
+
+                    Log::info("[IotSnapshot] Saved manual admin validation from snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
+
+                    // Evaluate WMA Threshold Shift!
+                    $subarea->evaluateThresholdShift();
+                }
+            }
         }
 
         // 5. BROADCAST KE WEB UI
@@ -221,6 +265,58 @@ class IotStreamController extends Controller
         broadcast(new IotStreamReceived($macAddress, $imageBase64));
 
         return response()->json(['status' => 'success', 'message' => 'Snapshot received and broadcasted.']);
+    }
+
+    /**
+     * Endpoint untuk menerima hitungan (count) kendaraan dari IoT device.
+     */
+    public function receiveCount(Request $request)
+    {
+        $request->validate([
+            'mac_address' => 'required|string',
+            'timestamp'   => 'required|numeric',
+            'count'       => 'required|integer|min:0',
+            'signature'   => 'required|string',
+        ]);
+
+        $macAddress = $request->mac_address;
+
+        if (!$this->validateMacAddress($macAddress)) {
+            return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
+        }
+
+        // Validate HMAC signature
+        $iotSecret = config('services.iot.secret');
+        $key32 = substr(hash('sha256', $iotSecret, true), 0, 32);
+
+        $payloadToSign = [
+            'mac_address' => $macAddress,
+            'timestamp'   => (int) $request->timestamp,
+            'count'       => (int) $request->count,
+        ];
+
+        $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
+        $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
+
+        if (!hash_equals($calculatedSignature, $request->signature)) {
+            Log::warning('[IotCount] Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+            return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
+        }
+
+        // Update database
+        $device = IotDevice::where('device_mac_address', $macAddress)->first();
+        if ($device && $device->subarea) {
+            $subarea = $device->subarea;
+            $subarea->current_count = (int) $request->count;
+            $subarea->save();
+
+            Log::info("[IotCount] Updated subarea {$subarea->park_subarea_name} count to {$request->count}");
+
+            // Broadcast count updated
+            broadcast(new \App\Events\IotCountUpdated($macAddress, $request->count));
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
     /**

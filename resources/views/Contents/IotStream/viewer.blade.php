@@ -17,6 +17,9 @@
                         <div id="status-indicator" class="badge badge-{{ $initialStatus === 'online' ? 'success' : 'danger' }} ml-2">
                             <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> {{ strtoupper($initialStatus) }}
                         </div>
+                        <span class="badge badge-primary ml-2">
+                            <i class="fas fa-car mr-1"></i> Count: <strong id="current-count-badge">0</strong>
+                        </span>
                     </div>
                     <select class="form-control" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
                         @forelse($devices as $device)
@@ -48,9 +51,15 @@
                     <h4 class="card-title font-weight-bold mb-0">
                         <i class="fas fa-satellite-dish mr-2"></i> Live Feed
                     </h4>
-                    <div>
-                        <button class="btn btn-sm btn-primary mr-2" id="btn-request-snapshot" onclick="requestSnapshot()">
-                            <i class="fas fa-camera mr-1"></i> Ambil Snapshot
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-sm btn-success mr-1" id="btn-val-banyak" onclick="validateStream('banyak')">
+                            <i class="fas fa-check-circle mr-1"></i> Banyak
+                        </button>
+                        <button class="btn btn-sm btn-warning text-white mr-1" id="btn-val-terbatas" onclick="validateStream('terbatas')">
+                            <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
+                        </button>
+                        <button class="btn btn-sm btn-danger mr-2" id="btn-val-penuh" onclick="validateStream('penuh')">
+                            <i class="fas fa-times-circle mr-1"></i> Penuh
                         </button>
                         <span class="badge badge-success" id="connection-status">
                             <i class="fas fa-circle-notch fa-spin mr-1"></i> Menghubungkan...
@@ -58,11 +67,76 @@
                     </div>
                 </div>
                 <div class="card-body p-0 bg-light d-flex justify-content-center align-items-center" style="min-height: 400px; border-radius: 0 0 15px 15px;">
-                    <div id="feed-container" class="text-center p-4">
-                        <i class="fas fa-video-slash fa-4x text-muted mb-3"></i>
-                        <h5 class="text-muted" id="feed-placeholder">Menunggu data masuk dari MAC Address: <strong>{{ $targetMac }}</strong>...</h5>
-                        <img id="live-image" src="" alt="Live Stream" class="img-fluid rounded shadow d-none" style="max-height: 400px;">
+                    <div id="feed-container" class="text-center p-4 w-100 h-100 position-relative d-flex justify-content-center align-items-center">
+                        <div id="placeholder-container">
+                            <i class="fas fa-video-slash fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted" id="feed-placeholder">Menunggu data masuk dari MAC Address: <strong>{{ $targetMac }}</strong>...</h5>
+                        </div>
+                        <div id="canvas-container" class="position-relative d-none" style="max-width: 640px; margin: 0 auto;">
+                            <img id="live-image" src="" alt="Live Stream" class="img-fluid rounded shadow" style="max-height: 400px; display: block; width: 100%; height: auto;">
+                            <canvas id="drawing-canvas" class="position-absolute" style="top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: crosshair; pointer-events: none;"></canvas>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            {{-- Panel Config Deteksi Subarea --}}
+            <div class="card shadow-sm mt-3 border-0">
+                <div class="card-header bg-dark text-white" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0">
+                        <i class="fas fa-cogs mr-2"></i> Pengaturan Deteksi & Threshold Subarea
+                    </h4>
+                </div>
+                <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
+                    <div class="row text-dark">
+                        <div class="col-md-4">
+                            <div class="form-group p-0">
+                                <label class="font-weight-bold" for="max-slots">Kapasitas Maksimal (Max Slot)</label>
+                                <input type="number" id="max-slots" class="form-control" value="{{ $maxSlots }}" min="1">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group p-0">
+                                <label class="font-weight-bold" for="threshold-banyak">Batas Status "Banyak" (%)</label>
+                                <input type="number" id="threshold-banyak" class="form-control" value="{{ $thresholdBanyak }}" min="5" max="90">
+                                <small class="text-muted">Okupansi di bawah ini dianggap "Banyak Kosong"</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group p-0">
+                                <label class="font-weight-bold" for="threshold-terbatas">Batas Status "Penuh" (%)</label>
+                                <input type="number" id="threshold-terbatas" class="form-control" value="{{ $thresholdTerbatas }}" min="10" max="95">
+                                <small class="text-muted">Okupansi di atas ini dianggap "Penuh"</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="form-group p-0 text-dark">
+                        <label class="font-weight-bold d-block">Polygon Bounding Box Deteksi (Multi-Zone)</label>
+                        <div class="btn-group mb-2" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-draw-mode" onclick="toggleDrawMode()">
+                                <i class="fas fa-edit"></i> Mode Menggambar
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="undoPoint()">
+                                <i class="fas fa-undo"></i> Batalkan Titik
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-success" onclick="closeCurrentPolygon()">
+                                <i class="fas fa-check"></i> Selesai Polygon
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearAllPolygons()">
+                                <i class="fas fa-trash-alt"></i> Hapus Semua
+                            </button>
+                        </div>
+                        <small class="text-muted d-block mb-3">
+                            <i class="fas fa-info-circle mr-1"></i> Klik kiri pada gambar untuk menaruh titik-titik (min 3 titik) kemudian klik <strong>Selesai Polygon</strong>. Anda dapat menggambar lebih dari satu zona deteksi.
+                        </small>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-block btn-round" onclick="saveDetectionConfig()">
+                        <i class="fas fa-save mr-1"></i> Simpan Setelan Deteksi ke Server
+                    </button>
                 </div>
             </div>
         </div>
@@ -117,33 +191,42 @@
         window.location.href = url.toString();
     }
 
-    // Fungsi untuk meminta snapshot ke server
-    function requestSnapshot() {
+    // Fungsi untuk mengirim manual validation dan meminta snapshot dari device
+    function validateStream(content) {
         const macAddress = "{{ $targetMac }}";
-        const btn = document.getElementById('btn-request-snapshot');
-        const originalText = btn.innerHTML;
+        const btnBanyak = document.getElementById('btn-val-banyak');
+        const btnTerbatas = document.getElementById('btn-val-terbatas');
+        const btnPenuh = document.getElementById('btn-val-penuh');
         
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Meminta...';
-        btn.disabled = true;
+        // Disable buttons
+        btnBanyak.disabled = true;
+        btnTerbatas.disabled = true;
+        btnPenuh.disabled = true;
 
-        fetch("{{ route('admin.iot-stream-viewer.trigger') }}", {
+        if (typeof addLog === 'function') {
+            addLog(`Memicu validasi manual [${content.toUpperCase()}] untuk ${macAddress}...`);
+        }
+
+        fetch("{{ route('admin.iot-stream-viewer.validate') }}", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ mac_address: macAddress })
+            body: JSON.stringify({ 
+                mac_address: macAddress,
+                validation_content: content
+            })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Tampilkan notifikasi atau log
                 if (typeof addLog === 'function') {
-                    addLog(`Perintah snapshot dikirim ke ${macAddress}`);
+                    addLog(data.message);
                 }
             } else {
-                alert("Gagal: " + data.message);
+                alert("Gagal memicu validasi: " + data.message);
             }
         })
         .catch(error => {
@@ -151,8 +234,216 @@
             alert("Terjadi kesalahan jaringan.");
         })
         .finally(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
+            btnBanyak.disabled = false;
+            btnTerbatas.disabled = false;
+            btnPenuh.disabled = false;
+        });
+    }
+</script>
+
+<script>
+    // --- LOGIKA CANVAS DRAWING OVERLAY ---
+    let completedPolygons = @json($detectionPolygon) || [];
+    let currentPoints = [];
+    let isDrawingMode = false;
+
+    const canvas = document.getElementById('drawing-canvas');
+    const ctx = canvas?.getContext('2d');
+    const liveImage = document.getElementById('live-image');
+
+    function initCanvas() {
+        if (!liveImage || !canvas || liveImage.classList.contains('d-none') || !liveImage.clientWidth) return;
+        
+        canvas.width = liveImage.clientWidth;
+        canvas.height = liveImage.clientHeight;
+        
+        draw();
+    }
+
+    if (liveImage) {
+        liveImage.addEventListener('load', () => {
+            const placeholder = document.getElementById('placeholder-container');
+            const container = document.getElementById('canvas-container');
+            if (placeholder) placeholder.classList.add('d-none');
+            if (container) container.classList.remove('d-none');
+            setTimeout(initCanvas, 100);
+        });
+    }
+
+    window.addEventListener('resize', initCanvas);
+
+    if (canvas) {
+        canvas.addEventListener('click', (e) => {
+            if (!isDrawingMode) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            currentPoints.push([x, y]);
+            draw();
+        });
+    }
+
+    function toggleDrawMode() {
+        isDrawingMode = !isDrawingMode;
+        const btn = document.getElementById('btn-draw-mode');
+        if (!btn || !canvas) return;
+
+        if (isDrawingMode) {
+            btn.classList.remove('btn-outline-primary');
+            btn.classList.add('btn-primary');
+            canvas.style.pointerEvents = 'auto';
+            if (typeof addLog === 'function') {
+                addLog('Mode menggambar aktif. Klik kiri pada gambar untuk menaruh titik.');
+            }
+        } else {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-primary');
+            canvas.style.pointerEvents = 'none';
+            currentPoints = [];
+            draw();
+        }
+    }
+
+    function undoPoint() {
+        if (currentPoints.length > 0) {
+            currentPoints.pop();
+            draw();
+        }
+    }
+
+    function closeCurrentPolygon() {
+        if (currentPoints.length < 3) {
+            alert('Minimal harus ada 3 titik untuk membuat polygon.');
+            return;
+        }
+        
+        // Konversi koordinat canvas ke koordinat natural image
+        const scaleX = liveImage.naturalWidth / liveImage.clientWidth;
+        const scaleY = liveImage.naturalHeight / liveImage.clientHeight;
+        
+        const scaledPoints = currentPoints.map(pt => [
+            Math.round(pt[0] * scaleX),
+            Math.round(pt[1] * scaleY)
+        ]);
+        
+        completedPolygons.push(scaledPoints);
+        currentPoints = [];
+        draw();
+        if (typeof addLog === 'function') {
+            addLog('Zona polygon baru selesai dibuat.');
+        }
+    }
+
+    function clearAllPolygons() {
+        if (confirm('Hapus semua polygon deteksi?')) {
+            completedPolygons = [];
+            currentPoints = [];
+            draw();
+            if (typeof addLog === 'function') {
+                addLog('Semua polygon dihapus dari layar.');
+            }
+        }
+    }
+
+    function draw() {
+        if (!ctx || !canvas || !liveImage) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const scaleX = canvas.width / liveImage.naturalWidth;
+        const scaleY = canvas.height / liveImage.naturalHeight;
+        
+        // Draw completed polygons
+        completedPolygons.forEach((poly, index) => {
+            ctx.beginPath();
+            poly.forEach((pt, i) => {
+                const cx = pt[0] * scaleX;
+                const cy = pt[1] * scaleY;
+                if (i === 0) ctx.moveTo(cx, cy);
+                else ctx.lineTo(cx, cy);
+            });
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(49, 206, 54, 0.2)'; // Green transparent
+            ctx.fill();
+            ctx.strokeStyle = '#31ce36'; // Green stroke
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Draw label text
+            if (poly.length > 0) {
+                ctx.fillStyle = '#1572e8';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText('Zona ' + (index + 1), poly[0][0] * scaleX, poly[0][1] * scaleY - 5);
+            }
+        });
+        
+        // Draw current drawing points
+        if (currentPoints.length > 0) {
+            ctx.beginPath();
+            currentPoints.forEach((pt, i) => {
+                if (i === 0) ctx.moveTo(pt[0], pt[1]);
+                else ctx.lineTo(pt[0], pt[1]);
+            });
+            ctx.strokeStyle = '#ffad46'; // Orange stroke
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            currentPoints.forEach(pt => {
+                ctx.beginPath();
+                ctx.arc(pt[0], pt[1], 4, 0, 2 * Math.PI);
+                ctx.fillStyle = '#ffad46';
+                ctx.fill();
+            });
+        }
+    }
+
+    // Mengirim konfigurasi deteksi ke server
+    function saveDetectionConfig() {
+        const macAddress = "{{ $targetMac }}";
+        const maxSlots = document.getElementById('max-slots').value;
+        const thresholdBanyak = document.getElementById('threshold-banyak').value;
+        const thresholdTerbatas = document.getElementById('threshold-terbatas').value;
+
+        if (!maxSlots || maxSlots <= 0) {
+            alert('Kapasitas maksimal harus lebih besar dari 0!');
+            return;
+        }
+
+        if (typeof addLog === 'function') {
+            addLog('Menyimpan konfigurasi deteksi...');
+        }
+
+        fetch("{{ route('admin.iot-stream-viewer.save-settings') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                mac_address: macAddress,
+                max_slots: parseInt(maxSlots),
+                threshold_banyak: parseFloat(thresholdBanyak),
+                threshold_terbatas: parseFloat(thresholdTerbatas),
+                detection_polygon: completedPolygons
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Konfigurasi deteksi berhasil disimpan dan disinkronkan ke perangkat!');
+                if (typeof addLog === 'function') {
+                    addLog('Konfigurasi deteksi berhasil disimpan ke database.');
+                }
+            } else {
+                alert('Gagal menyimpan: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan jaringan saat menyimpan konfigurasi.');
         });
     }
 </script>
@@ -202,7 +493,7 @@
                         if (feedPlaceholder) feedPlaceholder.style.display = 'none';
                         if (feedContainerIcon) feedContainerIcon.style.display = 'none';
                         
-                        addLog('Menerima frame gambar.');
+                        addLog('Menerima frame gambar snapshot.');
                     } else {
                         liveImage.classList.add('d-none');
                         if (feedPlaceholder) {
@@ -216,9 +507,15 @@
                         
                         addLog(`Pesan teks: ${frameData}`);
                     }
+                })
+                .listen('.count.updated', (e) => {
+                    addLog(`Jumlah kendaraan terdeteksi: <strong>${e.count}</strong>`);
+                    const countBadge = document.getElementById('current-count-badge');
+                    if (countBadge) {
+                        countBadge.innerText = e.count;
+                    }
                 });
         } else {
-            // Polling sampai file app.js termuat sepenuhnya tanpa harus mem-blok peramban
             console.warn("Menunggu modul mandiri (Echo) dari Vite dimuat...");
             setTimeout(initEcho, 500);
         }
@@ -252,7 +549,7 @@
         
         input.disabled = true;
         btn.disabled = true;
-
+ 
         fetch("{{ route('admin.iot-stream-viewer.chat') }}", {
             method: 'POST',
             headers: {
@@ -296,12 +593,9 @@
             // =====================================================
             // PRESENCE CHANNEL — Instant Online/Offline Detection
             // =====================================================
-            // Digunakan oleh IoT device yang terhubung via WebSocket (iot_ws_client.py).
-            // Saat device join → ONLINE (instant), saat device leave → OFFLINE (instant).
             const presenceChannelName = `iot.device.${cleanMac}`;
             window.Echo.join(presenceChannelName)
                 .here((members) => {
-                    // Cek apakah IoT device sudah ada di channel saat halaman dibuka
                     const isDeviceOnline = members.some(m => m.type === 'iot_device');
                     if (isDeviceOnline) {
                         updateStatusUI('online');
@@ -321,16 +615,13 @@
                     }
                 })
                 .listenForWhisper('chat-reply', (e) => {
-                    // Menerima chat murni via WebSocket (Instant)
                     console.log("💬 Chat received via WS:", e);
                     addChatMessage(e.username, e.message, e.time);
                 });
 
             // =====================================================
-            // FALLBACK: Listen Status dari MQTT (MqttListenerCommand)
+            // FALLBACK: Listen Status dari MQTT
             // =====================================================
-            // Untuk backward-compatibility dengan device yang menggunakan mqtt_test_iot.py.
-            // Event ini tetap dikirim oleh MqttListenerCommand saat menerima LWT.
             window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
                     console.log("📡 Status Received (MQTT):", e);
@@ -347,6 +638,7 @@
 
     function updateStatusUI(status) {
         const indicator = document.getElementById('status-indicator');
+        if (!indicator) return;
         if (status === 'online') {
             indicator.className = "badge badge-success ml-2";
             indicator.innerHTML = '<i class="fas fa-circle mr-1" style="font-size: 8px;"></i> ONLINE';
@@ -357,5 +649,6 @@
     }
     
     initChatEcho();
+    window.addLog = addLog; // Expose globally for other scripts
 </script>
 @endpush

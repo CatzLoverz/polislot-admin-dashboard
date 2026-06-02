@@ -27,7 +27,16 @@ class IotStreamViewerController extends Controller
         // Ambil status terakhir dari cache (default: offline jika tidak pernah online)
         $initialStatus = Cache::get("iot_status_{$targetMac}", 'offline');
         
-        return view('Contents.IotStream.viewer', compact('devices', 'targetMac', 'initialStatus'));
+        $selectedDevice = $devices->firstWhere('device_mac_address', $targetMac);
+        $maxSlots = $selectedDevice?->subarea?->max_slots ?? 0;
+        $detectionPolygon = $selectedDevice?->subarea?->detection_polygon ?? [];
+        $thresholdBanyak = $selectedDevice?->subarea?->threshold_banyak ?? 30.0;
+        $thresholdTerbatas = $selectedDevice?->subarea?->threshold_terbatas ?? 80.0;
+        
+        return view('Contents.IotStream.viewer', compact(
+            'devices', 'targetMac', 'initialStatus', 'maxSlots', 
+            'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas'
+        ));
     }
 
     /**
@@ -148,6 +157,108 @@ class IotStreamViewerController extends Controller
 
         return response()->json([
             'success' => true
+        ]);
+    }
+
+    /**
+     * Menyimpan setelan deteksi (max slots, detection polygon, thresholds) ke subarea terkait device ini.
+     * Kemudian mem-push config terupdate ke IoT Device (jika online).
+     */
+    public function saveSettings(Request $request)
+    {
+        $request->validate([
+            'mac_address'        => 'required|string',
+            'max_slots'          => 'required|integer|min:0',
+            'detection_polygon'  => 'nullable|array',
+            'threshold_banyak'   => 'required|numeric|min:5|max:90',
+            'threshold_terbatas' => 'required|numeric|min:10|max:95',
+        ]);
+
+        $mac = $request->mac_address;
+        $device = IotDevice::where('device_mac_address', $mac)->first();
+
+        if (!$device || !$device->subarea) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Perangkat atau subarea tidak ditemukan.'
+            ], 404);
+        }
+
+        $subarea = $device->subarea;
+        $subarea->max_slots = $request->max_slots;
+        $subarea->detection_polygon = $request->detection_polygon;
+        $subarea->threshold_banyak = $request->threshold_banyak;
+        $subarea->threshold_terbatas = $request->threshold_terbatas;
+        $subarea->save();
+
+        // Push update_config command to the device
+        $payloadData = [
+            'action'             => 'update_config',
+            'max_slots'          => (int) $request->max_slots,
+            'detection_polygon'  => $request->detection_polygon ?? [],
+            'threshold_banyak'   => (float) $request->threshold_banyak,
+            'threshold_terbatas' => (float) $request->threshold_terbatas,
+            'timestamp'          => time(),
+        ];
+
+        // Send command to device via Reverb WS & MQTT
+        $this->sendCommandToDevice($mac, 'update_config', $payloadData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Konfigurasi deteksi berhasil disimpan dan dikirim ke perangkat.'
+        ]);
+    }
+
+    /**
+     * Menerima request validasi manual Admin dari Web, menyimpan data ke cache pending_validation,
+     * lalu memicu perintah 'snapshot' ke perangkat IoT.
+     */
+    public function validateStream(Request $request)
+    {
+        $request->validate([
+            'mac_address'        => 'required|string',
+            'validation_content' => 'required|in:banyak,terbatas,penuh',
+        ]);
+
+        $mac = $request->mac_address;
+        $content = $request->validation_content;
+
+        $device = IotDevice::where('device_mac_address', $mac)->first();
+        if (!$device || !$device->subarea) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Perangkat atau subarea tidak ditemukan.'
+            ], 404);
+        }
+
+        // Simpan validation content ke Cache agar saat snapshot datang kita bisa menyimpannya ke user_validations
+        $cleanMac = str_replace(':', '', $mac);
+        \Illuminate\Support\Facades\Cache::put("pending_validation_{$cleanMac}", [
+            'content' => $content,
+            'user_id' => auth()->user()->user_id ?? 1, // pastikan admin user id tersimpan
+        ], 120); // 2 menit timeout
+
+        // Kirim perintah snapshot ke device
+        $payloadData = [
+            'action'       => 'snapshot',
+            'timestamp'    => time(),
+            'requested_by' => auth()->user()->id ?? 'admin'
+        ];
+
+        $errors = $this->sendCommandToDevice($mac, 'snapshot', $payloadData);
+
+        if (count($errors) === 2) {
+            \Illuminate\Support\Facades\Cache::forget("pending_validation_{$cleanMac}");
+            return response()->json([
+                'success' => false,
+                'message' => "Gagal mengirim perintah: " . implode(' | ', $errors)
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "Validasi {$content} dipicu, menunggu snapshot dari perangkat IoT..."
         ]);
     }
 }

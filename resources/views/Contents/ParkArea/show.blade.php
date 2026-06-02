@@ -41,13 +41,18 @@
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div style="width: 65%;">
                                         <span class="font-weight-bold d-block text-dark">{{ $sub->park_subarea_name }}</span>
-                                        {{-- Indikator Status Teks Kecil --}}
                                         <small class="d-block mt-1" style="color: {{ $sub->status_color }}">
                                             <i class="fas fa-circle" style="font-size: 8px;"></i> 
                                             @if($sub->status_color == '#f25961') Penuh
                                             @elseif($sub->status_color == '#ffad46') Terbatas
                                             @elseif($sub->status_color == '#31ce36') Banyak Kosong
-                                            @else Tidak ada info @endif
+                                            @else Tidak ada info / Netral @endif
+
+                                            @if(isset($sub->is_validated) && $sub->is_validated)
+                                                <span class="badge badge-success p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-check-circle"></i> Tervalidasi</span>
+                                            @elseif(isset($sub->has_user_report) && $sub->has_user_report)
+                                                <span class="badge badge-warning p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-exclamation-triangle"></i> Laporan Berbeda</span>
+                                            @endif
                                         </small>
                                         
                                         {{-- Amenities --}}

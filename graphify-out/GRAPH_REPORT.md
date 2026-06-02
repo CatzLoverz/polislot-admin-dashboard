@@ -1,16 +1,16 @@
-# Graph Report - polislot-admin-dashboard  (2026-05-24)
+# Graph Report - polislot-admin-dashboard  (2026-06-02)
 
 ## Corpus Check
-- 190 files · ~57,020 words
+- 194 files · ~63,529 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 863 nodes · 829 edges · 180 communities (88 shown, 92 thin omitted)
-- Extraction: 87% EXTRACTED · 13% INFERRED · 0% AMBIGUOUS · INFERRED: 105 edges (avg confidence: 0.8)
+- 919 nodes · 925 edges · 186 communities (90 shown, 96 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 106 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8820053f`
+- Built from commit: `f5d95a72`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -128,6 +128,12 @@
 - [[_COMMUNITY_Community 177|Community 177]]
 - [[_COMMUNITY_Community 178|Community 178]]
 - [[_COMMUNITY_Community 179|Community 179]]
+- [[_COMMUNITY_Community 180|Community 180]]
+- [[_COMMUNITY_Community 181|Community 181]]
+- [[_COMMUNITY_Community 182|Community 182]]
+- [[_COMMUNITY_Community 183|Community 183]]
+- [[_COMMUNITY_Community 184|Community 184]]
+- [[_COMMUNITY_Community 185|Community 185]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `AuthControllerTest` - 31 edges
@@ -138,8 +144,8 @@
 6. `AuthController` - 11 edges
 7. `Langkah Instalasi` - 10 edges
 8. `require` - 9 edges
-9. `ProfileControllerTest` - 9 edges
-10. `SubareaCommentControllerTest` - 9 edges
+9. `IotStreamViewerController` - 9 edges
+10. `ProfileControllerTest` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Docker Container Deployment` --references--> `MQTT Mosquitto Broker`  [EXTRACTED]
@@ -156,7 +162,7 @@
 ## Hyperedges (group relationships)
 - **Deployment Options** — docker_deployment, manual_deployment [EXTRACTED 1.00]
 
-## Communities (180 total, 92 thin omitted)
+## Communities (186 total, 96 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -171,7 +177,7 @@ Cohesion: 0.12
 Nodes (15): devDependencies, axios, concurrently, laravel-echo, laravel-vite-plugin, pusher-js, tailwindcss, @tailwindcss/vite (+7 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.20
+Cohesion: 0.19
 Nodes (3): IotStreamController, MqttListenerCommand, IotCapture
 
 ### Community 7 - "Community 7"
@@ -193,10 +199,6 @@ Nodes (8): description, keywords, license, minimum-stability, name, prefer-stabl
 ### Community 16 - "Community 16"
 Cohesion: 0.22
 Nodes (9): require, fakerphp/faker, laravel/framework, laravel/reverb, laravel/sanctum, laravel/tinker, php, php-mqtt/laravel-client (+1 more)
-
-### Community 17 - "Community 17"
-Cohesion: 0.13
-Nodes (3): IotDevice, AppServiceProvider, MissionService
 
 ### Community 21 - "Community 21"
 Cohesion: 0.29
@@ -242,10 +244,22 @@ Nodes (3): autoload-dev, psr-4, Tests\\
 Cohesion: 0.67
 Nodes (3): extra, laravel, dont-discover
 
+### Community 180 - "Community 180"
+Cohesion: 0.22
+Nodes (12): CameraStream, detector_loop(), encrypt_image_aes(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command(), is_inside_any_polygon() (+4 more)
+
+### Community 181 - "Community 181"
+Cohesion: 0.25
+Nodes (11): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_inside_any_polygon(), is_inside_polygon(), main(), on_connect() (+3 more)
+
+### Community 182 - "Community 182"
+Cohesion: 0.23
+Nodes (11): draw_hud(), is_inside_polygon(), load_config(), main(), mouse_callback(), Saves polygon points and detection threshold to a JSON file., Loads polygon points and threshold from a JSON file., Callback function for mouse events to handle polygon drawing. (+3 more)
+
 ## Knowledge Gaps
 - **96 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+91 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **92 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -253,7 +267,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 18 inferred relationships involving `Validation` (e.g. with `.store()` and `.index()`) actually correct?**
   _`Validation` has 18 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
-  _111 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _117 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06970128022759602 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**

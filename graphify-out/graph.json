@@ -1009,6 +1009,51 @@
       "norm_label": ".broadcastas()"
     },
     {
+      "label": "IotCountUpdated.php",
+      "file_type": "code",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L1",
+      "id": "app_events_iotcountupdated_php",
+      "community": 183,
+      "norm_label": "iotcountupdated.php"
+    },
+    {
+      "label": "IotCountUpdated",
+      "file_type": "code",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L11",
+      "id": "events_iotcountupdated_iotcountupdated",
+      "community": 183,
+      "norm_label": "iotcountupdated"
+    },
+    {
+      "label": ".__construct()",
+      "file_type": "code",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L21",
+      "id": "events_iotcountupdated_iotcountupdated_construct",
+      "community": 183,
+      "norm_label": ".__construct()"
+    },
+    {
+      "label": ".broadcastOn()",
+      "file_type": "code",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L30",
+      "id": "events_iotcountupdated_iotcountupdated_broadcaston",
+      "community": 183,
+      "norm_label": ".broadcaston()"
+    },
+    {
+      "label": ".broadcastAs()",
+      "file_type": "code",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L38",
+      "id": "events_iotcountupdated_iotcountupdated_broadcastas",
+      "community": 183,
+      "norm_label": ".broadcastas()"
+    },
+    {
       "label": "IotDeviceStatusChanged.php",
       "file_type": "code",
       "source_file": "app/Events/IotDeviceStatusChanged.php",
@@ -1423,10 +1468,19 @@
       "norm_label": ".receivesnapshot()"
     },
     {
+      "label": ".receiveCount()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
+      "source_location": "L273",
+      "id": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
+      "community": 6,
+      "norm_label": ".receivecount()"
+    },
+    {
       "label": ".receiveChatReply()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L230",
+      "source_location": "L326",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply",
       "community": 6,
       "norm_label": ".receivechatreply()"
@@ -2128,7 +2182,7 @@
       "label": ".generateCommandSignature()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L37",
+      "source_location": "L46",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_generatecommandsignature",
       "community": 18,
       "norm_label": ".generatecommandsignature()"
@@ -2137,7 +2191,7 @@
       "label": ".sendCommandToDevice()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L49",
+      "source_location": "L58",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
       "community": 18,
       "norm_label": ".sendcommandtodevice()"
@@ -2146,7 +2200,7 @@
       "label": ".triggerSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L83",
+      "source_location": "L92",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_triggersnapshot",
       "community": 18,
       "norm_label": ".triggersnapshot()"
@@ -2155,10 +2209,28 @@
       "label": ".sendChat()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L116",
+      "source_location": "L125",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat",
       "community": 18,
       "norm_label": ".sendchat()"
+    },
+    {
+      "label": ".saveSettings()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L167",
+      "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_savesettings",
+      "community": 18,
+      "norm_label": ".savesettings()"
+    },
+    {
+      "label": ".validateStream()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L217",
+      "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_validatestream",
+      "community": 18,
+      "norm_label": ".validatestream()"
     },
     {
       "label": "MissionController.php",
@@ -2308,7 +2380,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
-      "source_location": "L226",
+      "source_location": "L261",
       "id": "web_parkareacontroller_parkareacontroller_destroy",
       "community": 26,
       "norm_label": ".destroy()"
@@ -2850,7 +2922,7 @@
       "source_file": "app/Models/IotDevice.php",
       "source_location": "L1",
       "id": "app_models_iotdevice_php",
-      "community": 17,
+      "community": 184,
       "norm_label": "iotdevice.php"
     },
     {
@@ -2859,7 +2931,7 @@
       "source_file": "app/Models/IotDevice.php",
       "source_location": "L10",
       "id": "models_iotdevice_iotdevice",
-      "community": 17,
+      "community": 184,
       "norm_label": "iotdevice"
     },
     {
@@ -2868,7 +2940,7 @@
       "source_file": "app/Models/IotDevice.php",
       "source_location": "L19",
       "id": "models_iotdevice_iotdevice_booted",
-      "community": 17,
+      "community": 184,
       "norm_label": ".booted()"
     },
     {
@@ -2877,7 +2949,7 @@
       "source_file": "app/Models/IotDevice.php",
       "source_location": "L53",
       "id": "models_iotdevice_iotdevice_subarea",
-      "community": 17,
+      "community": 184,
       "norm_label": ".subarea()"
     },
     {
@@ -2886,7 +2958,7 @@
       "source_file": "app/Models/IotDevice.php",
       "source_location": "L58",
       "id": "models_iotdevice_iotdevice_captures",
-      "community": 17,
+      "community": 184,
       "norm_label": ".captures()"
     },
     {
@@ -2992,7 +3064,7 @@
       "label": ".parkArea()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L22",
+      "source_location": "L32",
       "id": "models_parksubarea_parksubarea_parkarea",
       "community": 20,
       "norm_label": ".parkarea()"
@@ -3001,7 +3073,7 @@
       "label": ".parkAmenity()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L27",
+      "source_location": "L37",
       "id": "models_parksubarea_parksubarea_parkamenity",
       "community": 20,
       "norm_label": ".parkamenity()"
@@ -3010,7 +3082,7 @@
       "label": ".userValidation()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L32",
+      "source_location": "L42",
       "id": "models_parksubarea_parksubarea_uservalidation",
       "community": 20,
       "norm_label": ".uservalidation()"
@@ -3019,7 +3091,7 @@
       "label": ".subareaComment()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L37",
+      "source_location": "L47",
       "id": "models_parksubarea_parksubarea_subareacomment",
       "community": 20,
       "norm_label": ".subareacomment()"
@@ -3028,10 +3100,19 @@
       "label": ".iotDevice()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L42",
+      "source_location": "L52",
       "id": "models_parksubarea_parksubarea_iotdevice",
       "community": 20,
       "norm_label": ".iotdevice()"
+    },
+    {
+      "label": ".evaluateThresholdShift()",
+      "file_type": "code",
+      "source_file": "app/Models/ParkSubarea.php",
+      "source_location": "L60",
+      "id": "models_parksubarea_parksubarea_evaluatethresholdshift",
+      "community": 20,
+      "norm_label": ".evaluatethresholdshift()"
     },
     {
       "label": "Reward.php",
@@ -3363,7 +3444,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L1",
       "id": "app_providers_appserviceprovider_php",
-      "community": 17,
+      "community": 185,
       "norm_label": "appserviceprovider.php"
     },
     {
@@ -3372,7 +3453,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L12",
       "id": "providers_appserviceprovider_appserviceprovider",
-      "community": 17,
+      "community": 185,
       "norm_label": "appserviceprovider"
     },
     {
@@ -3381,7 +3462,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L17",
       "id": "providers_appserviceprovider_appserviceprovider_register",
-      "community": 17,
+      "community": 185,
       "norm_label": ".register()"
     },
     {
@@ -3390,7 +3471,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L25",
       "id": "providers_appserviceprovider_appserviceprovider_boot",
-      "community": 17,
+      "community": 185,
       "norm_label": ".boot()"
     },
     {
@@ -3973,7 +4054,7 @@
       "label": "down()",
       "file_type": "code",
       "source_file": "database/migrations/2025_12_14_183526_create_park_areas_table.php",
-      "source_location": "L42",
+      "source_location": "L47",
       "id": "migrations_2025_12_14_183526_create_park_areas_table_down",
       "community": 102,
       "norm_label": "down()"
@@ -4283,6 +4364,114 @@
       "id": "public_index_php",
       "community": 148,
       "norm_label": "index.php"
+    },
+    {
+      "label": "crowd_detector.py",
+      "file_type": "code",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L1",
+      "id": "python_crowd_detector_py",
+      "community": 182,
+      "norm_label": "crowd_detector.py"
+    },
+    {
+      "label": "save_config()",
+      "file_type": "code",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L13",
+      "id": "python_crowd_detector_save_config",
+      "community": 182,
+      "norm_label": "save_config()"
+    },
+    {
+      "label": "load_config()",
+      "file_type": "code",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L26",
+      "id": "python_crowd_detector_load_config",
+      "community": 182,
+      "norm_label": "load_config()"
+    },
+    {
+      "label": "mouse_callback()",
+      "file_type": "code",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L40",
+      "id": "python_crowd_detector_mouse_callback",
+      "community": 182,
+      "norm_label": "mouse_callback()"
+    },
+    {
+      "label": "is_inside_polygon()",
+      "file_type": "code",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L58",
+      "id": "python_crowd_detector_is_inside_polygon",
+      "community": 182,
+      "norm_label": "is_inside_polygon()"
+    },
+    {
+      "label": "draw_hud()",
+      "file_type": "code",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L70",
+      "id": "python_crowd_detector_draw_hud",
+      "community": 182,
+      "norm_label": "draw_hud()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L143",
+      "id": "python_crowd_detector_main",
+      "community": 182,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Saves polygon points and detection threshold to a JSON file.",
+      "file_type": "rationale",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L14",
+      "id": "python_crowd_detector_rationale_14",
+      "community": 182,
+      "norm_label": "saves polygon points and detection threshold to a json file."
+    },
+    {
+      "label": "Loads polygon points and threshold from a JSON file.",
+      "file_type": "rationale",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L27",
+      "id": "python_crowd_detector_rationale_27",
+      "community": 182,
+      "norm_label": "loads polygon points and threshold from a json file."
+    },
+    {
+      "label": "Callback function for mouse events to handle polygon drawing.",
+      "file_type": "rationale",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L41",
+      "id": "python_crowd_detector_rationale_41",
+      "community": 182,
+      "norm_label": "callback function for mouse events to handle polygon drawing."
+    },
+    {
+      "label": "Checks if a point is inside the given polygon.     Uses cv2.pointPolygonTest.",
+      "file_type": "rationale",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L59",
+      "id": "python_crowd_detector_rationale_59",
+      "community": 182,
+      "norm_label": "checks if a point is inside the given polygon.     uses cv2.pointpolygontest."
+    },
+    {
+      "label": "Draws a sleek, semi-transparent HUD panel with real-time statistics     and cust",
+      "file_type": "rationale",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L71",
+      "id": "python_crowd_detector_rationale_71",
+      "community": 182,
+      "norm_label": "draws a sleek, semi-transparent hud panel with real-time statistics     and cust"
     },
     {
       "label": "iot_video_sender.py",
@@ -4634,6 +4823,321 @@
       "id": "python_mqtt_test_iot_rationale_189",
       "community": 10,
       "norm_label": "thread terpisah untuk membaca input dari keyboard dan mengirimkannya via mqtt (l"
+    },
+    {
+      "label": "parking_detector_mqtt.py",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L1",
+      "id": "python_parking_detector_mqtt_py",
+      "community": 181,
+      "norm_label": "parking_detector_mqtt.py"
+    },
+    {
+      "label": "get_aes_key()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L68",
+      "id": "python_parking_detector_mqtt_get_aes_key",
+      "community": 181,
+      "norm_label": "get_aes_key()"
+    },
+    {
+      "label": "encrypt_image_aes()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L71",
+      "id": "python_parking_detector_mqtt_encrypt_image_aes",
+      "community": 181,
+      "norm_label": "encrypt_image_aes()"
+    },
+    {
+      "label": "generate_hmac_signature()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L79",
+      "id": "python_parking_detector_mqtt_generate_hmac_signature",
+      "community": 181,
+      "norm_label": "generate_hmac_signature()"
+    },
+    {
+      "label": "is_inside_polygon()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L87",
+      "id": "python_parking_detector_mqtt_is_inside_polygon",
+      "community": 181,
+      "norm_label": "is_inside_polygon()"
+    },
+    {
+      "label": "is_inside_any_polygon()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L94",
+      "id": "python_parking_detector_mqtt_is_inside_any_polygon",
+      "community": 181,
+      "norm_label": "is_inside_any_polygon()"
+    },
+    {
+      "label": "CameraStream",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L103",
+      "id": "python_parking_detector_mqtt_camerastream",
+      "community": 181,
+      "norm_label": "camerastream"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L104",
+      "id": "python_parking_detector_mqtt_camerastream_init",
+      "community": 181,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._update()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L116",
+      "id": "python_parking_detector_mqtt_camerastream_update",
+      "community": 181,
+      "norm_label": "._update()"
+    },
+    {
+      "label": ".read()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L134",
+      "id": "python_parking_detector_mqtt_camerastream_read",
+      "community": 181,
+      "norm_label": ".read()"
+    },
+    {
+      "label": ".capture_jpeg()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L138",
+      "id": "python_parking_detector_mqtt_camerastream_capture_jpeg",
+      "community": 181,
+      "norm_label": ".capture_jpeg()"
+    },
+    {
+      "label": ".stop()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L154",
+      "id": "python_parking_detector_mqtt_camerastream_stop",
+      "community": 181,
+      "norm_label": ".stop()"
+    },
+    {
+      "label": "on_connect_success()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L169",
+      "id": "python_parking_detector_mqtt_on_connect_success",
+      "community": 181,
+      "norm_label": "on_connect_success()"
+    },
+    {
+      "label": "send_status_update()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L180",
+      "id": "python_parking_detector_mqtt_send_status_update",
+      "community": 181,
+      "norm_label": "send_status_update()"
+    },
+    {
+      "label": "on_connect()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L187",
+      "id": "python_parking_detector_mqtt_on_connect",
+      "community": 181,
+      "norm_label": "on_connect()"
+    },
+    {
+      "label": "on_message()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L199",
+      "id": "python_parking_detector_mqtt_on_message",
+      "community": 181,
+      "norm_label": "on_message()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L265",
+      "id": "python_parking_detector_mqtt_main",
+      "community": 181,
+      "norm_label": "main()"
+    },
+    {
+      "label": "parking_detector_ws.py",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L1",
+      "id": "python_parking_detector_ws_py",
+      "community": 180,
+      "norm_label": "parking_detector_ws.py"
+    },
+    {
+      "label": "get_aes_key()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L87",
+      "id": "python_parking_detector_ws_get_aes_key",
+      "community": 180,
+      "norm_label": "get_aes_key()"
+    },
+    {
+      "label": "generate_auth_signature()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L90",
+      "id": "python_parking_detector_ws_generate_auth_signature",
+      "community": 180,
+      "norm_label": "generate_auth_signature()"
+    },
+    {
+      "label": "generate_hmac_signature()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L95",
+      "id": "python_parking_detector_ws_generate_hmac_signature",
+      "community": 180,
+      "norm_label": "generate_hmac_signature()"
+    },
+    {
+      "label": "encrypt_image_aes()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L100",
+      "id": "python_parking_detector_ws_encrypt_image_aes",
+      "community": 180,
+      "norm_label": "encrypt_image_aes()"
+    },
+    {
+      "label": "is_inside_polygon()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L111",
+      "id": "python_parking_detector_ws_is_inside_polygon",
+      "community": 180,
+      "norm_label": "is_inside_polygon()"
+    },
+    {
+      "label": "is_inside_any_polygon()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L118",
+      "id": "python_parking_detector_ws_is_inside_any_polygon",
+      "community": 180,
+      "norm_label": "is_inside_any_polygon()"
+    },
+    {
+      "label": "CameraStream",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L127",
+      "id": "python_parking_detector_ws_camerastream",
+      "community": 180,
+      "norm_label": "camerastream"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L128",
+      "id": "python_parking_detector_ws_camerastream_init",
+      "community": 180,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._update()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L139",
+      "id": "python_parking_detector_ws_camerastream_update",
+      "community": 180,
+      "norm_label": "._update()"
+    },
+    {
+      "label": ".read()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L156",
+      "id": "python_parking_detector_ws_camerastream_read",
+      "community": 180,
+      "norm_label": ".read()"
+    },
+    {
+      "label": ".capture_jpeg()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L160",
+      "id": "python_parking_detector_ws_camerastream_capture_jpeg",
+      "community": 180,
+      "norm_label": ".capture_jpeg()"
+    },
+    {
+      "label": ".stop()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L174",
+      "id": "python_parking_detector_ws_camerastream_stop",
+      "community": 180,
+      "norm_label": ".stop()"
+    },
+    {
+      "label": "handle_command()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L184",
+      "id": "python_parking_detector_ws_handle_command",
+      "community": 180,
+      "norm_label": "handle_command()"
+    },
+    {
+      "label": "detector_loop()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L251",
+      "id": "python_parking_detector_ws_detector_loop",
+      "community": 180,
+      "norm_label": "detector_loop()"
+    },
+    {
+      "label": "websocket_client()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L303",
+      "id": "python_parking_detector_ws_websocket_client",
+      "community": 180,
+      "norm_label": "websocket_client()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L388",
+      "id": "python_parking_detector_ws_main",
+      "community": 180,
+      "norm_label": "main()"
+    },
+    {
+      "label": "PoliSlot Headless WebSocket Parking Detector ===================================",
+      "file_type": "rationale",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L1",
+      "id": "python_parking_detector_ws_rationale_1",
+      "community": 180,
+      "norm_label": "polislot headless websocket parking detector ==================================="
     },
     {
       "label": "app.js",
@@ -8858,6 +9362,46 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "app_events_iotcountupdated_php",
+      "target": "events_iotcountupdated_iotcountupdated",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "events_iotcountupdated_iotcountupdated",
+      "target": "events_iotcountupdated_iotcountupdated_construct",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "events_iotcountupdated_iotcountupdated",
+      "target": "events_iotcountupdated_iotcountupdated_broadcaston",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "events_iotcountupdated_iotcountupdated",
+      "target": "events_iotcountupdated_iotcountupdated_broadcastas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "app/Events/IotDeviceStatusChanged.php",
       "source_location": "L13",
       "weight": 1.0,
@@ -9383,6 +9927,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
+      "source_location": "L273",
+      "weight": 1.0,
+      "source": "api_iotstreamcontroller_iotstreamcontroller",
+      "target": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L230",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -9399,6 +9953,17 @@
       "confidence_score": 1.0,
       "source": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
       "target": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
+      "source_location": "L284",
+      "weight": 1.0,
+      "source": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
+      "target": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9443,6 +10008,17 @@
       "weight": 1.0,
       "source": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
       "target": "models_iotcapture_iotcapture"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
+      "source_location": "L302",
+      "weight": 1.0,
+      "source": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
+      "target": "services_historyservice_historyservice_log"
     },
     {
       "relation": "calls",
@@ -10504,6 +11080,26 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L167",
+      "weight": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller",
+      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_savesettings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L217",
+      "weight": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller",
+      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_validatestream",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
       "source_location": "L154",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -10542,6 +11138,28 @@
       "confidence_score": 1.0,
       "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat",
       "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L205",
+      "weight": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_savesettings",
+      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_validatestream",
+      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11668,6 +12286,27 @@
       "target": "models_parksubarea_parksubarea_iotdevice"
     },
     {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Models/ParkSubarea.php",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "models_parksubarea_parksubarea",
+      "target": "models_parksubarea_parksubarea_evaluatethresholdshift",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Models/ParkSubarea.php",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "models_parksubarea_parksubarea_evaluatethresholdshift",
+      "target": "models_parksubarea_parksubarea_uservalidation",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/Models/Reward.php",
@@ -12784,6 +13423,160 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "python_crowd_detector_py",
+      "target": "python_crowd_detector_save_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "python_crowd_detector_py",
+      "target": "python_crowd_detector_load_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "python_crowd_detector_py",
+      "target": "python_crowd_detector_mouse_callback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "python_crowd_detector_py",
+      "target": "python_crowd_detector_is_inside_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "python_crowd_detector_py",
+      "target": "python_crowd_detector_draw_hud",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "python_crowd_detector_py",
+      "target": "python_crowd_detector_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L302",
+      "weight": 1.0,
+      "source": "python_crowd_detector_main",
+      "target": "python_crowd_detector_save_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "python_crowd_detector_rationale_14",
+      "target": "python_crowd_detector_save_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "python_crowd_detector_main",
+      "target": "python_crowd_detector_load_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "python_crowd_detector_rationale_27",
+      "target": "python_crowd_detector_load_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "python_crowd_detector_rationale_41",
+      "target": "python_crowd_detector_mouse_callback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "python_crowd_detector_main",
+      "target": "python_crowd_detector_is_inside_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "python_crowd_detector_rationale_59",
+      "target": "python_crowd_detector_is_inside_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L285",
+      "weight": 1.0,
+      "source": "python_crowd_detector_main",
+      "target": "python_crowd_detector_draw_hud",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "python/crowd_detector.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "python_crowd_detector_rationale_71",
+      "target": "python_crowd_detector_draw_hud",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "python/iot_video_sender.py",
       "source_location": "L28",
       "weight": 1.0,
@@ -13413,6 +14206,721 @@
       "confidence_score": 1.0,
       "source": "python_mqtt_test_iot_rationale_205",
       "target": "python_mqtt_test_iot_chat_input_thread"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_get_aes_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_encrypt_image_aes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_generate_hmac_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_is_inside_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_is_inside_any_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_camerastream",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_on_connect_success",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L180",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_send_status_update",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_on_connect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_on_message",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L265",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_py",
+      "target": "python_parking_detector_mqtt_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_encrypt_image_aes",
+      "target": "python_parking_detector_mqtt_get_aes_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_generate_hmac_signature",
+      "target": "python_parking_detector_mqtt_get_aes_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L231",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_on_message",
+      "target": "python_parking_detector_mqtt_encrypt_image_aes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_send_status_update",
+      "target": "python_parking_detector_mqtt_generate_hmac_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_on_message",
+      "target": "python_parking_detector_mqtt_generate_hmac_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L283",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_main",
+      "target": "python_parking_detector_mqtt_generate_hmac_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_is_inside_any_polygon",
+      "target": "python_parking_detector_mqtt_is_inside_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L327",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_main",
+      "target": "python_parking_detector_mqtt_is_inside_any_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_camerastream",
+      "target": "python_parking_detector_mqtt_camerastream_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_camerastream",
+      "target": "python_parking_detector_mqtt_camerastream_update",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_camerastream",
+      "target": "python_parking_detector_mqtt_camerastream_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_camerastream",
+      "target": "python_parking_detector_mqtt_camerastream_capture_jpeg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_camerastream",
+      "target": "python_parking_detector_mqtt_camerastream_stop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L273",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_main",
+      "target": "python_parking_detector_mqtt_camerastream",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_camerastream_update",
+      "target": "python_parking_detector_mqtt_camerastream_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_camerastream_capture_jpeg",
+      "target": "python_parking_detector_mqtt_camerastream_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L309",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_main",
+      "target": "python_parking_detector_mqtt_camerastream_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_on_message",
+      "target": "python_parking_detector_mqtt_camerastream_capture_jpeg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L358",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_main",
+      "target": "python_parking_detector_mqtt_camerastream_stop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_on_connect_success",
+      "target": "python_parking_detector_mqtt_send_status_update",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L189",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_on_connect",
+      "target": "python_parking_detector_mqtt_on_connect_success",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_on_message",
+      "target": "python_parking_detector_mqtt_send_status_update",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_mqtt.py",
+      "source_location": "L356",
+      "weight": 1.0,
+      "source": "python_parking_detector_mqtt_main",
+      "target": "python_parking_detector_mqtt_send_status_update",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_get_aes_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_generate_auth_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_generate_hmac_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_encrypt_image_aes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_is_inside_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_is_inside_any_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_camerastream",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L184",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_handle_command",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L251",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_detector_loop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L303",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_websocket_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_py",
+      "target": "python_parking_detector_ws_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_rationale_1",
+      "target": "python_parking_detector_ws_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_generate_auth_signature",
+      "target": "python_parking_detector_ws_get_aes_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_generate_hmac_signature",
+      "target": "python_parking_detector_ws_get_aes_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_encrypt_image_aes",
+      "target": "python_parking_detector_ws_get_aes_key",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L330",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_websocket_client",
+      "target": "python_parking_detector_ws_generate_auth_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_handle_command",
+      "target": "python_parking_detector_ws_generate_hmac_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L286",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_detector_loop",
+      "target": "python_parking_detector_ws_generate_hmac_signature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L219",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_handle_command",
+      "target": "python_parking_detector_ws_encrypt_image_aes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_is_inside_any_polygon",
+      "target": "python_parking_detector_ws_is_inside_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L273",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_detector_loop",
+      "target": "python_parking_detector_ws_is_inside_any_polygon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_camerastream",
+      "target": "python_parking_detector_ws_camerastream_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_camerastream",
+      "target": "python_parking_detector_ws_camerastream_update",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_camerastream",
+      "target": "python_parking_detector_ws_camerastream_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L160",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_camerastream",
+      "target": "python_parking_detector_ws_camerastream_capture_jpeg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_camerastream",
+      "target": "python_parking_detector_ws_camerastream_stop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L396",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_main",
+      "target": "python_parking_detector_ws_camerastream",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_camerastream_update",
+      "target": "python_parking_detector_ws_camerastream_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_camerastream_capture_jpeg",
+      "target": "python_parking_detector_ws_camerastream_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L257",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_detector_loop",
+      "target": "python_parking_detector_ws_camerastream_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L218",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_handle_command",
+      "target": "python_parking_detector_ws_camerastream_capture_jpeg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L412",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_main",
+      "target": "python_parking_detector_ws_camerastream_stop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L372",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_websocket_client",
+      "target": "python_parking_detector_ws_handle_command",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "python/parking_detector_ws.py",
+      "source_location": "L408",
+      "weight": 1.0,
+      "source": "python_parking_detector_ws_main",
+      "target": "python_parking_detector_ws_websocket_client",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16282,5 +17790,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "8820053fc8defe6d631a2ef270938bccf7e9162e"
+  "built_at_commit": "f5d95a72b2e64edab9de4e99f180a1d42d696243"
 }

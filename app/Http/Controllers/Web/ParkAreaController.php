@@ -150,61 +150,96 @@ class ParkAreaController extends Controller
             $mapsApiKey = config('services.google.js_api_key');
 
             // --- LOGIKA WARNA POLYGON ---
-            // Kita inject attribute 'status_color' ke setiap subarea object
+            // Kita inject attribute 'status_color', 'is_validated', dan 'has_user_report' ke setiap subarea object
             foreach ($area->parkSubarea as $sub) {
-                $allValidations = $sub->userValidation; // Collection validasi 1 jam terakhir
-                
-                if ($allValidations->isEmpty()) {
-                    $sub->status_color = '#1572e8'; // Default Blue (Netral/Belum ada info)
-                } else {
-                    // 1. Ambil Validasi Paling Baru sebagai "Anchor"
-                    $latestValidation = $allValidations->first(); // Karena sudah di-orderby desc
-                    $anchorTime = $latestValidation->created_at;
+                $status = 'netral';
+                $isValidated = false;
+                $hasUserReport = false;
 
-                    // 2. Tentukan Batas Waktu (1 Jam sebelum Validasi Terakhir)
-                    $cutoffTime = $anchorTime->copy()->subHour();
+                // 1. Filter validations within the last 5 minutes from now
+                $allValidations = $sub->userValidation;
+                $cutoffTime = now()->subMinutes(5);
+                $validVotes = $allValidations->filter(function ($val) use ($cutoffTime) {
+                    return $val->created_at >= $cutoffTime;
+                });
 
-                    // 3. Filter Validasi yang masuk dalam rentang [Cutoff -> Anchor]
-                    //    Kita filter dari collection yang sudah di-load (PHP side filtering)
-                    $validVotes = $allValidations->filter(function ($val) use ($cutoffTime) {
-                        return $val->created_at >= $cutoffTime;
-                    });
+                // 2. Determine CV Status
+                $hasOnlineIot = false;
+                $cvStatus = 'netral';
+                $occupancy = 0.0;
 
-                    // 1. Hitung Vote per Status
+                if ($sub->iotDevice) {
+                    $mac = $sub->iotDevice->device_mac_address;
+                    $deviceStatus = \Illuminate\Support\Facades\Cache::get("iot_status_{$mac}", 'offline');
+                    if ($deviceStatus === 'online') {
+                        $hasOnlineIot = true;
+                        if ($sub->max_slots > 0) {
+                            $occupancy = ($sub->current_count / $sub->max_slots) * 100;
+                            if ($occupancy < ($sub->threshold_banyak ?? 30.0)) {
+                                $cvStatus = 'banyak';
+                            } elseif ($occupancy >= ($sub->threshold_terbatas ?? 80.0)) {
+                                $cvStatus = 'penuh';
+                            } else {
+                                $cvStatus = 'terbatas';
+                            }
+                        } else {
+                            $cvStatus = 'banyak';
+                        }
+                    }
+                }
+
+                // 3. Process votes to determine status
+                if ($validVotes->isNotEmpty()) {
                     $counts = $validVotes->countBy('user_validation_content');
-                    
-                    // 2. Cari Nilai Vote Tertinggi (Mayoritas)
                     $maxVote = $counts->max();
-
-                    // 3. Cari Status apa saja yang punya nilai Max tersebut
                     $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
                         return $counts[$key] === $maxVote;
                     });
 
-                    $status = 'banyak'; // Default jika logic fall-through
-
-                    // 4. Penentuan Pemenang
+                    $votedStatus = 'banyak';
                     if ($candidates->count() === 1) {
-                        $status = $candidates->first();
+                        $votedStatus = $candidates->first();
                     } else {
-                        // Jika SERI (Tie), ambil status dari vote TERBARU di antara kandidat yang seri
+                        // Tie-breaker: latest vote from candidates
                         $latestDecider = $validVotes->first(function ($vote) use ($candidates) {
                             return $candidates->contains($vote->user_validation_content);
                         });
-                        
                         if ($latestDecider) {
-                            $status = $latestDecider->user_validation_content;
+                            $votedStatus = $latestDecider->user_validation_content;
                         }
                     }
 
-                    // 5. Mapping Status ke Warna
-                    if ($status === 'penuh') {
-                        $sub->status_color = '#f25961'; // Merah (Penuh)
-                    } elseif ($status === 'terbatas') {
-                        $sub->status_color = '#ffad46'; // Kuning (Terbatas)
-                    } else {
-                        $sub->status_color = '#31ce36'; // Hijau (Banyak Kosong)
+                    $status = $votedStatus;
+
+                    if ($hasOnlineIot) {
+                        if ($votedStatus === $cvStatus) {
+                            $isValidated = true;
+                        } else {
+                            $hasUserReport = true;
+                        }
                     }
+                } else {
+                    // Fallback to CV status if online, otherwise netral
+                    if ($hasOnlineIot) {
+                        $status = $cvStatus;
+                    } else {
+                        $status = 'netral';
+                    }
+                }
+
+                // 4. Inject attributes to model object
+                $sub->is_validated = $isValidated;
+                $sub->has_user_report = $hasUserReport;
+
+                // 5. Mapping Status ke Warna
+                if ($status === 'penuh') {
+                    $sub->status_color = '#f25961'; // Merah (Penuh)
+                } elseif ($status === 'terbatas') {
+                    $sub->status_color = '#ffad46'; // Kuning (Terbatas)
+                } elseif ($status === 'banyak') {
+                    $sub->status_color = '#31ce36'; // Hijau (Banyak Kosong)
+                } else {
+                    $sub->status_color = '#1572e8'; // Biru (Netral / Tidak ada info)
                 }
             }
 

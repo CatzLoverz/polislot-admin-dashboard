@@ -96,5 +96,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         Route::get('iot-stream-viewer', [IotStreamViewerController::class, 'index'])->name('iot-stream-viewer.index');
         Route::post('iot-stream-viewer/trigger', [IotStreamViewerController::class, 'triggerSnapshot'])->name('iot-stream-viewer.trigger');
         Route::post('iot-stream-viewer/chat', [IotStreamViewerController::class, 'sendChat'])->name('iot-stream-viewer.chat');
+        Route::post('iot-stream-viewer/save-settings', [IotStreamViewerController::class, 'saveSettings'])->name('iot-stream-viewer.save-settings');
+        Route::post('iot-stream-viewer/validate', [IotStreamViewerController::class, 'validateStream'])->name('iot-stream-viewer.validate');
     });
 });

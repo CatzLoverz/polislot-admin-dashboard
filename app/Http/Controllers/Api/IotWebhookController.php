@@ -61,5 +61,32 @@ class IotWebhookController extends Controller
 
         // Broadcast perubahan status agar UI (Web & nantinya Mobile) terupdate
         broadcast(new IotDeviceStatusChanged($mac, $status));
+
+        // Auto-push config if device connects and becomes online
+        if ($status === 'online') {
+            $device = \App\Models\IotDevice::where('device_mac_address', $mac)->first();
+            if ($device && $device->subarea) {
+                $subarea = $device->subarea;
+                $payloadData = [
+                    'action'             => 'update_config',
+                    'max_slots'          => (int) $subarea->max_slots,
+                    'detection_polygon'  => $subarea->detection_polygon ?? [],
+                    'threshold_banyak'   => (float) ($subarea->threshold_banyak ?? 30.0),
+                    'threshold_terbatas' => (float) ($subarea->threshold_terbatas ?? 80.0),
+                    'timestamp'          => time(),
+                ];
+
+                try {
+                    $key32 = substr(hash('sha256', env('IOT_API_SECRET'), true), 0, 32);
+                    $payloadData['signature'] = hash_hmac('sha256', json_encode($payloadData, JSON_UNESCAPED_SLASHES), $key32);
+
+                    // Broadcast via Reverb WS
+                    broadcast(new \App\Events\IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
+                    Log::info("[IotWebhook] Auto-pushed config to device {$mac} on connection.");
+                } catch (\Exception $e) {
+                    Log::error("[IotWebhook] Failed to auto-push config: " . $e->getMessage());
+                }
+            }
+        }
     }
 }
