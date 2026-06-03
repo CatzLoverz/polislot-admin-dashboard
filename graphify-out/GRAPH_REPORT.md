@@ -1,16 +1,16 @@
 # Graph Report - polislot-admin-dashboard  (2026-06-03)
 
 ## Corpus Check
-- 194 files · ~65,441 words
+- 196 files · ~68,726 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 927 nodes · 948 edges · 185 communities (90 shown, 95 thin omitted)
-- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.8)
+- 967 nodes · 1028 edges · 187 communities (92 shown, 95 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `11005d05`
+- Built from commit: `b1f3669c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -87,6 +87,7 @@
 - [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
 - [[_COMMUNITY_Community 71|Community 71]]
+- [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
@@ -133,6 +134,7 @@
 - [[_COMMUNITY_Community 183|Community 183]]
 - [[_COMMUNITY_Community 184|Community 184]]
 - [[_COMMUNITY_Community 185|Community 185]]
+- [[_COMMUNITY_Community 186|Community 186]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `AuthControllerTest` - 31 edges
@@ -161,7 +163,7 @@
 ## Hyperedges (group relationships)
 - **Deployment Options** — docker_deployment, manual_deployment [EXTRACTED 1.00]
 
-## Communities (185 total, 95 thin omitted)
+## Communities (187 total, 95 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -235,6 +237,10 @@ Nodes (27): 1. Konfigurasi Environment (.env), 2. Generate RSA Keys (Wajib), 3. 
 Cohesion: 0.22
 Nodes (8): code:block1 (polislot-admin-dashboard/), 🧰 Custom Utility Commands, 🚀 Fitur Utama, 📖 Panduan Instalasi, Polislot Admin Dashboard, Prerequisites External Service, 📂 Struktur Direktori, 🛠️ Tech Stack
 
+### Community 72 - "Community 72"
+Cohesion: 0.20
+Nodes (15): CameraStream, encrypt_image_aes(), fetch_remote_config(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command(), is_inside_any_polygon() (+7 more)
+
 ### Community 110 - "Community 110"
 Cohesion: 0.67
 Nodes (3): autoload-dev, psr-4, Tests\\
@@ -255,6 +261,10 @@ Nodes (13): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_ae
 Cohesion: 0.23
 Nodes (11): draw_hud(), is_inside_polygon(), load_config(), main(), mouse_callback(), Saves polygon points and detection threshold to a JSON file., Loads polygon points and threshold from a JSON file., Callback function for mouse events to handle polygon drawing. (+3 more)
 
+### Community 186 - "Community 186"
+Cohesion: 0.22
+Nodes (13): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_inside_any_polygon(), is_inside_polygon(), load_local_config(), main() (+5 more)
+
 ## Knowledge Gaps
 - **96 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+91 more)
   These have ≤1 connection - possible missing edges or undocumented components.
@@ -264,11 +274,11 @@ Nodes (11): draw_hud(), is_inside_polygon(), load_config(), main(), mouse_callba
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Validation` connect `Community 0` to `Community 6`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Are the 20 inferred relationships involving `Validation` (e.g. with `.handle()` and `.receiveSnapshot()`) actually correct?**
   _`Validation` has 20 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
-  _117 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _118 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06970128022759602 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**

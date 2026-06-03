@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class MapVisualizationController extends Controller
 {
@@ -79,7 +80,7 @@ class MapVisualizationController extends Controller
 
                 if ($sub->iotDevice) {
                     $mac = $sub->iotDevice->device_mac_address;
-                    $deviceStatus = \Illuminate\Support\Facades\Cache::get("iot_status_{$mac}", 'offline');
+                    $deviceStatus = Cache::get("iot_status_{$mac}", 'offline');
                     if ($deviceStatus === 'online') {
                         $hasOnlineIot = true;
                         if ($sub->max_slots > 0) {

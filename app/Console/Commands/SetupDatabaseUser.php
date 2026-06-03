@@ -67,6 +67,9 @@ class SetupDatabaseUser extends Command
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.user_validations TO '$username'@'$host'");
 
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.subarea_comments TO '$username'@'$host'");
+            DB::statement("GRANT SELECT ON $dbName.iot_devices TO '$username'@'$host'");
+            DB::statement("GRANT SELECT, INSERT ON $dbName.iot_captures TO '$username'@'$host'");
+            DB::statement("GRANT SELECT ON $dbName.user_faq TO '$username'@'$host'");
 
             DB::statement("FLUSH PRIVILEGES;");
 

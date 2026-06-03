@@ -14,7 +14,7 @@ import threading
 from ultralytics import YOLO
 
 # ============================================================
-# KONFIGURASI IOT DEVICE (PARKING DETECTOR - MQTT)
+# KONFIGURASI IOT DEVICE (PARKING DETECTOR - MQTT DENGAN PREVIEW)
 # ============================================================
 # Ambil MAC Address dari argumen terminal, atau minta input jika kosong
 if len(sys.argv) > 1:
@@ -243,10 +243,10 @@ def on_message(client, userdata, msg):
         if not hmac.compare_digest(received_signature, calculated_signature):
             print("[🚨] DITOLAK: Signature tidak cocok!")
             return
- 
+            
         action = payload.get("action")
         print(f"\n[📥] Perintah terverifikasi: {action}")
- 
+        
         if action == "update_config":
             with config_lock:
                 max_slots = payload.get("max_slots", max_slots)
@@ -295,15 +295,15 @@ def on_message(client, userdata, msg):
         print(f"[-] Gagal memproses pesan: {e}")
 
 # ============================================================
-# MAIN AI LOOP
+# MAIN AI & VISUALIZATION LOOP
 # ============================================================
 def main():
-    global stream, current_vehicle_count
+    global stream, current_vehicle_count, max_slots, detection_polygons
     
     # Memuat konfigurasi dari cache lokal jika tersedia
     load_local_config()
     
-    print("[+] Loading Model weights...")
+    print("[+] Loading weight model...")
     model = YOLO(YOLO_WEIGHTS)
     print(f"[+] {YOLO_WEIGHTS} loaded.")
 
@@ -339,48 +339,84 @@ def main():
     mqtt_thread = threading.Thread(target=client.loop_forever, daemon=True)
     mqtt_thread.start()
 
-    # Main detection loop (every 2 seconds)
+    print("[+] Preview Window aktif. Tekan 'q' untuk keluar.")
+    last_count_send_time = 0
+
     try:
         while True:
-            start_time = time.time()
-            
             ret, frame = stream.read()
             if ret and frame is not None:
-                # Run YOLO prediction
+                preview_frame = frame.copy()
+                
+                # 1. Ambil salinan polygon deteksi secara thread-safe
+                with config_lock:
+                    polys = list(detection_polygons)
+                    current_max_slots = max_slots
+                
+                # 2. Gambar Polygon Deteksi di frame preview (warna Kuning)
+                for poly in polys:
+                    if len(poly) >= 3:
+                        pts = np.array(poly, np.int32)
+                        pts = pts.reshape((-1, 1, 2))
+                        cv2.polylines(preview_frame, [pts], True, (0, 255, 255), 2)
+                
+                # 3. Jalankan YOLOv8 Prediksi pada frame asli
                 results = model.predict(frame, conf=CONFIDENCE_THRESHOLD, classes=TARGET_CLASSES, verbose=False)
                 
                 vehicles_inside = 0
-                
-                with config_lock:
-                    polys = list(detection_polygons)
                 
                 if results and len(results) > 0:
                     boxes = results[0].boxes
                     for box in boxes:
                         x1, y1, x2, y2 = map(int, box.xyxy[0])
-                        # Bottom center (reference point of vehicle)
+                        conf = float(box.conf[0])
+                        cls = int(box.cls[0])
                         ref_point = (int((x1 + x2) / 2), y2)
                         
+                        # Cek apakah titik acuan kendaraan berada dalam salah satu polygon deteksi
+                        is_inside = False
                         if len(polys) > 0:
                             if is_inside_any_polygon(ref_point, polys):
                                 vehicles_inside += 1
-                
-                current_vehicle_count = vehicles_inside
-                print(f"[🤖] Detection: {vehicles_inside} kendaraan di dalam zona deteksi")
+                                is_inside = True
+                        
+                        # Gambar Bounding Box (Hijau jika di dalam polygon, Merah jika di luar)
+                        color = (0, 255, 0) if is_inside else (0, 0, 255)
+                        cv2.rectangle(preview_frame, (x1, y1), (x2, y2), color, 2)
+                        cv2.circle(preview_frame, ref_point, 5, color, -1)
+                        
+                        label = f"{model.names[cls]} {conf:.2f}"
+                        cv2.putText(preview_frame, label, (x1, y1 - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
 
-                # Send count to server
-                count_payload = {
-                    "mac_address": MAC_ADDRESS,
-                    "timestamp": int(time.time()),
-                    "count": current_vehicle_count
-                }
-                count_payload["signature"] = generate_hmac_signature(count_payload)
-                client.publish(TOPIC_COUNT, json.dumps(count_payload, separators=(',', ':')), qos=1)
+                current_vehicle_count = vehicles_inside
+
+                # 4. Tulis informasi visual pada window preview
+                status_text = f"Count: {vehicles_inside} | Max Slots: {current_max_slots}"
+                cv2.putText(preview_frame, status_text, (15, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
                 
-            # Control execution rate to run every ~2 seconds
-            elapsed = time.time() - start_time
-            sleep_time = max(0.1, 2.0 - elapsed)
-            time.sleep(sleep_time)
+                # Hitung Occupancy Status untuk info tambahan
+                if current_max_slots > 0:
+                    occupancy = (vehicles_inside / current_max_slots) * 100
+                    cv2.putText(preview_frame, f"Occupancy: {occupancy:.1f}%", (15, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (200, 255, 200), 1)
+
+                # Tampilkan Window Preview Realtime
+                cv2.imshow("PoliSlot - MQTT Realtime Preview", preview_frame)
+
+                # 5. Kirim data count ke server setiap 2 detik sekali agar tidak membanjiri server
+                now = time.time()
+                if now - last_count_send_time >= 2.0:
+                    count_payload = {
+                        "mac_address": MAC_ADDRESS,
+                        "timestamp": int(now),
+                        "count": current_vehicle_count
+                    }
+                    count_payload["signature"] = generate_hmac_signature(count_payload)
+                    client.publish(TOPIC_COUNT, json.dumps(count_payload, separators=(',', ':')), qos=1)
+                    last_count_send_time = now
+
+            # OpenCV Window refresh event loop (juga mendeteksi tombol 'q' untuk quit)
+            if cv2.waitKey(30) & 0xFF == ord('q'):
+                break
 
     except KeyboardInterrupt:
         print("\n[!] Dihentikan oleh user.")
@@ -390,6 +426,7 @@ def main():
         time.sleep(0.5)
         stream.stop()
         client.disconnect()
+        cv2.destroyAllWindows()
         print("[+] Selesai.")
 
 if __name__ == "__main__":

@@ -1,13 +1,13 @@
 """
-PoliSlot Headless WebSocket Parking Detector
-============================================
-Padanan WebSocket (Laravel Reverb) dari parking_detector_mqtt.py.
+PoliSlot Headless WebSocket Parking Detector (Dengan Preview Realtime)
+=====================================================================
+Klien WebSocket (Laravel Reverb) dengan visualisasi OpenCV Window.
 
 Fitur:
 - Presence Channel via Reverb -> Deteksi online/offline instan.
-- Headless (tanpa cv2.imshow).
+- OpenCV Window Preview -> Menampilkan feed kamera dengan overlay YOLOv8 + Polygon.
 - YOLOv8 pada mobil (class 2) dan motor (class 3) dalam multi-polygon.
-- Post hitungan ke /api/iot/count dengan HMAC signature.
+- Post hitungan ke /api/iot/count dengan HMAC signature (non-blocking).
 - Menerima command snapshot, update_config, connection_test, chat via WS.
 - Kirim snapshot terenkripsi AES-256-CBC ke /api/iot/snapshot.
 """
@@ -32,7 +32,7 @@ from Crypto.Util.Padding import pad
 from ultralytics import YOLO
 
 # ============================================================
-# KONFIGURASI IOT DEVICE (PARKING DETECTOR - WEBSOCKET)
+# KONFIGURASI IOT DEVICE (PARKING DETECTOR - WEBSOCKET DENGAN PREVIEW)
 # ============================================================
 # Ambil MAC Address dari argumen terminal, atau minta input jika kosong
 if len(sys.argv) > 1:
@@ -317,58 +317,6 @@ def handle_command(raw_data):
         print(f"[-] Error memproses command: {e}")
 
 # ============================================================
-# DETECTOR BACKGROUND THREAD (Runs YOLO & Sends Count)
-# ============================================================
-def detector_loop(model, confidence):
-    global current_vehicle_count, stream
-    print("[+] Detector thread started.")
-    
-    while True:
-        start_time = time.time()
-        ret, frame = stream.read()
-        if ret and frame is not None:
-            # Predict
-            results = model.predict(frame, conf=confidence, classes=TARGET_CLASSES, verbose=False)
-            vehicles_inside = 0
-            
-            with config_lock:
-                polys = list(detection_polygons)
-                
-            if results and len(results) > 0:
-                boxes = results[0].boxes
-                for box in boxes:
-                    x1, y1, x2, y2 = map(int, box.xyxy[0])
-                    ref_point = (int((x1 + x2) / 2), y2)
-                    
-                    if len(polys) > 0:
-                        if is_inside_any_polygon(ref_point, polys):
-                            vehicles_inside += 1
-            
-            current_vehicle_count = vehicles_inside
-            print(f"[🤖] Detection: {vehicles_inside} kendaraan di dalam zona deteksi")
-
-            # Send count to server via API endpoint
-            timestamp = int(time.time())
-            count_payload = {
-                "mac_address": MAC_ADDRESS,
-                "timestamp": timestamp,
-                "count": current_vehicle_count
-            }
-            count_payload["signature"] = generate_hmac_signature(count_payload)
-            
-            try:
-                resp = requests.post(API_COUNT_URL, json=count_payload, timeout=5)
-                if resp.status_code != 200:
-                    print(f"[-] Gagal mengirim count: {resp.status_code} — {resp.text}")
-            except Exception as e:
-                print(f"[-] Error mengirim count: {e}")
-
-        # Control rate to run every ~2 seconds
-        elapsed = time.time() - start_time
-        sleep_time = max(0.1, 2.0 - elapsed)
-        time.sleep(sleep_time)
-
-# ============================================================
 # WEBSOCKET CONNECTION MANAGER
 # ============================================================
 async def websocket_client():
@@ -456,11 +404,20 @@ async def websocket_client():
         print(f"[🔄] Reconnecting in 5s... ({reconnect_attempts}/{max_reconnects})")
         await asyncio.sleep(5)
 
+# Async loop runner untuk thread latar belakang
+def start_websocket_thread():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_until_complete(websocket_client())
+    except Exception as e:
+        print(f"[-] WS Client thread stopped: {e}")
+
 # ============================================================
 # MAIN
 # ============================================================
 def main():
-    global stream
+    global stream, current_vehicle_count, max_slots, detection_polygons
     
     # Memuat konfigurasi dari cache lokal jika tersedia
     load_local_config()
@@ -472,21 +429,105 @@ def main():
     # Initialize camera stream
     stream = CameraStream(SOURCE)
 
-    # Start detector thread
-    detector_thread = threading.Thread(
-        target=detector_loop, 
-        args=(model, CONFIDENCE_THRESHOLD), 
-        daemon=True
-    )
-    detector_thread.start()
+    # Start WebSocket client thread (menggunakan event loop asyncio tersendiri)
+    ws_thread = threading.Thread(target=start_websocket_thread, daemon=True)
+    ws_thread.start()
 
-    # Run Websocket Client
+    print("[+] Preview Window aktif. Tekan 'q' untuk keluar.")
+    last_count_send_time = 0
+
     try:
-        asyncio.run(websocket_client())
+        while True:
+            ret, frame = stream.read()
+            if ret and frame is not None:
+                preview_frame = frame.copy()
+                
+                # 1. Ambil salinan polygon deteksi secara thread-safe
+                with config_lock:
+                    polys = list(detection_polygons)
+                    current_max_slots = max_slots
+                
+                # 2. Gambar Polygon Deteksi di frame preview (warna Kuning)
+                for poly in polys:
+                    if len(poly) >= 3:
+                        pts = np.array(poly, np.int32)
+                        pts = pts.reshape((-1, 1, 2))
+                        cv2.polylines(preview_frame, [pts], True, (0, 255, 255), 2)
+                
+                # 3. Jalankan YOLOv8 Prediksi pada frame asli
+                results = model.predict(frame, conf=CONFIDENCE_THRESHOLD, classes=TARGET_CLASSES, verbose=False)
+                
+                vehicles_inside = 0
+                
+                if results and len(results) > 0:
+                    boxes = results[0].boxes
+                    for box in boxes:
+                        x1, y1, x2, y2 = map(int, box.xyxy[0])
+                        conf = float(box.conf[0])
+                        cls = int(box.cls[0])
+                        ref_point = (int((x1 + x2) / 2), y2)
+                        
+                        # Cek apakah titik acuan berada dalam polygon deteksi
+                        is_inside = False
+                        if len(polys) > 0:
+                            if is_inside_any_polygon(ref_point, polys):
+                                vehicles_inside += 1
+                                is_inside = True
+                        
+                        # Gambar Bounding Box (Hijau jika di dalam polygon, Merah jika di luar)
+                        color = (0, 255, 0) if is_inside else (0, 0, 255)
+                        cv2.rectangle(preview_frame, (x1, y1), (x2, y2), color, 2)
+                        cv2.circle(preview_frame, ref_point, 5, color, -1)
+                        
+                        label = f"{model.names[cls]} {conf:.2f}"
+                        cv2.putText(preview_frame, label, (x1, y1 - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+
+                current_vehicle_count = vehicles_inside
+
+                # 4. Tulis informasi visual pada window preview
+                status_text = f"Count: {vehicles_inside} | Max Slots: {current_max_slots}"
+                cv2.putText(preview_frame, status_text, (15, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
+                
+                # Hitung Occupancy Status untuk info tambahan
+                if current_max_slots > 0:
+                    occupancy = (vehicles_inside / current_max_slots) * 100
+                    cv2.putText(preview_frame, f"Occupancy: {occupancy:.1f}%", (15, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (200, 255, 200), 1)
+
+                # Tampilkan Window Preview Realtime
+                cv2.imshow("PoliSlot - WS Realtime Preview", preview_frame)
+
+                # 5. Kirim data count ke server setiap 2 detik secara asinkron agar tidak memblokir render frame preview
+                now = time.time()
+                if now - last_count_send_time >= 2.0:
+                    timestamp = int(now)
+                    count_payload = {
+                        "mac_address": MAC_ADDRESS,
+                        "timestamp": timestamp,
+                        "count": current_vehicle_count
+                    }
+                    count_payload["signature"] = generate_hmac_signature(count_payload)
+                    
+                    # Definisikan sub-thread pengiriman agar post request tidak mendatangkan delay frame
+                    def send_count():
+                        try:
+                            resp = requests.post(API_COUNT_URL, json=count_payload, timeout=5)
+                            if resp.status_code != 200:
+                                print(f"[-] Gagal mengirim count: {resp.status_code} — {resp.text}")
+                        except Exception as e:
+                            print(f"[-] Error mengirim count: {e}")
+                    
+                    threading.Thread(target=send_count, daemon=True).start()
+                    last_count_send_time = now
+
+            # OpenCV Window refresh event loop (juga mendeteksi tombol 'q' untuk quit)
+            if cv2.waitKey(30) & 0xFF == ord('q'):
+                break
+
     except KeyboardInterrupt:
         print("\n[!] Dihentikan oleh user.")
     finally:
         stream.stop()
+        cv2.destroyAllWindows()
         print("[+] Selesai.")
 
 if __name__ == "__main__":
