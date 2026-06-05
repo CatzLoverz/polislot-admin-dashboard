@@ -120,7 +120,7 @@ class ParkSubarea extends Model
             $this->threshold_terbatas = max($this->threshold_banyak + 5.0, min(95.0, $this->threshold_terbatas));
             $this->save();
 
-            Log::info("[Threshold WMA] Threshold shifted for Subarea {$this->park_subarea_name} (ID: {$this->park_subarea_id}). New thresholds: banyak={$this->threshold_banyak}%, terbatas={$this->threshold_terbatas}%.");
+            Log::info("Threshold shifted for Subarea {$this->park_subarea_name} (ID: {$this->park_subarea_id}). New thresholds: banyak={$this->threshold_banyak}%, terbatas={$this->threshold_terbatas}%.");
 
             // 4. Kirim update_config secara otomatis ke device IoT via MQTT & WS jika device online
             $device = $this->iotDevice;
@@ -131,7 +131,7 @@ class ParkSubarea extends Model
                 try {
                     broadcast(new IotThresholdUpdated($mac, $this->threshold_banyak, $this->threshold_terbatas));
                 } catch (\Exception $e) {
-                    Log::warning("[Threshold WMA] Failed to broadcast threshold update: " . $e->getMessage());
+                    Log::warning("Failed to broadcast threshold update: " . $e->getMessage());
                 }
 
                 $payloadData = [
@@ -155,14 +155,14 @@ class ParkSubarea extends Model
                     $mqtt->publish($topic, $payload, 0);
                     $mqtt->disconnect();
                 } catch (\Exception $e) {
-                    Log::warning("[Threshold WMA] Failed to sync config via MQTT: " . $e->getMessage());
+                    Log::warning("Failed to sync config via MQTT: " . $e->getMessage());
                 }
 
                 // Broadcast WS
                 try {
                     broadcast(new IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
                 } catch (\Exception $e) {
-                    Log::warning("[Threshold WMA] Failed to sync config via WS: " . $e->getMessage());
+                    Log::warning("Failed to sync config via WS: " . $e->getMessage());
                 }
             }
         }

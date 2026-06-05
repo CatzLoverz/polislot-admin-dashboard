@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
             ->by($request->user()?->id ?: $request->ip())
             ->response(function () use ($request) {
 
-                Log::warning('[SERVICE RateLimiter] API rate limit exceeded', [
+                Log::warning('API rate limit exceeded', [
                     'ip'        => $request->ip(),
                     'user_id'   => $request->user()?->id,
                     'path'      => $request->path(),

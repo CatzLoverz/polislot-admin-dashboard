@@ -70,7 +70,7 @@ class ApiEncryption
 
         } catch (\Exception $e) {
             // Log detail untuk admin, tapi return generic ke client
-            Log::error('[ApiEncryption] Handshake Failed: '.$e->getMessage());
+            Log::error('Handshake Failed: '.$e->getMessage());
 
             return response()->json(['message' => 'Invalid Request Signature'], 400);
         }
@@ -82,7 +82,7 @@ class ApiEncryption
         // Indikasi percobaan bypass / replay attack.
         // Return 404 Not Found seolah-olah endpoint tidak ada/salah.
         if ($request->hasHeader('Authorization') && ! $request->hasHeader('X-Auth-Token')) {
-            Log::warning('[ApiEncryption] Suspicious request: Raw Authorization without X-Auth-Token');
+            Log::warning('Suspicious request: Raw Authorization without X-Auth-Token');
 
             return response()->json(['message' => 'Not Found'], 404);
         }
@@ -116,14 +116,14 @@ class ApiEncryption
                         // Failsafe: Set SERVER var juga (untuk library yang baca $_SERVER langsung)
                         $request->server->set('HTTP_AUTHORIZATION', 'Bearer '.$decryptedToken);
                     } else {
-                        Log::warning('[ApiEncryption] Auth Token Decryption Failed');
+                        Log::warning('Auth Token Decryption Failed');
 
                         // Obscure: Generic 400
                         return response()->json(['message' => 'Invalid Request Signature'], 400);
                     }
                 }
             } catch (\Exception $e) {
-                Log::error('[ApiEncryption] Auth Token processing error', [
+                Log::error('Auth Token processing error', [
                     'error' => $e->getMessage(),
                 ]);
 
@@ -163,7 +163,7 @@ class ApiEncryption
                 $request->replace($json);
 
             } catch (\Exception $e) {
-                Log::error('[ApiEncryption] Payload Processing Failed: '.$e->getMessage());
+                Log::error('Payload Processing Failed: '.$e->getMessage());
 
                 return response()->json(['message' => 'Invalid Request Data'], 400);
             }
@@ -200,7 +200,7 @@ class ApiEncryption
                 ]);
 
             } catch (\Exception $e) {
-                Log::error('[ApiEncryption] Response encryption failed', [
+                Log::error('Response encryption failed', [
                     'error' => $e->getMessage(),
                 ]);
 
@@ -220,7 +220,7 @@ class ApiEncryption
         $keyPath = storage_path('app/private/keys/private_key.pem');
 
         if (! file_exists($keyPath)) {
-            Log::critical('[ApiEncryption] Private key not found at: '.$keyPath);
+            Log::critical('Private key not found at: '.$keyPath);
 
             return null;
         }
@@ -228,7 +228,7 @@ class ApiEncryption
         $privateKey = file_get_contents($keyPath);
 
         if (! $privateKey) {
-            Log::critical('[ApiEncryption] Failed to read private key');
+            Log::critical('Failed to read private key');
 
             return null;
         }

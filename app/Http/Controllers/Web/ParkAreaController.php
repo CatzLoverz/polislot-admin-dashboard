@@ -60,7 +60,7 @@ class ParkAreaController extends Controller
                     ->make(true);
 
             } catch (Exception $e) {
-                Log::error('[WEB ParkAreaController@index] Gagal memuat DataTables: ' . $e->getMessage());
+                Log::error('Gagal memuat DataTables: ' . $e->getMessage());
                 return response()->json(['error' => 'Gagal memuat data.'], 500);
             }
         }
@@ -107,7 +107,7 @@ class ParkAreaController extends Controller
                     ]
                 ]);
 
-                Log::info('[WEB ParkAreaController@store] Sukses: Area parkir baru dibuat.', [
+                Log::info('Area parkir baru dibuat.', [
                     'id' => $parkArea->park_area_id, 
                     'code' => $parkArea->park_area_code
                 ]);
@@ -117,11 +117,11 @@ class ParkAreaController extends Controller
             });
 
         } catch (ValidationException $e) {
-            Log::error('[WEB ParkAreaController@store] Gagal:', ['errors' => $e->errors()]);
+            Log::error('Terjadi kesalahan', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors())->withInput()
                 ->with('swal_error_crud', 'Validasi gagal, ' . $e->getMessage());
         } catch (Exception $e) {
-            Log::error('[WEB ParkAreaController@store] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menyimpan data area.')->withInput();
         }
     }
@@ -246,7 +246,7 @@ class ParkAreaController extends Controller
             return view('Contents.ParkArea.show', compact('area', 'mapsApiKey'));
 
         } catch (Exception $e) {
-            Log::error('[WEB ParkAreaController@show] Error: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return redirect()->route('admin.park-area.index')
                 ->with('swal_error_crud', 'Terjadi kesalahan memuat data.');
         }
@@ -267,14 +267,14 @@ class ParkAreaController extends Controller
                 
                 $area->delete();
 
-                Log::info('[WEB ParkAreaController@destroy] Sukses: Area parkir dihapus.', ['id' => $id, 'name' => $name]);
+                Log::info('Area parkir dihapus.', ['id' => $id, 'name' => $name]);
 
                 return redirect()->route('admin.park-area.index')
                     ->with('swal_success_crud', 'Area Parkir berhasil dihapus.');
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB ParkAreaController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

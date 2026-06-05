@@ -147,7 +147,7 @@ class RewardVerificationController extends Controller
                     
                     if ($pointsToRefund > 0 && $claim->user) {
                         $claim->user->increment('current_points', $pointsToRefund);
-                        Log::info('[WEB RewardVerificationController@process] Info: Poin dikembalikan ke user.', ['user_id' => $claim->user_id]);
+                        Log::info('Info: Poin dikembalikan ke user.', ['user_id' => $claim->user_id]);
 
                         // Catat History Refund
                         $this->historyService->log(
@@ -161,13 +161,13 @@ class RewardVerificationController extends Controller
                     $msg = 'Klaim ditolak, poin telah dikembalikan.';
                 }
                 
-                Log::info('[WEB RewardVerificationController@process] Sukses: Status klaim diperbarui.', ['id' => $id, 'status' => $newStatus]);
+                Log::info('Status klaim diperbarui.', ['id' => $id, 'status' => $newStatus]);
 
                 return back()->with('swal_success_crud', $msg);
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB RewardVerificationController@process] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan sistem.');
         }
     }

@@ -27,9 +27,9 @@ class HistoryService
                 'user_history_is_negative' => $isNegative,
             ]);
             
-            Log::info("[SERVICE HistoryService@log] Log created: User {$userId} | {$type} | {$name}");
+            Log::info("Log created: User {$userId} | {$type} | {$name}");
         } catch (\Exception $e) {
-            Log::error("[SERVICE HistoryService@log] Failed to create log: " . $e->getMessage());
+            Log::error("Failed to create log: " . $e->getMessage());
         }
     }
 }

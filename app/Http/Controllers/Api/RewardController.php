@@ -53,7 +53,7 @@ class RewardController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('[API RewardController@index] Gagal: '.$e->getMessage());
+            Log::error(''.$e->getMessage());
 
             return $this->sendError('Terjadi kesalahan server.', 500);
         }
@@ -84,7 +84,7 @@ class RewardController extends Controller
                 // Cek Poin Cukup
                 if ($user->current_points < $reward->reward_point_required) {
                     DB::rollBack();
-                    Log::warning("[API RewardController@redeem] Gagal: Poin tidak cukup. User: {$user->user_id}, Reward: {$reward->reward_id}");
+                    Log::warning("Poin tidak cukup. User: {$user->user_id}, Reward: {$reward->reward_id}");
 
                     return $this->sendError('Poin Anda tidak mencukupi untuk reward ini.', 422);
                 }
@@ -107,7 +107,7 @@ class RewardController extends Controller
                     'user_reward_status' => UserReward::STATUS_PENDING,
                 ]);
 
-                Log::info("[API RewardController@redeem] Sukses: User {$user->user_id} menukar {$reward->reward_name}.");
+                Log::info("User {$user->user_id} menukar {$reward->reward_name}.");
                 $this->historyService->log(
                     $user->user_id,
                     'redeem',
@@ -124,7 +124,7 @@ class RewardController extends Controller
             });
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('[API RewardController@redeem] Gagal: '.$e->getMessage());
+            Log::error(''.$e->getMessage());
 
             return $this->sendError('Gagal memproses penukaran: '.$e->getMessage(), 422);
         }
@@ -157,7 +157,7 @@ class RewardController extends Controller
             return $this->sendSuccess('Riwayat penukaran berhasil diambil.', $history);
 
         } catch (\Exception $e) {
-            Log::error('[API RewardController@history] Gagal: '.$e->getMessage());
+            Log::error(''.$e->getMessage());
 
             return $this->sendError('Gagal memuat riwayat.', 500);
         }

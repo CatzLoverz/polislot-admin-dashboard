@@ -42,7 +42,7 @@ class ParkSubareaController extends Controller
                     'park_subarea_polygon' => json_decode($request->polygon),
                 ]);
 
-                Log::info('[WEB ParkSubareaController@store] Sukses: Subarea baru ditambahkan.', [
+                Log::info('Subarea baru ditambahkan.', [
                     'area_id'    => $park_area,
                     'subarea_id' => $subarea->park_subarea_id,
                     'name'       => $subarea->park_subarea_name
@@ -56,14 +56,14 @@ class ParkSubareaController extends Controller
             });
 
         } catch (ValidationException $e) {
-            Log::warning('[WEB ParkSubareaController@store] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return response()->json([
                 'status' => 'error', 
                 'message' => 'Validasi gagal.',
                 'errors' => $e->errors()
             ], 422);
         } catch (Exception $e) {
-            Log::error('[WEB ParkSubareaController@store] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan server.'], 500);
         }
     }
@@ -147,7 +147,7 @@ class ParkSubareaController extends Controller
                     }
                 }
 
-                Log::info('[WEB ParkSubareaController@update] Sukses: Subarea & Fasilitas diperbarui.', [
+                Log::info('Subarea & Fasilitas diperbarui.', [
                     'subarea_id' => $id,
                     'name'       => $subarea->park_subarea_name
                 ]);
@@ -159,14 +159,14 @@ class ParkSubareaController extends Controller
             });
 
         } catch (ValidationException $e) {
-            Log::warning('[WEB ParkSubareaController@update] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return response()->json([
                 'status' => 'error', 
                 'message' => 'Validasi gagal.',
                 'errors' => $e->errors()
             ], 422);
         } catch (Exception $e) {
-            Log::error('[WEB ParkSubareaController@update] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan server.'], 500);
         }
     }
@@ -193,7 +193,7 @@ class ParkSubareaController extends Controller
 
                 $subarea->delete();
 
-                Log::info('[WEB ParkSubareaController@destroy] Sukses: Subarea dihapus.', [
+                Log::info('Subarea dihapus.', [
                     'subarea_id' => $id, 
                     'name' => $name
                 ]);
@@ -203,7 +203,7 @@ class ParkSubareaController extends Controller
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB ParkSubareaController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus subarea.');
         }
     }

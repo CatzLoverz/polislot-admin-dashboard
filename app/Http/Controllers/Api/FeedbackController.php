@@ -40,7 +40,7 @@ class FeedbackController extends Controller
                     'feedback_description' => strip_tags($validatedData['description'] ?? ''),
                 ]);
 
-                Log::info('[API FeedbackController@store] Sukses: Feedback tersimpan.');
+                Log::info('Feedback tersimpan.');
 
                 // 3. Kembalikan Response Sukses
                 return $this->sendSuccess('Feedback berhasil dikirim. Terima kasih atas masukan Anda!', [
@@ -49,12 +49,12 @@ class FeedbackController extends Controller
             });
 
         } catch (ValidationException $e) {
-            Log::warning('[API FeedbackController@store] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             // Menggunakan helper dari Base Controller
             return $this->sendValidationError($e);
 
         } catch (Exception $e) {
-            Log::error('[API FeedbackController@store] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             // Menggunakan helper dari Base Controller
             return $this->sendError('Terjadi kesalahan saat mengirim feedback.', 500);
         }

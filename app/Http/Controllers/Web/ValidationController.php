@@ -91,16 +91,17 @@ class ValidationController extends Controller
                     'validation_is_geofence_active' => $isGeofence,
                 ]);
 
-                Log::info('[WEB ValidationController@update] Sukses: Pengaturan validasi diperbarui.');
+                Log::info('Pengaturan validasi diperbarui.');
 
                 return redirect()->route('admin.validation.index')
                     ->with('swal_success_crud', 'Pengaturan validasi berhasil diperbarui.');
             });
 
         } catch (ValidationException $e) {
+            Log::warning('Validasi gagal saat update pengaturan.', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
-            Log::error('[WEB ValidationController@update] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }

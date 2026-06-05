@@ -93,7 +93,7 @@ class RewardController extends Controller
 
                 $reward = Reward::create($validated);
 
-                Log::info('[WEB RewardController@store] Sukses: Reward berhasil ditambahkan.', ['reward_id' => $reward->reward_id]);
+                Log::info('Reward berhasil ditambahkan.', ['reward_id' => $reward->reward_id]);
                 
                 return back()->with('swal_success_crud', 'Reward berhasil ditambahkan.');
             });
@@ -101,7 +101,7 @@ class RewardController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB RewardController@store] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal menyimpan data.');
         }
     }
@@ -134,7 +134,7 @@ class RewardController extends Controller
 
                 $reward->update($validated);
 
-                Log::info('[WEB RewardController@update] Sukses: Reward berhasil diperbarui.', ['reward_id' => $id]);
+                Log::info('Reward berhasil diperbarui.', ['reward_id' => $id]);
                 
                 return back()->with('swal_success_crud', 'Reward berhasil diperbarui.');
             });
@@ -142,7 +142,7 @@ class RewardController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
-            Log::error('[WEB RewardController@update] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
@@ -164,12 +164,12 @@ class RewardController extends Controller
 
                 $reward->delete();
                 
-                Log::info('[WEB RewardController@destroy] Sukses: Reward berhasil dihapus.', ['reward_id' => $id]);
+                Log::info('Reward berhasil dihapus.', ['reward_id' => $id]);
                 
                 return back()->with('swal_success_crud', 'Reward berhasil dihapus.');
             });
         } catch (Exception $e) {
-            Log::error('[WEB RewardController@destroy] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal menghapus reward.');
         }
     }

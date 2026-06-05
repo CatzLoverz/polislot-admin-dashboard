@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // Log untuk memastikan metode boot() di AuthServiceProvider dieksekusi
-        // Log::info('[AuthServiceProvider] Metode boot() sedang dieksekusi.');
+        // Log::info('Metode boot() sedang dieksekusi.');
 
 
         /**
@@ -36,14 +36,14 @@ class AuthServiceProvider extends ServiceProvider
          */
         Gate::define('access-admin-features', function (User $user) {
             // LOGGING DI DALAM GATE 'access-admin-features'
-            // Log::info('[GATE EVALUATION - Admin Features] Memeriksa akses fitur Admin untuk User ID: ' . $user->user_id . ' dengan Peran Aktual: "' . $user->role . '"');
+            // Log::info('Memeriksa akses fitur Admin untuk User ID: ' . $user->user_id . ' dengan Peran Aktual: "' . $user->role . '"');
 
             $isAllowed = strtolower(trim($user->role)) === 'admin'; // Hanya peran 'admin' yang diizinkan
 
             // if ($isAllowed) {
-            //     Log::info('[GATE EVALUATION - Admin Features] Akses Fitur Admin DIIZINKAN untuk User ID: ' . $user->user_id);
+            //     Log::info('Akses Fitur Admin DIIZINKAN untuk User ID: ' . $user->user_id);
             // } else {
-            //     Log::warning('[GATE EVALUATION - Admin Features] Akses Fitur Admin DITOLAK untuk User ID: ' . $user->user_id . ' (Peran: "' . $user->role . '")');
+            //     Log::warning('Akses Fitur Admin DITOLAK untuk User ID: ' . $user->user_id . ' (Peran: "' . $user->role . '")');
             // }
             return $isAllowed;
         });

@@ -29,7 +29,7 @@ class AuthController extends Controller
             }
             return view('Contents.Auth.login');
         } catch (\Exception $e) {
-            Log::error('[WEB AuthController@loginForm] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
         }
     }
@@ -53,7 +53,7 @@ class AuthController extends Controller
                 $user = User::where('email', $email)->where('role', 'admin')->first();
 
                 if (!$user) {
-                    Log::warning('[WEB AuthController@login] Gagal: Email tidak ditemukan.');
+                    Log::warning('Email tidak ditemukan.');
                     return redirect()->route('login.form')->with('swal_error_crud', 'Email tidak ditemukan.')->withInput($request->only('email'));
                 }
 
@@ -64,7 +64,7 @@ class AuthController extends Controller
                 }
 
                 if ($user->role !== 'admin' && is_null($user->email_verified_at)) {
-                    Log::warning('[WEB AuthController@login] Gagal: Akun belum diverifikasi.');
+                    Log::warning('Akun belum diverifikasi.');
                     $request->session()->put('email_for_otp_verification', $user->email);
                     return redirect()->route('login.form')
                         ->with('swal_error_crud', 'Akun Anda belum diverifikasi. Silakan Lakukan Pendaftaran Ulang.');
@@ -72,7 +72,7 @@ class AuthController extends Controller
 
                 if ($user->locked_until && now()->lt($user->locked_until)) {
                     $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
-                    Log::warning('[WEB AuthController@login] Gagal: Akun dikunci.');
+                    Log::warning('Akun dikunci.');
                     return redirect()->route('login.form')->with('swal_error_crud', "Akun Anda dikunci. Coba lagi dalam {$minutes} menit.")
                         ->withInput($request->only('email'));
                 }
@@ -81,7 +81,7 @@ class AuthController extends Controller
                     $request->session()->regenerate();
                     $user->update(['failed_attempts' => 0, 'locked_until' => null]);
 
-                    Log::info('[WEB AuthController@login] Sukses: Login berhasil.');
+                    Log::info('Login berhasil.');
 
                     return redirect()->intended(route('dashboard'))
                         ->with('swal_success_login', 'Login Berhasil! Selamat datang, ' . $user->name . '.');
@@ -92,19 +92,19 @@ class AuthController extends Controller
                 if ($user->failed_attempts >= 4) {
                     $lockMinutes = 10;
                     $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
-                    Log::warning('[WEB AuthController@login] Gagal: Password salah, akun dikunci.');
+                    Log::warning('Password salah, akun dikunci.');
                     return redirect()->route('login.form')->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")
                         ->withInput($request->only('email'));
                 }
 
                 $sisa = 4 - $user->failed_attempts;
-                Log::warning('[WEB AuthController@login] Gagal: Password salah.');
+                Log::warning('Password salah.');
                 return redirect()->route('login.form')->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")
                     ->withInput($request->only('email'));
             });
 
         } catch (\Exception $e) {
-            Log::error('[WEB AuthController@login] Gagal: Error sistem.');
+            Log::error('Error sistem.');
             return redirect()->route('login.form')->with('swal_error_crud', 'Terjadi kesalahan pada server.')
                 ->withInput($request->only('email'));
         }
@@ -124,11 +124,11 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             
-            Log::info('[WEB AuthController@logout] Sukses: Pengguna telah logout.');
+            Log::info('Pengguna telah logout.');
             return redirect()->route('login.form');    
         });
         } catch (\Exception $e) {
-            Log::error('[WEB AuthController@logout] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return redirect()->route('dashboard')->with('swal_error_crud', 'Terjadi kesalahan pada server.');
         }
     }
@@ -168,12 +168,12 @@ class AuthController extends Controller
 
                 $request->session()->put('email_for_password_reset', $user->email);
                 
-                Log::info('[WEB AuthController@forgotPasswordVerify] Sukses: OTP reset password dikirim.');
+                Log::info('OTP reset password dikirim.');
                 
                 return redirect()->route('forgot_otp.form')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
             });
         } catch (\Exception $e) {
-            Log::error('[WEB AuthController@forgotPasswordVerify] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal mengirim OTP.');
         }
     }
@@ -203,16 +203,16 @@ class AuthController extends Controller
             return DB::transaction(function () use ($request, $email) {
                 $user = User::where('email', $email)->firstOrFail();
                 if ($user->otp_code !== $request->otp || Carbon::now()->gt($user->otp_expires_at)) {
-                    Log::warning('[WEB AuthController@forgotPasswordOtpVerify] Gagal: OTP salah atau kedaluwarsa.');
+                    Log::warning('OTP salah atau kedaluwarsa.');
                     return back()->with('swal_error_crud', 'Kode OTP salah atau telah kedaluwarsa.');
                 }
                 session()->put('otp_verified', true);
                 
-                Log::info('[WEB AuthController@forgotPasswordOtpVerify] Sukses: OTP valid.');
+                Log::info('OTP valid.');
                 return redirect()->route('reset_pass.form')->with('swal_success_crud', 'OTP berhasil diverifikasi!');
             });
         } catch (\Exception $e) {
-            Log::error('[WEB AuthController@forgotPasswordOtpVerify] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan sistem.');
         }
     }
@@ -238,12 +238,12 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'Emails.reset_password_otp', 'Kode Reset Password Anda'));
                 
-                Log::info('[WEB AuthController@forgotPasswordOtpResend] Sukses: OTP reset baru dikirim.');
+                Log::info('OTP reset baru dikirim.');
                 
                 return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim ke email Anda.');
             });
         } catch (\Exception $e) {
-            Log::error('[WEB AuthController@forgotPasswordOtpResend] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal mengirim ulang OTP.');
         }
     }
@@ -286,7 +286,7 @@ class AuthController extends Controller
                 $user = User::where('email', $email)->firstOrFail();
 
                 if (Hash::check($request->password, $user->password)) {
-                    Log::warning('[WEB AuthController@resetPassword] Gagal: Password baru sama dengan lama.');
+                    Log::warning('Password baru sama dengan lama.');
                     return back()->with('swal_error_crud', 'Password baru tidak boleh sama dengan password lama.');
                 }
 
@@ -298,14 +298,14 @@ class AuthController extends Controller
                 $user->save();
                 session()->forget(['email_for_password_reset', 'otp_verified']);
                 
-                Log::info('[WEB AuthController@resetPassword] Sukses: Password direset.');
+                Log::info('Password direset.');
                 return redirect()->route('login.form')->with('swal_success_crud', 'Password berhasil direset! Silakan login.');
             });
         } catch (ValidationException $e) {
-            Log::warning('[WEB AuthController@resetPassword] Gagal: Validasi data gagal.', [ 'errors' => $e->errors() ]);
+            Log::warning('Validasi data gagal.', [ 'errors' => $e->errors() ]);
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            Log::error('[WEB AuthController@resetPassword] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
         }
     }

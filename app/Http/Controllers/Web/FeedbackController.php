@@ -80,14 +80,14 @@ class FeedbackController extends Controller
                 $feedback = Feedback::findOrFail($id);
                 $feedback->delete();
 
-                Log::info('[WEB FeedbackController@destroy] Sukses: Feedback berhasil dihapus.', ['id' => $id]);
+                Log::info('Feedback berhasil dihapus.', ['id' => $id]);
 
                 return redirect()->route('admin.feedback.index')
                     ->with('swal_success_crud', 'Feedback berhasil dihapus.');
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB FeedbackController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

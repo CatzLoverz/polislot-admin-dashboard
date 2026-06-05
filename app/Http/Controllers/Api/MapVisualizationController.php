@@ -183,7 +183,7 @@ class MapVisualizationController extends Controller
             return $this->sendSuccess('Data visualisasi berhasil diambil.', $data);
 
         } catch (\Exception $e) {
-            Log::error('[API MapVisualizationController@show] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat visualisasi: ' . $e->getMessage(), 500);
         }
     }

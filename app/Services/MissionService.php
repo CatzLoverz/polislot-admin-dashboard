@@ -60,14 +60,14 @@ class MissionService
 
             if ($missions->isEmpty()) return;
 
-            Log::info("[SERVICE MissionService@updateProgress] Trigger: {$metricCode} for User {$userId}. Found: {$missions->count()} missions.");
+            Log::info("Trigger: {$metricCode} for User {$userId}. Found: {$missions->count()} missions.");
 
             foreach ($missions as $mission) {
                 $this->processMission($userId, $mission, $incrementValue);
             }
 
         } catch (Exception $e) {
-            Log::error("[SERVICE MissionService@updateProgress] Global Error: " . $e->getMessage());
+            Log::error("Global Error: " . $e->getMessage());
         }
     }
 
@@ -149,7 +149,7 @@ class MissionService
                     // KASUS E: Bolos > 1 hari (Streak Putus di tengah minggu)
                     if ($mission->mission_is_consecutive) {
                         $userMission->user_mission_current_value = 1;
-                        Log::info("[SERVICE MissionService@processMission] Streak Reset: User {$userId} Mission {$mission->mission_id}");
+                        Log::info("Streak Reset: User {$userId} Mission {$mission->mission_id}");
                     } else {
                         $userMission->user_mission_current_value += 1; // Akumulasi Hari (Tidak Wajib Urut)
                     }
@@ -179,7 +179,7 @@ class MissionService
                         false
                     );
 
-                    Log::info("[SERVICE MissionService@processMission] COMPLETED: {$mission->mission_title}");
+                    Log::info("COMPLETED: {$mission->mission_title}");
                 }
             }
 
@@ -187,7 +187,7 @@ class MissionService
 
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error("[SERVICE MissionService@processMission] Error: " . $e->getMessage());
+            Log::error("" . $e->getMessage());
         }
     }
 

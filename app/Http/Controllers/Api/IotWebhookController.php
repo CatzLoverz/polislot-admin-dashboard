@@ -22,7 +22,7 @@ class IotWebhookController extends Controller
         // Untuk Reverb, signature dikirim di header X-Reverb-Signature atau X-Pusher-Signature
         $signature = $request->header('X-Reverb-Signature') ?: $request->header('X-Pusher-Signature');
         
-        // Log::info('[IotWebhook] received', $request->all());
+        // Log::info('received', $request->all());
 
         $events = $request->input('events', []);
 
@@ -56,7 +56,7 @@ class IotWebhookController extends Controller
      */
     private function updateStatus(string $mac, string $status)
     {
-        Log::info("[IotWebhook] Device {$mac} is now {$status}");
+        Log::info("Device {$mac} is now {$status}");
 
         // Simpan ke Cache (sama seperti MqttListenerCommand)
         Cache::forever("iot_status_{$mac}", $status);
@@ -84,9 +84,9 @@ class IotWebhookController extends Controller
 
                     // Broadcast via Reverb WS
                     broadcast(new IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
-                    Log::info("[IotWebhook] Auto-pushed config to device {$mac} on connection.");
+                    Log::info("Auto-pushed config to device {$mac} on connection.");
                 } catch (\Exception $e) {
-                    Log::error("[IotWebhook] Failed to auto-push config: " . $e->getMessage());
+                    Log::error("Failed to auto-push config: " . $e->getMessage());
                 }
             }
         }

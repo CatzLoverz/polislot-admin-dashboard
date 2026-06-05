@@ -21,7 +21,7 @@ class FeedbackCategoryController extends Controller
             
             return $this->sendSuccess('Data kategori berhasil diambil.', $categories);
         } catch (\Exception $e) {
-            Log::error('[API FeedbackCategoryController@index] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return $this->sendError('Gagal mengambil kategori.', 500);
         }
     }

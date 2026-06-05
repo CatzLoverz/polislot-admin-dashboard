@@ -22,7 +22,7 @@ class IotDevice extends Model
         static::deleted(function (IotDevice $device) {
             $cacheKey = "iot_device_valid:{$device->device_mac_address}";
             Cache::forget($cacheKey);
-            Log::info('[IotDevice Model] Cache invalidated on delete', [
+            Log::info('Cache invalidated on delete', [
                 'mac' => $device->device_mac_address,
                 'cache_key' => $cacheKey,
             ]);
@@ -34,7 +34,7 @@ class IotDevice extends Model
                 $oldMac = $device->getOriginal('device_mac_address');
                 $cacheKey = "iot_device_valid:{$oldMac}";
                 Cache::forget($cacheKey);
-                Log::info('[IotDevice Model] Cache invalidated on MAC change', [
+                Log::info('Cache invalidated on MAC change', [
                     'old_mac' => $oldMac,
                     'new_mac' => $device->device_mac_address,
                 ]);

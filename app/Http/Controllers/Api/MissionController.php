@@ -132,7 +132,7 @@ class MissionController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('[API MissionController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat data misi: '.$e->getMessage(), 500);
         }
     }

@@ -125,7 +125,7 @@ class DashboardController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('[WEB DashboardController@getChartData] Error: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load chart data'], 500);
         }
     }
@@ -152,6 +152,7 @@ class DashboardController extends Controller
 
             return response()->json($leaders);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load leaderboard'], 500);
         }
     }
@@ -191,6 +192,7 @@ class DashboardController extends Controller
             return response()->json($validations);
 
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load realtime data'], 500);
         }
     }

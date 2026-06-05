@@ -40,13 +40,13 @@ class IotWsAuthController extends Controller
         $iotSecret = config('services.iot.secret');
 
         if (!$iotSecret) {
-            Log::error('[IotWsAuth] IOT_API_SECRET not configured.');
+            Log::error('IOT_API_SECRET not configured.');
             return response()->json(['error' => 'Server misconfigured.'], 500);
         }
 
         // Cek timestamp (±5 menit untuk mencegah replay attack)
         if (abs($now - $timestamp) > 300) {
-            Log::warning('[IotWsAuth] Rejected: Stale timestamp', [
+            Log::warning('Rejected: Stale timestamp', [
                 'mac'       => $macAddress,
                 'timestamp' => $timestamp,
                 'server'    => $now,
@@ -62,7 +62,7 @@ class IotWsAuthController extends Controller
         $expectedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
         if (!hash_equals($expectedSignature, $request->signature)) {
-            Log::warning('[IotWsAuth] Rejected: Invalid HMAC signature', [
+            Log::warning('Rejected: Invalid HMAC signature', [
                 'mac' => $macAddress,
                 'ip'  => $request->ip(),
             ]);
@@ -84,7 +84,7 @@ class IotWsAuthController extends Controller
         }
 
         if (!$isRegistered) {
-            Log::warning('[IotWsAuth] Rejected: Unregistered MAC Address', [
+            Log::warning('Rejected: Unregistered MAC Address', [
                 'mac' => $macAddress,
                 'ip'  => $request->ip(),
             ]);
@@ -113,7 +113,7 @@ class IotWsAuthController extends Controller
         $reverbKey    = config('broadcasting.connections.reverb.key');
         $authSignature = hash_hmac('sha256', $stringToSign, $reverbSecret);
 
-        Log::info('[IotWsAuth] Device authenticated successfully', [
+        Log::info('Device authenticated successfully', [
             'mac'     => $macAddress,
             'channel' => $channelName,
         ]);

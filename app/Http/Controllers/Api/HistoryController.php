@@ -56,7 +56,7 @@ class HistoryController extends Controller
             return $this->sendSuccess('Riwayat aktivitas berhasil diambil.', $responseData);
 
         } catch (\Exception $e) {
-            Log::error('[API HistoryController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat riwayat: ' . $e->getMessage(), 500);
         }
     }

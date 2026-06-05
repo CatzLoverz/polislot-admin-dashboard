@@ -81,7 +81,7 @@ class FeedbackCategoryController extends Controller
                     'fbk_category_name' => $validated['fbk_category_name'],
                 ]);
 
-                Log::info('[WEB FeedbackCategoryController@store] Sukses: Kategori baru berhasil disimpan.');
+                Log::info('Kategori baru berhasil disimpan.');
                 
                 return redirect()->route('admin.feedback-category.index')
                     ->with('swal_success_crud', 'Kategori berhasil ditambahkan.');
@@ -91,7 +91,7 @@ class FeedbackCategoryController extends Controller
             return back()->withErrors($e->errors())->withInput()
                 ->with('swal_error_crud', 'Validasi gagal, pastikan nama kategori belum ada.');
         } catch (Exception $e) {
-            Log::error('[WEB FeedbackCategoryController@store] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menambahkan kategori.')->withInput();
         }
     }
@@ -112,7 +112,7 @@ class FeedbackCategoryController extends Controller
                     'fbk_category_name' => $validated['fbk_category_name'],
                 ]);
 
-                Log::info('[WEB FeedbackCategoryController@update] Sukses: Kategori berhasil diperbarui.');
+                Log::info('Kategori berhasil diperbarui.');
 
                 return redirect()->route('admin.feedback-category.index')
                     ->with('swal_success_crud', 'Kategori berhasil diperbarui.');
@@ -122,7 +122,7 @@ class FeedbackCategoryController extends Controller
             return back()->withErrors($e->errors())->withInput()
                 ->with('swal_error_crud', 'Validasi gagal, nama kategori mungkin sudah ada.');
         } catch (Exception $e) {
-            Log::error('[WEB FeedbackCategoryController@update] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
@@ -138,14 +138,14 @@ class FeedbackCategoryController extends Controller
                 
                 $category->delete();
 
-                Log::info('[WEB FeedbackCategoryController@destroy] Sukses: Kategori berhasil dihapus.');
+                Log::info('Kategori berhasil dihapus.');
 
                 return redirect()->route('admin.feedback-category.index')
                     ->with('swal_success_crud', 'Kategori berhasil dihapus.');
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB FeedbackCategoryController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

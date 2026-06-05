@@ -73,7 +73,7 @@ class IotStreamController extends Controller
         }
 
         if (!$isRegistered) {
-            Log::warning('[API IotStreamController] Rejected: Unregistered MAC Address', [
+            Log::warning('Rejected: Unregistered MAC Address', [
                 'mac' => $macAddress,
                 'ip'  => $request->ip(),
             ]);
@@ -96,7 +96,7 @@ class IotStreamController extends Controller
 
             // Cek timestamp tidak lebih dari 5 menit lalu atau masa depan
             if (abs($now - $timestamp) > 300) {
-                Log::warning('[API IotStreamController] Rejected: Stale timestamp', [
+                Log::warning('Rejected: Stale timestamp', [
                     'mac'       => $macAddress,
                     'timestamp' => $timestamp,
                     'server'    => $now,
@@ -116,7 +116,7 @@ class IotStreamController extends Controller
             $expectedSignature = hash_hmac('sha256', $dataToSign, $iotSecret);
 
             if (!hash_equals($expectedSignature, $request->signature)) {
-                Log::warning('[API IotStreamController] Rejected: Invalid HMAC signature', [
+                Log::warning('Rejected: Invalid HMAC signature', [
                     'mac' => $macAddress,
                     'ip'  => $request->ip(),
                 ]);
@@ -139,7 +139,7 @@ class IotStreamController extends Controller
                 'message' => 'Frame broadcasted successfully.',
             ], 200);
         } catch (\Exception $e) {
-            Log::error('[API IotStreamController] Error broadcasting stream: ' . $e->getMessage());
+            Log::error('Error broadcasting stream: ' . $e->getMessage());
 
             return response()->json([
                 'status'  => 'error',
@@ -170,7 +170,7 @@ class IotStreamController extends Controller
 
         // 1. VALIDASI MAC ADDRESS
         if (!$this->validateMacAddress($macAddress)) {
-            Log::warning('[IotSnapshot] Rejected: Unregistered MAC', ['mac' => $macAddress]);
+            Log::warning('Rejected: Unregistered MAC', ['mac' => $macAddress]);
             return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
         }
 
@@ -196,7 +196,7 @@ class IotStreamController extends Controller
         $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
         if (!hash_equals($calculatedSignature, $request->signature)) {
-            Log::warning('[IotSnapshot] Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+            Log::warning('Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
         }
 
@@ -206,7 +206,7 @@ class IotStreamController extends Controller
         $decryptedImageBytes = openssl_decrypt($encryptedImage, 'aes-256-cbc', $key32, OPENSSL_RAW_DATA, $iv);
 
         if ($decryptedImageBytes === false) {
-            Log::error('[IotSnapshot] Failed to decrypt image', ['mac' => $macAddress]);
+            Log::error('Failed to decrypt image', ['mac' => $macAddress]);
             return response()->json(['status' => 'error', 'message' => 'Decryption failed.'], 400);
         }
 
@@ -246,7 +246,7 @@ class IotStreamController extends Controller
                 'capture_ai_status'  => $cvStatus,
             ]);
 
-            Log::info('[IotSnapshot] Image saved', ['mac' => $macAddress, 'path' => $path, 'cv_status' => $cvStatus]);
+            Log::info('Image saved', ['mac' => $macAddress, 'path' => $path, 'cv_status' => $cvStatus]);
 
             // Save the current count if present in payload
             if ($request->has('current_count') && $subarea) {
@@ -276,7 +276,7 @@ class IotStreamController extends Controller
                     $capture->user_validation_id = $userVal->user_validation_id;
                     $capture->save();
 
-                    Log::info("[IotSnapshot] Saved manual admin validation from snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
+                    Log::info("Saved manual admin validation from snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
 
                     // Evaluate WMA Threshold Shift!
                     $subarea->evaluateThresholdShift();
@@ -287,6 +287,8 @@ class IotStreamController extends Controller
         // 5. BROADCAST KE WEB UI
         $imageBase64 = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
         broadcast(new IotStreamReceived($macAddress, $imageBase64, $saveImage));
+
+        Log::info('Snapshot diterima dan berhasil dibroadcast', ['mac' => $macAddress, 'saved' => $saveImage]);
 
         return response()->json(['status' => 'success', 'message' => 'Snapshot received and broadcasted.']);
     }
@@ -323,7 +325,7 @@ class IotStreamController extends Controller
         $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
         if (!hash_equals($calculatedSignature, $request->signature)) {
-            Log::warning('[IotCount] Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+            Log::warning('Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
         }
 
@@ -336,6 +338,8 @@ class IotStreamController extends Controller
 
             // Broadcast count updated
             broadcast(new IotCountUpdated($macAddress, $request->count));
+
+            Log::info('Data count (kendaraan) diperbarui via IoT', ['mac' => $macAddress, 'count' => $request->count]);
         }
 
         return response()->json(['status' => 'success']);
@@ -367,13 +371,14 @@ class IotStreamController extends Controller
         $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
         if (!hash_equals($calculatedSignature, $request->signature)) {
-            Log::warning('[IotConfig] Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+            Log::warning('Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
         }
 
         $device = IotDevice::where('device_mac_address', $macAddress)->first();
         if ($device && $device->subarea) {
             $subarea = $device->subarea;
+            Log::info('Konfigurasi dikirim ke IoT Device', ['mac' => $macAddress]);
             return response()->json([
                 'status' => 'success',
                 'config' => [
@@ -385,6 +390,7 @@ class IotStreamController extends Controller
             ]);
         }
 
+        Log::warning('Config query ditolak: Subarea tidak ditemukan', ['mac' => $macAddress]);
         return response()->json(['status' => 'error', 'message' => 'Subarea not found.'], 404);
     }
 }

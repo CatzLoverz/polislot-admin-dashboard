@@ -9,6 +9,7 @@ use App\Models\UserValidation;
 use App\Models\Validation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotCommandSent;
 use ZipArchive;
@@ -80,8 +81,10 @@ class IotStreamViewerController extends Controller
             $payloadForWs['signature'] = $this->generateCommandSignature($payloadData);
 
             broadcast(new IotCommandSent($mac, $action, $payloadForWs, $payloadForWs['signature']));
+            Log::info("Command '{$action}' broadcasted via Reverb WS", ['mac' => $mac]);
         } catch (\Exception $e) {
             $errors[] = "Reverb: " . $e->getMessage();
+            Log::error("Failed to broadcast command via Reverb WS", ['mac' => $mac, 'error' => $e->getMessage()]);
         }
 
         // 2. Publish via MQTT (untuk mqtt_test_iot.py — backward compatibility)
@@ -94,8 +97,10 @@ class IotStreamViewerController extends Controller
             $mqtt = MQTT::connection('publisher');
             $mqtt->publish($topic, $payload, 0);
             $mqtt->disconnect();
+            Log::info("Command '{$action}' published via MQTT", ['mac' => $mac, 'topic' => $topic]);
         } catch (\Exception $e) {
             $errors[] = "MQTT: " . $e->getMessage();
+            Log::error("Failed to publish command via MQTT", ['mac' => $mac, 'error' => $e->getMessage()]);
         }
 
         return $errors;
@@ -126,12 +131,15 @@ class IotStreamViewerController extends Controller
         $errors = $this->sendCommandToDevice($mac, 'snapshot', $payloadData);
 
         if (count($errors) === 2) {
+            Log::warning("Gagal mengirim perintah snapshot ke perangkat", ['mac' => $mac, 'errors' => $errors]);
             // Kedua jalur gagal
             return response()->json([
                 'success' => false,
                 'message' => "Gagal mengirim perintah: " . implode(' | ', $errors)
             ], 500);
         }
+
+        Log::info("Perintah snapshot berhasil dikirim", ['mac' => $mac]);
 
         return response()->json([
             'success' => true,
@@ -158,6 +166,7 @@ class IotStreamViewerController extends Controller
         $device = IotDevice::where('device_mac_address', $mac)->first();
 
         if (!$device || !$device->subarea) {
+            Log::warning('Gagal menyimpan settings: perangkat atau subarea tidak ditemukan', ['mac' => $mac]);
             return response()->json([
                 'success' => false,
                 'message' => 'Perangkat atau subarea tidak ditemukan.'
@@ -184,6 +193,8 @@ class IotStreamViewerController extends Controller
         // Send command to device via Reverb WS & MQTT
         $this->sendCommandToDevice($mac, 'update_config', $payloadData);
 
+        Log::info('Konfigurasi deteksi berhasil disimpan dan dikirim ke perangkat', ['mac' => $mac]);
+
         return response()->json([
             'success' => true,
             'message' => 'Konfigurasi deteksi berhasil disimpan dan dikirim ke perangkat.'
@@ -206,6 +217,7 @@ class IotStreamViewerController extends Controller
 
         $device = IotDevice::where('device_mac_address', $mac)->first();
         if (!$device || !$device->subarea) {
+            Log::warning('Validasi stream gagal: Perangkat atau subarea tidak ditemukan', ['mac' => $mac]);
             return response()->json([
                 'success' => false,
                 'message' => 'Perangkat atau subarea tidak ditemukan.'
@@ -225,6 +237,12 @@ class IotStreamViewerController extends Controller
 
             // Evaluasi pergeseran threshold WMA
             $device->subarea->evaluateThresholdShift();
+
+            Log::info("Perangkat offline. Validasi manual langsung diproses", [
+                'mac' => $mac,
+                'content' => $content,
+                'subarea_id' => $device->subarea->park_subarea_id
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -251,11 +269,14 @@ class IotStreamViewerController extends Controller
 
         if (count($errors) === 2) {
             Cache::forget("pending_validation_{$cleanMac}");
+            Log::warning("Gagal mengirim perintah snapshot untuk validasi", ['mac' => $mac, 'errors' => $errors]);
             return response()->json([
                 'success' => false,
                 'message' => "Gagal mengirim perintah: " . implode(' | ', $errors)
             ], 500);
         }
+
+        Log::info("Validasi dipicu, snapshot diminta", ['mac' => $mac, 'content' => $content]);
 
         return response()->json([
             'success' => true,
@@ -301,6 +322,7 @@ class IotStreamViewerController extends Controller
         $captures = $query->get();
 
         if ($captures->isEmpty()) {
+            Log::warning("Batch download dibatalkan: tidak ada data capture yang cocok", ['mac' => $mac]);
             return redirect()->back()->with('error', 'Tidak ada gambar yang cocok dengan kriteria unduh.');
         }
 
@@ -345,7 +367,10 @@ class IotStreamViewerController extends Controller
 
         if (!empty($idsToUpdate)) {
             IotCapture::whereIn('capture_id', $idsToUpdate)->update(['capture_is_trained' => true]);
+            Log::info("Tandai capture sebagai trained selama batch download", ['count' => count($idsToUpdate)]);
         }
+
+        Log::info("Batch download sukses", ['mac' => $mac, 'file' => $zipFileName, 'total_files' => $addedFiles]);
 
         return response()->download($zipFilePath)->deleteFileAfterSend(true);
     }
@@ -371,6 +396,8 @@ class IotStreamViewerController extends Controller
             $capture->delete();
             $deletedCount++;
         }
+
+        Log::info("Batch delete capture IoT sukses", ['deleted_count' => $deletedCount]);
 
         return response()->json([
             'success' => true,

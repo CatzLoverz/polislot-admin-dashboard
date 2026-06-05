@@ -37,7 +37,7 @@ class UserFaqController extends Controller
             return $this->sendSuccess('Data FAQ berhasil diambil.', $formattedData, 200);
 
         } catch (\Exception $e) {
-            Log::error('[API UserFaqController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan saat mengambil data FAQ.', 500);
         }
     }
