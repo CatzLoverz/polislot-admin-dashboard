@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotCommandSent;
+use App\Events\IotThresholdUpdated;
 
 class ParkSubarea extends Model
 {
@@ -128,7 +129,7 @@ class ParkSubarea extends Model
 
                 // Broadcast event ke Web UI untuk silent refresh slider/treshold
                 try {
-                    broadcast(new \App\Events\IotThresholdUpdated($mac, $this->threshold_banyak, $this->threshold_terbatas));
+                    broadcast(new IotThresholdUpdated($mac, $this->threshold_banyak, $this->threshold_terbatas));
                 } catch (\Exception $e) {
                     Log::warning("[Threshold WMA] Failed to broadcast threshold update: " . $e->getMessage());
                 }
