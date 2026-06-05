@@ -1383,7 +1383,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L1",
       "id": "app_http_controllers_api_iotstreamcontroller_php",
-      "community": 6,
+      "community": 187,
       "norm_label": "iotstreamcontroller.php"
     },
     {
@@ -1392,7 +1392,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L17",
       "id": "api_iotstreamcontroller_iotstreamcontroller",
-      "community": 6,
+      "community": 187,
       "norm_label": "iotstreamcontroller"
     },
     {
@@ -1401,7 +1401,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L22",
       "id": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress",
-      "community": 6,
+      "community": 187,
       "norm_label": ".validatemacaddress()"
     },
     {
@@ -1410,7 +1410,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L45",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivestream",
-      "community": 6,
+      "community": 187,
       "norm_label": ".receivestream()"
     },
     {
@@ -1419,25 +1419,25 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L157",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
-      "community": 6,
+      "community": 187,
       "norm_label": ".receivesnapshot()"
     },
     {
       "label": ".receiveCount()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L293",
+      "source_location": "L297",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
-      "community": 6,
+      "community": 187,
       "norm_label": ".receivecount()"
     },
     {
       "label": ".receiveConfigQuery()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L347",
+      "source_location": "L348",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receiveconfigquery",
-      "community": 6,
+      "community": 187,
       "norm_label": ".receiveconfigquery()"
     },
     {
@@ -2137,7 +2137,7 @@
       "label": ".generateCommandSignature()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L54",
+      "source_location": "L55",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_generatecommandsignature",
       "community": 6,
       "norm_label": ".generatecommandsignature()"
@@ -2146,7 +2146,7 @@
       "label": ".sendCommandToDevice()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L66",
+      "source_location": "L67",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
       "community": 6,
       "norm_label": ".sendcommandtodevice()"
@@ -2155,7 +2155,7 @@
       "label": ".triggerSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L100",
+      "source_location": "L101",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_triggersnapshot",
       "community": 6,
       "norm_label": ".triggersnapshot()"
@@ -2191,7 +2191,7 @@
       "label": ".deleteBatch()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L327",
+      "source_location": "L330",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_deletebatch",
       "community": 6,
       "norm_label": ".deletebatch()"
@@ -2875,10 +2875,19 @@
       "label": ".device()",
       "file_type": "code",
       "source_file": "app/Models/IotCapture.php",
-      "source_location": "L26",
+      "source_location": "L27",
       "id": "models_iotcapture_iotcapture_device",
       "community": 6,
       "norm_label": ".device()"
+    },
+    {
+      "label": ".userValidation()",
+      "file_type": "code",
+      "source_file": "app/Models/IotCapture.php",
+      "source_location": "L32",
+      "id": "models_iotcapture_iotcapture_uservalidation",
+      "community": 6,
+      "norm_label": ".uservalidation()"
     },
     {
       "label": "IotDevice.php",
@@ -4132,6 +4141,33 @@
       "norm_label": "down()"
     },
     {
+      "label": "2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php",
+      "file_type": "code",
+      "source_file": "database/migrations/2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php",
+      "source_location": "L1",
+      "id": "database_migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_php",
+      "community": 188,
+      "norm_label": "2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php"
+    },
+    {
+      "label": "up()",
+      "file_type": "code",
+      "source_file": "database/migrations/2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php",
+      "source_location": "L12",
+      "id": "migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_up",
+      "community": 188,
+      "norm_label": "up()"
+    },
+    {
+      "label": "down()",
+      "file_type": "code",
+      "source_file": "database/migrations/2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php",
+      "source_location": "L26",
+      "id": "migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_down",
+      "community": 188,
+      "norm_label": "down()"
+    },
+    {
       "label": "DatabaseSeeder.php",
       "file_type": "code",
       "source_file": "database/seeders/DatabaseSeeder.php",
@@ -4954,7 +4990,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L294",
+      "source_location": "L293",
       "id": "python_parking_detector_mqtt_main",
       "community": 181,
       "norm_label": "main()"
@@ -5125,7 +5161,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L294",
+      "source_location": "L293",
       "id": "python_parking_detector_mqtt_preview_main",
       "community": 186,
       "norm_label": "main()"
@@ -5287,7 +5323,7 @@
       "label": "detector_loop()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L316",
+      "source_location": "L315",
       "id": "python_parking_detector_ws_detector_loop",
       "community": 180,
       "norm_label": "detector_loop()"
@@ -5296,7 +5332,7 @@
       "label": "websocket_client()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L368",
+      "source_location": "L367",
       "id": "python_parking_detector_ws_websocket_client",
       "community": 180,
       "norm_label": "websocket_client()"
@@ -5305,7 +5341,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L456",
+      "source_location": "L455",
       "id": "python_parking_detector_ws_main",
       "community": 180,
       "norm_label": "main()"
@@ -5476,7 +5512,7 @@
       "label": "websocket_client()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L316",
+      "source_location": "L315",
       "id": "python_parking_detector_ws_preview_websocket_client",
       "community": 72,
       "norm_label": "websocket_client()"
@@ -5485,7 +5521,7 @@
       "label": "start_websocket_thread()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L402",
+      "source_location": "L401",
       "id": "python_parking_detector_ws_preview_start_websocket_thread",
       "community": 72,
       "norm_label": "start_websocket_thread()"
@@ -5494,7 +5530,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L413",
+      "source_location": "L412",
       "id": "python_parking_detector_ws_preview_main",
       "community": 72,
       "norm_label": "main()"
@@ -8591,7 +8627,7 @@
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L347",
-      "community": 6,
+      "community": 187,
       "norm_label": ".receivechatreply()",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply"
     },
@@ -12603,6 +12639,16 @@
       "target": "models_iotcapture_iotcapture_device"
     },
     {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Models/IotCapture.php",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "models_iotcapture_iotcapture",
+      "target": "models_iotcapture_iotcapture_uservalidation",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/Models/IotDevice.php",
@@ -13787,6 +13833,26 @@
       "confidence_score": 1.0,
       "source": "database_migrations_2026_04_23_202454_create_user_faq_table_php",
       "target": "migrations_2026_04_23_202454_create_user_faq_table_down"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "database/migrations/2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "database_migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_php",
+      "target": "migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_up",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "database/migrations/2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "database_migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_php",
+      "target": "migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_down",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19309,5 +19375,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "13d4cd9cf47063b66fdb5ec23a56a98d47103758"
+  "built_at_commit": "46391e1c7d779649329c196851de86183b8bc293"
 }

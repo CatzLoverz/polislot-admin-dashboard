@@ -1,16 +1,16 @@
 # Graph Report - polislot-admin-dashboard  (2026-06-05)
 
 ## Corpus Check
-- 195 files · ~68,545 words
+- 196 files · ~68,828 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 967 nodes · 1028 edges · 187 communities (92 shown, 95 thin omitted)
+- 971 nodes · 1031 edges · 189 communities (93 shown, 96 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `13d4cd9c`
+- Built from commit: `46391e1c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -135,6 +135,7 @@
 - [[_COMMUNITY_Community 184|Community 184]]
 - [[_COMMUNITY_Community 185|Community 185]]
 - [[_COMMUNITY_Community 186|Community 186]]
+- [[_COMMUNITY_Community 187|Community 187]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `AuthControllerTest` - 31 edges
@@ -163,7 +164,7 @@
 ## Hyperedges (group relationships)
 - **Deployment Options** — docker_deployment, manual_deployment [EXTRACTED 1.00]
 
-## Communities (187 total, 95 thin omitted)
+## Communities (189 total, 96 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -178,8 +179,8 @@ Cohesion: 0.12
 Nodes (15): devDependencies, axios, concurrently, laravel-echo, laravel-vite-plugin, pusher-js, tailwindcss, @tailwindcss/vite (+7 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.11
-Nodes (4): IotStreamController, MqttListenerCommand, IotCapture, IotStreamViewerController
+Cohesion: 0.15
+Nodes (3): MqttListenerCommand, IotCapture, IotStreamViewerController
 
 ### Community 7 - "Community 7"
 Cohesion: 0.21
@@ -268,13 +269,15 @@ Nodes (13): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_ae
 ## Knowledge Gaps
 - **96 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+91 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **95 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Validation` connect `Community 0` to `Community 6`?**
+- **Why does `Validation` connect `Community 0` to `Community 187`, `Community 6`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **Why does `IotCapture` connect `Community 6` to `Community 187`?**
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **Are the 20 inferred relationships involving `Validation` (e.g. with `.handle()` and `.receiveSnapshot()`) actually correct?**
   _`Validation` has 20 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
@@ -285,5 +288,3 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.0625 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.08 - nodes in this community are weakly interconnected._
-- **Should `Community 3` be split into smaller, more focused modules?**
-  _Cohesion score 0.13438735177865613 - nodes in this community are weakly interconnected._

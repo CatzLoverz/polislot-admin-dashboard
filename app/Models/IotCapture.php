@@ -17,6 +17,7 @@ class IotCapture extends Model
         'capture_image_path',
         'capture_is_trained',
         'capture_ai_status',
+        'user_validation_id',
     ];
 
     protected $casts = [
@@ -26,5 +27,10 @@ class IotCapture extends Model
     public function device()
     {
         return $this->belongsTo(IotDevice::class, 'device_id', 'device_id');
+    }
+
+    public function userValidation()
+    {
+        return $this->belongsTo(UserValidation::class, 'user_validation_id', 'user_validation_id');
     }
 }

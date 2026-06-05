@@ -298,30 +298,44 @@
                                             <div class="position-absolute" style="top: 5px; left: 5px; z-index: 5;">
                                                 <input type="checkbox" name="capture_ids[]" value="{{ $capture->capture_id }}" onchange="updateSelectedCount()" class="capture-checkbox" style="width: 16px; height: 16px; cursor: pointer;">
                                             </div>
-                                            
-                                            <a href="{{ asset('storage/' . $capture->capture_image_path) }}" target="_blank" title="Klik untuk perbesar">
-                                                <img src="{{ asset('storage/' . $capture->capture_image_path) }}" class="img-fluid rounded" style="height: 70px; width: 100%; object-fit: cover;">
+                                                                                       <a href="{{ asset('storage/' . $capture->capture_image_path) }}" target="_blank" title="Klik untuk perbesar">
+                                                <img src="{{ asset('storage/' . $capture->capture_image_path) }}" class="img-fluid rounded" style="height: 120px; width: 100%; object-fit: cover;">
                                             </a>
                                             
                                             <div class="mt-1 small px-1 text-left">
-                                                <!-- Badge Status CV -->
-                                                @if($capture->capture_ai_status === 'banyak')
-                                                    <span class="badge badge-success px-1" style="font-size: 8px;">Banyak</span>
-                                                @elseif($capture->capture_ai_status === 'terbatas')
-                                                    <span class="badge badge-warning text-white px-1" style="font-size: 8px;">Terbatas</span>
-                                                @elseif($capture->capture_ai_status === 'penuh')
-                                                    <span class="badge badge-danger px-1" style="font-size: 8px;">Penuh</span>
-                                                @else
-                                                    <span class="badge badge-secondary px-1" style="font-size: 8px;">Pending</span>
-                                                @endif
-
+                                                <div class="mb-1 d-flex flex-wrap" style="gap: 3px;">
+                                                    <!-- Badge Status CV -->
+                                                    @if($capture->capture_ai_status === 'banyak')
+                                                        <span class="badge badge-success px-1" style="font-size: 8px;">CV: Banyak</span>
+                                                    @elseif($capture->capture_ai_status === 'terbatas')
+                                                        <span class="badge badge-warning text-white px-1" style="font-size: 8px;">CV: Terbatas</span>
+                                                    @elseif($capture->capture_ai_status === 'penuh')
+                                                        <span class="badge badge-danger px-1" style="font-size: 8px;">CV: Penuh</span>
+                                                    @else
+                                                        <span class="badge badge-secondary px-1" style="font-size: 8px;">CV: Pending</span>
+                                                    @endif
+ 
+                                                    <!-- Badge Status User Validation -->
+                                                    @if($capture->userValidation)
+                                                        @if($capture->userValidation->user_validation_content === 'banyak')
+                                                            <span class="badge badge-success px-1" style="font-size: 8px;">Val: Banyak</span>
+                                                        @elseif($capture->userValidation->user_validation_content === 'terbatas')
+                                                            <span class="badge badge-warning text-white px-1" style="font-size: 8px;">Val: Terbatas</span>
+                                                        @elseif($capture->userValidation->user_validation_content === 'penuh')
+                                                            <span class="badge badge-danger px-1" style="font-size: 8px;">Val: Penuh</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="badge badge-secondary px-1" style="font-size: 8px;">Val: -</span>
+                                                    @endif
+                                                </div>
+ 
                                                 <!-- Badge Trained Status -->
                                                 @if($capture->capture_is_trained)
                                                     <span class="badge badge-info px-1" style="font-size: 8px;"><i class="fas fa-check"></i> Trained</span>
                                                 @else
                                                     <span class="badge badge-light border px-1" style="font-size: 8px; color: #555;">New</span>
                                                 @endif
-
+ 
                                                 <div class="text-muted mt-1" style="font-size: 9px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ $capture->created_at->format('d/m/Y H:i:s') }}">
                                                     {{ $capture->created_at->format('d/m/Y H:i:s') }}
                                                 </div>
@@ -388,12 +402,22 @@
                     addLog(data.message);
                 }
             } else {
-                alert("Gagal memicu validasi: " + data.message);
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Gagal memicu validasi: ' + data.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("Terjadi kesalahan jaringan.");
+            Swal.fire({
+                title: 'Gagal!',
+                text: 'Terjadi kesalahan jaringan.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         })
         .finally(() => {
             btnBanyak.disabled = false;
@@ -480,7 +504,12 @@
                         addLog('Berhasil memicu pengambilan snapshot. Menunggu respons gambar...');
                     }
                 } else {
-                    alert("Gagal memicu snapshot: " + data.message);
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Gagal memicu snapshot: ' + data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 }
             })
             .catch(err => {
@@ -507,7 +536,12 @@
 
     function closeCurrentPolygon() {
         if (currentPoints.length < 3) {
-            alert('Minimal harus ada 3 titik untuk membuat polygon.');
+            Swal.fire({
+                title: 'Perhatian!',
+                text: 'Minimal harus ada 3 titik untuk membuat polygon.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
             return;
         }
         
@@ -529,14 +563,25 @@
     }
 
     function clearAllPolygons() {
-        if (confirm('Hapus semua polygon deteksi?')) {
-            completedPolygons = [];
-            currentPoints = [];
-            draw();
-            if (typeof addLog === 'function') {
-                addLog('Semua polygon dihapus dari layar.');
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: 'Semua polygon deteksi akan dihapus dari layar!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                completedPolygons = [];
+                currentPoints = [];
+                draw();
+                if (typeof addLog === 'function') {
+                    addLog('Semua polygon dihapus dari layar.');
+                }
             }
-        }
+        });
     }
 
     function draw() {
@@ -599,7 +644,12 @@
         const thresholdTerbatas = document.getElementById('input-threshold-terbatas').value;
 
         if (!maxSlots || maxSlots <= 0) {
-            alert('Kapasitas maksimal harus lebih besar dari 0!');
+            Swal.fire({
+                title: 'Perhatian!',
+                text: 'Kapasitas maksimal harus lebih besar dari 0!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
@@ -625,17 +675,32 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Konfigurasi deteksi berhasil disimpan dan disinkronkan ke perangkat!');
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Konfigurasi deteksi berhasil disimpan dan disinkronkan ke perangkat!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
                 if (typeof addLog === 'function') {
                     addLog('Konfigurasi deteksi berhasil disimpan ke database.');
                 }
             } else {
-                alert('Gagal menyimpan: ' + data.message);
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Gagal menyimpan: ' + data.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Terjadi kesalahan jaringan saat menyimpan konfigurasi.');
+            Swal.fire({
+                title: 'Gagal!',
+                text: 'Terjadi kesalahan jaringan saat menyimpan konfigurasi.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         });
     }
 
@@ -702,41 +767,70 @@
     function deleteSelectedCaptures() {
         const checkedCheckboxes = document.querySelectorAll('.capture-checkbox:checked');
         if (checkedCheckboxes.length === 0) {
-            alert('Silakan pilih minimal 1 gambar untuk dihapus.');
+            Swal.fire({
+                title: 'Perhatian!',
+                text: 'Silakan pilih minimal 1 gambar untuk dihapus.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
             return;
         }
 
-        if (!confirm(`Apakah Anda yakin ingin menghapus ${checkedCheckboxes.length} gambar terpilih dari server?`)) {
-            return;
-        }
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: `Apakah Anda yakin ingin menghapus ${checkedCheckboxes.length} gambar terpilih dari server?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const ids = Array.from(checkedCheckboxes).map(cb => parseInt(cb.value));
 
-        const ids = Array.from(checkedCheckboxes).map(cb => parseInt(cb.value));
-
-        fetch("{{ route('admin.iot-stream-viewer.delete-batch') }}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ capture_ids: ids })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                checkedCheckboxes.forEach(cb => {
-                    const card = cb.closest('.capture-item-card');
-                    if (card) card.remove();
+                fetch("{{ route('admin.iot-stream-viewer.delete-batch') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ capture_ids: ids })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        checkedCheckboxes.forEach(cb => {
+                            const card = cb.closest('.capture-item-card');
+                            if (card) card.remove();
+                        });
+                        filterCaptures();
+                    } else {
+                        Swal.fire({
+                            title: 'Gagal!',
+                            text: 'Gagal menghapus gambar: ' + data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Error deleting captures:', err);
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: 'Terjadi kesalahan jaringan saat menghapus.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 });
-                filterCaptures();
-            } else {
-                alert('Gagal menghapus gambar: ' + data.message);
             }
-        })
-        .catch(err => {
-            console.error('Error deleting captures:', err);
-            alert('Terjadi kesalahan jaringan saat menghapus.');
         });
     }
 

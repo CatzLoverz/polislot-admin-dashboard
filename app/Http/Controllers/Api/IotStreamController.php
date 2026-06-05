@@ -239,7 +239,7 @@ class IotStreamController extends Controller
                 }
             }
 
-            IotCapture::create([
+            $capture = IotCapture::create([
                 'device_id'          => $device->device_id,
                 'capture_image_path' => $path,
                 'capture_is_trained' => false,
@@ -265,12 +265,16 @@ class IotStreamController extends Controller
                 $subarea = $device->subarea;
                 if ($subarea) {
                     // Create UserValidation record
-                    UserValidation::create([
+                    $userVal = UserValidation::create([
                         'user_id' => $pending['user_id'],
                         'validation_id' => Validation::first()->validation_id ?? 1,
                         'park_subarea_id' => $subarea->park_subarea_id,
                         'user_validation_content' => $pending['content'],
                     ]);
+
+                    // Associate with capture
+                    $capture->user_validation_id = $userVal->user_validation_id;
+                    $capture->save();
 
                     Log::info("[IotSnapshot] Saved manual admin validation from snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
 

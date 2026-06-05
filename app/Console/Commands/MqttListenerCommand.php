@@ -163,7 +163,7 @@ class MqttListenerCommand extends Command
                             }
 
                             // 4. Simpan ke database IotCapture
-                            IotCapture::create([
+                            $capture = IotCapture::create([
                                 'device_id' => $device->device_id,
                                 'capture_image_path' => $path,
                                 'capture_is_trained' => false,
@@ -189,12 +189,16 @@ class MqttListenerCommand extends Command
                                 $subarea = $device->subarea;
                                 if ($subarea) {
                                     // Create UserValidation record
-                                    UserValidation::create([
+                                    $userVal = UserValidation::create([
                                         'user_id' => $pending['user_id'],
                                         'validation_id' => Validation::first()->validation_id ?? 1,
                                         'park_subarea_id' => $subarea->park_subarea_id,
                                         'user_validation_content' => $pending['content'],
                                     ]);
+
+                                    // Associate with capture
+                                    $capture->user_validation_id = $userVal->user_validation_id;
+                                    $capture->save();
 
                                     $this->info("📈 [MQTT] Saved manual validation from admin snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
 

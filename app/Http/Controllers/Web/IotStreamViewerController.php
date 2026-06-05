@@ -37,6 +37,7 @@ class IotStreamViewerController extends Controller
         $captures = [];
         if ($selectedDevice) {
             $captures = IotCapture::where('device_id', $selectedDevice->device_id)
+                ->with('userValidation')
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
@@ -257,7 +258,7 @@ class IotStreamViewerController extends Controller
             return abort(404, 'Device not found.');
         }
 
-        $query = IotCapture::where('device_id', $device->device_id);
+        $query = IotCapture::where('device_id', $device->device_id)->with('userValidation');
 
         if ($request->has('capture_ids') && !empty($request->capture_ids)) {
             $query->whereIn('capture_id', $request->capture_ids);
@@ -278,7 +279,9 @@ class IotStreamViewerController extends Controller
         }
 
         $zip = new ZipArchive();
-        $zipFileName = 'polislot_dataset_' . time() . '_' . str_replace(':', '', $mac) . '.zip';
+        $oldestDate = $captures->min('created_at')->format('d-m-Y');
+        $newestDate = $captures->max('created_at')->format('d-m-Y');
+        $zipFileName = "polislot_dataset_{$oldestDate}_{$newestDate}.zip";
         $zipFilePath = storage_path('app/public/' . $zipFileName);
 
         if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
@@ -291,9 +294,10 @@ class IotStreamViewerController extends Controller
         foreach ($captures as $capture) {
             $filePath = storage_path('app/public/' . $capture->capture_image_path);
             if (file_exists($filePath)) {
-                $trainedStr = $capture->capture_is_trained ? 'trained' : 'untrained';
-                $statusStr = $capture->capture_ai_status ?: 'unknown';
-                $localName = "capture_{$capture->capture_id}_{$statusStr}_{$trainedStr}.jpg";
+                $dateStr = $capture->created_at->format('d-m-Y');
+                $cvStatus = $capture->capture_ai_status ?: 'unknown';
+                $valStatus = $capture->userValidation ? $capture->userValidation->user_validation_content : 'none';
+                $localName = "capture_{$dateStr}_cv-{$cvStatus}_val-{$valStatus}_{$capture->capture_id}.jpg";
 
                 $zip->addFile($filePath, $localName);
                 $addedFiles++;
