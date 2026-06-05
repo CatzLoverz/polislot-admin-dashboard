@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\IotDevice;
 use App\Models\IotCapture;
+use App\Models\UserValidation;
+use App\Models\Validation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use PhpMqtt\Client\Facades\MQTT;
@@ -208,6 +210,26 @@ class IotStreamViewerController extends Controller
                 'success' => false,
                 'message' => 'Perangkat atau subarea tidak ditemukan.'
             ], 404);
+        }
+
+        // Cek status perangkat dari Cache (default: offline)
+        $status = Cache::get("iot_status_{$mac}", 'offline');
+        if ($status === 'offline') {
+            // Jalankan flow validasi biasa tanpa IoT (ignore capture)
+            $userVal = UserValidation::create([
+                'user_id' => auth()->user()->user_id ?? 1,
+                'validation_id' => Validation::first()->validation_id ?? 1,
+                'park_subarea_id' => $device->subarea->park_subarea_id,
+                'user_validation_content' => $content,
+            ]);
+
+            // Evaluasi pergeseran threshold WMA
+            $device->subarea->evaluateThresholdShift();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Perangkat offline. Validasi [" . strtoupper($content) . "] berhasil diproses langsung (tanpa IoT)."
+            ]);
         }
 
         // Simpan validation content ke Cache agar saat snapshot datang kita bisa menyimpannya ke user_validations

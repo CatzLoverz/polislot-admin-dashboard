@@ -960,6 +960,21 @@
                     if (countBadge) {
                         countBadge.innerText = e.count;
                     }
+                })
+                .listen('.threshold.updated', (e) => {
+                    addLog(`Threshold WMA bergeser: Banyak=<strong>${e.thresholdBanyak}%</strong>, Terbatas=<strong>${e.thresholdTerbatas}%</strong>`);
+                    
+                    const sliderBanyak = document.getElementById('input-threshold-banyak');
+                    const sliderTerbatas = document.getElementById('input-threshold-terbatas');
+                    
+                    if (sliderBanyak && sliderTerbatas) {
+                        sliderBanyak.value = Math.round(e.thresholdBanyak);
+                        sliderTerbatas.value = Math.round(e.thresholdTerbatas);
+                        
+                        if (typeof updateSliderUI === 'function') {
+                            updateSliderUI();
+                        }
+                    }
                 });
         } else {
             console.warn("Menunggu modul mandiri (Echo) dari Vite dimuat...");

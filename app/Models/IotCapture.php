@@ -13,11 +13,11 @@ class IotCapture extends Model
     protected $primaryKey = 'capture_id';
 
     protected $fillable = [
+        'user_validation_id',
         'device_id',
         'capture_image_path',
         'capture_is_trained',
-        'capture_ai_status',
-        'user_validation_id',
+        'capture_ai_status'
     ];
 
     protected $casts = [

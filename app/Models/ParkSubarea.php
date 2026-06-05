@@ -125,6 +125,14 @@ class ParkSubarea extends Model
             $device = $this->iotDevice;
             if ($device) {
                 $mac = $device->device_mac_address;
+
+                // Broadcast event ke Web UI untuk silent refresh slider/treshold
+                try {
+                    broadcast(new \App\Events\IotThresholdUpdated($mac, $this->threshold_banyak, $this->threshold_terbatas));
+                } catch (\Exception $e) {
+                    Log::warning("[Threshold WMA] Failed to broadcast threshold update: " . $e->getMessage());
+                }
+
                 $payloadData = [
                     'action'            => 'update_config',
                     'max_slots'         => (int) $this->max_slots,
