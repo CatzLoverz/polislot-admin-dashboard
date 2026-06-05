@@ -215,7 +215,7 @@ class MqttListenerCommand extends Command
 
                     // 5. Ubah bytes menjadi base64 string untuk UI HTML dan Broadcast ke Reverb
                     $imageBase64String = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
-                    broadcast(new IotStreamReceived($payload['mac_address'], $imageBase64String));
+                    broadcast(new IotStreamReceived($payload['mac_address'], $imageBase64String, $saveImage));
                     $this->info("📡 Gambar di-broadcast ke Web UI.");
                 } catch (\Exception $e) {
                     $this->error("Error memproses pesan: " . $e->getMessage());

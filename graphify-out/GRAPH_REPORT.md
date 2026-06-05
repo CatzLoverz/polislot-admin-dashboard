@@ -1,16 +1,16 @@
 # Graph Report - polislot-admin-dashboard  (2026-06-05)
 
 ## Corpus Check
-- 196 files · ~68,828 words
+- 197 files · ~68,960 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 971 nodes · 1031 edges · 189 communities (93 shown, 96 thin omitted)
+- 973 nodes · 1032 edges · 190 communities (93 shown, 97 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 113 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `46391e1c`
+- Built from commit: `d4e62721`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -124,6 +124,7 @@
 - [[_COMMUNITY_Community 120|Community 120]]
 - [[_COMMUNITY_Community 121|Community 121]]
 - [[_COMMUNITY_Community 122|Community 122]]
+- [[_COMMUNITY_Community 159|Community 159]]
 - [[_COMMUNITY_Community 176|Community 176]]
 - [[_COMMUNITY_Community 177|Community 177]]
 - [[_COMMUNITY_Community 178|Community 178]]
@@ -164,7 +165,7 @@
 ## Hyperedges (group relationships)
 - **Deployment Options** — docker_deployment, manual_deployment [EXTRACTED 1.00]
 
-## Communities (189 total, 96 thin omitted)
+## Communities (190 total, 97 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -267,9 +268,9 @@ Cohesion: 0.22
 Nodes (13): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_inside_any_polygon(), is_inside_polygon(), load_local_config(), main() (+5 more)
 
 ## Knowledge Gaps
-- **96 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+91 more)
+- **97 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+92 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **96 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **97 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -281,7 +282,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 20 inferred relationships involving `Validation` (e.g. with `.handle()` and `.receiveSnapshot()`) actually correct?**
   _`Validation` has 20 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
-  _118 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _119 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06970128022759602 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**

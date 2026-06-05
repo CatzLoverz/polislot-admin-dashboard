@@ -46,6 +46,58 @@
     z-index: 20;
     position: relative;
 }
+
+/* Custom Premium Badge & Card Styles */
+.capture-card {
+    border-radius: 8px;
+    border: 1px solid #ebedf2 !important;
+    transition: all 0.2s ease-in-out;
+}
+.capture-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #1572e8 !important;
+}
+.status-pill {
+    font-size: 9px !important;
+    font-weight: 600;
+    min-width: 78px;
+    text-align: center;
+    padding: 3px 6px !important;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid transparent;
+}
+.status-pill-banyak {
+    background-color: rgba(49, 206, 54, 0.1) !important;
+    color: #2bb430 !important;
+    border-color: rgba(49, 206, 54, 0.2) !important;
+}
+.status-pill-terbatas {
+    background-color: rgba(255, 173, 70, 0.1) !important;
+    color: #ff9a13 !important;
+    border-color: rgba(255, 173, 70, 0.2) !important;
+}
+.status-pill-penuh {
+    background-color: rgba(242, 89, 97, 0.1) !important;
+    color: #ea3d46 !important;
+    border-color: rgba(242, 89, 97, 0.2) !important;
+}
+.status-pill-pending, .status-pill-belum {
+    background-color: rgba(108, 117, 125, 0.08) !important;
+    color: #8d949a !important;
+    border-color: rgba(108, 117, 125, 0.15) !important;
+}
+.status-pill-trained {
+    background-color: rgba(21, 114, 232, 0.1) !important;
+    color: #1572e8 !important;
+    border-color: rgba(21, 114, 232, 0.2) !important;
+}
+.status-pill-new {
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+    border-color: #e9ecef !important;
+}
 </style>
 <div class="page-inner mt--5">
     {{-- Pemilihan Device --}}
@@ -290,64 +342,7 @@
                                 <div class="alert alert-danger py-2 small mb-2">{{ session('error') }}</div>
                             @endif
                             <div class="row" id="captures-grid-row" style="margin-left: -5px; margin-right: -5px;">
-                                @forelse($captures as $capture)
-                                    <div class="col-6 col-sm-4 col-md-3 mb-2 px-1 capture-item-card" 
-                                         data-trained="{{ $capture->capture_is_trained ? 'yes' : 'no' }}" 
-                                         data-status="{{ $capture->capture_ai_status ?: 'unknown' }}">
-                                        <div class="card p-1 m-0 border text-center position-relative bg-white" style="border-radius: 8px;">
-                                            <div class="position-absolute" style="top: 5px; left: 5px; z-index: 5;">
-                                                <input type="checkbox" name="capture_ids[]" value="{{ $capture->capture_id }}" onchange="updateSelectedCount()" class="capture-checkbox" style="width: 16px; height: 16px; cursor: pointer;">
-                                            </div>
-                                                                                       <a href="{{ asset('storage/' . $capture->capture_image_path) }}" target="_blank" title="Klik untuk perbesar">
-                                                <img src="{{ asset('storage/' . $capture->capture_image_path) }}" class="img-fluid rounded" style="height: 120px; width: 100%; object-fit: cover;">
-                                            </a>
-                                            
-                                            <div class="mt-1 small px-1 text-left">
-                                                <div class="mb-1 d-flex flex-wrap" style="gap: 3px;">
-                                                    <!-- Badge Status CV -->
-                                                    @if($capture->capture_ai_status === 'banyak')
-                                                        <span class="badge badge-success px-1" style="font-size: 8px;">CV: Banyak</span>
-                                                    @elseif($capture->capture_ai_status === 'terbatas')
-                                                        <span class="badge badge-warning text-white px-1" style="font-size: 8px;">CV: Terbatas</span>
-                                                    @elseif($capture->capture_ai_status === 'penuh')
-                                                        <span class="badge badge-danger px-1" style="font-size: 8px;">CV: Penuh</span>
-                                                    @else
-                                                        <span class="badge badge-secondary px-1" style="font-size: 8px;">CV: Pending</span>
-                                                    @endif
- 
-                                                    <!-- Badge Status User Validation -->
-                                                    @if($capture->userValidation)
-                                                        @if($capture->userValidation->user_validation_content === 'banyak')
-                                                            <span class="badge badge-success px-1" style="font-size: 8px;">Val: Banyak</span>
-                                                        @elseif($capture->userValidation->user_validation_content === 'terbatas')
-                                                            <span class="badge badge-warning text-white px-1" style="font-size: 8px;">Val: Terbatas</span>
-                                                        @elseif($capture->userValidation->user_validation_content === 'penuh')
-                                                            <span class="badge badge-danger px-1" style="font-size: 8px;">Val: Penuh</span>
-                                                        @endif
-                                                    @else
-                                                        <span class="badge badge-secondary px-1" style="font-size: 8px;">Val: -</span>
-                                                    @endif
-                                                </div>
- 
-                                                <!-- Badge Trained Status -->
-                                                @if($capture->capture_is_trained)
-                                                    <span class="badge badge-info px-1" style="font-size: 8px;"><i class="fas fa-check"></i> Trained</span>
-                                                @else
-                                                    <span class="badge badge-light border px-1" style="font-size: 8px; color: #555;">New</span>
-                                                @endif
- 
-                                                <div class="text-muted mt-1" style="font-size: 9px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ $capture->created_at->format('d/m/Y H:i:s') }}">
-                                                    {{ $capture->created_at->format('d/m/Y H:i:s') }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @empty
-                                    <div class="col-md-12 text-center text-muted py-4" id="no-captures-placeholder">
-                                        <i class="fas fa-images fa-2x mb-2 text-muted"></i>
-                                        <p class="mb-0 small">Belum ada snapshot gambar yang dikumpulkan.</p>
-                                    </div>
-                                @endforelse
+                                @include('Contents.IotStream.partials.captures_grid')
                             </div>
                         </div>
                     </form>
@@ -807,11 +802,7 @@
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        checkedCheckboxes.forEach(cb => {
-                            const card = cb.closest('.capture-item-card');
-                            if (card) card.remove();
-                        });
-                        filterCaptures();
+                        window.refreshCaptures();
                     } else {
                         Swal.fire({
                             title: 'Gagal!',
@@ -834,9 +825,45 @@
         });
     }
 
+    // AJAX Refresh function for dataset captures grid
+    window.refreshCaptures = function() {
+        const macAddress = "{{ $targetMac }}";
+        const url = `{{ route('admin.iot-stream-viewer.index') }}?mac=${macAddress}`;
+
+        fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(res => res.text())
+        .then(html => {
+            const gridRow = document.getElementById('captures-grid-row');
+            if (gridRow) {
+                gridRow.innerHTML = html;
+                // Run filterCaptures again to apply active filters and update selection count
+                filterCaptures();
+            }
+        })
+        .catch(err => {
+            console.error('Error refreshing captures:', err);
+        });
+    };
+
     // Jalankan filter filterCaptures pertama kali saat dimuat untuk menerapkan default (Belum Dilatih)
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(filterCaptures, 300);
+
+        // Listen to download form submission to refresh grid after download starts
+        const downloadForm = document.getElementById('download-batch-form');
+        if (downloadForm) {
+            downloadForm.addEventListener('submit', function() {
+                setTimeout(() => {
+                    if (typeof window.refreshCaptures === 'function') {
+                        window.refreshCaptures();
+                    }
+                }, 1500);
+            });
+        }
     });
 </script>
 
@@ -887,6 +914,11 @@
                         if (feedContainerIcon) feedContainerIcon.style.display = 'none';
                         
                         addLog('Menerima frame gambar snapshot.');
+
+                        // Silent refresh the gallery grid ONLY if it is a saved validation snapshot
+                        if (e.isSaved && typeof window.refreshCaptures === 'function') {
+                            window.refreshCaptures();
+                        }
                     } else {
                         liveImage.classList.add('d-none');
                         if (feedPlaceholder) {

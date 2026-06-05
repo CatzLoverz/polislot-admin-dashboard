@@ -16,14 +16,16 @@ class IotStreamReceived implements ShouldBroadcastNow
 
     public $macAddress;
     public $frameData;
+    public $isSaved;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($macAddress, $frameData)
+    public function __construct($macAddress, $frameData, $isSaved = true)
     {
         $this->macAddress = $macAddress;
         $this->frameData = $frameData;
+        $this->isSaved = $isSaved;
     }
 
     /**

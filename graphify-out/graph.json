@@ -1075,7 +1075,7 @@
       "label": ".__construct()",
       "file_type": "code",
       "source_file": "app/Events/IotStreamReceived.php",
-      "source_location": "L23",
+      "source_location": "L24",
       "id": "events_iotstreamreceived_iotstreamreceived_construct",
       "community": 54,
       "norm_label": ".__construct()"
@@ -1084,7 +1084,7 @@
       "label": ".broadcastOn()",
       "file_type": "code",
       "source_file": "app/Events/IotStreamReceived.php",
-      "source_location": "L34",
+      "source_location": "L36",
       "id": "events_iotstreamreceived_iotstreamreceived_broadcaston",
       "community": 54,
       "norm_label": ".broadcaston()"
@@ -1093,7 +1093,7 @@
       "label": ".broadcastAs()",
       "file_type": "code",
       "source_file": "app/Events/IotStreamReceived.php",
-      "source_location": "L41",
+      "source_location": "L43",
       "id": "events_iotstreamreceived_iotstreamreceived_broadcastas",
       "community": 54,
       "norm_label": ".broadcastas()"
@@ -2137,7 +2137,7 @@
       "label": ".generateCommandSignature()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L55",
+      "source_location": "L59",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_generatecommandsignature",
       "community": 6,
       "norm_label": ".generatecommandsignature()"
@@ -2146,7 +2146,7 @@
       "label": ".sendCommandToDevice()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L67",
+      "source_location": "L71",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
       "community": 6,
       "norm_label": ".sendcommandtodevice()"
@@ -2155,7 +2155,7 @@
       "label": ".triggerSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L101",
+      "source_location": "L105",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_triggersnapshot",
       "community": 6,
       "norm_label": ".triggersnapshot()"
@@ -2164,7 +2164,7 @@
       "label": ".saveSettings()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L141",
+      "source_location": "L145",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_savesettings",
       "community": 6,
       "norm_label": ".savesettings()"
@@ -2173,7 +2173,7 @@
       "label": ".validateStream()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L191",
+      "source_location": "L195",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_validatestream",
       "community": 6,
       "norm_label": ".validatestream()"
@@ -2182,7 +2182,7 @@
       "label": ".downloadBatch()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L243",
+      "source_location": "L247",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_downloadbatch",
       "community": 6,
       "norm_label": ".downloadbatch()"
@@ -2191,7 +2191,7 @@
       "label": ".deleteBatch()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L330",
+      "source_location": "L334",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_deletebatch",
       "community": 6,
       "norm_label": ".deletebatch()"
@@ -5669,6 +5669,24 @@
       "id": "resources_views_contents_iotstream_viewer_blade_php",
       "community": 159,
       "norm_label": "viewer.blade.php"
+    },
+    {
+      "label": "Contents.IotStream.partials.captures_grid",
+      "file_type": "code",
+      "source_file": "resources/views/Contents/IotStream/viewer.blade.php",
+      "source_location": null,
+      "id": "contents_iotstream_partials_captures_grid",
+      "community": 159,
+      "norm_label": "contents.iotstream.partials.captures_grid"
+    },
+    {
+      "label": "captures_grid.blade.php",
+      "file_type": "code",
+      "source_file": "resources/views/Contents/IotStream/partials/captures_grid.blade.php",
+      "source_location": null,
+      "id": "resources_views_contents_iotstream_partials_captures_grid_blade_php",
+      "community": 189,
+      "norm_label": "captures_grid.blade.php"
     },
     {
       "label": "index.blade.php",
@@ -12644,9 +12662,9 @@
       "source_file": "app/Models/IotCapture.php",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_iotcapture_iotcapture",
-      "target": "models_iotcapture_iotcapture_uservalidation",
-      "confidence_score": 1.0
+      "target": "models_iotcapture_iotcapture_uservalidation"
     },
     {
       "relation": "contains",
@@ -13840,9 +13858,9 @@
       "source_file": "database/migrations/2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "database_migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_php",
-      "target": "migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_up",
-      "confidence_score": 1.0
+      "target": "migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_up"
     },
     {
       "relation": "contains",
@@ -13850,9 +13868,9 @@
       "source_file": "database/migrations/2026_06_05_161600_add_user_validation_id_to_iot_captures_table.php",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "database_migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_php",
-      "target": "migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_down",
-      "confidence_score": 1.0
+      "target": "migrations_2026_06_05_161600_add_user_validation_id_to_iot_captures_table_down"
     },
     {
       "relation": "contains",
@@ -16488,6 +16506,16 @@
       "confidence_score": 1.0,
       "source": "resources_js_bootstrap_js",
       "target": "resources_js_echo_js"
+    },
+    {
+      "relation": "includes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "resources/views/Contents/IotStream/viewer.blade.php",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "resources_views_contents_iotstream_viewer_blade_php",
+      "target": "contents_iotstream_partials_captures_grid"
     },
     {
       "relation": "contains",
@@ -19375,5 +19403,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "46391e1c7d779649329c196851de86183b8bc293"
+  "built_at_commit": "d4e62721aad0a4d6d7baad9fa609d48ed1423278"
 }

@@ -132,7 +132,7 @@ class IotStreamController extends Controller
         // 3. BROADCAST FRAME
         // ============================================================
         try {
-            broadcast(new IotStreamReceived($macAddress, $request->frame));
+            broadcast(new IotStreamReceived($macAddress, $request->frame, false));
             
             return response()->json([
                 'status'  => 'success',
@@ -286,7 +286,7 @@ class IotStreamController extends Controller
 
         // 5. BROADCAST KE WEB UI
         $imageBase64 = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
-        broadcast(new IotStreamReceived($macAddress, $imageBase64));
+        broadcast(new IotStreamReceived($macAddress, $imageBase64, $saveImage));
 
         return response()->json(['status' => 'success', 'message' => 'Snapshot received and broadcasted.']);
     }

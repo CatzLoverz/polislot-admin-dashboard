@@ -41,6 +41,10 @@ class IotStreamViewerController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
+
+        if ($request->ajax()) {
+            return view('Contents.IotStream.partials.captures_grid', compact('captures', 'targetMac'));
+        }
         
         return view('Contents.IotStream.viewer', compact(
             'devices', 'targetMac', 'initialStatus', 'maxSlots', 
