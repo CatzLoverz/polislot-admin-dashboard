@@ -5,6 +5,7 @@ namespace App\Logging\Processors;
 use Illuminate\Support\Str;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
+use Exception;
 
 class ScrubAndTraceProcessor implements ProcessorInterface
 {
@@ -57,7 +58,7 @@ class ScrubAndTraceProcessor implements ProcessorInterface
                 // Try to get user ID safely
                 try {
                     $extra['user_id'] = auth()->check() ? auth()->id() : 'guest';
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $extra['user_id'] = 'unknown';
                 }
             }
@@ -66,7 +67,10 @@ class ScrubAndTraceProcessor implements ProcessorInterface
         // Include unique request ID for tracing across multiple logs in same request
         $extra['request_id'] = $this->getRequestId();
 
-        // 3. Optional: Filter out excessively long "spam" string logs
+        // 3. Auto-Format Message Prefix
+        $message = $this->injectPrefix((string) $message);
+
+        // 4. Optional: Filter out excessively long "spam" string logs
         // e.g., if message itself is a giant base64 or json string
         if (is_string($message) && strlen($message) > 5000) {
             $message = substr($message, 0, 500) . '... [TRUNCATED DUE TO SPAM FILTER]';
@@ -130,5 +134,63 @@ class ScrubAndTraceProcessor implements ProcessorInterface
         app()->instance('request_id', $requestId);
 
         return $requestId;
+    }
+
+    /**
+     * Inject the automatically generated [PLATFORM Class@method] prefix into the message.
+     */
+    protected function injectPrefix(string $message): string
+    {
+        // Temukan dari mana log ini dipanggil
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 15);
+        $caller = null;
+
+        // Cari class pertama yang bukan bawaan Illuminate\Log, Facades, atau Monolog
+        foreach ($trace as $frame) {
+            if (isset($frame['class'])) {
+                $class = $frame['class'];
+                if (!Str::startsWith($class, [
+                    'Illuminate\Log', 
+                    'Illuminate\Support\Facades', 
+                    'Monolog\\', 
+                    'App\Logging'
+                ])) {
+                    $caller = $frame;
+                    break;
+                }
+            }
+        }
+
+        if (!$caller) {
+            return $message; // Fallback jika tidak ditemukan
+        }
+
+        $className = class_basename($caller['class']);
+        $methodName = $caller['function'] ?? 'unknown';
+
+        // Tentukan platform berdasarkan namespace
+        $platform = 'APP';
+        $namespace = $caller['class'];
+
+        if (Str::contains($namespace, 'App\Http\Controllers\Api')) {
+            $platform = 'API';
+        } elseif (Str::contains($namespace, 'App\Http\Controllers\Web')) {
+            $platform = 'WEB';
+        } elseif (Str::contains($namespace, 'App\Console')) {
+            $platform = 'CLI';
+        } elseif (Str::contains($namespace, 'App\Services')) {
+            $platform = 'SERVICE';
+        } elseif (Str::contains($namespace, 'App\Models')) {
+            $platform = 'MODEL';
+        } elseif (Str::contains($namespace, 'App\Http\Middleware')) {
+            $platform = 'MIDDLEWARE';
+        }
+
+        $generatedPrefix = "[{$platform} {$className}@{$methodName}]";
+
+        // Hilangkan prefix manual dari user jika sudah ada (contoh: "[WEB Controller@method] " atau "[API Controller]")
+        $message = preg_replace('/^\[.*?\]\s*/', '', trim($message));
+
+        return "{$generatedPrefix} {$message}";
     }
 }
