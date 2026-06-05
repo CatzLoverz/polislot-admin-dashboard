@@ -52,6 +52,7 @@
     border-radius: 8px;
     border: 1px solid #ebedf2 !important;
     transition: all 0.2s ease-in-out;
+    cursor: pointer;
 }
 .capture-card:hover {
     transform: translateY(-2px);
@@ -862,6 +863,26 @@
                         window.refreshCaptures();
                     }
                 }, 1500);
+            });
+        }
+
+        // Card click event delegation: toggles checkbox status when clicking on card body
+        const capturesGrid = document.getElementById('captures-grid-row');
+        if (capturesGrid) {
+            capturesGrid.addEventListener('click', function(e) {
+                const card = e.target.closest('.capture-card');
+                if (!card) return;
+
+                // Ignore if clicked on a link, image inside a link, or the checkbox itself
+                if (e.target.closest('a') || e.target.closest('.capture-checkbox') || e.target.type === 'checkbox') {
+                    return;
+                }
+
+                const checkbox = card.querySelector('.capture-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    updateSelectedCount();
+                }
             });
         }
     });
