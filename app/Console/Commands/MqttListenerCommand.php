@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotStreamReceived;
-use App\Events\ChatMessageSent;
 use App\Events\IotDeviceStatusChanged;
 use App\Events\IotCountUpdated;
 use App\Models\IotDevice;
@@ -221,7 +220,6 @@ class MqttListenerCommand extends Command
 
             // Listener tambahan untuk update count dari IoT Device via MQTT
             $mqtt->subscribe('polislot/device/+/count', function (string $topic, string $message) use ($secretKey) {
-                $this->info("Pesan count diterima di topik: {$topic}");
                 try {
                     $payload = json_decode($message, true);
                     if (!$payload || !isset($payload['signature'])) {
@@ -251,45 +249,12 @@ class MqttListenerCommand extends Command
                             $subarea->current_count = $count;
                             $subarea->save();
                             
-                            $this->info("📈 [MQTT] Device {$mac} melaporkan count: {$count} untuk subarea {$subarea->park_subarea_name}");
-                            
                             // Broadcast count update
                             broadcast(new IotCountUpdated($mac, $count));
                         }
                     }
                 } catch (\Exception $e) {
                     $this->error("Error memproses count MQTT: " . $e->getMessage());
-                }
-            });
-            
-            // Listener tambahan untuk fitur Live Chat dari IoT Device
-            $mqtt->subscribe('polislot/device/+/chat_reply', function (string $topic, string $message) use ($secretKey) {
-                try {
-                    $payload = json_decode($message, true);
-                    if (!$payload || !isset($payload['signature'])) {
-                        $this->warn("⚠️ Pesan chat ditolak: Tidak ada signature.");
-                        return;
-                    }
-
-                    $receivedSignature = $payload['signature'];
-                    unset($payload['signature']); // Hapus signature dari payload untuk proses verifikasi
-                    
-                    $dataToSign = json_encode($payload, JSON_UNESCAPED_SLASHES);
-                    $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
-                    $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
-
-                    if (!hash_equals($calculatedSignature, $receivedSignature)) {
-                        $this->warn("🚨 DITOLAK: Signature chat tidak valid!");
-                        return;
-                    }
-
-                    if (isset($payload['username'], $payload['message'])) {
-                        // Broadcast balasan chat ke web (Reverb)
-                        broadcast(new ChatMessageSent($payload['username'], $payload['message']));
-                        $this->info("💬 Pesan chat diterima dari {$payload['username']}: {$payload['message']}");
-                    }
-                } catch (\Exception $e) {
-                    $this->error("Error memproses chat: " . $e->getMessage());
                 }
             });
 

@@ -5,6 +5,48 @@
 @section('page_subtitle', 'Monitoring real-time data/video dari perangkat IoT yang terdaftar.')
 
 @section('content')
+<style>
+.double-range-slider {
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    background: transparent;
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+    top: 0;
+    margin: 0;
+    left: 0;
+}
+
+.double-range-slider::-webkit-slider-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #1572e8;
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    z-index: 20;
+    position: relative;
+}
+
+.double-range-slider::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #1572e8;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    z-index: 20;
+    position: relative;
+}
+</style>
 <div class="page-inner mt--5">
     {{-- Pemilihan Device --}}
     <div class="row mb-3">
@@ -89,24 +131,49 @@
                 </div>
                 <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
                     <div class="row text-dark">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group p-0">
                                 <label class="font-weight-bold" for="max-slots">Kapasitas Maksimal (Max Slot)</label>
                                 <input type="number" id="max-slots" class="form-control" value="{{ $maxSlots }}" min="1">
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group p-0">
-                                <label class="font-weight-bold" for="threshold-banyak">Batas Status "Banyak" (%)</label>
-                                <input type="number" id="threshold-banyak" class="form-control" value="{{ $thresholdBanyak }}" min="5" max="90">
-                                <small class="text-muted">Okupansi di bawah ini dianggap "Banyak Tersedia"</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group p-0">
-                                <label class="font-weight-bold" for="threshold-terbatas">Batas Status "Penuh" (%)</label>
-                                <input type="number" id="threshold-terbatas" class="form-control" value="{{ $thresholdTerbatas }}" min="10" max="95">
-                                <small class="text-muted">Okupansi di atas ini dianggap "Penuh"</small>
+                        <div class="col-md-9">
+                            <label class="font-weight-bold">Batas Threshold Okupansi</label>
+                            <div class="threshold-slider-container">
+                                <!-- Visual labels similar to standard PoliSlot colors -->
+                                <div class="d-flex justify-content-between text-center mb-2">
+                                    <div style="flex: 1;">
+                                        <span class="badge text-white font-weight-bold" style="background-color: #31ce36; border-radius: 6px; font-size: 10px; padding: 4px 8px;">
+                                            <i class="fas fa-check-circle mr-1"></i> Banyak
+                                        </span>
+                                        <div class="mt-1 font-weight-bold" style="color: #31ce36; font-size: 0.85rem;"><span id="label-banyak-range">0% - 30%</span></div>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <span class="badge text-white font-weight-bold" style="background-color: #ffad46; border-radius: 6px; font-size: 10px; padding: 4px 8px;">
+                                            <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
+                                        </span>
+                                        <div class="mt-1 font-weight-bold" style="color: #ffad46; font-size: 0.85rem;"><span id="label-terbatas-range">30% - 80%</span></div>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <span class="badge text-white font-weight-bold" style="background-color: #f25961; border-radius: 6px; font-size: 10px; padding: 4px 8px;">
+                                            <i class="fas fa-times-circle mr-1"></i> Penuh
+                                        </span>
+                                        <div class="mt-1 font-weight-bold" style="color: #f25961; font-size: 0.85rem;"><span id="label-penuh-range">80% - 100%</span></div>
+                                    </div>
+                                </div>
+
+                                <!-- The Double Range Slider Bar -->
+                                <div class="position-relative" style="height: 10px; margin: 15px 10px 10px 10px;">
+                                    <div class="slider-track" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: #dee2e6; border-radius: 5px;"></div>
+                                    <!-- Colored segments representing the 3 regions -->
+                                    <div id="segment-banyak" style="position: absolute; top: 0; bottom: 0; left: 0; background-color: #31ce36; border-radius: 5px 0 0 5px;"></div>
+                                    <div id="segment-terbatas" style="position: absolute; top: 0; bottom: 0; background-color: #ffad46;"></div>
+                                    <div id="segment-penuh" style="position: absolute; top: 0; bottom: 0; right: 0; background-color: #f25961; border-radius: 0 5px 5px 0;"></div>
+                                    
+                                    <!-- Standard HTML5 input ranges overlayed -->
+                                    <input type="range" id="input-threshold-banyak" min="5" max="95" value="{{ $thresholdBanyak }}" class="double-range-slider">
+                                    <input type="range" id="input-threshold-terbatas" min="5" max="95" value="{{ $thresholdTerbatas }}" class="double-range-slider">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -158,7 +225,7 @@
         </div>
 
         <!-- Panel Snapshot Gallery (Dataset Training) -->
-        <div class="col-md-8 mt-4">
+        <div class="col-md-12 mt-4">
             <div class="card shadow-sm" style="border-radius: 15px; border: none; height: 100%;">
                 <div class="card-header d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
                     <h4 class="card-title font-weight-bold mb-0 text-dark">
@@ -256,7 +323,7 @@
                                                 @endif
 
                                                 <div class="text-muted mt-1" style="font-size: 9px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" title="{{ $capture->created_at->format('d/m/Y H:i:s') }}">
-                                                    {{ $capture->created_at->format('H:i:s') }}
+                                                    {{ $capture->created_at->format('d/m/Y H:i:s') }}
                                                 </div>
                                             </div>
                                         </div>
@@ -267,29 +334,6 @@
                                         <p class="mb-0 small">Belum ada snapshot gambar yang dikumpulkan.</p>
                                     </div>
                                 @endforelse
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Kolom Chat PoC -->
-        <div class="col-md-4 mt-4">
-
-            <div class="card shadow-sm" style="border-radius: 15px; border: none;">
-                <div class="card-header" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0 text-dark"><i class="fas fa-comments mr-2"></i> Live Chat (PoC)</h4>
-                </div>
-                <div class="card-body p-2">
-                    <div id="chat-messages" style="height: 300px; overflow-y: auto; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; margin-bottom: 10px;">
-                        <div class="text-muted text-center small mt-2">Selamat datang di Live Chat.</div>
-                    </div>
-                    <form id="chat-form" onsubmit="sendChatMessage(event)">
-                        <div class="input-group">
-                            <input type="text" id="chat-input" class="form-control" placeholder="Ketik pesan..." required>
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-info" id="chat-btn">Kirim</button>
                             </div>
                         </div>
                     </form>
@@ -551,8 +595,8 @@
     function saveDetectionConfig() {
         const macAddress = "{{ $targetMac }}";
         const maxSlots = document.getElementById('max-slots').value;
-        const thresholdBanyak = document.getElementById('threshold-banyak').value;
-        const thresholdTerbatas = document.getElementById('threshold-terbatas').value;
+        const thresholdBanyak = document.getElementById('input-threshold-banyak').value;
+        const thresholdTerbatas = document.getElementById('input-threshold-terbatas').value;
 
         if (!maxSlots || maxSlots <= 0) {
             alert('Kapasitas maksimal harus lebih besar dari 0!');
@@ -776,75 +820,12 @@
         }
     }
 
-    // Fungsi menambah pesan ke chat box
-    function addChatMessage(username, message, time) {
-        const chatBox = document.getElementById('chat-messages');
-        const isSelf = username === "{{ auth()->user()->name ?? 'Admin' }}";
-        
-        const html = `
-            <div class="mb-2 ${isSelf ? 'text-right' : ''}">
-                <small class="text-muted" style="font-size: 0.7rem;">${username} • ${time}</small>
-                <div class="d-inline-block px-3 py-2 rounded ${isSelf ? 'bg-info text-white' : 'bg-light border'}" style="max-width: 85%; text-align: left; display: inline-block;">
-                    ${message}
-                </div>
-            </div>
-        `;
-        chatBox.insertAdjacentHTML('beforeend', html);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    // Kirim pesan chat via AJAX
-    window.sendChatMessage = function(e) {
-        e.preventDefault();
-        const input = document.getElementById('chat-input');
-        const btn = document.getElementById('chat-btn');
-        const message = input.value.trim();
-        
-        if (!message) return;
-        
-        input.disabled = true;
-        btn.disabled = true;
- 
-        fetch("{{ route('admin.iot-stream-viewer.chat') }}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                mac_address: "{{ $targetMac }}",
-                username: "{{ auth()->user()->name ?? 'Admin' }}",
-                message: message
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                input.value = '';
-            } else {
-                addLog('Gagal mengirim pesan chat.', 'danger');
-            }
-        })
-        .finally(() => {
-            input.disabled = false;
-            btn.disabled = false;
-            input.focus();
-        });
-    }
-
     // Mulai inisiasi
     initEcho();
 
-    // Listen untuk Live Chat PoC + Presence Channel (instant status) setelah Echo jalan
-    function initChatEcho() {
+    // Listen untuk Presence Channel (instant status) setelah Echo jalan
+    function initStatusEcho() {
         if (typeof window.Echo !== 'undefined') {
-            // Listen Chat
-            window.Echo.channel('livechat.demo')
-                .listen('.chat.message', (e) => {
-                    addChatMessage(e.username, e.message, e.time);
-                });
-
             // =====================================================
             // PRESENCE CHANNEL — Instant Online/Offline Detection
             // =====================================================
@@ -868,10 +849,6 @@
                         updateStatusUI('offline');
                         addLog(`❌ Perangkat IoT baru saja OFFLINE (instant)`);
                     }
-                })
-                .listenForWhisper('chat-reply', (e) => {
-                    console.log("💬 Chat received via WS:", e);
-                    addChatMessage(e.username, e.message, e.time);
                 });
 
             // =====================================================
@@ -887,7 +864,7 @@
                     }
                 });
         } else {
-            setTimeout(initChatEcho, 500);
+            setTimeout(initStatusEcho, 500);
         }
     }
 
@@ -903,7 +880,51 @@
         }
     }
     
-    initChatEcho();
+    initStatusEcho();
     window.addLog = addLog; // Expose globally for other scripts
+
+    // --- LOGIKA RANGE SLIDER GANDA KUSTOM ---
+    const sliderBanyak = document.getElementById('input-threshold-banyak');
+    const sliderTerbatas = document.getElementById('input-threshold-terbatas');
+
+    const labelBanyakRange = document.getElementById('label-banyak-range');
+    const labelTerbatasRange = document.getElementById('label-terbatas-range');
+    const labelPenuhRange = document.getElementById('label-penuh-range');
+
+    const segBanyak = document.getElementById('segment-banyak');
+    const segTerbatas = document.getElementById('segment-terbatas');
+    const segPenuh = document.getElementById('segment-penuh');
+
+    function updateSliderUI() {
+        let valBanyak = parseInt(sliderBanyak.value);
+        let valTerbatas = parseInt(sliderTerbatas.value);
+
+        // Mencegah handle saling bersilangan (crossover)
+        if (valBanyak >= valTerbatas) {
+            valBanyak = valTerbatas - 1;
+            sliderBanyak.value = valBanyak;
+        }
+
+        // Atur lebar & posisi segment berwarna
+        segBanyak.style.width = valBanyak + '%';
+        
+        segTerbatas.style.left = valBanyak + '%';
+        segTerbatas.style.width = (valTerbatas - valBanyak) + '%';
+        
+        segPenuh.style.left = valTerbatas + '%';
+        segPenuh.style.width = (100 - valTerbatas) + '%';
+
+        // Update label teks
+        labelBanyakRange.innerText = `0% - ${valBanyak}%`;
+        labelTerbatasRange.innerText = `${valBanyak}% - ${valTerbatas}%`;
+        labelPenuhRange.innerText = `${valTerbatas}% - 100%`;
+    }
+
+    if (sliderBanyak && sliderTerbatas) {
+        sliderBanyak.addEventListener('input', updateSliderUI);
+        sliderTerbatas.addEventListener('input', updateSliderUI);
+        // Jalankan inisialisasi awal
+        updateSliderUI();
+    }
 </script>
 @endpush

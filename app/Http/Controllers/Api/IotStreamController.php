@@ -9,7 +9,6 @@ use App\Models\UserValidation;
 use App\Models\Validation;
 use Illuminate\Http\Request;
 use App\Events\IotStreamReceived;
-use App\Events\ChatMessageSent;
 use App\Events\IotCountUpdated;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -331,8 +330,6 @@ class IotStreamController extends Controller
             $subarea->current_count = (int) $request->count;
             $subarea->save();
 
-            Log::info("[IotCount] Updated subarea {$subarea->park_subarea_name} count to {$request->count}");
-
             // Broadcast count updated
             broadcast(new IotCountUpdated($macAddress, $request->count));
         }
@@ -340,46 +337,6 @@ class IotStreamController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    /**
-     * Endpoint untuk menerima balasan chat dari IoT device.
-     * Padanan HTTP dari MQTT topic "polislot/device/{MAC}/chat_reply".
-     */
-    public function receiveChatReply(Request $request)
-    {
-        $request->validate([
-            'mac_address' => 'required|string',
-            'username'    => 'required|string',
-            'message'     => 'required|string',
-            'signature'   => 'required|string',
-        ]);
-
-        // VALIDASI MAC ADDRESS
-        if (!$this->validateMacAddress($request->mac_address)) {
-            return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
-        }
-
-        // VALIDASI HMAC SIGNATURE
-        $iotSecret = config('services.iot.secret');
-        $key32 = substr(hash('sha256', $iotSecret, true), 0, 32);
-
-        $dataToSign = json_encode([
-            'username' => $request->username,
-            'message'  => $request->message,
-        ], JSON_UNESCAPED_SLASHES);
-
-        $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
-
-        if (!hash_equals($calculatedSignature, $request->signature)) {
-            Log::warning('[IotChatReply] Rejected: Invalid HMAC', ['mac' => $request->mac_address]);
-            return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
-        }
-
-        // BROADCAST KE WEB UI
-        broadcast(new ChatMessageSent($request->username, $request->message));
-        Log::info("[IotChatReply] Chat from {$request->username}: {$request->message}");
-
-        return response()->json(['status' => 'success']);
-    }
 
     /**
      * Endpoint untuk memberikan konfigurasi terbaru ke IoT device pada saat startup.

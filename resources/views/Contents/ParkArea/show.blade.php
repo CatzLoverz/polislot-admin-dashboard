@@ -18,9 +18,17 @@
                     <h4 class="card-title font-weight-bold mb-0">
                         <i class="fas fa-map-marked-alt mr-2"></i> Peta Editor (Satelit)
                     </h4>
-                    <small class="text-dark op-8">
-                        <i class="fas fa-info-circle mr-1"></i> Klik Kanan titik untuk hapus &bull; Geser untuk edit
-                    </small>
+                    <div class="d-flex align-items-center">
+                        <button id="btn-start-drawing" class="btn btn-primary btn-sm btn-round mr-2" onclick="startDrawing()">
+                            <i class="fas fa-plus mr-1"></i> Tambah Sub Area
+                        </button>
+                        <button id="btn-finish-drawing" class="btn btn-success btn-sm btn-round mr-2 d-none" onclick="finishDrawing()">
+                            <i class="fas fa-check mr-1"></i> Selesai
+                        </button>
+                        <button id="btn-cancel-drawing" class="btn btn-danger btn-sm btn-round d-none" onclick="cancelDrawing()">
+                            <i class="fas fa-times mr-1"></i> Batal
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div id="map" style="height: 650px; width: 100%; border-radius: 0 0 15px 15px; z-index: 1;"></div>
@@ -243,21 +251,28 @@
     let centerData = @json($area->park_area_data);
     let center = { lat: parseFloat(centerData.lat), lng: parseFloat(centerData.lng) };
     let existingSubareas = @json($area->parkSubarea);
-    let drawingManager;
     let currentPolygonObj = null;
+
+    // State untuk mode menggambar kustom pengganti Drawing Manager
+    let isDrawingMode = false;
+    let drawingPoints = [];
+    let tempPolyline = null;
+    let tempMarkers = [];
 
     // Definisikan Base URL Storage untuk akses gambar
     const storageBaseUrl = "{{ asset('storage') }}";
 
     async function initMap() {
+        // Load Libraries via importLibrary
         await google.maps.importLibrary("maps");
-        await google.maps.importLibrary("drawing");
+        await google.maps.importLibrary("marker");
         await google.maps.importLibrary("geometry");
 
         map = new google.maps.Map(document.getElementById("map"), {
             center: center,
             zoom: parseInt(centerData.zoom),
             mapTypeId: 'satellite',
+            mapId: 'DEMO_MAP_ID', // Diperlukan oleh AdvancedMarkerElement
             streetViewControl: false,
             mapTypeControl: false
         });
@@ -306,32 +321,132 @@
             });
         });
 
-        drawingManager = new google.maps.drawing.DrawingManager({
-            drawingMode: google.maps.drawing.OverlayType.POLYGON,
-            drawingControl: true,
-            drawingControlOptions: {
-                position: google.maps.ControlPosition.TOP_LEFT,
-                drawingModes: ['polygon'],
-            },
-            polygonOptions: {
-                fillColor: "#1572e8",
-                fillOpacity: 0.5,
-                strokeWeight: 2,
-                editable: true,
-                zIndex: 1
-            }
+        // Click listener pada peta untuk merekam koordinat saat menggambar subarea baru
+        map.addListener("click", (event) => {
+            if (!isDrawingMode) return;
+            
+            const latLng = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+            addDrawingPoint(latLng);
         });
-        drawingManager.setMap(map);
+    }
 
-        google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
-            currentPolygonObj = event.overlay;
-            let paths = event.overlay.getPath().getArray();
-            let coords = paths.map(p => ({ lat: p.lat(), lng: p.lng() }));
-            document.getElementById('polygon_data').value = JSON.stringify(coords);
-            $('#subarea_name').val('');
-            $('#modalSubarea').modal('show');
-            drawingManager.setDrawingMode(null);
+    // === KUSTOM DRAWING FUNCTIONS ===
+    function startDrawing() {
+        if (isDrawingMode) return;
+        
+        isDrawingMode = true;
+        drawingPoints = [];
+        tempMarkers = [];
+
+        // Ubah kursor map menjadi crosshair agar menyerupai alat menggambar
+        map.setOptions({ draggableCursor: 'crosshair' });
+
+        // Buat polyline sementara untuk menghubungkan titik-titik polygon
+        tempPolyline = new google.maps.Polyline({
+            strokeColor: "#1572e8",
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            map: map
         });
+
+        // Atur tombol visibilitas
+        $('#btn-start-drawing').addClass('d-none');
+        $('#btn-finish-drawing').removeClass('d-none');
+        $('#btn-cancel-drawing').removeClass('d-none');
+    }
+
+    function addDrawingPoint(latLng) {
+        drawingPoints.push(latLng);
+        
+        // Update garis polyline penunjuk
+        tempPolyline.setPath(drawingPoints);
+
+        // Buat DOM Element kustom dengan styling modern untuk penanda titik (AdvancedMarkerElement)
+        const pinElement = document.createElement("div");
+        pinElement.style.width = "12px";
+        pinElement.style.height = "12px";
+        pinElement.style.borderRadius = "50%";
+        pinElement.style.backgroundColor = "#1572e8";
+        pinElement.style.border = "2px solid #ffffff";
+        pinElement.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
+        pinElement.style.cursor = "pointer";
+
+        // Tambah marker baru ke peta menggunakan AdvancedMarkerElement
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+            map: map,
+            position: latLng,
+            content: pinElement,
+            title: tempMarkers.length === 0 ? "Klik di sini untuk menyelesaikan area" : `Titik ${tempMarkers.length + 1}`
+        });
+
+        // Klik titik pertama untuk menyelesaikan gambar secara otomatis
+        if (tempMarkers.length === 0) {
+            marker.addListener("click", () => {
+                finishDrawing();
+            });
+        }
+
+        tempMarkers.push(marker);
+    }
+
+    function finishDrawing() {
+        if (!isDrawingMode) return;
+
+        if (drawingPoints.length < 3) {
+            Swal.fire('Perhatian', 'Sub area minimal harus terdiri dari 3 titik koordinat!', 'warning');
+            return;
+        }
+
+        // Tulis data koordinat ke input tersembunyi
+        document.getElementById('polygon_data').value = JSON.stringify(drawingPoints);
+
+        // Bersihkan grafis gambar sementara dari peta
+        cleanupDrawingGraphics();
+
+        // Tampilkan visualisasi polygon hasil gambar sementara
+        currentPolygonObj = new google.maps.Polygon({
+            paths: drawingPoints,
+            fillColor: "#1572e8",
+            fillOpacity: 0.5,
+            strokeWeight: 2,
+            editable: false,
+            map: map
+        });
+
+        $('#subarea_name').val('');
+        $('#modalSubarea').modal('show');
+    }
+
+    function cancelDrawing() {
+        cleanupDrawingGraphics();
+        if (currentPolygonObj) {
+            currentPolygonObj.setMap(null);
+            currentPolygonObj = null;
+        }
+    }
+
+    function cleanupDrawingGraphics() {
+        isDrawingMode = false;
+        
+        // Kembalikan kursor default peta
+        map.setOptions({ draggableCursor: null });
+
+        if (tempPolyline) {
+            tempPolyline.setMap(null);
+            tempPolyline = null;
+        }
+
+        // Hapus marker dari peta
+        tempMarkers.forEach(m => {
+            m.map = null;
+        });
+        tempMarkers = [];
+        drawingPoints = [];
+
+        // Kembalikan visibilitas tombol
+        $('#btn-start-drawing').removeClass('d-none');
+        $('#btn-finish-drawing').addClass('d-none');
+        $('#btn-cancel-drawing').addClass('d-none');
     }
 
     // === 2. LOGIKA SUBAREA ===
@@ -552,12 +667,6 @@
         $('#modalComments').modal('show');
     }
 
-    function cancelDrawing() {
-        if(currentPolygonObj) {
-            currentPolygonObj.setMap(null);
-            drawingManager.setDrawingMode(null);
-        }
-    }
 
     // Event Listener untuk Konfirmasi Hapus Subarea
     document.addEventListener("DOMContentLoaded", function() {

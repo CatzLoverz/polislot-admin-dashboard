@@ -805,7 +805,7 @@
       "label": "MqttListenerCommand",
       "file_type": "code",
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
-      "source_location": "L19",
+      "source_location": "L18",
       "id": "commands_mqttlistenercommand_mqttlistenercommand",
       "community": 6,
       "norm_label": "mqttlistenercommand"
@@ -814,7 +814,7 @@
       "label": ".handle()",
       "file_type": "code",
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
-      "source_location": "L38",
+      "source_location": "L37",
       "id": "commands_mqttlistenercommand_mqttlistenercommand_handle",
       "community": 6,
       "norm_label": ".handle()"
@@ -917,51 +917,6 @@
       "id": "traits_loggableoutput_error",
       "community": 63,
       "norm_label": "error()"
-    },
-    {
-      "label": "ChatMessageSent.php",
-      "file_type": "code",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L1",
-      "id": "app_events_chatmessagesent_php",
-      "community": 53,
-      "norm_label": "chatmessagesent.php"
-    },
-    {
-      "label": "ChatMessageSent",
-      "file_type": "code",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L13",
-      "id": "events_chatmessagesent_chatmessagesent",
-      "community": 53,
-      "norm_label": "chatmessagesent"
-    },
-    {
-      "label": ".__construct()",
-      "file_type": "code",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L24",
-      "id": "events_chatmessagesent_chatmessagesent_construct",
-      "community": 53,
-      "norm_label": ".__construct()"
-    },
-    {
-      "label": ".broadcastOn()",
-      "file_type": "code",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L36",
-      "id": "events_chatmessagesent_chatmessagesent_broadcaston",
-      "community": 53,
-      "norm_label": ".broadcaston()"
-    },
-    {
-      "label": ".broadcastAs()",
-      "file_type": "code",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L43",
-      "id": "events_chatmessagesent_chatmessagesent_broadcastas",
-      "community": 53,
-      "norm_label": ".broadcastas()"
     },
     {
       "label": "IotCommandSent.php",
@@ -1435,7 +1390,7 @@
       "label": "IotStreamController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L18",
+      "source_location": "L17",
       "id": "api_iotstreamcontroller_iotstreamcontroller",
       "community": 6,
       "norm_label": "iotstreamcontroller"
@@ -1444,7 +1399,7 @@
       "label": ".validateMacAddress()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L23",
+      "source_location": "L22",
       "id": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress",
       "community": 6,
       "norm_label": ".validatemacaddress()"
@@ -1453,7 +1408,7 @@
       "label": ".receiveStream()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L46",
+      "source_location": "L45",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivestream",
       "community": 6,
       "norm_label": ".receivestream()"
@@ -1462,7 +1417,7 @@
       "label": ".receiveSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L158",
+      "source_location": "L157",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
       "community": 6,
       "norm_label": ".receivesnapshot()"
@@ -1471,25 +1426,16 @@
       "label": ".receiveCount()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L294",
+      "source_location": "L293",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
       "community": 6,
       "norm_label": ".receivecount()"
     },
     {
-      "label": ".receiveChatReply()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L347",
-      "id": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply",
-      "community": 6,
-      "norm_label": ".receivechatreply()"
-    },
-    {
       "label": ".receiveConfigQuery()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L387",
+      "source_location": "L347",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receiveconfigquery",
       "community": 6,
       "norm_label": ".receiveconfigquery()"
@@ -2173,7 +2119,7 @@
       "label": "IotStreamViewerController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L15",
+      "source_location": "L14",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller",
       "community": 6,
       "norm_label": "iotstreamviewercontroller"
@@ -2182,7 +2128,7 @@
       "label": ".index()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L21",
+      "source_location": "L20",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_index",
       "community": 6,
       "norm_label": ".index()"
@@ -2191,7 +2137,7 @@
       "label": ".generateCommandSignature()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L55",
+      "source_location": "L54",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_generatecommandsignature",
       "community": 6,
       "norm_label": ".generatecommandsignature()"
@@ -2200,7 +2146,7 @@
       "label": ".sendCommandToDevice()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L67",
+      "source_location": "L66",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
       "community": 6,
       "norm_label": ".sendcommandtodevice()"
@@ -2209,25 +2155,16 @@
       "label": ".triggerSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L101",
+      "source_location": "L100",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_triggersnapshot",
       "community": 6,
       "norm_label": ".triggersnapshot()"
     },
     {
-      "label": ".sendChat()",
-      "file_type": "code",
-      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L139",
-      "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat",
-      "community": 6,
-      "norm_label": ".sendchat()"
-    },
-    {
       "label": ".saveSettings()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L181",
+      "source_location": "L141",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_savesettings",
       "community": 6,
       "norm_label": ".savesettings()"
@@ -2236,7 +2173,7 @@
       "label": ".validateStream()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L231",
+      "source_location": "L191",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_validatestream",
       "community": 6,
       "norm_label": ".validatestream()"
@@ -2245,7 +2182,7 @@
       "label": ".downloadBatch()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L283",
+      "source_location": "L243",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_downloadbatch",
       "community": 6,
       "norm_label": ".downloadbatch()"
@@ -2254,7 +2191,7 @@
       "label": ".deleteBatch()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L367",
+      "source_location": "L327",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_deletebatch",
       "community": 6,
       "norm_label": ".deletebatch()"
@@ -4972,7 +4909,7 @@
       "label": ".stop()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L181",
+      "source_location": "L178",
       "id": "python_parking_detector_mqtt_camerastream_stop",
       "community": 181,
       "norm_label": ".stop()"
@@ -4981,7 +4918,7 @@
       "label": "on_connect_success()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L196",
+      "source_location": "L193",
       "id": "python_parking_detector_mqtt_on_connect_success",
       "community": 181,
       "norm_label": "on_connect_success()"
@@ -4990,7 +4927,7 @@
       "label": "send_status_update()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L211",
+      "source_location": "L208",
       "id": "python_parking_detector_mqtt_send_status_update",
       "community": 181,
       "norm_label": "send_status_update()"
@@ -4999,7 +4936,7 @@
       "label": "on_connect()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L218",
+      "source_location": "L215",
       "id": "python_parking_detector_mqtt_on_connect",
       "community": 181,
       "norm_label": "on_connect()"
@@ -5008,7 +4945,7 @@
       "label": "on_message()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L230",
+      "source_location": "L227",
       "id": "python_parking_detector_mqtt_on_message",
       "community": 181,
       "norm_label": "on_message()"
@@ -5017,7 +4954,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L300",
+      "source_location": "L294",
       "id": "python_parking_detector_mqtt_main",
       "community": 181,
       "norm_label": "main()"
@@ -5143,7 +5080,7 @@
       "label": ".stop()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L181",
+      "source_location": "L178",
       "id": "python_parking_detector_mqtt_preview_camerastream_stop",
       "community": 186,
       "norm_label": ".stop()"
@@ -5152,7 +5089,7 @@
       "label": "on_connect_success()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L196",
+      "source_location": "L193",
       "id": "python_parking_detector_mqtt_preview_on_connect_success",
       "community": 186,
       "norm_label": "on_connect_success()"
@@ -5161,7 +5098,7 @@
       "label": "send_status_update()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L211",
+      "source_location": "L208",
       "id": "python_parking_detector_mqtt_preview_send_status_update",
       "community": 186,
       "norm_label": "send_status_update()"
@@ -5170,7 +5107,7 @@
       "label": "on_connect()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L218",
+      "source_location": "L215",
       "id": "python_parking_detector_mqtt_preview_on_connect",
       "community": 186,
       "norm_label": "on_connect()"
@@ -5179,7 +5116,7 @@
       "label": "on_message()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L230",
+      "source_location": "L227",
       "id": "python_parking_detector_mqtt_preview_on_message",
       "community": 186,
       "norm_label": "on_message()"
@@ -5188,7 +5125,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L300",
+      "source_location": "L294",
       "id": "python_parking_detector_mqtt_preview_main",
       "community": 186,
       "norm_label": "main()"
@@ -5332,7 +5269,7 @@
       "label": ".stop()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L241",
+      "source_location": "L238",
       "id": "python_parking_detector_ws_camerastream_stop",
       "community": 180,
       "norm_label": ".stop()"
@@ -5341,7 +5278,7 @@
       "label": "handle_command()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L251",
+      "source_location": "L248",
       "id": "python_parking_detector_ws_handle_command",
       "community": 180,
       "norm_label": "handle_command()"
@@ -5350,7 +5287,7 @@
       "label": "detector_loop()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L322",
+      "source_location": "L316",
       "id": "python_parking_detector_ws_detector_loop",
       "community": 180,
       "norm_label": "detector_loop()"
@@ -5359,7 +5296,7 @@
       "label": "websocket_client()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L374",
+      "source_location": "L368",
       "id": "python_parking_detector_ws_websocket_client",
       "community": 180,
       "norm_label": "websocket_client()"
@@ -5368,7 +5305,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L462",
+      "source_location": "L456",
       "id": "python_parking_detector_ws_main",
       "community": 180,
       "norm_label": "main()"
@@ -5521,7 +5458,7 @@
       "label": ".stop()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L241",
+      "source_location": "L238",
       "id": "python_parking_detector_ws_preview_camerastream_stop",
       "community": 72,
       "norm_label": ".stop()"
@@ -5530,7 +5467,7 @@
       "label": "handle_command()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L251",
+      "source_location": "L248",
       "id": "python_parking_detector_ws_preview_handle_command",
       "community": 72,
       "norm_label": "handle_command()"
@@ -5539,7 +5476,7 @@
       "label": "websocket_client()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L322",
+      "source_location": "L316",
       "id": "python_parking_detector_ws_preview_websocket_client",
       "community": 72,
       "norm_label": "websocket_client()"
@@ -5548,7 +5485,7 @@
       "label": "start_websocket_thread()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L408",
+      "source_location": "L402",
       "id": "python_parking_detector_ws_preview_start_websocket_thread",
       "community": 72,
       "norm_label": "start_websocket_thread()"
@@ -5557,7 +5494,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L419",
+      "source_location": "L413",
       "id": "python_parking_detector_ws_preview_main",
       "community": 72,
       "norm_label": "main()"
@@ -8605,6 +8542,69 @@
       "norm_label": "code:bash (php artisan schedule:work)"
     },
     {
+      "label": "ChatMessageSent.php",
+      "file_type": "code",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L1",
+      "community": 53,
+      "norm_label": "chatmessagesent.php",
+      "id": "app_events_chatmessagesent_php"
+    },
+    {
+      "label": "ChatMessageSent",
+      "file_type": "code",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L13",
+      "community": 53,
+      "norm_label": "chatmessagesent",
+      "id": "events_chatmessagesent_chatmessagesent"
+    },
+    {
+      "label": ".__construct()",
+      "file_type": "code",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L24",
+      "community": 53,
+      "norm_label": ".__construct()",
+      "id": "events_chatmessagesent_chatmessagesent_construct"
+    },
+    {
+      "label": ".broadcastOn()",
+      "file_type": "code",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L36",
+      "community": 53,
+      "norm_label": ".broadcaston()",
+      "id": "events_chatmessagesent_chatmessagesent_broadcaston"
+    },
+    {
+      "label": ".broadcastAs()",
+      "file_type": "code",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L43",
+      "community": 53,
+      "norm_label": ".broadcastas()",
+      "id": "events_chatmessagesent_chatmessagesent_broadcastas"
+    },
+    {
+      "label": ".receiveChatReply()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
+      "source_location": "L347",
+      "community": 6,
+      "norm_label": ".receivechatreply()",
+      "id": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply"
+    },
+    {
+      "label": ".sendChat()",
+      "file_type": "code",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L139",
+      "community": 6,
+      "norm_label": ".sendchat()",
+      "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat"
+    },
+    {
       "label": "Thread terpisah untuk membaca input dari keyboard dan mengirimkannya via MQTT (L",
       "file_type": "rationale",
       "source_file": "python/mqtt_test_iot.py",
@@ -9725,46 +9725,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_events_chatmessagesent_php",
-      "target": "events_chatmessagesent_chatmessagesent"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_chatmessagesent_chatmessagesent",
-      "target": "events_chatmessagesent_chatmessagesent_construct"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_chatmessagesent_chatmessagesent",
-      "target": "events_chatmessagesent_chatmessagesent_broadcaston"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/ChatMessageSent.php",
-      "source_location": "L43",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_chatmessagesent_chatmessagesent",
-      "target": "events_chatmessagesent_chatmessagesent_broadcastas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "app/Events/IotCommandSent.php",
       "source_location": "L19",
       "weight": 1.0,
@@ -10380,21 +10340,21 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L230",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_iotstreamcontroller_iotstreamcontroller",
-      "target": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L381",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "api_iotstreamcontroller_iotstreamcontroller",
       "target": "api_iotstreamcontroller_iotstreamcontroller_receiveconfigquery"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
+      "source_location": "L230",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_iotstreamcontroller_iotstreamcontroller",
+      "target": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply"
     },
     {
       "relation": "calls",
@@ -10423,10 +10383,10 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L240",
+      "source_location": "L391",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply",
+      "source": "api_iotstreamcontroller_iotstreamcontroller_receiveconfigquery",
       "target": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress"
     },
     {
@@ -10434,10 +10394,10 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L391",
+      "source_location": "L240",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "api_iotstreamcontroller_iotstreamcontroller_receiveconfigquery",
+      "source": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply",
       "target": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress"
     },
     {
@@ -10493,17 +10453,6 @@
       "source_location": "L302",
       "weight": 1.0,
       "source": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
-      "target": "services_historyservice_historyservice_log"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L256",
-      "weight": 1.0,
-      "source": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply",
       "target": "services_historyservice_historyservice_log"
     },
     {
@@ -11556,16 +11505,6 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L116",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller",
-      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
       "source_location": "L167",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -11601,6 +11540,16 @@
       "confidence_score": 1.0,
       "source": "web_iotstreamviewercontroller_iotstreamviewercontroller",
       "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_deletebatch"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L116",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller",
+      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat"
     },
     {
       "relation": "method",
@@ -11650,17 +11599,6 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L133",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat",
-      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
       "source_location": "L205",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -11676,6 +11614,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_validatestream",
+      "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
+      "source_location": "L133",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendchat",
       "target": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice"
     },
     {
@@ -13412,6 +13361,17 @@
       "source_location": "L152",
       "weight": 1.0,
       "source": "services_missionservice_missionservice_processmission",
+      "target": "services_historyservice_historyservice_log"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Http/Controllers/Api/IotStreamController.php",
+      "source_location": "L256",
+      "weight": 1.0,
+      "source": "api_iotstreamcontroller_iotstreamcontroller_receivechatreply",
       "target": "services_historyservice_historyservice_log"
     },
     {
@@ -19154,6 +19114,46 @@
       "target": "docs_installation_manual_codeblock_15"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_events_chatmessagesent_php",
+      "target": "events_chatmessagesent_chatmessagesent"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_chatmessagesent_chatmessagesent",
+      "target": "events_chatmessagesent_chatmessagesent_construct"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_chatmessagesent_chatmessagesent",
+      "target": "events_chatmessagesent_chatmessagesent_broadcaston"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/ChatMessageSent.php",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_chatmessagesent_chatmessagesent",
+      "target": "events_chatmessagesent_chatmessagesent_broadcastas"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -19309,5 +19309,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "b1f3669cb78e9c70d22de8f338641d8b78f02be6"
+  "built_at_commit": "13d4cd9cf47063b66fdb5ec23a56a98d47103758"
 }

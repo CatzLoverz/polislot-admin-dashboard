@@ -8,7 +8,6 @@ use App\Models\IotCapture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use PhpMqtt\Client\Facades\MQTT;
-use App\Events\ChatMessageSent;
 use App\Events\IotCommandSent;
 use ZipArchive;
 
@@ -133,46 +132,6 @@ class IotStreamViewerController extends Controller
         ]);
     }
 
-    /**
-     * Mengirim pesan Live Chat (Proof of Concept WebSockets)
-     */
-    public function sendChat(Request $request)
-    {
-        $request->validate([
-            'mac_address' => 'required|string',
-            'username' => 'required|string|max:50',
-            'message' => 'required|string|max:500'
-        ]);
-
-        $mac = $request->mac_address;
-        
-        $payloadData = [
-            'action' => 'chat',
-            'timestamp' => time(),
-            'username' => $request->username,
-            'message' => $request->message
-        ];
-
-        $errors = $this->sendCommandToDevice($mac, 'chat', $payloadData);
-
-        // Broadcast ke Web UI sendiri agar muncul di layar (Reverb)
-        try {
-            broadcast(new ChatMessageSent($request->username, $request->message));
-        } catch (\Exception $e) {
-            // Chat broadcast ke UI gagal, tapi command mungkin sudah terkirim
-        }
-
-        if (count($errors) === 2) {
-            return response()->json([
-                'success' => false,
-                'message' => "Gagal mengirim chat: " . implode(' | ', $errors)
-            ], 500);
-        }
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
 
     /**
      * Menyimpan setelan deteksi (max slots, detection polygon, thresholds) ke subarea terkait device ini.

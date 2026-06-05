@@ -169,9 +169,6 @@ class CameraStream:
         if not ret or frame is None:
             frame = np.zeros((480, 640, 3), dtype=np.uint8)
             cv2.putText(frame, "Camera offline", (180, 240), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        else:
-            timestamp_str = time.strftime("%Y-%m-%d %H:%M:%S")
-            cv2.putText(frame, timestamp_str, (15, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
         ret_encode, buffer = cv2.imencode('.jpg', frame)
         if ret_encode:
@@ -280,10 +277,6 @@ def on_message(client, userdata, msg):
             print("[🏓] Connection test, mengirim status online...")
             send_status_update(client, "online")
 
-        elif action == "chat":
-            username = payload.get("username", "Admin")
-            message = payload.get("message", "")
-            print(f"[💬] Chat dari {username}: {message}")
 
         elif msg.topic == TOPIC_SERVER_STATUS:
             server_status = payload.get("status", "").upper()

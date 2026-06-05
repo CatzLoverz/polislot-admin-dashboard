@@ -96,7 +96,6 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         Route::prefix('iot-stream-viewer')->as('iot-stream-viewer.')->controller(IotStreamViewerController::class)->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/trigger', 'triggerSnapshot')->name('trigger');
-            Route::post('/chat', 'sendChat')->name('chat');
             Route::post('/save-settings', 'saveSettings')->name('save-settings');
             Route::post('/validate', 'validateStream')->name('validate');
             Route::post('/download-batch', 'downloadBatch')->name('download-batch');
