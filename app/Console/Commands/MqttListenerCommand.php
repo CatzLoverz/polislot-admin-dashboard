@@ -53,8 +53,15 @@ class MqttListenerCommand extends Command
                 $mac = $device->device_mac_address;
                 Cache::forever("iot_status_{$mac}", 'offline');
                 broadcast(new IotDeviceStatusChanged($mac, 'offline'));
+
+                if ($device->subarea) {
+                    $subarea = $device->subarea;
+                    $subarea->current_count = 0;
+                    $subarea->save();
+                    broadcast(new IotCountUpdated($mac, 0));
+                }
             }
-            $this->info("🔄 Reset {$devices->count()} device status ke OFFLINE (cache + broadcast)");
+            $this->info("🔄 Reset {$devices->count()} device status ke OFFLINE dan count ke 0 (cache + broadcast)");
 
             // announce server online
             $mqtt = MQTT::connection();
@@ -295,6 +302,20 @@ class MqttListenerCommand extends Command
                 
                 // Broadcast ke Reverb agar UI berubah secara real-time
                 broadcast(new IotDeviceStatusChanged($mac, $status));
+
+                // Reset count to 0 in database if device goes offline via MQTT
+                if ($status === 'offline') {
+                    $device = IotDevice::where('device_mac_address', $mac)->first();
+                    if ($device && $device->subarea) {
+                        $subarea = $device->subarea;
+                        $subarea->current_count = 0;
+                        $subarea->save();
+
+                        // Broadcast count updated to 0
+                        broadcast(new IotCountUpdated($mac, 0));
+                        $this->info("📈 [MQTT] Device {$mac} went offline. Reset subarea count to 0.");
+                    }
+                }
 
                 // Auto-push config if device connects and becomes online via MQTT
                 if ($status === 'online') {

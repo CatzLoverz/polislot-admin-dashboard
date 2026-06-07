@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use App\Events\IotDeviceStatusChanged;
 use App\Events\IotCommandSent;
+use App\Events\IotCountUpdated;
 use App\Models\IotDevice;
 
 class IotWebhookController extends Controller
@@ -40,10 +41,17 @@ class IotWebhookController extends Controller
                 // Contoh: 001A2B3C4D5E -> 00:1A:2B:3C:4D:5E
                 $mac = implode(':', str_split($macNoColons, 2));
 
-                if ($name === 'member_added') {
-                    $this->updateStatus($mac, 'online');
-                } elseif ($name === 'member_removed') {
-                    $this->updateStatus($mac, 'offline');
+                // Hanya update status jika member yang join/leave adalah device IoT itu sendiri
+                // (Mencegah admin browser session meng-override status device)
+                $cleanUserId = str_replace(':', '', strtolower($userId));
+                $cleanMac = strtolower($macNoColons);
+
+                if ($cleanUserId === $cleanMac) {
+                    if ($name === 'member_added') {
+                        $this->updateStatus($mac, 'online');
+                    } elseif ($name === 'member_removed') {
+                        $this->updateStatus($mac, 'offline');
+                    }
                 }
             }
         }
@@ -63,6 +71,20 @@ class IotWebhookController extends Controller
 
         // Broadcast perubahan status agar UI (Web & nantinya Mobile) terupdate
         broadcast(new IotDeviceStatusChanged($mac, $status));
+
+        // Reset count to 0 in database if device goes offline
+        if ($status === 'offline') {
+            $device = IotDevice::where('device_mac_address', $mac)->first();
+            if ($device && $device->subarea) {
+                $subarea = $device->subarea;
+                $subarea->current_count = 0;
+                $subarea->save();
+
+                // Broadcast count updated to 0
+                broadcast(new IotCountUpdated($mac, 0));
+                Log::info("Device {$mac} went offline. Reset subarea count to 0.");
+            }
+        }
 
         // Auto-push config if device connects and becomes online
         if ($status === 'online') {

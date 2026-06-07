@@ -36,6 +36,7 @@ class IotStreamViewerController extends Controller
         $detectionPolygon = $selectedDevice?->subarea?->detection_polygon ?? [];
         $thresholdBanyak = $selectedDevice?->subarea?->threshold_banyak ?? 30.0;
         $thresholdTerbatas = $selectedDevice?->subarea?->threshold_terbatas ?? 80.0;
+        $initialCount = $selectedDevice?->subarea?->current_count ?? 0;
         
         $captures = [];
         if ($selectedDevice) {
@@ -51,7 +52,7 @@ class IotStreamViewerController extends Controller
         
         return view('Contents.IotStream.viewer', compact(
             'devices', 'targetMac', 'initialStatus', 'maxSlots', 
-            'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas', 'captures'
+            'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas', 'captures', 'initialCount'
         ));
     }
 

@@ -113,7 +113,7 @@
                             <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> {{ strtoupper($initialStatus) }}
                         </div>
                         <span class="badge badge-primary ml-2">
-                            <i class="fas fa-car mr-1"></i> Count: <strong id="current-count-badge">0</strong>
+                            <i class="fas fa-car mr-1"></i> Count: <strong id="current-count-badge">{{ $initialCount ?? 0 }}</strong>
                         </span>
                     </div>
                     <select class="form-control" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
@@ -998,6 +998,9 @@
                     if (isDeviceOnline) {
                         updateStatusUI('online');
                         addLog(`✅ Perangkat IoT terdeteksi ONLINE (via Presence Channel)`);
+                    } else {
+                        updateStatusUI('offline');
+                        addLog(`❌ Perangkat IoT terdeteksi OFFLINE (via Presence Channel)`);
                     }
                 })
                 .joining((member) => {
