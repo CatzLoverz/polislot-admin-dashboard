@@ -76,6 +76,7 @@ detection_polygons = []
 threshold_banyak = 30.0
 threshold_terbatas = 80.0
 current_vehicle_count = 0
+ws_connected = False
 
 # File cache konfigurasi lokal
 CONFIG_FILE = f"config_cache_{MAC_ADDRESS.replace(':', '')}.json"
@@ -313,6 +314,7 @@ def handle_command(raw_data):
 # WEBSOCKET CONNECTION MANAGER
 # ============================================================
 async def websocket_client():
+    global ws_connected
     clean_mac = MAC_ADDRESS.replace(':', '')
     channel_name = f"presence-iot.device.{clean_mac}"
     ws_uri = f"{REVERB_SCHEME}://{REVERB_HOST}:{REVERB_PORT}/app/{REVERB_APP_KEY}?protocol=7&client=python&version=1.0"
@@ -383,14 +385,17 @@ async def websocket_client():
                         await ws.send(json.dumps({"event": "pusher:pong"}))
                     elif event == 'pusher_internal:subscription_succeeded':
                         print(f"[📡] Status: ONLINE (Subscribed ke {channel_name})")
+                        ws_connected = True
                     elif event == 'command.sent':
                         handle_command(msg.get('data', '{}'))
                     elif event == 'pusher:error':
                         print(f"[-] Pusher error: {msg.get('data')}")
 
         except websockets.exceptions.ConnectionClosedError as e:
+            ws_connected = False
             print(f"[-] WS Koneksi terputus: {e}")
         except Exception as e:
+            ws_connected = False
             print(f"[-] WS Error: {e}")
 
         reconnect_attempts += 1
@@ -492,24 +497,27 @@ def main():
                 # 5. Kirim data count ke server setiap 2 detik secara asinkron agar tidak memblokir render frame preview
                 now = time.time()
                 if now - last_count_send_time >= 2.0:
-                    timestamp = int(now)
-                    count_payload = {
-                        "mac_address": MAC_ADDRESS,
-                        "timestamp": timestamp,
-                        "count": current_vehicle_count
-                    }
-                    count_payload["signature"] = generate_hmac_signature(count_payload)
-                    
-                    # Definisikan sub-thread pengiriman agar post request tidak mendatangkan delay frame
-                    def send_count():
-                        try:
-                            resp = requests.post(API_COUNT_URL, json=count_payload, timeout=5)
-                            if resp.status_code != 200:
-                                print(f"[-] Gagal mengirim count: {resp.status_code} — {resp.text}")
-                        except Exception as e:
-                            print(f"[-] Error mengirim count: {e}")
-                    
-                    threading.Thread(target=send_count, daemon=True).start()
+                    if ws_connected:
+                        timestamp = int(now)
+                        count_payload = {
+                            "mac_address": MAC_ADDRESS,
+                            "timestamp": timestamp,
+                            "count": current_vehicle_count
+                        }
+                        count_payload["signature"] = generate_hmac_signature(count_payload)
+                        
+                        # Definisikan sub-thread pengiriman agar post request tidak mendatangkan delay frame
+                        def send_count():
+                            try:
+                                resp = requests.post(API_COUNT_URL, json=count_payload, timeout=5)
+                                if resp.status_code != 200:
+                                    print(f"[-] Gagal mengirim count: {resp.status_code} — {resp.text}")
+                            except Exception as e:
+                                print(f"[-] Error mengirim count: {e}")
+                        
+                        threading.Thread(target=send_count, daemon=True).start()
+                    else:
+                        print("[🤖] WS Terputus, pengiriman count dilewati.")
                     last_count_send_time = now
 
             # OpenCV Window refresh event loop (juga mendeteksi tombol 'q' untuk quit)

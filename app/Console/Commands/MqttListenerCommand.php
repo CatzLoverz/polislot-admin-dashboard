@@ -254,14 +254,20 @@ class MqttListenerCommand extends Command
                         $mac = $payload['mac_address'];
                         $count = (int) $payload['count'];
                         
-                        $device = IotDevice::where('device_mac_address', $mac)->first();
-                        if ($device && $device->subarea) {
-                            $subarea = $device->subarea;
-                            $subarea->current_count = $count;
-                            $subarea->save();
-                            
-                            // Broadcast count update
-                            broadcast(new IotCountUpdated($mac, $count));
+                        // Hanya perbarui jika status di cache adalah online
+                        $status = Cache::get("iot_status_{$mac}", 'offline');
+                        if ($status === 'online') {
+                            $device = IotDevice::where('device_mac_address', $mac)->first();
+                            if ($device && $device->subarea) {
+                                $subarea = $device->subarea;
+                                $subarea->current_count = $count;
+                                $subarea->save();
+                                
+                                // Broadcast count update
+                                broadcast(new IotCountUpdated($mac, $count));
+                            }
+                        } else {
+                            $this->warn("⚠️ Mengabaikan count MQTT dari perangkat offline: {$mac} (Count: {$count})");
                         }
                     }
                 } catch (\Exception $e) {

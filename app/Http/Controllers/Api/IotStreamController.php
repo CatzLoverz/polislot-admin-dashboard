@@ -329,6 +329,13 @@ class IotStreamController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
         }
 
+        // Hanya perbarui count jika status perangkat di cache adalah online
+        $status = Cache::get("iot_status_{$macAddress}", 'offline');
+        if ($status !== 'online') {
+            Log::info("Mengabaikan count dari perangkat offline", ['mac' => $macAddress, 'count' => $request->count]);
+            return response()->json(['status' => 'ignored', 'message' => 'Device is offline.']);
+        }
+
         // Update database
         $device = IotDevice::where('device_mac_address', $macAddress)->first();
         if ($device && $device->subarea) {
@@ -338,8 +345,6 @@ class IotStreamController extends Controller
 
             // Broadcast count updated
             broadcast(new IotCountUpdated($macAddress, $request->count));
-
-            Log::info('Data count (kendaraan) diperbarui via IoT', ['mac' => $macAddress, 'count' => $request->count]);
         }
 
         return response()->json(['status' => 'success']);
