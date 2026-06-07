@@ -29,7 +29,7 @@ class IotStreamViewerController extends Controller
         $targetMac = $request->query('mac', $devices->first()?->device_mac_address ?? '00:00:00:00:00:00');
         
         // Ambil status terakhir dari cache (default: offline jika tidak pernah online)
-        $initialStatus = Cache::get("iot_status_{$targetMac}", 'offline');
+        $initialStatus = IotDevice::getStatus($targetMac);
         
         $selectedDevice = $devices->firstWhere('device_mac_address', $targetMac);
         $maxSlots = $selectedDevice?->subarea?->max_slots ?? 0;
@@ -225,8 +225,8 @@ class IotStreamViewerController extends Controller
             ], 404);
         }
 
-        // Cek status perangkat dari Cache (default: offline)
-        $status = Cache::get("iot_status_{$mac}", 'offline');
+        // Cek status perangkat (default: offline)
+        $status = IotDevice::getStatus($mac);
         if ($status === 'offline') {
             // Jalankan flow validasi biasa tanpa IoT (ignore capture)
             $userVal = UserValidation::create([

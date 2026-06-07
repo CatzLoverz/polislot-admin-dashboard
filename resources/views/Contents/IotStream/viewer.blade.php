@@ -998,9 +998,6 @@
                     if (isDeviceOnline) {
                         updateStatusUI('online');
                         addLog(`✅ Perangkat IoT terdeteksi ONLINE (via Presence Channel)`);
-                    } else {
-                        updateStatusUI('offline');
-                        addLog(`❌ Perangkat IoT terdeteksi OFFLINE (via Presence Channel)`);
                     }
                 })
                 .joining((member) => {
@@ -1042,6 +1039,13 @@
         } else {
             indicator.className = "badge badge-danger ml-2";
             indicator.innerHTML = '<i class="fas fa-circle mr-1" style="font-size: 8px;"></i> OFFLINE';
+
+            // Reset count badge ke 0 saat device offline
+            // Ini memastikan UI konsisten dengan backend yang sudah reset current_count = 0
+            const countBadge = document.getElementById('current-count-badge');
+            if (countBadge) {
+                countBadge.innerText = '0';
+            }
         }
     }
     

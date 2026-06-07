@@ -42,6 +42,67 @@ class IotDevice extends Model
         });
     }
 
+    /**
+     * Dapatkan status perangkat dengan sinkronisasi ke Reverb WebSocket Server.
+     * Karena Reverb tidak mendukung outbound webhooks secara bawaan, metode ini
+     * melakukan query langsung ke HTTP API Reverb untuk memverifikasi apakah perangkat
+     * terhubung ke presence channel.
+     */
+    public static function getStatus(string $mac): string
+    {
+        $status = Cache::get("iot_status_{$mac}", 'offline');
+
+        if ($status === 'online') {
+            try {
+                $cleanMac = str_replace(':', '', strtolower($mac));
+                $channelName = "presence-iot.device.{$cleanMac}";
+
+                // Ambil instance Pusher dari Reverb Broadcaster
+                $pusher = \Illuminate\Support\Facades\Broadcast::connection('reverb')->getPusher();
+                $response = $pusher->get("/channels/{$channelName}/users");
+
+                if ($response && $response['status'] == 200 && isset($response['result']['users'])) {
+                    $users = $response['result']['users'];
+                    $isDevicePresent = false;
+                    
+                    foreach ($users as $user) {
+                        if (isset($user['id']) && str_replace(':', '', strtolower($user['id'])) === $cleanMac) {
+                            $isDevicePresent = true;
+                            break;
+                        }
+                    }
+
+                    if (!$isDevicePresent) {
+                        Log::info("Reverb sync: Device {$mac} not found in presence channel. Setting to offline.");
+                        
+                        // Update cache
+                        Cache::forever("iot_status_{$mac}", 'offline');
+                        $status = 'offline';
+
+                        // Broadcast status offline
+                        broadcast(new \App\Events\IotDeviceStatusChanged($mac, 'offline'));
+
+                        // Reset database subarea count to 0
+                        $device = static::where('device_mac_address', $mac)->first();
+                        if ($device && $device->subarea) {
+                            $subarea = $device->subarea;
+                            $subarea->current_count = 0;
+                            $subarea->save();
+
+                            // Broadcast count updated to 0
+                            broadcast(new \App\Events\IotCountUpdated($mac, 0));
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                // Log warning dan gunakan status dari cache sebagai fallback jika Reverb bermasalah/offline
+                Log::warning("Reverb sync failed for device {$mac}: " . $e->getMessage());
+            }
+        }
+
+        return $status;
+    }
+
     protected $table = 'iot_devices';
     protected $primaryKey = 'device_id';
 

@@ -80,7 +80,7 @@ class MapVisualizationController extends Controller
 
                 if ($sub->iotDevice) {
                     $mac = $sub->iotDevice->device_mac_address;
-                    $deviceStatus = Cache::get("iot_status_{$mac}", 'offline');
+                    $deviceStatus = \App\Models\IotDevice::getStatus($mac);
                     if ($deviceStatus === 'online') {
                         $hasOnlineIot = true;
                         if ($sub->max_slots > 0) {

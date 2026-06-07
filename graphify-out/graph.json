@@ -243,7 +243,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L1",
       "id": "traits_loggableoutput",
-      "community": 10,
+      "community": 66,
       "norm_label": "loggableoutput.php"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L16",
       "id": "traits_loggableoutput_info",
-      "community": 10,
+      "community": 66,
       "norm_label": "info()"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L30",
       "id": "traits_loggableoutput_loginfo",
-      "community": 10,
+      "community": 66,
       "norm_label": "loginfo()"
     },
     {
@@ -270,7 +270,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L44",
       "id": "traits_loggableoutput_warn",
-      "community": 10,
+      "community": 66,
       "norm_label": "warn()"
     },
     {
@@ -279,7 +279,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L57",
       "id": "traits_loggableoutput_error",
-      "community": 10,
+      "community": 66,
       "norm_label": "error()"
     },
     {
@@ -693,7 +693,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackCategoryController.php",
       "source_location": "L1",
       "id": "api_feedbackcategorycontroller",
-      "community": 29,
+      "community": 32,
       "norm_label": "feedbackcategorycontroller.php"
     },
     {
@@ -702,7 +702,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackCategoryController.php",
       "source_location": "L10",
       "id": "api_feedbackcategorycontroller_feedbackcategorycontroller",
-      "community": 29,
+      "community": 32,
       "norm_label": "feedbackcategorycontroller"
     },
     {
@@ -711,7 +711,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackCategoryController.php",
       "source_location": "L16",
       "id": "api_feedbackcategorycontroller_feedbackcategorycontroller_index",
-      "community": 29,
+      "community": 32,
       "norm_label": ".index()"
     },
     {
@@ -720,7 +720,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackCategoryController.php",
       "source_location": "L16",
       "id": "app_http_controllers_api_feedbackcategorycontroller_php_jsonresponse",
-      "community": 29,
+      "community": 32,
       "norm_label": "jsonresponse"
     },
     {
@@ -855,7 +855,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L1",
       "id": "api_iotstreamcontroller",
-      "community": 5,
+      "community": 31,
       "norm_label": "iotstreamcontroller.php"
     },
     {
@@ -864,7 +864,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L17",
       "id": "api_iotstreamcontroller_iotstreamcontroller",
-      "community": 5,
+      "community": 31,
       "norm_label": "iotstreamcontroller"
     },
     {
@@ -873,7 +873,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L22",
       "id": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress",
-      "community": 5,
+      "community": 31,
       "norm_label": ".validatemacaddress()"
     },
     {
@@ -882,7 +882,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L45",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivestream",
-      "community": 5,
+      "community": 31,
       "norm_label": ".receivestream()"
     },
     {
@@ -891,7 +891,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L45",
       "id": "app_http_controllers_api_iotstreamcontroller_php_request",
-      "community": 5,
+      "community": 31,
       "norm_label": "request"
     },
     {
@@ -900,7 +900,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L157",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
-      "community": 5,
+      "community": 31,
       "norm_label": ".receivesnapshot()"
     },
     {
@@ -909,7 +909,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L299",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
-      "community": 5,
+      "community": 31,
       "norm_label": ".receivecount()"
     },
     {
@@ -918,7 +918,7 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L357",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receiveconfigquery",
-      "community": 5,
+      "community": 31,
       "norm_label": ".receiveconfigquery()"
     },
     {
@@ -972,7 +972,7 @@
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
       "source_location": "L1",
       "id": "api_iotwsauthcontroller",
-      "community": 32,
+      "community": 69,
       "norm_label": "iotwsauthcontroller.php"
     },
     {
@@ -981,7 +981,7 @@
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
       "source_location": "L11",
       "id": "api_iotwsauthcontroller_iotwsauthcontroller",
-      "community": 32,
+      "community": 69,
       "norm_label": "iotwsauthcontroller"
     },
     {
@@ -990,7 +990,7 @@
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
       "source_location": "L23",
       "id": "api_iotwsauthcontroller_iotwsauthcontroller_authenticate",
-      "community": 32,
+      "community": 69,
       "norm_label": ".authenticate()"
     },
     {
@@ -999,7 +999,7 @@
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
       "source_location": "L23",
       "id": "app_http_controllers_api_iotwsauthcontroller_php_request",
-      "community": 32,
+      "community": 69,
       "norm_label": "request"
     },
     {
@@ -1269,7 +1269,7 @@
       "source_file": "app/Http/Controllers/Api/SubareaCommentController.php",
       "source_location": "L1",
       "id": "api_subareacommentcontroller",
-      "community": 10,
+      "community": 56,
       "norm_label": "subareacommentcontroller.php"
     },
     {
@@ -1278,7 +1278,7 @@
       "source_file": "app/Http/Controllers/Api/SubareaCommentController.php",
       "source_location": "L15",
       "id": "api_subareacommentcontroller_subareacommentcontroller",
-      "community": 10,
+      "community": 56,
       "norm_label": "subareacommentcontroller"
     },
     {
@@ -1287,7 +1287,7 @@
       "source_file": "app/Http/Controllers/Api/SubareaCommentController.php",
       "source_location": "L23",
       "id": "api_subareacommentcontroller_subareacommentcontroller_index",
-      "community": 10,
+      "community": 56,
       "norm_label": ".index()"
     },
     {
@@ -1296,7 +1296,7 @@
       "source_file": "app/Http/Controllers/Api/SubareaCommentController.php",
       "source_location": "L23",
       "id": "app_http_controllers_api_subareacommentcontroller_php_request",
-      "community": 10,
+      "community": 56,
       "norm_label": "request"
     },
     {
@@ -1305,7 +1305,7 @@
       "source_file": "app/Http/Controllers/Api/SubareaCommentController.php",
       "source_location": "L82",
       "id": "api_subareacommentcontroller_subareacommentcontroller_store",
-      "community": 10,
+      "community": 56,
       "norm_label": ".store()"
     },
     {
@@ -1314,7 +1314,7 @@
       "source_file": "app/Http/Controllers/Api/SubareaCommentController.php",
       "source_location": "L127",
       "id": "api_subareacommentcontroller_subareacommentcontroller_update",
-      "community": 10,
+      "community": 56,
       "norm_label": ".update()"
     },
     {
@@ -1323,7 +1323,7 @@
       "source_file": "app/Http/Controllers/Api/SubareaCommentController.php",
       "source_location": "L185",
       "id": "api_subareacommentcontroller_subareacommentcontroller_destroy",
-      "community": 10,
+      "community": 56,
       "norm_label": ".destroy()"
     },
     {
@@ -1332,7 +1332,7 @@
       "source_file": "app/Http/Controllers/Api/UserFaqController.php",
       "source_location": "L1",
       "id": "api_userfaqcontroller",
-      "community": 31,
+      "community": 12,
       "norm_label": "userfaqcontroller.php"
     },
     {
@@ -1341,7 +1341,7 @@
       "source_file": "app/Http/Controllers/Api/UserFaqController.php",
       "source_location": "L10",
       "id": "api_userfaqcontroller_userfaqcontroller",
-      "community": 31,
+      "community": 12,
       "norm_label": "userfaqcontroller"
     },
     {
@@ -1350,7 +1350,7 @@
       "source_file": "app/Http/Controllers/Api/UserFaqController.php",
       "source_location": "L17",
       "id": "api_userfaqcontroller_userfaqcontroller_index",
-      "community": 31,
+      "community": 12,
       "norm_label": ".index()"
     },
     {
@@ -1359,7 +1359,7 @@
       "source_file": "app/Http/Controllers/Api/UserFaqController.php",
       "source_location": "L17",
       "id": "app_http_controllers_api_userfaqcontroller_php_jsonresponse",
-      "community": 31,
+      "community": 12,
       "norm_label": "jsonresponse"
     },
     {
@@ -1494,7 +1494,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L1",
       "id": "web_authcontroller",
-      "community": 10,
+      "community": 29,
       "norm_label": "authcontroller.php"
     },
     {
@@ -1503,7 +1503,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L18",
       "id": "web_authcontroller_authcontroller",
-      "community": 10,
+      "community": 29,
       "norm_label": "authcontroller"
     },
     {
@@ -1512,7 +1512,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L24",
       "id": "web_authcontroller_authcontroller_loginform",
-      "community": 10,
+      "community": 29,
       "norm_label": ".loginform()"
     },
     {
@@ -1521,7 +1521,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L42",
       "id": "web_authcontroller_authcontroller_login",
-      "community": 10,
+      "community": 29,
       "norm_label": ".login()"
     },
     {
@@ -1530,7 +1530,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L42",
       "id": "app_http_controllers_web_authcontroller_php_request",
-      "community": 10,
+      "community": 29,
       "norm_label": "request"
     },
     {
@@ -1539,7 +1539,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L118",
       "id": "web_authcontroller_authcontroller_logout",
-      "community": 10,
+      "community": 29,
       "norm_label": ".logout()"
     },
     {
@@ -1548,7 +1548,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L144",
       "id": "web_authcontroller_authcontroller_forgotpasswordform",
-      "community": 10,
+      "community": 29,
       "norm_label": ".forgotpasswordform()"
     },
     {
@@ -1557,7 +1557,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L154",
       "id": "web_authcontroller_authcontroller_forgotpasswordverify",
-      "community": 10,
+      "community": 29,
       "norm_label": ".forgotpasswordverify()"
     },
     {
@@ -1566,7 +1566,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L185",
       "id": "web_authcontroller_authcontroller_forgotpasswordotpform",
-      "community": 10,
+      "community": 29,
       "norm_label": ".forgotpasswordotpform()"
     },
     {
@@ -1575,7 +1575,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L198",
       "id": "web_authcontroller_authcontroller_forgotpasswordotpverify",
-      "community": 10,
+      "community": 29,
       "norm_label": ".forgotpasswordotpverify()"
     },
     {
@@ -1584,7 +1584,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L225",
       "id": "web_authcontroller_authcontroller_forgotpasswordotpresend",
-      "community": 10,
+      "community": 29,
       "norm_label": ".forgotpasswordotpresend()"
     },
     {
@@ -1593,7 +1593,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L255",
       "id": "web_authcontroller_authcontroller_resetpasswordform",
-      "community": 10,
+      "community": 29,
       "norm_label": ".resetpasswordform()"
     },
     {
@@ -1602,7 +1602,7 @@
       "source_file": "app/Http/Controllers/Web/AuthController.php",
       "source_location": "L268",
       "id": "web_authcontroller_authcontroller_resetpassword",
-      "community": 10,
+      "community": 29,
       "norm_label": ".resetpassword()"
     },
     {
@@ -1611,7 +1611,7 @@
       "source_file": "app/Http/Controllers/Web/DashboardController.php",
       "source_location": "L1",
       "id": "web_dashboardcontroller",
-      "community": 10,
+      "community": 57,
       "norm_label": "dashboardcontroller.php"
     },
     {
@@ -1620,7 +1620,7 @@
       "source_file": "app/Http/Controllers/Web/DashboardController.php",
       "source_location": "L17",
       "id": "web_dashboardcontroller_dashboardcontroller",
-      "community": 10,
+      "community": 57,
       "norm_label": "dashboardcontroller"
     },
     {
@@ -1629,7 +1629,7 @@
       "source_file": "app/Http/Controllers/Web/DashboardController.php",
       "source_location": "L24",
       "id": "web_dashboardcontroller_dashboardcontroller_index",
-      "community": 10,
+      "community": 57,
       "norm_label": ".index()"
     },
     {
@@ -1638,7 +1638,7 @@
       "source_file": "app/Http/Controllers/Web/DashboardController.php",
       "source_location": "L52",
       "id": "web_dashboardcontroller_dashboardcontroller_getchartdata",
-      "community": 10,
+      "community": 57,
       "norm_label": ".getchartdata()"
     },
     {
@@ -1647,7 +1647,7 @@
       "source_file": "app/Http/Controllers/Web/DashboardController.php",
       "source_location": "L52",
       "id": "app_http_controllers_web_dashboardcontroller_php_request",
-      "community": 10,
+      "community": 57,
       "norm_label": "request"
     },
     {
@@ -1656,7 +1656,7 @@
       "source_file": "app/Http/Controllers/Web/DashboardController.php",
       "source_location": "L138",
       "id": "web_dashboardcontroller_dashboardcontroller_getleaderboard",
-      "community": 10,
+      "community": 57,
       "norm_label": ".getleaderboard()"
     },
     {
@@ -1665,7 +1665,7 @@
       "source_file": "app/Http/Controllers/Web/DashboardController.php",
       "source_location": "L165",
       "id": "web_dashboardcontroller_dashboardcontroller_getrealtimevalidations",
-      "community": 10,
+      "community": 57,
       "norm_label": ".getrealtimevalidations()"
     },
     {
@@ -1737,7 +1737,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L1",
       "id": "web_feedbackcontroller",
-      "community": 75,
+      "community": 32,
       "norm_label": "feedbackcontroller.php"
     },
     {
@@ -1746,7 +1746,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L14",
       "id": "web_feedbackcontroller_feedbackcontroller",
-      "community": 75,
+      "community": 32,
       "norm_label": "feedbackcontroller"
     },
     {
@@ -1755,7 +1755,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L20",
       "id": "web_feedbackcontroller_feedbackcontroller_index",
-      "community": 75,
+      "community": 32,
       "norm_label": ".index()"
     },
     {
@@ -1764,7 +1764,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L20",
       "id": "app_http_controllers_web_feedbackcontroller_php_request",
-      "community": 75,
+      "community": 32,
       "norm_label": "request"
     },
     {
@@ -1773,7 +1773,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L76",
       "id": "web_feedbackcontroller_feedbackcontroller_destroy",
-      "community": 75,
+      "community": 32,
       "norm_label": ".destroy()"
     },
     {
@@ -1944,7 +1944,7 @@
       "source_file": "app/Http/Controllers/Web/MissionController.php",
       "source_location": "L1",
       "id": "web_missioncontroller",
-      "community": 10,
+      "community": 61,
       "norm_label": "missioncontroller.php"
     },
     {
@@ -1953,7 +1953,7 @@
       "source_file": "app/Http/Controllers/Web/MissionController.php",
       "source_location": "L15",
       "id": "web_missioncontroller_missioncontroller",
-      "community": 10,
+      "community": 61,
       "norm_label": "missioncontroller"
     },
     {
@@ -1962,7 +1962,7 @@
       "source_file": "app/Http/Controllers/Web/MissionController.php",
       "source_location": "L22",
       "id": "web_missioncontroller_missioncontroller_index",
-      "community": 10,
+      "community": 61,
       "norm_label": ".index()"
     },
     {
@@ -1971,7 +1971,7 @@
       "source_file": "app/Http/Controllers/Web/MissionController.php",
       "source_location": "L22",
       "id": "app_http_controllers_web_missioncontroller_php_request",
-      "community": 10,
+      "community": 61,
       "norm_label": "request"
     },
     {
@@ -1980,7 +1980,7 @@
       "source_file": "app/Http/Controllers/Web/MissionController.php",
       "source_location": "L92",
       "id": "web_missioncontroller_missioncontroller_store",
-      "community": 10,
+      "community": 61,
       "norm_label": ".store()"
     },
     {
@@ -1989,7 +1989,7 @@
       "source_file": "app/Http/Controllers/Web/MissionController.php",
       "source_location": "L129",
       "id": "web_missioncontroller_missioncontroller_update",
-      "community": 10,
+      "community": 61,
       "norm_label": ".update()"
     },
     {
@@ -1998,7 +1998,7 @@
       "source_file": "app/Http/Controllers/Web/MissionController.php",
       "source_location": "L167",
       "id": "web_missioncontroller_missioncontroller_destroy",
-      "community": 10,
+      "community": 61,
       "norm_label": ".destroy()"
     },
     {
@@ -2052,7 +2052,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
       "source_location": "L1",
       "id": "web_parkareacontroller",
-      "community": 10,
+      "community": 48,
       "norm_label": "parkareacontroller.php"
     },
     {
@@ -2061,7 +2061,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
       "source_location": "L14",
       "id": "web_parkareacontroller_parkareacontroller",
-      "community": 10,
+      "community": 48,
       "norm_label": "parkareacontroller"
     },
     {
@@ -2070,7 +2070,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
       "source_location": "L23",
       "id": "web_parkareacontroller_parkareacontroller_index",
-      "community": 10,
+      "community": 48,
       "norm_label": ".index()"
     },
     {
@@ -2079,7 +2079,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
       "source_location": "L23",
       "id": "app_http_controllers_web_parkareacontroller_php_request",
-      "community": 10,
+      "community": 48,
       "norm_label": "request"
     },
     {
@@ -2088,7 +2088,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
       "source_location": "L76",
       "id": "web_parkareacontroller_parkareacontroller_create",
-      "community": 10,
+      "community": 48,
       "norm_label": ".create()"
     },
     {
@@ -2097,7 +2097,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
       "source_location": "L88",
       "id": "web_parkareacontroller_parkareacontroller_store",
-      "community": 10,
+      "community": 48,
       "norm_label": ".store()"
     },
     {
@@ -2106,7 +2106,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
       "source_location": "L135",
       "id": "web_parkareacontroller_parkareacontroller_show",
-      "community": 10,
+      "community": 48,
       "norm_label": ".show()"
     },
     {
@@ -2115,7 +2115,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
       "source_location": "L261",
       "id": "web_parkareacontroller_parkareacontroller_destroy",
-      "community": 10,
+      "community": 48,
       "norm_label": ".destroy()"
     },
     {
@@ -2124,7 +2124,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L1",
       "id": "web_parksubareacontroller",
-      "community": 10,
+      "community": 65,
       "norm_label": "parksubareacontroller.php"
     },
     {
@@ -2133,7 +2133,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L15",
       "id": "web_parksubareacontroller_parksubareacontroller",
-      "community": 10,
+      "community": 65,
       "norm_label": "parksubareacontroller"
     },
     {
@@ -2142,7 +2142,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L25",
       "id": "web_parksubareacontroller_parksubareacontroller_store",
-      "community": 10,
+      "community": 65,
       "norm_label": ".store()"
     },
     {
@@ -2151,7 +2151,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L25",
       "id": "app_http_controllers_web_parksubareacontroller_php_request",
-      "community": 10,
+      "community": 65,
       "norm_label": "request"
     },
     {
@@ -2160,7 +2160,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L78",
       "id": "web_parksubareacontroller_parksubareacontroller_update",
-      "community": 10,
+      "community": 65,
       "norm_label": ".update()"
     },
     {
@@ -2169,7 +2169,7 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L180",
       "id": "web_parksubareacontroller_parksubareacontroller_destroy",
-      "community": 10,
+      "community": 65,
       "norm_label": ".destroy()"
     },
     {
@@ -2808,7 +2808,7 @@
       "source_file": "app/Models/IotCapture.php",
       "source_location": "L1",
       "id": "models_iotcapture",
-      "community": 62,
+      "community": 5,
       "norm_label": "iotcapture.php"
     },
     {
@@ -2884,10 +2884,19 @@
       "norm_label": ".booted()"
     },
     {
+      "label": ".getStatus()",
+      "file_type": "code",
+      "source_file": "app/Models/IotDevice.php",
+      "source_location": "L51",
+      "id": "models_iotdevice_iotdevice_getstatus",
+      "community": 62,
+      "norm_label": ".getstatus()"
+    },
+    {
       "label": ".subarea()",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L53",
+      "source_location": "L114",
       "id": "models_iotdevice_iotdevice_subarea",
       "community": 62,
       "norm_label": ".subarea()"
@@ -2896,7 +2905,7 @@
       "label": ".captures()",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L58",
+      "source_location": "L119",
       "id": "models_iotdevice_iotdevice_captures",
       "community": 62,
       "norm_label": ".captures()"
@@ -3087,7 +3096,7 @@
       "source_file": "app/Models/SubareaComment.php",
       "source_location": "L1",
       "id": "models_subareacomment",
-      "community": 70,
+      "community": 72,
       "norm_label": "subareacomment.php"
     },
     {
@@ -3096,7 +3105,7 @@
       "source_file": "app/Models/SubareaComment.php",
       "source_location": "L7",
       "id": "models_subareacomment_subareacomment",
-      "community": 70,
+      "community": 72,
       "norm_label": "subareacomment"
     },
     {
@@ -3105,7 +3114,7 @@
       "source_file": "app/Models/SubareaComment.php",
       "source_location": "L19",
       "id": "models_subareacomment_subareacomment_user",
-      "community": 70,
+      "community": 72,
       "norm_label": ".user()"
     },
     {
@@ -3114,7 +3123,7 @@
       "source_file": "app/Models/SubareaComment.php",
       "source_location": "L24",
       "id": "models_subareacomment_subareacomment_parksubarea",
-      "community": 70,
+      "community": 72,
       "norm_label": ".parksubarea()"
     },
     {
@@ -3204,7 +3213,7 @@
       "source_file": "app/Models/UserFaq.php",
       "source_location": "L1",
       "id": "models_userfaq",
-      "community": 12,
+      "community": 72,
       "norm_label": "userfaq.php"
     },
     {
@@ -3258,7 +3267,7 @@
       "source_file": "app/Models/UserMission.php",
       "source_location": "L1",
       "id": "models_usermission",
-      "community": 71,
+      "community": 62,
       "norm_label": "usermission.php"
     },
     {
@@ -3267,7 +3276,7 @@
       "source_file": "app/Models/UserMission.php",
       "source_location": "L9",
       "id": "models_usermission_usermission",
-      "community": 71,
+      "community": 62,
       "norm_label": "usermission"
     },
     {
@@ -3276,7 +3285,7 @@
       "source_file": "app/Models/UserMission.php",
       "source_location": "L31",
       "id": "models_usermission_usermission_user",
-      "community": 71,
+      "community": 62,
       "norm_label": ".user()"
     },
     {
@@ -3285,7 +3294,7 @@
       "source_file": "app/Models/UserMission.php",
       "source_location": "L36",
       "id": "models_usermission_usermission_mission",
-      "community": 71,
+      "community": 62,
       "norm_label": ".mission()"
     },
     {
@@ -3294,7 +3303,7 @@
       "source_file": "app/Models/UserReward.php",
       "source_location": "L1",
       "id": "models_userreward",
-      "community": 72,
+      "community": 70,
       "norm_label": "userreward.php"
     },
     {
@@ -3303,7 +3312,7 @@
       "source_file": "app/Models/UserReward.php",
       "source_location": "L7",
       "id": "models_userreward_userreward",
-      "community": 72,
+      "community": 70,
       "norm_label": "userreward"
     },
     {
@@ -3312,7 +3321,7 @@
       "source_file": "app/Models/UserReward.php",
       "source_location": "L23",
       "id": "models_userreward_userreward_user",
-      "community": 72,
+      "community": 70,
       "norm_label": ".user()"
     },
     {
@@ -3321,7 +3330,7 @@
       "source_file": "app/Models/UserReward.php",
       "source_location": "L28",
       "id": "models_userreward_userreward_reward",
-      "community": 72,
+      "community": 70,
       "norm_label": ".reward()"
     },
     {
@@ -3384,7 +3393,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L1",
       "id": "providers_appserviceprovider",
-      "community": 5,
+      "community": 55,
       "norm_label": "appserviceprovider.php"
     },
     {
@@ -3393,7 +3402,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L12",
       "id": "providers_appserviceprovider_appserviceprovider",
-      "community": 5,
+      "community": 55,
       "norm_label": "appserviceprovider"
     },
     {
@@ -3402,7 +3411,7 @@
       "source_file": "",
       "source_location": "",
       "id": "serviceprovider",
-      "community": 5,
+      "community": 55,
       "norm_label": "serviceprovider"
     },
     {
@@ -3411,7 +3420,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L17",
       "id": "providers_appserviceprovider_appserviceprovider_register",
-      "community": 5,
+      "community": 55,
       "norm_label": ".register()"
     },
     {
@@ -3420,7 +3429,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L25",
       "id": "providers_appserviceprovider_appserviceprovider_boot",
-      "community": 5,
+      "community": 55,
       "norm_label": ".boot()"
     },
     {
@@ -3429,7 +3438,7 @@
       "source_file": "app/Providers/AuthServiceProvider.php",
       "source_location": "L1",
       "id": "providers_authserviceprovider",
-      "community": 5,
+      "community": 55,
       "norm_label": "authserviceprovider.php"
     },
     {
@@ -3438,7 +3447,7 @@
       "source_file": "app/Providers/AuthServiceProvider.php",
       "source_location": "L10",
       "id": "providers_authserviceprovider_authserviceprovider",
-      "community": 5,
+      "community": 55,
       "norm_label": "authserviceprovider"
     },
     {
@@ -3447,7 +3456,7 @@
       "source_file": "app/Providers/AuthServiceProvider.php",
       "source_location": "L24",
       "id": "providers_authserviceprovider_authserviceprovider_boot",
-      "community": 5,
+      "community": 55,
       "norm_label": ".boot()"
     },
     {
@@ -3483,7 +3492,7 @@
       "source_file": "app/Services/HistoryService.php",
       "source_location": "L1",
       "id": "services_historyservice",
-      "community": 10,
+      "community": 29,
       "norm_label": "historyservice.php"
     },
     {
@@ -3492,7 +3501,7 @@
       "source_file": "app/Services/HistoryService.php",
       "source_location": "L8",
       "id": "services_historyservice_historyservice",
-      "community": 10,
+      "community": 29,
       "norm_label": "historyservice"
     },
     {
@@ -3501,7 +3510,7 @@
       "source_file": "app/Services/HistoryService.php",
       "source_location": "L19",
       "id": "services_historyservice_historyservice_log",
-      "community": 10,
+      "community": 29,
       "norm_label": ".log()"
     },
     {
@@ -8536,6 +8545,24 @@
       "norm_label": "wsl_terminal_bridge.sh"
     },
     {
+      "label": "environment_isolation.md",
+      "file_type": "document",
+      "source_file": ".agents/rules/environment_isolation.md",
+      "source_location": "L1",
+      "id": "rules_environment_isolation",
+      "community": 71,
+      "norm_label": "environment_isolation.md"
+    },
+    {
+      "label": "Aturan Pemisahan Lingkungan Pengembangan dan Runtime Docker",
+      "file_type": "document",
+      "source_file": ".agents/rules/environment_isolation.md",
+      "source_location": "L10",
+      "id": "rules_environment_isolation_aturan_pemisahan_lingkungan_pengembangan_dan_runtime_docker",
+      "community": 71,
+      "norm_label": "aturan pemisahan lingkungan pengembangan dan runtime docker"
+    },
+    {
       "label": "graphify.md",
       "file_type": "document",
       "source_file": ".agents/rules/graphify.md",
@@ -8552,6 +8579,24 @@
       "id": "rules_graphify_graphify",
       "community": 181,
       "norm_label": "graphify"
+    },
+    {
+      "label": "development_cycle.md",
+      "file_type": "document",
+      "source_file": ".agents/workflows/development_cycle.md",
+      "source_location": "L1",
+      "id": "workflows_development_cycle",
+      "community": 74,
+      "norm_label": "development_cycle.md"
+    },
+    {
+      "label": "Workflow: Siklus Pengembangan Kode Tersendiri",
+      "file_type": "document",
+      "source_file": ".agents/workflows/development_cycle.md",
+      "source_location": "L10",
+      "id": "workflows_development_cycle_workflow_siklus_pengembangan_kode_tersendiri",
+      "community": 74,
+      "norm_label": "workflow: siklus pengembangan kode tersendiri"
     },
     {
       "label": "graphify.md",
@@ -16151,6 +16196,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Models/IotDevice.php",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "models_iotdevice_iotdevice",
+      "target": "models_iotdevice_iotdevice_getstatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Models/IotDevice.php",
       "source_location": "L53",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -16166,6 +16221,17 @@
       "source_location": "L25",
       "weight": 1.0,
       "source": "models_iotdevice_iotdevice_booted",
+      "target": "services_historyservice_historyservice_log"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "app/Models/IotDevice.php",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "models_iotdevice_iotdevice_getstatus",
       "target": "services_historyservice_historyservice_log"
     },
     {
@@ -22778,12 +22844,32 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": ".agents/rules/environment_isolation.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "rules_environment_isolation",
+      "target": "rules_environment_isolation_aturan_pemisahan_lingkungan_pengembangan_dan_runtime_docker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": ".agents/rules/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "rules_graphify",
       "target": "rules_graphify_graphify"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".agents/workflows/development_cycle.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "workflows_development_cycle",
+      "target": "workflows_development_cycle_workflow_siklus_pengembangan_kode_tersendiri",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -23577,5 +23663,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4f613ab5821224c6b8c5f2c3cc5e5c4e54063952"
+  "built_at_commit": "22e4a5f0b9d17f07a03866df3b6b27596ac30a21"
 }
