@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use \App\Events\IotDeviceStatusChanged;
+use App\Events\IotCountUpdated;
 use App\Models\IotCapture;
 use App\Models\ParkSubarea;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Pusher\ApiErrorException;
 
 class IotDevice extends Model
 {
@@ -84,7 +87,7 @@ class IotDevice extends Model
                         $status = 'offline';
 
                         // Broadcast status offline
-                        broadcast(new \App\Events\IotDeviceStatusChanged($mac, 'offline'));
+                        broadcast(new IotDeviceStatusChanged($mac, 'offline'));
 
                         // Reset database subarea count to 0
                         $device = static::where('device_mac_address', $mac)->first();
@@ -94,13 +97,44 @@ class IotDevice extends Model
                             $subarea->save();
 
                             // Broadcast count updated to 0
-                            broadcast(new \App\Events\IotCountUpdated($mac, 0));
+                            broadcast(new IotCountUpdated($mac, 0));
                         }
                     }
                 }
+            } catch (ApiErrorException $e) {
+                if ($e->getCode() === 404) {
+                    Log::info("Reverb sync: Channel not found (404) for device {$mac}. Setting to offline.");
+                    
+                    // Update cache
+                    Cache::forever("iot_status_{$mac}", 'offline');
+                    $status = 'offline';
+
+                    // Broadcast status offline
+                    broadcast(new IotDeviceStatusChanged($mac, 'offline'));
+
+                    // Reset database subarea count to 0
+                    $device = static::where('device_mac_address', $mac)->first();
+                    if ($device && $device->subarea) {
+                        $subarea = $device->subarea;
+                        $subarea->current_count = 0;
+                        $subarea->save();
+
+                        // Broadcast count updated to 0
+                        broadcast(new IotCountUpdated($mac, 0));
+                    }
+                } else {
+                    Log::warning("Reverb sync failed (API error) for device {$mac}", [
+                        'message' => $e->getMessage(),
+                        'code' => $e->getCode(),
+                    ]);
+                }
             } catch (\Exception $e) {
                 // Log warning dan gunakan status dari cache sebagai fallback jika Reverb bermasalah/offline
-                Log::warning("Reverb sync failed for device {$mac}: " . $e->getMessage());
+                Log::warning("Reverb sync failed for device {$mac}", [
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                ]);
             }
         }
 
