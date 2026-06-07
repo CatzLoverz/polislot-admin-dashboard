@@ -61,7 +61,7 @@ class IotDevice extends Model
 
         if ($status === 'online' && $connectionType === 'ws') {
             try {
-                $cleanMac = str_replace(':', '', strtolower($mac));
+                $cleanMac = str_replace(':', '', $mac);
                 $channelName = "presence-iot.device.{$cleanMac}";
 
                 // Ambil instance Pusher dari Reverb Broadcaster
@@ -73,7 +73,7 @@ class IotDevice extends Model
                     $isDevicePresent = false;
                     
                     foreach ($users as $user) {
-                        if (isset($user['id']) && str_replace(':', '', strtolower($user['id'])) === $cleanMac) {
+                        if (isset($user['id']) && str_replace(':', '', strtolower($user['id'])) === strtolower($cleanMac)) {
                             $isDevicePresent = true;
                             break;
                         }
