@@ -1,16 +1,16 @@
 # Graph Report - polislot-admin-dashboard  (2026-06-08)
 
 ## Corpus Check
-- 201 files · ~70,539 words
+- 201 files · ~70,567 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1038 nodes · 1372 edges · 166 communities (103 shown, 63 thin omitted)
+- 1038 nodes · 1372 edges · 167 communities (103 shown, 64 thin omitted)
 - Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 126 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `22e4a5f0`
+- Built from commit: `b3e8d3db`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -90,21 +90,22 @@
 - [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
+- [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
 - [[_COMMUNITY_Community 77|Community 77]]
 - [[_COMMUNITY_Community 78|Community 78]]
 - [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
 - [[_COMMUNITY_Community 82|Community 82]]
 - [[_COMMUNITY_Community 83|Community 83]]
 - [[_COMMUNITY_Community 84|Community 84]]
+- [[_COMMUNITY_Community 85|Community 85]]
 - [[_COMMUNITY_Community 91|Community 91]]
 - [[_COMMUNITY_Community 92|Community 92]]
 - [[_COMMUNITY_Community 93|Community 93]]
 - [[_COMMUNITY_Community 95|Community 95]]
-- [[_COMMUNITY_Community 111|Community 111]]
 - [[_COMMUNITY_Community 112|Community 112]]
-- [[_COMMUNITY_Community 113|Community 113]]
 - [[_COMMUNITY_Community 114|Community 114]]
 - [[_COMMUNITY_Community 116|Community 116]]
 - [[_COMMUNITY_Community 120|Community 120]]
@@ -143,7 +144,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (166 total, 63 thin omitted)
+## Communities (167 total, 64 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -235,7 +236,7 @@ Nodes (4): RewardController, HistoryService, JsonResponse, Request
 
 ### Community 32 - "Community 32"
 Cohesion: 0.17
-Nodes (5): FeedbackCategoryController, JsonResponse, Request, Controller, FeedbackController
+Nodes (5): FeedbackCategoryController, JsonResponse, Request, Controller, ParkAmenityController
 
 ### Community 33 - "Community 33"
 Cohesion: 0.08
@@ -258,8 +259,8 @@ Cohesion: 0.29
 Nodes (3): AppServiceProvider, AuthServiceProvider, ServiceProvider
 
 ### Community 62 - "Community 62"
-Cohesion: 0.14
-Nodes (4): HasFactory, IotDevice, UserHistory, UserMission
+Cohesion: 0.20
+Nodes (3): HasFactory, IotDevice, Mission
 
 ### Community 63 - "Community 63"
 Cohesion: 0.50
@@ -269,9 +270,9 @@ Nodes (4): Membuat HMAC-SHA256 signature., Menangkap video dari webcam dan mengi
 Cohesion: 0.53
 Nodes (3): MapVisualizationController, JsonResponse, Request
 
-### Community 72 - "Community 72"
+### Community 70 - "Community 70"
 Cohesion: 0.20
-Nodes (3): Model, Feedback, SubareaComment
+Nodes (3): Model, FeedbackCategory, UserReward
 
 ### Community 78 - "Community 78"
 Cohesion: 0.06
@@ -296,16 +297,16 @@ Nodes (6): Request, Closure, ApiEncryption, RBAC, API Encryption (RSA), NotCurre
 ## Knowledge Gaps
 - **99 isolated node(s):** `TrustProxies`, `$schema`, `name`, `type`, `description` (+94 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **63 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **64 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Controller` connect `Community 32` to `Community 0`, `Community 1`, `Community 5`, `Community 10`, `Community 12`, `Community 23`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 56`, `Community 57`, `Community 61`, `Community 65`, `Community 67`, `Community 68`, `Community 69`, `Community 76`, `Community 77`, `Community 83`?**
+- **Why does `Controller` connect `Community 32` to `Community 0`, `Community 1`, `Community 5`, `Community 10`, `Community 12`, `Community 23`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 56`, `Community 57`, `Community 61`, `Community 65`, `Community 67`, `Community 68`, `Community 69`, `Community 75`, `Community 77`, `Community 83`?**
   _High betweenness centrality (0.038) - this node is a cross-community bridge._
-- **Why does `IotCapture` connect `Community 5` to `Community 72`, `Community 1`, `Community 62`, `Community 31`?**
+- **Why does `IotCapture` connect `Community 5` to `Community 1`, `Community 70`, `Community 62`, `Community 31`?**
   _High betweenness centrality (0.033) - this node is a cross-community bridge._
-- **Why does `Request` connect `Community 5` to `Community 0`, `Community 1`, `Community 10`, `Community 12`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 32`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 55`, `Community 56`, `Community 57`, `Community 61`, `Community 65`, `Community 67`, `Community 68`, `Community 69`, `Community 76`, `Community 77`, `Community 83`, `Community 95`?**
+- **Why does `Request` connect `Community 5` to `Community 0`, `Community 1`, `Community 10`, `Community 12`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 32`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 55`, `Community 56`, `Community 57`, `Community 61`, `Community 65`, `Community 67`, `Community 68`, `Community 69`, `Community 75`, `Community 77`, `Community 83`, `Community 95`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Are the 21 inferred relationships involving `Validation` (e.g. with `.receiveSnapshot()` and `.store()`) actually correct?**
   _`Validation` has 21 INFERRED edges - model-reasoned connections that need verification._

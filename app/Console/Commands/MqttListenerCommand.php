@@ -305,6 +305,9 @@ class MqttListenerCommand extends Command
                 
                 // Simpan status terbaru ke Cache agar web bisa tahu status awal saat halaman baru dibuka
                 Cache::forever("iot_status_{$mac}", $status);
+                if ($status === 'online') {
+                    Cache::forever("iot_connection_type_{$mac}", 'mqtt');
+                }
                 
                 // Broadcast ke Reverb agar UI berubah secara real-time
                 broadcast(new IotDeviceStatusChanged($mac, $status));

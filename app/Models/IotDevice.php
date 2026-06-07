@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\IotCapture;
+use App\Models\ParkSubarea;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -51,18 +54,19 @@ class IotDevice extends Model
     public static function getStatus(string $mac): string
     {
         $status = Cache::get("iot_status_{$mac}", 'offline');
+        $connectionType = Cache::get("iot_connection_type_{$mac}", 'ws');
 
-        if ($status === 'online') {
+        if ($status === 'online' && $connectionType === 'ws') {
             try {
                 $cleanMac = str_replace(':', '', strtolower($mac));
                 $channelName = "presence-iot.device.{$cleanMac}";
 
                 // Ambil instance Pusher dari Reverb Broadcaster
-                $pusher = \Illuminate\Support\Facades\Broadcast::connection('reverb')->getPusher();
-                $response = $pusher->get("/channels/{$channelName}/users");
+                $pusher = Broadcast::connection('reverb')->getPusher();
+                $response = $pusher->get("/channels/{$channelName}/users", [], true);
 
-                if ($response && $response['status'] == 200 && isset($response['result']['users'])) {
-                    $users = $response['result']['users'];
+                if (is_array($response) && isset($response['users'])) {
+                    $users = $response['users'];
                     $isDevicePresent = false;
                     
                     foreach ($users as $user) {

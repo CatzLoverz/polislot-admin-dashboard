@@ -122,6 +122,7 @@ class IotWsAuthController extends Controller
         // 4. UPDATE STATUS CACHE (Instant Online)
         // ============================================================
         Cache::forever("iot_status_{$macAddress}", 'online');
+        Cache::forever("iot_connection_type_{$macAddress}", 'ws');
         broadcast(new \App\Events\IotDeviceStatusChanged($macAddress, 'online'));
 
         return response()->json([

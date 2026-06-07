@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
+use App\Models\IotDevice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -170,7 +171,7 @@ class ParkAreaController extends Controller
 
                 if ($sub->iotDevice) {
                     $mac = $sub->iotDevice->device_mac_address;
-                    $deviceStatus = \App\Models\IotDevice::getStatus($mac);
+                    $deviceStatus = IotDevice::getStatus($mac);
                     if ($deviceStatus === 'online') {
                         $hasOnlineIot = true;
                         if ($sub->max_slots > 0) {

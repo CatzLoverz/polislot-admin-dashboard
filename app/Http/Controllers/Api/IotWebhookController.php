@@ -68,6 +68,9 @@ class IotWebhookController extends Controller
 
         // Simpan ke Cache (sama seperti MqttListenerCommand)
         Cache::forever("iot_status_{$mac}", $status);
+        if ($status === 'online') {
+            Cache::forever("iot_connection_type_{$mac}", 'ws');
+        }
 
         // Broadcast perubahan status agar UI (Web & nantinya Mobile) terupdate
         broadcast(new IotDeviceStatusChanged($mac, $status));
