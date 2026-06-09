@@ -94,6 +94,9 @@ class MqttListenerCommand extends Command
                         return;
                     }
 
+                    // Update last seen cache
+                    Cache::put("iot_last_seen_{$payload['mac_address']}", time());
+
                     // 1. Validasi HMAC Signature
                     $receivedSignature = $payload['signature'];
                     
@@ -254,6 +257,9 @@ class MqttListenerCommand extends Command
                         $mac = $payload['mac_address'];
                         $count = (int) $payload['count'];
                         
+                        // Update last seen cache
+                        Cache::put("iot_last_seen_{$mac}", time());
+                        
                         // Hanya perbarui jika status di cache adalah online
                         $status = Cache::get("iot_status_{$mac}", 'offline');
                         if ($status === 'online') {
@@ -303,6 +309,9 @@ class MqttListenerCommand extends Command
                 
                 $this->info("⚡ Status Perangkat [{$mac}]: " . strtoupper($status) . " (Secured)");
                 
+                // Update last seen cache
+                Cache::put("iot_last_seen_{$mac}", time());
+                
                 // Simpan status terbaru ke Cache agar web bisa tahu status awal saat halaman baru dibuka
                 Cache::forever("iot_status_{$mac}", $status);
                 if ($status === 'online') {
@@ -311,6 +320,19 @@ class MqttListenerCommand extends Command
                 
                 // Broadcast ke Reverb agar UI berubah secara real-time
                 broadcast(new IotDeviceStatusChanged($mac, $status));
+
+                // Log status changes to laravel.log
+                if ($status === 'online') {
+                    Log::info("Device authenticated successfully via MQTT", [
+                        'mac' => $mac,
+                        'connection_type' => 'mqtt'
+                    ]);
+                } else {
+                    Log::info("Device disconnected via MQTT (LWT)", [
+                        'mac' => $mac,
+                        'connection_type' => 'mqtt'
+                    ]);
+                }
 
                 // Reset count to 0 in database if device goes offline via MQTT
                 if ($status === 'offline') {
@@ -343,6 +365,12 @@ class MqttListenerCommand extends Command
                         
                         $mqtt->publish("polislot/device/{$mac}/command", json_encode($payloadData, JSON_UNESCAPED_SLASHES), 1);
                         $this->info("📈 [MQTT] Auto-pushed config to device {$mac} on connection.");
+                        
+                        // Log config push to laravel.log
+                        Log::info("Konfigurasi dikirim ke IoT Device via MQTT", [
+                            'mac' => $mac,
+                            'connection_type' => 'mqtt'
+                        ]);
                     }
                 }
             });

@@ -1,16 +1,16 @@
-# Graph Report - polislot-admin-dashboard  (2026-06-08)
+# Graph Report - polislot-admin-dashboard  (2026-06-09)
 
 ## Corpus Check
-- 202 files · ~70,791 words
+- 202 files · ~71,135 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1039 nodes · 1372 edges · 168 communities (104 shown, 64 thin omitted)
-- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 126 edges (avg confidence: 0.81)
+- 1043 nodes · 1412 edges · 164 communities (102 shown, 62 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 127 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b18e9bf1`
+- Built from commit: `95c26846`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -103,16 +103,13 @@
 - [[_COMMUNITY_Community 85|Community 85]]
 - [[_COMMUNITY_Community 91|Community 91]]
 - [[_COMMUNITY_Community 92|Community 92]]
-- [[_COMMUNITY_Community 93|Community 93]]
 - [[_COMMUNITY_Community 95|Community 95]]
 - [[_COMMUNITY_Community 112|Community 112]]
 - [[_COMMUNITY_Community 114|Community 114]]
 - [[_COMMUNITY_Community 116|Community 116]]
 - [[_COMMUNITY_Community 120|Community 120]]
 - [[_COMMUNITY_Community 121|Community 121]]
-- [[_COMMUNITY_Community 122|Community 122]]
 - [[_COMMUNITY_Community 123|Community 123]]
-- [[_COMMUNITY_Community 125|Community 125]]
 - [[_COMMUNITY_Community 167|Community 167]]
 - [[_COMMUNITY_Community 181|Community 181]]
 - [[_COMMUNITY_Community 182|Community 182]]
@@ -120,14 +117,14 @@
 ## God Nodes (most connected - your core abstractions)
 1. `Controller` - 65 edges
 2. `Request` - 38 edges
-3. `AuthControllerTest` - 31 edges
-4. `AuthControllerTest` - 24 edges
-5. `Validation` - 22 edges
-6. `AuthController` - 13 edges
-7. `AuthController` - 12 edges
-8. `Polislot Admin Dashboard` - 12 edges
-9. `Langkah Instalasi` - 12 edges
-10. `Request` - 11 edges
+3. `TestCase` - 35 edges
+4. `AuthControllerTest` - 31 edges
+5. `AuthControllerTest` - 24 edges
+6. `Validation` - 22 edges
+7. `AuthController` - 13 edges
+8. `AuthController` - 12 edges
+9. `Polislot Admin Dashboard` - 12 edges
+10. `Langkah Instalasi` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `ApiEncryption` --rationale_for--> `API Encryption (RSA)`  [INFERRED]
@@ -144,7 +141,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (168 total, 64 thin omitted)
+## Communities (164 total, 62 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -187,7 +184,7 @@ Cohesion: 0.12
 Nodes (15): devDependencies, axios, concurrently, laravel-echo, laravel-vite-plugin, pusher-js, tailwindcss, @tailwindcss/vite (+7 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.24
+Cohesion: 0.22
 Nodes (5): UserFaqController, JsonResponse, Request, UserFaq, UserFaqController
 
 ### Community 13 - "Community 13"
@@ -236,15 +233,15 @@ Nodes (4): RewardController, HistoryService, JsonResponse, Request
 
 ### Community 32 - "Community 32"
 Cohesion: 0.17
-Nodes (5): FeedbackCategoryController, JsonResponse, Request, Controller, ParkAmenityController
+Nodes (5): FeedbackCategoryController, JsonResponse, Request, Controller, ProfileController
 
 ### Community 33 - "Community 33"
 Cohesion: 0.08
 Nodes (10): Dispatchable, IotCommandSent, IotCountUpdated, IotDeviceStatusChanged, IotStreamReceived, IotThresholdUpdated, InteractsWithSockets, SendOtpMail (+2 more)
 
 ### Community 52 - "Community 52"
-Cohesion: 0.43
-Nodes (4): ProfileController, JsonResponse, MissionService, Request
+Cohesion: 0.17
+Nodes (7): ProfileController, JsonResponse, MissionService, Request, AppServiceProvider, AuthServiceProvider, ServiceProvider
 
 ### Community 53 - "Community 53"
 Cohesion: 0.40
@@ -253,14 +250,6 @@ Nodes (5): autoload, psr-4, App\\, Database\\Factories\\, Database\\Seeders\\
 ### Community 54 - "Community 54"
 Cohesion: 0.60
 Nodes (3): HistoryController, JsonResponse, Request
-
-### Community 55 - "Community 55"
-Cohesion: 0.29
-Nodes (3): AppServiceProvider, AuthServiceProvider, ServiceProvider
-
-### Community 62 - "Community 62"
-Cohesion: 0.20
-Nodes (3): HasFactory, IotDevice, Mission
 
 ### Community 63 - "Community 63"
 Cohesion: 0.50
@@ -271,12 +260,16 @@ Cohesion: 0.53
 Nodes (3): MapVisualizationController, JsonResponse, Request
 
 ### Community 70 - "Community 70"
-Cohesion: 0.20
-Nodes (3): Model, FeedbackCategory, UserReward
+Cohesion: 0.22
+Nodes (3): Model, Feedback, UserReward
 
 ### Community 78 - "Community 78"
 Cohesion: 0.06
 Nodes (32): 10. Atur Ulang Environment (.env) - PENTING, 11. Re-up Container, 1. Konfigurasi Environment (.env), 2. Atur docker-compose.yml, 3. Generate RSA Keys (Di Root), 4. Verifikasi Credential, 5. Menjalankan Container, 6. Generate Application Key (+24 more)
+
+### Community 79 - "Community 79"
+Cohesion: 0.11
+Nodes (5): FeedbackCategoryControllerTest, ExampleTest, TestCase, ExampleTest, ScrubAndTraceProcessorTest
 
 ### Community 81 - "Community 81"
 Cohesion: 0.07
@@ -295,24 +288,24 @@ Cohesion: 0.19
 Nodes (6): Request, Closure, ApiEncryption, RBAC, API Encryption (RSA), NotCurrentPassword
 
 ## Knowledge Gaps
-- **99 isolated node(s):** `TrustProxies`, `$schema`, `name`, `type`, `description` (+94 more)
+- **98 isolated node(s):** `TrustProxies`, `$schema`, `name`, `type`, `description` (+93 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **64 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Controller` connect `Community 32` to `Community 0`, `Community 1`, `Community 5`, `Community 10`, `Community 12`, `Community 23`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 56`, `Community 57`, `Community 61`, `Community 65`, `Community 67`, `Community 68`, `Community 69`, `Community 75`, `Community 77`, `Community 83`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
-- **Why does `IotCapture` connect `Community 5` to `Community 1`, `Community 70`, `Community 62`, `Community 31`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
-- **Why does `Request` connect `Community 5` to `Community 0`, `Community 1`, `Community 10`, `Community 12`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 32`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 55`, `Community 56`, `Community 57`, `Community 61`, `Community 65`, `Community 67`, `Community 68`, `Community 69`, `Community 75`, `Community 77`, `Community 83`, `Community 95`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Are the 21 inferred relationships involving `Validation` (e.g. with `.receiveSnapshot()` and `.store()`) actually correct?**
-  _`Validation` has 21 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `TestCase` connect `Community 79` to `Community 0`, `Community 16`, `Community 17`, `Community 18`, `Community 23`, `Community 24`, `Community 34`, `Community 35`, `Community 36`, `Community 38`, `Community 39`, `Community 40`, `Community 41`, `Community 42`, `Community 43`, `Community 44`, `Community 50`, `Community 51`, `Community 59`, `Community 60`, `Community 82`, `Community 84`?**
+  _High betweenness centrality (0.202) - this node is a cross-community bridge._
+- **Why does `Mission` connect `Community 23` to `Community 61`?**
+  _High betweenness centrality (0.104) - this node is a cross-community bridge._
+- **Why does `Controller` connect `Community 32` to `Community 0`, `Community 1`, `Community 5`, `Community 10`, `Community 12`, `Community 23`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 55`, `Community 56`, `Community 57`, `Community 61`, `Community 67`, `Community 68`, `Community 69`, `Community 75`, `Community 77`, `Community 83`?**
+  _High betweenness centrality (0.074) - this node is a cross-community bridge._
 - **What connects `TrustProxies`, `$schema`, `name` to the rest of the system?**
-  _121 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _120 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.06951219512195123 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07179487179487179 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.04931972789115646 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05053191489361702 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
+  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._

@@ -168,6 +168,14 @@ class ScrubAndTraceProcessor implements ProcessorInterface
         $className = class_basename($caller['class']);
         $methodName = $caller['function'] ?? 'unknown';
 
+        // Clean up PHP 8.4+ closure function names
+        // e.g., "{closure:App\Http\Controllers\Web\AuthController::login():47}" -> "login"
+        if (preg_match('/\{closure:(?:(?P<class>[^:]+)::)?(?P<method>[a-zA-Z0-9_]+)(?:\(\))?:(?P<line>\d+)\}/', $methodName, $matches)) {
+            $methodName = $matches['method'];
+        } elseif (str_contains($methodName, '{closure')) {
+            $methodName = 'closure';
+        }
+
         // Tentukan platform berdasarkan namespace
         $platform = 'APP';
         $namespace = $caller['class'];
