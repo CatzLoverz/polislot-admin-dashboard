@@ -28,8 +28,12 @@ def test_delete_feedback_category(driver):
         time.sleep(2)
 
         # === 2. MENUJU HALAMAN KATEGORI FEEDBACK ===
+        link_category = driver.find_element(By.XPATH, '//a[contains(@href, "feedback")]')
+        link_category.click()
+        time.sleep(3)
+
         link_category = driver.find_element(By.XPATH, '//a[contains(@href, "feedback-category")]')
-        driver.execute_script("arguments[0].click();", link_category)
+        link_category.click()
         time.sleep(3)
 
         # === 3. KLIK TOMBOL HAPUS DI BARIS PERTAMA TABEL ===

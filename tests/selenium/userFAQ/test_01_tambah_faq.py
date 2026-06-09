@@ -29,8 +29,8 @@ def test_add_faq(driver):
 
         # === 2. MENUJU HALAMAN FAQ ===
         # Menggunakan JS Executor untuk menghindari elemen tertutup
-        link_faq = driver.find_element(By.XPATH, '//a[contains(@href, "faq")]')
-        driver.execute_script("arguments[0].click();", link_faq)
+        link_faq = driver.find_element(By.XPATH, '//a[contains(@href, "user-faq")]')
+        link_faq.click()
         time.sleep(3)
 
         # === 3. KLIK TOMBOL TAMBAH FAQ (BUKA MODAL) ===
