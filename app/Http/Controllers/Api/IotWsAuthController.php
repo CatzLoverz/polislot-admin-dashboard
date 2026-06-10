@@ -125,6 +125,11 @@ class IotWsAuthController extends Controller
         Cache::forever("iot_connection_type_{$macAddress}", 'ws');
         broadcast(new \App\Events\IotDeviceStatusChanged($macAddress, 'online'));
 
+        $device = IotDevice::where('device_mac_address', $macAddress)->first();
+        if ($device && $device->subarea) {
+            broadcast(new \App\Events\SubareaStatusUpdated($device->subarea));
+        }
+
         return response()->json([
             'auth'         => "{$reverbKey}:{$authSignature}",
             'channel_data' => $channelData,

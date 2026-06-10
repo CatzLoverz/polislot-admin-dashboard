@@ -2959,7 +2959,7 @@
       "label": ".subarea()",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L179",
+      "source_location": "L188",
       "id": "models_iotdevice_iotdevice_subarea",
       "community": 62,
       "norm_label": ".subarea()"
@@ -2968,7 +2968,7 @@
       "label": ".captures()",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L184",
+      "source_location": "L193",
       "id": "models_iotdevice_iotdevice_captures",
       "community": 62,
       "norm_label": ".captures()"
@@ -24678,5 +24678,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "dacc944709eeacc4794ffe340f6f619a39478f5f"
+  "built_at_commit": "e8f3e16a2c635eb85509cac71e166a175504e02a"
 }

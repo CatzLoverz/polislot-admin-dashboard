@@ -99,6 +99,9 @@ class IotDevice extends Model
 
                                 // Broadcast count updated to 0
                                 broadcast(new IotCountUpdated($mac, 0));
+
+                                // Broadcast subarea status updated
+                                broadcast(new \App\Events\SubareaStatusUpdated($subarea));
                             }
                         }
                     }
@@ -122,6 +125,9 @@ class IotDevice extends Model
 
                             // Broadcast count updated to 0
                             broadcast(new IotCountUpdated($mac, 0));
+
+                            // Broadcast subarea status updated
+                            broadcast(new \App\Events\SubareaStatusUpdated($subarea));
                         }
                     } else {
                         Log::warning("Reverb sync failed (API error) for device {$mac}", [
@@ -160,6 +166,9 @@ class IotDevice extends Model
 
                         // Broadcast count updated to 0
                         broadcast(new IotCountUpdated($mac, 0));
+
+                        // Broadcast subarea status updated
+                        broadcast(new \App\Events\SubareaStatusUpdated($subarea));
                     }
                 }
             }

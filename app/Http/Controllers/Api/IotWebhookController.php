@@ -85,6 +85,10 @@ class IotWebhookController extends Controller
 
                 // Broadcast count updated to 0
                 broadcast(new IotCountUpdated($mac, 0));
+                
+                // Broadcast subarea status updated
+                broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                
                 Log::info("Device {$mac} went offline. Reset subarea count to 0.");
             }
         }
@@ -94,6 +98,10 @@ class IotWebhookController extends Controller
             $device = IotDevice::where('device_mac_address', $mac)->first();
             if ($device && $device->subarea) {
                 $subarea = $device->subarea;
+                
+                // Broadcast subarea status updated
+                broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                
                 $payloadData = [
                     'action'             => 'update_config',
                     'max_slots'          => (int) $subarea->max_slots,

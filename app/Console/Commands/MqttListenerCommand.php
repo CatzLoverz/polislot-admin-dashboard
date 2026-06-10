@@ -59,6 +59,7 @@ class MqttListenerCommand extends Command
                     $subarea->current_count = 0;
                     $subarea->save();
                     broadcast(new IotCountUpdated($mac, 0));
+                    broadcast(new \App\Events\SubareaStatusUpdated($subarea));
                 }
             }
             $this->info("🔄 Reset {$devices->count()} device status ke OFFLINE dan count ke 0 (cache + broadcast)");
@@ -334,7 +335,6 @@ class MqttListenerCommand extends Command
                     ]);
                 }
 
-                // Reset count to 0 in database if device goes offline via MQTT
                 if ($status === 'offline') {
                     $device = IotDevice::where('device_mac_address', $mac)->first();
                     if ($device && $device->subarea) {
@@ -344,6 +344,7 @@ class MqttListenerCommand extends Command
 
                         // Broadcast count updated to 0
                         broadcast(new IotCountUpdated($mac, 0));
+                        broadcast(new \App\Events\SubareaStatusUpdated($subarea));
                         $this->info("📈 [MQTT] Device {$mac} went offline. Reset subarea count to 0.");
                     }
                 }
@@ -353,6 +354,9 @@ class MqttListenerCommand extends Command
                     $device = IotDevice::where('device_mac_address', $mac)->first();
                     if ($device && $device->subarea) {
                         $subarea = $device->subarea;
+                        
+                        broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                        
                         $payloadData = [
                             'action'             => 'update_config',
                             'max_slots'          => (int) $subarea->max_slots,

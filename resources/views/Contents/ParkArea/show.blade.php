@@ -914,7 +914,7 @@
         Object.keys(subareaStates).forEach(subId => {
             const state = subareaStates[subId];
             if (state.validationRemainingSeconds > 0) {
-                state.validationRemainingSeconds--;
+                state.validationRemainingSeconds = Math.floor(state.validationRemainingSeconds) - 1;
                 
                 if (state.validationRemainingSeconds <= 0) {
                     console.log(`⏰ Validation expired for subarea ${subId}. Reverting to fallback: ${state.fallbackStatus}`);
@@ -977,7 +977,7 @@
                         subareaStates[subId].hasUserReport = e.hasUserReport;
                         subareaStates[subId].validationExpiresAt = e.validationExpiresAt;
                         subareaStates[subId].lastValidationTime = e.lastValidationTime;
-                        subareaStates[subId].validationRemainingSeconds = e.validationRemainingSeconds || 0;
+                        subareaStates[subId].validationRemainingSeconds = Math.floor(e.validationRemainingSeconds || 0);
                         subareaStates[subId].fallbackStatus = e.fallbackStatus;
                         subareaStates[subId].fallbackColor = e.fallbackStatusColor;
                         subareaStates[subId].currentCount = e.currentCount;
@@ -1033,7 +1033,7 @@
                 hasUserReport: sub.has_user_report ? true : false,
                 validationExpiresAt: sub.validation_expires_at || null,
                 lastValidationTime: sub.last_validation_time || null,
-                validationRemainingSeconds: sub.validation_remaining_seconds ?? 0,
+                validationRemainingSeconds: Math.floor(sub.validation_remaining_seconds ?? 0),
                 fallbackStatus: sub.fallback_status || 'netral',
                 fallbackColor: sub.fallback_status_color || '#1572e8',
                 currentCount: sub.current_count ?? 0,
