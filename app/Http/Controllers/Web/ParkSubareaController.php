@@ -153,8 +153,10 @@ class ParkSubareaController extends Controller
                     'name'       => $subarea->park_subarea_name
                 ]);
 
-                // Broadcast updated status
-                broadcast(new SubareaStatusUpdated($subarea));
+                // Broadcast updated status setelah transaksi commit
+                DB::afterCommit(function () use ($subarea) {
+                    broadcast(new SubareaStatusUpdated($subarea));
+                });
 
                 return response()->json([
                     'status'  => 'success', 

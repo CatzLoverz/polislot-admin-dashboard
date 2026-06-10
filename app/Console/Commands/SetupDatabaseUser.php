@@ -37,14 +37,14 @@ class SetupDatabaseUser extends Command
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.cache TO '$username'@'$host'");
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.sessions TO '$username'@'$host'");
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.password_reset_tokens TO '$username'@'$host'");
+            DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.personal_access_tokens TO '$username'@'$host'");
+            DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.jobs TO '$username'@'$host'");
 
             // === LARAVEL INTERNAL (READ ONLY) ===
             DB::statement("GRANT SELECT ON $dbName.cache_locks TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.failed_jobs TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.job_batches TO '$username'@'$host'");
-            DB::statement("GRANT SELECT ON $dbName.jobs TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.migrations TO '$username'@'$host'");
-            DB::statement("GRANT SELECT ON $dbName.personal_access_tokens TO '$username'@'$host'");
 
             // === APPLICATION TABLES ===
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.users TO '$username'@'$host'");

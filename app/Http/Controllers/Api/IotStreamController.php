@@ -14,6 +14,7 @@ use App\Events\SubareaStatusUpdated;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class IotStreamController extends Controller
 {
@@ -254,7 +255,9 @@ class IotStreamController extends Controller
                 $subarea->current_count = (int) $request->current_count;
                 $subarea->save();
                 broadcast(new IotCountUpdated($macAddress, $request->current_count));
-                broadcast(new SubareaStatusUpdated($subarea));
+                DB::afterCommit(function () use ($subarea) {
+                    broadcast(new SubareaStatusUpdated($subarea));
+                });
             }
 
             // Check if there is a pending validation for this device
@@ -284,7 +287,9 @@ class IotStreamController extends Controller
                     $subarea->evaluateThresholdShift();
                     
                     // Broadcast updated status
-                    broadcast(new SubareaStatusUpdated($subarea));
+                    DB::afterCommit(function () use ($subarea) {
+                        broadcast(new SubareaStatusUpdated($subarea));
+                    });
                 }
             }
         }
@@ -350,7 +355,9 @@ class IotStreamController extends Controller
 
             // Broadcast count updated
             broadcast(new IotCountUpdated($macAddress, $request->count));
-            broadcast(new SubareaStatusUpdated($subarea));
+            DB::afterCommit(function () use ($subarea) {
+                broadcast(new SubareaStatusUpdated($subarea));
+            });
         }
 
         return response()->json(['status' => 'success']);

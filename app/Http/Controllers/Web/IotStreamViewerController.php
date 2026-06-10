@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotCommandSent;
 use App\Events\SubareaStatusUpdated;
+use Illuminate\Support\Facades\DB;
 use ZipArchive;
 
 class IotStreamViewerController extends Controller
@@ -182,8 +183,10 @@ class IotStreamViewerController extends Controller
         $subarea->threshold_terbatas = $request->threshold_terbatas;
         $subarea->save();
 
-        // Broadcast updated status
-        broadcast(new SubareaStatusUpdated($subarea));
+        // Broadcast updated status setelah transaksi commit
+        DB::afterCommit(function () use ($subarea) {
+            broadcast(new SubareaStatusUpdated($subarea));
+        });
 
         // Push update_config command to the device
         $payloadData = [
@@ -243,8 +246,10 @@ class IotStreamViewerController extends Controller
             // Evaluasi pergeseran threshold WMA
             $device->subarea->evaluateThresholdShift();
 
-            // Broadcast status update
-            broadcast(new SubareaStatusUpdated($device->subarea));
+            // Broadcast status update setelah transaksi commit
+            DB::afterCommit(function () use ($device) {
+                broadcast(new SubareaStatusUpdated($device->subarea));
+            });
 
             Log::info("Perangkat offline. Validasi manual langsung diproses", [
                 'mac' => $mac,

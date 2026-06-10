@@ -115,7 +115,10 @@ class UserValidationController extends Controller
 
                 // 4.5. Evaluasi pergeseran threshold WMA & broadcast status update
                 $subarea->evaluateThresholdShift();
-                broadcast(new SubareaStatusUpdated($subarea));
+                
+                DB::afterCommit(function () use ($subarea) {
+                    broadcast(new SubareaStatusUpdated($subarea));
+                });
 
                 // 5. Tambah Poin & History
                 if ($points > 0) {
