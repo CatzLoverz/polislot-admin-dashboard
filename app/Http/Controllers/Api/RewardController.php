@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reward;
@@ -52,7 +53,7 @@ class RewardController extends Controller
                 'rewards' => $formattedRewards,
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error(''.$e->getMessage());
 
             return $this->sendError('Terjadi kesalahan server.', 500);
@@ -122,7 +123,7 @@ class RewardController extends Controller
                     'reward_name' => $reward->reward_name,
                 ], 201);
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error(''.$e->getMessage());
 
@@ -156,7 +157,7 @@ class RewardController extends Controller
 
             return $this->sendSuccess('Riwayat penukaran berhasil diambil.', $history);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error(''.$e->getMessage());
 
             return $this->sendError('Gagal memuat riwayat.', 500);

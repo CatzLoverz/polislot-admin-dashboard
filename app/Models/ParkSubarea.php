@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Exception;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -263,7 +264,7 @@ class ParkSubarea extends Model
                 // Broadcast event ke Web UI untuk silent refresh slider/treshold
                 try {
                     broadcast(new IotThresholdUpdated($mac, $this->threshold_banyak, $this->threshold_terbatas));
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::warning("Failed to broadcast threshold update: " . $e->getMessage());
                 }
 
@@ -287,14 +288,14 @@ class ParkSubarea extends Model
                     $mqtt = MQTT::connection('publisher');
                     $mqtt->publish($topic, $payload, 0);
                     $mqtt->disconnect();
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::warning("Failed to sync config via MQTT: " . $e->getMessage());
                 }
 
                 // Broadcast WS
                 try {
                     broadcast(new IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::warning("Failed to sync config via WS: " . $e->getMessage());
                 }
             }

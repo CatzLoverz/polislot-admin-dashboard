@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
 use App\Http\Controllers\Controller; // Menggunakan Base Controller Anda
 use App\Models\UserHistory;
@@ -55,7 +56,7 @@ class HistoryController extends Controller
 
             return $this->sendSuccess('Riwayat aktivitas berhasil diambil.', $responseData);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat riwayat: ' . $e->getMessage(), 500);
         }

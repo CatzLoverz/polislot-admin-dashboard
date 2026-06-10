@@ -2,19 +2,20 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use PhpMqtt\Client\Facades\MQTT;
-use App\Events\IotStreamReceived;
-use App\Events\IotDeviceStatusChanged;
 use App\Events\IotCountUpdated;
+use App\Events\IotDeviceStatusChanged;
+use App\Events\IotStreamReceived;
 use App\Events\SubareaStatusUpdated;
-use App\Models\IotDevice;
 use App\Models\IotCapture;
+use App\Models\IotDevice;
 use App\Models\UserValidation;
 use App\Models\Validation;
+use Exception;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
+use PhpMqtt\Client\Facades\MQTT;
 
 class MqttListenerCommand extends Command
 {
@@ -227,7 +228,7 @@ class MqttListenerCommand extends Command
                     $imageBase64String = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
                     broadcast(new IotStreamReceived($payload['mac_address'], $imageBase64String, $saveImage));
                     $this->info("📡 Gambar di-broadcast ke Web UI.");
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->error("Error memproses pesan: " . $e->getMessage());
                 }
             });
@@ -283,7 +284,7 @@ class MqttListenerCommand extends Command
                             broadcast(new SubareaStatusUpdated($subarea));
                         }
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->error("Error memproses count MQTT: " . $e->getMessage());
                 }
             });
@@ -387,7 +388,7 @@ class MqttListenerCommand extends Command
             
             $mqtt->loop(true);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error("Koneksi MQTT Gagal: " . $e->getMessage());
             return 1;
         }

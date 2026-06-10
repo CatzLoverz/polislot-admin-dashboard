@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserFaq;
@@ -36,7 +37,7 @@ class UserFaqController extends Controller
 
             return $this->sendSuccess('Data FAQ berhasil diambil.', $formattedData, 200);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan saat mengambil data FAQ.', 500);
         }

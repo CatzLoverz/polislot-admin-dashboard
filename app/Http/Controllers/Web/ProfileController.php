@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Rules\NotCurrentPassword;
@@ -88,7 +89,7 @@ class ProfileController extends Controller
             DB::rollBack();
             Log::warning('Validasi data gagal.', [ 'user_id' => $user->user_id, 'errors' => $e->errors() ]);
             return back()->withErrors($e->errors())->withInput();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error('Terjadi error sistem saat memperbarui profil.', [ 'user_id' => $user->user_id, 'error' => $e->getMessage() ]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server saat memperbarui profil.');

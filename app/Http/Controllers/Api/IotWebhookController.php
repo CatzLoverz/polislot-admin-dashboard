@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -119,7 +120,7 @@ class IotWebhookController extends Controller
                     // Broadcast via Reverb WS
                     broadcast(new IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
                     Log::info("Auto-pushed config to device {$mac} on connection.");
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::error("Failed to auto-push config: " . $e->getMessage());
                 }
             }

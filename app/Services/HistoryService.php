@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use Exception;
 
 use App\Models\UserHistory;
 use Illuminate\Support\Facades\Log;
@@ -28,7 +29,7 @@ class HistoryService
             ]);
             
             Log::info("Log created: User {$userId} | {$type} | {$name}");
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Failed to create log: " . $e->getMessage());
         }
     }

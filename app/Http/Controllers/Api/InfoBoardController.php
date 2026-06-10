@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\InfoBoard;
@@ -37,7 +38,7 @@ class InfoBoardController extends Controller
             
             return $this->sendSuccess('Data info board berhasil diambil.', $formattedData, 200);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan saat mengambil info board.', 500);
         }

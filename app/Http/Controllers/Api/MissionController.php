@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Carbon\Carbon;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
@@ -87,7 +89,7 @@ class MissionController extends Controller
                     'current_value' => $currentValue,
                     'percentage' => $percentage, // Ini yang dipakai UI Flutter
                     'is_completed' => $isCompleted,
-                    'completed_at' => $completedAt ? \Carbon\Carbon::parse($completedAt)->format('d M Y, H:i') : null,
+                    'completed_at' => $completedAt ? Carbon::parse($completedAt)->format('d M Y, H:i') : null,
                 ];
             })->sortBy('is_completed')->values();
 
@@ -131,7 +133,7 @@ class MissionController extends Controller
                 'user_rank' => $userRankData,
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat data misi: '.$e->getMessage(), 500);
         }

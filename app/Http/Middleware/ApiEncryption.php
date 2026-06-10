@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
+use Exception;
 
 use Closure;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +39,7 @@ class ApiEncryption
             // B. DEKRIPSI RSA (Session Key)
             $encryptedKeyBin = base64_decode($encryptedSession);
             if ($encryptedKeyBin === false) {
-                throw new \Exception('Invalid Base64');
+                throw new Exception('Invalid Base64');
             }
 
             $success = openssl_private_decrypt(
@@ -49,7 +50,7 @@ class ApiEncryption
             );
 
             if (! $success) {
-                throw new \Exception('RSA Decrypt Failed');
+                throw new Exception('RSA Decrypt Failed');
             }
 
             // C. PARSE SESSION DATA
@@ -57,7 +58,7 @@ class ApiEncryption
             $parts = explode('|', $decryptedSession);
 
             if (count($parts) !== 2) {
-                throw new \Exception('Invalid Session Format');
+                throw new Exception('Invalid Session Format');
             }
 
             $decryptedAesKey = trim($parts[0]);
@@ -65,10 +66,10 @@ class ApiEncryption
 
             // Validasi panjang key (AES-256 = 32 bytes, IV = 16 bytes)
             if (strlen($decryptedAesKey) !== 32 || strlen($decryptedAesIv) !== 16) {
-                throw new \Exception('Invalid Key/IV Length');
+                throw new Exception('Invalid Key/IV Length');
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log detail untuk admin, tapi return generic ke client
             Log::error('Handshake Failed: '.$e->getMessage());
 
@@ -122,7 +123,7 @@ class ApiEncryption
                         return response()->json(['message' => 'Invalid Request Signature'], 400);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error('Auth Token processing error', [
                     'error' => $e->getMessage(),
                 ]);
@@ -137,7 +138,7 @@ class ApiEncryption
                 $encryptedPayload = base64_decode($request->input('payload'));
 
                 if ($encryptedPayload === false) {
-                    throw new \Exception('Invalid Payload Base64');
+                    throw new Exception('Invalid Payload Base64');
                 }
 
                 $decryptedData = openssl_decrypt(
@@ -149,20 +150,20 @@ class ApiEncryption
                 );
 
                 if ($decryptedData === false) {
-                    throw new \Exception('Body Decryption Failed');
+                    throw new Exception('Body Decryption Failed');
                 }
 
                 // Parse JSON
                 $json = json_decode($decryptedData, true);
 
                 if (json_last_error() !== JSON_ERROR_NONE || ! is_array($json)) {
-                    throw new \Exception('Invalid JSON in Payload');
+                    throw new Exception('Invalid JSON in Payload');
                 }
 
                 // Ganti request data
                 $request->replace($json);
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error('Payload Processing Failed: '.$e->getMessage());
 
                 return response()->json(['message' => 'Invalid Request Data'], 400);
@@ -192,14 +193,14 @@ class ApiEncryption
                 );
 
                 if ($encryptedResponse === false) {
-                    throw new \Exception('openssl_encrypt failed');
+                    throw new Exception('openssl_encrypt failed');
                 }
 
                 $response->setData([
                     'payload' => base64_encode($encryptedResponse),
                 ]);
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error('Response encryption failed', [
                     'error' => $e->getMessage(),
                 ]);

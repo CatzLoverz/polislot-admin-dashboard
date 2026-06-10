@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
@@ -124,7 +125,7 @@ class DashboardController extends Controller
                 'period' => $period
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load chart data'], 500);
         }
@@ -151,7 +152,7 @@ class DashboardController extends Controller
                 });
 
             return response()->json($leaders);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load leaderboard'], 500);
         }
@@ -191,7 +192,7 @@ class DashboardController extends Controller
 
             return response()->json($validations);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load realtime data'], 500);
         }

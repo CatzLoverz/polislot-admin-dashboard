@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\FeedbackCategory;
@@ -20,7 +21,7 @@ class FeedbackCategoryController extends Controller
             $categories = FeedbackCategory::select('fbk_category_id', 'fbk_category_name')->orderBy('created_at', 'desc')->get();
             
             return $this->sendSuccess('Data kategori berhasil diambil.', $categories);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             return $this->sendError('Gagal mengambil kategori.', 500);
         }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\IotDevice;
@@ -86,7 +87,7 @@ class IotStreamViewerController extends Controller
 
             broadcast(new IotCommandSent($mac, $action, $payloadForWs, $payloadForWs['signature']));
             Log::info("Command '{$action}' broadcasted via Reverb WS", ['mac' => $mac]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $errors[] = "Reverb: " . $e->getMessage();
             Log::error("Failed to broadcast command via Reverb WS", ['mac' => $mac, 'error' => $e->getMessage()]);
         }
@@ -102,7 +103,7 @@ class IotStreamViewerController extends Controller
             $mqtt->publish($topic, $payload, 0);
             $mqtt->disconnect();
             Log::info("Command '{$action}' published via MQTT", ['mac' => $mac, 'topic' => $topic]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $errors[] = "MQTT: " . $e->getMessage();
             Log::error("Failed to publish command via MQTT", ['mac' => $mac, 'error' => $e->getMessage()]);
         }

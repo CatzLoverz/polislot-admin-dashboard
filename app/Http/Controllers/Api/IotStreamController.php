@@ -1,20 +1,22 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
+use App\Events\IotCountUpdated;
+use App\Events\IotStreamReceived;
+use App\Events\IotDeviceStatusChanged;
+use App\Events\SubareaStatusUpdated;
 use App\Http\Controllers\Controller;
-use App\Models\IotDevice;
 use App\Models\IotCapture;
+use App\Models\IotDevice;
 use App\Models\UserValidation;
 use App\Models\Validation;
 use Illuminate\Http\Request;
-use App\Events\IotStreamReceived;
-use App\Events\IotCountUpdated;
-use App\Events\SubareaStatusUpdated;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 class IotStreamController extends Controller
 {
@@ -140,7 +142,7 @@ class IotStreamController extends Controller
                 'status'  => 'success',
                 'message' => 'Frame broadcasted successfully.',
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error broadcasting stream: ' . $e->getMessage());
 
             return response()->json([
@@ -200,6 +202,16 @@ class IotStreamController extends Controller
         if (!hash_equals($calculatedSignature, $request->signature)) {
             Log::warning('Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
+        }
+
+        // Auto-promote: Jika device mengirim data snapshot yang valid,
+        // artinya device hidup — set ke online jika belum
+        $status = Cache::get("iot_status_{$macAddress}", 'offline');
+        if ($status !== 'online') {
+            Log::info("🔄 Auto-promote (WS): Device {$macAddress} mengirim snapshot tapi status={$status}. Mempromosikan ke ONLINE.");
+            Cache::forever("iot_status_{$macAddress}", 'online');
+            Cache::forever("iot_connection_type_{$macAddress}", 'ws');
+            broadcast(new IotDeviceStatusChanged($macAddress, 'online'));
         }
 
         // 3. DEKRIPSI AES-256-CBC
@@ -339,11 +351,14 @@ class IotStreamController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
         }
 
-        // Hanya perbarui count jika status perangkat di cache adalah online
+        // Auto-promote: Jika device mengirim data count yang valid,
+        // artinya device hidup — set ke online jika belum
         $status = Cache::get("iot_status_{$macAddress}", 'offline');
         if ($status !== 'online') {
-            Log::info("Mengabaikan count dari perangkat offline", ['mac' => $macAddress, 'count' => $request->count]);
-            return response()->json(['status' => 'ignored', 'message' => 'Device is offline.']);
+            Log::info("🔄 Auto-promote (WS): Device {$macAddress} mengirim count tapi status={$status}. Mempromosikan ke ONLINE.");
+            Cache::forever("iot_status_{$macAddress}", 'online');
+            Cache::forever("iot_connection_type_{$macAddress}", 'ws');
+            broadcast(new IotDeviceStatusChanged($macAddress, 'online'));
         }
 
         // Update database

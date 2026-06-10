@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
@@ -34,7 +35,7 @@ class MapVisualizationController extends Controller
             });
 
             return $this->sendSuccess('Daftar area berhasil diambil.', $data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->sendError('Gagal memuat area: ' . $e->getMessage(), 500);
         }
     }
@@ -115,7 +116,7 @@ class MapVisualizationController extends Controller
 
             return $this->sendSuccess('Data visualisasi berhasil diambil.', $data);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat visualisasi: ' . $e->getMessage(), 500);
         }

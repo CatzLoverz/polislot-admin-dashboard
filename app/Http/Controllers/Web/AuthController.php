@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -28,7 +29,7 @@ class AuthController extends Controller
                 return redirect()->route('dashboard');
             }
             return view('Contents.Auth.login');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
         }
@@ -103,7 +104,7 @@ class AuthController extends Controller
                     ->withInput($request->only('email'));
             });
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.');
             return redirect()->route('login.form')->with('swal_error_crud', 'Terjadi kesalahan pada server.')
                 ->withInput($request->only('email'));
@@ -127,7 +128,7 @@ class AuthController extends Controller
             Log::info('Pengguna telah logout.');
             return redirect()->route('login.form');    
         });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return redirect()->route('dashboard')->with('swal_error_crud', 'Terjadi kesalahan pada server.');
         }
@@ -172,7 +173,7 @@ class AuthController extends Controller
                 
                 return redirect()->route('forgot_otp.form')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal mengirim OTP.');
         }
@@ -211,7 +212,7 @@ class AuthController extends Controller
                 Log::info('OTP valid.');
                 return redirect()->route('reset_pass.form')->with('swal_success_crud', 'OTP berhasil diverifikasi!');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan sistem.');
         }
@@ -242,7 +243,7 @@ class AuthController extends Controller
                 
                 return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim ke email Anda.');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal mengirim ulang OTP.');
         }
@@ -304,7 +305,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Validasi data gagal.', [ 'errors' => $e->errors() ]);
             return back()->withErrors($e->errors())->withInput();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server.');
         }

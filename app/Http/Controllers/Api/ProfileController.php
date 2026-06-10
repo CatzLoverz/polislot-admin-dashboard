@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Rules\NotCurrentPassword;
@@ -34,7 +35,7 @@ class ProfileController extends Controller
         try {
             $user = $request->user();
             return $this->sendSuccess('Data profil berhasil diambil.', $this->formatUser($user));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Gagal menampilkan profil. Error: ' . $e->getMessage());
             return $this->sendError('Gagal mengambil data profil.', 500);
         }
@@ -81,7 +82,7 @@ class ProfileController extends Controller
                     try {
                         $this->missionService->updateProgress($user->user_id, 'PROFILE_UPDATE');
                 
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         // Kita catch error misi agar tidak membatalkan update profil utama
                         // Log errornya saja untuk debugging
                         Log::error("Gagal trigger misi: " . $e->getMessage());
@@ -103,7 +104,7 @@ class ProfileController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             return $this->sendError('Gagal memperbarui profil.', 500);
         }

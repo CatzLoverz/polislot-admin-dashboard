@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -40,7 +41,7 @@ class SetupDatabaseAdmin extends Command
             $this->info("User database berhasil dibuat dan privilege disetel.");
             return self::SUCCESS;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error("Terjadi kesalahan: " . $e->getMessage());
             return self::FAILURE;
         }

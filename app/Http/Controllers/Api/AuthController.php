@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
 use App\Http\Controllers\Controller;
 use App\Services\MissionService;
 use App\Models\User;
@@ -50,7 +51,7 @@ class AuthController extends Controller
                 $this->missionService->updateProgress($user->user_id, 'LOGIN_ACTION');
                 // Simpan penanda di cache sampai akhir hari
                 Cache::put($cacheKey, true, now()->endOfDay());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error('Gagal update misi: ' . $e->getMessage());
             }
         }
@@ -121,7 +122,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan pada server.', 500);
         }
@@ -172,7 +173,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan sistem.', 500);
         }
@@ -212,7 +213,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal mengirim ulang OTP.', 500);
         }
@@ -294,7 +295,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan pada server.', 500);
         }
@@ -352,7 +353,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Email tidak ditemukan.');
             return $this->sendError('Email tidak ditemukan.', 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal mengirim OTP.', 500);
         }
@@ -378,7 +379,7 @@ class AuthController extends Controller
 
             return $this->sendSuccess('OTP valid. Silakan reset password.', ['email' => $user->email]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan sistem.', 500);
         }
@@ -412,7 +413,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal mengirim ulang OTP.', 500);
         }
@@ -454,7 +455,7 @@ class AuthController extends Controller
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal mereset password.', 500);
         }

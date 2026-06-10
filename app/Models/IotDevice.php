@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Exception;
 
 use App\Events\IotDeviceStatusChanged;
 use App\Events\IotCountUpdated;
@@ -132,7 +133,7 @@ class IotDevice extends Model
                 'message' => $e->getMessage(),
                 'code' => $e->getCode(),
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning("Reverb sync failed for device {$mac}", [
                 'exception' => get_class($e),
                 'message' => $e->getMessage(),
