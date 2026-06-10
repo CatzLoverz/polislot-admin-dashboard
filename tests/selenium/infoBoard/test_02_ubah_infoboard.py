@@ -34,7 +34,7 @@ def test_edit_info_board(driver):
 
         # === 3. KLIK TOMBOL EDIT DI DALAM TABEL ===
         # Mencari tombol dengan class 'btn-edit' di baris pertama tabel
-        btn_edit = driver.find_element(By.CSS_SELECTOR, '#infoboard-table tbody tr:first-child .btn-edit')
+        btn_edit = driver.find_element(By.CSS_SELECTOR, '.btn-edit')
         btn_edit.click()
         time.sleep(2) # Tunggu modal Edit terbuka dan data terisi otomatis
 

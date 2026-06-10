@@ -34,7 +34,7 @@ def test_edit_faq(driver):
 
         # === 3. KLIK TOMBOL EDIT DI DALAM TABEL ===
         # Mencari tombol edit di baris paling atas tabel
-        btn_edit = driver.find_element(By.CSS_SELECTOR, '#faq-table tbody tr:first-child .btn-edit')
+        btn_edit = driver.find_element(By.CSS_SELECTOR, '.btn-edit')
         btn_edit.click()
         time.sleep(2) # Tunggu modal terbuka dan data lama terisi oleh script JS Anda
 
