@@ -260,20 +260,24 @@ class MqttListenerCommand extends Command
                         // Update last seen cache
                         Cache::put("iot_last_seen_{$mac}", time());
                         
-                        // Hanya perbarui jika status di cache adalah online
+                        // Auto-promote: Jika device mengirim data count yang valid,
+                        // artinya device hidup — set ke online jika belum
                         $status = Cache::get("iot_status_{$mac}", 'offline');
-                        if ($status === 'online') {
-                            $device = IotDevice::where('device_mac_address', $mac)->first();
-                            if ($device && $device->subarea) {
-                                $subarea = $device->subarea;
-                                $subarea->current_count = $count;
-                                $subarea->save();
-                                
-                                // Broadcast count update
-                                broadcast(new IotCountUpdated($mac, $count));
-                            }
-                        } else {
-                            $this->warn("⚠️ Mengabaikan count MQTT dari perangkat offline: {$mac} (Count: {$count})");
+                        if ($status !== 'online') {
+                            $this->info("🔄 Auto-promote: Device {$mac} mengirim count tapi status={$status}. Mempromosikan ke ONLINE.");
+                            Cache::forever("iot_status_{$mac}", 'online');
+                            Cache::forever("iot_connection_type_{$mac}", 'mqtt');
+                            broadcast(new IotDeviceStatusChanged($mac, 'online'));
+                        }
+                        
+                        $device = IotDevice::where('device_mac_address', $mac)->first();
+                        if ($device && $device->subarea) {
+                            $subarea = $device->subarea;
+                            $subarea->current_count = $count;
+                            $subarea->save();
+                            
+                            // Broadcast count update
+                            broadcast(new IotCountUpdated($mac, $count));
                         }
                     }
                 } catch (\Exception $e) {

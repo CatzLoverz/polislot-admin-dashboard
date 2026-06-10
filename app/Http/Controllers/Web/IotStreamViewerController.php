@@ -30,8 +30,9 @@ class IotStreamViewerController extends Controller
         // MAC Address yang dipilih (dari query string atau default ke device pertama)
         $targetMac = $request->query('mac', $devices->first()?->device_mac_address ?? '00:00:00:00:00:00');
         
-        // Ambil status terakhir dari cache (default: offline jika tidak pernah online)
-        $initialStatus = IotDevice::getStatus($targetMac);
+        // Verifikasi status aktual untuk device yang dipilih (bukan hanya baca cache)
+        // syncStatus() akan cek Reverb presence / MQTT last-seen, dan koreksi jika stale
+        $initialStatus = IotDevice::syncStatus($targetMac);
         
         $selectedDevice = $devices->firstWhere('device_mac_address', $targetMac);
         $maxSlots = $selectedDevice?->subarea?->max_slots ?? 0;
