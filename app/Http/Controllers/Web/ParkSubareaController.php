@@ -213,4 +213,43 @@ class ParkSubareaController extends Controller
             return back()->with('swal_error_crud', 'Gagal menghapus subarea.');
         }
     }
+
+    /**
+     * Mengambil daftar komentar terbaru untuk subarea tertentu.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getComments($id)
+    {
+        try {
+            $subarea = ParkSubarea::findOrFail($id);
+            $comments = $subarea->subareaComment()
+                ->with('user:user_id,name,avatar')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'subarea_comment_id' => $item->subarea_comment_id,
+                        'subarea_comment_content' => $item->subarea_comment_content,
+                        'subarea_comment_image' => $item->subarea_comment_image,
+                        'created_at' => $item->created_at->toIso8601String(),
+                        'user' => [
+                            'name' => $item->user->name ?? 'User Terhapus',
+                            'avatar' => $item->user->avatar ?? null,
+                        ],
+                    ];
+                });
+
+            return response()->json([
+                'status' => 'success',
+                'comments' => $comments
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

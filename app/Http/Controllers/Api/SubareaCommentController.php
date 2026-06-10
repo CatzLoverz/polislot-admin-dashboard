@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Exception;
 use App\Http\Controllers\Controller;
 use App\Models\SubareaComment;
+use App\Models\ParkSubarea;
+use App\Events\SubareaStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -106,6 +108,14 @@ class SubareaCommentController extends Controller
                 $comment->load('user:user_id,name,avatar');
 
                 Log::info('Comment baru ditambahkan.');
+
+                $subarea = ParkSubarea::find($request->park_subarea_id);
+                if ($subarea) {
+                    DB::afterCommit(function () use ($subarea) {
+                        broadcast(new SubareaStatusUpdated($subarea));
+                    });
+                }
+
                 return $this->sendSuccess('Komentar terkirim.', $comment, 201);
             });
         } catch (ValidationException $e) {
@@ -163,6 +173,14 @@ class SubareaCommentController extends Controller
                 $comment->load('user:user_id,name,avatar');
 
                 Log::info('Comment Berhasil Diupdate.');
+
+                $subarea = ParkSubarea::find($comment->park_subarea_id);
+                if ($subarea) {
+                    DB::afterCommit(function () use ($subarea) {
+                        broadcast(new SubareaStatusUpdated($subarea));
+                    });
+                }
+
                 return $this->sendSuccess('Komentar berhasil diperbarui.', $comment);
             });
         } catch (ValidationException $e) {
@@ -201,6 +219,14 @@ class SubareaCommentController extends Controller
                 $comment->delete();
 
                 Log::info('Comment dihapus.');
+
+                $subarea = ParkSubarea::find($comment->park_subarea_id);
+                if ($subarea) {
+                    DB::afterCommit(function () use ($subarea) {
+                        broadcast(new SubareaStatusUpdated($subarea));
+                    });
+                }
+
                 return $this->sendSuccess('Komentar berhasil dihapus.');
             });
         } catch (ValidationException $e) {

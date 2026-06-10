@@ -62,6 +62,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
 
         // Route Park Subarea
         Route::post('park-area/{park_area}/subarea', [ParkSubareaController::class, 'store'])->name('park-area.subarea.store');
+        Route::get('park-subarea/{park_subarea}/comments', [ParkSubareaController::class, 'getComments'])->name('park-subarea.comments');
         Route::resource('park-subarea', ParkSubareaController::class)->only(['update', 'destroy']);
 
         // Route Park Amenity

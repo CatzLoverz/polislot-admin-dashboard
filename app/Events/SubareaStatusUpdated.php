@@ -24,6 +24,7 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
     public $commentCount;
     public $validationExpiresAt;
     public $lastValidationTime;
+    public $validationRemainingSeconds;
     public $fallbackStatus;
     public $fallbackStatusColor;
 
@@ -42,6 +43,7 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
         $this->hasUserReport = $live['has_user_report'];
         $this->validationExpiresAt = $live['validation_expires_at'] ?? null;
         $this->lastValidationTime = $live['last_validation_time'] ?? null;
+        $this->validationRemainingSeconds = $live['validation_remaining_seconds'] ?? 0;
         $this->fallbackStatus = $live['fallback_status'] ?? 'netral';
         $this->fallbackStatusColor = $live['fallback_status_color'] ?? '#1572e8';
         

@@ -136,11 +136,9 @@
                                         </small>
 
                                         {{-- Kapasitas Slot (Dynamic) --}}
-                                        @if($sub->iotDevice && $sub->max_slots > 0)
-                                            <small class="d-block mt-1 text-muted subarea-occupancy font-weight-bold" style="font-size: 11px;">
-                                                <i class="fas fa-car mr-1"></i> Terisi: <span class="current-count-val">{{ $sub->current_count ?? 0 }}</span>/<span class="max-slots-val">{{ $sub->max_slots }}</span> slot
-                                            </small>
-                                        @endif
+                                        <small class="d-block mt-1 text-muted subarea-occupancy font-weight-bold" style="font-size: 11px; {{ ($sub->iotDevice && $sub->max_slots > 0) ? '' : 'display: none;' }}">
+                                            <i class="fas fa-car mr-1"></i> Terisi: <span class="current-count-val">{{ $sub->current_count ?? 0 }}</span>/<span class="max-slots-val">{{ $sub->max_slots ?? 0 }}</span> slot
+                                        </small>
                                         
                                         {{-- Amenities --}}
                                         <div class="mt-2 subarea-badges">
@@ -169,10 +167,15 @@
                                     
                                     <div class="d-flex align-items-center ml-1">
                                         {{-- Tombol Lihat Komentar --}}
-                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs mr-1" 
-                                            onclick="openCommentModal('{{ $sub->park_subarea_name }}', {{ json_encode($sub->subareaComment) }})"
+                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mr-1 btn-comment-modal" 
+                                            onclick="fetchAndOpenCommentModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}')"
                                             data-toggle="tooltip" title="Lihat Komentar">
                                             <i class="fas fa-comments"></i>
+                                            @php $cCount = $sub->subareaComment->count(); @endphp
+                                            <span class="badge badge-notification badge-danger position-absolute comment-count-badge" 
+                                                  style="top: -8px; right: -8px; font-size: 8px; padding: 2px 4px; border-radius: 50%; {{ $cCount > 0 ? '' : 'display: none;' }}">
+                                                {{ $cCount }}
+                                            </span>
                                         </button>
 
                                         {{-- Tombol Edit (Existing) --}}
@@ -339,6 +342,8 @@
     let currentPolygonObj = null;
     let polygonObjects = {}; // Menyimpan referensi polygon untuk update WS
     let subareaStates = {}; // Menyimpan state validasi & fallback subarea
+    let activeCommentSubareaId = null; // Menyimpan ID subarea yang komentar modallnya sedang terbuka
+    let activeCommentSubareaName = null; // Menyimpan nama subarea yang komentar modallnya sedang terbuka
 
     // State untuk mode menggambar kustom pengganti Drawing Manager
     let isDrawingMode = false;
@@ -704,6 +709,38 @@
         });
     }
 
+    // [BARU] Fetch komentar dinamis & buka modal
+    function fetchAndOpenCommentModal(subId, name) {
+        activeCommentSubareaId = subId;
+        activeCommentSubareaName = name;
+        
+        // Tampilkan loading spinner di container
+        $('#comment_subarea_title').text(name);
+        $('#comments_container').html('<div class="text-center py-5"><i class="fas fa-spinner fa-spin fa-3x text-primary mb-3"></i><p class="text-muted">Memuat komentar terbaru...</p></div>');
+        $('#modalComments').modal('show');
+        
+        $.getJSON(`/admin/park-subarea/${subId}/comments`, function(response) {
+            if (response.status === 'success') {
+                if (activeCommentSubareaId === subId) {
+                    openCommentModal(name, response.comments);
+                }
+            } else {
+                $('#comments_container').html('<div class="text-center py-5 text-danger"><i class="fas fa-exclamation-circle fa-3x mb-3"></i><p>Gagal memuat komentar.</p></div>');
+            }
+        }).fail(function() {
+            $('#comments_container').html('<div class="text-center py-5 text-danger"><i class="fas fa-exclamation-circle fa-3x mb-3"></i><p>Gagal memuat komentar.</p></div>');
+        });
+    }
+
+    // [BARU] Refresh komentar secara silent (untuk update real-time via WebSockets)
+    function refreshCommentsSilently(subId, name) {
+        $.getJSON(`/admin/park-subarea/${subId}/comments`, function(response) {
+            if (response.status === 'success' && activeCommentSubareaId === subId) {
+                openCommentModal(name, response.comments);
+            }
+        });
+    }
+
     // [PERBAIKAN] Logika Gambar Komentar & Avatar
     function openCommentModal(name, comments) {
         $('#comment_subarea_title').text(name);
@@ -712,7 +749,12 @@
         if (!Array.isArray(comments) || comments.length === 0) {
             html = `<div class="text-center py-5"><i class="fas fa-comment-slash fa-3x text-muted mb-3"></i><p class="text-muted">Belum ada komentar untuk area ini.</p></div>`;
         } else {
-            comments.sort((a, b) => b.subarea_comment_id - a.subarea_comment_id);
+            // Sort by ID descending (newest first)
+            comments.sort((a, b) => {
+                const idA = a.subarea_comment_id || a.id;
+                const idB = b.subarea_comment_id || b.id;
+                return idB - idA;
+            });
             
             html = '<div class="list-group list-group-flush">';
             comments.forEach(c => {
@@ -724,8 +766,9 @@
                     ? (rawAvatar.startsWith('http') ? rawAvatar : storageBaseUrl + '/' + rawAvatar) 
                     : 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userName);
                 
-                let date = new Date(c.created_at).toLocaleString('id-ID');
-
+                // Parse format tanggal
+                let dateStr = c.created_at ? new Date(c.created_at).toLocaleString('id-ID') : '';
+                
                 // [FIX] Cek Bukti Gambar Komentar
                 let commentImageHtml = '';
                 if (c.subarea_comment_image) {
@@ -743,7 +786,7 @@
                                 </div>
                                 <h6 class="mb-1 font-weight-bold text-primary">${userName}</h6>
                             </div>
-                            <small class="text-muted">${date}</small>
+                            <small class="text-muted">${dateStr}</small>
                         </div>
                         <p class="mb-1 text-dark">${c.subarea_comment_content}</p>
                         ${commentImageHtml}
@@ -753,12 +796,22 @@
             html += '</div>';
         }
         $('#comments_container').html(html);
-        $('#modalComments').modal('show');
     }
 
 
-    // Helper function to update Subarea UI (Polygon and sidebar item)
-    function updateSubareaUI(subId, status, color, isValidated, hasUserReport, currentCount, maxSlots) {
+    // Helper function to update Subarea UI (Polygon and sidebar item) from state
+    function updateSubareaUI(subId) {
+        const state = subareaStates[subId];
+        if (!state) return;
+
+        const color = state.color || '#1572e8';
+        const status = state.status || 'netral';
+        const isValidated = state.isValidated || false;
+        const hasUserReport = state.hasUserReport || false;
+        const currentCount = state.currentCount ?? 0;
+        const maxSlots = state.maxSlots ?? 0;
+        const commentCount = state.commentCount ?? 0;
+
         // A. Update Google Maps Polygon
         if (polygonObjects[subId]) {
             polygonObjects[subId].setOptions({
@@ -805,9 +858,8 @@
             // Update validation time & countdown visibility
             const timeContainer = item.querySelector('.subarea-validation-time');
             if (timeContainer) {
-                const state = subareaStates[subId];
-                if (state && state.validationExpiresAt) {
-                    timeContainer.style.display = 'block';
+                if (state.validationExpiresAt) {
+                    timeContainer.style.setProperty('display', 'block', 'important');
                     if (state.lastValidationTime) {
                         const dateObj = new Date(state.lastValidationTime);
                         const hours = String(dateObj.getHours()).padStart(2, '0');
@@ -817,32 +869,54 @@
                         if (timeSpan) timeSpan.innerText = `${hours}:${minutes}`;
                     }
                 } else {
-                    timeContainer.style.display = 'none';
+                    timeContainer.style.setProperty('display', 'none', 'important');
+                    const timeSpan = timeContainer.querySelector('.last-validated-time-val');
+                    if (timeSpan) timeSpan.innerText = '';
+                    const countdownSpan = timeContainer.querySelector('.validation-countdown-val');
+                    if (countdownSpan) countdownSpan.innerText = '';
                 }
             }
             
-            // Update slot count
-            if (currentCount !== undefined && maxSlots !== undefined) {
-                const occupancySpan = item.querySelector('.subarea-occupancy');
-                if (occupancySpan) {
+            // Update slot count dynamically
+            const occupancySpan = item.querySelector('.subarea-occupancy');
+            if (occupancySpan) {
+                if (maxSlots > 0) {
+                    occupancySpan.style.display = 'block';
                     const countVal = occupancySpan.querySelector('.current-count-val');
                     if (countVal) countVal.innerText = currentCount;
                     const maxVal = occupancySpan.querySelector('.max-slots-val');
                     if (maxVal) maxVal.innerText = maxSlots;
+                } else {
+                    occupancySpan.style.display = 'none';
                 }
+            }
+
+            // Update comment count badge dynamically
+            const commentBadge = item.querySelector('.comment-count-badge');
+            if (commentBadge) {
+                commentBadge.innerText = commentCount;
+                if (commentCount > 0) {
+                    commentBadge.style.display = 'inline-block';
+                } else {
+                    commentBadge.style.display = 'none';
+                }
+            }
+
+            // Real-time refresh of comments modal if open for this subarea
+            if (activeCommentSubareaId && activeCommentSubareaId == subId) {
+                refreshCommentsSilently(subId, activeCommentSubareaName);
             }
         }
     }
 
     // Check validation expiration client-side
     function checkValidationExpirations() {
-        const now = new Date();
-        
         Object.keys(subareaStates).forEach(subId => {
             const state = subareaStates[subId];
-            if (state.validationExpiresAt) {
-                const expires = new Date(state.validationExpiresAt);
-                if (now >= expires) {
+            if (state.validationRemainingSeconds > 0) {
+                state.validationRemainingSeconds--;
+                
+                if (state.validationRemainingSeconds <= 0) {
                     console.log(`⏰ Validation expired for subarea ${subId}. Reverting to fallback: ${state.fallbackStatus}`);
                     
                     // Revert local state
@@ -850,25 +924,35 @@
                     state.color = state.fallbackColor;
                     state.isValidated = false;
                     state.hasUserReport = false;
-                    state.validationExpiresAt = null; // Clear so we don't repeat
+                    state.validationExpiresAt = null;
                     state.lastValidationTime = null;
+                    state.validationRemainingSeconds = 0;
                     
                     // Update UI
-                    updateSubareaUI(subId, state.status, state.color, state.isValidated, state.hasUserReport);
+                    updateSubareaUI(subId);
                 } else {
                     // Update countdown text
                     const item = document.getElementById(`subarea-item-${subId}`);
                     if (item) {
                         const countdownSpan = item.querySelector('.validation-countdown-val');
                         if (countdownSpan) {
-                            const diffMs = expires - now;
-                            const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+                            const diffSec = state.validationRemainingSeconds;
                             const minutes = Math.floor(diffSec / 60);
                             const seconds = diffSec % 60;
                             countdownSpan.innerText = `(Sisa: ${minutes}m ${seconds}s)`;
                         }
                     }
                 }
+            } else if (state.validationExpiresAt) {
+                // Fallback for cases where remaining seconds is 0/falsy but expiresAt is present (e.g. initial load logic correction)
+                state.status = state.fallbackStatus;
+                state.color = state.fallbackColor;
+                state.isValidated = false;
+                state.hasUserReport = false;
+                state.validationExpiresAt = null;
+                state.lastValidationTime = null;
+                state.validationRemainingSeconds = 0;
+                updateSubareaUI(subId);
             }
         });
     }
@@ -884,31 +968,25 @@
                     console.log("📡 Subarea Updated Event Received:", e);
                     
                     const subId = e.parkSubareaId;
-                    const status = e.status;
-                    const color = e.statusColor;
-                    const isValidated = e.isValidated;
-                    const hasUserReport = e.hasUserReport;
-                    const currentCount = e.currentCount;
-                    const maxSlots = e.maxSlots;
-                    const expiresAt = e.validationExpiresAt;
-                    const lastValTime = e.lastValidationTime;
-                    const fallbackStatus = e.fallbackStatus;
-                    const fallbackColor = e.fallbackStatusColor;
                     
                     // Update local state dictionary
                     if (subareaStates[subId]) {
-                        subareaStates[subId].status = status;
-                        subareaStates[subId].color = color;
-                        subareaStates[subId].isValidated = isValidated;
-                        subareaStates[subId].hasUserReport = hasUserReport;
-                        subareaStates[subId].validationExpiresAt = expiresAt;
-                        subareaStates[subId].lastValidationTime = lastValTime;
-                        subareaStates[subId].fallbackStatus = fallbackStatus;
-                        subareaStates[subId].fallbackColor = fallbackColor;
+                        subareaStates[subId].status = e.status;
+                        subareaStates[subId].color = e.statusColor;
+                        subareaStates[subId].isValidated = e.isValidated;
+                        subareaStates[subId].hasUserReport = e.hasUserReport;
+                        subareaStates[subId].validationExpiresAt = e.validationExpiresAt;
+                        subareaStates[subId].lastValidationTime = e.lastValidationTime;
+                        subareaStates[subId].validationRemainingSeconds = e.validationRemainingSeconds || 0;
+                        subareaStates[subId].fallbackStatus = e.fallbackStatus;
+                        subareaStates[subId].fallbackColor = e.fallbackStatusColor;
+                        subareaStates[subId].currentCount = e.currentCount;
+                        subareaStates[subId].maxSlots = e.maxSlots;
+                        subareaStates[subId].commentCount = e.commentCount;
                     }
                     
                     // Trigger UI update
-                    updateSubareaUI(subId, status, color, isValidated, hasUserReport, currentCount, maxSlots);
+                    updateSubareaUI(subId);
                 });
                 
             // 2. Dengar status perangkat IoT (online/offline)
@@ -947,6 +1025,7 @@
         
         // Populate local subareaStates from the server-injected existingSubareas
         existingSubareas.forEach(sub => {
+            let commentCount = sub.subarea_comment ? sub.subarea_comment.length : 0;
             subareaStates[sub.park_subarea_id] = {
                 status: sub.status_color ? sub.status : 'netral',
                 color: sub.status_color || '#1572e8',
@@ -954,16 +1033,29 @@
                 hasUserReport: sub.has_user_report ? true : false,
                 validationExpiresAt: sub.validation_expires_at || null,
                 lastValidationTime: sub.last_validation_time || null,
+                validationRemainingSeconds: sub.validation_remaining_seconds ?? 0,
                 fallbackStatus: sub.fallback_status || 'netral',
-                fallbackColor: sub.fallback_status_color || '#1572e8'
+                fallbackColor: sub.fallback_status_color || '#1572e8',
+                currentCount: sub.current_count ?? 0,
+                maxSlots: sub.max_slots ?? 0,
+                commentCount: commentCount
             };
         });
         
         // Inisialisasi Echo listener
         initEcho();
 
+        // Run expiration check immediately to sync UI on page load
+        checkValidationExpirations();
+
         // Start expiration checking timer (check every 1 second for smooth countdowns)
         setInterval(checkValidationExpirations, 1000);
+
+        // Reset active comments state on modal close
+        $('#modalComments').on('hidden.bs.modal', function () {
+            activeCommentSubareaId = null;
+            activeCommentSubareaName = null;
+        });
 
         // Handler tombol hapus subarea
         $(document).on('submit', '.delete-subarea-form', function(e) {

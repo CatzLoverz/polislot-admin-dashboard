@@ -66,20 +66,21 @@ class MapVisualizationController extends Controller
                 $live = $sub->getLiveStatus();
 
                 return [
-                    'id'                    => $sub->park_subarea_id,
-                    'name'                  => $sub->park_subarea_name,
-                    'polygon'               => $sub->park_subarea_polygon, 
-                    'status'                => $live['status'], 
-                    'is_validated'          => $live['is_validated'],
-                    'has_user_report'       => $live['has_user_report'],
-                    'current_count'         => $sub->current_count ?? 0,
-                    'max_slots'             => $sub->max_slots ?? 0,
-                    'validation_expires_at' => $live['validation_expires_at'],
-                    'last_validation_time'  => $live['last_validation_time'],
-                    'fallback_status'       => $live['fallback_status'],
-                    'fallback_status_color' => $live['fallback_status_color'],
-                    'amenities'             => $sub->parkAmenity->pluck('park_amenity_name'),
-                    'comment_count'         => $sub->subarea_comment_count ?? 0, 
+                    'id'                           => $sub->park_subarea_id,
+                    'name'                         => $sub->park_subarea_name,
+                    'polygon'                      => $sub->park_subarea_polygon, 
+                    'status'                       => $live['status'], 
+                    'is_validated'                 => $live['is_validated'],
+                    'has_user_report'              => $live['has_user_report'],
+                    'current_count'                => $sub->current_count ?? 0,
+                    'max_slots'                    => $sub->max_slots ?? 0,
+                    'validation_expires_at'        => $live['validation_expires_at'],
+                    'last_validation_time'         => $live['last_validation_time'],
+                    'validation_remaining_seconds' => $live['validation_remaining_seconds'],
+                    'fallback_status'              => $live['fallback_status'],
+                    'fallback_status_color'        => $live['fallback_status_color'],
+                    'amenities'                    => $sub->parkAmenity->pluck('park_amenity_name'),
+                    'comment_count'                => $sub->subarea_comment_count ?? 0, 
                 ];
             });
 
