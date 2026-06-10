@@ -84,7 +84,7 @@ class ParkSubarea extends Model
 
         if ($this->iotDevice) {
             $mac = $this->iotDevice->device_mac_address;
-            $deviceStatus = IotDevice::getStatus($mac);
+            $deviceStatus = IotDevice::syncStatus($mac);
             if ($deviceStatus === 'online') {
                 $hasOnlineIot = true;
                 if ($this->max_slots > 0) {

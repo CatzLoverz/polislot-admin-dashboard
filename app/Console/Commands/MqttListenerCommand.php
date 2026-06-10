@@ -278,6 +278,9 @@ class MqttListenerCommand extends Command
                             
                             // Broadcast count update
                             broadcast(new IotCountUpdated($mac, $count));
+                            
+                            // Broadcast subarea status update untuk halaman Visualisasi
+                            broadcast(new SubareaStatusUpdated($subarea));
                         }
                     }
                 } catch (\Exception $e) {
