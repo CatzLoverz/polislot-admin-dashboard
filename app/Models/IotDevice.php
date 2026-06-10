@@ -50,132 +50,121 @@ class IotDevice extends Model
     }
 
     /**
-     * Dapatkan status perangkat dengan sinkronisasi ke Reverb WebSocket Server.
-     * Karena Reverb tidak mendukung outbound webhooks secara bawaan, metode ini
-     * melakukan query langsung ke HTTP API Reverb untuk memverifikasi apakah perangkat
-     * terhubung ke presence channel.
+     * Dapatkan status perangkat (READ-ONLY).
+     * 
+     * Method ini HANYA membaca status dari cache tanpa side-effects.
+     * Aman dipanggil dari controller/views tanpa memicu broadcast events.
+     * Untuk sinkronisasi aktif dengan Reverb/MQTT, gunakan syncStatus().
      */
     public static function getStatus(string $mac): string
+    {
+        return Cache::get("iot_status_{$mac}", 'offline');
+    }
+
+    /**
+     * Sinkronisasi status perangkat dengan verifikasi aktual ke Reverb/MQTT.
+     * 
+     * Method ini melakukan side-effects: update cache, broadcast events, 
+     * dan reset database jika device ternyata sudah offline.
+     * HANYA panggil dari background processes (MqttListenerCommand, scheduled tasks).
+     * 
+     * @return string Status aktual setelah sinkronisasi ('online' atau 'offline')
+     */
+    public static function syncStatus(string $mac): string
     {
         $status = Cache::get("iot_status_{$mac}", 'offline');
         $connectionType = Cache::get("iot_connection_type_{$mac}", 'ws');
 
-        if ($status === 'online') {
-            if ($connectionType === 'ws') {
-                try {
-                    $cleanMac = str_replace(':', '', $mac);
-                    $channelName = "presence-iot.device.{$cleanMac}";
+        if ($status !== 'online') {
+            return $status;
+        }
 
-                    // Ambil instance Pusher dari Reverb Broadcaster
-                    $pusher = Broadcast::connection('reverb')->getPusher();
-                    $response = $pusher->get("/channels/{$channelName}/users", [], true);
+        $shouldGoOffline = false;
 
-                    if (is_array($response) && isset($response['users'])) {
-                        $users = $response['users'];
-                        $isDevicePresent = false;
-                        
-                        foreach ($users as $user) {
-                            if (isset($user['id']) && str_replace(':', '', strtolower($user['id'])) === strtolower($cleanMac)) {
-                                $isDevicePresent = true;
-                                break;
-                            }
-                        }
-
-                        if (!$isDevicePresent) {
-                            Log::info("Reverb sync: Device {$mac} not found in presence channel. Setting to offline.");
-                            
-                            // Update cache
-                            Cache::forever("iot_status_{$mac}", 'offline');
-                            $status = 'offline';
-
-                            // Broadcast status offline
-                            broadcast(new IotDeviceStatusChanged($mac, 'offline'));
-
-                            // Reset database subarea count to 0
-                            $device = static::where('device_mac_address', $mac)->first();
-                            if ($device && $device->subarea) {
-                                $subarea = $device->subarea;
-                                $subarea->current_count = 0;
-                                $subarea->save();
-
-                                // Broadcast count updated to 0
-                                broadcast(new IotCountUpdated($mac, 0));
-
-                                // Broadcast subarea status updated
-                                broadcast(new SubareaStatusUpdated($subarea));
-                            }
-                        }
-                    }
-                } catch (ApiErrorException $e) {
-                    if ($e->getCode() === 404) {
-                        Log::info("Reverb sync: Channel not found (404) for device {$mac}. Setting to offline.");
-                        
-                        // Update cache
-                        Cache::forever("iot_status_{$mac}", 'offline');
-                        $status = 'offline';
-
-                        // Broadcast status offline
-                        broadcast(new IotDeviceStatusChanged($mac, 'offline'));
-
-                        // Reset database subarea count to 0
-                        $device = static::where('device_mac_address', $mac)->first();
-                        if ($device && $device->subarea) {
-                            $subarea = $device->subarea;
-                            $subarea->current_count = 0;
-                            $subarea->save();
-
-                            // Broadcast count updated to 0
-                            broadcast(new IotCountUpdated($mac, 0));
-
-                            // Broadcast subarea status updated
-                            broadcast(new SubareaStatusUpdated($subarea));
-                        }
-                    } else {
-                        Log::warning("Reverb sync failed (API error) for device {$mac}", [
-                            'message' => $e->getMessage(),
-                            'code' => $e->getCode(),
-                        ]);
-                    }
-                } catch (\Exception $e) {
-                    // Log warning dan gunakan status dari cache sebagai fallback jika Reverb bermasalah/offline
-                    Log::warning("Reverb sync failed for device {$mac}", [
-                        'exception' => get_class($e),
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]);
-                }
-            } elseif ($connectionType === 'mqtt') {
-                $lastSeen = Cache::get("iot_last_seen_{$mac}");
-                
-                // Jika tidak ada last seen atau sudah lebih dari 60 detik tidak mengirim kabar, set ke offline
-                if (!$lastSeen || (time() - $lastSeen) > 60) {
-                    Log::info("MQTT sync: Device {$mac} inactive for more than 60 seconds. Setting to offline.");
-                    
-                    // Update cache
-                    Cache::forever("iot_status_{$mac}", 'offline');
-                    $status = 'offline';
-
-                    // Broadcast status offline
-                    broadcast(new IotDeviceStatusChanged($mac, 'offline'));
-
-                    // Reset database subarea count to 0
-                    $device = static::where('device_mac_address', $mac)->first();
-                    if ($device && $device->subarea) {
-                        $subarea = $device->subarea;
-                        $subarea->current_count = 0;
-                        $subarea->save();
-
-                        // Broadcast count updated to 0
-                        broadcast(new IotCountUpdated($mac, 0));
-
-                        // Broadcast subarea status updated
-                        broadcast(new SubareaStatusUpdated($subarea));
-                    }
-                }
+        if ($connectionType === 'ws') {
+            $shouldGoOffline = static::checkReverbPresence($mac);
+        } elseif ($connectionType === 'mqtt') {
+            $lastSeen = Cache::get("iot_last_seen_{$mac}");
+            if (!$lastSeen || (time() - $lastSeen) > 60) {
+                Log::info("MQTT sync: Device {$mac} inactive for more than 60 seconds. Setting to offline.");
+                $shouldGoOffline = true;
             }
         }
 
+        if ($shouldGoOffline) {
+            static::markDeviceOffline($mac);
+            $status = 'offline';
+        }
+
         return $status;
+    }
+
+    /**
+     * Verifikasi keberadaan device di Reverb presence channel.
+     * 
+     * @return bool True jika device HARUS di-set offline (tidak ditemukan di channel)
+     */
+    private static function checkReverbPresence(string $mac): bool
+    {
+        try {
+            $cleanMac = str_replace(':', '', $mac);
+            $channelName = "presence-iot.device.{$cleanMac}";
+
+            $pusher = Broadcast::connection('reverb')->getPusher();
+            $response = $pusher->get("/channels/{$channelName}/users", [], true);
+
+            if (is_array($response) && isset($response['users'])) {
+                $users = $response['users'];
+                foreach ($users as $user) {
+                    if (isset($user['id']) && str_replace(':', '', strtolower($user['id'])) === strtolower($cleanMac)) {
+                        return false; // Device ditemukan, JANGAN set offline
+                    }
+                }
+                Log::info("Reverb sync: Device {$mac} not found in presence channel. Setting to offline.");
+                return true; // Device TIDAK ditemukan
+            }
+        } catch (ApiErrorException $e) {
+            if ($e->getCode() === 404) {
+                Log::info("Reverb sync: Channel not found (404) for device {$mac}. Setting to offline.");
+                return true; // Channel tidak ada = device offline
+            }
+            Log::warning("Reverb sync failed (API error) for device {$mac}", [
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+        } catch (\Exception $e) {
+            Log::warning("Reverb sync failed for device {$mac}", [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+        }
+
+        return false; // Jika Reverb error, fallback ke status cache (jangan force offline)
+    }
+
+    /**
+     * Tandai device sebagai offline: update cache, broadcast events, reset database.
+     * Semua side-effects terisolasi di method ini.
+     */
+    private static function markDeviceOffline(string $mac): void
+    {
+        // Update cache
+        Cache::forever("iot_status_{$mac}", 'offline');
+
+        // Broadcast status offline
+        broadcast(new IotDeviceStatusChanged($mac, 'offline'));
+
+        // Reset database subarea count to 0
+        $device = static::where('device_mac_address', $mac)->first();
+        if ($device && $device->subarea) {
+            $subarea = $device->subarea;
+            $subarea->current_count = 0;
+            $subarea->save();
+
+            broadcast(new IotCountUpdated($mac, 0));
+            broadcast(new SubareaStatusUpdated($subarea));
+        }
     }
 
     protected $table = 'iot_devices';

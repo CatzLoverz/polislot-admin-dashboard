@@ -356,6 +356,17 @@
 
 @push('scripts')
 <script>
+    // Bug #6: Pending log queue — tangkap log messages sebelum module script ready
+    // Module scripts execute deferred, jadi window.addLog belum tersedia saat regular scripts jalan
+    window._pendingLogs = [];
+    function safeAddLog(message) {
+        if (typeof window.addLog === 'function') {
+            window.addLog(message);
+        } else {
+            window._pendingLogs.push(message);
+        }
+    }
+
     // Navigasi ke device lain tanpa reload penuh
     function switchDevice(macAddress) {
         const url = new URL(window.location.href);
@@ -375,9 +386,7 @@
         btnTerbatas.disabled = true;
         btnPenuh.disabled = true;
 
-        if (typeof addLog === 'function') {
-            addLog(`Memicu validasi manual [${content.toUpperCase()}] untuk ${macAddress}...`);
-        }
+        safeAddLog(`Memicu validasi manual [${content.toUpperCase()}] untuk ${macAddress}...`);
 
         fetch("{{ route('admin.iot-stream-viewer.validate') }}", {
             method: 'POST',
@@ -394,9 +403,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                if (typeof addLog === 'function') {
-                    addLog(data.message);
-                }
+                safeAddLog(data.message);
             } else {
                 Swal.fire({
                     title: 'Gagal!',
@@ -476,9 +483,7 @@
             btn.classList.remove('btn-outline-primary');
             btn.classList.add('btn-primary');
             canvas.style.pointerEvents = 'auto';
-            if (typeof addLog === 'function') {
-                addLog('Mode menggambar aktif. Meminta snapshot terbaru dari perangkat IoT...');
-            }
+            safeAddLog('Mode menggambar aktif. Meminta snapshot terbaru dari perangkat IoT...');
 
             // Pemicu otomatis snapshot dari device IoT
             fetch("{{ route('admin.iot-stream-viewer.trigger') }}", {
@@ -496,9 +501,7 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    if (typeof addLog === 'function') {
-                        addLog('Berhasil memicu pengambilan snapshot. Menunggu respons gambar...');
-                    }
+                    safeAddLog('Berhasil memicu pengambilan snapshot. Menunggu respons gambar...');
                 } else {
                     Swal.fire({
                         title: 'Gagal!',
@@ -510,9 +513,7 @@
             })
             .catch(err => {
                 console.error("Error triggering snapshot:", err);
-                if (typeof addLog === 'function') {
-                    addLog('Error memicu snapshot: Terjadi masalah jaringan.');
-                }
+                safeAddLog('Error memicu snapshot: Terjadi masalah jaringan.');
             });
         } else {
             btn.classList.remove('btn-primary');
@@ -553,9 +554,7 @@
         completedPolygons.push(scaledPoints);
         currentPoints = [];
         draw();
-        if (typeof addLog === 'function') {
-            addLog('Zona polygon baru selesai dibuat.');
-        }
+        safeAddLog('Zona polygon baru selesai dibuat.');
     }
 
     function clearAllPolygons() {
@@ -573,9 +572,7 @@
                 completedPolygons = [];
                 currentPoints = [];
                 draw();
-                if (typeof addLog === 'function') {
-                    addLog('Semua polygon dihapus dari layar.');
-                }
+                safeAddLog('Semua polygon dihapus dari layar.');
             }
         });
     }
@@ -649,9 +646,7 @@
             return;
         }
 
-        if (typeof addLog === 'function') {
-            addLog('Menyimpan konfigurasi deteksi...');
-        }
+        safeAddLog('Menyimpan konfigurasi deteksi...');
 
         fetch("{{ route('admin.iot-stream-viewer.save-settings') }}", {
             method: 'POST',
@@ -677,9 +672,7 @@
                     icon: 'success',
                     confirmButtonText: 'OK'
                 });
-                if (typeof addLog === 'function') {
-                    addLog('Konfigurasi deteksi berhasil disimpan ke database.');
-                }
+                safeAddLog('Konfigurasi deteksi berhasil disimpan ke database.');
             } else {
                 Swal.fire({
                     title: 'Gagal!',
@@ -893,6 +886,7 @@
     // Hapus titik dua dari MAC address sesuai dengan format channel di Event kita
     const cleanMac = "{{ str_replace(':', '', $targetMac) }}";
     const channelName = `iot.stream.${cleanMac}`;
+    const serverInitialStatus = "{{ $initialStatus }}"; // Bug #3: Hydrate dari server
 
     const connectionStatus = document.getElementById('connection-status');
     const logList = document.getElementById('log-list');
@@ -900,6 +894,9 @@
     const liveImage = document.getElementById('live-image');
     const feedPlaceholder = document.getElementById('feed-placeholder');
     const feedContainerIcon = document.querySelector('#feed-container i');
+
+    // Bug #6: Pending log queue — tangkap log messages sebelum module ready
+    const pendingLogs = [];
 
     function addLog(message) {
         if (emptyLogMsg) emptyLogMsg.style.display = 'none';
@@ -917,6 +914,21 @@
         }
     }
 
+    // Bug #5 & #6: Expose addLog ke global scope SEGERA (bukan di akhir)
+    // agar regular scripts bisa memakainya tanpa race condition
+    window.addLog = addLog;
+
+    // Flush pending logs yang dikumpulkan sebelum module ready
+    if (window._pendingLogs && window._pendingLogs.length > 0) {
+        window._pendingLogs.forEach(msg => addLog(msg));
+        window._pendingLogs = [];
+    }
+
+    // Bug #4: Track channel subscriptions untuk cleanup
+    let streamChannel = null;
+    let presenceChannel = null;
+    let statusChannel = null;
+
     // Menggunakan window.Echo yang telah di-bundle secara internal oleh Vite (app.js/echo.js)
     function initEcho() {
         if (typeof window.Echo !== 'undefined') {
@@ -924,7 +936,7 @@
             connectionStatus.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Terhubung ke Reverb';
             addLog(`Tersambung ke server. Mendengarkan channel: <strong>${channelName}</strong>`);
             
-            window.Echo.channel(channelName)
+            streamChannel = window.Echo.channel(channelName)
                 .listen('.stream.received', (e) => {
                     let frameData = e.frameData;
                     
@@ -971,8 +983,9 @@
                         sliderBanyak.value = Math.round(e.thresholdBanyak);
                         sliderTerbatas.value = Math.round(e.thresholdTerbatas);
                         
-                        if (typeof updateSliderUI === 'function') {
-                            updateSliderUI();
+                        // Bug #5: Gunakan window.updateSliderUI (exposed ke global scope)
+                        if (typeof window.updateSliderUI === 'function') {
+                            window.updateSliderUI();
                         }
                     }
                 });
@@ -985,6 +998,9 @@
     // Mulai inisiasi
     initEcho();
 
+    // Bug #3: Hydrate initial status dari server segera (sebelum presence channel ready)
+    updateStatusUI(serverInitialStatus);
+
     // Listen untuk Presence Channel (instant status) setelah Echo jalan
     function initStatusEcho() {
         if (typeof window.Echo !== 'undefined') {
@@ -992,12 +1008,18 @@
             // PRESENCE CHANNEL — Instant Online/Offline Detection
             // =====================================================
             const presenceChannelName = `iot.device.${cleanMac}`;
-            window.Echo.join(presenceChannelName)
+            presenceChannel = window.Echo.join(presenceChannelName)
                 .here((members) => {
                     const isDeviceOnline = members.some(m => m.type === 'iot_device');
                     if (isDeviceOnline) {
                         updateStatusUI('online');
                         addLog(`✅ Perangkat IoT terdeteksi ONLINE (via Presence Channel)`);
+                    } else {
+                        // Bug #7: Jika tidak ada IoT device di presence channel,
+                        // JANGAN override status — biarkan serverInitialStatus yang berlaku.
+                        // Device MQTT tidak join presence channel, jadi ketiadaan di sini
+                        // bukan berarti device offline.
+                        addLog(`ℹ️ Presence channel terhubung. Status perangkat: ${serverInitialStatus.toUpperCase()} (dari server)`);
                     }
                 })
                 .joining((member) => {
@@ -1014,9 +1036,10 @@
                 });
 
             // =====================================================
-            // FALLBACK: Listen Status dari MQTT/WS
+            // FALLBACK: Listen Status dari MQTT/WS broadcast events
+            // (Menangkap status changes dari MqttListenerCommand & IotWebhookController)
             // =====================================================
-            window.Echo.channel('iot.status')
+            statusChannel = window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
                     console.log("📡 Status Received (MQTT/WS):", e);
                     const selectedMac = document.getElementById('device-selector').value;
@@ -1050,7 +1073,19 @@
     }
     
     initStatusEcho();
-    window.addLog = addLog; // Expose globally for other scripts
+
+    // Bug #4: Cleanup Echo channels saat navigasi away (prevent listener leaks)
+    window.addEventListener('beforeunload', () => {
+        if (streamChannel) {
+            window.Echo.leave(channelName);
+        }
+        if (presenceChannel) {
+            window.Echo.leave(`iot.device.${cleanMac}`);
+        }
+        if (statusChannel) {
+            window.Echo.leave('iot.status');
+        }
+    });
 
     // --- LOGIKA RANGE SLIDER GANDA KUSTOM ---
     const sliderBanyak = document.getElementById('input-threshold-banyak');
@@ -1088,6 +1123,9 @@
         labelTerbatasRange.innerText = `${valBanyak}% - ${valTerbatas}%`;
         labelPenuhRange.innerText = `${valTerbatas}% - 100%`;
     }
+
+    // Bug #5: Expose updateSliderUI ke global scope agar event listener bisa akses
+    window.updateSliderUI = updateSliderUI;
 
     if (sliderBanyak && sliderTerbatas) {
         sliderBanyak.addEventListener('input', updateSliderUI);

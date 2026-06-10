@@ -48,22 +48,20 @@ class MqttListenerCommand extends Command
         try {
             $key32 = substr(hash('sha256', $secretKey, true), 0, 32);
 
-            // default offline status for devices
-            $devices = IotDevice::all();
+            // Smart sync: Verify actual device status before resetting
+            // (Menghindari broadcast storm saat MQTT listener restart)
+            $devices = IotDevice::with('subarea')->get();
+            $resetCount = 0;
             foreach ($devices as $device) {
                 $mac = $device->device_mac_address;
-                Cache::forever("iot_status_{$mac}", 'offline');
-                broadcast(new IotDeviceStatusChanged($mac, 'offline'));
-
-                if ($device->subarea) {
-                    $subarea = $device->subarea;
-                    $subarea->current_count = 0;
-                    $subarea->save();
-                    broadcast(new IotCountUpdated($mac, 0));
-                    broadcast(new SubareaStatusUpdated($subarea));
+                // syncStatus() akan cek Reverb presence / MQTT last-seen
+                // dan hanya broadcast offline jika device benar-benar tidak terdeteksi
+                $actualStatus = IotDevice::syncStatus($mac);
+                if ($actualStatus === 'offline') {
+                    $resetCount++;
                 }
             }
-            $this->info("🔄 Reset {$devices->count()} device status ke OFFLINE dan count ke 0 (cache + broadcast)");
+            $this->info("🔄 Smart sync selesai: {$resetCount}/{$devices->count()} device terverifikasi OFFLINE");
 
             // announce server online
             $mqtt = MQTT::connection();
