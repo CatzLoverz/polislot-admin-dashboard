@@ -59,6 +59,107 @@ class ParkSubarea extends Model
     }
 
     /**
+     * Mendapatkan status dan warna subarea terkini secara real-time.
+     * Logika ini digabungkan dari controller untuk menghindari duplikasi kode.
+     * 
+     * @return array
+     */
+    public function getLiveStatus(): array
+    {
+        $status = 'netral';
+        $isValidated = false;
+        $hasUserReport = false;
+
+        // 1. Filter validasi dalam 5 menit terakhir
+        $cutoffTime = now()->subMinutes(5);
+        $validVotes = $this->userValidation()
+            ->where('created_at', '>=', $cutoffTime)
+            ->get();
+
+        // 2. Tentukan status dari deteksi AI perangkat IoT
+        $hasOnlineIot = false;
+        $cvStatus = 'netral';
+        $occupancy = 0.0;
+
+        if ($this->iotDevice) {
+            $mac = $this->iotDevice->device_mac_address;
+            $deviceStatus = IotDevice::getStatus($mac);
+            if ($deviceStatus === 'online') {
+                $hasOnlineIot = true;
+                if ($this->max_slots > 0) {
+                    $occupancy = ($this->current_count / $this->max_slots) * 100;
+                    if ($occupancy < ($this->threshold_banyak ?? 30.0)) {
+                        $cvStatus = 'banyak';
+                    } elseif ($occupancy >= ($this->threshold_terbatas ?? 80.0)) {
+                        $cvStatus = 'penuh';
+                    } else {
+                        $cvStatus = 'terbatas';
+                    }
+                } else {
+                    $cvStatus = 'banyak';
+                }
+            }
+        }
+
+        // 3. Bandingkan dengan hasil vote validasi pengguna
+        if ($validVotes->isNotEmpty()) {
+            $counts = $validVotes->countBy('user_validation_content');
+            $maxVote = $counts->max();
+            $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
+                return $counts[$key] === $maxVote;
+            });
+
+            $votedStatus = 'banyak';
+            if ($candidates->count() === 1) {
+                $votedStatus = $candidates->first();
+            } else {
+                // Tie-breaker: ambil vote terakhir dari kandidat yang seri
+                $latestDecider = $validVotes->first(function ($vote) use ($candidates) {
+                    return $candidates->contains($vote->user_validation_content);
+                });
+                if ($latestDecider) {
+                    $votedStatus = $latestDecider->user_validation_content;
+                }
+            }
+
+            $status = $votedStatus;
+
+            if ($hasOnlineIot) {
+                if ($votedStatus === $cvStatus) {
+                    $isValidated = true;
+                } else {
+                    $hasUserReport = true;
+                }
+            }
+        } else {
+            // Jika tidak ada vote, fallback ke status deteksi IoT (bila online), atau netral
+            if ($hasOnlineIot) {
+                $status = $cvStatus;
+            } else {
+                $status = 'netral';
+            }
+        }
+
+        // 4. Konversi status ke kode warna
+        $status_color = '#1572e8'; // Default: Netral (Biru)
+        if ($status === 'penuh') {
+            $status_color = '#f25961'; // Merah
+        } elseif ($status === 'terbatas') {
+            $status_color = '#ffad46'; // Orange/Kuning
+        } elseif ($status === 'banyak') {
+            $status_color = '#31ce36'; // Hijau
+        }
+
+        return [
+            'status'          => $status,
+            'status_color'    => $status_color,
+            'is_validated'    => $isValidated,
+            'has_user_report' => $hasUserReport,
+            'has_online_iot'  => $hasOnlineIot
+        ];
+    }
+
+    /**
      * Mengevaluasi pergeseran threshold WMA jika ada minimal 3 validation dalam 5 menit terakhir.
      */
     public function evaluateThresholdShift()

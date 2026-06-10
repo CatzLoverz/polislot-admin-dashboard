@@ -8,6 +8,7 @@ use App\Models\UserValidation;
 use App\Models\Validation;
 use App\Services\HistoryService;
 use App\Services\MissionService;
+use App\Events\SubareaStatusUpdated;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -103,7 +104,7 @@ class UserValidationController extends Controller
                 }
             }
 
-            return DB::transaction(function () use ($request, $user, $areaName, $validationSetting, $points) {
+            return DB::transaction(function () use ($request, $user, $areaName, $validationSetting, $points, $subarea) {
                 // 4. Simpan Validasi
                 UserValidation::create([
                     'user_id' => $user->user_id,
@@ -111,6 +112,10 @@ class UserValidationController extends Controller
                     'park_subarea_id' => $request->park_subarea_id,
                     'user_validation_content' => $request->user_validation_content,
                 ]);
+
+                // 4.5. Evaluasi pergeseran threshold WMA & broadcast status update
+                $subarea->evaluateThresholdShift();
+                broadcast(new SubareaStatusUpdated($subarea));
 
                 // 5. Tambah Poin & History
                 if ($points > 0) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
+use App\Events\SubareaStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -151,6 +152,9 @@ class ParkSubareaController extends Controller
                     'subarea_id' => $id,
                     'name'       => $subarea->park_subarea_name
                 ]);
+
+                // Broadcast updated status
+                broadcast(new SubareaStatusUpdated($subarea));
 
                 return response()->json([
                     'status'  => 'success', 

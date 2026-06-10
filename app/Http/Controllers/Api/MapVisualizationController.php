@@ -63,88 +63,15 @@ class MapVisualizationController extends Controller
             }
 
             $formattedSubareas = $area->parkSubarea->map(function ($sub) {
-                $status = 'netral';
-                $isValidated = false;
-                $hasUserReport = false;
-
-                // 1. Filter validations within the last 5 minutes from now
-                $allValidations = $sub->userValidation;
-                $cutoffTime = now()->subMinutes(5);
-                $validVotes = $allValidations->filter(function ($val) use ($cutoffTime) {
-                    return $val->created_at >= $cutoffTime;
-                });
-
-                // 2. Determine CV Status
-                $hasOnlineIot = false;
-                $cvStatus = 'netral';
-                $occupancy = 0.0;
-
-                if ($sub->iotDevice) {
-                    $mac = $sub->iotDevice->device_mac_address;
-                    $deviceStatus = IotDevice::getStatus($mac);
-                    if ($deviceStatus === 'online') {
-                        $hasOnlineIot = true;
-                        if ($sub->max_slots > 0) {
-                            $occupancy = ($sub->current_count / $sub->max_slots) * 100;
-                            if ($occupancy < ($sub->threshold_banyak ?? 30.0)) {
-                                $cvStatus = 'banyak';
-                            } elseif ($occupancy >= ($sub->threshold_terbatas ?? 80.0)) {
-                                $cvStatus = 'penuh';
-                            } else {
-                                $cvStatus = 'terbatas';
-                            }
-                        } else {
-                            $cvStatus = 'banyak';
-                        }
-                    }
-                }
-
-                // 3. Process votes to determine status
-                if ($validVotes->isNotEmpty()) {
-                    $counts = $validVotes->countBy('user_validation_content');
-                    $maxVote = $counts->max();
-                    $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
-                        return $counts[$key] === $maxVote;
-                    });
-
-                    $votedStatus = 'banyak';
-                    if ($candidates->count() === 1) {
-                        $votedStatus = $candidates->first();
-                    } else {
-                        // Tie-breaker: latest vote from candidates
-                        $latestDecider = $validVotes->first(function ($vote) use ($candidates) {
-                            return $candidates->contains($vote->user_validation_content);
-                        });
-                        if ($latestDecider) {
-                            $votedStatus = $latestDecider->user_validation_content;
-                        }
-                    }
-
-                    $status = $votedStatus;
-
-                    if ($hasOnlineIot) {
-                        if ($votedStatus === $cvStatus) {
-                            $isValidated = true;
-                        } else {
-                            $hasUserReport = true;
-                        }
-                    }
-                } else {
-                    // Fallback to CV status if online, otherwise netral
-                    if ($hasOnlineIot) {
-                        $status = $cvStatus;
-                    } else {
-                        $status = 'netral';
-                    }
-                }
+                $live = $sub->getLiveStatus();
 
                 return [
                     'id'              => $sub->park_subarea_id,
                     'name'            => $sub->park_subarea_name,
                     'polygon'         => $sub->park_subarea_polygon, 
-                    'status'          => $status, 
-                    'is_validated'    => $isValidated,
-                    'has_user_report' => $hasUserReport,
+                    'status'          => $live['status'], 
+                    'is_validated'    => $live['is_validated'],
+                    'has_user_report' => $live['has_user_report'],
                     'current_count'   => $sub->current_count ?? 0,
                     'max_slots'       => $sub->max_slots ?? 0,
                     'amenities'       => $sub->parkAmenity->pluck('park_amenity_name'),

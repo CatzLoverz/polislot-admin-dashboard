@@ -153,95 +153,11 @@ class ParkAreaController extends Controller
             // --- LOGIKA WARNA POLYGON ---
             // Kita inject attribute 'status_color', 'is_validated', dan 'has_user_report' ke setiap subarea object
             foreach ($area->parkSubarea as $sub) {
-                $status = 'netral';
-                $isValidated = false;
-                $hasUserReport = false;
-
-                // 1. Filter validations within the last 5 minutes from now
-                $allValidations = $sub->userValidation;
-                $cutoffTime = now()->subMinutes(5);
-                $validVotes = $allValidations->filter(function ($val) use ($cutoffTime) {
-                    return $val->created_at >= $cutoffTime;
-                });
-
-                // 2. Determine CV Status
-                $hasOnlineIot = false;
-                $cvStatus = 'netral';
-                $occupancy = 0.0;
-
-                if ($sub->iotDevice) {
-                    $mac = $sub->iotDevice->device_mac_address;
-                    $deviceStatus = IotDevice::getStatus($mac);
-                    if ($deviceStatus === 'online') {
-                        $hasOnlineIot = true;
-                        if ($sub->max_slots > 0) {
-                            $occupancy = ($sub->current_count / $sub->max_slots) * 100;
-                            if ($occupancy < ($sub->threshold_banyak ?? 30.0)) {
-                                $cvStatus = 'banyak';
-                            } elseif ($occupancy >= ($sub->threshold_terbatas ?? 80.0)) {
-                                $cvStatus = 'penuh';
-                            } else {
-                                $cvStatus = 'terbatas';
-                            }
-                        } else {
-                            $cvStatus = 'banyak';
-                        }
-                    }
-                }
-
-                // 3. Process votes to determine status
-                if ($validVotes->isNotEmpty()) {
-                    $counts = $validVotes->countBy('user_validation_content');
-                    $maxVote = $counts->max();
-                    $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
-                        return $counts[$key] === $maxVote;
-                    });
-
-                    $votedStatus = 'banyak';
-                    if ($candidates->count() === 1) {
-                        $votedStatus = $candidates->first();
-                    } else {
-                        // Tie-breaker: latest vote from candidates
-                        $latestDecider = $validVotes->first(function ($vote) use ($candidates) {
-                            return $candidates->contains($vote->user_validation_content);
-                        });
-                        if ($latestDecider) {
-                            $votedStatus = $latestDecider->user_validation_content;
-                        }
-                    }
-
-                    $status = $votedStatus;
-
-                    if ($hasOnlineIot) {
-                        if ($votedStatus === $cvStatus) {
-                            $isValidated = true;
-                        } else {
-                            $hasUserReport = true;
-                        }
-                    }
-                } else {
-                    // Fallback to CV status if online, otherwise netral
-                    if ($hasOnlineIot) {
-                        $status = $cvStatus;
-                    } else {
-                        $status = 'netral';
-                    }
-                }
-
-                // 4. Inject attributes to model object
-                $sub->is_validated = $isValidated;
-                $sub->has_user_report = $hasUserReport;
-
-                // 5. Mapping Status ke Warna
-                if ($status === 'penuh') {
-                    $sub->status_color = '#f25961'; // Merah (Penuh)
-                } elseif ($status === 'terbatas') {
-                    $sub->status_color = '#ffad46'; // Kuning (Terbatas)
-                } elseif ($status === 'banyak') {
-                    $sub->status_color = '#31ce36'; // Hijau (Banyak Tersedia)
-                } else {
-                    $sub->status_color = '#1572e8'; // Biru (Netral / Tidak ada info)
-                }
+                $live = $sub->getLiveStatus();
+                $sub->is_validated = $live['is_validated'];
+                $sub->has_user_report = $live['has_user_report'];
+                $sub->status_color = $live['status_color'];
+                $sub->iot_status = $sub->iotDevice ? ($live['has_online_iot'] ? 'online' : 'offline') : null;
             }
 
             return view('Contents.ParkArea.show', compact('area', 'mapsApiKey'));

@@ -8,6 +8,64 @@
     Kode: <strong>{{ $area->park_area_code }}</strong> | Atur subarea (blok parkir) menggunakan peta interaktif.
 @endsection
 
+@push('styles')
+<style>
+    .subarea-item {
+        background-color: #ffffff;
+        border-left: 5px solid #1572e8;
+        margin: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        transition: all 0.25s ease-in-out;
+    }
+    .subarea-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.08) !important;
+        background-color: #fbfbfb;
+    }
+    .list-group-item.subarea-item {
+        border-top: 1px solid #ebedf2 !important;
+        border-right: 1px solid #ebedf2 !important;
+        border-bottom: 1px solid #ebedf2 !important;
+    }
+    .subarea-list-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    .subarea-list-container::-webkit-scrollbar-track {
+        background: #f8f9fa;
+    }
+    .subarea-list-container::-webkit-scrollbar-thumb {
+        background: #dcdcdc;
+        border-radius: 3px;
+    }
+    .subarea-list-container::-webkit-scrollbar-thumb:hover {
+        background: #c0c0c0;
+    }
+    
+    #comments_container::-webkit-scrollbar {
+        width: 6px;
+    }
+    #comments_container::-webkit-scrollbar-track {
+        background: #f8f9fa;
+    }
+    #comments_container::-webkit-scrollbar-thumb {
+        background: #dcdcdc;
+        border-radius: 3px;
+    }
+    #comments_container::-webkit-scrollbar-thumb:hover {
+        background: #c0c0c0;
+    }
+    
+    @keyframes pulse-highlight {
+        0% { background-color: rgba(21, 114, 232, 0.15); }
+        100% { background-color: #ffffff; }
+    }
+    .status-update-highlight {
+        animation: pulse-highlight 2s ease-out;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="page-inner mt--5">
     <div class="row">
@@ -43,32 +101,49 @@
                     <h4 class="card-title font-weight-bold">Daftar Sub Area</h4>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="list-group list-group-flush" style="max-height: 500px; overflow-y: auto;">
+                    <ul class="list-group list-group-flush subarea-list-container" style="max-height: 650px; overflow-y: auto; background-color: #f8f9fa;">
                         @forelse($area->parkSubarea as $sub)
-                            <li class="list-group-item">
+                            <li class="list-group-item subarea-item" id="subarea-item-{{ $sub->park_subarea_id }}" data-id="{{ $sub->park_subarea_id }}" style="border-left: 5px solid {{ $sub->status_color }} !important;">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div style="width: 65%;">
-                                        <span class="font-weight-bold d-block text-dark">{{ $sub->park_subarea_name }}</span>
-                                        <small class="d-block mt-1" style="color: {{ $sub->status_color }}">
-                                            <i class="fas fa-circle" style="font-size: 8px;"></i> 
-                                            @if($sub->status_color == '#f25961') Penuh
-                                            @elseif($sub->status_color == '#ffad46') Terbatas
-                                            @elseif($sub->status_color == '#31ce36') Banyak Tersedia
-                                            @else Tidak ada info / Netral @endif
+                                        <span class="font-weight-bold d-block text-dark subarea-name" style="font-size: 1.05rem;">{{ $sub->park_subarea_name }}</span>
+                                        <small class="d-block mt-1 subarea-status-wrapper" style="font-weight: 600;">
+                                            <span class="subarea-status-text" style="color: {{ $sub->status_color }}">
+                                                <i class="fas fa-circle" style="font-size: 8px;"></i> 
+                                                @if($sub->status_color == '#f25961') Penuh
+                                                @elseif($sub->status_color == '#ffad46') Terbatas
+                                                @elseif($sub->status_color == '#31ce36') Banyak Tersedia
+                                                @else Tidak ada info / Netral @endif
+                                            </span>
 
-                                            @if(isset($sub->is_validated) && $sub->is_validated)
-                                                <span class="badge badge-success p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-check-circle"></i> Tervalidasi</span>
-                                            @elseif(isset($sub->has_user_report) && $sub->has_user_report)
-                                                <span class="badge badge-warning p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-exclamation-triangle"></i> Laporan Berbeda</span>
-                                            @endif
+                                            <span class="subarea-validation-badges">
+                                                @if(isset($sub->is_validated) && $sub->is_validated)
+                                                    <span class="badge badge-success p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-check-circle"></i> Tervalidasi</span>
+                                                @elseif(isset($sub->has_user_report) && $sub->has_user_report)
+                                                    <span class="badge badge-warning p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-exclamation-triangle"></i> Laporan Berbeda</span>
+                                                @endif
+                                            </span>
                                         </small>
+
+                                        {{-- Kapasitas Slot (Dynamic) --}}
+                                        @if($sub->iotDevice && $sub->max_slots > 0)
+                                            <small class="d-block mt-1 text-muted subarea-occupancy font-weight-bold" style="font-size: 11px;">
+                                                <i class="fas fa-car mr-1"></i> Terisi: <span class="current-count-val">{{ $sub->current_count ?? 0 }}</span>/<span class="max-slots-val">{{ $sub->max_slots }}</span> slot
+                                            </small>
+                                        @endif
                                         
                                         {{-- Amenities --}}
-                                        <div class="mt-2">
+                                        <div class="mt-2 subarea-badges">
                                             @if($sub->iotDevice)
-                                                <span class="badge badge-success text-white mr-1 mb-1 p-1" style="font-size: 9px;" data-toggle="tooltip" title="IoT Tersambung">
-                                                    <i class="fas fa-video"></i> IoT Active
-                                                </span>
+                                                @if($sub->iot_status === 'online')
+                                                    <span class="badge badge-success text-white mr-1 mb-1 p-1 iot-status-badge" data-mac="{{ $sub->iotDevice->device_mac_address }}" style="font-size: 9px;" data-toggle="tooltip" title="IoT Online">
+                                                        <i class="fas fa-signal"></i> IoT Online
+                                                    </span>
+                                                @else
+                                                    <span class="badge badge-danger text-white mr-1 mb-1 p-1 iot-status-badge" data-mac="{{ $sub->iotDevice->device_mac_address }}" style="font-size: 9px;" data-toggle="tooltip" title="IoT Offline">
+                                                        <i class="fas fa-signal-slash"></i> IoT Offline
+                                                    </span>
+                                                @endif
                                             @endif
                                             @forelse($sub->parkAmenity as $amenity)
                                                 <span class="badge badge-count text-secondary border border-secondary mr-1 mb-1 p-1" style="font-size: 9px;">
@@ -252,6 +327,7 @@
     let center = { lat: parseFloat(centerData.lat), lng: parseFloat(centerData.lng) };
     let existingSubareas = @json($area->parkSubarea);
     let currentPolygonObj = null;
+    let polygonObjects = {}; // Menyimpan referensi polygon untuk update WS
 
     // State untuk mode menggambar kustom pengganti Drawing Manager
     let isDrawingMode = false;
@@ -291,6 +367,8 @@
                 draggable: false, 
                 map: map
             });
+            
+            polygonObjects[sub.park_subarea_id] = polygon;
 
             let infoWindow = new google.maps.InfoWindow({
                 content: `<b>${sub.park_subarea_name}</b>`
@@ -668,10 +746,114 @@
     }
 
 
+    // Inisialisasi Echo listener untuk update real-time
+    function initEcho() {
+        if (typeof window.Echo !== 'undefined') {
+            const areaId = "{{ $area->park_area_id }}";
+            
+            // 1. Dengar event pembaruan subarea di area parkir ini
+            window.Echo.channel(`park-area.${areaId}`)
+                .listen('.subarea.updated', (e) => {
+                    console.log("📡 Subarea Updated Event Received:", e);
+                    
+                    const subId = e.parkSubareaId;
+                    const status = e.status;
+                    const color = e.statusColor;
+                    const isValidated = e.isValidated;
+                    const hasUserReport = e.hasUserReport;
+                    const currentCount = e.currentCount;
+                    const maxSlots = e.maxSlots;
+                    
+                    // A. Update Google Maps Polygon
+                    if (polygonObjects[subId]) {
+                        polygonObjects[subId].setOptions({
+                            strokeColor: color,
+                            fillColor: color
+                        });
+                    }
+                    
+                    // B. Update List Item di Kanan
+                    const item = document.getElementById(`subarea-item-${subId}`);
+                    if (item) {
+                        // Highlight animation
+                        item.classList.remove('status-update-highlight');
+                        void item.offsetWidth; // Trigger reflow
+                        item.classList.add('status-update-highlight');
+                        
+                        // Update border color
+                        item.style.setProperty('border-left', `5px solid ${color}`, 'important');
+                        
+                        // Update status text
+                        let statusText = 'Tidak ada info / Netral';
+                        if (status === 'penuh') statusText = 'Penuh';
+                        else if (status === 'terbatas') statusText = 'Terbatas';
+                        else if (status === 'banyak') statusText = 'Banyak Tersedia';
+                        
+                        const statusSpan = item.querySelector('.subarea-status-text');
+                        if (statusSpan) {
+                            statusSpan.style.color = color;
+                            statusSpan.innerHTML = `<i class="fas fa-circle mr-1" style="font-size: 8px; vertical-align: middle;"></i> ${statusText}`;
+                        }
+                        
+                        // Update validation badges
+                        const badgesSpan = item.querySelector('.subarea-validation-badges');
+                        if (badgesSpan) {
+                            let badgeHtml = '';
+                            if (isValidated) {
+                                badgeHtml = `<span class="badge badge-success p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-check-circle"></i> Tervalidasi</span>`;
+                            } else if (hasUserReport) {
+                                badgeHtml = `<span class="badge badge-warning p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-exclamation-triangle"></i> Laporan Berbeda</span>`;
+                            }
+                            badgesSpan.innerHTML = badgeHtml;
+                        }
+                        
+                        // Update slot count
+                        const occupancySpan = item.querySelector('.subarea-occupancy');
+                        if (occupancySpan) {
+                            const countVal = occupancySpan.querySelector('.current-count-val');
+                            if (countVal) countVal.innerText = currentCount;
+                            const maxVal = occupancySpan.querySelector('.max-slots-val');
+                            if (maxVal) maxVal.innerText = maxSlots;
+                        }
+                    }
+                });
+                
+            // 2. Dengar status perangkat IoT (online/offline)
+            window.Echo.channel('iot.status')
+                .listen('.device.status', (e) => {
+                    console.log("📡 Device Status Received (MQTT/WS):", e);
+                    
+                    const mac = e.macAddress;
+                    const status = e.status;
+                    
+                    // Cari semua badge status IoT dengan MAC address ini
+                    const badges = document.querySelectorAll(`.iot-status-badge[data-mac="${mac}"]`);
+                    badges.forEach(badge => {
+                        if (status === 'online') {
+                            badge.className = "badge badge-success text-white mr-1 mb-1 p-1 iot-status-badge";
+                            badge.innerHTML = '<i class="fas fa-signal"></i> IoT Online';
+                            badge.setAttribute('title', 'IoT Online');
+                            badge.setAttribute('data-original-title', 'IoT Online');
+                        } else {
+                            badge.className = "badge badge-danger text-white mr-1 mb-1 p-1 iot-status-badge";
+                            badge.innerHTML = '<i class="fas fa-signal-slash"></i> IoT Offline';
+                            badge.setAttribute('title', 'IoT Offline');
+                            badge.setAttribute('data-original-title', 'IoT Offline');
+                        }
+                    });
+                });
+        } else {
+            setTimeout(initEcho, 500);
+        }
+    }
+
     // Event Listener untuk Konfirmasi Hapus Subarea
     document.addEventListener("DOMContentLoaded", function() {
         initMap();
         $(function () { $('[data-toggle="tooltip"]').tooltip() });
+        
+        // Inisialisasi Echo listener
+        initEcho();
 
         // Handler tombol hapus subarea
         $(document).on('submit', '.delete-subarea-form', function(e) {

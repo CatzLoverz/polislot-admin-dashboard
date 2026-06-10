@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotCommandSent;
+use App\Events\SubareaStatusUpdated;
 use ZipArchive;
 
 class IotStreamViewerController extends Controller
@@ -181,6 +182,9 @@ class IotStreamViewerController extends Controller
         $subarea->threshold_terbatas = $request->threshold_terbatas;
         $subarea->save();
 
+        // Broadcast updated status
+        broadcast(new SubareaStatusUpdated($subarea));
+
         // Push update_config command to the device
         $payloadData = [
             'action'             => 'update_config',
@@ -238,6 +242,9 @@ class IotStreamViewerController extends Controller
 
             // Evaluasi pergeseran threshold WMA
             $device->subarea->evaluateThresholdShift();
+
+            // Broadcast status update
+            broadcast(new SubareaStatusUpdated($device->subarea));
 
             Log::info("Perangkat offline. Validasi manual langsung diproses", [
                 'mac' => $mac,
