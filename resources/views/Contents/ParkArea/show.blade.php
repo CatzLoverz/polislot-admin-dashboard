@@ -328,6 +328,7 @@
     let existingSubareas = @json($area->parkSubarea);
     let currentPolygonObj = null;
     let polygonObjects = {}; // Menyimpan referensi polygon untuk update WS
+    let subareaStates = {}; // Menyimpan state validasi & fallback subarea
 
     // State untuk mode menggambar kustom pengganti Drawing Manager
     let isDrawingMode = false;
@@ -746,6 +747,89 @@
     }
 
 
+    // Helper function to update Subarea UI (Polygon and sidebar item)
+    function updateSubareaUI(subId, status, color, isValidated, hasUserReport, currentCount, maxSlots) {
+        // A. Update Google Maps Polygon
+        if (polygonObjects[subId]) {
+            polygonObjects[subId].setOptions({
+                strokeColor: color,
+                fillColor: color
+            });
+        }
+        
+        // B. Update List Item di Kanan
+        const item = document.getElementById(`subarea-item-${subId}`);
+        if (item) {
+            // Highlight animation
+            item.classList.remove('status-update-highlight');
+            void item.offsetWidth; // Trigger reflow
+            item.classList.add('status-update-highlight');
+            
+            // Update border color
+            item.style.setProperty('border-left', `5px solid ${color}`, 'important');
+            
+            // Update status text
+            let statusText = 'Tidak ada info / Netral';
+            if (status === 'penuh') statusText = 'Penuh';
+            else if (status === 'terbatas') statusText = 'Terbatas';
+            else if (status === 'banyak') statusText = 'Banyak Tersedia';
+            
+            const statusSpan = item.querySelector('.subarea-status-text');
+            if (statusSpan) {
+                statusSpan.style.color = color;
+                statusSpan.innerHTML = `<i class="fas fa-circle mr-1" style="font-size: 8px; vertical-align: middle;"></i> ${statusText}`;
+            }
+            
+            // Update validation badges
+            const badgesSpan = item.querySelector('.subarea-validation-badges');
+            if (badgesSpan) {
+                let badgeHtml = '';
+                if (isValidated) {
+                    badgeHtml = `<span class="badge badge-success p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-check-circle"></i> Tervalidasi</span>`;
+                } else if (hasUserReport) {
+                    badgeHtml = `<span class="badge badge-warning p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-exclamation-triangle"></i> Laporan Berbeda</span>`;
+                }
+                badgesSpan.innerHTML = badgeHtml;
+            }
+            
+            // Update slot count
+            if (currentCount !== undefined && maxSlots !== undefined) {
+                const occupancySpan = item.querySelector('.subarea-occupancy');
+                if (occupancySpan) {
+                    const countVal = occupancySpan.querySelector('.current-count-val');
+                    if (countVal) countVal.innerText = currentCount;
+                    const maxVal = occupancySpan.querySelector('.max-slots-val');
+                    if (maxVal) maxVal.innerText = maxSlots;
+                }
+            }
+        }
+    }
+
+    // Check validation expiration client-side
+    function checkValidationExpirations() {
+        const now = new Date();
+        
+        Object.keys(subareaStates).forEach(subId => {
+            const state = subareaStates[subId];
+            if (state.validationExpiresAt) {
+                const expires = new Date(state.validationExpiresAt);
+                if (now >= expires) {
+                    console.log(`⏰ Validation expired for subarea ${subId}. Reverting to fallback: ${state.fallbackStatus}`);
+                    
+                    // Revert local state
+                    state.status = state.fallbackStatus;
+                    state.color = state.fallbackColor;
+                    state.isValidated = false;
+                    state.hasUserReport = false;
+                    state.validationExpiresAt = null; // Clear so we don't repeat
+                    
+                    // Update UI
+                    updateSubareaUI(subId, state.status, state.color, state.isValidated, state.hasUserReport);
+                }
+            }
+        });
+    }
+
     // Inisialisasi Echo listener untuk update real-time
     function initEcho() {
         if (typeof window.Echo !== 'undefined') {
@@ -763,59 +847,23 @@
                     const hasUserReport = e.hasUserReport;
                     const currentCount = e.currentCount;
                     const maxSlots = e.maxSlots;
+                    const expiresAt = e.validationExpiresAt;
+                    const fallbackStatus = e.fallbackStatus;
+                    const fallbackColor = e.fallbackStatusColor;
                     
-                    // A. Update Google Maps Polygon
-                    if (polygonObjects[subId]) {
-                        polygonObjects[subId].setOptions({
-                            strokeColor: color,
-                            fillColor: color
-                        });
+                    // Update local state dictionary
+                    if (subareaStates[subId]) {
+                        subareaStates[subId].status = status;
+                        subareaStates[subId].color = color;
+                        subareaStates[subId].isValidated = isValidated;
+                        subareaStates[subId].hasUserReport = hasUserReport;
+                        subareaStates[subId].validationExpiresAt = expiresAt;
+                        subareaStates[subId].fallbackStatus = fallbackStatus;
+                        subareaStates[subId].fallbackColor = fallbackColor;
                     }
                     
-                    // B. Update List Item di Kanan
-                    const item = document.getElementById(`subarea-item-${subId}`);
-                    if (item) {
-                        // Highlight animation
-                        item.classList.remove('status-update-highlight');
-                        void item.offsetWidth; // Trigger reflow
-                        item.classList.add('status-update-highlight');
-                        
-                        // Update border color
-                        item.style.setProperty('border-left', `5px solid ${color}`, 'important');
-                        
-                        // Update status text
-                        let statusText = 'Tidak ada info / Netral';
-                        if (status === 'penuh') statusText = 'Penuh';
-                        else if (status === 'terbatas') statusText = 'Terbatas';
-                        else if (status === 'banyak') statusText = 'Banyak Tersedia';
-                        
-                        const statusSpan = item.querySelector('.subarea-status-text');
-                        if (statusSpan) {
-                            statusSpan.style.color = color;
-                            statusSpan.innerHTML = `<i class="fas fa-circle mr-1" style="font-size: 8px; vertical-align: middle;"></i> ${statusText}`;
-                        }
-                        
-                        // Update validation badges
-                        const badgesSpan = item.querySelector('.subarea-validation-badges');
-                        if (badgesSpan) {
-                            let badgeHtml = '';
-                            if (isValidated) {
-                                badgeHtml = `<span class="badge badge-success p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-check-circle"></i> Tervalidasi</span>`;
-                            } else if (hasUserReport) {
-                                badgeHtml = `<span class="badge badge-warning p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-exclamation-triangle"></i> Laporan Berbeda</span>`;
-                            }
-                            badgesSpan.innerHTML = badgeHtml;
-                        }
-                        
-                        // Update slot count
-                        const occupancySpan = item.querySelector('.subarea-occupancy');
-                        if (occupancySpan) {
-                            const countVal = occupancySpan.querySelector('.current-count-val');
-                            if (countVal) countVal.innerText = currentCount;
-                            const maxVal = occupancySpan.querySelector('.max-slots-val');
-                            if (maxVal) maxVal.innerText = maxSlots;
-                        }
-                    }
+                    // Trigger UI update
+                    updateSubareaUI(subId, status, color, isValidated, hasUserReport, currentCount, maxSlots);
                 });
                 
             // 2. Dengar status perangkat IoT (online/offline)
@@ -852,8 +900,24 @@
         initMap();
         $(function () { $('[data-toggle="tooltip"]').tooltip() });
         
+        // Populate local subareaStates from the server-injected existingSubareas
+        existingSubareas.forEach(sub => {
+            subareaStates[sub.park_subarea_id] = {
+                status: sub.status_color ? sub.status : 'netral',
+                color: sub.status_color || '#1572e8',
+                isValidated: sub.is_validated ? true : false,
+                hasUserReport: sub.has_user_report ? true : false,
+                validationExpiresAt: sub.validation_expires_at || null,
+                fallbackStatus: sub.fallback_status || 'netral',
+                fallbackColor: sub.fallback_status_color || '#1572e8'
+            };
+        });
+        
         // Inisialisasi Echo listener
         initEcho();
+
+        // Start expiration checking timer (check every 2 seconds)
+        setInterval(checkValidationExpirations, 2000);
 
         // Handler tombol hapus subarea
         $(document).on('submit', '.delete-subarea-form', function(e) {

@@ -180,7 +180,7 @@
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
       "source_location": "L37",
       "id": "commands_mqttlistenercommand_mqttlistenercommand_handle",
-      "community": 5,
+      "community": 1,
       "norm_label": ".handle()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L1",
       "id": "traits_loggableoutput",
-      "community": 65,
+      "community": 29,
       "norm_label": "loggableoutput.php"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L16",
       "id": "traits_loggableoutput_info",
-      "community": 65,
+      "community": 29,
       "norm_label": "info()"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L30",
       "id": "traits_loggableoutput_loginfo",
-      "community": 65,
+      "community": 29,
       "norm_label": "loginfo()"
     },
     {
@@ -270,7 +270,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L44",
       "id": "traits_loggableoutput_warn",
-      "community": 65,
+      "community": 29,
       "norm_label": "warn()"
     },
     {
@@ -279,7 +279,7 @@
       "source_file": "app/Console/Traits/LoggableOutput.php",
       "source_location": "L57",
       "id": "traits_loggableoutput_error",
-      "community": 65,
+      "community": 29,
       "norm_label": "error()"
     },
     {
@@ -344,6 +344,42 @@
       "id": "events_iotcountupdated_iotcountupdated",
       "community": 33,
       "norm_label": "iotcountupdated"
+    },
+    {
+      "label": "ShouldBroadcastNow",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "shouldbroadcastnow",
+      "community": 33,
+      "norm_label": "shouldbroadcastnow"
+    },
+    {
+      "label": "Dispatchable",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "dispatchable",
+      "community": 33,
+      "norm_label": "dispatchable"
+    },
+    {
+      "label": "InteractsWithSockets",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "interactswithsockets",
+      "community": 33,
+      "norm_label": "interactswithsockets"
+    },
+    {
+      "label": "SerializesModels",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "serializesmodels",
+      "community": 33,
+      "norm_label": "serializesmodels"
     },
     {
       "label": ".__construct()",
@@ -481,42 +517,6 @@
       "norm_label": "iotthresholdupdated"
     },
     {
-      "label": "ShouldBroadcast",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "id": "shouldbroadcast",
-      "community": 33,
-      "norm_label": "shouldbroadcast"
-    },
-    {
-      "label": "Dispatchable",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "id": "dispatchable",
-      "community": 33,
-      "norm_label": "dispatchable"
-    },
-    {
-      "label": "InteractsWithSockets",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "id": "interactswithsockets",
-      "community": 33,
-      "norm_label": "interactswithsockets"
-    },
-    {
-      "label": "SerializesModels",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "id": "serializesmodels",
-      "community": 33,
-      "norm_label": "serializesmodels"
-    },
-    {
       "label": ".__construct()",
       "file_type": "code",
       "source_file": "app/Events/IotThresholdUpdated.php",
@@ -540,6 +540,60 @@
       "source_file": "app/Events/IotThresholdUpdated.php",
       "source_location": "L40",
       "id": "events_iotthresholdupdated_iotthresholdupdated_broadcastas",
+      "community": 33,
+      "norm_label": ".broadcastas()"
+    },
+    {
+      "label": "SubareaStatusUpdated.php",
+      "file_type": "code",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L1",
+      "id": "events_subareastatusupdated",
+      "community": 33,
+      "norm_label": "subareastatusupdated.php"
+    },
+    {
+      "label": "SubareaStatusUpdated",
+      "file_type": "code",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L12",
+      "id": "events_subareastatusupdated_subareastatusupdated",
+      "community": 33,
+      "norm_label": "subareastatusupdated"
+    },
+    {
+      "label": ".__construct()",
+      "file_type": "code",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L32",
+      "id": "events_subareastatusupdated_subareastatusupdated_construct",
+      "community": 17,
+      "norm_label": ".__construct()"
+    },
+    {
+      "label": "ParkSubarea",
+      "file_type": "code",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L32",
+      "id": "parksubarea",
+      "community": 17,
+      "norm_label": "parksubarea"
+    },
+    {
+      "label": ".broadcastOn()",
+      "file_type": "code",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L54",
+      "id": "events_subareastatusupdated_subareastatusupdated_broadcaston",
+      "community": 33,
+      "norm_label": ".broadcaston()"
+    },
+    {
+      "label": ".broadcastAs()",
+      "file_type": "code",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L64",
+      "id": "events_subareastatusupdated_subareastatusupdated_broadcastas",
       "community": 33,
       "norm_label": ".broadcastas()"
     },
@@ -693,7 +747,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackCategoryController.php",
       "source_location": "L1",
       "id": "api_feedbackcategorycontroller",
-      "community": 32,
+      "community": 28,
       "norm_label": "feedbackcategorycontroller.php"
     },
     {
@@ -702,7 +756,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackCategoryController.php",
       "source_location": "L10",
       "id": "api_feedbackcategorycontroller_feedbackcategorycontroller",
-      "community": 32,
+      "community": 28,
       "norm_label": "feedbackcategorycontroller"
     },
     {
@@ -711,7 +765,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackCategoryController.php",
       "source_location": "L16",
       "id": "api_feedbackcategorycontroller_feedbackcategorycontroller_index",
-      "community": 32,
+      "community": 28,
       "norm_label": ".index()"
     },
     {
@@ -720,7 +774,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackCategoryController.php",
       "source_location": "L16",
       "id": "app_http_controllers_api_feedbackcategorycontroller_php_jsonresponse",
-      "community": 32,
+      "community": 28,
       "norm_label": "jsonresponse"
     },
     {
@@ -729,7 +783,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackController.php",
       "source_location": "L1",
       "id": "api_feedbackcontroller",
-      "community": 28,
+      "community": 32,
       "norm_label": "feedbackcontroller.php"
     },
     {
@@ -738,7 +792,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackController.php",
       "source_location": "L15",
       "id": "api_feedbackcontroller_feedbackcontroller",
-      "community": 28,
+      "community": 32,
       "norm_label": "feedbackcontroller"
     },
     {
@@ -747,7 +801,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackController.php",
       "source_location": "L22",
       "id": "api_feedbackcontroller_feedbackcontroller_store",
-      "community": 28,
+      "community": 32,
       "norm_label": ".store()"
     },
     {
@@ -756,7 +810,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackController.php",
       "source_location": "L22",
       "id": "app_http_controllers_api_feedbackcontroller_php_request",
-      "community": 28,
+      "community": 32,
       "norm_label": "request"
     },
     {
@@ -765,7 +819,7 @@
       "source_file": "app/Http/Controllers/Api/FeedbackController.php",
       "source_location": "L22",
       "id": "app_http_controllers_api_feedbackcontroller_php_jsonresponse",
-      "community": 28,
+      "community": 32,
       "norm_label": "jsonresponse"
     },
     {
@@ -819,7 +873,7 @@
       "source_file": "app/Http/Controllers/Api/InfoBoardController.php",
       "source_location": "L1",
       "id": "api_infoboardcontroller",
-      "community": 83,
+      "community": 32,
       "norm_label": "infoboardcontroller.php"
     },
     {
@@ -828,7 +882,7 @@
       "source_file": "app/Http/Controllers/Api/InfoBoardController.php",
       "source_location": "L11",
       "id": "api_infoboardcontroller_infoboardcontroller",
-      "community": 83,
+      "community": 32,
       "norm_label": "infoboardcontroller"
     },
     {
@@ -837,7 +891,7 @@
       "source_file": "app/Http/Controllers/Api/InfoBoardController.php",
       "source_location": "L17",
       "id": "api_infoboardcontroller_infoboardcontroller_index",
-      "community": 83,
+      "community": 32,
       "norm_label": ".index()"
     },
     {
@@ -846,7 +900,7 @@
       "source_file": "app/Http/Controllers/Api/InfoBoardController.php",
       "source_location": "L17",
       "id": "app_http_controllers_api_infoboardcontroller_php_jsonresponse",
-      "community": 83,
+      "community": 32,
       "norm_label": "jsonresponse"
     },
     {
@@ -855,70 +909,70 @@
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
       "source_location": "L1",
       "id": "api_iotstreamcontroller",
-      "community": 69,
+      "community": 5,
       "norm_label": "iotstreamcontroller.php"
     },
     {
       "label": "IotStreamController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L17",
+      "source_location": "L19",
       "id": "api_iotstreamcontroller_iotstreamcontroller",
-      "community": 69,
+      "community": 5,
       "norm_label": "iotstreamcontroller"
     },
     {
       "label": ".validateMacAddress()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L22",
+      "source_location": "L24",
       "id": "api_iotstreamcontroller_iotstreamcontroller_validatemacaddress",
-      "community": 69,
+      "community": 5,
       "norm_label": ".validatemacaddress()"
     },
     {
       "label": ".receiveStream()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L45",
+      "source_location": "L47",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivestream",
-      "community": 69,
+      "community": 5,
       "norm_label": ".receivestream()"
     },
     {
       "label": "Request",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L45",
+      "source_location": "L47",
       "id": "app_http_controllers_api_iotstreamcontroller_php_request",
-      "community": 69,
+      "community": 5,
       "norm_label": "request"
     },
     {
       "label": ".receiveSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L157",
+      "source_location": "L159",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivesnapshot",
-      "community": 69,
+      "community": 5,
       "norm_label": ".receivesnapshot()"
     },
     {
       "label": ".receiveCount()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L299",
+      "source_location": "L309",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receivecount",
-      "community": 69,
+      "community": 5,
       "norm_label": ".receivecount()"
     },
     {
       "label": ".receiveConfigQuery()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotStreamController.php",
-      "source_location": "L357",
+      "source_location": "L370",
       "id": "api_iotstreamcontroller_iotstreamcontroller_receiveconfigquery",
-      "community": 69,
+      "community": 5,
       "norm_label": ".receiveconfigquery()"
     },
     {
@@ -927,7 +981,7 @@
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
       "source_location": "L1",
       "id": "api_iotwebhookcontroller",
-      "community": 67,
+      "community": 5,
       "norm_label": "iotwebhookcontroller.php"
     },
     {
@@ -936,7 +990,7 @@
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
       "source_location": "L14",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller",
-      "community": 67,
+      "community": 5,
       "norm_label": "iotwebhookcontroller"
     },
     {
@@ -945,7 +999,7 @@
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
       "source_location": "L20",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller_handle",
-      "community": 67,
+      "community": 5,
       "norm_label": ".handle()"
     },
     {
@@ -954,7 +1008,7 @@
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
       "source_location": "L20",
       "id": "app_http_controllers_api_iotwebhookcontroller_php_request",
-      "community": 67,
+      "community": 5,
       "norm_label": "request"
     },
     {
@@ -963,7 +1017,7 @@
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
       "source_location": "L65",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller_updatestatus",
-      "community": 67,
+      "community": 5,
       "norm_label": ".updatestatus()"
     },
     {
@@ -1368,70 +1422,70 @@
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
       "source_location": "L1",
       "id": "api_uservalidationcontroller",
-      "community": 0,
+      "community": 17,
       "norm_label": "uservalidationcontroller.php"
     },
     {
       "label": "UserValidationController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
-      "source_location": "L17",
+      "source_location": "L18",
       "id": "api_uservalidationcontroller_uservalidationcontroller",
-      "community": 0,
+      "community": 17,
       "norm_label": "uservalidationcontroller"
     },
     {
       "label": ".__construct()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
-      "source_location": "L23",
+      "source_location": "L24",
       "id": "api_uservalidationcontroller_uservalidationcontroller_construct",
-      "community": 0,
+      "community": 17,
       "norm_label": ".__construct()"
     },
     {
       "label": "MissionService",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
-      "source_location": "L23",
+      "source_location": "L24",
       "id": "app_http_controllers_api_uservalidationcontroller_php_missionservice",
-      "community": 0,
+      "community": 17,
       "norm_label": "missionservice"
     },
     {
       "label": "HistoryService",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
-      "source_location": "L23",
+      "source_location": "L24",
       "id": "app_http_controllers_api_uservalidationcontroller_php_historyservice",
-      "community": 0,
+      "community": 17,
       "norm_label": "historyservice"
     },
     {
       "label": ".store()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
-      "source_location": "L34",
+      "source_location": "L35",
       "id": "api_uservalidationcontroller_uservalidationcontroller_store",
-      "community": 0,
+      "community": 17,
       "norm_label": ".store()"
     },
     {
       "label": "Request",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
-      "source_location": "L34",
+      "source_location": "L35",
       "id": "app_http_controllers_api_uservalidationcontroller_php_request",
-      "community": 0,
+      "community": 17,
       "norm_label": "request"
     },
     {
       "label": ".calculateDistance()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
-      "source_location": "L148",
+      "source_location": "L156",
       "id": "api_uservalidationcontroller_uservalidationcontroller_calculatedistance",
-      "community": 0,
+      "community": 17,
       "norm_label": ".calculatedistance()"
     },
     {
@@ -1737,7 +1791,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L1",
       "id": "web_feedbackcontroller",
-      "community": 75,
+      "community": 32,
       "norm_label": "feedbackcontroller.php"
     },
     {
@@ -1746,7 +1800,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L14",
       "id": "web_feedbackcontroller_feedbackcontroller",
-      "community": 75,
+      "community": 32,
       "norm_label": "feedbackcontroller"
     },
     {
@@ -1755,7 +1809,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L20",
       "id": "web_feedbackcontroller_feedbackcontroller_index",
-      "community": 75,
+      "community": 32,
       "norm_label": ".index()"
     },
     {
@@ -1764,7 +1818,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L20",
       "id": "app_http_controllers_web_feedbackcontroller_php_request",
-      "community": 75,
+      "community": 32,
       "norm_label": "request"
     },
     {
@@ -1773,7 +1827,7 @@
       "source_file": "app/Http/Controllers/Web/FeedbackController.php",
       "source_location": "L76",
       "id": "web_feedbackcontroller_feedbackcontroller_destroy",
-      "community": 75,
+      "community": 32,
       "norm_label": ".destroy()"
     },
     {
@@ -1852,7 +1906,7 @@
       "label": "IotStreamViewerController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L17",
+      "source_location": "L19",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller",
       "community": 5,
       "norm_label": "iotstreamviewercontroller"
@@ -1861,7 +1915,7 @@
       "label": ".index()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L23",
+      "source_location": "L25",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_index",
       "community": 5,
       "norm_label": ".index()"
@@ -1870,7 +1924,7 @@
       "label": "Request",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L23",
+      "source_location": "L25",
       "id": "app_http_controllers_web_iotstreamviewercontroller_php_request",
       "community": 5,
       "norm_label": "request"
@@ -1879,7 +1933,7 @@
       "label": ".generateCommandSignature()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L63",
+      "source_location": "L65",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_generatecommandsignature",
       "community": 5,
       "norm_label": ".generatecommandsignature()"
@@ -1888,7 +1942,7 @@
       "label": ".sendCommandToDevice()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L75",
+      "source_location": "L77",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_sendcommandtodevice",
       "community": 5,
       "norm_label": ".sendcommandtodevice()"
@@ -1897,7 +1951,7 @@
       "label": ".triggerSnapshot()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L113",
+      "source_location": "L115",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_triggersnapshot",
       "community": 5,
       "norm_label": ".triggersnapshot()"
@@ -1906,7 +1960,7 @@
       "label": ".saveSettings()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L156",
+      "source_location": "L158",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_savesettings",
       "community": 5,
       "norm_label": ".savesettings()"
@@ -1915,7 +1969,7 @@
       "label": ".validateStream()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L209",
+      "source_location": "L216",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_validatestream",
       "community": 5,
       "norm_label": ".validatestream()"
@@ -1924,7 +1978,7 @@
       "label": ".downloadBatch()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L291",
+      "source_location": "L303",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_downloadbatch",
       "community": 5,
       "norm_label": ".downloadbatch()"
@@ -1933,7 +1987,7 @@
       "label": ".deleteBatch()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
-      "source_location": "L382",
+      "source_location": "L394",
       "id": "web_iotstreamviewercontroller_iotstreamviewercontroller_deletebatch",
       "community": 5,
       "norm_label": ".deletebatch()"
@@ -2113,7 +2167,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
-      "source_location": "L262",
+      "source_location": "L181",
       "id": "web_parkareacontroller_parkareacontroller_destroy",
       "community": 31,
       "norm_label": ".destroy()"
@@ -2131,7 +2185,7 @@
       "label": "ParkSubareaController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
-      "source_location": "L15",
+      "source_location": "L16",
       "id": "web_parksubareacontroller_parksubareacontroller",
       "community": 56,
       "norm_label": "parksubareacontroller"
@@ -2140,7 +2194,7 @@
       "label": ".store()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
-      "source_location": "L25",
+      "source_location": "L26",
       "id": "web_parksubareacontroller_parksubareacontroller_store",
       "community": 56,
       "norm_label": ".store()"
@@ -2149,7 +2203,7 @@
       "label": "Request",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
-      "source_location": "L25",
+      "source_location": "L26",
       "id": "app_http_controllers_web_parksubareacontroller_php_request",
       "community": 56,
       "norm_label": "request"
@@ -2158,7 +2212,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
-      "source_location": "L78",
+      "source_location": "L79",
       "id": "web_parksubareacontroller_parksubareacontroller_update",
       "community": 56,
       "norm_label": ".update()"
@@ -2167,7 +2221,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
-      "source_location": "L180",
+      "source_location": "L186",
       "id": "web_parksubareacontroller_parksubareacontroller_destroy",
       "community": 56,
       "norm_label": ".destroy()"
@@ -2808,7 +2862,7 @@
       "source_file": "app/Models/IotCapture.php",
       "source_location": "L1",
       "id": "models_iotcapture",
-      "community": 62,
+      "community": 5,
       "norm_label": "iotcapture.php"
     },
     {
@@ -3055,10 +3109,19 @@
       "norm_label": ".iotdevice()"
     },
     {
+      "label": ".getLiveStatus()",
+      "file_type": "code",
+      "source_file": "app/Models/ParkSubarea.php",
+      "source_location": "L67",
+      "id": "models_parksubarea_parksubarea_getlivestatus",
+      "community": 22,
+      "norm_label": ".getlivestatus()"
+    },
+    {
       "label": ".evaluateThresholdShift()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L64",
+      "source_location": "L190",
       "id": "models_parksubarea_parksubarea_evaluatethresholdshift",
       "community": 22,
       "norm_label": ".evaluatethresholdshift()"
@@ -3240,7 +3303,7 @@
       "source_file": "app/Models/UserHistory.php",
       "source_location": "L1",
       "id": "models_userhistory",
-      "community": 85,
+      "community": 62,
       "norm_label": "userhistory.php"
     },
     {
@@ -3249,7 +3312,7 @@
       "source_file": "app/Models/UserHistory.php",
       "source_location": "L8",
       "id": "models_userhistory_userhistory",
-      "community": 85,
+      "community": 62,
       "norm_label": "userhistory"
     },
     {
@@ -3258,7 +3321,7 @@
       "source_file": "app/Models/UserHistory.php",
       "source_location": "L32",
       "id": "models_userhistory_userhistory_user",
-      "community": 85,
+      "community": 62,
       "norm_label": ".user()"
     },
     {
@@ -3393,7 +3456,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L1",
       "id": "providers_appserviceprovider",
-      "community": 52,
+      "community": 5,
       "norm_label": "appserviceprovider.php"
     },
     {
@@ -3402,7 +3465,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L12",
       "id": "providers_appserviceprovider_appserviceprovider",
-      "community": 52,
+      "community": 5,
       "norm_label": "appserviceprovider"
     },
     {
@@ -3411,7 +3474,7 @@
       "source_file": "",
       "source_location": "",
       "id": "serviceprovider",
-      "community": 52,
+      "community": 5,
       "norm_label": "serviceprovider"
     },
     {
@@ -3420,7 +3483,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L17",
       "id": "providers_appserviceprovider_appserviceprovider_register",
-      "community": 52,
+      "community": 5,
       "norm_label": ".register()"
     },
     {
@@ -3429,7 +3492,7 @@
       "source_file": "app/Providers/AppServiceProvider.php",
       "source_location": "L25",
       "id": "providers_appserviceprovider_appserviceprovider_boot",
-      "community": 52,
+      "community": 5,
       "norm_label": ".boot()"
     },
     {
@@ -3438,7 +3501,7 @@
       "source_file": "app/Providers/AuthServiceProvider.php",
       "source_location": "L1",
       "id": "providers_authserviceprovider",
-      "community": 52,
+      "community": 5,
       "norm_label": "authserviceprovider.php"
     },
     {
@@ -3447,7 +3510,7 @@
       "source_file": "app/Providers/AuthServiceProvider.php",
       "source_location": "L10",
       "id": "providers_authserviceprovider_authserviceprovider",
-      "community": 52,
+      "community": 5,
       "norm_label": "authserviceprovider"
     },
     {
@@ -3456,7 +3519,7 @@
       "source_file": "app/Providers/AuthServiceProvider.php",
       "source_location": "L24",
       "id": "providers_authserviceprovider_authserviceprovider_boot",
-      "community": 52,
+      "community": 5,
       "norm_label": ".boot()"
     },
     {
@@ -6426,7 +6489,7 @@
       "source_file": "tests/Feature/ExampleTest.php",
       "source_location": "L1",
       "id": "feature_exampletest",
-      "community": 79,
+      "community": 38,
       "norm_label": "exampletest.php"
     },
     {
@@ -6435,7 +6498,7 @@
       "source_file": "tests/Feature/ExampleTest.php",
       "source_location": "L8",
       "id": "feature_exampletest_exampletest",
-      "community": 79,
+      "community": 38,
       "norm_label": "exampletest"
     },
     {
@@ -6444,7 +6507,7 @@
       "source_file": "tests/Feature/ExampleTest.php",
       "source_location": "L13",
       "id": "feature_exampletest_exampletest_test_the_application_returns_a_successful_response",
-      "community": 79,
+      "community": 38,
       "norm_label": ".test_the_application_returns_a_successful_response()"
     },
     {
@@ -6840,7 +6903,7 @@
       "source_file": "tests/Feature/Http/Controllers/Api/InfoBoardControllerTest.php",
       "source_location": "L1",
       "id": "api_infoboardcontrollertest",
-      "community": 84,
+      "community": 79,
       "norm_label": "infoboardcontrollertest.php"
     },
     {
@@ -6849,7 +6912,7 @@
       "source_file": "tests/Feature/Http/Controllers/Api/InfoBoardControllerTest.php",
       "source_location": "L11",
       "id": "api_infoboardcontrollertest_infoboardcontrollertest",
-      "community": 84,
+      "community": 79,
       "norm_label": "infoboardcontrollertest"
     },
     {
@@ -6858,7 +6921,7 @@
       "source_file": "tests/Feature/Http/Controllers/Api/InfoBoardControllerTest.php",
       "source_location": "L16",
       "id": "api_infoboardcontrollertest_infoboardcontrollertest_index_returns_200_and_info_list",
-      "community": 84,
+      "community": 79,
       "norm_label": ".index_returns_200_and_info_list()"
     },
     {
@@ -7182,7 +7245,7 @@
       "source_file": "tests/Feature/Http/Controllers/Api/UserValidationControllerTest.php",
       "source_location": "L1",
       "id": "api_uservalidationcontrollertest",
-      "community": 79,
+      "community": 17,
       "norm_label": "uservalidationcontrollertest.php"
     },
     {
@@ -7794,7 +7857,7 @@
       "source_file": "tests/Feature/Model/ParkAmenityTest.php",
       "source_location": "L1",
       "id": "model_parkamenitytest",
-      "community": 38,
+      "community": 17,
       "norm_label": "parkamenitytest.php"
     },
     {
@@ -7803,7 +7866,7 @@
       "source_file": "tests/Feature/Model/ParkAmenityTest.php",
       "source_location": "L12",
       "id": "model_parkamenitytest_parkamenitytest",
-      "community": 38,
+      "community": 17,
       "norm_label": "parkamenitytest"
     },
     {
@@ -7812,7 +7875,7 @@
       "source_file": "tests/Feature/Model/ParkAmenityTest.php",
       "source_location": "L16",
       "id": "model_parkamenitytest_parkamenitytest_amenities_dapat_dibuat",
-      "community": 38,
+      "community": 17,
       "norm_label": ".amenities_dapat_dibuat()"
     },
     {
@@ -7821,7 +7884,7 @@
       "source_file": "tests/Feature/Model/ParkAmenityTest.php",
       "source_location": "L32",
       "id": "model_parkamenitytest_parkamenitytest_amenities_dapat_dibaca",
-      "community": 38,
+      "community": 17,
       "norm_label": ".amenities_dapat_dibaca()"
     },
     {
@@ -7830,7 +7893,7 @@
       "source_file": "tests/Feature/Model/ParkAmenityTest.php",
       "source_location": "L49",
       "id": "model_parkamenitytest_parkamenitytest_amenities_dapat_diupdate",
-      "community": 38,
+      "community": 17,
       "norm_label": ".amenities_dapat_diupdate()"
     },
     {
@@ -7839,7 +7902,7 @@
       "source_file": "tests/Feature/Model/ParkAmenityTest.php",
       "source_location": "L66",
       "id": "model_parkamenitytest_parkamenitytest_amenities_dapat_dihapus",
-      "community": 38,
+      "community": 17,
       "norm_label": ".amenities_dapat_dihapus()"
     },
     {
@@ -7893,7 +7956,7 @@
       "source_file": "tests/Feature/Model/ParkSubareaTest.php",
       "source_location": "L1",
       "id": "model_parksubareatest",
-      "community": 39,
+      "community": 17,
       "norm_label": "parksubareatest.php"
     },
     {
@@ -7902,7 +7965,7 @@
       "source_file": "tests/Feature/Model/ParkSubareaTest.php",
       "source_location": "L11",
       "id": "model_parksubareatest_parksubareatest",
-      "community": 39,
+      "community": 17,
       "norm_label": "parksubareatest"
     },
     {
@@ -7911,7 +7974,7 @@
       "source_file": "tests/Feature/Model/ParkSubareaTest.php",
       "source_location": "L15",
       "id": "model_parksubareatest_parksubareatest_subarea_dapat_dibuat_dengan_relasi_area",
-      "community": 39,
+      "community": 17,
       "norm_label": ".subarea_dapat_dibuat_dengan_relasi_area()"
     },
     {
@@ -7920,7 +7983,7 @@
       "source_file": "tests/Feature/Model/ParkSubareaTest.php",
       "source_location": "L38",
       "id": "model_parksubareatest_parksubareatest_subarea_dapat_diupdate",
-      "community": 39,
+      "community": 17,
       "norm_label": ".subarea_dapat_diupdate()"
     },
     {
@@ -7929,7 +7992,7 @@
       "source_file": "tests/Feature/Model/ParkSubareaTest.php",
       "source_location": "L60",
       "id": "model_parksubareatest_parksubareatest_subarea_dapat_dibaca",
-      "community": 39,
+      "community": 17,
       "norm_label": ".subarea_dapat_dibaca()"
     },
     {
@@ -7938,7 +8001,7 @@
       "source_file": "tests/Feature/Model/ParkSubareaTest.php",
       "source_location": "L71",
       "id": "model_parksubareatest_parksubareatest_subarea_dapat_dihapus",
-      "community": 39,
+      "community": 17,
       "norm_label": ".subarea_dapat_dihapus()"
     },
     {
@@ -7992,7 +8055,7 @@
       "source_file": "tests/Feature/Model/SubareaCommentTest.php",
       "source_location": "L1",
       "id": "model_subareacommenttest",
-      "community": 40,
+      "community": 17,
       "norm_label": "subareacommenttest.php"
     },
     {
@@ -8001,7 +8064,7 @@
       "source_file": "tests/Feature/Model/SubareaCommentTest.php",
       "source_location": "L13",
       "id": "model_subareacommenttest_subareacommenttest",
-      "community": 40,
+      "community": 17,
       "norm_label": "subareacommenttest"
     },
     {
@@ -8010,7 +8073,7 @@
       "source_file": "tests/Feature/Model/SubareaCommentTest.php",
       "source_location": "L17",
       "id": "model_subareacommenttest_subareacommenttest_comment_dapat_dibuat",
-      "community": 40,
+      "community": 17,
       "norm_label": ".comment_dapat_dibuat()"
     },
     {
@@ -8019,7 +8082,7 @@
       "source_file": "tests/Feature/Model/SubareaCommentTest.php",
       "source_location": "L37",
       "id": "model_subareacommenttest_subareacommenttest_comment_dapat_dibaca",
-      "community": 40,
+      "community": 17,
       "norm_label": ".comment_dapat_dibaca()"
     },
     {
@@ -8028,7 +8091,7 @@
       "source_file": "tests/Feature/Model/SubareaCommentTest.php",
       "source_location": "L55",
       "id": "model_subareacommenttest_subareacommenttest_comment_dapat_diupdate",
-      "community": 40,
+      "community": 17,
       "norm_label": ".comment_dapat_diupdate()"
     },
     {
@@ -8037,7 +8100,7 @@
       "source_file": "tests/Feature/Model/SubareaCommentTest.php",
       "source_location": "L76",
       "id": "model_subareacommenttest_subareacommenttest_comment_dapat_dihapus",
-      "community": 40,
+      "community": 17,
       "norm_label": ".comment_dapat_dihapus()"
     },
     {
@@ -8379,7 +8442,7 @@
       "source_file": "tests/Unit/ExampleTest.php",
       "source_location": "L1",
       "id": "unit_exampletest",
-      "community": 79,
+      "community": 39,
       "norm_label": "exampletest.php"
     },
     {
@@ -8388,7 +8451,7 @@
       "source_file": "tests/Unit/ExampleTest.php",
       "source_location": "L7",
       "id": "unit_exampletest_exampletest",
-      "community": 79,
+      "community": 39,
       "norm_label": "exampletest"
     },
     {
@@ -8397,7 +8460,7 @@
       "source_file": "tests/Unit/ExampleTest.php",
       "source_location": "L12",
       "id": "unit_exampletest_exampletest_test_that_true_is_true",
-      "community": 79,
+      "community": 39,
       "norm_label": ".test_that_true_is_true()"
     },
     {
@@ -9292,6 +9355,15 @@
       "norm_label": "code:bash (php artisan schedule:work)"
     },
     {
+      "label": "ShouldBroadcast",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "community": 33,
+      "norm_label": "shouldbroadcast",
+      "id": "shouldbroadcast"
+    },
+    {
       "label": "Request",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/IotStreamViewerController.php",
@@ -9723,6 +9795,16 @@
       "target": "command"
     },
     {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Console/Commands/SetupDatabaseUser.php",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "commands_setupdatabaseuser_setupdatabaseuser",
+      "target": "command",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "INFERRED",
@@ -9901,6 +9983,17 @@
       "target": "serializesmodels"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCommandSent.php",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "events_iotcommandsent",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Events/IotCommandSent.php",
@@ -9985,6 +10078,27 @@
       "target": "shouldbroadcast"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "events_iotcountupdated",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "events_iotcountupdated_iotcountupdated",
+      "target": "dispatchable",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Events/IotCountUpdated.php",
@@ -10015,6 +10129,110 @@
       "target": "events_iotcountupdated_iotcountupdated_construct"
     },
     {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "events_iotcountupdated_iotcountupdated",
+      "target": "interactswithsockets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "events_iotcountupdated_iotcountupdated",
+      "target": "serializesmodels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotCountUpdated.php",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "events_iotcountupdated_iotcountupdated",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotDeviceStatusChanged.php",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "events_iotdevicestatuschanged",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotDeviceStatusChanged.php",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "events_iotdevicestatuschanged_iotdevicestatuschanged",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotStreamReceived.php",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "events_iotstreamreceived",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotThresholdUpdated.php",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "events_iotthresholdupdated",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotThresholdUpdated.php",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "events_iotthresholdupdated_iotthresholdupdated",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated_subareastatusupdated",
+      "target": "shouldbroadcastnow",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -10026,14 +10244,67 @@
       "target": "dispatchable"
     },
     {
-      "relation": "contains",
+      "relation": "mixes_in",
       "confidence": "EXTRACTED",
       "source_file": "app/Events/IotDeviceStatusChanged.php",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "events_iotdevicestatuschanged_iotdevicestatuschanged",
+      "target": "dispatchable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotStreamReceived.php",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotstreamreceived",
+      "target": "dispatchable"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotThresholdUpdated.php",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotthresholdupdated",
+      "target": "dispatchable"
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotThresholdUpdated.php",
       "source_location": "L13",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "events_iotdevicestatuschanged",
-      "target": "events_iotdevicestatuschanged_iotdevicestatuschanged"
+      "source": "events_iotthresholdupdated_iotthresholdupdated",
+      "target": "dispatchable"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated",
+      "target": "dispatchable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated_subareastatusupdated",
+      "target": "dispatchable",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10047,6 +10318,69 @@
       "target": "interactswithsockets"
     },
     {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotDeviceStatusChanged.php",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "events_iotdevicestatuschanged_iotdevicestatuschanged",
+      "target": "interactswithsockets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotStreamReceived.php",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotstreamreceived",
+      "target": "interactswithsockets"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotThresholdUpdated.php",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotthresholdupdated",
+      "target": "interactswithsockets"
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotThresholdUpdated.php",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotthresholdupdated_iotthresholdupdated",
+      "target": "interactswithsockets"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated",
+      "target": "interactswithsockets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated_subareastatusupdated",
+      "target": "interactswithsockets",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -10056,6 +10390,90 @@
       "confidence_score": 1.0,
       "source": "events_iotdevicestatuschanged",
       "target": "serializesmodels"
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotDeviceStatusChanged.php",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "events_iotdevicestatuschanged_iotdevicestatuschanged",
+      "target": "serializesmodels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotStreamReceived.php",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotstreamreceived",
+      "target": "serializesmodels"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotThresholdUpdated.php",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotthresholdupdated",
+      "target": "serializesmodels"
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotThresholdUpdated.php",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotthresholdupdated_iotthresholdupdated",
+      "target": "serializesmodels"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated",
+      "target": "serializesmodels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "mixes_in",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated_subareastatusupdated",
+      "target": "serializesmodels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Mail/SendOtpMail.php",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "mail_sendotpmail",
+      "target": "serializesmodels"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/IotDeviceStatusChanged.php",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "events_iotdevicestatuschanged",
+      "target": "events_iotdevicestatuschanged_iotdevicestatuschanged"
     },
     {
       "relation": "imports",
@@ -10099,17 +10517,6 @@
       "target": "events_iotdevicestatuschanged_iotdevicestatuschanged_construct"
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotStreamReceived.php",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotstreamreceived",
-      "target": "dispatchable"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/Events/IotStreamReceived.php",
@@ -10118,28 +10525,6 @@
       "confidence_score": 1.0,
       "source": "events_iotstreamreceived",
       "target": "events_iotstreamreceived_iotstreamreceived"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotStreamReceived.php",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotstreamreceived",
-      "target": "interactswithsockets"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotStreamReceived.php",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotstreamreceived",
-      "target": "serializesmodels"
     },
     {
       "relation": "method",
@@ -10172,17 +10557,6 @@
       "target": "events_iotstreamreceived_iotstreamreceived_construct"
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotThresholdUpdated.php",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotthresholdupdated",
-      "target": "dispatchable"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/Events/IotThresholdUpdated.php",
@@ -10197,43 +10571,11 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/Events/IotThresholdUpdated.php",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotthresholdupdated",
-      "target": "interactswithsockets"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotThresholdUpdated.php",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotthresholdupdated",
-      "target": "serializesmodels"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotThresholdUpdated.php",
       "source_location": "L7",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "events_iotthresholdupdated",
       "target": "shouldbroadcast"
-    },
-    {
-      "relation": "mixes_in",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotThresholdUpdated.php",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotthresholdupdated_iotthresholdupdated",
-      "target": "dispatchable"
     },
     {
       "relation": "method",
@@ -10266,26 +10608,6 @@
       "target": "events_iotthresholdupdated_iotthresholdupdated_construct"
     },
     {
-      "relation": "mixes_in",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotThresholdUpdated.php",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotthresholdupdated_iotthresholdupdated",
-      "target": "interactswithsockets"
-    },
-    {
-      "relation": "mixes_in",
-      "confidence": "EXTRACTED",
-      "source_file": "app/Events/IotThresholdUpdated.php",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "events_iotthresholdupdated_iotthresholdupdated",
-      "target": "serializesmodels"
-    },
-    {
       "relation": "implements",
       "confidence": "EXTRACTED",
       "source_file": "app/Events/IotThresholdUpdated.php",
@@ -10296,15 +10618,176 @@
       "target": "shouldbroadcast"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated",
+      "target": "events_subareastatusupdated_subareastatusupdated",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "app/Mail/SendOtpMail.php",
-      "source_location": "L10",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "mail_sendotpmail",
-      "target": "serializesmodels"
+      "source": "events_subareastatusupdated",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated_subareastatusupdated",
+      "target": "events_subareastatusupdated_subareastatusupdated_broadcastas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated_subareastatusupdated",
+      "target": "events_subareastatusupdated_subareastatusupdated_broadcaston",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "events_subareastatusupdated_subareastatusupdated",
+      "target": "events_subareastatusupdated_subareastatusupdated_construct",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Events/SubareaStatusUpdated.php",
+      "source_location": "L32",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "source": "events_subareastatusupdated_subareastatusupdated_construct",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/Feature/Http/Controllers/Api/SubareaCommentControllerTest.php",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "api_subareacommentcontrollertest",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Api/UserValidationController.php",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "api_uservalidationcontroller",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/Feature/Http/Controllers/Api/UserValidationControllerTest.php",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "api_uservalidationcontrollertest",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/Feature/Model/ParkAmenityTest.php",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "model_parkamenitytest",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/Feature/Model/ParkSubareaTest.php",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "model_parksubareatest",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/Feature/Model/SubareaCommentTest.php",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "model_subareacommenttest",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/Feature/Model/UserValidationTest.php",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "model_uservalidationtest",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Models/IotDevice.php",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "models_iotdevice",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/DashboardController.php",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "web_dashboardcontroller",
+      "target": "parksubarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "web_parksubareacontroller",
+      "target": "parksubarea",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16160,9 +16643,9 @@
       "source_file": "tests/Unit/ScrubAndTraceProcessorTest.php",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "unit_scrubandtraceprocessortest",
-      "target": "model",
-      "confidence_score": 1.0
+      "target": "model"
     },
     {
       "relation": "imports",
@@ -16385,6 +16868,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Models/ParkSubarea.php",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "models_parksubarea_parksubarea",
+      "target": "models_parksubarea_parksubarea_getlivestatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Models/ParkSubarea.php",
       "source_location": "L55",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -16441,6 +16934,17 @@
       "confidence_score": 1.0,
       "source": "models_parksubarea_parksubarea_evaluatethresholdshift",
       "target": "models_parksubarea_parksubarea_uservalidation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Models/ParkSubarea.php",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "models_parksubarea_parksubarea_getlivestatus",
+      "target": "models_parksubarea_parksubarea_uservalidation",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -24144,5 +24648,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "95c268465cf7bf4084e8c99ec551b622dbc55a0f"
+  "built_at_commit": "b1002d48f51dc045f4a739be0920418f1b019839"
 }

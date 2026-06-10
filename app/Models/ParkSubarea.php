@@ -151,12 +151,36 @@ class ParkSubarea extends Model
             $status_color = '#31ce36'; // Hijau
         }
 
+        // Tentukan fallback status (jika tidak ada vote)
+        $fallbackStatus = 'netral';
+        if ($hasOnlineIot) {
+            $fallbackStatus = $cvStatus;
+        }
+
+        $fallbackStatusColor = '#1572e8'; // Default: Netral (Biru)
+        if ($fallbackStatus === 'penuh') {
+            $fallbackStatusColor = '#f25961'; // Merah
+        } elseif ($fallbackStatus === 'terbatas') {
+            $fallbackStatusColor = '#ffad46'; // Orange/Kuning
+        } elseif ($fallbackStatus === 'banyak') {
+            $fallbackStatusColor = '#31ce36'; // Hijau
+        }
+
+        $validationExpiresAt = null;
+        if ($validVotes->isNotEmpty()) {
+            $latestVote = $validVotes->first();
+            $validationExpiresAt = $latestVote->created_at->addMinutes(5)->toIso8601String();
+        }
+
         return [
-            'status'          => $status,
-            'status_color'    => $status_color,
-            'is_validated'    => $isValidated,
-            'has_user_report' => $hasUserReport,
-            'has_online_iot'  => $hasOnlineIot
+            'status'                => $status,
+            'status_color'          => $status_color,
+            'is_validated'          => $isValidated,
+            'has_user_report'       => $hasUserReport,
+            'has_online_iot'        => $hasOnlineIot,
+            'validation_expires_at' => $validationExpiresAt,
+            'fallback_status'       => $fallbackStatus,
+            'fallback_status_color' => $fallbackStatusColor,
         ];
     }
 
