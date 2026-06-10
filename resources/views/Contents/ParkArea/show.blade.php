@@ -338,7 +338,19 @@
     let map;
     let centerData = @json($area->park_area_data);
     let center = { lat: parseFloat(centerData.lat), lng: parseFloat(centerData.lng) };
-    let existingSubareas = @json($area->parkSubarea);
+    let existingSubareas = <?php echo json_encode($area->parkSubarea->map(function($sub) {
+        return array_merge($sub->toArray(), [
+            'is_validated' => (bool) $sub->is_validated,
+            'has_user_report' => (bool) $sub->has_user_report,
+            'status_color' => $sub->status_color,
+            'validation_expires_at' => $sub->validation_expires_at,
+            'last_validation_time' => $sub->last_validation_time,
+            'validation_remaining_seconds' => (int) $sub->validation_remaining_seconds,
+            'fallback_status' => $sub->fallback_status,
+            'fallback_status_color' => $sub->fallback_status_color,
+            'iot_status' => $sub->iot_status,
+        ]);
+    })); ?>;
     let currentPolygonObj = null;
     let polygonObjects = {}; // Menyimpan referensi polygon untuk update WS
     let subareaStates = {}; // Menyimpan state validasi & fallback subarea
@@ -944,15 +956,25 @@
                     }
                 }
             } else if (state.validationExpiresAt) {
-                // Fallback for cases where remaining seconds is 0/falsy but expiresAt is present (e.g. initial load logic correction)
-                state.status = state.fallbackStatus;
-                state.color = state.fallbackColor;
-                state.isValidated = false;
-                state.hasUserReport = false;
-                state.validationExpiresAt = null;
-                state.lastValidationTime = null;
-                state.validationRemainingSeconds = 0;
-                updateSubareaUI(subId);
+                // If remaining seconds is 0/falsy but validationExpiresAt is still present,
+                // let's double check if it is truly expired (fail-safe fallback)
+                const expires = new Date(state.validationExpiresAt);
+                const diffMs = expires - new Date();
+                const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+                
+                if (diffSec > 0) {
+                    state.validationRemainingSeconds = diffSec;
+                } else {
+                    console.log(`⏰ Validation expired for subarea ${subId} (fail-safe). Reverting to fallback: ${state.fallbackStatus}`);
+                    state.status = state.fallbackStatus;
+                    state.color = state.fallbackColor;
+                    state.isValidated = false;
+                    state.hasUserReport = false;
+                    state.validationExpiresAt = null;
+                    state.lastValidationTime = null;
+                    state.validationRemainingSeconds = 0;
+                    updateSubareaUI(subId);
+                }
             }
         });
     }
@@ -977,7 +999,15 @@
                         subareaStates[subId].hasUserReport = e.hasUserReport;
                         subareaStates[subId].validationExpiresAt = e.validationExpiresAt;
                         subareaStates[subId].lastValidationTime = e.lastValidationTime;
-                        subareaStates[subId].validationRemainingSeconds = Math.floor(e.validationRemainingSeconds || 0);
+                        
+                        let remainingSec = e.validationRemainingSeconds || 0;
+                        if (!remainingSec && e.validationExpiresAt) {
+                            const expires = new Date(e.validationExpiresAt);
+                            const diffMs = expires - new Date();
+                            remainingSec = Math.max(0, Math.floor(diffMs / 1000));
+                        }
+                        
+                        subareaStates[subId].validationRemainingSeconds = Math.floor(remainingSec);
                         subareaStates[subId].fallbackStatus = e.fallbackStatus;
                         subareaStates[subId].fallbackColor = e.fallbackStatusColor;
                         subareaStates[subId].currentCount = e.currentCount;
@@ -1026,6 +1056,14 @@
         // Populate local subareaStates from the server-injected existingSubareas
         existingSubareas.forEach(sub => {
             let commentCount = sub.subarea_comment ? sub.subarea_comment.length : 0;
+            
+            let remainingSec = sub.validation_remaining_seconds ?? 0;
+            if (!remainingSec && sub.validation_expires_at) {
+                const expires = new Date(sub.validation_expires_at);
+                const diffMs = expires - new Date();
+                remainingSec = Math.max(0, Math.floor(diffMs / 1000));
+            }
+            
             subareaStates[sub.park_subarea_id] = {
                 status: sub.status_color ? sub.status : 'netral',
                 color: sub.status_color || '#1572e8',
@@ -1033,7 +1071,7 @@
                 hasUserReport: sub.has_user_report ? true : false,
                 validationExpiresAt: sub.validation_expires_at || null,
                 lastValidationTime: sub.last_validation_time || null,
-                validationRemainingSeconds: Math.floor(sub.validation_remaining_seconds ?? 0),
+                validationRemainingSeconds: Math.floor(remainingSec),
                 fallbackStatus: sub.fallback_status || 'netral',
                 fallbackColor: sub.fallback_status_color || '#1572e8',
                 currentCount: sub.current_count ?? 0,

@@ -1,7 +1,7 @@
 # Graph Report - polislot-admin-dashboard  (2026-06-10)
 
 ## Corpus Check
-- 203 files · ~72,964 words
+- 203 files · ~73,119 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e8f3e16a`
+- Built from commit: `77a07017`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

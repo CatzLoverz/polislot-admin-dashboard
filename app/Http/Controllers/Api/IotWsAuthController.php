@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\IotDevice;
+use App\Events\IotDeviceStatusChanged;
+use App\Events\SubareaStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -123,11 +125,11 @@ class IotWsAuthController extends Controller
         // ============================================================
         Cache::forever("iot_status_{$macAddress}", 'online');
         Cache::forever("iot_connection_type_{$macAddress}", 'ws');
-        broadcast(new \App\Events\IotDeviceStatusChanged($macAddress, 'online'));
+        broadcast(new IotDeviceStatusChanged($macAddress, 'online'));
 
         $device = IotDevice::where('device_mac_address', $macAddress)->first();
         if ($device && $device->subarea) {
-            broadcast(new \App\Events\SubareaStatusUpdated($device->subarea));
+            broadcast(new SubareaStatusUpdated($device->subarea));
         }
 
         return response()->json([

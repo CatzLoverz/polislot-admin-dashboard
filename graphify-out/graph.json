@@ -160,7 +160,7 @@
       "label": "MqttListenerCommand",
       "file_type": "code",
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
-      "source_location": "L18",
+      "source_location": "L19",
       "id": "commands_mqttlistenercommand_mqttlistenercommand",
       "community": 1,
       "norm_label": "mqttlistenercommand"
@@ -178,7 +178,7 @@
       "label": ".handle()",
       "file_type": "code",
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
-      "source_location": "L37",
+      "source_location": "L38",
       "id": "commands_mqttlistenercommand_mqttlistenercommand_handle",
       "community": 1,
       "norm_label": ".handle()"
@@ -988,7 +988,7 @@
       "label": "IotWebhookController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
-      "source_location": "L14",
+      "source_location": "L15",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller",
       "community": 40,
       "norm_label": "iotwebhookcontroller"
@@ -997,7 +997,7 @@
       "label": ".handle()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller_handle",
       "community": 40,
       "norm_label": ".handle()"
@@ -1006,7 +1006,7 @@
       "label": "Request",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
-      "source_location": "L20",
+      "source_location": "L21",
       "id": "app_http_controllers_api_iotwebhookcontroller_php_request",
       "community": 40,
       "norm_label": "request"
@@ -1015,7 +1015,7 @@
       "label": ".updateStatus()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWebhookController.php",
-      "source_location": "L65",
+      "source_location": "L66",
       "id": "api_iotwebhookcontroller_iotwebhookcontroller_updatestatus",
       "community": 40,
       "norm_label": ".updatestatus()"
@@ -1033,7 +1033,7 @@
       "label": "IotWsAuthController",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
-      "source_location": "L11",
+      "source_location": "L13",
       "id": "api_iotwsauthcontroller_iotwsauthcontroller",
       "community": 32,
       "norm_label": "iotwsauthcontroller"
@@ -1042,7 +1042,7 @@
       "label": ".authenticate()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
-      "source_location": "L23",
+      "source_location": "L25",
       "id": "api_iotwsauthcontroller_iotwsauthcontroller_authenticate",
       "community": 32,
       "norm_label": ".authenticate()"
@@ -1051,7 +1051,7 @@
       "label": "Request",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
-      "source_location": "L23",
+      "source_location": "L25",
       "id": "app_http_controllers_api_iotwsauthcontroller_php_request",
       "community": 32,
       "norm_label": "request"
@@ -2932,7 +2932,7 @@
       "label": "IotDevice",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L16",
+      "source_location": "L17",
       "id": "models_iotdevice_iotdevice",
       "community": 62,
       "norm_label": "iotdevice"
@@ -2941,7 +2941,7 @@
       "label": ".booted()",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L25",
+      "source_location": "L26",
       "id": "models_iotdevice_iotdevice_booted",
       "community": 62,
       "norm_label": ".booted()"
@@ -2950,7 +2950,7 @@
       "label": ".getStatus()",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L57",
+      "source_location": "L58",
       "id": "models_iotdevice_iotdevice_getstatus",
       "community": 62,
       "norm_label": ".getstatus()"
@@ -2959,7 +2959,7 @@
       "label": ".subarea()",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L188",
+      "source_location": "L189",
       "id": "models_iotdevice_iotdevice_subarea",
       "community": 62,
       "norm_label": ".subarea()"
@@ -2968,7 +2968,7 @@
       "label": ".captures()",
       "file_type": "code",
       "source_file": "app/Models/IotDevice.php",
-      "source_location": "L193",
+      "source_location": "L194",
       "id": "models_iotdevice_iotdevice_captures",
       "community": 62,
       "norm_label": ".captures()"
@@ -24678,5 +24678,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e8f3e16a2c635eb85509cac71e166a175504e02a"
+  "built_at_commit": "77a07017d542f76949a7a305e1183fd6fbca39d5"
 }

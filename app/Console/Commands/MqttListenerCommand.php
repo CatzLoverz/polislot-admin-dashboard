@@ -7,6 +7,7 @@ use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotStreamReceived;
 use App\Events\IotDeviceStatusChanged;
 use App\Events\IotCountUpdated;
+use App\Events\SubareaStatusUpdated;
 use App\Models\IotDevice;
 use App\Models\IotCapture;
 use App\Models\UserValidation;
@@ -59,7 +60,7 @@ class MqttListenerCommand extends Command
                     $subarea->current_count = 0;
                     $subarea->save();
                     broadcast(new IotCountUpdated($mac, 0));
-                    broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                    broadcast(new SubareaStatusUpdated($subarea));
                 }
             }
             $this->info("🔄 Reset {$devices->count()} device status ke OFFLINE dan count ke 0 (cache + broadcast)");
@@ -344,7 +345,7 @@ class MqttListenerCommand extends Command
 
                         // Broadcast count updated to 0
                         broadcast(new IotCountUpdated($mac, 0));
-                        broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                        broadcast(new SubareaStatusUpdated($subarea));
                         $this->info("📈 [MQTT] Device {$mac} went offline. Reset subarea count to 0.");
                     }
                 }
@@ -355,7 +356,7 @@ class MqttListenerCommand extends Command
                     if ($device && $device->subarea) {
                         $subarea = $device->subarea;
                         
-                        broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                        broadcast(new SubareaStatusUpdated($subarea));
                         
                         $payloadData = [
                             'action'             => 'update_config',

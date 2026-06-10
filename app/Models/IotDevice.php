@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use \App\Events\IotDeviceStatusChanged;
+use App\Events\IotDeviceStatusChanged;
 use App\Events\IotCountUpdated;
+use App\Events\SubareaStatusUpdated;
 use App\Models\IotCapture;
 use App\Models\ParkSubarea;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -101,7 +102,7 @@ class IotDevice extends Model
                                 broadcast(new IotCountUpdated($mac, 0));
 
                                 // Broadcast subarea status updated
-                                broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                                broadcast(new SubareaStatusUpdated($subarea));
                             }
                         }
                     }
@@ -127,7 +128,7 @@ class IotDevice extends Model
                             broadcast(new IotCountUpdated($mac, 0));
 
                             // Broadcast subarea status updated
-                            broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                            broadcast(new SubareaStatusUpdated($subarea));
                         }
                     } else {
                         Log::warning("Reverb sync failed (API error) for device {$mac}", [
@@ -168,7 +169,7 @@ class IotDevice extends Model
                         broadcast(new IotCountUpdated($mac, 0));
 
                         // Broadcast subarea status updated
-                        broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                        broadcast(new SubareaStatusUpdated($subarea));
                     }
                 }
             }

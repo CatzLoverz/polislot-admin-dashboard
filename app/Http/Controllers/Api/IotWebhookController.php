@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Events\IotDeviceStatusChanged;
 use App\Events\IotCommandSent;
 use App\Events\IotCountUpdated;
+use App\Events\SubareaStatusUpdated;
 use App\Models\IotDevice;
 
 class IotWebhookController extends Controller
@@ -87,7 +88,7 @@ class IotWebhookController extends Controller
                 broadcast(new IotCountUpdated($mac, 0));
                 
                 // Broadcast subarea status updated
-                broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                broadcast(new SubareaStatusUpdated($subarea));
                 
                 Log::info("Device {$mac} went offline. Reset subarea count to 0.");
             }
@@ -100,7 +101,7 @@ class IotWebhookController extends Controller
                 $subarea = $device->subarea;
                 
                 // Broadcast subarea status updated
-                broadcast(new \App\Events\SubareaStatusUpdated($subarea));
+                broadcast(new SubareaStatusUpdated($subarea));
                 
                 $payloadData = [
                     'action'             => 'update_config',
