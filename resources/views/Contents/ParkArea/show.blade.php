@@ -124,6 +124,16 @@
                                                 @endif
                                             </span>
                                         </small>
+                                        
+                                        {{-- Last Validation Report Time & Countdown --}}
+                                        <small class="d-block mt-1 text-muted subarea-validation-time font-weight-bold" style="font-size: 10px; {{ (isset($sub->validation_expires_at) && $sub->validation_expires_at) ? '' : 'display: none;' }}">
+                                            <i class="fas fa-history mr-1"></i> Laporan: <span class="last-validated-time-val">
+                                                @if(isset($sub->last_validation_time) && $sub->last_validation_time)
+                                                    {{ date('H:i', strtotime($sub->last_validation_time)) }}
+                                                @endif
+                                            </span>
+                                            <span class="validation-countdown-val text-info ml-1"></span>
+                                        </small>
 
                                         {{-- Kapasitas Slot (Dynamic) --}}
                                         @if($sub->iotDevice && $sub->max_slots > 0)
@@ -792,6 +802,25 @@
                 badgesSpan.innerHTML = badgeHtml;
             }
             
+            // Update validation time & countdown visibility
+            const timeContainer = item.querySelector('.subarea-validation-time');
+            if (timeContainer) {
+                const state = subareaStates[subId];
+                if (state && state.validationExpiresAt) {
+                    timeContainer.style.display = 'block';
+                    if (state.lastValidationTime) {
+                        const dateObj = new Date(state.lastValidationTime);
+                        const hours = String(dateObj.getHours()).padStart(2, '0');
+                        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+                        
+                        const timeSpan = timeContainer.querySelector('.last-validated-time-val');
+                        if (timeSpan) timeSpan.innerText = `${hours}:${minutes}`;
+                    }
+                } else {
+                    timeContainer.style.display = 'none';
+                }
+            }
+            
             // Update slot count
             if (currentCount !== undefined && maxSlots !== undefined) {
                 const occupancySpan = item.querySelector('.subarea-occupancy');
@@ -822,9 +851,23 @@
                     state.isValidated = false;
                     state.hasUserReport = false;
                     state.validationExpiresAt = null; // Clear so we don't repeat
+                    state.lastValidationTime = null;
                     
                     // Update UI
                     updateSubareaUI(subId, state.status, state.color, state.isValidated, state.hasUserReport);
+                } else {
+                    // Update countdown text
+                    const item = document.getElementById(`subarea-item-${subId}`);
+                    if (item) {
+                        const countdownSpan = item.querySelector('.validation-countdown-val');
+                        if (countdownSpan) {
+                            const diffMs = expires - now;
+                            const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+                            const minutes = Math.floor(diffSec / 60);
+                            const seconds = diffSec % 60;
+                            countdownSpan.innerText = `(Sisa: ${minutes}m ${seconds}s)`;
+                        }
+                    }
                 }
             }
         });
@@ -848,6 +891,7 @@
                     const currentCount = e.currentCount;
                     const maxSlots = e.maxSlots;
                     const expiresAt = e.validationExpiresAt;
+                    const lastValTime = e.lastValidationTime;
                     const fallbackStatus = e.fallbackStatus;
                     const fallbackColor = e.fallbackStatusColor;
                     
@@ -858,6 +902,7 @@
                         subareaStates[subId].isValidated = isValidated;
                         subareaStates[subId].hasUserReport = hasUserReport;
                         subareaStates[subId].validationExpiresAt = expiresAt;
+                        subareaStates[subId].lastValidationTime = lastValTime;
                         subareaStates[subId].fallbackStatus = fallbackStatus;
                         subareaStates[subId].fallbackColor = fallbackColor;
                     }
@@ -908,6 +953,7 @@
                 isValidated: sub.is_validated ? true : false,
                 hasUserReport: sub.has_user_report ? true : false,
                 validationExpiresAt: sub.validation_expires_at || null,
+                lastValidationTime: sub.last_validation_time || null,
                 fallbackStatus: sub.fallback_status || 'netral',
                 fallbackColor: sub.fallback_status_color || '#1572e8'
             };
@@ -916,8 +962,8 @@
         // Inisialisasi Echo listener
         initEcho();
 
-        // Start expiration checking timer (check every 2 seconds)
-        setInterval(checkValidationExpirations, 2000);
+        // Start expiration checking timer (check every 1 second for smooth countdowns)
+        setInterval(checkValidationExpirations, 1000);
 
         // Handler tombol hapus subarea
         $(document).on('submit', '.delete-subarea-form', function(e) {

@@ -158,6 +158,7 @@ class ParkAreaController extends Controller
                 $sub->has_user_report = $live['has_user_report'];
                 $sub->status_color = $live['status_color'];
                 $sub->validation_expires_at = $live['validation_expires_at'];
+                $sub->last_validation_time = $live['last_validation_time'];
                 $sub->fallback_status = $live['fallback_status'];
                 $sub->fallback_status_color = $live['fallback_status_color'];
                 $sub->iot_status = $sub->iotDevice ? ($live['has_online_iot'] ? 'online' : 'offline') : null;

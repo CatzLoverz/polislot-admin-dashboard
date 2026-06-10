@@ -23,6 +23,7 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
     public $maxSlots;
     public $commentCount;
     public $validationExpiresAt;
+    public $lastValidationTime;
     public $fallbackStatus;
     public $fallbackStatusColor;
 
@@ -40,6 +41,7 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
         $this->isValidated = $live['is_validated'];
         $this->hasUserReport = $live['has_user_report'];
         $this->validationExpiresAt = $live['validation_expires_at'] ?? null;
+        $this->lastValidationTime = $live['last_validation_time'] ?? null;
         $this->fallbackStatus = $live['fallback_status'] ?? 'netral';
         $this->fallbackStatusColor = $live['fallback_status_color'] ?? '#1572e8';
         

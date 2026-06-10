@@ -565,7 +565,7 @@
       "label": ".__construct()",
       "file_type": "code",
       "source_file": "app/Events/SubareaStatusUpdated.php",
-      "source_location": "L32",
+      "source_location": "L33",
       "id": "events_subareastatusupdated_subareastatusupdated_construct",
       "community": 17,
       "norm_label": ".__construct()"
@@ -574,7 +574,7 @@
       "label": "ParkSubarea",
       "file_type": "code",
       "source_file": "app/Events/SubareaStatusUpdated.php",
-      "source_location": "L32",
+      "source_location": "L33",
       "id": "parksubarea",
       "community": 17,
       "norm_label": "parksubarea"
@@ -583,7 +583,7 @@
       "label": ".broadcastOn()",
       "file_type": "code",
       "source_file": "app/Events/SubareaStatusUpdated.php",
-      "source_location": "L54",
+      "source_location": "L56",
       "id": "events_subareastatusupdated_subareastatusupdated_broadcaston",
       "community": 33,
       "norm_label": ".broadcaston()"
@@ -592,7 +592,7 @@
       "label": ".broadcastAs()",
       "file_type": "code",
       "source_file": "app/Events/SubareaStatusUpdated.php",
-      "source_location": "L64",
+      "source_location": "L66",
       "id": "events_subareastatusupdated_subareastatusupdated_broadcastas",
       "community": 33,
       "norm_label": ".broadcastas()"
@@ -873,7 +873,7 @@
       "source_file": "app/Http/Controllers/Api/InfoBoardController.php",
       "source_location": "L1",
       "id": "api_infoboardcontroller",
-      "community": 32,
+      "community": 57,
       "norm_label": "infoboardcontroller.php"
     },
     {
@@ -882,7 +882,7 @@
       "source_file": "app/Http/Controllers/Api/InfoBoardController.php",
       "source_location": "L11",
       "id": "api_infoboardcontroller_infoboardcontroller",
-      "community": 32,
+      "community": 57,
       "norm_label": "infoboardcontroller"
     },
     {
@@ -891,7 +891,7 @@
       "source_file": "app/Http/Controllers/Api/InfoBoardController.php",
       "source_location": "L17",
       "id": "api_infoboardcontroller_infoboardcontroller_index",
-      "community": 32,
+      "community": 57,
       "norm_label": ".index()"
     },
     {
@@ -900,7 +900,7 @@
       "source_file": "app/Http/Controllers/Api/InfoBoardController.php",
       "source_location": "L17",
       "id": "app_http_controllers_api_infoboardcontroller_php_jsonresponse",
-      "community": 32,
+      "community": 57,
       "norm_label": "jsonresponse"
     },
     {
@@ -1026,7 +1026,7 @@
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
       "source_location": "L1",
       "id": "api_iotwsauthcontroller",
-      "community": 77,
+      "community": 32,
       "norm_label": "iotwsauthcontroller.php"
     },
     {
@@ -1035,7 +1035,7 @@
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
       "source_location": "L11",
       "id": "api_iotwsauthcontroller_iotwsauthcontroller",
-      "community": 77,
+      "community": 32,
       "norm_label": "iotwsauthcontroller"
     },
     {
@@ -1044,7 +1044,7 @@
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
       "source_location": "L23",
       "id": "api_iotwsauthcontroller_iotwsauthcontroller_authenticate",
-      "community": 77,
+      "community": 32,
       "norm_label": ".authenticate()"
     },
     {
@@ -1053,7 +1053,7 @@
       "source_file": "app/Http/Controllers/Api/IotWsAuthController.php",
       "source_location": "L23",
       "id": "app_http_controllers_api_iotwsauthcontroller_php_request",
-      "community": 77,
+      "community": 32,
       "norm_label": "request"
     },
     {
@@ -2061,7 +2061,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAmenityController.php",
       "source_location": "L1",
       "id": "web_parkamenitycontroller",
-      "community": 57,
+      "community": 32,
       "norm_label": "parkamenitycontroller.php"
     },
     {
@@ -2070,7 +2070,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAmenityController.php",
       "source_location": "L12",
       "id": "web_parkamenitycontroller_parkamenitycontroller",
-      "community": 57,
+      "community": 32,
       "norm_label": "parkamenitycontroller"
     },
     {
@@ -2079,7 +2079,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAmenityController.php",
       "source_location": "L17",
       "id": "web_parkamenitycontroller_parkamenitycontroller_store",
-      "community": 57,
+      "community": 32,
       "norm_label": ".store()"
     },
     {
@@ -2088,7 +2088,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAmenityController.php",
       "source_location": "L17",
       "id": "app_http_controllers_web_parkamenitycontroller_php_request",
-      "community": 57,
+      "community": 32,
       "norm_label": "request"
     },
     {
@@ -2097,7 +2097,7 @@
       "source_file": "app/Http/Controllers/Web/ParkAmenityController.php",
       "source_location": "L49",
       "id": "web_parkamenitycontroller_parkamenitycontroller_destroy",
-      "community": 57,
+      "community": 32,
       "norm_label": ".destroy()"
     },
     {
@@ -2167,7 +2167,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/ParkAreaController.php",
-      "source_location": "L181",
+      "source_location": "L182",
       "id": "web_parkareacontroller_parkareacontroller_destroy",
       "community": 31,
       "norm_label": ".destroy()"
@@ -2232,7 +2232,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L1",
       "id": "web_profilecontroller",
-      "community": 32,
+      "community": 40,
       "norm_label": "profilecontroller.php"
     },
     {
@@ -2241,7 +2241,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L18",
       "id": "web_profilecontroller_profilecontroller",
-      "community": 32,
+      "community": 40,
       "norm_label": "profilecontroller"
     },
     {
@@ -2250,7 +2250,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L23",
       "id": "web_profilecontroller_profilecontroller_edit",
-      "community": 32,
+      "community": 40,
       "norm_label": ".edit()"
     },
     {
@@ -2259,7 +2259,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L35",
       "id": "web_profilecontroller_profilecontroller_update",
-      "community": 32,
+      "community": 40,
       "norm_label": ".update()"
     },
     {
@@ -2268,7 +2268,7 @@
       "source_file": "app/Http/Controllers/Web/ProfileController.php",
       "source_location": "L35",
       "id": "app_http_controllers_web_profilecontroller_php_request",
-      "community": 32,
+      "community": 40,
       "norm_label": "request"
     },
     {
@@ -3121,7 +3121,7 @@
       "label": ".evaluateThresholdShift()",
       "file_type": "code",
       "source_file": "app/Models/ParkSubarea.php",
-      "source_location": "L190",
+      "source_location": "L193",
       "id": "models_parksubarea_parksubarea_evaluatethresholdshift",
       "community": 22,
       "norm_label": ".evaluatethresholdshift()"
@@ -9800,9 +9800,9 @@
       "source_file": "app/Console/Commands/SetupDatabaseUser.php",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_setupdatabaseuser_setupdatabaseuser",
-      "target": "command",
-      "confidence_score": 1.0
+      "target": "command"
     },
     {
       "relation": "calls",
@@ -9989,9 +9989,9 @@
       "source_file": "app/Events/IotCommandSent.php",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotcommandsent",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "method",
@@ -10084,9 +10084,9 @@
       "source_file": "app/Events/IotCountUpdated.php",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotcountupdated",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "mixes_in",
@@ -10094,9 +10094,9 @@
       "source_file": "app/Events/IotCountUpdated.php",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotcountupdated_iotcountupdated",
-      "target": "dispatchable",
-      "confidence_score": 1.0
+      "target": "dispatchable"
     },
     {
       "relation": "method",
@@ -10134,9 +10134,9 @@
       "source_file": "app/Events/IotCountUpdated.php",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotcountupdated_iotcountupdated",
-      "target": "interactswithsockets",
-      "confidence_score": 1.0
+      "target": "interactswithsockets"
     },
     {
       "relation": "mixes_in",
@@ -10144,9 +10144,9 @@
       "source_file": "app/Events/IotCountUpdated.php",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotcountupdated_iotcountupdated",
-      "target": "serializesmodels",
-      "confidence_score": 1.0
+      "target": "serializesmodels"
     },
     {
       "relation": "implements",
@@ -10154,9 +10154,9 @@
       "source_file": "app/Events/IotCountUpdated.php",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotcountupdated_iotcountupdated",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "imports",
@@ -10165,9 +10165,9 @@
       "source_file": "app/Events/IotDeviceStatusChanged.php",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotdevicestatuschanged",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "implements",
@@ -10175,9 +10175,9 @@
       "source_file": "app/Events/IotDeviceStatusChanged.php",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotdevicestatuschanged_iotdevicestatuschanged",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "imports",
@@ -10186,9 +10186,9 @@
       "source_file": "app/Events/IotStreamReceived.php",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotstreamreceived",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "imports",
@@ -10197,9 +10197,9 @@
       "source_file": "app/Events/IotThresholdUpdated.php",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotthresholdupdated",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "implements",
@@ -10207,9 +10207,9 @@
       "source_file": "app/Events/IotThresholdUpdated.php",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotthresholdupdated_iotthresholdupdated",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "imports",
@@ -10218,9 +10218,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "implements",
@@ -10228,9 +10228,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated_subareastatusupdated",
-      "target": "shouldbroadcastnow",
-      "confidence_score": 1.0
+      "target": "shouldbroadcastnow"
     },
     {
       "relation": "imports",
@@ -10249,9 +10249,9 @@
       "source_file": "app/Events/IotDeviceStatusChanged.php",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotdevicestatuschanged_iotdevicestatuschanged",
-      "target": "dispatchable",
-      "confidence_score": 1.0
+      "target": "dispatchable"
     },
     {
       "relation": "imports",
@@ -10292,9 +10292,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated",
-      "target": "dispatchable",
-      "confidence_score": 1.0
+      "target": "dispatchable"
     },
     {
       "relation": "mixes_in",
@@ -10302,9 +10302,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated_subareastatusupdated",
-      "target": "dispatchable",
-      "confidence_score": 1.0
+      "target": "dispatchable"
     },
     {
       "relation": "imports",
@@ -10323,9 +10323,9 @@
       "source_file": "app/Events/IotDeviceStatusChanged.php",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotdevicestatuschanged_iotdevicestatuschanged",
-      "target": "interactswithsockets",
-      "confidence_score": 1.0
+      "target": "interactswithsockets"
     },
     {
       "relation": "imports",
@@ -10366,9 +10366,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated",
-      "target": "interactswithsockets",
-      "confidence_score": 1.0
+      "target": "interactswithsockets"
     },
     {
       "relation": "mixes_in",
@@ -10376,9 +10376,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated_subareastatusupdated",
-      "target": "interactswithsockets",
-      "confidence_score": 1.0
+      "target": "interactswithsockets"
     },
     {
       "relation": "imports",
@@ -10397,9 +10397,9 @@
       "source_file": "app/Events/IotDeviceStatusChanged.php",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_iotdevicestatuschanged_iotdevicestatuschanged",
-      "target": "serializesmodels",
-      "confidence_score": 1.0
+      "target": "serializesmodels"
     },
     {
       "relation": "imports",
@@ -10440,9 +10440,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated",
-      "target": "serializesmodels",
-      "confidence_score": 1.0
+      "target": "serializesmodels"
     },
     {
       "relation": "mixes_in",
@@ -10450,9 +10450,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated_subareastatusupdated",
-      "target": "serializesmodels",
-      "confidence_score": 1.0
+      "target": "serializesmodels"
     },
     {
       "relation": "imports",
@@ -10623,9 +10623,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated",
-      "target": "events_subareastatusupdated_subareastatusupdated",
-      "confidence_score": 1.0
+      "target": "events_subareastatusupdated_subareastatusupdated"
     },
     {
       "relation": "imports",
@@ -10634,9 +10634,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "method",
@@ -10644,9 +10644,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated_subareastatusupdated",
-      "target": "events_subareastatusupdated_subareastatusupdated_broadcastas",
-      "confidence_score": 1.0
+      "target": "events_subareastatusupdated_subareastatusupdated_broadcastas"
     },
     {
       "relation": "method",
@@ -10654,9 +10654,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated_subareastatusupdated",
-      "target": "events_subareastatusupdated_subareastatusupdated_broadcaston",
-      "confidence_score": 1.0
+      "target": "events_subareastatusupdated_subareastatusupdated_broadcaston"
     },
     {
       "relation": "method",
@@ -10664,9 +10664,9 @@
       "source_file": "app/Events/SubareaStatusUpdated.php",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated_subareastatusupdated",
-      "target": "events_subareastatusupdated_subareastatusupdated_construct",
-      "confidence_score": 1.0
+      "target": "events_subareastatusupdated_subareastatusupdated_construct"
     },
     {
       "relation": "references",
@@ -10675,9 +10675,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "context": "parameter_type",
+      "confidence_score": 1.0,
       "source": "events_subareastatusupdated_subareastatusupdated_construct",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10686,9 +10686,9 @@
       "source_file": "tests/Feature/Http/Controllers/Api/SubareaCommentControllerTest.php",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_subareacommentcontrollertest",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10697,9 +10697,9 @@
       "source_file": "app/Http/Controllers/Api/UserValidationController.php",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_uservalidationcontroller",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10708,9 +10708,9 @@
       "source_file": "tests/Feature/Http/Controllers/Api/UserValidationControllerTest.php",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_uservalidationcontrollertest",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10719,9 +10719,9 @@
       "source_file": "tests/Feature/Model/ParkAmenityTest.php",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "model_parkamenitytest",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10730,9 +10730,9 @@
       "source_file": "tests/Feature/Model/ParkSubareaTest.php",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "model_parksubareatest",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10741,9 +10741,9 @@
       "source_file": "tests/Feature/Model/SubareaCommentTest.php",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "model_subareacommenttest",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10752,9 +10752,9 @@
       "source_file": "tests/Feature/Model/UserValidationTest.php",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "model_uservalidationtest",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10763,9 +10763,9 @@
       "source_file": "app/Models/IotDevice.php",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_iotdevice",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10774,9 +10774,9 @@
       "source_file": "app/Http/Controllers/Web/DashboardController.php",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_dashboardcontroller",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "imports",
@@ -10785,9 +10785,9 @@
       "source_file": "app/Http/Controllers/Web/ParkSubareaController.php",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "web_parksubareacontroller",
-      "target": "parksubarea",
-      "confidence_score": 1.0
+      "target": "parksubarea"
     },
     {
       "relation": "contains",
@@ -16870,9 +16870,9 @@
       "source_file": "app/Models/ParkSubarea.php",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_parksubarea_parksubarea",
-      "target": "models_parksubarea_parksubarea_getlivestatus",
-      "confidence_score": 1.0
+      "target": "models_parksubarea_parksubarea_getlivestatus"
     },
     {
       "relation": "method",
@@ -16942,9 +16942,9 @@
       "source_file": "app/Models/ParkSubarea.php",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_parksubarea_parksubarea_getlivestatus",
-      "target": "models_parksubarea_parksubarea_uservalidation",
-      "confidence_score": 1.0
+      "target": "models_parksubarea_parksubarea_uservalidation"
     },
     {
       "relation": "calls",
@@ -24648,5 +24648,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b1002d48f51dc045f4a739be0920418f1b019839"
+  "built_at_commit": "cc90eea8001cc3b3508079b950c64a79f9493485"
 }

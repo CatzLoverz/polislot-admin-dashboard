@@ -1,7 +1,7 @@
 # Graph Report - polislot-admin-dashboard  (2026-06-10)
 
 ## Corpus Check
-- 203 files · ~72,176 words
+- 203 files · ~72,377 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b1002d48`
+- Built from commit: `cc90eea8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -55,6 +55,7 @@
 - [[_COMMUNITY_Community 37|Community 37]]
 - [[_COMMUNITY_Community 38|Community 38]]
 - [[_COMMUNITY_Community 39|Community 39]]
+- [[_COMMUNITY_Community 40|Community 40]]
 - [[_COMMUNITY_Community 41|Community 41]]
 - [[_COMMUNITY_Community 42|Community 42]]
 - [[_COMMUNITY_Community 43|Community 43]]
@@ -87,7 +88,6 @@
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 76|Community 76]]
-- [[_COMMUNITY_Community 77|Community 77]]
 - [[_COMMUNITY_Community 78|Community 78]]
 - [[_COMMUNITY_Community 79|Community 79]]
 - [[_COMMUNITY_Community 80|Community 80]]
@@ -225,7 +225,7 @@ Nodes (4): RewardController, HistoryService, JsonResponse, Request
 
 ### Community 32 - "Community 32"
 Cohesion: 0.11
-Nodes (10): FeedbackController, InfoBoardController, JsonResponse, Request, JsonResponse, Request, Request, Controller (+2 more)
+Nodes (10): FeedbackController, IotWsAuthController, JsonResponse, Request, Request, Request, Request, Controller (+2 more)
 
 ### Community 33 - "Community 33"
 Cohesion: 0.09
@@ -295,7 +295,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.197) - this node is a cross-community bridge._
 - **Why does `ParkSubarea` connect `Community 17` to `Community 0`, `Community 33`, `Community 48`, `Community 56`, `Community 62`?**
   _High betweenness centrality (0.107) - this node is a cross-community bridge._
-- **Why does `Controller` connect `Community 32` to `Community 0`, `Community 1`, `Community 5`, `Community 10`, `Community 12`, `Community 17`, `Community 23`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 55`, `Community 56`, `Community 57`, `Community 61`, `Community 68`, `Community 77`?**
+- **Why does `Controller` connect `Community 32` to `Community 0`, `Community 1`, `Community 5`, `Community 10`, `Community 12`, `Community 17`, `Community 23`, `Community 28`, `Community 29`, `Community 30`, `Community 31`, `Community 40`, `Community 46`, `Community 47`, `Community 48`, `Community 49`, `Community 52`, `Community 54`, `Community 55`, `Community 56`, `Community 57`, `Community 61`, `Community 68`?**
   _High betweenness centrality (0.072) - this node is a cross-community bridge._
 - **What connects `TrustProxies`, `$schema`, `name` to the rest of the system?**
   _120 weakly-connected nodes found - possible documentation gaps or missing edges._

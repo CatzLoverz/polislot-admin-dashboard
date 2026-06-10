@@ -75,6 +75,7 @@ class MapVisualizationController extends Controller
                     'current_count'         => $sub->current_count ?? 0,
                     'max_slots'             => $sub->max_slots ?? 0,
                     'validation_expires_at' => $live['validation_expires_at'],
+                    'last_validation_time'  => $live['last_validation_time'],
                     'fallback_status'       => $live['fallback_status'],
                     'fallback_status_color' => $live['fallback_status_color'],
                     'amenities'             => $sub->parkAmenity->pluck('park_amenity_name'),

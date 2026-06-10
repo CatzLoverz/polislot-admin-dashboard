@@ -167,9 +167,11 @@ class ParkSubarea extends Model
         }
 
         $validationExpiresAt = null;
+        $lastValidationTime = null;
         if ($validVotes->isNotEmpty()) {
             $latestVote = $validVotes->first();
             $validationExpiresAt = $latestVote->created_at->addMinutes(5)->toIso8601String();
+            $lastValidationTime = $latestVote->created_at->toIso8601String();
         }
 
         return [
@@ -179,6 +181,7 @@ class ParkSubarea extends Model
             'has_user_report'       => $hasUserReport,
             'has_online_iot'        => $hasOnlineIot,
             'validation_expires_at' => $validationExpiresAt,
+            'last_validation_time'  => $lastValidationTime,
             'fallback_status'       => $fallbackStatus,
             'fallback_status_color' => $fallbackStatusColor,
         ];
