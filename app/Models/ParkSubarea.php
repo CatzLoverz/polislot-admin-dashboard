@@ -70,10 +70,11 @@ class ParkSubarea extends Model
         $isValidated = false;
         $hasUserReport = false;
 
-        // 1. Filter validasi dalam 5 menit terakhir
+        // 1. Filter validasi dalam 5 menit terakhir (urutkan terbaru dahulu untuk tie-breaker)
         $cutoffTime = now()->subMinutes(5);
         $validVotes = $this->userValidation()
             ->where('created_at', '>=', $cutoffTime)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         // 2. Tentukan status dari deteksi AI perangkat IoT
