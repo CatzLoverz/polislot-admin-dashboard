@@ -17,6 +17,11 @@ class Feedback extends Model
         'feedback_description',
     ];
 
+    /**
+     * Relasi ke kategori feedback.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function feedbackCategory(): BelongsTo
     {
         return $this->belongsTo(FeedbackCategory::class, 'fbk_category_id', 'fbk_category_id');

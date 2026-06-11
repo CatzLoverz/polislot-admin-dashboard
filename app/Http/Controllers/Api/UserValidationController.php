@@ -30,9 +30,10 @@ class UserValidationController extends Controller
     /**
      * Memproses validasi parkir dari user.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'park_subarea_id' => 'required|exists:park_subareas,park_subarea_id',

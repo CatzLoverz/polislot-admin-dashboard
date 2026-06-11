@@ -15,7 +15,9 @@ class FeedbackController extends Controller
 {
     /**
      * Menampilkan halaman daftar feedback.
-     * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -70,10 +72,11 @@ class FeedbackController extends Controller
 
     /**
      * Memproses penghapusan data feedback.
-     * * @param int $id
-     * * @return \Illuminate\Http\RedirectResponse
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {

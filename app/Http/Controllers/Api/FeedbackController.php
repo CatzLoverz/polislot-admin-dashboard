@@ -16,7 +16,8 @@ class FeedbackController extends Controller
 {
     /**
      * Mempproses penyimpanan feedback baru dari pengguna.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function store(Request $request): JsonResponse

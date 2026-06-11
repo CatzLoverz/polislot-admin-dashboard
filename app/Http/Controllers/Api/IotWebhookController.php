@@ -18,8 +18,11 @@ class IotWebhookController extends Controller
     /**
      * Handle Webhooks from Reverb/Pusher.
      * Digunakan untuk mendeteksi kapan IoT Device join/leave presence channel.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function handle(Request $request)
+    public function handle(Request $request): \Illuminate\Http\JsonResponse
     {
         // 1. Verifikasi Webhook Signature (Opsional tapi disarankan)
         // Untuk Reverb, signature dikirim di header X-Reverb-Signature atau X-Pusher-Signature

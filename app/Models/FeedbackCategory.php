@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FeedbackCategory extends Model
 {
@@ -14,7 +15,12 @@ class FeedbackCategory extends Model
         'fbk_category_name',
     ];
 
-    public function feedback()
+    /**
+     * Relasi ke feedback yang terkait dengan kategori ini.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class, 'fbk_category_id', 'fbk_category_id');
     }

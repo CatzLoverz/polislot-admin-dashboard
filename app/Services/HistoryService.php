@@ -16,8 +16,9 @@ class HistoryService
      * @param string $name Nama aktivitas (snapshot)
      * @param int|null $points Jumlah poin
      * @param bool $isNegative Default false (0)
+     * @return void
      */
-    public function log(int $userId, string $type, string $name, ?int $points, bool $isNegative = false)
+    public function log(int $userId, string $type, string $name, ?int $points, bool $isNegative = false): void
     {
         try {
             UserHistory::create([

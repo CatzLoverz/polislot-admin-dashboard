@@ -10,6 +10,8 @@ use App\Models\IotCapture;
 use App\Models\ParkSubarea;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -176,12 +178,22 @@ class IotDevice extends Model
         'device_mac_address',
     ];
 
-    public function subarea()
+    /**
+     * Relasi ke ParkSubarea tempat device ini terpasang.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function subarea(): BelongsTo
     {
         return $this->belongsTo(ParkSubarea::class, 'park_subarea_id', 'park_subarea_id');
     }
 
-    public function captures()
+    /**
+     * Relasi ke IotCapture (history jepretan kamera device ini).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function captures(): HasMany
     {
         return $this->hasMany(IotCapture::class, 'device_id', 'device_id');
     }

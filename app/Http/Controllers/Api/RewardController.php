@@ -133,6 +133,8 @@ class RewardController extends Controller
 
     /**
      * Mengambil riwayat penukaran reward user.
+     *
+     * @return JsonResponse
      */
     public function history(): JsonResponse
     {

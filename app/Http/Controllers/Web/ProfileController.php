@@ -20,8 +20,10 @@ class ProfileController extends Controller
 {
     /**
      * Menampilkan halaman form untuk mengedit profil pengguna.
+     *
+     * @return \Illuminate\View\View
      */
-    public function edit()
+    public function edit(): \Illuminate\View\View
     {
         $user = Auth::user();
 
@@ -32,8 +34,11 @@ class ProfileController extends Controller
 
     /**
      * Memproses permintaan untuk memperbarui profil pengguna.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request)
+    public function update(Request $request): \Illuminate\Http\RedirectResponse
     {
         $user = Auth::user();
         Log::info('Menerima permintaan update profil.', ['user_id' => $user->user_id]);

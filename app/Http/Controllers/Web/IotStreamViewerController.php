@@ -22,8 +22,11 @@ class IotStreamViewerController extends Controller
     /**
      * Menampilkan halaman IoT Stream Viewer.
      * MAC Address dipilih dari daftar perangkat yang terdaftar di database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\View\View
     {
         // Ambil semua device dari database, termasuk subarea dan area induknya
         $devices = IotDevice::with('subarea.parkArea')->get();
@@ -113,8 +116,11 @@ class IotStreamViewerController extends Controller
 
     /**
      * Mengirim perintah 'snapshot' ke perangkat IoT via Reverb + MQTT
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function triggerSnapshot(Request $request)
+    public function triggerSnapshot(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
@@ -156,8 +162,11 @@ class IotStreamViewerController extends Controller
     /**
      * Menyimpan setelan deteksi (max slots, detection polygon, thresholds) ke subarea terkait device ini.
      * Kemudian mem-push config terupdate ke IoT Device (jika online).
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function saveSettings(Request $request)
+    public function saveSettings(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'mac_address'        => 'required|string',
@@ -214,8 +223,11 @@ class IotStreamViewerController extends Controller
     /**
      * Menerima request validasi manual Admin dari Web, menyimpan data ke cache pending_validation,
      * lalu memicu perintah 'snapshot' ke perangkat IoT.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function validateStream(Request $request)
+    public function validateStream(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'mac_address'        => 'required|string',
@@ -301,6 +313,9 @@ class IotStreamViewerController extends Controller
 
     /**
      * Batch Download snapshot images as a ZIP file.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\RedirectResponse
      */
     public function downloadBatch(Request $request)
     {
@@ -392,8 +407,11 @@ class IotStreamViewerController extends Controller
 
     /**
      * Batch Delete snapshots from database and local storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteBatch(Request $request)
+    public function deleteBatch(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'capture_ids'   => 'required|array',

@@ -22,23 +22,13 @@ class MissionService
     }
 
     /**
-     * Entry Point: Update progress misi user berdasarkan aksi.
-     * Service ini mencari SEMUA misi aktif dengan metric code tersebut,
-     * lalu memperbarui progress user untuk masing-masing mission_id secara independen.
-     *
-     * @param int $userId ID User yang melakukan aksi
-     * @param string $metricCode Kode event (VALIDATION_ACTION, LOGIN_ACTION, PROFILE_UPDATE)
-     * @param int $incrementValue Jumlah penambahan progress (default 1)
-     * @return void
-     */
-    /**
      * Memeriksa dan mereset semua misi user yang siklusnya sudah kadaluwarsa.
      * Dipanggil saat user membuka halaman misi.
      *
      * @param int $userId
      * @return void
      */
-    public function checkResetAllMissions(int $userId)
+    public function checkResetAllMissions(int $userId): void
     {
         $userMissions = UserMission::with('mission')
             ->where('user_id', $userId)
@@ -51,7 +41,17 @@ class MissionService
         }
     }
 
-    public function updateProgress(int $userId, string $metricCode, int $incrementValue = 1)
+    /**
+     * Entry Point: Update progress misi user berdasarkan aksi.
+     * Service ini mencari SEMUA misi aktif dengan metric code tersebut,
+     * lalu memperbarui progress user untuk masing-masing mission_id secara independen.
+     *
+     * @param int $userId ID User yang melakukan aksi
+     * @param string $metricCode Kode event (VALIDATION_ACTION, LOGIN_ACTION, PROFILE_UPDATE)
+     * @param int $incrementValue Jumlah penambahan progress (default 1)
+     * @return void
+     */
+    public function updateProgress(int $userId, string $metricCode, int $incrementValue = 1): void
     {
         try {
             $missions = Mission::where('mission_metric_code', $metricCode)
@@ -78,8 +78,9 @@ class MissionService
      * @param int $userId
      * @param Mission $mission
      * @param int $incrementValue
+     * @return void
      */
-    private function processMission(int $userId, Mission $mission, int $incrementValue)
+    private function processMission(int $userId, Mission $mission, int $incrementValue): void
     {
         DB::beginTransaction();
         try {
@@ -197,6 +198,7 @@ class MissionService
      *
      * @param UserMission $userMission
      * @param string $cycle ENUM: 'NONE', 'DAILY', 'WEEKLY', 'MONTHLY'
+     * @return bool
      */
     private function checkAndResetCycle(UserMission $userMission, string $cycle): bool
     {
@@ -222,7 +224,14 @@ class MissionService
         return false; // Tidak ada Reset
     }
 
-    private function awardPoints(int $userId, int $points)
+    /**
+     * Memberikan poin kepada user atas misi yang diselesaikan.
+     *
+     * @param int $userId
+     * @param int $points
+     * @return void
+     */
+    private function awardPoints(int $userId, int $points): void
     {
         $user = User::where('user_id', $userId)->lockForUpdate()->first();
         if ($user) {

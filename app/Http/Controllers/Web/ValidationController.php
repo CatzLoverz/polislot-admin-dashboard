@@ -15,7 +15,9 @@ class ValidationController extends Controller
 {
     /**
      * Menampilkan halaman daftar pengaturan validasi.
-     * * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -68,11 +70,12 @@ class ValidationController extends Controller
 
     /**
      * Memproses pembaruan data poin validasi.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {

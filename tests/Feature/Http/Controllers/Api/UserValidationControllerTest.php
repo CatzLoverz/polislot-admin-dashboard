@@ -6,6 +6,8 @@ use App\Models\ParkArea;
 use App\Models\ParkSubarea;
 use App\Models\User;
 use App\Models\Validation;
+use App\Services\HistoryService;
+use App\Services\MissionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Event;
@@ -23,11 +25,11 @@ class UserValidationControllerTest extends TestCase
         Storage::fake('public');
         Event::fake();
 
-        $this->mock(\App\Services\MissionService::class, function ($mock) {
+        $this->mock(MissionService::class, function ($mock) {
             $mock->shouldReceive('updateProgress')->andReturn(true);
         });
 
-        $this->mock(\App\Services\HistoryService::class, function ($mock) {
+        $this->mock(HistoryService::class, function ($mock) {
             $mock->shouldReceive('log')->andReturn(true);
         });
     }

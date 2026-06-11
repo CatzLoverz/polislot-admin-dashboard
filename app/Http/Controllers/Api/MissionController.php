@@ -26,7 +26,7 @@ class MissionController extends Controller
 
     /**
      * Mengambil data halaman Misi & Leaderboard secara agregat.
-     * * Data mencakup:
+     * Data mencakup:
      * 1. Statistik User (Total Misi Selesai & Lifetime Points)
      * 2. Daftar Misi Aktif beserta progres user saat ini
      * 3. Leaderboard Top 20 berdasarkan Lifetime Points

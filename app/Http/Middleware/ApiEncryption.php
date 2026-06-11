@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Log;
 
 class ApiEncryption
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed
+     */
     public function handle(Request $request, Closure $next)
     {
         // Cek jika request ke API route
@@ -215,8 +222,10 @@ class ApiEncryption
 
     /**
      * Load private key from storage
+     * 
+     * @return string|null
      */
-    private function loadPrivateKey()
+    private function loadPrivateKey(): ?string
     {
         $keyPath = storage_path('app/private/keys/private_key.pem');
 
@@ -239,6 +248,9 @@ class ApiEncryption
 
     /**
      * Check if request is for API
+     * 
+     * @param Request $request
+     * @return bool
      */
     private function isApiRequest(Request $request): bool
     {
@@ -249,6 +261,9 @@ class ApiEncryption
 
     /**
      * Check if request method should have body
+     * 
+     * @param Request $request
+     * @return bool
      */
     private function shouldHaveBody(Request $request): bool
     {

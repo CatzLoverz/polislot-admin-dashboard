@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ParkAmenity extends Model
 {
@@ -14,7 +15,12 @@ class ParkAmenity extends Model
         'park_amenity_name',
     ];
 
-    public function parkSubarea()
+    /**
+     * Relasi ke subarea parkir.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parkSubarea(): BelongsTo
     {
         return $this->belongsTo(ParkSubarea::class, 'park_subarea_id', 'park_subarea_id');
     }

@@ -31,7 +31,8 @@ class AuthController extends Controller
     /**
      * Endpoint untuk mendapatkan data user saat ini (pengganti route /user).
      * Sekaligus mentrigger misi login harian.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function authCheck(Request $request): JsonResponse
@@ -72,7 +73,8 @@ class AuthController extends Controller
 
     /**
      * Memproses registrasi pengguna baru.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function register(Request $request): JsonResponse
@@ -130,7 +132,8 @@ class AuthController extends Controller
 
     /**
      * Memverifikasi OTP Registrasi.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function registerOtpVerify(Request $request): JsonResponse
@@ -181,7 +184,8 @@ class AuthController extends Controller
 
     /**
      * Mengirim ulang OTP Registrasi.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function registerOtpResend(Request $request): JsonResponse
@@ -225,7 +229,8 @@ class AuthController extends Controller
 
     /**
      * Memproses Login.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function login(Request $request): JsonResponse
@@ -303,7 +308,8 @@ class AuthController extends Controller
 
     /**
      * Memproses Logout.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function logout(Request $request): JsonResponse
@@ -328,7 +334,8 @@ class AuthController extends Controller
 
     /**
      * Memproses permintaan email untuk reset password (mengirim OTP).
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function forgotPasswordVerify(Request $request): JsonResponse
@@ -361,7 +368,8 @@ class AuthController extends Controller
 
     /**
      * Memverifikasi OTP untuk reset password.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function forgotPasswordOtpVerify(Request $request): JsonResponse
@@ -387,7 +395,8 @@ class AuthController extends Controller
 
     /**
      * Mengirim ulang OTP untuk reset password.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function forgotPasswordOtpResend(Request $request): JsonResponse
@@ -421,7 +430,8 @@ class AuthController extends Controller
 
     /**
      * Memproses penyimpanan password baru.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function resetPassword(Request $request): JsonResponse

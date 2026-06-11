@@ -17,6 +17,7 @@ class MapVisualizationController extends Controller
 {
     /**
      * Menampilkan list Area parkir
+     *
      * @return JsonResponse
      */
     public function index(): JsonResponse
@@ -42,6 +43,7 @@ class MapVisualizationController extends Controller
 
     /**
      * Menampilkan detail Area beserta Subarea, Polygon, Amenities, Status, dan Jumlah Komentar.
+     *
      * @param Request $request
      * @param int $id (park_area_id)
      * @return JsonResponse

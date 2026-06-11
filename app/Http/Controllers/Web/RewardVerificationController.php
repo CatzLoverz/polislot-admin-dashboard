@@ -22,7 +22,8 @@ class RewardVerificationController extends Controller
 
     /**
      * Menampilkan daftar antrian klaim reward.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -107,11 +108,12 @@ class RewardVerificationController extends Controller
 
     /**
      * Memproses persetujuan atau penolakan klaim reward.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function process(Request $request, $id)
+    public function process(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {

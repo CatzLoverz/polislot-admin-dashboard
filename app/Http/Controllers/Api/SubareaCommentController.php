@@ -19,10 +19,11 @@ class SubareaCommentController extends Controller
     /**
      * Menampilkan daftar komentar berdasarkan Subarea dengan Paginasi.
      * Mirip dengan HistoryController, output diformat ulang.
-     * * @param Request $request (park_subarea_id, limit, page)
+     *
+     * @param Request $request (park_subarea_id, limit, page)
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         // Validasi: Kita butuh ID Subarea untuk tahu komentar mana yang diambil
         $request->validate([
@@ -78,10 +79,11 @@ class SubareaCommentController extends Controller
 
     /**
      * Menyimpan komentar baru (Store).
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'park_subarea_id'         => 'required|exists:park_subareas,park_subarea_id',
@@ -129,12 +131,13 @@ class SubareaCommentController extends Controller
 
     /**
      * Memperbarui komentar (Update).
-     * * Mengganti konten atau gambar. Gambar lama akan dihapus jika ada gambar baru.
-     * * @param Request $request
+     * Mengganti konten atau gambar. Gambar lama akan dihapus jika ada gambar baru.
+     *
+     * @param Request $request
      * @param int $id ID SubareaComment
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         if ($request->isMethod('put') || $request->isMethod('patch')) {
              // Laravel handle ini otomatis, tapi request harus multipart/form-data
@@ -195,12 +198,13 @@ class SubareaCommentController extends Controller
 
     /**
      * Menghapus komentar (Destroy).
-     * * Menghapus data di database beserta file gambarnya di storage.
-     * * @param Request $request
+     * Menghapus data di database beserta file gambarnya di storage.
+     *
+     * @param Request $request
      * @param int $id ID SubareaComment
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $comment = SubareaComment::findOrFail($id);
 

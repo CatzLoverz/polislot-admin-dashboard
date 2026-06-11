@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -45,32 +46,62 @@ class User extends Authenticatable
     }
 
     
-    public function infoBoard()
+    /**
+     * Relasi ke Info Board.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function infoBoard(): HasMany
     {
         return $this->hasMany(InfoBoard::class, 'user_id', 'user_id');
     }
 
-    public function userMission()
+    /**
+     * Relasi ke User Mission.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userMission(): HasMany
     {
         return $this->hasMany(UserMission::class, 'user_id', 'user_id');
     }
 
-    public function userReward()
+    /**
+     * Relasi ke User Reward.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userReward(): HasMany
     {
         return $this->hasMany(UserReward::class, 'user_id', 'user_id');
     }
 
-    public function userHistory()
+    /**
+     * Relasi ke User History.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userHistory(): HasMany
     {
         return $this->hasMany(UserHistory::class, 'user_id', 'user_id');
     }
 
-    public function userValidation()
+    /**
+     * Relasi ke User Validation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userValidation(): HasMany
     {
         return $this->hasMany(UserValidation::class, 'user_id', 'user_id');
     }
 
-    public function subareaComment()
+    /**
+     * Relasi ke Subarea Comment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subareaComment(): HasMany
     {
         return $this->hasMany(SubareaComment::class, 'user_id', 'user_id');
     }

@@ -16,7 +16,9 @@ class InfoBoardController extends Controller
 {
     /**
      * Menampilkan halaman daftar semua info board.
-     * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -73,10 +75,11 @@ class InfoBoardController extends Controller
 
     /**
      * Memproses penyimpanan data info board baru.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -106,11 +109,12 @@ class InfoBoardController extends Controller
 
     /**
      * Memproses pembaruan data info board.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -142,10 +146,11 @@ class InfoBoardController extends Controller
 
     /**
      * Memproses penghapusan data info board.
-     * * @param int $id
+     *
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {

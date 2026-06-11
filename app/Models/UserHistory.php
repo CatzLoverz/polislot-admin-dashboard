@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserHistory extends Model
 {
@@ -29,7 +30,12 @@ class UserHistory extends Model
     const TYPE_VALIDATION = 'validation';
     const TYPE_REDEEM = 'redeem';
 
-    public function user()
+    /**
+     * Relasi ke pengguna terkait.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }

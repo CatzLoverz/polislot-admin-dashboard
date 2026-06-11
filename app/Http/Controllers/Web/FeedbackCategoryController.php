@@ -15,7 +15,9 @@ class FeedbackCategoryController extends Controller
 {
     /**
      * Menampilkan halaman daftar kategori feedback.
-     * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -66,10 +68,11 @@ class FeedbackCategoryController extends Controller
 
     /**
      * Memproses penyimpanan kategori baru.
-     * * @param \Illuminate\Http\Request $request
-     * * @return \Illuminate\Http\RedirectResponse
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -98,8 +101,12 @@ class FeedbackCategoryController extends Controller
 
     /**
      * Memperbarui kategori.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -129,8 +136,11 @@ class FeedbackCategoryController extends Controller
 
     /**
      * Menghapus kategori.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {

@@ -14,7 +14,8 @@ class HistoryController extends Controller
 {
     /**
      * Menampilkan riwayat aktivitas poin user.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse

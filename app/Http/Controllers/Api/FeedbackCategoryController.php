@@ -12,7 +12,8 @@ class FeedbackCategoryController extends Controller
 {
     /**
      * Ambil semua kategori feedback untuk dropdown.
-     * * @return JsonResponse
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {

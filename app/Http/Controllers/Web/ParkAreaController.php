@@ -74,7 +74,7 @@ class ParkAreaController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(): \Illuminate\View\View
     {
         $mapsApiKey = config('services.google.js_api_key');
         return view('Contents.ParkArea.create', compact('mapsApiKey'));
@@ -86,7 +86,7 @@ class ParkAreaController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -180,7 +180,7 @@ class ParkAreaController extends Controller
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {

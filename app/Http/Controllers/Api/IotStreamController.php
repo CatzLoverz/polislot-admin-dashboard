@@ -45,8 +45,11 @@ class IotStreamController extends Controller
      * 1. MAC Address divalidasi terhadap database (harus terdaftar)
      * 2. Request di-sign dengan HMAC-SHA256 menggunakan API secret
      * 3. Timestamp dalam signature mencegah replay attack (±5 menit)
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function receiveStream(Request $request)
+    public function receiveStream(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
@@ -157,8 +160,11 @@ class IotStreamController extends Controller
      * Padanan HTTP dari MQTT topic "polislot/device/{MAC}/snapshot".
      * 
      * Flow: Device capture → AES encrypt → HTTP POST → Decrypt → Save DB → Broadcast Reverb
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function receiveSnapshot(Request $request)
+    public function receiveSnapshot(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'mac_address'     => 'required|string',
@@ -317,8 +323,11 @@ class IotStreamController extends Controller
 
     /**
      * Endpoint untuk menerima hitungan (count) kendaraan dari IoT device.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function receiveCount(Request $request)
+    public function receiveCount(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
@@ -381,8 +390,11 @@ class IotStreamController extends Controller
 
     /**
      * Endpoint untuk memberikan konfigurasi terbaru ke IoT device pada saat startup.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function receiveConfigQuery(Request $request)
+    public function receiveConfigQuery(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',

@@ -22,7 +22,7 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(): \Illuminate\View\View
     {
         $user = Auth::user();
 
@@ -48,9 +48,10 @@ class DashboardController extends Controller
     /**
      * Fetch chart data for User Validation frequency.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getChartData(Request $request)
+    public function getChartData(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $period = $request->input('period', 'day'); // day, week, month
@@ -136,7 +137,7 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getLeaderboard()
+    public function getLeaderboard(): \Illuminate\Http\JsonResponse
     {
         try {
             $leaders = User::select('user_id', 'name', 'avatar', 'lifetime_points') // id is mapped to user_id usually, verify model
@@ -161,9 +162,10 @@ class DashboardController extends Controller
     /**
      * Fetch realtime validation logs with optional area filtering.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getRealtimeValidations(Request $request)
+    public function getRealtimeValidations(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $areaId = $request->input('area_id');

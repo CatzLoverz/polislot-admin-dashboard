@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Reward extends Model
 {
@@ -23,7 +24,12 @@ class Reward extends Model
     // Helper untuk Konstanta (Dropdown Filter)
     const TYPES = ['Voucher', 'Barang'];
 
-    public function userRewards()
+    /**
+     * Relasi ke reward yang ditukarkan oleh pengguna (UserReward).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userRewards(): HasMany
     {
         return $this->hasMany(UserReward::class, 'reward_id', 'reward_id');
     }

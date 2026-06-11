@@ -4,6 +4,9 @@ namespace App\Models;
 use Exception;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotCommandSent;
@@ -34,27 +37,52 @@ class ParkSubarea extends Model
         'threshold_terbatas' => 'double',
     ];
 
-    public function parkArea()
+    /**
+     * Relasi ke area parkir utama.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parkArea(): BelongsTo
     {
         return $this->belongsTo(ParkArea::class, 'park_area_id', 'park_area_id');
     }
 
-    public function parkAmenity()
+    /**
+     * Relasi ke fasilitas yang ada di subarea ini.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function parkAmenity(): HasMany
     {
         return $this->hasMany(ParkAmenity::class, 'park_subarea_id', 'park_subarea_id');
     }
 
-    public function userValidation()
+    /**
+     * Relasi ke validasi parkir dari user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userValidation(): HasMany
     {
         return $this->hasMany(UserValidation::class, 'park_subarea_id', 'park_subarea_id');
     }
 
-    public function subareaComment()
+    /**
+     * Relasi ke komentar subarea dari user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subareaComment(): HasMany
     {
         return $this->hasMany(SubareaComment::class, 'park_subarea_id', 'park_subarea_id');
     }
 
-    public function iotDevice()
+    /**
+     * Relasi ke perangkat IoT yang terpasang di subarea ini.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function iotDevice(): HasOne
     {
         return $this->hasOne(IotDevice::class, 'park_subarea_id', 'park_subarea_id');
     }

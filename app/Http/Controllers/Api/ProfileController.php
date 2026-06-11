@@ -27,7 +27,8 @@ class ProfileController extends Controller
 
     /**
      * Menampilkan data profil pengguna.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function show(Request $request): JsonResponse
@@ -43,7 +44,8 @@ class ProfileController extends Controller
 
     /**
      * Memperbarui data profil pengguna.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function update(Request $request): JsonResponse

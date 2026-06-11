@@ -20,10 +20,10 @@ class ParkSubareaController extends Controller
      * Biasanya dipanggil via AJAX dari Map Editor.
      *
      * @param Request $request
-     * @param int $areaId ID dari ParkArea induk
+     * @param int $park_area ID dari ParkArea induk
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, $park_area)
+    public function store(Request $request, $park_area): \Illuminate\Http\JsonResponse
     {
         try {
             return DB::transaction(function () use ($request, $park_area) {
@@ -76,7 +76,7 @@ class ParkSubareaController extends Controller
      * @param int $id ID ParkSubarea
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -183,7 +183,7 @@ class ParkSubareaController extends Controller
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
@@ -220,7 +220,7 @@ class ParkSubareaController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getComments($id)
+    public function getComments($id): \Illuminate\Http\JsonResponse
     {
         try {
             $subarea = ParkSubarea::findOrFail($id);

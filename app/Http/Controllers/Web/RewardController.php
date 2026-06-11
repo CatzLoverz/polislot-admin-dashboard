@@ -16,7 +16,8 @@ class RewardController extends Controller
 {
     /**
      * Menampilkan halaman daftar master reward.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -73,10 +74,11 @@ class RewardController extends Controller
 
     /**
      * Menyimpan data reward baru.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -108,11 +110,12 @@ class RewardController extends Controller
 
     /**
      * Memperbarui data reward.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -149,10 +152,11 @@ class RewardController extends Controller
 
     /**
      * Menghapus data reward.
-     * * @param int $id
+     *
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
