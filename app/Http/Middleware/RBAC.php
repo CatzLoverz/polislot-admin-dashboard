@@ -49,19 +49,7 @@ class RBAC
             }
         }
 
-        // Atur koneksi database berdasarkan role user
-        $connection = match ($user->role) {
-            'admin' => 'mariadb',
-            'user' => 'mariadb_mobile',
-            default => config('database.default'),
-        };
 
-        config(['database.default' => $connection]);
-        
-        // Pastikan user menggunakan koneksi yang benar
-        if (method_exists($user, 'setConnection')) {
-            $user->setConnection($connection);
-        }
 
         // Jika ada parameter role, lakukan pengecekan RBAC
         if (!empty($roles)) {

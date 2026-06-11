@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Validation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -20,6 +21,7 @@ class UserValidationControllerTest extends TestCase
     {
         parent::setUp();
         Storage::fake('public');
+        Event::fake();
 
         $this->mock(\App\Services\MissionService::class, function ($mock) {
             $mock->shouldReceive('updateProgress')->andReturn(true);

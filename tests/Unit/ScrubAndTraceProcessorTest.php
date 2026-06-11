@@ -69,8 +69,8 @@ class ScrubAndTraceProcessorTest extends TestCase
         // Set last seen to 70 seconds ago
         Cache::put("iot_last_seen_{$mac}", time() - 70);
 
-        // Call getStatus
-        $status = IotDevice::getStatus($mac);
+        // Call syncStatus
+        $status = IotDevice::syncStatus($mac);
 
         // It should return 'offline' and update the cache status to 'offline'
         $this->assertEquals('offline', $status);
@@ -89,8 +89,8 @@ class ScrubAndTraceProcessorTest extends TestCase
         // Set last seen to 20 seconds ago
         Cache::put("iot_last_seen_{$mac}", time() - 20);
 
-        // Call getStatus
-        $status = IotDevice::getStatus($mac);
+        // Call syncStatus
+        $status = IotDevice::syncStatus($mac);
 
         // It should remain 'online'
         $this->assertEquals('online', $status);
