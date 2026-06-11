@@ -173,7 +173,7 @@ class ParkSubareaController extends Controller
             ], 422);
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan server.'], 500);
+            return response()->json(['status' => 'error', 'message' => $e->getMessage() . ' - ' . $e->getFile() . ':' . $e->getLine()], 500);
         }
     }
 

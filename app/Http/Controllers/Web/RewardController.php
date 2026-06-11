@@ -97,7 +97,7 @@ class RewardController extends Controller
 
                 Log::info('Reward berhasil ditambahkan.', ['reward_id' => $reward->reward_id]);
                 
-                return back()->with('swal_success_crud', 'Reward berhasil ditambahkan.');
+                return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil ditambahkan.');
             });
 
         } catch (ValidationException $e) {
@@ -139,7 +139,7 @@ class RewardController extends Controller
 
                 Log::info('Reward berhasil diperbarui.', ['reward_id' => $id]);
                 
-                return back()->with('swal_success_crud', 'Reward berhasil diperbarui.');
+                return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil diperbarui.');
             });
 
         } catch (ValidationException $e) {
@@ -170,7 +170,7 @@ class RewardController extends Controller
                 
                 Log::info('Reward berhasil dihapus.', ['reward_id' => $id]);
                 
-                return back()->with('swal_success_crud', 'Reward berhasil dihapus.');
+                return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil dihapus.');
             });
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);

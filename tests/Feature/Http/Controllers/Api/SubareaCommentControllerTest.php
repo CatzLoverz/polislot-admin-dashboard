@@ -31,6 +31,12 @@ class SubareaCommentControllerTest extends TestCase
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
         
+        \App\Models\SubareaComment::create([
+            'user_id' => $user->user_id,
+            'park_subarea_id' => $sub->park_subarea_id,
+            'subarea_comment_content' => 'Test comment',
+        ]);
+
         $this->actingAs($user);
         
         $response = $this->getJson("/api/comment?park_subarea_id={$sub->park_subarea_id}");

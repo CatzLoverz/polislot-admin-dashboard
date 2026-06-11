@@ -32,7 +32,7 @@ class RBAC
             }
             
             // Untuk Web, redirect ke login
-            return redirect()->route('login');
+            return redirect()->route('login.form');
         }
 
         if (!app()->runningUnitTests()) {

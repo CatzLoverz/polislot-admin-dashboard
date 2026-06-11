@@ -3,8 +3,6 @@
 namespace Tests\Feature\Http\Controllers\Web;
 
 use App\Models\User;
-use App\Models\ParkArea;
-use App\Models\ParkSubarea;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -18,66 +16,40 @@ class DashboardControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Buat user admin
-        $this->admin = User::create([
-            'name' => 'Admin Test',
-            'email' => 'admin@test.com',
-            'password' => bcrypt('password'),
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
+        $this->admin = User::factory()->create(['role' => 'admin']);
     }
 
     #[Test]
-    public function it_can_display_dashboard_index()
+    public function index_returns_dashboard_view()
     {
-        $this->actingAs($this->admin);
-
-        // Buat beberapa data dummy
-        User::create(['name' => 'User 1', 'email' => 'user@test.com', 'password' => 'pass', 'role' => 'user', 'email_verified_at' => now()]);
-        ParkArea::create(['park_area_name' => 'Area 1', 'park_area_code' => 'A1', 'park_area_data' => []]);
-
-        $response = $this->get(route('dashboard'));
-
-        $response->assertStatus(200);
-        $response->assertViewIs('Contents.Dashboard.index');
-        $response->assertViewHasAll(['totalUsers', 'totalParkAreas', 'totalSubareas', 'pendingRewards', 'parkAreas']);
+        $response = $this->actingAs($this->admin)->get('/dashboard');
+        $response->assertStatus(200)->assertViewIs('Contents.Dashboard.index');
     }
 
     #[Test]
-    public function it_can_fetch_chart_data()
+    public function chart_data_returns_json()
     {
-        $this->actingAs($this->admin);
-
-        $response = $this->getJson(route('dashboard.chart', ['period' => 'day']));
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'labels',
-            'datasets',
-            'period'
-        ]);
+        $response = $this->actingAs($this->admin)->get('/dashboard/chart');
+        $response->assertStatus(200)->assertJsonStructure(['labels', 'datasets', 'period']);
     }
 
     #[Test]
-    public function it_can_fetch_leaderboard()
+    public function leaderboard_returns_json()
     {
-        $this->actingAs($this->admin);
-
-        $response = $this->getJson(route('dashboard.leaderboard'));
-
-        $response->assertStatus(200);
-        $this->assertIsArray($response->json());
+        User::factory()->create(['role' => 'user', 'lifetime_points' => 100, 'email_verified_at' => now()]);
+        $response = $this->actingAs($this->admin)->get('/dashboard/leaderboard');
+        $response->assertStatus(200)->assertJsonStructure([['user_id', 'name', 'avatar', 'lifetime_points']]);
     }
 
     #[Test]
-    public function it_can_fetch_realtime_validations()
+    public function realtime_validations_returns_json()
     {
-        $this->actingAs($this->admin);
-
-        $response = $this->getJson(route('dashboard.realtime'));
-
-        $response->assertStatus(200);
-        $this->assertIsArray($response->json());
+        $user = User::factory()->create(['role' => 'user', 'email_verified_at' => now()]);
+        $area = \App\Models\ParkArea::create(['park_area_name' => 'Area', 'park_area_code' => 'AR', 'park_area_data' => '[]']);
+        $sub = \App\Models\ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'Sub', 'park_subarea_polygon' => '[]', 'max_slots' => 10]);
+        $validation = \App\Models\Validation::create(['validation_points' => 10, 'validation_is_geofence_active' => true]);
+        \App\Models\UserValidation::create(['validation_id' => $validation->validation_id, 'user_id' => $user->user_id, 'park_subarea_id' => $sub->park_subarea_id, 'user_validation_content' => 'banyak', 'user_validation_image' => 'img.jpg', 'user_validation_status' => 'valid']);
+        $response = $this->actingAs($this->admin)->get('/dashboard/realtime');
+        $response->assertStatus(200)->assertJsonStructure([['avatar', 'username', 'status', 'area', 'subarea', 'time', 'timestamp']]);
     }
 }

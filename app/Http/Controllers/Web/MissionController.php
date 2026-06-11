@@ -110,7 +110,7 @@ class MissionController extends Controller
 
                 Mission::create($validated);
 
-                return redirect()->back()->with('swal_success_crud', 'Misi berhasil ditambahkan.');
+                return redirect()->route('admin.missions.index')->with('swal_success_crud', 'Misi berhasil ditambahkan.');
             });
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
@@ -149,7 +149,7 @@ class MissionController extends Controller
 
                 $mission->update($validated);
 
-                return redirect()->back()->with('swal_success_crud', 'Misi berhasil diperbarui.');
+                return redirect()->route('admin.missions.index')->with('swal_success_crud', 'Misi berhasil diperbarui.');
             });
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
