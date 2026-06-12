@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\IotDevice;
 use App\Models\ParkArea;
 use App\Models\UserValidation;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class MapVisualizationController extends Controller
 {
     /**
      * Menampilkan list Area parkir
+     *
      * @return JsonResponse
      */
     public function index(): JsonResponse
@@ -32,13 +36,14 @@ class MapVisualizationController extends Controller
             });
 
             return $this->sendSuccess('Daftar area berhasil diambil.', $data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->sendError('Gagal memuat area: ' . $e->getMessage(), 500);
         }
     }
 
     /**
      * Menampilkan detail Area beserta Subarea, Polygon, Amenities, Status, dan Jumlah Komentar.
+     *
      * @param Request $request
      * @param int $id (park_area_id)
      * @return JsonResponse
@@ -61,56 +66,24 @@ class MapVisualizationController extends Controller
             }
 
             $formattedSubareas = $area->parkSubarea->map(function ($sub) {
-                // --- LOGIKA PENENTUAN STATUS (Voting 1 Jam Terakhir) ---
-                $status = 'netral'; 
-                $allValidations = $sub->userValidation;
-
-                if ($allValidations->isNotEmpty()) {
-                    $latestValidation = $allValidations->first();
-                    $anchorTime = $latestValidation->created_at;
-                    $cutoffTime = $anchorTime->copy()->subHour();
-
-                    $validVotes = $allValidations->filter(function ($val) use ($cutoffTime) {
-                        return $val->created_at >= $cutoffTime;
-                    });
-
-                    if ($validVotes->isNotEmpty()) {
-                        // 1. Hitung Vote per Status
-                        $counts = $validVotes->countBy('user_validation_content');
-                        
-                        // 2. Cari Nilai Vote Tertinggi (Mayoritas)
-                        $maxVote = $counts->max();
-
-                        // 3. Cari Status apa saja yang punya nilai Max tersebut (Bisa lebih dari 1 jika seri)
-                        $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
-                            return $counts[$key] === $maxVote;
-                        });
-
-                        // 4. Penentuan Pemenang
-                        if ($candidates->count() === 1) {
-                            // Jika TIDAK seri, ambil langsung pemenangnya
-                            $status = $candidates->first();
-                        } else {
-                            // Jika SERI (Tie), ambil status dari vote TERBARU di antara kandidat yang seri
-                            // Karena $validVotes sudah urut descending (terbaru diatas), kita loop cari yang pertama ketemu
-                            $latestDecider = $validVotes->first(function ($vote) use ($candidates) {
-                                return $candidates->contains($vote->user_validation_content);
-                            });
-                            
-                            if ($latestDecider) {
-                                $status = $latestDecider->user_validation_content;
-                            }
-                        }
-                    }
-                }
+                $live = $sub->getLiveStatus();
 
                 return [
-                    'id'            => $sub->park_subarea_id,
-                    'name'          => $sub->park_subarea_name,
-                    'polygon'       => $sub->park_subarea_polygon, 
-                    'status'        => $status, 
-                    'amenities'     => $sub->parkAmenity->pluck('park_amenity_name'),
-                    'comment_count' => $sub->subarea_comment_count ?? 0, 
+                    'id'                           => $sub->park_subarea_id,
+                    'name'                         => $sub->park_subarea_name,
+                    'polygon'                      => $sub->park_subarea_polygon, 
+                    'status'                       => $live['status'], 
+                    'is_validated'                 => $live['is_validated'],
+                    'has_user_report'              => $live['has_user_report'],
+                    'current_count'                => $sub->current_count ?? 0,
+                    'max_slots'                    => $sub->max_slots ?? 0,
+                    'validation_expires_at'        => $live['validation_expires_at'],
+                    'last_validation_time'         => $live['last_validation_time'],
+                    'validation_remaining_seconds' => $live['validation_remaining_seconds'],
+                    'fallback_status'              => $live['fallback_status'],
+                    'fallback_status_color'        => $live['fallback_status_color'],
+                    'amenities'                    => $sub->parkAmenity->pluck('park_amenity_name'),
+                    'comment_count'                => $sub->subarea_comment_count ?? 0, 
                 ];
             });
 
@@ -145,8 +118,8 @@ class MapVisualizationController extends Controller
 
             return $this->sendSuccess('Data visualisasi berhasil diambil.', $data);
 
-        } catch (\Exception $e) {
-            Log::error('[API MapVisualizationController@show] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+        } catch (Exception $e) {
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat visualisasi: ' . $e->getMessage(), 500);
         }
     }

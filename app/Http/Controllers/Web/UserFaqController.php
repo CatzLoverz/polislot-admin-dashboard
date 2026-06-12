@@ -4,20 +4,24 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserFaq;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class UserFaqController extends Controller
 {
     /**
      * Menampilkan halaman daftar semua FAQ.
      *
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -77,9 +81,9 @@ class UserFaqController extends Controller
      * Memproses penyimpanan data FAQ baru.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -94,7 +98,7 @@ class UserFaqController extends Controller
                     'faq_answer'   => $validated['faq_answer'],
                 ]);
 
-                Log::info('[WEB UserFaqController@store] Sukses: Data FAQ baru berhasil disimpan.');
+                Log::info('Data FAQ baru berhasil disimpan.');
 
                 return redirect()->route('admin.user-faq.index')
                     ->with('swal_success_crud', 'FAQ berhasil ditambahkan.');
@@ -103,7 +107,7 @@ class UserFaqController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB UserFaqController@store] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menambahkan FAQ.')->withInput();
         }
     }
@@ -113,9 +117,9 @@ class UserFaqController extends Controller
      *
      * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -131,7 +135,7 @@ class UserFaqController extends Controller
                     'faq_answer'   => $validated['faq_answer'],
                 ]);
 
-                Log::info('[WEB UserFaqController@update] Sukses: Data FAQ berhasil diperbarui.');
+                Log::info('Data FAQ berhasil diperbarui.');
 
                 return redirect()->route('admin.user-faq.index')
                     ->with('swal_success_crud', 'FAQ berhasil diperbarui.');
@@ -140,7 +144,7 @@ class UserFaqController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB UserFaqController@update] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal memperbarui FAQ.');
         }
     }
@@ -149,23 +153,23 @@ class UserFaqController extends Controller
      * Memproses penghapusan data FAQ.
      *
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
                 $faq = UserFaq::findOrFail($id);
                 $faq->delete();
 
-                Log::info('[WEB UserFaqController@destroy] Sukses: Data FAQ berhasil dihapus.');
+                Log::info('Data FAQ berhasil dihapus.');
 
                 return redirect()->route('admin.user-faq.index')
                     ->with('swal_success_crud', 'FAQ berhasil dihapus.');
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB UserFaqController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus FAQ.');
         }
     }

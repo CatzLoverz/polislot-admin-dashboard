@@ -4,20 +4,23 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class MissionController extends Controller
 {
     /**
      * Menampilkan halaman daftar semua misi.
      * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -87,9 +90,9 @@ class MissionController extends Controller
     /**
      * Memproses penyimpanan data Misi baru.
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -110,12 +113,12 @@ class MissionController extends Controller
 
                 Mission::create($validated);
 
-                return redirect()->back()->with('swal_success_crud', 'Misi berhasil ditambahkan.');
+                return redirect()->route('admin.missions.index')->with('swal_success_crud', 'Misi berhasil ditambahkan.');
             });
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB MissionController@store] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menyimpan data.');
         }
     }
@@ -124,9 +127,9 @@ class MissionController extends Controller
      * Memproses pembaruan data Misi.
      * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -149,12 +152,12 @@ class MissionController extends Controller
 
                 $mission->update($validated);
 
-                return redirect()->back()->with('swal_success_crud', 'Misi berhasil diperbarui.');
+                return redirect()->route('admin.missions.index')->with('swal_success_crud', 'Misi berhasil diperbarui.');
             });
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
-            Log::error('[WEB MissionController@update] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
@@ -162,9 +165,9 @@ class MissionController extends Controller
     /**
      * Memproses penghapusan data Misi.
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
@@ -173,13 +176,13 @@ class MissionController extends Controller
                 
                 $mission->delete();
 
-                Log::info('[WEB MissionController@destroy] Sukses: Mission dihapus.', ['id' => $id, 'title' => $title]);
+                Log::info('Mission dihapus.', ['id' => $id, 'title' => $title]);
 
                 return redirect()->route('admin.missions.index')->with('swal_success_crud', 'Misi berhasil dihapus.');
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB MissionController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

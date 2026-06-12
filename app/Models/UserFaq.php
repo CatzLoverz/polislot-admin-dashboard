@@ -17,7 +17,11 @@ class UserFaq extends Model
         'faq_answer',
     ];
  
-    // Relationships
+    /**
+     * Relasi ke user yang menanyakan FAQ.
+     *
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');

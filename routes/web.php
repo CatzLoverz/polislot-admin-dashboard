@@ -15,7 +15,7 @@ use App\Http\Controllers\Web\FeedbackCategoryController;
 use App\Http\Controllers\Web\RewardVerificationController;
 use App\Http\Controllers\Web\ValidationController;
 use App\Http\Controllers\Web\UserFaqController;
-use App\Http\Controllers\Web\IotStreamViewerController;
+use App\Http\Controllers\Web\IotDetectionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -60,10 +60,9 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         // Route Park Area
         Route::resource('park-area', ParkAreaController::class);
 
-
-
         // Route Park Subarea
         Route::post('park-area/{park_area}/subarea', [ParkSubareaController::class, 'store'])->name('park-area.subarea.store');
+        Route::get('park-subarea/{park_subarea}/comments', [ParkSubareaController::class, 'getComments'])->name('park-subarea.comments');
         Route::resource('park-subarea', ParkSubareaController::class)->only(['update', 'destroy']);
 
         // Route Park Amenity
@@ -93,12 +92,15 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
 
         // Route User_Faq
         Route::resource('user-faq', UserFaqController::class)->only(['index', 'store', 'update', 'destroy']);
-        
 
         // Route Khusus Uji Coba WebSockets IoT
-        Route::get('iot-stream-viewer', [IotStreamViewerController::class, 'index'])->name('iot-stream-viewer.index');
-        Route::post('iot-stream-viewer/trigger', [IotStreamViewerController::class, 'triggerSnapshot'])->name('iot-stream-viewer.trigger');
-        Route::post('iot-stream-viewer/chat', [IotStreamViewerController::class, 'sendChat'])->name('iot-stream-viewer.chat');
+        Route::prefix('iot')->as('iot.')->controller(IotDetectionController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/trigger', 'triggerSnapshot')->name('trigger');
+            Route::post('/save-settings', 'saveSettings')->name('save-settings');
+            Route::post('/validate', 'validateStream')->name('validate');
+            Route::post('/download-batch', 'downloadBatch')->name('download-batch');
+            Route::post('/delete-batch', 'deleteBatch')->name('delete-batch');
+        });
     });
-
 });

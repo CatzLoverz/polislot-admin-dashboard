@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -37,21 +38,21 @@ class SetupDatabaseUser extends Command
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.cache TO '$username'@'$host'");
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.sessions TO '$username'@'$host'");
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.password_reset_tokens TO '$username'@'$host'");
+            DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.personal_access_tokens TO '$username'@'$host'");
+            DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.jobs TO '$username'@'$host'");
 
             // === LARAVEL INTERNAL (READ ONLY) ===
             DB::statement("GRANT SELECT ON $dbName.cache_locks TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.failed_jobs TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.job_batches TO '$username'@'$host'");
-            DB::statement("GRANT SELECT ON $dbName.jobs TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.migrations TO '$username'@'$host'");
-            DB::statement("GRANT SELECT ON $dbName.personal_access_tokens TO '$username'@'$host'");
 
             // === APPLICATION TABLES ===
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.users TO '$username'@'$host'");
 
             DB::statement("GRANT SELECT ON $dbName.info_boards TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.park_areas TO '$username'@'$host'");
-            DB::statement("GRANT SELECT ON $dbName.park_subareas TO '$username'@'$host'");
+            DB::statement("GRANT SELECT, INSERT, UPDATE ON $dbName.park_subareas TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.park_amenities TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.missions TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.rewards TO '$username'@'$host'");
@@ -67,14 +68,19 @@ class SetupDatabaseUser extends Command
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.user_validations TO '$username'@'$host'");
 
             DB::statement("GRANT SELECT, INSERT, UPDATE, DELETE ON $dbName.subarea_comments TO '$username'@'$host'");
+            DB::statement("GRANT SELECT ON $dbName.iot_devices TO '$username'@'$host'");
+            DB::statement("GRANT SELECT, INSERT ON $dbName.iot_captures TO '$username'@'$host'");
+            DB::statement("GRANT SELECT ON $dbName.user_faq TO '$username'@'$host'");
 
-            DB::statement("FLUSH PRIVILEGES;");
+            DB::statement('FLUSH PRIVILEGES;');
 
-            $this->info("User database berhasil dibuat dan privilege disetel.");
+            $this->info('User database berhasil dibuat dan privilege disetel.');
+
             return self::SUCCESS;
 
-        } catch (\Exception $e) {
-            $this->error("Terjadi kesalahan: " . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('Terjadi kesalahan: '.$e->getMessage());
+
             return self::FAILURE;
         }
     }

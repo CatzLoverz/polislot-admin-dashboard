@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -35,13 +36,15 @@ class SetupDatabaseAdmin extends Command
 
             DB::statement("GRANT ALL PRIVILEGES ON `$dbName`.* TO '$username'@'$host';");
 
-            DB::statement("FLUSH PRIVILEGES;");
+            DB::statement('FLUSH PRIVILEGES;');
 
-            $this->info("User database berhasil dibuat dan privilege disetel.");
+            $this->info('User database berhasil dibuat dan privilege disetel.');
+
             return self::SUCCESS;
 
-        } catch (\Exception $e) {
-            $this->error("Terjadi kesalahan: " . $e->getMessage());
+        } catch (Exception $e) {
+            $this->error('Terjadi kesalahan: '.$e->getMessage());
+
             return self::FAILURE;
         }
     }

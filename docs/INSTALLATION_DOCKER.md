@@ -15,7 +15,8 @@ Karena instalasi ini terpisah dari source code, Anda perlu **Menyalin** beberapa
 1. Copy `docker/docker-compose.yml` -> ke root.
 2. Copy `docker/mariadb.cnf` -> ke root.
 3. Copy `docker/logrotate-entrypoint.sh` -> ke root.
-4. Copy `.env.example` -> ke root (Rename menjadi `.env`).
+4. Copy `docker/mosquitto.conf` -> ke root.
+5. Copy `.env.example` -> ke root (Rename menjadi `.env`).
 
 ### Khusus Pengguna Linux
 Berikan izin eksekusi pada file entrypoint yang sudah dicopy ke root:
@@ -63,6 +64,11 @@ Buka `.env` dan atur konfigurasi berikut:
     - **Cloudflare Tunnel (Opsional)**: Isi token ini jika Anda menggunakan fitur tunneling.
     ```ini
     TUNNEL_TOKEN="isi_token_cloudflare_tunnel_anda"
+    ```
+- **MQTT Authentication (Mosquitto)**: Isi kredensial untuk broker MQTT. Autentikasi broker ini telah **diotomatisasi secara penuh** di dalam Docker kontainer pada saat kontainer dijalankan menggunakan variabel ini. Anda tidak perlu membuat berkas password secara manual.
+    ```ini
+    MQTT_AUTH_USERNAME=MQTTPoliSlot
+    MQTT_AUTH_PASSWORD=password_mqtt_yang_aman
     ```
 
 ### 2. Atur docker-compose.yml
@@ -156,7 +162,7 @@ DB_PASSWORD_MOBILE=password_db_mobile
 ```
 
 ### 11. Re-up Container
-Jalankan kembali docker compose untuk menerapkan perubahan environment dan memastikan koneksi user baru berhasil.
+Jalankan kembali docker compose untuk menerapkan seluruh perubahan environment (termasuk kredensial MQTT dan user database baru) dan memastikan seluruh sistem berjalan dengan benar.
 ```bash
 docker compose up -d --force-recreate
 ```

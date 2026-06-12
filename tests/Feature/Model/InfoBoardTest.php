@@ -3,6 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\InfoBoard;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -14,7 +15,7 @@ class InfoBoardTest extends TestCase
     #[Test]
     public function infoboard_dapat_dibuat()
     {
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
         $info = InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Pengumuman Penting',
@@ -30,7 +31,7 @@ class InfoBoardTest extends TestCase
     #[Test]
     public function infoboard_dapat_dibaca()
     {
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
         $info = InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Read Me',
@@ -46,7 +47,7 @@ class InfoBoardTest extends TestCase
     #[Test]
     public function infoboard_dapat_diupdate()
     {
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
         $info = InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Judul Lama',
@@ -64,7 +65,7 @@ class InfoBoardTest extends TestCase
     #[Test]
     public function infoboard_dapat_dihapus()
     {
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
         $info = InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Hapus Saya',

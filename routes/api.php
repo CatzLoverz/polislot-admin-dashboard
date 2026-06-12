@@ -11,12 +11,26 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\SubareaCommentController;
 use App\Http\Controllers\Api\UserValidationController;
-use App\Http\Controllers\Api\IotStreamController;
+use App\Http\Controllers\Api\IotDetectionController;
+use App\Http\Controllers\Api\IotWsAuthController;
 use App\Http\Controllers\Api\UserFaqController;
+use App\Http\Controllers\Api\IotWebhookController;
 use Illuminate\Support\Facades\Route;
 
-// Rute untuk IoT Device Broadcasting
-Route::post('/iot/stream', [IotStreamController::class, 'receiveStream']);
+Route::prefix('iot')->group(function() {
+    // Rute untuk IoT Device Broadcasting
+    Route::post('/detection', [IotDetectionController::class, 'receiveDetection']);
+    Route::get('/sync-area/{id}', [IotDetectionController::class, 'syncArea']);
+
+    // Rute autentikasi WebSocket untuk IoT Device (Presence Channel via Reverb)
+    Route::post('/ws-auth', [IotWsAuthController::class, 'authenticate']);
+
+    // Rute untuk IoT Device — Snapshot terenkripsi, Count, dan Chat Reply (padanan MQTT via HTTP)
+    Route::post('/snapshot', [IotDetectionController::class, 'receiveSnapshot']);
+    Route::post('/count', [IotDetectionController::class, 'receiveCount']);
+    Route::post('/config', [IotDetectionController::class, 'receiveConfigQuery']);
+    Route::post('/webhook', [IotWebhookController::class, 'handle']);
+});
 
 Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
 

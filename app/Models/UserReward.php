@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserReward extends Model
 {
@@ -20,12 +21,22 @@ class UserReward extends Model
     const STATUS_ACCEPTED = 'accepted';
     const STATUS_REJECTED = 'rejected';
 
-    public function user()
+    /**
+     * Relasi ke pengguna yang menukarkan reward.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
-    public function reward()
+    /**
+     * Relasi ke reward yang ditukarkan.
+     *
+     * @return BelongsTo
+     */
+    public function reward(): BelongsTo
     {
         return $this->belongsTo(Reward::class, 'reward_id', 'reward_id');
     }

@@ -6,10 +6,10 @@ use App\Models\Mission;
 use App\Models\User;
 use App\Models\UserMission;
 use App\Services\HistoryService;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MissionService
 {
@@ -22,23 +22,13 @@ class MissionService
     }
 
     /**
-     * Entry Point: Update progress misi user berdasarkan aksi.
-     * Service ini mencari SEMUA misi aktif dengan metric code tersebut,
-     * lalu memperbarui progress user untuk masing-masing mission_id secara independen.
-     *
-     * @param int $userId ID User yang melakukan aksi
-     * @param string $metricCode Kode event (VALIDATION_ACTION, LOGIN_ACTION, PROFILE_UPDATE)
-     * @param int $incrementValue Jumlah penambahan progress (default 1)
-     * @return void
-     */
-    /**
      * Memeriksa dan mereset semua misi user yang siklusnya sudah kadaluwarsa.
      * Dipanggil saat user membuka halaman misi.
      *
      * @param int $userId
      * @return void
      */
-    public function checkResetAllMissions(int $userId)
+    public function checkResetAllMissions(int $userId): void
     {
         $userMissions = UserMission::with('mission')
             ->where('user_id', $userId)
@@ -51,7 +41,17 @@ class MissionService
         }
     }
 
-    public function updateProgress(int $userId, string $metricCode, int $incrementValue = 1)
+    /**
+     * Entry Point: Update progress misi user berdasarkan aksi.
+     * Service ini mencari SEMUA misi aktif dengan metric code tersebut,
+     * lalu memperbarui progress user untuk masing-masing mission_id secara independen.
+     *
+     * @param int $userId ID User yang melakukan aksi
+     * @param string $metricCode Kode event (VALIDATION_ACTION, LOGIN_ACTION, PROFILE_UPDATE)
+     * @param int $incrementValue Jumlah penambahan progress (default 1)
+     * @return void
+     */
+    public function updateProgress(int $userId, string $metricCode, int $incrementValue = 1): void
     {
         try {
             $missions = Mission::where('mission_metric_code', $metricCode)
@@ -60,14 +60,14 @@ class MissionService
 
             if ($missions->isEmpty()) return;
 
-            Log::info("[SERVICE MissionService@updateProgress] Trigger: {$metricCode} for User {$userId}. Found: {$missions->count()} missions.");
+            Log::info("Trigger: {$metricCode} for User {$userId}. Found: {$missions->count()} missions.");
 
             foreach ($missions as $mission) {
                 $this->processMission($userId, $mission, $incrementValue);
             }
 
         } catch (Exception $e) {
-            Log::error("[SERVICE MissionService@updateProgress] Global Error: " . $e->getMessage());
+            Log::error("Global Error: " . $e->getMessage());
         }
     }
 
@@ -78,11 +78,11 @@ class MissionService
      * @param int $userId
      * @param Mission $mission
      * @param int $incrementValue
+     * @return void
      */
-    private function processMission(int $userId, Mission $mission, int $incrementValue)
+    private function processMission(int $userId, Mission $mission, int $incrementValue): void
     {
-        DB::beginTransaction();
-        try {
+        DB::transaction(function () use ($userId, $mission, $incrementValue) {
             $userMission = UserMission::where('user_id', $userId)
                 ->where('mission_id', $mission->mission_id)
                 ->lockForUpdate()
@@ -105,7 +105,7 @@ class MissionService
             $isReset = $this->checkAndResetCycle($userMission, $mission->mission_reset_cycle);
 
             if ($userMission->user_mission_is_completed) {
-                DB::commit(); return;
+                return;
             }
 
             // 3. LOGIC UPDATE PROGRESS
@@ -149,7 +149,7 @@ class MissionService
                     // KASUS E: Bolos > 1 hari (Streak Putus di tengah minggu)
                     if ($mission->mission_is_consecutive) {
                         $userMission->user_mission_current_value = 1;
-                        Log::info("[SERVICE MissionService@processMission] Streak Reset: User {$userId} Mission {$mission->mission_id}");
+                        Log::info("Streak Reset: User {$userId} Mission {$mission->mission_id}");
                     } else {
                         $userMission->user_mission_current_value += 1; // Akumulasi Hari (Tidak Wajib Urut)
                     }
@@ -179,16 +179,10 @@ class MissionService
                         false
                     );
 
-                    Log::info("[SERVICE MissionService@processMission] COMPLETED: {$mission->mission_title}");
+                    Log::info("COMPLETED: {$mission->mission_title}");
                 }
             }
-
-            DB::commit();
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error("[SERVICE MissionService@processMission] Error: " . $e->getMessage());
-        }
+        });
     }
 
     /**
@@ -197,6 +191,7 @@ class MissionService
      *
      * @param UserMission $userMission
      * @param string $cycle ENUM: 'NONE', 'DAILY', 'WEEKLY', 'MONTHLY'
+     * @return bool
      */
     private function checkAndResetCycle(UserMission $userMission, string $cycle): bool
     {
@@ -212,22 +207,33 @@ class MissionService
         }
 
         if ($shouldReset) {
-            $userMission->user_mission_current_value = 0;
-            $userMission->user_mission_is_completed = false;
-            $userMission->user_mission_completed_at = null;
-            $userMission->save(); // updated_at berubah jadi NOW
+            DB::transaction(function () use ($userMission) {
+                $userMission->user_mission_current_value = 0;
+                $userMission->user_mission_is_completed = false;
+                $userMission->user_mission_completed_at = null;
+                $userMission->save(); // updated_at berubah jadi NOW
+            });
             return true; // Reset Terjadi
         }
 
         return false; // Tidak ada Reset
     }
 
-    private function awardPoints(int $userId, int $points)
+    /**
+     * Memberikan poin kepada user atas misi yang diselesaikan.
+     *
+     * @param int $userId
+     * @param int $points
+     * @return void
+     */
+    private function awardPoints(int $userId, int $points): void
     {
-        $user = User::where('user_id', $userId)->lockForUpdate()->first();
-        if ($user) {
-            $user->increment('current_points', $points);
-            $user->increment('lifetime_points', $points);
-        }
+        DB::transaction(function () use ($userId, $points) {
+            $user = User::where('user_id', $userId)->lockForUpdate()->first();
+            if ($user) {
+                $user->increment('current_points', $points);
+                $user->increment('lifetime_points', $points);
+            }
+        });
     }
 }

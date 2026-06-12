@@ -29,8 +29,25 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/atlantis.min.css') }}" />
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" /> --}}
-    @vite(['resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.Laravel = {
+            reverbKey: "{{ env('REVERB_APP_KEY') }}",
+            reverbHost: "{{ env('REVERB_HOST') }}",
+            reverbPort: "{{ env('REVERB_PORT') }}",
+            reverbScheme: "{{ env('REVERB_SCHEME') }}"
+        };
+    </script>
+    <style>
+        /* CSS Fix untuk Akordion Sidebar yang tidak muncul di localhost */
+        .sidebar .nav .nav-item.submenu .collapse.show,
+        .sidebar .nav .nav-item.submenu .collapsing {
+            display: block !important;
+            height: auto !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    </style>
     @stack('styles')
 </head>
 
@@ -43,7 +60,7 @@
                         class="navbar-brand" style="width: 180px; height: 62px;" />
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
-                    data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    data-target="#menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"><i class="icon-menu"></i></span>
                 </button>
             </div>
@@ -127,21 +144,29 @@
                                 <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
                                 <h4 class="text-section">Kelola</h4>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.park-area.*') ? 'active' : '' }}">
-                                <a href="{{ Route('admin.park-area.index') }}"> <i class="fas fa-parking"></i>
-                                    <p>Manajemen Area Parkir</p>
-                                </a>
-                            </li>
                             <li class="nav-item {{ Route::is('admin.info-board.*') ? 'active' : '' }}">
                                 <a href="{{ Route('admin.info-board.index') }}"> <i class="fas fa-bullhorn"></i>
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*') ? 'active submenu' : '' }}">
-                                <a data-toggle="collapse" href="#menuDropdown" aria-expanded="true">
+                            <li class="nav-item {{ Route::is('admin.park-area.*') ? 'active' : '' }}">
+                                <a href="{{ Route('admin.park-area.index') }}"> <i class="fas fa-parking"></i>
+                                    <p>Manajemen Area Parkir</p>
+                                </a>
+                            </li>
+                            <li class="nav-item {{ Route::is('admin.iot.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.iot.index') }}"> <i class="fas fa-microchip"></i>
+                                    <span>Manajemen Konfigurasi Deteksi IoT</span>
+                                </a>
+                            </li>
+                            @php
+                                $isGamificationActive = Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*');
+                            @endphp
+                            <li class="nav-item submenu {{ $isGamificationActive ? 'active' : '' }}">
+                                <a data-toggle="collapse" href="#menuDropdown" aria-expanded="{{ $isGamificationActive ? 'true' : 'false' }}">
                                     <i class="fas fa-gamepad"></i><p>Manajemen Gamifikasi</p><span class="caret"></span>
                                 </a>
-                                <div class="collapse show" id="menuDropdown">
+                                <div class="collapse {{ $isGamificationActive ? 'show' : '' }}" id="menuDropdown">
                                     <ul class="nav nav-collapse">
                                         <li class="{{ Route::is('admin.validation.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.validation.index') }}"> 
@@ -348,6 +373,7 @@
             }
         });
     </script>
+    @vite(['resources/js/app.js'])
     @stack('scripts')
 </body>
 

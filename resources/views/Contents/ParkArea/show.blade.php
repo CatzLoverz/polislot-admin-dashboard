@@ -8,6 +8,64 @@
     Kode: <strong>{{ $area->park_area_code }}</strong> | Atur subarea (blok parkir) menggunakan peta interaktif.
 @endsection
 
+@push('styles')
+<style>
+    .subarea-item {
+        background-color: #ffffff;
+        border-left: 5px solid #1572e8;
+        margin: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        transition: all 0.25s ease-in-out;
+    }
+    .subarea-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.08) !important;
+        background-color: #fbfbfb;
+    }
+    .list-group-item.subarea-item {
+        border-top: 1px solid #ebedf2 !important;
+        border-right: 1px solid #ebedf2 !important;
+        border-bottom: 1px solid #ebedf2 !important;
+    }
+    .subarea-list-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    .subarea-list-container::-webkit-scrollbar-track {
+        background: #f8f9fa;
+    }
+    .subarea-list-container::-webkit-scrollbar-thumb {
+        background: #dcdcdc;
+        border-radius: 3px;
+    }
+    .subarea-list-container::-webkit-scrollbar-thumb:hover {
+        background: #c0c0c0;
+    }
+    
+    #comments_container::-webkit-scrollbar {
+        width: 6px;
+    }
+    #comments_container::-webkit-scrollbar-track {
+        background: #f8f9fa;
+    }
+    #comments_container::-webkit-scrollbar-thumb {
+        background: #dcdcdc;
+        border-radius: 3px;
+    }
+    #comments_container::-webkit-scrollbar-thumb:hover {
+        background: #c0c0c0;
+    }
+    
+    @keyframes pulse-highlight {
+        0% { background-color: rgba(21, 114, 232, 0.15); }
+        100% { background-color: #ffffff; }
+    }
+    .status-update-highlight {
+        animation: pulse-highlight 2s ease-out;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="page-inner mt--5">
     <div class="row">
@@ -18,9 +76,17 @@
                     <h4 class="card-title font-weight-bold mb-0">
                         <i class="fas fa-map-marked-alt mr-2"></i> Peta Editor (Satelit)
                     </h4>
-                    <small class="text-dark op-8">
-                        <i class="fas fa-info-circle mr-1"></i> Klik Kanan titik untuk hapus &bull; Geser untuk edit
-                    </small>
+                    <div class="d-flex align-items-center">
+                        <button id="btn-start-drawing" class="btn btn-primary btn-sm btn-round mr-2" onclick="startDrawing()">
+                            <i class="fas fa-plus mr-1"></i> Tambah Sub Area
+                        </button>
+                        <button id="btn-finish-drawing" class="btn btn-success btn-sm btn-round mr-2 d-none" onclick="finishDrawing()">
+                            <i class="fas fa-check mr-1"></i> Selesai
+                        </button>
+                        <button id="btn-cancel-drawing" class="btn btn-danger btn-sm btn-round d-none" onclick="cancelDrawing()">
+                            <i class="fas fa-times mr-1"></i> Batal
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div id="map" style="height: 650px; width: 100%; border-radius: 0 0 15px 15px; z-index: 1;"></div>
@@ -35,27 +101,57 @@
                     <h4 class="card-title font-weight-bold">Daftar Sub Area</h4>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="list-group list-group-flush" style="max-height: 500px; overflow-y: auto;">
+                    <ul class="list-group list-group-flush subarea-list-container" style="max-height: 650px; overflow-y: auto; background-color: #f8f9fa;">
                         @forelse($area->parkSubarea as $sub)
-                            <li class="list-group-item">
+                            <li class="list-group-item subarea-item" id="subarea-item-{{ $sub->park_subarea_id }}" data-id="{{ $sub->park_subarea_id }}" style="border-left: 5px solid {{ $sub->status_color }} !important;">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div style="width: 65%;">
-                                        <span class="font-weight-bold d-block text-dark">{{ $sub->park_subarea_name }}</span>
-                                        {{-- Indikator Status Teks Kecil --}}
-                                        <small class="d-block mt-1" style="color: {{ $sub->status_color }}">
-                                            <i class="fas fa-circle" style="font-size: 8px;"></i> 
-                                            @if($sub->status_color == '#f25961') Penuh
-                                            @elseif($sub->status_color == '#ffad46') Terbatas
-                                            @elseif($sub->status_color == '#31ce36') Banyak Kosong
-                                            @else Tidak ada info @endif
+                                        <span class="font-weight-bold d-block text-dark subarea-name" style="font-size: 1.05rem;">{{ $sub->park_subarea_name }}</span>
+                                        <small class="d-block mt-1 subarea-status-wrapper" style="font-weight: 600;">
+                                            <span class="subarea-status-text" style="color: {{ $sub->status_color }}">
+                                                <i class="fas fa-circle" style="font-size: 8px;"></i> 
+                                                @if($sub->status_color == '#f25961') Penuh
+                                                @elseif($sub->status_color == '#ffad46') Terbatas
+                                                @elseif($sub->status_color == '#31ce36') Banyak Tersedia
+                                                @else Tidak ada info / Netral @endif
+                                            </span>
+
+                                            <span class="subarea-validation-badges">
+                                                @if(isset($sub->is_validated) && $sub->is_validated)
+                                                    <span class="badge badge-success p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-check-circle"></i> Tervalidasi</span>
+                                                @elseif(isset($sub->has_user_report) && $sub->has_user_report)
+                                                    <span class="badge badge-warning p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-exclamation-triangle"></i> Laporan Berbeda</span>
+                                                @endif
+                                            </span>
+                                        </small>
+                                        
+                                        {{-- Last Validation Report Time & Countdown --}}
+                                        <small class="d-block mt-1 text-muted subarea-validation-time font-weight-bold" style="font-size: 10px; {{ (isset($sub->validation_expires_at) && $sub->validation_expires_at) ? '' : 'display: none;' }}">
+                                            <i class="fas fa-history mr-1"></i> Laporan: <span class="last-validated-time-val">
+                                                @if(isset($sub->last_validation_time) && $sub->last_validation_time)
+                                                    {{ date('H:i', strtotime($sub->last_validation_time)) }}
+                                                @endif
+                                            </span>
+                                            <span class="validation-countdown-val text-info ml-1"></span>
+                                        </small>
+
+                                        {{-- Kapasitas Slot (Dynamic) --}}
+                                        <small class="d-block mt-1 text-muted subarea-occupancy font-weight-bold" style="font-size: 11px; {{ ($sub->iotDevice && $sub->max_slots > 0) ? '' : 'display: none;' }}">
+                                            <i class="fas fa-car mr-1"></i> Terisi: <span class="current-count-val">{{ $sub->current_count ?? 0 }}</span>/<span class="max-slots-val">{{ $sub->max_slots ?? 0 }}</span> slot
                                         </small>
                                         
                                         {{-- Amenities --}}
-                                        <div class="mt-2">
+                                        <div class="mt-2 subarea-badges">
                                             @if($sub->iotDevice)
-                                                <span class="badge badge-success text-white mr-1 mb-1 p-1" style="font-size: 9px;" data-toggle="tooltip" title="IoT Tersambung">
-                                                    <i class="fas fa-video"></i> IoT Active
-                                                </span>
+                                                @if($sub->iot_status === 'online')
+                                                    <span class="badge badge-success text-white mr-1 mb-1 p-1 iot-status-badge" data-mac="{{ $sub->iotDevice->device_mac_address }}" style="font-size: 9px;" data-toggle="tooltip" title="IoT Online">
+                                                        <i class="fas fa-signal"></i> IoT Online
+                                                    </span>
+                                                @else
+                                                    <span class="badge badge-danger text-white mr-1 mb-1 p-1 iot-status-badge" data-mac="{{ $sub->iotDevice->device_mac_address }}" style="font-size: 9px;" data-toggle="tooltip" title="IoT Offline">
+                                                        <i class="fas fa-signal-slash"></i> IoT Offline
+                                                    </span>
+                                                @endif
                                             @endif
                                             @forelse($sub->parkAmenity as $amenity)
                                                 <span class="badge badge-count text-secondary border border-secondary mr-1 mb-1 p-1" style="font-size: 9px;">
@@ -71,10 +167,15 @@
                                     
                                     <div class="d-flex align-items-center ml-1">
                                         {{-- Tombol Lihat Komentar --}}
-                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs mr-1" 
-                                            onclick="openCommentModal('{{ $sub->park_subarea_name }}', {{ json_encode($sub->subareaComment) }})"
+                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mr-1 btn-comment-modal" 
+                                            onclick="fetchAndOpenCommentModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}')"
                                             data-toggle="tooltip" title="Lihat Komentar">
                                             <i class="fas fa-comments"></i>
+                                            @php $cCount = $sub->subareaComment->count(); @endphp
+                                            <span class="badge badge-notification badge-danger position-absolute comment-count-badge" 
+                                                  style="top: -8px; right: -8px; font-size: 8px; padding: 2px 4px; border-radius: 50%; {{ $cCount > 0 ? '' : 'display: none;' }}">
+                                                {{ $cCount }}
+                                            </span>
                                         </button>
 
                                         {{-- Tombol Edit (Existing) --}}
@@ -237,22 +338,45 @@
     let map;
     let centerData = @json($area->park_area_data);
     let center = { lat: parseFloat(centerData.lat), lng: parseFloat(centerData.lng) };
-    let existingSubareas = @json($area->parkSubarea);
-    let drawingManager;
+    let existingSubareas = <?php echo json_encode($area->parkSubarea->map(function($sub) {
+        return array_merge($sub->toArray(), [
+            'is_validated' => (bool) $sub->is_validated,
+            'has_user_report' => (bool) $sub->has_user_report,
+            'status_color' => $sub->status_color,
+            'validation_expires_at' => $sub->validation_expires_at,
+            'last_validation_time' => $sub->last_validation_time,
+            'validation_remaining_seconds' => (int) $sub->validation_remaining_seconds,
+            'fallback_status' => $sub->fallback_status,
+            'fallback_status_color' => $sub->fallback_status_color,
+            'iot_status' => $sub->iot_status,
+        ]);
+    })); ?>;
     let currentPolygonObj = null;
+    let polygonObjects = {}; // Menyimpan referensi polygon untuk update WS
+    let subareaStates = {}; // Menyimpan state validasi & fallback subarea
+    let activeCommentSubareaId = null; // Menyimpan ID subarea yang komentar modallnya sedang terbuka
+    let activeCommentSubareaName = null; // Menyimpan nama subarea yang komentar modallnya sedang terbuka
+
+    // State untuk mode menggambar kustom pengganti Drawing Manager
+    let isDrawingMode = false;
+    let drawingPoints = [];
+    let tempPolyline = null;
+    let tempMarkers = [];
 
     // Definisikan Base URL Storage untuk akses gambar
     const storageBaseUrl = "{{ asset('storage') }}";
 
     async function initMap() {
+        // Load Libraries via importLibrary
         await google.maps.importLibrary("maps");
-        await google.maps.importLibrary("drawing");
+        await google.maps.importLibrary("marker");
         await google.maps.importLibrary("geometry");
 
         map = new google.maps.Map(document.getElementById("map"), {
             center: center,
             zoom: parseInt(centerData.zoom),
             mapTypeId: 'satellite',
+            mapId: 'DEMO_MAP_ID', // Diperlukan oleh AdvancedMarkerElement
             streetViewControl: false,
             mapTypeControl: false
         });
@@ -271,6 +395,8 @@
                 draggable: false, 
                 map: map
             });
+            
+            polygonObjects[sub.park_subarea_id] = polygon;
 
             let infoWindow = new google.maps.InfoWindow({
                 content: `<b>${sub.park_subarea_name}</b>`
@@ -301,32 +427,132 @@
             });
         });
 
-        drawingManager = new google.maps.drawing.DrawingManager({
-            drawingMode: google.maps.drawing.OverlayType.POLYGON,
-            drawingControl: true,
-            drawingControlOptions: {
-                position: google.maps.ControlPosition.TOP_LEFT,
-                drawingModes: ['polygon'],
-            },
-            polygonOptions: {
-                fillColor: "#1572e8",
-                fillOpacity: 0.5,
-                strokeWeight: 2,
-                editable: true,
-                zIndex: 1
-            }
+        // Click listener pada peta untuk merekam koordinat saat menggambar subarea baru
+        map.addListener("click", (event) => {
+            if (!isDrawingMode) return;
+            
+            const latLng = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+            addDrawingPoint(latLng);
         });
-        drawingManager.setMap(map);
+    }
 
-        google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
-            currentPolygonObj = event.overlay;
-            let paths = event.overlay.getPath().getArray();
-            let coords = paths.map(p => ({ lat: p.lat(), lng: p.lng() }));
-            document.getElementById('polygon_data').value = JSON.stringify(coords);
-            $('#subarea_name').val('');
-            $('#modalSubarea').modal('show');
-            drawingManager.setDrawingMode(null);
+    // === KUSTOM DRAWING FUNCTIONS ===
+    function startDrawing() {
+        if (isDrawingMode) return;
+        
+        isDrawingMode = true;
+        drawingPoints = [];
+        tempMarkers = [];
+
+        // Ubah kursor map menjadi crosshair agar menyerupai alat menggambar
+        map.setOptions({ draggableCursor: 'crosshair' });
+
+        // Buat polyline sementara untuk menghubungkan titik-titik polygon
+        tempPolyline = new google.maps.Polyline({
+            strokeColor: "#1572e8",
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            map: map
         });
+
+        // Atur tombol visibilitas
+        $('#btn-start-drawing').addClass('d-none');
+        $('#btn-finish-drawing').removeClass('d-none');
+        $('#btn-cancel-drawing').removeClass('d-none');
+    }
+
+    function addDrawingPoint(latLng) {
+        drawingPoints.push(latLng);
+        
+        // Update garis polyline penunjuk
+        tempPolyline.setPath(drawingPoints);
+
+        // Buat DOM Element kustom dengan styling modern untuk penanda titik (AdvancedMarkerElement)
+        const pinElement = document.createElement("div");
+        pinElement.style.width = "12px";
+        pinElement.style.height = "12px";
+        pinElement.style.borderRadius = "50%";
+        pinElement.style.backgroundColor = "#1572e8";
+        pinElement.style.border = "2px solid #ffffff";
+        pinElement.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
+        pinElement.style.cursor = "pointer";
+
+        // Tambah marker baru ke peta menggunakan AdvancedMarkerElement
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+            map: map,
+            position: latLng,
+            content: pinElement,
+            title: tempMarkers.length === 0 ? "Klik di sini untuk menyelesaikan area" : `Titik ${tempMarkers.length + 1}`
+        });
+
+        // Klik titik pertama untuk menyelesaikan gambar secara otomatis
+        if (tempMarkers.length === 0) {
+            marker.addListener("click", () => {
+                finishDrawing();
+            });
+        }
+
+        tempMarkers.push(marker);
+    }
+
+    function finishDrawing() {
+        if (!isDrawingMode) return;
+
+        if (drawingPoints.length < 3) {
+            Swal.fire('Perhatian', 'Sub area minimal harus terdiri dari 3 titik koordinat!', 'warning');
+            return;
+        }
+
+        // Tulis data koordinat ke input tersembunyi
+        document.getElementById('polygon_data').value = JSON.stringify(drawingPoints);
+
+        // Bersihkan grafis gambar sementara dari peta
+        cleanupDrawingGraphics();
+
+        // Tampilkan visualisasi polygon hasil gambar sementara
+        currentPolygonObj = new google.maps.Polygon({
+            paths: drawingPoints,
+            fillColor: "#1572e8",
+            fillOpacity: 0.5,
+            strokeWeight: 2,
+            editable: false,
+            map: map
+        });
+
+        $('#subarea_name').val('');
+        $('#modalSubarea').modal('show');
+    }
+
+    function cancelDrawing() {
+        cleanupDrawingGraphics();
+        if (currentPolygonObj) {
+            currentPolygonObj.setMap(null);
+            currentPolygonObj = null;
+        }
+    }
+
+    function cleanupDrawingGraphics() {
+        isDrawingMode = false;
+        
+        // Kembalikan kursor default peta
+        map.setOptions({ draggableCursor: null });
+
+        if (tempPolyline) {
+            tempPolyline.setMap(null);
+            tempPolyline = null;
+        }
+
+        // Hapus marker dari peta
+        tempMarkers.forEach(m => {
+            m.map = null;
+        });
+        tempMarkers = [];
+        drawingPoints = [];
+
+        // Kembalikan visibilitas tombol
+        $('#btn-start-drawing').removeClass('d-none');
+        $('#btn-finish-drawing').addClass('d-none');
+        $('#btn-cancel-drawing').addClass('d-none');
     }
 
     // === 2. LOGIKA SUBAREA ===
@@ -495,6 +721,38 @@
         });
     }
 
+    // [BARU] Fetch komentar dinamis & buka modal
+    function fetchAndOpenCommentModal(subId, name) {
+        activeCommentSubareaId = subId;
+        activeCommentSubareaName = name;
+        
+        // Tampilkan loading spinner di container
+        $('#comment_subarea_title').text(name);
+        $('#comments_container').html('<div class="text-center py-5"><i class="fas fa-spinner fa-spin fa-3x text-primary mb-3"></i><p class="text-muted">Memuat komentar terbaru...</p></div>');
+        $('#modalComments').modal('show');
+        
+        $.getJSON(`/admin/park-subarea/${subId}/comments`, function(response) {
+            if (response.status === 'success') {
+                if (activeCommentSubareaId === subId) {
+                    openCommentModal(name, response.comments);
+                }
+            } else {
+                $('#comments_container').html('<div class="text-center py-5 text-danger"><i class="fas fa-exclamation-circle fa-3x mb-3"></i><p>Gagal memuat komentar.</p></div>');
+            }
+        }).fail(function() {
+            $('#comments_container').html('<div class="text-center py-5 text-danger"><i class="fas fa-exclamation-circle fa-3x mb-3"></i><p>Gagal memuat komentar.</p></div>');
+        });
+    }
+
+    // [BARU] Refresh komentar secara silent (untuk update real-time via WebSockets)
+    function refreshCommentsSilently(subId, name) {
+        $.getJSON(`/admin/park-subarea/${subId}/comments`, function(response) {
+            if (response.status === 'success' && activeCommentSubareaId === subId) {
+                openCommentModal(name, response.comments);
+            }
+        });
+    }
+
     // [PERBAIKAN] Logika Gambar Komentar & Avatar
     function openCommentModal(name, comments) {
         $('#comment_subarea_title').text(name);
@@ -503,7 +761,12 @@
         if (!Array.isArray(comments) || comments.length === 0) {
             html = `<div class="text-center py-5"><i class="fas fa-comment-slash fa-3x text-muted mb-3"></i><p class="text-muted">Belum ada komentar untuk area ini.</p></div>`;
         } else {
-            comments.sort((a, b) => b.subarea_comment_id - a.subarea_comment_id);
+            // Sort by ID descending (newest first)
+            comments.sort((a, b) => {
+                const idA = a.subarea_comment_id || a.id;
+                const idB = b.subarea_comment_id || b.id;
+                return idB - idA;
+            });
             
             html = '<div class="list-group list-group-flush">';
             comments.forEach(c => {
@@ -515,8 +778,9 @@
                     ? (rawAvatar.startsWith('http') ? rawAvatar : storageBaseUrl + '/' + rawAvatar) 
                     : 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userName);
                 
-                let date = new Date(c.created_at).toLocaleString('id-ID');
-
+                // Parse format tanggal
+                let dateStr = c.created_at ? new Date(c.created_at).toLocaleString('id-ID') : '';
+                
                 // [FIX] Cek Bukti Gambar Komentar
                 let commentImageHtml = '';
                 if (c.subarea_comment_image) {
@@ -534,7 +798,7 @@
                                 </div>
                                 <h6 class="mb-1 font-weight-bold text-primary">${userName}</h6>
                             </div>
-                            <small class="text-muted">${date}</small>
+                            <small class="text-muted">${dateStr}</small>
                         </div>
                         <p class="mb-1 text-dark">${c.subarea_comment_content}</p>
                         ${commentImageHtml}
@@ -544,13 +808,243 @@
             html += '</div>';
         }
         $('#comments_container').html(html);
-        $('#modalComments').modal('show');
     }
 
-    function cancelDrawing() {
-        if(currentPolygonObj) {
-            currentPolygonObj.setMap(null);
-            drawingManager.setDrawingMode(null);
+
+    // Helper function to update Subarea UI (Polygon and sidebar item) from state
+    function updateSubareaUI(subId) {
+        const state = subareaStates[subId];
+        if (!state) return;
+
+        const color = state.color || '#1572e8';
+        const status = state.status || 'netral';
+        const isValidated = state.isValidated || false;
+        const hasUserReport = state.hasUserReport || false;
+        const currentCount = state.currentCount ?? 0;
+        const maxSlots = state.maxSlots ?? 0;
+        const commentCount = state.commentCount ?? 0;
+
+        // A. Update Google Maps Polygon
+        if (polygonObjects[subId]) {
+            polygonObjects[subId].setOptions({
+                strokeColor: color,
+                fillColor: color
+            });
+        }
+        
+        // B. Update List Item di Kanan
+        const item = document.getElementById(`subarea-item-${subId}`);
+        if (item) {
+            // Highlight animation
+            item.classList.remove('status-update-highlight');
+            void item.offsetWidth; // Trigger reflow
+            item.classList.add('status-update-highlight');
+            
+            // Update border color
+            item.style.setProperty('border-left', `5px solid ${color}`, 'important');
+            
+            // Update status text
+            let statusText = 'Tidak ada info / Netral';
+            if (status === 'penuh') statusText = 'Penuh';
+            else if (status === 'terbatas') statusText = 'Terbatas';
+            else if (status === 'banyak') statusText = 'Banyak Tersedia';
+            
+            const statusSpan = item.querySelector('.subarea-status-text');
+            if (statusSpan) {
+                statusSpan.style.color = color;
+                statusSpan.innerHTML = `<i class="fas fa-circle mr-1" style="font-size: 8px; vertical-align: middle;"></i> ${statusText}`;
+            }
+            
+            // Update validation badges
+            const badgesSpan = item.querySelector('.subarea-validation-badges');
+            if (badgesSpan) {
+                let badgeHtml = '';
+                if (isValidated) {
+                    badgeHtml = `<span class="badge badge-success p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-check-circle"></i> Tervalidasi</span>`;
+                } else if (hasUserReport) {
+                    badgeHtml = `<span class="badge badge-warning p-1 ml-1 text-white" style="font-size: 8px; vertical-align: middle;"><i class="fas fa-exclamation-triangle"></i> Laporan Berbeda</span>`;
+                }
+                badgesSpan.innerHTML = badgeHtml;
+            }
+            
+            // Update validation time & countdown visibility
+            const timeContainer = item.querySelector('.subarea-validation-time');
+            if (timeContainer) {
+                if (state.validationExpiresAt) {
+                    timeContainer.style.setProperty('display', 'block', 'important');
+                    if (state.lastValidationTime) {
+                        const dateObj = new Date(state.lastValidationTime);
+                        const hours = String(dateObj.getHours()).padStart(2, '0');
+                        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+                        
+                        const timeSpan = timeContainer.querySelector('.last-validated-time-val');
+                        if (timeSpan) timeSpan.innerText = `${hours}:${minutes}`;
+                    }
+                } else {
+                    timeContainer.style.setProperty('display', 'none', 'important');
+                    const timeSpan = timeContainer.querySelector('.last-validated-time-val');
+                    if (timeSpan) timeSpan.innerText = '';
+                    const countdownSpan = timeContainer.querySelector('.validation-countdown-val');
+                    if (countdownSpan) countdownSpan.innerText = '';
+                }
+            }
+            
+            // Update slot count dynamically
+            const occupancySpan = item.querySelector('.subarea-occupancy');
+            if (occupancySpan) {
+                if (maxSlots > 0) {
+                    occupancySpan.style.display = 'block';
+                    const countVal = occupancySpan.querySelector('.current-count-val');
+                    if (countVal) countVal.innerText = currentCount;
+                    const maxVal = occupancySpan.querySelector('.max-slots-val');
+                    if (maxVal) maxVal.innerText = maxSlots;
+                } else {
+                    occupancySpan.style.display = 'none';
+                }
+            }
+
+            // Update comment count badge dynamically
+            const commentBadge = item.querySelector('.comment-count-badge');
+            if (commentBadge) {
+                commentBadge.innerText = commentCount;
+                if (commentCount > 0) {
+                    commentBadge.style.display = 'inline-block';
+                } else {
+                    commentBadge.style.display = 'none';
+                }
+            }
+
+            // Real-time refresh of comments modal if open for this subarea
+            if (activeCommentSubareaId && activeCommentSubareaId == subId) {
+                refreshCommentsSilently(subId, activeCommentSubareaName);
+            }
+        }
+    }
+
+    // Check validation expiration client-side
+    function checkValidationExpirations() {
+        Object.keys(subareaStates).forEach(subId => {
+            const state = subareaStates[subId];
+            if (state.validationRemainingSeconds > 0) {
+                state.validationRemainingSeconds = Math.floor(state.validationRemainingSeconds) - 1;
+                
+                if (state.validationRemainingSeconds <= 0) {
+                    console.log(`⏰ Validation expired for subarea ${subId}. Reverting to fallback: ${state.fallbackStatus}`);
+                    
+                    // Revert local state
+                    state.status = state.fallbackStatus;
+                    state.color = state.fallbackColor;
+                    state.isValidated = false;
+                    state.hasUserReport = false;
+                    state.validationExpiresAt = null;
+                    state.lastValidationTime = null;
+                    state.validationRemainingSeconds = 0;
+                    
+                    // Update UI
+                    updateSubareaUI(subId);
+                } else {
+                    // Update countdown text
+                    const item = document.getElementById(`subarea-item-${subId}`);
+                    if (item) {
+                        const countdownSpan = item.querySelector('.validation-countdown-val');
+                        if (countdownSpan) {
+                            const diffSec = state.validationRemainingSeconds;
+                            const minutes = Math.floor(diffSec / 60);
+                            const seconds = diffSec % 60;
+                            countdownSpan.innerText = `(Sisa: ${minutes}m ${seconds}s)`;
+                        }
+                    }
+                }
+            } else if (state.validationExpiresAt) {
+                // If remaining seconds is 0/falsy but validationExpiresAt is still present,
+                // let's double check if it is truly expired (fail-safe fallback)
+                const expires = new Date(state.validationExpiresAt);
+                const diffMs = expires - new Date();
+                const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+                
+                if (diffSec > 0) {
+                    state.validationRemainingSeconds = diffSec;
+                } else {
+                    console.log(`⏰ Validation expired for subarea ${subId} (fail-safe). Reverting to fallback: ${state.fallbackStatus}`);
+                    state.status = state.fallbackStatus;
+                    state.color = state.fallbackColor;
+                    state.isValidated = false;
+                    state.hasUserReport = false;
+                    state.validationExpiresAt = null;
+                    state.lastValidationTime = null;
+                    state.validationRemainingSeconds = 0;
+                    updateSubareaUI(subId);
+                }
+            }
+        });
+    }
+
+    // Inisialisasi Echo listener untuk update real-time
+    function initEcho() {
+        if (typeof window.Echo !== 'undefined') {
+            const areaId = "{{ $area->park_area_id }}";
+            
+            // 1. Dengar event pembaruan subarea di area parkir ini
+            window.Echo.channel(`park-area.${areaId}`)
+                .listen('.subarea.updated', (e) => {
+                    console.log("📡 Subarea Updated Event Received:", e);
+                    
+                    const subId = e.parkSubareaId;
+                    
+                    // Update local state dictionary
+                    if (subareaStates[subId]) {
+                        subareaStates[subId].status = e.status;
+                        subareaStates[subId].color = e.statusColor;
+                        subareaStates[subId].isValidated = e.isValidated;
+                        subareaStates[subId].hasUserReport = e.hasUserReport;
+                        subareaStates[subId].validationExpiresAt = e.validationExpiresAt;
+                        subareaStates[subId].lastValidationTime = e.lastValidationTime;
+                        
+                        let remainingSec = e.validationRemainingSeconds || 0;
+                        if (!remainingSec && e.validationExpiresAt) {
+                            const expires = new Date(e.validationExpiresAt);
+                            const diffMs = expires - new Date();
+                            remainingSec = Math.max(0, Math.floor(diffMs / 1000));
+                        }
+                        
+                        subareaStates[subId].validationRemainingSeconds = Math.floor(remainingSec);
+                        subareaStates[subId].fallbackStatus = e.fallbackStatus;
+                        subareaStates[subId].fallbackColor = e.fallbackStatusColor;
+                        subareaStates[subId].currentCount = e.currentCount;
+                        subareaStates[subId].maxSlots = e.maxSlots;
+                        subareaStates[subId].commentCount = e.commentCount;
+                    }
+                    
+                    // Trigger UI update
+                    updateSubareaUI(subId);
+                });
+                
+            // 2. Dengar status perangkat IoT (online/offline)
+            window.Echo.channel('iot.status')
+                .listen('.device.status', (e) => {
+                    console.log("📡 Device Status Received (MQTT/WS):", e);
+                    
+                    const mac = e.macAddress;
+                    const status = e.status;
+                    
+                    // Cari semua badge status IoT dengan MAC address ini
+                    const badges = document.querySelectorAll(`.iot-status-badge[data-mac="${mac}"]`);
+                    badges.forEach(badge => {
+                        if (status === 'online') {
+                            badge.className = "badge badge-success text-white mr-1 mb-1 p-1 iot-status-badge";
+                            badge.innerHTML = '<i class="fas fa-signal"></i> IoT Online';
+                            badge.setAttribute('title', 'IoT Online');
+                            badge.setAttribute('data-original-title', 'IoT Online');
+                        } else {
+                            badge.className = "badge badge-danger text-white mr-1 mb-1 p-1 iot-status-badge";
+                            badge.innerHTML = '<i class="fas fa-signal-slash"></i> IoT Offline';
+                            badge.setAttribute('title', 'IoT Offline');
+                            badge.setAttribute('data-original-title', 'IoT Offline');
+                        }
+                    });
+                });
+        } else {
+            setTimeout(initEcho, 500);
         }
     }
 
@@ -558,6 +1052,54 @@
     document.addEventListener("DOMContentLoaded", function() {
         initMap();
         $(function () { $('[data-toggle="tooltip"]').tooltip() });
+        
+        // Populate local subareaStates from the server-injected existingSubareas
+        existingSubareas.forEach(sub => {
+            let commentCount = sub.subarea_comment ? sub.subarea_comment.length : 0;
+            
+            let remainingSec = sub.validation_remaining_seconds ?? 0;
+            if (!remainingSec && sub.validation_expires_at) {
+                const expires = new Date(sub.validation_expires_at);
+                const diffMs = expires - new Date();
+                remainingSec = Math.max(0, Math.floor(diffMs / 1000));
+            }
+            
+            subareaStates[sub.park_subarea_id] = {
+                status: sub.status_color ? sub.status : 'netral',
+                color: sub.status_color || '#1572e8',
+                isValidated: sub.is_validated ? true : false,
+                hasUserReport: sub.has_user_report ? true : false,
+                validationExpiresAt: sub.validation_expires_at || null,
+                lastValidationTime: sub.last_validation_time || null,
+                validationRemainingSeconds: Math.floor(remainingSec),
+                fallbackStatus: sub.fallback_status || 'netral',
+                fallbackColor: sub.fallback_status_color || '#1572e8',
+                currentCount: sub.current_count ?? 0,
+                maxSlots: sub.max_slots ?? 0,
+                commentCount: commentCount
+            };
+        });
+        
+        // Inisialisasi Echo listener
+        initEcho();
+
+        // Run expiration check immediately to sync UI on page load
+        checkValidationExpirations();
+
+        // Start expiration checking timer (check every 1 second for smooth countdowns)
+        setInterval(checkValidationExpirations, 1000);
+
+        // Ping backend every 25 seconds to sync IoT statuses (fixes WS ghost connections)
+        setInterval(() => {
+            fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
+                .catch(err => console.error("Sync error:", err));
+        }, 25000);
+
+        // Reset active comments state on modal close
+        $('#modalComments').on('hidden.bs.modal', function () {
+            activeCommentSubareaId = null;
+            activeCommentSubareaName = null;
+        });
 
         // Handler tombol hapus subarea
         $(document).on('submit', '.delete-subarea-form', function(e) {

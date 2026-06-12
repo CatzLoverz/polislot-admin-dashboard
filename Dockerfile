@@ -24,12 +24,6 @@ COPY resources/ ./resources/
 
 # VITE build-time values (bukan secret — ini public key yang terekspos di browser)
 # Default sudah disetel untuk Docker deployment, tidak perlu --build-arg
-ARG VITE_APP_NAME="PoliSlot"
-ARG VITE_REVERB_APP_KEY="xcubvd4inm14ayepjhro"
-ARG VITE_REVERB_HOST="127.0.0.1"
-ARG VITE_REVERB_PORT="6001"
-ARG VITE_REVERB_SCHEME="http"
-
 RUN npm run build
 
 # ============================================================

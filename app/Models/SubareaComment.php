@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SubareaComment extends Model
 {
@@ -16,12 +17,22 @@ class SubareaComment extends Model
         'subarea_comment_image'
     ];
 
-    public function user()
+    /**
+     * Relasi ke user pembuat komentar.
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
-    public function parkSubarea()
+    /**
+     * Relasi ke subarea parkir yang dikomentari.
+     *
+     * @return BelongsTo
+     */
+    public function parkSubarea(): BelongsTo
     {
         return $this->belongsTo(ParkSubarea::class, 'park_subarea_id', 'park_subarea_id');
     }

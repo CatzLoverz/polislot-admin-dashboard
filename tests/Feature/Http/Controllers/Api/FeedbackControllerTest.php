@@ -4,19 +4,21 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\FeedbackCategory;
 use App\Models\User;
+use App\Services\MissionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class FeedbackControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use \Illuminate\Foundation\Testing\WithoutMiddleware;
+    use WithoutMiddleware;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->mock(\App\Services\MissionService::class);
+        $this->mock(MissionService::class);
     }
 
     #[Test]

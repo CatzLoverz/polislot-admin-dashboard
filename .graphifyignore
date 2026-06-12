@@ -1,0 +1,34 @@
+# Dependencies (WAJIB DIABAIKAN)
+vendor/
+node_modules/
+
+# Laravel Internal & Cache
+storage/
+bootstrap/cache/
+.phpunit.cache/
+
+# Git & IDE
+.git/
+.idea/
+.vscode/
+
+# Assets & Compiled files (Biasanya hanya hasil build)
+public/assets/
+public/build/
+public/storage/
+mix-manifest.json
+package-lock.json
+composer.lock
+
+# Documentation & Tests (Opsional - aktifkan jika ingin memperkecil lagi)
+# tests/
+# docs/
+
+# Media & Database Backups
+storage/app/backups/
+storage/app/public/
+
+# File Log & Temp
+*.log
+.env
+.env.*

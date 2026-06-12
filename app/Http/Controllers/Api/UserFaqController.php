@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserFaq;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
@@ -36,8 +37,8 @@ class UserFaqController extends Controller
 
             return $this->sendSuccess('Data FAQ berhasil diambil.', $formattedData, 200);
 
-        } catch (\Exception $e) {
-            Log::error('[API UserFaqController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+        } catch (Exception $e) {
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Terjadi kesalahan saat mengambil data FAQ.', 500);
         }
     }

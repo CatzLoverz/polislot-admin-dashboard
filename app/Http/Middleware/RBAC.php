@@ -12,7 +12,7 @@ class RBAC
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Closure(Request): (\Symfony\Component\HttpFoundation\Response)  $next
      * @param  string|null  ...$roles
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
@@ -32,7 +32,7 @@ class RBAC
             }
             
             // Untuk Web, redirect ke login
-            return redirect()->route('login');
+            return redirect()->route('login.form');
         }
 
         if (!app()->runningUnitTests()) {
@@ -49,19 +49,7 @@ class RBAC
             }
         }
 
-        // Atur koneksi database berdasarkan role user
-        $connection = match ($user->role) {
-            'admin' => 'mariadb',
-            'user' => 'mariadb_mobile',
-            default => config('database.default'),
-        };
 
-        config(['database.default' => $connection]);
-        
-        // Pastikan user menggunakan koneksi yang benar
-        if (method_exists($user, 'setConnection')) {
-            $user->setConnection($connection);
-        }
 
         // Jika ada parameter role, lakukan pengecekan RBAC
         if (!empty($roles)) {

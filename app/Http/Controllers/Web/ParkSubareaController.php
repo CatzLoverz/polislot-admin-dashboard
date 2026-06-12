@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Events\SubareaStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-use Exception;
 
 class ParkSubareaController extends Controller
 {
@@ -19,10 +22,10 @@ class ParkSubareaController extends Controller
      * Biasanya dipanggil via AJAX dari Map Editor.
      *
      * @param Request $request
-     * @param int $areaId ID dari ParkArea induk
-     * @return \Illuminate\Http\JsonResponse
+     * @param int $park_area ID dari ParkArea induk
+     * @return JsonResponse
      */
-    public function store(Request $request, $park_area)
+    public function store(Request $request, $park_area): JsonResponse
     {
         try {
             return DB::transaction(function () use ($request, $park_area) {
@@ -42,7 +45,7 @@ class ParkSubareaController extends Controller
                     'park_subarea_polygon' => json_decode($request->polygon),
                 ]);
 
-                Log::info('[WEB ParkSubareaController@store] Sukses: Subarea baru ditambahkan.', [
+                Log::info('Subarea baru ditambahkan.', [
                     'area_id'    => $park_area,
                     'subarea_id' => $subarea->park_subarea_id,
                     'name'       => $subarea->park_subarea_name
@@ -56,14 +59,14 @@ class ParkSubareaController extends Controller
             });
 
         } catch (ValidationException $e) {
-            Log::warning('[WEB ParkSubareaController@store] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return response()->json([
                 'status' => 'error', 
                 'message' => 'Validasi gagal.',
                 'errors' => $e->errors()
             ], 422);
         } catch (Exception $e) {
-            Log::error('[WEB ParkSubareaController@store] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan server.'], 500);
         }
     }
@@ -73,9 +76,9 @@ class ParkSubareaController extends Controller
      *
      * @param Request $request
      * @param int $id ID ParkSubarea
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -147,10 +150,15 @@ class ParkSubareaController extends Controller
                     }
                 }
 
-                Log::info('[WEB ParkSubareaController@update] Sukses: Subarea & Fasilitas diperbarui.', [
+                Log::info('Subarea & Fasilitas diperbarui.', [
                     'subarea_id' => $id,
                     'name'       => $subarea->park_subarea_name
                 ]);
+
+                // Broadcast updated status setelah transaksi commit
+                DB::afterCommit(function () use ($subarea) {
+                    broadcast(new SubareaStatusUpdated($subarea));
+                });
 
                 return response()->json([
                     'status'  => 'success', 
@@ -159,15 +167,15 @@ class ParkSubareaController extends Controller
             });
 
         } catch (ValidationException $e) {
-            Log::warning('[WEB ParkSubareaController@update] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return response()->json([
                 'status' => 'error', 
                 'message' => 'Validasi gagal.',
                 'errors' => $e->errors()
             ], 422);
         } catch (Exception $e) {
-            Log::error('[WEB ParkSubareaController@update] Gagal: ' . $e->getMessage());
-            return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan server.'], 500);
+            Log::error($e->getMessage());
+            return response()->json(['status' => 'error', 'message' => $e->getMessage() . ' - ' . $e->getFile() . ':' . $e->getLine()], 500);
         }
     }
 
@@ -175,9 +183,9 @@ class ParkSubareaController extends Controller
      * Menghapus subarea.
      *
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
@@ -193,7 +201,7 @@ class ParkSubareaController extends Controller
 
                 $subarea->delete();
 
-                Log::info('[WEB ParkSubareaController@destroy] Sukses: Subarea dihapus.', [
+                Log::info('Subarea dihapus.', [
                     'subarea_id' => $id, 
                     'name' => $name
                 ]);
@@ -203,8 +211,47 @@ class ParkSubareaController extends Controller
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB ParkSubareaController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus subarea.');
+        }
+    }
+
+    /**
+     * Mengambil daftar komentar terbaru untuk subarea tertentu.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getComments($id): JsonResponse
+    {
+        try {
+            $subarea = ParkSubarea::findOrFail($id);
+            $comments = $subarea->subareaComment()
+                ->with('user:user_id,name,avatar')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'subarea_comment_id' => $item->subarea_comment_id,
+                        'subarea_comment_content' => $item->subarea_comment_content,
+                        'subarea_comment_image' => $item->subarea_comment_image,
+                        'created_at' => $item->created_at->toIso8601String(),
+                        'user' => [
+                            'name' => $item->user->name ?? 'User Terhapus',
+                            'avatar' => $item->user->avatar ?? null,
+                        ],
+                    ];
+                });
+
+            return response()->json([
+                'status' => 'success',
+                'comments' => $comments
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 }

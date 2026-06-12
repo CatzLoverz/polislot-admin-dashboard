@@ -8,20 +8,23 @@ use App\Models\ParkSubarea;
 use App\Models\User;
 use App\Models\UserReward;
 use App\Models\UserValidation;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     /**
      * Display the dashboard index page with summary statistics.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
 
@@ -47,9 +50,10 @@ class DashboardController extends Controller
     /**
      * Fetch chart data for User Validation frequency.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function getChartData(Request $request)
+    public function getChartData(Request $request): JsonResponse
     {
         try {
             $period = $request->input('period', 'day'); // day, week, month
@@ -124,8 +128,8 @@ class DashboardController extends Controller
                 'period' => $period
             ]);
 
-        } catch (\Exception $e) {
-            Log::error('[WEB DashboardController@getChartData] Error: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load chart data'], 500);
         }
     }
@@ -133,9 +137,9 @@ class DashboardController extends Controller
     /**
      * Fetch top users leaderboard based on lifetime points.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getLeaderboard()
+    public function getLeaderboard(): JsonResponse
     {
         try {
             $leaders = User::select('user_id', 'name', 'avatar', 'lifetime_points') // id is mapped to user_id usually, verify model
@@ -151,7 +155,8 @@ class DashboardController extends Controller
                 });
 
             return response()->json($leaders);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load leaderboard'], 500);
         }
     }
@@ -159,9 +164,10 @@ class DashboardController extends Controller
     /**
      * Fetch realtime validation logs with optional area filtering.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function getRealtimeValidations(Request $request)
+    public function getRealtimeValidations(Request $request): JsonResponse
     {
         try {
             $areaId = $request->input('area_id');
@@ -190,7 +196,8 @@ class DashboardController extends Controller
 
             return response()->json($validations);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['error' => 'Failed to load realtime data'], 500);
         }
     }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Mission extends Model
 {
@@ -45,7 +46,12 @@ class Mission extends Model
         'mission_is_active' => 'boolean',
     ];
 
-    public function userMissions()
+    /**
+     * Relasi ke misi yang diambil oleh pengguna (UserMission).
+     *
+     * @return HasMany
+     */
+    public function userMissions(): HasMany
     {
         return $this->hasMany(UserMission::class, 'mission_id', 'mission_id');
     }

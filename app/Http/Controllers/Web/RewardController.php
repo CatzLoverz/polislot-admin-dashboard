@@ -4,20 +4,24 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reward;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class RewardController extends Controller
 {
     /**
      * Menampilkan halaman daftar master reward.
-     * * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     *
+     * @param Request $request
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -73,10 +77,11 @@ class RewardController extends Controller
 
     /**
      * Menyimpan data reward baru.
-     * * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -93,26 +98,27 @@ class RewardController extends Controller
 
                 $reward = Reward::create($validated);
 
-                Log::info('[WEB RewardController@store] Sukses: Reward berhasil ditambahkan.', ['reward_id' => $reward->reward_id]);
+                Log::info('Reward berhasil ditambahkan.', ['reward_id' => $reward->reward_id]);
                 
-                return back()->with('swal_success_crud', 'Reward berhasil ditambahkan.');
+                return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil ditambahkan.');
             });
 
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB RewardController@store] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal menyimpan data.');
         }
     }
 
     /**
      * Memperbarui data reward.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -134,25 +140,26 @@ class RewardController extends Controller
 
                 $reward->update($validated);
 
-                Log::info('[WEB RewardController@update] Sukses: Reward berhasil diperbarui.', ['reward_id' => $id]);
+                Log::info('Reward berhasil diperbarui.', ['reward_id' => $id]);
                 
-                return back()->with('swal_success_crud', 'Reward berhasil diperbarui.');
+                return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil diperbarui.');
             });
 
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
-            Log::error('[WEB RewardController@update] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
 
     /**
      * Menghapus data reward.
-     * * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
@@ -164,12 +171,12 @@ class RewardController extends Controller
 
                 $reward->delete();
                 
-                Log::info('[WEB RewardController@destroy] Sukses: Reward berhasil dihapus.', ['reward_id' => $id]);
+                Log::info('Reward berhasil dihapus.', ['reward_id' => $id]);
                 
-                return back()->with('swal_success_crud', 'Reward berhasil dihapus.');
+                return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil dihapus.');
             });
         } catch (Exception $e) {
-            Log::error('[WEB RewardController@destroy] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Gagal menghapus reward.');
         }
     }

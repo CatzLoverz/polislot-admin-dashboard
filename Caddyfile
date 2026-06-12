@@ -13,9 +13,9 @@
 :80 {
     root * /var/www/html/public
 
-    # Reverse proxy WebSocket /app/* ke Reverb (internal port 8080)
+    # Reverse proxy WebSocket /app/* dan HTTP API /apps/* ke Reverb (internal port 8080)
     @websocket {
-        path /app/*
+        path /app/* /apps/*
     }
     reverse_proxy @websocket 127.0.0.1:8080 {
         flush_interval -1

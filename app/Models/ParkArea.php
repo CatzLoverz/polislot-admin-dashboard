@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ParkArea extends Model
 {
@@ -19,7 +20,12 @@ class ParkArea extends Model
         'park_area_data' => 'array',
     ];
 
-    public function parkSubarea()
+    /**
+     * Relasi ke subarea parkir yang ada di area ini.
+     *
+     * @return HasMany
+     */
+    public function parkSubarea(): HasMany
     {
         return $this->hasMany(ParkSubarea::class, 'park_area_id', 'park_area_id');
     }

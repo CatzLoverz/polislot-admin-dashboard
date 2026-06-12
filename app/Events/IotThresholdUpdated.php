@@ -4,42 +4,44 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class IotStreamReceived implements ShouldBroadcastNow
+class IotThresholdUpdated implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $macAddress;
-    public $frameData;
+
+    public $thresholdBanyak;
+
+    public $thresholdTerbatas;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($macAddress, $frameData)
+    public function __construct($macAddress, $thresholdBanyak, $thresholdTerbatas)
     {
         $this->macAddress = $macAddress;
-        $this->frameData = $frameData;
+        $this->thresholdBanyak = (float) $thresholdBanyak;
+        $this->thresholdTerbatas = (float) $thresholdTerbatas;
     }
 
     /**
      * Get the channels the event should broadcast on.
-     *
-     * @return array<int, Channel>
      */
     public function broadcastOn(): array
     {
+        $cleanMac = str_replace(':', '', $this->macAddress);
+
         return [
-            new Channel('iot.stream.' . str_replace(':', '', $this->macAddress)),
+            new Channel('iot.detection.'.$cleanMac),
         ];
     }
-    
+
     public function broadcastAs()
     {
-        return 'stream.received';
+        return 'threshold.updated';
     }
 }

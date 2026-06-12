@@ -7,11 +7,13 @@ use App\Models\Mission;
 use App\Models\User;
 use App\Models\UserHistory;
 use App\Models\UserMission;
+use App\Services\MissionService;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
-use App\Services\MissionService;
+use Illuminate\Support\Facades\Log;
 
 class MissionController extends Controller
 {
@@ -24,7 +26,7 @@ class MissionController extends Controller
 
     /**
      * Mengambil data halaman Misi & Leaderboard secara agregat.
-     * * Data mencakup:
+     * Data mencakup:
      * 1. Statistik User (Total Misi Selesai & Lifetime Points)
      * 2. Daftar Misi Aktif beserta progres user saat ini
      * 3. Leaderboard Top 20 berdasarkan Lifetime Points
@@ -87,7 +89,7 @@ class MissionController extends Controller
                     'current_value' => $currentValue,
                     'percentage' => $percentage, // Ini yang dipakai UI Flutter
                     'is_completed' => $isCompleted,
-                    'completed_at' => $completedAt ? \Carbon\Carbon::parse($completedAt)->format('d M Y, H:i') : null,
+                    'completed_at' => $completedAt ? Carbon::parse($completedAt)->format('d M Y, H:i') : null,
                 ];
             })->sortBy('is_completed')->values();
 
@@ -131,8 +133,8 @@ class MissionController extends Controller
                 'user_rank' => $userRankData,
             ]);
 
-        } catch (\Exception $e) {
-            Log::error('[API MissionController@index] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+        } catch (Exception $e) {
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return $this->sendError('Gagal memuat data misi: '.$e->getMessage(), 500);
         }
     }

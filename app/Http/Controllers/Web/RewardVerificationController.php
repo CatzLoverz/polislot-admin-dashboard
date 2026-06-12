@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Services\HistoryService;
 use App\Models\UserReward;
+use App\Services\HistoryService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class RewardVerificationController extends Controller
 {
@@ -22,8 +25,9 @@ class RewardVerificationController extends Controller
 
     /**
      * Menampilkan daftar antrian klaim reward.
-     * * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     *
+     * @param Request $request
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -107,11 +111,12 @@ class RewardVerificationController extends Controller
 
     /**
      * Memproses persetujuan atau penolakan klaim reward.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function process(Request $request, $id)
+    public function process(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -147,7 +152,7 @@ class RewardVerificationController extends Controller
                     
                     if ($pointsToRefund > 0 && $claim->user) {
                         $claim->user->increment('current_points', $pointsToRefund);
-                        Log::info('[WEB RewardVerificationController@process] Info: Poin dikembalikan ke user.', ['user_id' => $claim->user_id]);
+                        Log::info('Info: Poin dikembalikan ke user.', ['user_id' => $claim->user_id]);
 
                         // Catat History Refund
                         $this->historyService->log(
@@ -161,13 +166,13 @@ class RewardVerificationController extends Controller
                     $msg = 'Klaim ditolak, poin telah dikembalikan.';
                 }
                 
-                Log::info('[WEB RewardVerificationController@process] Sukses: Status klaim diperbarui.', ['id' => $id, 'status' => $newStatus]);
+                Log::info('Status klaim diperbarui.', ['id' => $id, 'status' => $newStatus]);
 
                 return back()->with('swal_success_crud', $msg);
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB RewardVerificationController@process] Gagal: Error sistem.', ['error' => $e->getMessage()]);
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan sistem.');
         }
     }

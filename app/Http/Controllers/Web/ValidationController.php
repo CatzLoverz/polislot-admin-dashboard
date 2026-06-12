@@ -4,18 +4,23 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Validation;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class ValidationController extends Controller
 {
     /**
      * Menampilkan halaman daftar pengaturan validasi.
-     * * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     *
+     * @param Request $request
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -68,11 +73,12 @@ class ValidationController extends Controller
 
     /**
      * Memproses pembaruan data poin validasi.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -91,16 +97,17 @@ class ValidationController extends Controller
                     'validation_is_geofence_active' => $isGeofence,
                 ]);
 
-                Log::info('[WEB ValidationController@update] Sukses: Pengaturan validasi diperbarui.');
+                Log::info('Pengaturan validasi diperbarui.');
 
                 return redirect()->route('admin.validation.index')
                     ->with('swal_success_crud', 'Pengaturan validasi berhasil diperbarui.');
             });
 
         } catch (ValidationException $e) {
+            Log::warning('Validasi gagal saat update pengaturan.', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
-            Log::error('[WEB ValidationController@update] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }

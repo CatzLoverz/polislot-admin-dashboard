@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
             ->by($request->user()?->id ?: $request->ip())
             ->response(function () use ($request) {
 
-                Log::warning('[SERVICE RateLimiter] API rate limit exceeded', [
+                Log::warning('API rate limit exceeded', [
                     'ip'        => $request->ip(),
                     'user_id'   => $request->user()?->id,
                     'path'      => $request->path(),

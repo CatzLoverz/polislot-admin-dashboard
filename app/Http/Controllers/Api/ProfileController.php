@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Rules\NotCurrentPassword;
 use App\Models\User;
+use App\Rules\NotCurrentPassword;
 use App\Services\MissionService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Http\JsonResponse;
 
 class ProfileController extends Controller
 {
@@ -26,7 +27,8 @@ class ProfileController extends Controller
 
     /**
      * Menampilkan data profil pengguna.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function show(Request $request): JsonResponse
@@ -34,15 +36,16 @@ class ProfileController extends Controller
         try {
             $user = $request->user();
             return $this->sendSuccess('Data profil berhasil diambil.', $this->formatUser($user));
-        } catch (\Exception $e) {
-            Log::error('[API ProfileController@show] Gagal menampilkan profil. Error: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Log::error('Gagal menampilkan profil. Error: ' . $e->getMessage());
             return $this->sendError('Gagal mengambil data profil.', 500);
         }
     }
 
     /**
      * Memperbarui data profil pengguna.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @return JsonResponse
      */
     public function update(Request $request): JsonResponse
@@ -81,10 +84,10 @@ class ProfileController extends Controller
                     try {
                         $this->missionService->updateProgress($user->user_id, 'PROFILE_UPDATE');
                 
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         // Kita catch error misi agar tidak membatalkan update profil utama
                         // Log errornya saja untuk debugging
-                        Log::error("[API ProfileController@update] Gagal trigger misi: " . $e->getMessage());
+                        Log::error("Gagal trigger misi: " . $e->getMessage());
                     }
                 }
 
@@ -96,15 +99,15 @@ class ProfileController extends Controller
                 // 3. Nama
                 $user->name = $request->name;
                 $user->save();
-                Log::info('[API ProfileController@update] Profil berhasil diperbarui.');
+                Log::info('Profil berhasil diperbarui.');
                 return $this->sendSuccess('Profil berhasil diperbarui.', ['user' => $this->formatUser($user)]);
             });
 
         } catch (ValidationException $e) {
-            Log::warning('[API ProfileController@update] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
-        } catch (\Exception $e) {
-            Log::error('[API ProfileController@update] Error: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
             return $this->sendError('Gagal memperbarui profil.', 500);
         }
     }

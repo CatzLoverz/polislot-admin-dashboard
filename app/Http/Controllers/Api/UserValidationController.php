@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\ParkSubarea;
 use App\Models\UserValidation;
 use App\Models\Validation;
 use App\Services\HistoryService;
 use App\Services\MissionService;
+use App\Events\SubareaStatusUpdated;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -29,9 +31,10 @@ class UserValidationController extends Controller
     /**
      * Memproses validasi parkir dari user.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'park_subarea_id' => 'required|exists:park_subareas,park_subarea_id',
@@ -79,7 +82,7 @@ class UserValidationController extends Controller
 
                 if (empty($polygon)) {
                     // Fallback jika polygon kosong, skip atau deny (di sini kita skip agar aman)
-                    Log::warning("[API UserValidationController@store] Polygon kosong untuk Subarea ID {$subarea->park_subarea_id}");
+                    Log::warning("Polygon kosong untuk Subarea ID {$subarea->park_subarea_id}");
                 } else {
                     $centerLat = 0;
                     $centerLng = 0;
@@ -103,7 +106,7 @@ class UserValidationController extends Controller
                 }
             }
 
-            return DB::transaction(function () use ($request, $user, $areaName, $validationSetting, $points) {
+            return DB::transaction(function () use ($request, $user, $areaName, $validationSetting, $points, $subarea) {
                 // 4. Simpan Validasi
                 UserValidation::create([
                     'user_id' => $user->user_id,
@@ -111,6 +114,13 @@ class UserValidationController extends Controller
                     'park_subarea_id' => $request->park_subarea_id,
                     'user_validation_content' => $request->user_validation_content,
                 ]);
+
+                // 4.5. Evaluasi pergeseran threshold WMA & broadcast status update
+                $subarea->evaluateThresholdShift();
+                
+                DB::afterCommit(function () use ($subarea) {
+                    broadcast(new SubareaStatusUpdated($subarea));
+                });
 
                 // 5. Tambah Poin & History
                 if ($points > 0) {
@@ -136,7 +146,7 @@ class UserValidationController extends Controller
             });
 
         } catch (Exception $e) {
-            Log::error('[API UserValidationController@store] Error: '.$e->getMessage());
+            Log::error(''.$e->getMessage());
 
             return $this->sendError('Terjadi kesalahan server saat memproses validasi.', 500);
         }

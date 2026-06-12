@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Exception;
 use App\Http\Controllers\Controller;
 use App\Models\SubareaComment;
+use App\Models\ParkSubarea;
+use App\Events\SubareaStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -17,10 +20,11 @@ class SubareaCommentController extends Controller
     /**
      * Menampilkan daftar komentar berdasarkan Subarea dengan Paginasi.
      * Mirip dengan HistoryController, output diformat ulang.
-     * * @param Request $request (park_subarea_id, limit, page)
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @param Request $request (park_subarea_id, limit, page)
+     * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         // Validasi: Kita butuh ID Subarea untuk tahu komentar mana yang diambil
         $request->validate([
@@ -69,17 +73,18 @@ class SubareaCommentController extends Controller
             return $this->sendSuccess('Daftar komentar berhasil diambil.', $responseData);
 
         } catch (Exception $e) {
-            Log::error('[API SubareaCommentController@index] Error: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return $this->sendError('Gagal memuat komentar.', 500);
         }
     }
 
     /**
      * Menyimpan komentar baru (Store).
-     * * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'park_subarea_id'         => 'required|exists:park_subareas,park_subarea_id',
@@ -105,26 +110,35 @@ class SubareaCommentController extends Controller
 
                 $comment->load('user:user_id,name,avatar');
 
-                Log::info('[API SubareaCommentController@store] Sukses: Comment baru ditambahkan.');
+                Log::info('Comment baru ditambahkan.');
+
+                $subarea = ParkSubarea::find($request->park_subarea_id);
+                if ($subarea) {
+                    DB::afterCommit(function () use ($subarea) {
+                        broadcast(new SubareaStatusUpdated($subarea));
+                    });
+                }
+
                 return $this->sendSuccess('Komentar terkirim.', $comment, 201);
             });
         } catch (ValidationException $e) {
-            Log::warning('[API SubareaCommentController@store] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
         } catch (Exception $e) {
-            Log::error('[API SubareaCommentController@store] Error: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return $this->sendError('Gagal mengirim komentar.', 500);
         }
     }
 
     /**
      * Memperbarui komentar (Update).
-     * * Mengganti konten atau gambar. Gambar lama akan dihapus jika ada gambar baru.
-     * * @param Request $request
+     * Mengganti konten atau gambar. Gambar lama akan dihapus jika ada gambar baru.
+     *
+     * @param Request $request
      * @param int $id ID SubareaComment
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         if ($request->isMethod('put') || $request->isMethod('patch')) {
              // Laravel handle ini otomatis, tapi request harus multipart/form-data
@@ -162,14 +176,22 @@ class SubareaCommentController extends Controller
                 $comment->update($dataToUpdate);
                 $comment->load('user:user_id,name,avatar');
 
-                Log::info('[API SubareaCommentController@update] Sukses: Comment Berhasil Diupdate.');
+                Log::info('Comment Berhasil Diupdate.');
+
+                $subarea = ParkSubarea::find($comment->park_subarea_id);
+                if ($subarea) {
+                    DB::afterCommit(function () use ($subarea) {
+                        broadcast(new SubareaStatusUpdated($subarea));
+                    });
+                }
+
                 return $this->sendSuccess('Komentar berhasil diperbarui.', $comment);
             });
         } catch (ValidationException $e) {
-            Log::warning('[API SubareaCommentController@update] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
         } catch (Exception $e) {
-            Log::error('[API SubareaCommentController@update] Error: ' . $e->getMessage());
+            Log::error($e->getMessage());
             $code = $e->getCode() === 403 ? 403 : 500;
             return $this->sendError($e->getMessage(), $code);
         }
@@ -177,12 +199,13 @@ class SubareaCommentController extends Controller
 
     /**
      * Menghapus komentar (Destroy).
-     * * Menghapus data di database beserta file gambarnya di storage.
-     * * @param Request $request
+     * Menghapus data di database beserta file gambarnya di storage.
+     *
+     * @param Request $request
      * @param int $id ID SubareaComment
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id): JsonResponse
     {
         $comment = SubareaComment::findOrFail($id);
 
@@ -200,14 +223,22 @@ class SubareaCommentController extends Controller
 
                 $comment->delete();
 
-                Log::info('[API SubareaCommentController@destroy] Sukses: Comment dihapus.');
+                Log::info('Comment dihapus.');
+
+                $subarea = ParkSubarea::find($comment->park_subarea_id);
+                if ($subarea) {
+                    DB::afterCommit(function () use ($subarea) {
+                        broadcast(new SubareaStatusUpdated($subarea));
+                    });
+                }
+
                 return $this->sendSuccess('Komentar berhasil dihapus.');
             });
         } catch (ValidationException $e) {
-            Log::warning('[API SubareaCommentController@destroy] Gagal: Validasi error.', ['errors' => $e->errors()]);
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
             return $this->sendValidationError($e);
         } catch (Exception $e) {
-            Log::error('[API SubareaCommentController@destroy] Error: ' . $e->getMessage());
+            Log::error($e->getMessage());
             $code = $e->getCode() === 403 ? 403 : 500;
             return $this->sendError($e->getMessage(), $code);
         }

@@ -5,17 +5,22 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
 use App\Models\FeedbackCategory; // Tambahkan Model Kategori
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class FeedbackController extends Controller
 {
     /**
      * Menampilkan halaman daftar feedback.
-     * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     *
+     * @param Request $request
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -70,24 +75,25 @@ class FeedbackController extends Controller
 
     /**
      * Memproses penghapusan data feedback.
-     * * @param int $id
-     * * @return \Illuminate\Http\RedirectResponse
+     *
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
                 $feedback = Feedback::findOrFail($id);
                 $feedback->delete();
 
-                Log::info('[WEB FeedbackController@destroy] Sukses: Feedback berhasil dihapus.', ['id' => $id]);
+                Log::info('Feedback berhasil dihapus.', ['id' => $id]);
 
                 return redirect()->route('admin.feedback.index')
                     ->with('swal_success_crud', 'Feedback berhasil dihapus.');
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB FeedbackController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

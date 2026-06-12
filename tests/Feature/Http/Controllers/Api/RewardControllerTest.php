@@ -4,20 +4,22 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\Reward;
 use App\Models\User;
+use App\Models\UserReward;
+use App\Services\MissionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class RewardControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use \Illuminate\Foundation\Testing\WithoutMiddleware;
+    use WithoutMiddleware;
 
     protected function setUp(): void
     {
         parent::setUp();
-        // Mock MissionService to prevent side effects
-        $this->mock(\App\Services\MissionService::class);
+        $this->mock(MissionService::class);
     }
 
     #[Test]
@@ -75,5 +77,26 @@ class RewardControllerTest extends TestCase
         $response = $this->postJson('/api/rewards/redeem', []);
         
         $response->assertStatus(422);
+    }
+
+    #[Test]
+    public function history_returns_200_and_list()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $reward = Reward::create(['reward_name' => 'R1', 'reward_point_required' => 50, 'reward_type' => 'Voucher', 'reward_image' => 'a.jpg']);
+        UserReward::create([
+            'user_id' => $user->user_id,
+            'reward_id' => $reward->reward_id,
+            'user_reward_code' => 'TEST-123',
+            'user_reward_status' => 'pending'
+        ]);
+
+        $response = $this->getJson('/api/rewards/history');
+        
+        $response->assertStatus(200)
+                 ->assertJson(['status' => 'success', 'message' => 'Riwayat penukaran berhasil diambil.'])
+                 ->assertJsonPath('data.0.name', 'R1');
     }
 }

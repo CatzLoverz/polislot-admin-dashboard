@@ -4,17 +4,21 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\ParkAmenity;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Exception;
 
 class ParkAmenityController extends Controller
 {
     /**
      * Simpan satu fasilitas baru.
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -29,7 +33,7 @@ class ParkAmenityController extends Controller
                 ]);
 
                 // Return ID agar bisa tombol hapus berfungsi tanpa refresh
-                Log::info('[WEB ParkAmenityController@store] Sukses: Fasilitas ditambahkan.', ['subarea_id' => $request->park_subarea_id, 'amenity_id' => $amenity->park_amenity_id]);
+                Log::info('Fasilitas ditambahkan.', ['subarea_id' => $request->park_subarea_id, 'amenity_id' => $amenity->park_amenity_id]);
 
                 return response()->json([
                     'status' => 'success', 
@@ -38,26 +42,29 @@ class ParkAmenityController extends Controller
                 ]);
             });
         } catch (Exception $e) {
-            Log::error('[WEB ParkAmenityController@store] Error: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Gagal menyimpan.'], 500);
         }
     }
 
     /**
      * Hapus satu fasilitas.
+     *
+     * @param int $id
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         try {
             return DB::transaction(function () use ($id) {
                 $amenity = ParkAmenity::findOrFail($id);
                 $amenity->delete();
                 
-                Log::info('[WEB ParkAmenityController@destroy] Sukses: Fasilitas dihapus.', ['amenity_id' => $id]);
+                Log::info('Fasilitas dihapus.', ['amenity_id' => $id]);
                 return response()->json(['status' => 'success', 'message' => 'Fasilitas dihapus.']);
             });
         } catch (Exception $e) {
-            Log::error('[WEB ParkAmenityController@destroy] Error: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return response()->json(['status' => 'error', 'message' => 'Gagal menghapus.'], 500);
         }
     }

@@ -4,19 +4,24 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\InfoBoard;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class InfoBoardController extends Controller
 {
     /**
      * Menampilkan halaman daftar semua info board.
-     * * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     *
+     * @param Request $request
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -73,10 +78,11 @@ class InfoBoardController extends Controller
 
     /**
      * Memproses penyimpanan data info board baru.
-     * * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -91,7 +97,7 @@ class InfoBoardController extends Controller
                     'info_content' => $validated['info_content'],
                 ]);
 
-                Log::info('[WEB InfoBoardController@store] Sukses: Data info board baru berhasil disimpan.');
+                Log::info('Data info board baru berhasil disimpan.');
                 return redirect()->route('admin.info-board.index')
                     ->with('swal_success_crud', 'Informasi berhasil ditambahkan.');
             });
@@ -99,18 +105,19 @@ class InfoBoardController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB InfoBoardController@store] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menambahkan informasi.')->withInput();
         }
     }
 
     /**
      * Memproses pembaruan data info board.
-     * * @param Request $request
+     *
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -126,7 +133,7 @@ class InfoBoardController extends Controller
                     'info_content' => $validated['info_content'],
                 ]);
 
-                Log::info('[WEB InfoBoardController@update] Sukses: Data info board berhasil diperbarui.');
+                Log::info('Data info board berhasil diperbarui.');
 
                 return redirect()->route('admin.info-board.index')
                     ->with('swal_success_crud', 'Informasi berhasil diperbarui.');
@@ -135,31 +142,32 @@ class InfoBoardController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
-            Log::error('[WEB InfoBoardController@update] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
 
     /**
      * Memproses penghapusan data info board.
-     * * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
                 $infoBoard = InfoBoard::findOrFail($id);
                 $infoBoard->delete();
 
-                Log::info('[WEB InfoBoardController@destroy] Sukses: Data info board berhasil dihapus.');
+                Log::info('Data info board berhasil dihapus.');
 
                 return redirect()->route('admin.info-board.index')
                     ->with('swal_success_crud', 'Informasi berhasil dihapus.');
             });
 
         } catch (Exception $e) {
-            Log::error('[WEB InfoBoardController@destroy] Gagal: ' . $e->getMessage());
+            Log::error($e->getMessage());
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

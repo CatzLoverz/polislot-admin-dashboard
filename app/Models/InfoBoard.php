@@ -17,7 +17,11 @@ class InfoBoard extends Model
         'info_content'
     ];
 
-    // Relationships
+    /**
+     * Relasi ke pembuat info board (User).
+     *
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
