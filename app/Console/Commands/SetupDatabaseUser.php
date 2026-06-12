@@ -52,7 +52,7 @@ class SetupDatabaseUser extends Command
 
             DB::statement("GRANT SELECT ON $dbName.info_boards TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.park_areas TO '$username'@'$host'");
-            DB::statement("GRANT SELECT ON $dbName.park_subareas TO '$username'@'$host'");
+            DB::statement("GRANT SELECT, INSERT, UPDATE ON $dbName.park_subareas TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.park_amenities TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.missions TO '$username'@'$host'");
             DB::statement("GRANT SELECT ON $dbName.rewards TO '$username'@'$host'");

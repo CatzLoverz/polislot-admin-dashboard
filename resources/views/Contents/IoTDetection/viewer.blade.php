@@ -1,8 +1,8 @@
 @extends("Layouts.content_layout")
 
-@section('title', 'IoT Detection')
-@section('page_title', 'IoT Detection')
-@section('page_subtitle', 'Manajemen deteksi parkir dari perangkat IoT yang terdaftar.')
+@section('title', 'Manajemen Konfigurasi Deteksi Parkir oleh IoT')
+@section('page_title', 'Manajemen Konfigurasi Deteksi Parkir oleh IoT')
+@section('page_subtitle', 'Kelola konfigurasi deteksi parkir otomatis berdasarkan perangkat IoT yang terhubung.')
 
 @section('content')
 <style>

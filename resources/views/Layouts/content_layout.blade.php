@@ -144,14 +144,19 @@
                                 <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
                                 <h4 class="text-section">Kelola</h4>
                             </li>
+                            <li class="nav-item {{ Route::is('admin.info-board.*') ? 'active' : '' }}">
+                                <a href="{{ Route('admin.info-board.index') }}"> <i class="fas fa-bullhorn"></i>
+                                    <p>Manajemen Info Board</p>
+                                </a>
+                            </li>
                             <li class="nav-item {{ Route::is('admin.park-area.*') ? 'active' : '' }}">
                                 <a href="{{ Route('admin.park-area.index') }}"> <i class="fas fa-parking"></i>
                                     <p>Manajemen Area Parkir</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.info-board.*') ? 'active' : '' }}">
-                                <a href="{{ Route('admin.info-board.index') }}"> <i class="fas fa-bullhorn"></i>
-                                    <p>Manajemen Info Board</p>
+                            <li class="nav-item {{ Route::is('admin.iot.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.iot.index') }}"> <i class="fas fa-satellite-dish"></i>
+                                    <p>Manajemen Konfigurasi Deteksi IoT</p>
                                 </a>
                             </li>
                             @php
