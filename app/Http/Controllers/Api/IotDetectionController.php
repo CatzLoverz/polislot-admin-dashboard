@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 use Exception;
 
 use App\Events\IotCountUpdated;
-use App\Events\IotStreamReceived;
+use App\Events\IotDetectionReceived;
 use App\Events\IotDeviceStatusChanged;
 use App\Events\SubareaStatusUpdated;
 use App\Http\Controllers\Controller;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class IotStreamController extends Controller
+class IotDetectionController extends Controller
 {
     /**
      * Helper: Validasi MAC Address terdaftar (cache-aware).
@@ -49,7 +49,7 @@ class IotStreamController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function receiveStream(Request $request): \Illuminate\Http\JsonResponse
+    public function receiveDetection(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
@@ -139,7 +139,7 @@ class IotStreamController extends Controller
         // 3. BROADCAST FRAME
         // ============================================================
         try {
-            broadcast(new IotStreamReceived($macAddress, $request->frame, false));
+            broadcast(new IotDetectionReceived($macAddress, $request->frame, false));
             
             return response()->json([
                 'status'  => 'success',
@@ -314,7 +314,7 @@ class IotStreamController extends Controller
 
         // 5. BROADCAST KE WEB UI
         $imageBase64 = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
-        broadcast(new IotStreamReceived($macAddress, $imageBase64, $saveImage));
+        broadcast(new IotDetectionReceived($macAddress, $imageBase64, $saveImage));
 
         Log::info('Snapshot diterima dan berhasil dibroadcast', ['mac' => $macAddress, 'saved' => $saveImage]);
 

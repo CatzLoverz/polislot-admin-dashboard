@@ -1,8 +1,8 @@
 @extends("Layouts.content_layout")
 
-@section('title', 'IoT Stream Viewer')
-@section('page_title', 'Live IoT Stream Viewer')
-@section('page_subtitle', 'Monitoring real-time data/video dari perangkat IoT yang terdaftar.')
+@section('title', 'IoT Detection')
+@section('page_title', 'IoT Detection')
+@section('page_subtitle', 'Manajemen deteksi parkir dari perangkat IoT yang terdaftar.')
 
 @section('content')
 <style>
@@ -290,7 +290,7 @@
                 </div>
                 <div class="card-body bg-white text-dark p-3" style="border-radius: 0 0 15px 15px;">
                     <!-- Filter & Batch Action Form -->
-                    <form id="download-batch-form" action="{{ route('admin.iot-stream-viewer.download-batch') }}" method="POST" target="_blank">
+                    <form id="download-batch-form" action="{{ route('admin.iot.download-batch') }}" method="POST" target="_blank">
                         @csrf
                         <input type="hidden" name="mac_address" value="{{ $targetMac }}">
                         
@@ -343,7 +343,7 @@
                                 <div class="alert alert-danger py-2 small mb-2">{{ session('error') }}</div>
                             @endif
                             <div class="row" id="captures-grid-row" style="margin-left: -5px; margin-right: -5px;">
-                                @include('Contents.IotStream.partials.captures_grid')
+                                @include('Contents.IoTDetection.partials.captures_grid')
                             </div>
                         </div>
                     </form>
@@ -388,7 +388,7 @@
 
         safeAddLog(`Memicu validasi manual [${content.toUpperCase()}] untuk ${macAddress}...`);
 
-        fetch("{{ route('admin.iot-stream-viewer.validate') }}", {
+        fetch("{{ route('admin.iot.validate') }}", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -486,7 +486,7 @@
             safeAddLog('Mode menggambar aktif. Meminta snapshot terbaru dari perangkat IoT...');
 
             // Pemicu otomatis snapshot dari device IoT
-            fetch("{{ route('admin.iot-stream-viewer.trigger') }}", {
+            fetch("{{ route('admin.iot.trigger') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -648,7 +648,7 @@
 
         safeAddLog('Menyimpan konfigurasi deteksi...');
 
-        fetch("{{ route('admin.iot-stream-viewer.save-settings') }}", {
+        fetch("{{ route('admin.iot.save-settings') }}", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -778,7 +778,7 @@
             if (result.isConfirmed) {
                 const ids = Array.from(checkedCheckboxes).map(cb => parseInt(cb.value));
 
-                fetch("{{ route('admin.iot-stream-viewer.delete-batch') }}", {
+                fetch("{{ route('admin.iot.delete-batch') }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -822,7 +822,7 @@
     // AJAX Refresh function for dataset captures grid
     window.refreshCaptures = function() {
         const macAddress = "{{ $targetMac }}";
-        const url = `{{ route('admin.iot-stream-viewer.index') }}?mac=${macAddress}`;
+        const url = `{{ route('admin.iot.index') }}?mac=${macAddress}`;
 
         fetch(url, {
             headers: {
@@ -885,7 +885,7 @@
 <script type="module">
     // Hapus titik dua dari MAC address sesuai dengan format channel di Event kita
     const cleanMac = "{{ str_replace(':', '', $targetMac) }}";
-    const channelName = `iot.stream.${cleanMac}`;
+    const channelName = `iot.detection.${cleanMac}`;
     const serverInitialStatus = "{{ $initialStatus }}"; // Bug #3: Hydrate dari server
 
     const connectionStatus = document.getElementById('connection-status');
@@ -937,7 +937,7 @@
             addLog(`Tersambung ke server. Mendengarkan channel: <strong>${channelName}</strong>`);
             
             streamChannel = window.Echo.channel(channelName)
-                .listen('.stream.received', (e) => {
+                .listen('.iot.detection.received', (e) => {
                     let frameData = e.frameData;
                     
                     if(frameData.startsWith('data:image')) {

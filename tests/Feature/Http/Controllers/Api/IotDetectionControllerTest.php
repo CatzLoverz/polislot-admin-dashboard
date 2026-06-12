@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class IotStreamControllerTest extends TestCase
+class IotDetectionControllerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -43,16 +43,16 @@ class IotStreamControllerTest extends TestCase
             \App\Events\IotDeviceStatusChanged::class,
             \App\Events\SubareaStatusUpdated::class,
             \App\Events\IotCountUpdated::class,
-            \App\Events\IotStreamReceived::class,
+            \App\Events\IotDetectionReceived::class,
             \App\Events\IotCommandSent::class
         ]);
         Storage::fake('public');
     }
 
     #[Test]
-    public function receive_stream_fails_with_unregistered_mac()
+    public function receive_detection_fails_with_unregistered_mac()
     {
-        $response = $this->postJson('/api/iot/stream', [
+        $response = $this->postJson('/api/iot/detection', [
             'mac_address' => '00:00:00:00:00:00',
             'frame' => 'base64frame',
             'timestamp' => time(),
@@ -63,9 +63,9 @@ class IotStreamControllerTest extends TestCase
     }
 
     #[Test]
-    public function receive_stream_fails_with_invalid_signature()
+    public function receive_detection_fails_with_invalid_signature()
     {
-        $response = $this->postJson('/api/iot/stream', [
+        $response = $this->postJson('/api/iot/detection', [
             'mac_address' => $this->mac,
             'frame' => 'base64frame',
             'timestamp' => time(),
@@ -76,7 +76,7 @@ class IotStreamControllerTest extends TestCase
     }
 
     #[Test]
-    public function receive_stream_succeeds_with_valid_signature()
+    public function receive_detection_succeeds_with_valid_signature()
     {
         $timestamp = time();
         $frame = 'base64frame';
@@ -84,7 +84,7 @@ class IotStreamControllerTest extends TestCase
         $dataToSign = "{$this->mac}:{$timestamp}:{$frameLength}";
         $signature = hash_hmac('sha256', $dataToSign, $this->secret);
 
-        $response = $this->postJson('/api/iot/stream', [
+        $response = $this->postJson('/api/iot/detection', [
             'mac_address' => $this->mac,
             'frame' => $frame,
             'timestamp' => $timestamp,

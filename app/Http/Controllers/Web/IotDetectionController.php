@@ -17,7 +17,7 @@ use App\Events\SubareaStatusUpdated;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
 
-class IotStreamViewerController extends Controller
+class IotDetectionController extends Controller
 {
     /**
      * Menampilkan halaman IoT Stream Viewer.
@@ -54,10 +54,10 @@ class IotStreamViewerController extends Controller
         }
 
         if ($request->ajax()) {
-            return view('Contents.IotStream.partials.captures_grid', compact('captures', 'targetMac'));
+            return view('Contents.IoTDetection.partials.captures_grid', compact('captures', 'targetMac'));
         }
         
-        return view('Contents.IotStream.viewer', compact(
+        return view('Contents.IoTDetection.viewer', compact(
             'devices', 'targetMac', 'initialStatus', 'maxSlots', 
             'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas', 'captures', 'initialCount'
         ));

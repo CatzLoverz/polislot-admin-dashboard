@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class IotStreamReceived implements ShouldBroadcastNow
+class IotDetectionReceived implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -36,12 +36,12 @@ class IotStreamReceived implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('iot.stream.' . str_replace(':', '', $this->macAddress)),
+            new Channel('iot.detection.' . str_replace(':', '', $this->macAddress)),
         ];
     }
     
     public function broadcastAs()
     {
-        return 'stream.received';
+        return 'iot.detection.received';
     }
 }

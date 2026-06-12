@@ -39,7 +39,7 @@ class IotWsAuthControllerTest extends TestCase
             \App\Events\IotDeviceStatusChanged::class,
             \App\Events\SubareaStatusUpdated::class,
             \App\Events\IotCountUpdated::class,
-            \App\Events\IotStreamReceived::class,
+            \App\Events\IotDetectionReceived::class,
             \App\Events\IotCommandSent::class
         ]);
     }

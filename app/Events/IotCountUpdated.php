@@ -31,7 +31,7 @@ class IotCountUpdated implements ShouldBroadcastNow
     {
         $cleanMac = str_replace(':', '', $this->macAddress);
         return [
-            new Channel('iot.stream.' . $cleanMac),
+            new Channel('iot.detection.' . $cleanMac),
         ];
     }
 

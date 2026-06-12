@@ -15,7 +15,7 @@ use App\Http\Controllers\Web\FeedbackCategoryController;
 use App\Http\Controllers\Web\RewardVerificationController;
 use App\Http\Controllers\Web\ValidationController;
 use App\Http\Controllers\Web\UserFaqController;
-use App\Http\Controllers\Web\IotStreamViewerController;
+use App\Http\Controllers\Web\IotDetectionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -94,7 +94,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         Route::resource('user-faq', UserFaqController::class)->only(['index', 'store', 'update', 'destroy']);
 
         // Route Khusus Uji Coba WebSockets IoT
-        Route::prefix('iot-stream-viewer')->as('iot-stream-viewer.')->controller(IotStreamViewerController::class)->group(function () {
+        Route::prefix('iot')->as('iot.')->controller(IotDetectionController::class)->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/trigger', 'triggerSnapshot')->name('trigger');
             Route::post('/save-settings', 'saveSettings')->name('save-settings');
