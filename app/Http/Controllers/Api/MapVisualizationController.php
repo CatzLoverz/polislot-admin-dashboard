@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use Exception;
 
 use App\Http\Controllers\Controller;
+use App\Models\IotDevice;
 use App\Models\ParkArea;
 use App\Models\UserValidation;
-use App\Models\IotDevice;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class MapVisualizationController extends Controller
 {

@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-use Exception;
 
 use App\Http\Controllers\Controller;
-use App\Rules\NotCurrentPassword;
 use App\Models\User;
+use App\Rules\NotCurrentPassword;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,15 +15,16 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;use Exception;
 
 class ProfileController extends Controller
 {
     /**
      * Menampilkan halaman form untuk mengedit profil pengguna.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function edit(): \Illuminate\View\View
+    public function edit(): View
     {
         $user = Auth::user();
 
@@ -35,10 +36,10 @@ class ProfileController extends Controller
     /**
      * Memproses permintaan untuk memperbarui profil pengguna.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function update(Request $request): \Illuminate\Http\RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
         $user = Auth::user();
         Log::info('Menerima permintaan update profil.', ['user_id' => $user->user_id]);
@@ -60,42 +61,40 @@ class ProfileController extends Controller
             $rules['new_password'] = $passwordRules; 
         }
 
-        DB::beginTransaction();
         try {
-            $validatedData = $request->validate($rules);
-            Log::info('Validasi data profil berhasil.', ['user_id' => $user->user_id]);
+            return DB::transaction(function () use ($request, $user, $rules) {
+                $validatedData = $request->validate($rules);
+                Log::info('Validasi data profil berhasil.', ['user_id' => $user->user_id]);
 
-            if ($request->hasFile('avatar')) {
-                Log::info('Mengunggah avatar baru.', ['user_id' => $user->user_id]);
-                if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
-                    Storage::disk('public')->delete($user->avatar);
+                if ($request->hasFile('avatar')) {
+                    Log::info('Mengunggah avatar baru.', ['user_id' => $user->user_id]);
+                    if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
+                        Storage::disk('public')->delete($user->avatar);
+                    }
+                    $path = $request->file('avatar')->store('avatars', 'public');
+                    $user->avatar = $path;
                 }
-                $path = $request->file('avatar')->store('avatars', 'public');
-                $user->avatar = $path;
-            }
-            
-            // update password jika diisi
-            if (isset($validatedData['new_password'])) {
-                $user->password = Hash::make($validatedData['new_password']);
-                Log::info('Password diupdate.', ['user_id' => $user->user_id]);
-            }
+                
+                // update password jika diisi
+                if (isset($validatedData['new_password'])) {
+                    $user->password = Hash::make($validatedData['new_password']);
+                    Log::info('Password diupdate.', ['user_id' => $user->user_id]);
+                }
 
-            /** @var \App\Models\User $user */
-            $user->name = $validatedData['name'];
-            $user->save();
+                /** @var \App\Models\User $user */
+                $user->name = $validatedData['name'];
+                $user->save();
 
-            Auth::login($user);
-            DB::commit();
+                Auth::login($user);
 
-            Log::info('Profil berhasil diperbarui.', ['user_id' => $user->user_id]);
-            return redirect()->route('profile.edit')->with('swal_success_crud', 'Profil Anda berhasil diperbarui.');
+                Log::info('Profil berhasil diperbarui.', ['user_id' => $user->user_id]);
+                return redirect()->route('profile.edit')->with('swal_success_crud', 'Profil Anda berhasil diperbarui.');
+            });
 
         } catch (ValidationException $e) {
-            DB::rollBack();
             Log::warning('Validasi data gagal.', [ 'user_id' => $user->user_id, 'errors' => $e->errors() ]);
             return back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            DB::rollBack();
             Log::error('Terjadi error sistem saat memperbarui profil.', [ 'user_id' => $user->user_id, 'error' => $e->getMessage() ]);
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server saat memperbarui profil.');
         }

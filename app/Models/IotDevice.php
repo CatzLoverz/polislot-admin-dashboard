@@ -181,7 +181,7 @@ class IotDevice extends Model
     /**
      * Relasi ke ParkSubarea tempat device ini terpasang.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function subarea(): BelongsTo
     {
@@ -191,7 +191,7 @@ class IotDevice extends Model
     /**
      * Relasi ke IotCapture (history jepretan kamera device ini).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function captures(): HasMany
     {

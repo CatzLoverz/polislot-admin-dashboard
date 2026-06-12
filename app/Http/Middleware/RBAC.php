@@ -12,7 +12,7 @@ class RBAC
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Closure(Request): (\Symfony\Component\HttpFoundation\Response)  $next
      * @param  string|null  ...$roles
      */
     public function handle(Request $request, Closure $next, ...$roles): Response

@@ -84,9 +84,7 @@ class RewardController extends Controller
 
                 // Cek Poin Cukup
                 if ($user->current_points < $reward->reward_point_required) {
-                    DB::rollBack();
                     Log::warning("Poin tidak cukup. User: {$user->user_id}, Reward: {$reward->reward_id}");
-
                     return $this->sendError('Poin Anda tidak mencukupi untuk reward ini.', 422);
                 }
 
@@ -124,7 +122,6 @@ class RewardController extends Controller
                 ], 201);
             });
         } catch (Exception $e) {
-            DB::rollBack();
             Log::error(''.$e->getMessage());
 
             return $this->sendError('Gagal memproses penukaran: '.$e->getMessage(), 422);

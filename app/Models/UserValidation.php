@@ -20,7 +20,7 @@ class UserValidation extends Model
     /**
      * Relasi ke pengguna yang melakukan validasi.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -30,7 +30,7 @@ class UserValidation extends Model
     /**
      * Relasi ke subarea parkir yang divalidasi.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function parkSubarea(): BelongsTo
     {

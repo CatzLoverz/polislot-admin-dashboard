@@ -1,25 +1,25 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-use Exception;
 
-use App\Http\Controllers\Controller;
-use App\Models\IotDevice;
-use App\Models\IotCapture;
-use App\Models\UserValidation;
-use App\Models\Validation;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use PhpMqtt\Client\Facades\MQTT;
 use App\Events\IotCommandSent;
 use App\Events\SubareaStatusUpdated;
-use Illuminate\Support\Facades\DB;
-use ZipArchive;
+use App\Http\Controllers\Controller;
+use App\Models\IotCapture;
+use App\Models\IotDevice;
+use App\Models\UserValidation;
+use App\Models\Validation;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use PhpMqtt\Client\Facades\MQTT;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use ZipArchive;
 
 class IotDetectionController extends Controller
 {
@@ -27,7 +27,7 @@ class IotDetectionController extends Controller
      * Menampilkan halaman IoT Stream Viewer.
      * MAC Address dipilih dari daftar perangkat yang terdaftar di database.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return View
      */
     public function index(Request $request): View
@@ -121,7 +121,7 @@ class IotDetectionController extends Controller
     /**
      * Mengirim perintah 'snapshot' ke perangkat IoT via Reverb + MQTT
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function triggerSnapshot(Request $request): JsonResponse
@@ -167,7 +167,7 @@ class IotDetectionController extends Controller
      * Menyimpan setelan deteksi (max slots, detection polygon, thresholds) ke subarea terkait device ini.
      * Kemudian mem-push config terupdate ke IoT Device (jika online).
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function saveSettings(Request $request): JsonResponse
@@ -228,7 +228,7 @@ class IotDetectionController extends Controller
      * Menerima request validasi manual Admin dari Web, menyimpan data ke cache pending_validation,
      * lalu memicu perintah 'snapshot' ke perangkat IoT.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function validateStream(Request $request): JsonResponse
@@ -318,7 +318,7 @@ class IotDetectionController extends Controller
     /**
      * Batch Download snapshot images as a ZIP file.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return BinaryFileResponse|RedirectResponse
      */
     public function downloadBatch(Request $request)
@@ -412,7 +412,7 @@ class IotDetectionController extends Controller
     /**
      * Batch Delete snapshots from database and local storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return JsonResponse
      */
     public function deleteBatch(Request $request): JsonResponse

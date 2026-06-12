@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\ParkArea;
 use App\Models\IotDevice;
+use App\Models\ParkArea;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class ParkAreaController extends Controller
 {
@@ -19,7 +22,7 @@ class ParkAreaController extends Controller
      * Menggunakan Yajra DataTables untuk memuat data.
      *
      * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -72,9 +75,9 @@ class ParkAreaController extends Controller
     /**
      * Menampilkan halaman form pembuatan area parkir baru.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function create(): \Illuminate\View\View
+    public function create(): View
     {
         $mapsApiKey = config('services.google.js_api_key');
         return view('Contents.ParkArea.create', compact('mapsApiKey'));
@@ -84,9 +87,9 @@ class ParkAreaController extends Controller
      * Menyimpan data area parkir baru ke database.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -131,7 +134,7 @@ class ParkAreaController extends Controller
      * Menampilkan detail area parkir dan peta interaktif untuk manajemen subarea.
      *
      * @param int $id
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     * @return View|RedirectResponse
      */
     public function show($id)
     {
@@ -178,9 +181,9 @@ class ParkAreaController extends Controller
      * Menghapus area parkir beserta subareanya (Cascade Delete di DB).
      *
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id): \Illuminate\Http\RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {

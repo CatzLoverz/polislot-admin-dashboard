@@ -5,19 +5,22 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
 use App\Models\FeedbackCategory; // Tambahkan Model Kategori
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class FeedbackController extends Controller
 {
     /**
      * Menampilkan halaman daftar feedback.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -74,9 +77,9 @@ class FeedbackController extends Controller
      * Memproses penghapusan data feedback.
      *
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id): \Illuminate\Http\RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {

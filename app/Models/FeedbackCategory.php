@@ -18,7 +18,7 @@ class FeedbackCategory extends Model
     /**
      * Relasi ke feedback yang terkait dengan kategori ini.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function feedbacks(): HasMany
     {

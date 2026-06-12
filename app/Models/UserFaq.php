@@ -20,7 +20,7 @@ class UserFaq extends Model
     /**
      * Relasi ke user yang menanyakan FAQ.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {

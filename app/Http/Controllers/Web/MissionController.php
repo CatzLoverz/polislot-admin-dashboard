@@ -4,20 +4,23 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mission;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class MissionController extends Controller
 {
     /**
      * Menampilkan halaman daftar semua misi.
      * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -87,9 +90,9 @@ class MissionController extends Controller
     /**
      * Memproses penyimpanan data Misi baru.
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
@@ -124,9 +127,9 @@ class MissionController extends Controller
      * Memproses pembaruan data Misi.
      * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -162,9 +165,9 @@ class MissionController extends Controller
     /**
      * Memproses penghapusan data Misi.
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id): \Illuminate\Http\RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {

@@ -24,7 +24,7 @@ class UserReward extends Model
     /**
      * Relasi ke pengguna yang menukarkan reward.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -34,7 +34,7 @@ class UserReward extends Model
     /**
      * Relasi ke reward yang ditukarkan.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function reward(): BelongsTo
     {

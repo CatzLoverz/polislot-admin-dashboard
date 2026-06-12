@@ -20,7 +20,7 @@ class SubareaComment extends Model
     /**
      * Relasi ke user pembuat komentar.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -30,7 +30,7 @@ class SubareaComment extends Model
     /**
      * Relasi ke subarea parkir yang dikomentari.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function parkSubarea(): BelongsTo
     {

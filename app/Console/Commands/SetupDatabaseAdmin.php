@@ -36,13 +36,15 @@ class SetupDatabaseAdmin extends Command
 
             DB::statement("GRANT ALL PRIVILEGES ON `$dbName`.* TO '$username'@'$host';");
 
-            DB::statement("FLUSH PRIVILEGES;");
+            DB::statement('FLUSH PRIVILEGES;');
 
-            $this->info("User database berhasil dibuat dan privilege disetel.");
+            $this->info('User database berhasil dibuat dan privilege disetel.');
+
             return self::SUCCESS;
 
         } catch (Exception $e) {
-            $this->error("Terjadi kesalahan: " . $e->getMessage());
+            $this->error('Terjadi kesalahan: '.$e->getMessage());
+
             return self::FAILURE;
         }
     }

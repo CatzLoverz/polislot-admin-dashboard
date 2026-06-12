@@ -23,7 +23,7 @@ class ParkArea extends Model
     /**
      * Relasi ke subarea parkir yang ada di area ini.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function parkSubarea(): HasMany
     {

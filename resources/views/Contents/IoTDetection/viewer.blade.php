@@ -164,7 +164,7 @@
                 <div class="card-body p-0 bg-light d-flex justify-content-center align-items-center" style="min-height: 400px; border-radius: 0 0 15px 15px;">
                     <div id="feed-container" class="text-center p-4 w-100 h-100 position-relative d-flex justify-content-center align-items-center">
                         <div id="placeholder-container">
-                            <i class="fas fa-video-slash fa-4x text-muted mb-3"></i>
+                            <i class="fas fa-image fa-4x text-muted mb-3"></i>
                             <h5 class="text-muted" id="feed-placeholder">Menunggu data masuk dari MAC Address: <strong>{{ $targetMac }}</strong>...</h5>
                         </div>
                         <div id="canvas-container" class="position-relative d-none" style="max-width: 640px; margin: 0 auto;">

@@ -20,7 +20,7 @@ class InfoBoard extends Model
     /**
      * Relasi ke pembuat info board (User).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {

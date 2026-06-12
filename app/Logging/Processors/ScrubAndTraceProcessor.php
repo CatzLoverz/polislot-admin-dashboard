@@ -2,10 +2,10 @@
 
 namespace App\Logging\Processors;
 
+use Exception;
 use Illuminate\Support\Str;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
-use Exception;
 
 class ScrubAndTraceProcessor implements ProcessorInterface
 {

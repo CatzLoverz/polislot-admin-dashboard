@@ -49,7 +49,7 @@ class Mission extends Model
     /**
      * Relasi ke misi yang diambil oleh pengguna (UserMission).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function userMissions(): HasMany
     {

@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserFaq;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 

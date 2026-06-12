@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Services\HistoryService;
 use App\Models\UserReward;
+use App\Services\HistoryService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
-use Exception;
 
 class RewardVerificationController extends Controller
 {
@@ -24,7 +27,7 @@ class RewardVerificationController extends Controller
      * Menampilkan daftar antrian klaim reward.
      *
      * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -111,9 +114,9 @@ class RewardVerificationController extends Controller
      *
      * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function process(Request $request, $id): \Illuminate\Http\RedirectResponse
+    public function process(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {

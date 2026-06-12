@@ -13,7 +13,9 @@ class IotThresholdUpdated implements ShouldBroadcastNow
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $macAddress;
+
     public $thresholdBanyak;
+
     public $thresholdTerbatas;
 
     /**
@@ -32,8 +34,9 @@ class IotThresholdUpdated implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         $cleanMac = str_replace(':', '', $this->macAddress);
+
         return [
-            new Channel('iot.detection.' . $cleanMac),
+            new Channel('iot.detection.'.$cleanMac),
         ];
     }
 

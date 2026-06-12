@@ -2,23 +2,25 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Console\Traits\LoggableOutput;
+use Illuminate\Console\Command;
 
 class DbRestore extends Command
 {
     use LoggableOutput;
 
     protected $signature = 'db:restore {filename}';
+
     protected $description = 'Restore database dari file SQL di storage/backups';
 
     public function handle()
     {
         $filename = $this->argument('filename');
-        $filePath = storage_path('app/backups/' . $filename);
+        $filePath = storage_path('app/backups/'.$filename);
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             $this->error("❌ File tidak ditemukan: {$filePath}");
+
             return Command::FAILURE;
         }
 
@@ -30,7 +32,7 @@ class DbRestore extends Command
 
         $this->info("⏳ Melakukan restore database '{$db}' dari file '{$filename}'...");
 
-        $passwordPart = $pass ? '-p' . escapeshellarg($pass) : '';
+        $passwordPart = $pass ? '-p'.escapeshellarg($pass) : '';
 
         // Command mysql untuk restore
         $command = sprintf(
@@ -48,8 +50,8 @@ class DbRestore extends Command
         if ($result === 0) {
             $this->logInfo("✅ Restore database '{$db}' berhasil!");
         } else {
-            $this->error("❌ Restore gagal!");
-            $this->line("Detail error:\n" . implode("\n", $output));
+            $this->error('❌ Restore gagal!');
+            $this->line("Detail error:\n".implode("\n", $output));
         }
 
         return $result;

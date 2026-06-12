@@ -12,12 +12,12 @@ use App\Models\IotDevice;
 use App\Models\UserValidation;
 use App\Models\Validation;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\JsonResponse;
 
 class IotDetectionController extends Controller
 {
@@ -38,25 +38,23 @@ class IotDetectionController extends Controller
 
         return (bool) $isRegistered;
     }
+
     /**
      * Endpoint untuk menerima frame dari perangkat IoT Python
      * dan mem-broadcast-nya via Reverb WebSockets.
-     * 
+     *
      * Security:
      * 1. MAC Address divalidasi terhadap database (harus terdaftar)
      * 2. Request di-sign dengan HMAC-SHA256 menggunakan API secret
      * 3. Timestamp dalam signature mencegah replay attack (±5 menit)
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function receiveDetection(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
-            'frame'       => 'required|string',
-            'timestamp'   => 'required|numeric',
-            'signature'   => 'required|string',
+            'frame' => 'required|string',
+            'timestamp' => 'required|numeric',
+            'signature' => 'required|string',
         ]);
 
         $macAddress = $request->mac_address;
@@ -80,15 +78,15 @@ class IotDetectionController extends Controller
             }
         }
 
-        if (!$isRegistered) {
+        if (! $isRegistered) {
             Log::warning('Rejected: Unregistered MAC Address', [
                 'mac' => $macAddress,
-                'ip'  => $request->ip(),
+                'ip' => $request->ip(),
             ]);
 
             // Response 403 — agar device tahu ditolak dan bisa stop/retry
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => 'Device not registered.',
             ], 403);
         }
@@ -105,14 +103,14 @@ class IotDetectionController extends Controller
             // Cek timestamp tidak lebih dari 5 menit lalu atau masa depan
             if (abs($now - $timestamp) > 300) {
                 Log::warning('Rejected: Stale timestamp', [
-                    'mac'       => $macAddress,
+                    'mac' => $macAddress,
                     'timestamp' => $timestamp,
-                    'server'    => $now,
-                    'diff'      => abs($now - $timestamp),
+                    'server' => $now,
+                    'diff' => abs($now - $timestamp),
                 ]);
 
                 return response()->json([
-                    'status'  => 'error',
+                    'status' => 'error',
                     'message' => 'Request expired.',
                 ], 401);
             }
@@ -123,14 +121,14 @@ class IotDetectionController extends Controller
             $dataToSign = "{$macAddress}:{$timestamp}:{$frameLength}";
             $expectedSignature = hash_hmac('sha256', $dataToSign, $iotSecret);
 
-            if (!hash_equals($expectedSignature, $request->signature)) {
+            if (! hash_equals($expectedSignature, $request->signature)) {
                 Log::warning('Rejected: Invalid HMAC signature', [
                     'mac' => $macAddress,
-                    'ip'  => $request->ip(),
+                    'ip' => $request->ip(),
                 ]);
 
                 return response()->json([
-                    'status'  => 'error',
+                    'status' => 'error',
                     'message' => 'Invalid signature.',
                 ], 401);
             }
@@ -141,16 +139,16 @@ class IotDetectionController extends Controller
         // ============================================================
         try {
             broadcast(new IotDetectionReceived($macAddress, $request->frame, false));
-            
+
             return response()->json([
-                'status'  => 'success',
+                'status' => 'success',
                 'message' => 'Frame broadcasted successfully.',
             ], 200);
         } catch (Exception $e) {
-            Log::error('Error broadcasting stream: ' . $e->getMessage());
+            Log::error('Error broadcasting stream: '.$e->getMessage());
 
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => 'Failed to broadcast frame.',
             ], 500);
         }
@@ -159,29 +157,27 @@ class IotDetectionController extends Controller
     /**
      * Endpoint untuk menerima snapshot terenkripsi dari IoT device.
      * Padanan HTTP dari MQTT topic "polislot/device/{MAC}/snapshot".
-     * 
-     * Flow: Device capture → AES encrypt → HTTP POST → Decrypt → Save DB → Broadcast Reverb
      *
-     * @param Request $request
-     * @return JsonResponse
+     * Flow: Device capture → AES encrypt → HTTP POST → Decrypt → Save DB → Broadcast Reverb
      */
     public function receiveSnapshot(Request $request): JsonResponse
     {
         $request->validate([
-            'mac_address'     => 'required|string',
-            'timestamp'       => 'required|numeric',
+            'mac_address' => 'required|string',
+            'timestamp' => 'required|numeric',
             'encrypted_image' => 'required|string',
-            'iv'              => 'required|string',
-            'signature'       => 'required|string',
-            'save_image'      => 'nullable',
-            'current_count'   => 'nullable|numeric',
+            'iv' => 'required|string',
+            'signature' => 'required|string',
+            'save_image' => 'nullable',
+            'current_count' => 'nullable|numeric',
         ]);
 
         $macAddress = $request->mac_address;
 
         // 1. VALIDASI MAC ADDRESS
-        if (!$this->validateMacAddress($macAddress)) {
+        if (! $this->validateMacAddress($macAddress)) {
             Log::warning('Rejected: Unregistered MAC', ['mac' => $macAddress]);
+
             return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
         }
 
@@ -190,12 +186,12 @@ class IotDetectionController extends Controller
         $key32 = substr(hash('sha256', $iotSecret, true), 0, 32);
 
         $payloadToSign = [
-            'mac_address'     => $macAddress,
-            'timestamp'       => (int) $request->timestamp,
+            'mac_address' => $macAddress,
+            'timestamp' => (int) $request->timestamp,
             'encrypted_image' => $request->encrypted_image,
-            'iv'              => $request->iv,
+            'iv' => $request->iv,
         ];
-        
+
         if ($request->has('current_count')) {
             $payloadToSign['current_count'] = (int) $request->current_count;
         }
@@ -206,8 +202,9 @@ class IotDetectionController extends Controller
         $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
         $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
-        if (!hash_equals($calculatedSignature, $request->signature)) {
+        if (! hash_equals($calculatedSignature, $request->signature)) {
             Log::warning('Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
         }
 
@@ -228,20 +225,21 @@ class IotDetectionController extends Controller
 
         if ($decryptedImageBytes === false) {
             Log::error('Failed to decrypt image', ['mac' => $macAddress]);
+
             return response()->json(['status' => 'error', 'message' => 'Decryption failed.'], 400);
         }
 
         // 4. SIMPAN KE STORAGE + DATABASE (kondisional berdasarkan parameter save_image)
         $device = IotDevice::where('device_mac_address', $macAddress)->first();
-        
+
         $saveImage = true;
         if ($request->has('save_image')) {
             $saveImage = filter_var($request->save_image, FILTER_VALIDATE_BOOLEAN);
         }
 
         if ($device && $saveImage) {
-            $fileName = 'capture_' . time() . '_' . str_replace(':', '', $macAddress) . '.jpg';
-            $path = 'iot_captures/' . $fileName;
+            $fileName = 'capture_'.time().'_'.str_replace(':', '', $macAddress).'.jpg';
+            $path = 'iot_captures/'.$fileName;
 
             Storage::disk('public')->put($path, $decryptedImageBytes);
 
@@ -250,7 +248,7 @@ class IotDetectionController extends Controller
             if ($subarea && $subarea->max_slots > 0) {
                 $count = $request->has('current_count') ? (int) $request->current_count : ($subarea->current_count ?? 0);
                 $occupancy = ($count / $subarea->max_slots) * 100;
-                
+
                 if ($occupancy < ($subarea->threshold_banyak ?? 30.0)) {
                     $cvStatus = 'banyak';
                 } elseif ($occupancy >= ($subarea->threshold_terbatas ?? 80.0)) {
@@ -261,10 +259,10 @@ class IotDetectionController extends Controller
             }
 
             $capture = IotCapture::create([
-                'device_id'          => $device->device_id,
+                'device_id' => $device->device_id,
                 'capture_image_path' => $path,
                 'capture_is_trained' => false,
-                'capture_ai_status'  => $cvStatus,
+                'capture_ai_status' => $cvStatus,
             ]);
 
             Log::info('Image saved', ['mac' => $macAddress, 'path' => $path, 'cv_status' => $cvStatus]);
@@ -304,7 +302,7 @@ class IotDetectionController extends Controller
 
                     // Evaluate WMA Threshold Shift!
                     $subarea->evaluateThresholdShift();
-                    
+
                     // Broadcast updated status
                     DB::afterCommit(function () use ($subarea) {
                         broadcast(new SubareaStatusUpdated($subarea));
@@ -314,7 +312,7 @@ class IotDetectionController extends Controller
         }
 
         // 5. BROADCAST KE WEB UI
-        $imageBase64 = 'data:image/jpeg;base64,' . base64_encode($decryptedImageBytes);
+        $imageBase64 = 'data:image/jpeg;base64,'.base64_encode($decryptedImageBytes);
         broadcast(new IotDetectionReceived($macAddress, $imageBase64, $saveImage));
 
         Log::info('Snapshot diterima dan berhasil dibroadcast', ['mac' => $macAddress, 'saved' => $saveImage]);
@@ -324,22 +322,19 @@ class IotDetectionController extends Controller
 
     /**
      * Endpoint untuk menerima hitungan (count) kendaraan dari IoT device.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function receiveCount(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
-            'timestamp'   => 'required|numeric',
-            'count'       => 'required|integer|min:0',
-            'signature'   => 'required|string',
+            'timestamp' => 'required|numeric',
+            'count' => 'required|integer|min:0',
+            'signature' => 'required|string',
         ]);
 
         $macAddress = $request->mac_address;
 
-        if (!$this->validateMacAddress($macAddress)) {
+        if (! $this->validateMacAddress($macAddress)) {
             return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
         }
 
@@ -349,15 +344,16 @@ class IotDetectionController extends Controller
 
         $payloadToSign = [
             'mac_address' => $macAddress,
-            'timestamp'   => (int) $request->timestamp,
-            'count'       => (int) $request->count,
+            'timestamp' => (int) $request->timestamp,
+            'count' => (int) $request->count,
         ];
 
         $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
         $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
-        if (!hash_equals($calculatedSignature, $request->signature)) {
+        if (! hash_equals($calculatedSignature, $request->signature)) {
             Log::warning('Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
         }
 
@@ -388,24 +384,20 @@ class IotDetectionController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-
     /**
      * Endpoint untuk memberikan konfigurasi terbaru ke IoT device pada saat startup.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function receiveConfigQuery(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
-            'timestamp'   => 'required|numeric',
-            'signature'   => 'required|string',
+            'timestamp' => 'required|numeric',
+            'signature' => 'required|string',
         ]);
 
         $macAddress = $request->mac_address;
 
-        if (!$this->validateMacAddress($macAddress)) {
+        if (! $this->validateMacAddress($macAddress)) {
             return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
         }
 
@@ -416,8 +408,9 @@ class IotDetectionController extends Controller
         $dataToSign = "{$macAddress}:{$request->timestamp}";
         $calculatedSignature = hash_hmac('sha256', $dataToSign, $key32);
 
-        if (!hash_equals($calculatedSignature, $request->signature)) {
+        if (! hash_equals($calculatedSignature, $request->signature)) {
             Log::warning('Rejected: Invalid HMAC signature', ['mac' => $macAddress]);
+
             return response()->json(['status' => 'error', 'message' => 'Invalid signature.'], 401);
         }
 
@@ -425,19 +418,20 @@ class IotDetectionController extends Controller
         if ($device && $device->subarea) {
             $subarea = $device->subarea;
             Log::info('Konfigurasi dikirim ke IoT Device', ['mac' => $macAddress]);
+
             return response()->json([
                 'status' => 'success',
                 'config' => [
-                    'max_slots'          => (int) $subarea->max_slots,
-                    'detection_polygon'  => $subarea->detection_polygon ?? [],
-                    'threshold_banyak'   => (float) ($subarea->threshold_banyak ?? 30.0),
+                    'max_slots' => (int) $subarea->max_slots,
+                    'detection_polygon' => $subarea->detection_polygon ?? [],
+                    'threshold_banyak' => (float) ($subarea->threshold_banyak ?? 30.0),
                     'threshold_terbatas' => (float) ($subarea->threshold_terbatas ?? 80.0),
-                ]
+                ],
             ]);
         }
 
         Log::warning('Config query ditolak: Subarea tidak ditemukan', ['mac' => $macAddress]);
+
         return response()->json(['status' => 'error', 'message' => 'Subarea not found.'], 404);
     }
 }
-

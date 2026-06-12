@@ -20,7 +20,7 @@ class Feedback extends Model
     /**
      * Relasi ke kategori feedback.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function feedbackCategory(): BelongsTo
     {

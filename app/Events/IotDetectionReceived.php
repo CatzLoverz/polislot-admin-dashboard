@@ -4,8 +4,6 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -15,7 +13,9 @@ class IotDetectionReceived implements ShouldBroadcastNow
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $macAddress;
+
     public $frameData;
+
     public $isSaved;
 
     /**
@@ -36,10 +36,10 @@ class IotDetectionReceived implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('iot.detection.' . str_replace(':', '', $this->macAddress)),
+            new Channel('iot.detection.'.str_replace(':', '', $this->macAddress)),
         ];
     }
-    
+
     public function broadcastAs()
     {
         return 'iot.detection.received';

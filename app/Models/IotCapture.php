@@ -28,7 +28,7 @@ class IotCapture extends Model
     /**
      * Relasi ke perangkat IOT (IotDevice).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function device(): BelongsTo
     {
@@ -38,7 +38,7 @@ class IotCapture extends Model
     /**
      * Relasi ke validasi pengguna (UserValidation).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function userValidation(): BelongsTo
     {

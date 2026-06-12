@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
@@ -9,20 +8,23 @@ use App\Models\ParkSubarea;
 use App\Models\User;
 use App\Models\UserReward;
 use App\Models\UserValidation;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     /**
      * Display the dashboard index page with summary statistics.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function index(): \Illuminate\View\View
+    public function index(): View
     {
         $user = Auth::user();
 
@@ -49,9 +51,9 @@ class DashboardController extends Controller
      * Fetch chart data for User Validation frequency.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getChartData(Request $request): \Illuminate\Http\JsonResponse
+    public function getChartData(Request $request): JsonResponse
     {
         try {
             $period = $request->input('period', 'day'); // day, week, month
@@ -135,9 +137,9 @@ class DashboardController extends Controller
     /**
      * Fetch top users leaderboard based on lifetime points.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getLeaderboard(): \Illuminate\Http\JsonResponse
+    public function getLeaderboard(): JsonResponse
     {
         try {
             $leaders = User::select('user_id', 'name', 'avatar', 'lifetime_points') // id is mapped to user_id usually, verify model
@@ -163,9 +165,9 @@ class DashboardController extends Controller
      * Fetch realtime validation logs with optional area filtering.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getRealtimeValidations(Request $request): \Illuminate\Http\JsonResponse
+    public function getRealtimeValidations(Request $request): JsonResponse
     {
         try {
             $areaId = $request->input('area_id');

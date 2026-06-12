@@ -27,7 +27,7 @@ class Reward extends Model
     /**
      * Relasi ke reward yang ditukarkan oleh pengguna (UserReward).
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function userRewards(): HasMany
     {

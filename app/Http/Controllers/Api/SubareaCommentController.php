@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Exception;
 use App\Http\Controllers\Controller;
 use App\Models\SubareaComment;
@@ -21,9 +22,9 @@ class SubareaCommentController extends Controller
      * Mirip dengan HistoryController, output diformat ulang.
      *
      * @param Request $request (park_subarea_id, limit, page)
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         // Validasi: Kita butuh ID Subarea untuk tahu komentar mana yang diambil
         $request->validate([
@@ -81,9 +82,9 @@ class SubareaCommentController extends Controller
      * Menyimpan komentar baru (Store).
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'park_subarea_id'         => 'required|exists:park_subareas,park_subarea_id',
@@ -135,9 +136,9 @@ class SubareaCommentController extends Controller
      *
      * @param Request $request
      * @param int $id ID SubareaComment
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(Request $request, $id): \Illuminate\Http\JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         if ($request->isMethod('put') || $request->isMethod('patch')) {
              // Laravel handle ini otomatis, tapi request harus multipart/form-data
@@ -202,9 +203,9 @@ class SubareaCommentController extends Controller
      *
      * @param Request $request
      * @param int $id ID SubareaComment
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(Request $request, $id): \Illuminate\Http\JsonResponse
+    public function destroy(Request $request, $id): JsonResponse
     {
         $comment = SubareaComment::findOrFail($id);
 

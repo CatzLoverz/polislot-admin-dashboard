@@ -155,8 +155,8 @@
                                 </a>
                             </li>
                             <li class="nav-item {{ Route::is('admin.iot.*') ? 'active' : '' }}">
-                                <a href="{{ route('admin.iot.index') }}"> <i class="fas fa-satellite-dish"></i>
-                                    <p>Manajemen Konfigurasi Deteksi IoT</p>
+                                <a href="{{ route('admin.iot.index') }}"> <i class="fas fa-microchip"></i>
+                                    <span>Manajemen Konfigurasi Deteksi IoT</span>
                                 </a>
                             </li>
                             @php

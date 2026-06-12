@@ -18,7 +18,7 @@ class ParkAmenity extends Model
     /**
      * Relasi ke subarea parkir.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function parkSubarea(): BelongsTo
     {

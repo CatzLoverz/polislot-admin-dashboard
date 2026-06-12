@@ -49,7 +49,7 @@ class User extends Authenticatable
     /**
      * Relasi ke Info Board.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function infoBoard(): HasMany
     {
@@ -59,7 +59,7 @@ class User extends Authenticatable
     /**
      * Relasi ke User Mission.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function userMission(): HasMany
     {
@@ -69,7 +69,7 @@ class User extends Authenticatable
     /**
      * Relasi ke User Reward.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function userReward(): HasMany
     {
@@ -79,7 +79,7 @@ class User extends Authenticatable
     /**
      * Relasi ke User History.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function userHistory(): HasMany
     {
@@ -89,7 +89,7 @@ class User extends Authenticatable
     /**
      * Relasi ke User Validation.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function userValidation(): HasMany
     {
@@ -99,7 +99,7 @@ class User extends Authenticatable
     /**
      * Relasi ke Subarea Comment.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function subareaComment(): HasMany
     {

@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Console\Traits\LoggableOutput;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 
 class BackupClean extends Command
 {
@@ -21,8 +20,9 @@ class BackupClean extends Command
         $days = (int) $this->option('days');
         $path = storage_path('app/backups/manual');
 
-        if (!File::exists($path)) {
+        if (! File::exists($path)) {
             $this->error("❌ Folder {$path} tidak ditemukan.");
+
             return Command::FAILURE;
         }
 

@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Services;
-use Exception;
 
 use App\Models\UserHistory;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class HistoryService
@@ -21,13 +22,15 @@ class HistoryService
     public function log(int $userId, string $type, string $name, ?int $points, bool $isNegative = false): void
     {
         try {
-            UserHistory::create([
-                'user_id' => $userId,
-                'user_history_type' => $type,
-                'user_history_name' => $name,
-                'user_history_points' => $points,
-                'user_history_is_negative' => $isNegative,
-            ]);
+            DB::transaction(function () use ($userId, $type, $name, $points, $isNegative) {
+                UserHistory::create([
+                    'user_id' => $userId,
+                    'user_history_type' => $type,
+                    'user_history_name' => $name,
+                    'user_history_points' => $points,
+                    'user_history_is_negative' => $isNegative,
+                ]);
+            });
             
             Log::info("Log created: User {$userId} | {$type} | {$name}");
         } catch (Exception $e) {

@@ -6,10 +6,10 @@ use App\Models\Mission;
 use App\Models\User;
 use App\Models\UserMission;
 use App\Services\HistoryService;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MissionService
 {
@@ -82,8 +82,7 @@ class MissionService
      */
     private function processMission(int $userId, Mission $mission, int $incrementValue): void
     {
-        DB::beginTransaction();
-        try {
+        DB::transaction(function () use ($userId, $mission, $incrementValue) {
             $userMission = UserMission::where('user_id', $userId)
                 ->where('mission_id', $mission->mission_id)
                 ->lockForUpdate()
@@ -106,7 +105,7 @@ class MissionService
             $isReset = $this->checkAndResetCycle($userMission, $mission->mission_reset_cycle);
 
             if ($userMission->user_mission_is_completed) {
-                DB::commit(); return;
+                return;
             }
 
             // 3. LOGIC UPDATE PROGRESS
@@ -183,13 +182,7 @@ class MissionService
                     Log::info("COMPLETED: {$mission->mission_title}");
                 }
             }
-
-            DB::commit();
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error("" . $e->getMessage());
-        }
+        });
     }
 
     /**
@@ -214,10 +207,12 @@ class MissionService
         }
 
         if ($shouldReset) {
-            $userMission->user_mission_current_value = 0;
-            $userMission->user_mission_is_completed = false;
-            $userMission->user_mission_completed_at = null;
-            $userMission->save(); // updated_at berubah jadi NOW
+            DB::transaction(function () use ($userMission) {
+                $userMission->user_mission_current_value = 0;
+                $userMission->user_mission_is_completed = false;
+                $userMission->user_mission_completed_at = null;
+                $userMission->save(); // updated_at berubah jadi NOW
+            });
             return true; // Reset Terjadi
         }
 
@@ -233,10 +228,12 @@ class MissionService
      */
     private function awardPoints(int $userId, int $points): void
     {
-        $user = User::where('user_id', $userId)->lockForUpdate()->first();
-        if ($user) {
-            $user->increment('current_points', $points);
-            $user->increment('lifetime_points', $points);
-        }
+        DB::transaction(function () use ($userId, $points) {
+            $user = User::where('user_id', $userId)->lockForUpdate()->first();
+            if ($user) {
+                $user->increment('current_points', $points);
+                $user->increment('lifetime_points', $points);
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Logging;
 
 use App\Logging\Processors\ScrubAndTraceProcessor;
+use Illuminate\Log\Logger;
 use Monolog\Formatter\LineFormatter;
 
 class CustomizeFormatter
@@ -10,7 +11,7 @@ class CustomizeFormatter
     /**
      * Customize the given logger instance.
      *
-     * @param  \Illuminate\Log\Logger  $logger
+     * @param  Logger  $logger
      * @return void
      */
     public function __invoke($logger)

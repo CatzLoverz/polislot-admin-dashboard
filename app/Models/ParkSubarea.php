@@ -40,7 +40,7 @@ class ParkSubarea extends Model
     /**
      * Relasi ke area parkir utama.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function parkArea(): BelongsTo
     {
@@ -50,7 +50,7 @@ class ParkSubarea extends Model
     /**
      * Relasi ke fasilitas yang ada di subarea ini.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function parkAmenity(): HasMany
     {
@@ -60,7 +60,7 @@ class ParkSubarea extends Model
     /**
      * Relasi ke validasi parkir dari user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function userValidation(): HasMany
     {
@@ -70,7 +70,7 @@ class ParkSubarea extends Model
     /**
      * Relasi ke komentar subarea dari user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function subareaComment(): HasMany
     {
@@ -80,7 +80,7 @@ class ParkSubarea extends Model
     /**
      * Relasi ke perangkat IoT yang terpasang di subarea ini.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function iotDevice(): HasOne
     {

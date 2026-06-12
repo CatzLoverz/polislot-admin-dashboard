@@ -33,7 +33,7 @@ class UserHistory extends Model
     /**
      * Relasi ke pengguna terkait.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {

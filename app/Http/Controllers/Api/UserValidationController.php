@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\ParkSubarea;
 use App\Models\UserValidation;
@@ -31,9 +32,9 @@ class UserValidationController extends Controller
      * Memproses validasi parkir dari user.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'park_subarea_id' => 'required|exists:park_subareas,park_subarea_id',

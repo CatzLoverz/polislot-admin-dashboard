@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Events\SubareaStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
-use App\Events\SubareaStatusUpdated;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-use Exception;
 
 class ParkSubareaController extends Controller
 {
@@ -21,9 +23,9 @@ class ParkSubareaController extends Controller
      *
      * @param Request $request
      * @param int $park_area ID dari ParkArea induk
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(Request $request, $park_area): \Illuminate\Http\JsonResponse
+    public function store(Request $request, $park_area): JsonResponse
     {
         try {
             return DB::transaction(function () use ($request, $park_area) {
@@ -74,9 +76,9 @@ class ParkSubareaController extends Controller
      *
      * @param Request $request
      * @param int $id ID ParkSubarea
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(Request $request, $id): \Illuminate\Http\JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
@@ -181,9 +183,9 @@ class ParkSubareaController extends Controller
      * Menghapus subarea.
      *
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id): \Illuminate\Http\RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
@@ -218,9 +220,9 @@ class ParkSubareaController extends Controller
      * Mengambil daftar komentar terbaru untuk subarea tertentu.
      *
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getComments($id): \Illuminate\Http\JsonResponse
+    public function getComments($id): JsonResponse
     {
         try {
             $subarea = ParkSubarea::findOrFail($id);
