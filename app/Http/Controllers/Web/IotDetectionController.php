@@ -16,6 +16,10 @@ use App\Events\IotCommandSent;
 use App\Events\SubareaStatusUpdated;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class IotDetectionController extends Controller
 {
@@ -24,9 +28,9 @@ class IotDetectionController extends Controller
      * MAC Address dipilih dari daftar perangkat yang terdaftar di database.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function index(Request $request): \Illuminate\View\View
+    public function index(Request $request): View
     {
         // Ambil semua device dari database, termasuk subarea dan area induknya
         $devices = IotDevice::with('subarea.parkArea')->get();
@@ -118,9 +122,9 @@ class IotDetectionController extends Controller
      * Mengirim perintah 'snapshot' ke perangkat IoT via Reverb + MQTT
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function triggerSnapshot(Request $request): \Illuminate\Http\JsonResponse
+    public function triggerSnapshot(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
@@ -164,9 +168,9 @@ class IotDetectionController extends Controller
      * Kemudian mem-push config terupdate ke IoT Device (jika online).
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function saveSettings(Request $request): \Illuminate\Http\JsonResponse
+    public function saveSettings(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address'        => 'required|string',
@@ -225,9 +229,9 @@ class IotDetectionController extends Controller
      * lalu memicu perintah 'snapshot' ke perangkat IoT.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function validateStream(Request $request): \Illuminate\Http\JsonResponse
+    public function validateStream(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address'        => 'required|string',
@@ -315,7 +319,7 @@ class IotDetectionController extends Controller
      * Batch Download snapshot images as a ZIP file.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\RedirectResponse
+     * @return BinaryFileResponse|RedirectResponse
      */
     public function downloadBatch(Request $request)
     {
@@ -409,9 +413,9 @@ class IotDetectionController extends Controller
      * Batch Delete snapshots from database and local storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function deleteBatch(Request $request): \Illuminate\Http\JsonResponse
+    public function deleteBatch(Request $request): JsonResponse
     {
         $request->validate([
             'capture_ids'   => 'required|array',
@@ -436,6 +440,32 @@ class IotDetectionController extends Controller
             'success' => true,
             'message' => "{$deletedCount} gambar berhasil dihapus."
         ]);
+    }
+    /**
+     * Endpoint untuk memicu sinkronisasi status perangkat secara lazy dari frontend.
+     * Dipanggil secara periodik oleh halaman Visualisasi Web agar ghost connections
+     * WS yang terputus tidak nyangkut.
+     *
+     * @param int $id Area ID
+     * @return JsonResponse
+     */
+    public function syncArea($id): JsonResponse
+    {
+        try {
+            $devices = IotDevice::whereHas('subarea', function ($q) use ($id) {
+                $q->where('park_area_id', $id);
+            })->get();
+
+            foreach ($devices as $device) {
+                // syncStatus otomatis memeriksa keberadaan di Reverb / MQTT
+                // dan mem-broadcast SubareaStatusUpdated jika perangkat offline
+                IotDevice::syncStatus($device->device_mac_address);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Synced']);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
     }
 }
 

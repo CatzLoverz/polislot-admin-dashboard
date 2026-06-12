@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('iot')->group(function() {
     // Rute untuk IoT Device Broadcasting
     Route::post('/detection', [IotDetectionController::class, 'receiveDetection']);
+    Route::get('/sync-area/{id}', [IotDetectionController::class, 'syncArea']);
 
     // Rute autentikasi WebSocket untuk IoT Device (Presence Channel via Reverb)
     Route::post('/ws-auth', [IotWsAuthController::class, 'authenticate']);

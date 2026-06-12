@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use Exception;
 
 use App\Events\IotCountUpdated;
 use App\Events\IotDetectionReceived;
@@ -12,11 +11,13 @@ use App\Models\IotCapture;
 use App\Models\IotDevice;
 use App\Models\UserValidation;
 use App\Models\Validation;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\JsonResponse;
 
 class IotDetectionController extends Controller
 {
@@ -47,9 +48,9 @@ class IotDetectionController extends Controller
      * 3. Timestamp dalam signature mencegah replay attack (±5 menit)
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function receiveDetection(Request $request): \Illuminate\Http\JsonResponse
+    public function receiveDetection(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
@@ -162,9 +163,9 @@ class IotDetectionController extends Controller
      * Flow: Device capture → AES encrypt → HTTP POST → Decrypt → Save DB → Broadcast Reverb
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function receiveSnapshot(Request $request): \Illuminate\Http\JsonResponse
+    public function receiveSnapshot(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address'     => 'required|string',
@@ -325,9 +326,9 @@ class IotDetectionController extends Controller
      * Endpoint untuk menerima hitungan (count) kendaraan dari IoT device.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function receiveCount(Request $request): \Illuminate\Http\JsonResponse
+    public function receiveCount(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',
@@ -392,9 +393,9 @@ class IotDetectionController extends Controller
      * Endpoint untuk memberikan konfigurasi terbaru ke IoT device pada saat startup.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function receiveConfigQuery(Request $request): \Illuminate\Http\JsonResponse
+    public function receiveConfigQuery(Request $request): JsonResponse
     {
         $request->validate([
             'mac_address' => 'required|string',

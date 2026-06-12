@@ -1089,6 +1089,12 @@
         // Start expiration checking timer (check every 1 second for smooth countdowns)
         setInterval(checkValidationExpirations, 1000);
 
+        // Ping backend every 25 seconds to sync IoT statuses (fixes WS ghost connections)
+        setInterval(() => {
+            fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
+                .catch(err => console.error("Sync error:", err));
+        }, 25000);
+
         // Reset active comments state on modal close
         $('#modalComments').on('hidden.bs.modal', function () {
             activeCommentSubareaId = null;
