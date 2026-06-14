@@ -72,7 +72,17 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
                 'type' => 'status_updated',
                 'parkSubareaId' => $this->parkSubareaId,
                 'status' => $this->status,
+                'statusColor' => $this->statusColor,
+                'isValidated' => $this->isValidated,
+                'hasUserReport' => $this->hasUserReport,
                 'currentCount' => $this->currentCount,
+                'maxSlots' => $this->maxSlots,
+                'validationExpiresAt' => $this->validationExpiresAt,
+                'lastValidationTime' => $this->lastValidationTime,
+                'validationRemainingSeconds' => $this->validationRemainingSeconds,
+                'fallbackStatus' => $this->fallbackStatus,
+                'fallbackStatusColor' => $this->fallbackStatusColor,
+                'commentCount' => $this->commentCount,
                 'timestamp' => time()
             ];
             $mqtt = MQTT::connection('publisher');
