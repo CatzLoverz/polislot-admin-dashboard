@@ -86,7 +86,7 @@ class MqttListenerCommand extends Command
 
             $this->info('Terhubung ke MQTT Broker. Mendengarkan polislot/device/+/snapshot...');
 
-            $mqtt->subscribe('polislot/device/+/snapshot', function (string $topic, string $message) use ($secretKey) {
+            $mqtt->subscribe('polislot/device/+/snapshot', function (string $topic, string $message) use ($secretKey, $mqtt) {
                 $this->info("Pesan diterima di topik: {$topic}");
 
                 try {
@@ -251,7 +251,7 @@ class MqttListenerCommand extends Command
             });
 
             // Listener tambahan untuk update count dari IoT Device via MQTT
-            $mqtt->subscribe('polislot/device/+/count', function (string $topic, string $message) use ($secretKey) {
+            $mqtt->subscribe('polislot/device/+/count', function (string $topic, string $message) use ($secretKey, $mqtt) {
                 try {
                     $payload = json_decode($message, true);
                     if (! $payload || ! isset($payload['signature'])) {
@@ -303,7 +303,9 @@ class MqttListenerCommand extends Command
                             broadcast(new IotCountUpdated($mac, $count));
 
                             // Broadcast subarea status update untuk halaman Visualisasi
-                            broadcast(new SubareaStatusUpdated($subarea));
+                            $event = new SubareaStatusUpdated($subarea);
+                            broadcast($event);
+                            $mqtt->publish("frontend/parking_area/{$subarea->park_area_id}", json_encode($event), 1, true);
                         }
                     }
                 } catch (Exception $e) {
@@ -312,7 +314,7 @@ class MqttListenerCommand extends Command
             });
 
             // Listener tambahan untuk status Online/Offline (LWT)
-            $mqtt->subscribe('polislot/device/+/status', function (string $topic, string $message) use ($secretKey) {
+            $mqtt->subscribe('polislot/device/+/status', function (string $topic, string $message) use ($secretKey, $mqtt) {
                 // Topic format: polislot/device/{MAC}/status
                 $parts = explode('/', $topic);
                 $mac = $parts[2] ?? 'unknown';
@@ -378,7 +380,9 @@ class MqttListenerCommand extends Command
 
                         // Broadcast count updated to 0
                         broadcast(new IotCountUpdated($mac, 0));
-                        broadcast(new SubareaStatusUpdated($subarea));
+                        $event = new SubareaStatusUpdated($subarea);
+                        broadcast($event);
+                        $mqtt->publish("frontend/parking_area/{$subarea->park_area_id}", json_encode($event), 1, true);
                         $this->info("📈 [MQTT] Device {$mac} went offline. Reset subarea count to 0.");
                     }
                 }
@@ -389,7 +393,9 @@ class MqttListenerCommand extends Command
                     if ($device && $device->subarea) {
                         $subarea = $device->subarea;
 
-                        broadcast(new SubareaStatusUpdated($subarea));
+                        $event = new SubareaStatusUpdated($subarea);
+                        broadcast($event);
+                        $mqtt->publish("frontend/parking_area/{$subarea->park_area_id}", json_encode($event), 1, true);
 
                         $payloadData = [
                             'action' => 'update_config',

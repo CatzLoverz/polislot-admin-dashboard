@@ -86,6 +86,8 @@ services:
     environment:
       - MQTT_AUTH_USERNAME=${MQTT_AUTH_USERNAME:-polislot_user}
       - MQTT_AUTH_PASSWORD=${MQTT_AUTH_PASSWORD:-secure_password}
+      - MQTT_MOBILE_USERNAME=${MQTT_MOBILE_USERNAME:-polislot_mobile}
+      - MQTT_MOBILE_PASSWORD=${MQTT_MOBILE_PASSWORD:-mobile_secure_password}
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
       - ./mosquitto:/mosquitto
@@ -96,6 +98,12 @@ services:
       chown mosquitto:mosquitto /mosquitto/mosquitto.passwd &&
       chmod 600 /mosquitto/mosquitto.passwd &&
       mosquitto_passwd -b /mosquitto/mosquitto.passwd \$${MQTT_AUTH_USERNAME} \$${MQTT_AUTH_PASSWORD} &&
+      mosquitto_passwd -b /mosquitto/mosquitto.passwd \$${MQTT_MOBILE_USERNAME} \$${MQTT_MOBILE_PASSWORD} &&
+      echo \"user \$${MQTT_AUTH_USERNAME}\" > /mosquitto/mosquitto.acl &&
+      echo \"topic readwrite #\" >> /mosquitto/mosquitto.acl &&
+      echo \"\" >> /mosquitto/mosquitto.acl &&
+      echo \"user \$${MQTT_MOBILE_USERNAME}\" >> /mosquitto/mosquitto.acl &&
+      echo \"topic read frontend/#\" >> /mosquitto/mosquitto.acl &&
       exec /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
       "
     networks:
