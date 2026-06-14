@@ -8,6 +8,8 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use PhpMqtt\Client\Facades\MQTT;
 
 class SubareaStatusUpdated implements ShouldBroadcastNow
 {
@@ -63,6 +65,22 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
         $this->currentCount = $subarea->current_count ?? 0;
         $this->maxSlots = $subarea->max_slots ?? 0;
         $this->commentCount = $subarea->subareaComment()->count();
+
+        // Publish ke MQTT untuk aplikasi mobile
+        try {
+            $mqttPayload = [
+                'type' => 'status_updated',
+                'parkSubareaId' => $this->parkSubareaId,
+                'status' => $this->status,
+                'currentCount' => $this->currentCount,
+                'timestamp' => time()
+            ];
+            $mqtt = MQTT::connection('publisher');
+            $mqtt->publish("frontend/parking_area/{$this->parkAreaId}", json_encode($mqttPayload), 1, true);
+            $mqtt->disconnect();
+        } catch (\Exception $e) {
+            Log::warning("Failed to publish status update via MQTT: " . $e->getMessage());
+        }
     }
 
     /**
