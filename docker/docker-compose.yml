@@ -118,7 +118,7 @@ services:
     volumes:
       - ./.env:/var/www/html/.env
       - ./storage/public:/var/www/html/storage/app/public
-      - ./storage/logs:/var/www/html/storage/logs
+      - ./storage/logs/laravel:/var/www/html/storage/logs
       - ./storage/backups:/var/www/html/storage/app/backups
     depends_on:
       db:

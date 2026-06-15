@@ -349,6 +349,8 @@
             'fallback_status' => $sub->fallback_status,
             'fallback_status_color' => $sub->fallback_status_color,
             'iot_status' => $sub->iot_status,
+            // Sertakan MAC address untuk Presence Channel listener
+            'device_mac' => $sub->iotDevice ? $sub->iotDevice->device_mac_address : null,
         ]);
     })); ?>;
     let currentPolygonObj = null;
@@ -979,12 +981,30 @@
         });
     }
 
+    // Helper: update badge IoT status di sidebar berdasarkan MAC address dan status
+    function updateIotBadgeByMac(mac, status) {
+        const badges = document.querySelectorAll(`.iot-status-badge[data-mac="${mac}"]`);
+        badges.forEach(badge => {
+            if (status === 'online') {
+                badge.className = "badge badge-success text-white mr-1 mb-1 p-1 iot-status-badge";
+                badge.innerHTML = '<i class="fas fa-signal"></i> IoT Online';
+                badge.setAttribute('title', 'IoT Online');
+                badge.setAttribute('data-original-title', 'IoT Online');
+            } else {
+                badge.className = "badge badge-danger text-white mr-1 mb-1 p-1 iot-status-badge";
+                badge.innerHTML = '<i class="fas fa-signal-slash"></i> IoT Offline';
+                badge.setAttribute('title', 'IoT Offline');
+                badge.setAttribute('data-original-title', 'IoT Offline');
+            }
+        });
+    }
+
     // Inisialisasi Echo listener untuk update real-time
     function initEcho() {
         if (typeof window.Echo !== 'undefined') {
             const areaId = "{{ $area->park_area_id }}";
             
-            // 1. Dengar event pembaruan subarea di area parkir ini
+            // 1. Dengar event pembaruan subarea di area parkir ini (status, count, validasi, dll.)
             window.Echo.channel(`park-area.${areaId}`)
                 .listen('.subarea.updated', (e) => {
                     console.log("📡 Subarea Updated Event Received:", e);
@@ -1019,30 +1039,51 @@
                     updateSubareaUI(subId);
                 });
                 
-            // 2. Dengar status perangkat IoT (online/offline)
+            // 2. Dengar status perangkat IoT via broadcast event (FALLBACK dari MQTT/WS webhook)
             window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
-                    console.log("📡 Device Status Received (MQTT/WS):", e);
-                    
-                    const mac = e.macAddress;
-                    const status = e.status;
-                    
-                    // Cari semua badge status IoT dengan MAC address ini
-                    const badges = document.querySelectorAll(`.iot-status-badge[data-mac="${mac}"]`);
-                    badges.forEach(badge => {
-                        if (status === 'online') {
-                            badge.className = "badge badge-success text-white mr-1 mb-1 p-1 iot-status-badge";
-                            badge.innerHTML = '<i class="fas fa-signal"></i> IoT Online';
-                            badge.setAttribute('title', 'IoT Online');
-                            badge.setAttribute('data-original-title', 'IoT Online');
-                        } else {
-                            badge.className = "badge badge-danger text-white mr-1 mb-1 p-1 iot-status-badge";
-                            badge.innerHTML = '<i class="fas fa-signal-slash"></i> IoT Offline';
-                            badge.setAttribute('title', 'IoT Offline');
-                            badge.setAttribute('data-original-title', 'IoT Offline');
+                    console.log("📡 Device Status Received (MQTT/WS Broadcast):", e);
+                    updateIotBadgeByMac(e.macAddress, e.status);
+                });
+
+            // 3. Presence Channel per-device IoT — DETEKSI OFFLINE INSTAN
+            // Saat skrip IoT dimatikan, koneksi WS device putus → Reverb langsung
+            // mengirim event 'leaving' ke semua subscriber → UI update TANPA menunggu polling.
+            existingSubareas.forEach(sub => {
+                if (!sub.device_mac) return; // Skip subarea tanpa IoT device
+
+                const cleanMac = sub.device_mac.replace(/:/g, '');
+                const presenceChannelName = `iot.device.${cleanMac}`;
+
+                console.log(`🔗 Joining presence channel: ${presenceChannelName} (${sub.park_subarea_name})`);
+
+                window.Echo.join(presenceChannelName)
+                    .here((members) => {
+                        // Hydrate status saat pertama kali join berdasarkan anggota yang ada
+                        const isOnline = members.some(m => m.type === 'iot_device');
+                        console.log(`✅ Presence channel ready for ${sub.device_mac}: ${isOnline ? 'ONLINE' : 'OFFLINE'} (${members.length} member)`);
+                        // Tidak override badge di sini — biarkan server-rendered status berlaku.
+                        // Badge sudah di-render oleh Blade berdasarkan $sub->iot_status.
+                    })
+                    .joining((member) => {
+                        if (member.type === 'iot_device') {
+                            console.log(`✅ IoT Device ONLINE via Presence: ${sub.device_mac}`);
+                            updateIotBadgeByMac(sub.device_mac, 'online');
+                        }
+                    })
+                    .leaving((member) => {
+                        if (member.type === 'iot_device') {
+                            console.log(`❌ IoT Device OFFLINE via Presence: ${sub.device_mac} — Triggering instant sync...`);
+                            // Langsung update badge untuk respons visual instan
+                            updateIotBadgeByMac(sub.device_mac, 'offline');
+                            // Panggil backend sync agar cache & MQTT mobile ikut update (broadcast SubareaStatusUpdated)
+                            fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
+                                .then(r => r.json())
+                                .then(d => console.log(`🔄 Instant sync done for area {{ $area->park_area_id }}:`, d))
+                                .catch(err => console.error("Instant sync error:", err));
                         }
                     });
-                });
+            });
         } else {
             setTimeout(initEcho, 500);
         }
@@ -1089,11 +1130,12 @@
         // Start expiration checking timer (check every 1 second for smooth countdowns)
         setInterval(checkValidationExpirations, 1000);
 
-        // Ping backend every 25 seconds to sync IoT statuses (fixes WS ghost connections)
+        // Fallback polling setiap 60 detik untuk mendeteksi ghost connections (WS yang putus tanpa event).
+        // Presence Channel sudah menangani offline instan; polling ini sebagai safety net.
         setInterval(() => {
             fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
                 .catch(err => console.error("Sync error:", err));
-        }, 25000);
+        }, 60000);
 
         // Reset active comments state on modal close
         $('#modalComments').on('hidden.bs.modal', function () {

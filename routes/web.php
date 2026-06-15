@@ -93,7 +93,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         // Route User_Faq
         Route::resource('user-faq', UserFaqController::class)->only(['index', 'store', 'update', 'destroy']);
 
-        // Route Khusus Uji Coba WebSockets IoT
+        // Route konfigurasi deteksi IoT
         Route::prefix('iot')->as('iot.')->controller(IotDetectionController::class)->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/trigger', 'triggerSnapshot')->name('trigger');
