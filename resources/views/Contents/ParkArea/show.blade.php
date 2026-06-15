@@ -1073,14 +1073,39 @@
                     })
                     .leaving((member) => {
                         if (member.type === 'iot_device') {
-                            console.log(`❌ IoT Device OFFLINE via Presence: ${sub.device_mac} — Triggering instant sync...`);
-                            // Langsung update badge untuk respons visual instan
+                            console.log(`❌ IoT Device OFFLINE via Presence: ${sub.device_mac}`);
+
+                            // ── LANGKAH 1: Update badge IoT di sidebar (instan) ──────────────────
                             updateIotBadgeByMac(sub.device_mac, 'offline');
-                            // Panggil backend sync agar cache & MQTT mobile ikut update (broadcast SubareaStatusUpdated)
-                            fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
-                                .then(r => r.json())
-                                .then(d => console.log(`🔄 Instant sync done for area {{ $area->park_area_id }}:`, d))
-                                .catch(err => console.error("Instant sync error:", err));
+
+                            // ── LANGKAH 2: Reset visualisasi polygon + status sidebar ke fallback ─
+                            // Kita tahu device offline, jadi langsung revert state di frontend
+                            // tanpa menunggu broadcast dari backend. fallbackStatus adalah status
+                            // berdasarkan validasi user (bukan IoT), biasanya 'netral' jika kosong.
+                            existingSubareas.forEach(s => {
+                                if (s.device_mac !== sub.device_mac) return;
+                                const subId = s.park_subarea_id;
+                                if (!subareaStates[subId]) return;
+
+                                subareaStates[subId].status       = subareaStates[subId].fallbackStatus || 'netral';
+                                subareaStates[subId].color        = subareaStates[subId].fallbackColor  || '#1572e8';
+                                subareaStates[subId].currentCount = 0;
+                                updateSubareaUI(subId);
+                                console.log(`🔄 Subarea ${subId} (${s.park_subarea_name}) reverted to fallback instantly`);
+                            });
+
+                            // ── LANGKAH 3: Sync backend setelah 3 detik ──────────────────────────
+                            // Race condition: saat 'leaving' tiba, Reverb server belum sepenuhnya
+                            // membersihkan presence channel-nya. Jika langsung dipanggil,
+                            // checkReverbPresence() masih menemukan device → markDeviceOffline()
+                            // tidak terpanggil → MQTT ke mobile tidak terkirim.
+                            // Delay 3 detik memberi waktu Reverb menyelesaikan cleanup.
+                            setTimeout(() => {
+                                fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
+                                    .then(r => r.json())
+                                    .then(d => console.log(`🔄 Backend sync done (MQTT mobile notified):`, d))
+                                    .catch(err => console.error("Backend sync error:", err));
+                            }, 3000);
                         }
                     });
             });
