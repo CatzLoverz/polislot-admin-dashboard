@@ -150,7 +150,7 @@ class IotDevice extends Model
      * Tandai device sebagai offline: update cache, broadcast events, reset database.
      * Semua side-effects terisolasi di method ini.
      */
-    private static function markDeviceOffline(string $mac): void
+    public static function markDeviceOffline(string $mac): void
     {
         // Update cache
         Cache::forever("iot_status_{$mac}", 'offline');

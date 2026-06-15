@@ -434,4 +434,48 @@ class IotDetectionController extends Controller
 
         return response()->json(['status' => 'error', 'message' => 'Subarea not found.'], 404);
     }
+
+    /**
+     * Endpoint untuk langsung menandai device sebagai offline dari Web Admin UI.
+     *
+     * Dipanggil oleh halaman Visualisasi ketika Presence Channel mendeteksi device
+     * 'leaving' (koneksi WS putus). Berbeda dengan syncArea yang masih harus
+     * mengecek Reverb API (rentan race condition), endpoint ini langsung
+     * memangil markDeviceOffline() karena event 'leaving' dari Reverb adalah
+     * bukti yang cukup bahwa device memang sudah offline.
+     *
+     * Dilindungi oleh validasi MAC address agar tidak bisa disalahgunakan.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function markOffline(Request $request): JsonResponse
+    {
+        $request->validate([
+            'mac_address' => 'required|string',
+        ]);
+
+        $macAddress = $request->mac_address;
+
+        if (! $this->validateMacAddress($macAddress)) {
+            Log::warning('markOffline rejected: Unregistered MAC', ['mac' => $macAddress]);
+            return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
+        }
+
+        $currentStatus = Cache::get("iot_status_{$macAddress}", 'offline');
+        if ($currentStatus === 'offline') {
+            // Sudah offline, tidak perlu broadcast ulang
+            return response()->json(['status' => 'success', 'message' => 'Device already offline.']);
+        }
+
+        try {
+            Log::info("markOffline: Memaksa device {$macAddress} ke OFFLINE via Presence leaving event.");
+            IotDevice::markDeviceOffline($macAddress);
+
+            return response()->json(['status' => 'success', 'message' => 'Device marked offline and broadcasts sent.']);
+        } catch (Exception $e) {
+            Log::error("markOffline failed for {$macAddress}: " . $e->getMessage());
+            return response()->json(['status' => 'error', 'message' => 'Failed to mark device offline.'], 500);
+        }
+    }
 }

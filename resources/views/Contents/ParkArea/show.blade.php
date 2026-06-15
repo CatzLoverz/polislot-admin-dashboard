@@ -1078,34 +1078,37 @@
                             // ── LANGKAH 1: Update badge IoT di sidebar (instan) ──────────────────
                             updateIotBadgeByMac(sub.device_mac, 'offline');
 
-                            // ── LANGKAH 2: Reset visualisasi polygon + status sidebar ke fallback ─
-                            // Kita tahu device offline, jadi langsung revert state di frontend
-                            // tanpa menunggu broadcast dari backend. fallbackStatus adalah status
-                            // berdasarkan validasi user (bukan IoT), biasanya 'netral' jika kosong.
+                            // ── LANGKAH 2: Reset visualisasi polygon + status sidebar ke NETRAL ──
+                            // Saat IoT offline tidak ada data ketersediaan → tampilkan netral (biru).
+                            // CATATAN: fallbackStatus TIDAK bisa dipakai di sini karena nilainya
+                            // sama dengan status IoT saat device online (bukan status tanpa IoT).
                             existingSubareas.forEach(s => {
                                 if (s.device_mac !== sub.device_mac) return;
                                 const subId = s.park_subarea_id;
                                 if (!subareaStates[subId]) return;
 
-                                subareaStates[subId].status       = subareaStates[subId].fallbackStatus || 'netral';
-                                subareaStates[subId].color        = subareaStates[subId].fallbackColor  || '#1572e8';
+                                subareaStates[subId].status       = 'netral';
+                                subareaStates[subId].color        = '#1572e8';
                                 subareaStates[subId].currentCount = 0;
                                 updateSubareaUI(subId);
-                                console.log(`🔄 Subarea ${subId} (${s.park_subarea_name}) reverted to fallback instantly`);
+                                console.log(`🔄 Subarea ${subId} (${s.park_subarea_name}) → netral (IoT offline)`);
                             });
 
-                            // ── LANGKAH 3: Sync backend setelah 3 detik ──────────────────────────
-                            // Race condition: saat 'leaving' tiba, Reverb server belum sepenuhnya
-                            // membersihkan presence channel-nya. Jika langsung dipanggil,
-                            // checkReverbPresence() masih menemukan device → markDeviceOffline()
-                            // tidak terpanggil → MQTT ke mobile tidak terkirim.
-                            // Delay 3 detik memberi waktu Reverb menyelesaikan cleanup.
-                            setTimeout(() => {
-                                fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
-                                    .then(r => r.json())
-                                    .then(d => console.log(`🔄 Backend sync done (MQTT mobile notified):`, d))
-                                    .catch(err => console.error("Backend sync error:", err));
-                            }, 3000);
+                            // ── LANGKAH 3: Panggil mark-offline ke backend (TANPA delay) ─────────
+                            // Endpoint ini langsung memanggil markDeviceOffline() tanpa
+                            // mengecek Reverb presence (menghindari race condition).
+                            // Efek samping: cache di-set offline + MQTT broadcast ke mobile.
+                            fetch('/api/iot/mark-offline', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({ mac_address: sub.device_mac })
+                            })
+                                .then(r => r.json())
+                                .then(d => console.log(`🔄 mark-offline response (MQTT mobile notified):`, d))
+                                .catch(err => console.error("mark-offline error:", err));
                         }
                     });
             });
