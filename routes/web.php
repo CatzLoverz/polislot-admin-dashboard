@@ -101,6 +101,8 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
             Route::post('/validate', 'validateStream')->name('validate');
             Route::post('/download-batch', 'downloadBatch')->name('download-batch');
             Route::post('/delete-batch', 'deleteBatch')->name('delete-batch');
+            Route::post('/mark-offline', 'markOffline')->name('mark-offline');
+            Route::get('/sync-area/{id}', 'syncArea')->name('sync-area');
         });
     });
 });

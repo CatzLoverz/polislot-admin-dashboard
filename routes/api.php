@@ -17,13 +17,9 @@ use App\Http\Controllers\Api\UserFaqController;
 use App\Http\Controllers\Api\IotWebhookController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('iot')->group(function() {
+Route::prefix('iot')->middleware('throttle:500,1')->group(function() {
     // Rute untuk IoT Device Broadcasting
     Route::post('/detection', [IotDetectionController::class, 'receiveDetection']);
-    Route::get('/sync-area/{id}', [IotDetectionController::class, 'syncArea']);
-    // Dipanggil oleh Web Admin saat Presence Channel mendeteksi device 'leaving' (koneksi putus)
-    // Langsung mark offline tanpa cek Reverb (menghindari race condition)
-    Route::post('/mark-offline', [IotDetectionController::class, 'markOffline']);
 
     // Rute autentikasi WebSocket untuk IoT Device (Presence Channel via Reverb)
     Route::post('/ws-auth', [IotWsAuthController::class, 'authenticate']);

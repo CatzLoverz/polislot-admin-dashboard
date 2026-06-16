@@ -1098,7 +1098,7 @@
                             // Endpoint ini langsung memanggil markDeviceOffline() tanpa
                             // mengecek Reverb presence (menghindari race condition).
                             // Efek samping: cache di-set offline + MQTT broadcast ke mobile.
-                            fetch('/api/iot/mark-offline', {
+                            fetch('/admin/iot/mark-offline', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -1161,7 +1161,7 @@
         // Fallback polling setiap 60 detik untuk mendeteksi ghost connections (WS yang putus tanpa event).
         // Presence Channel sudah menangani offline instan; polling ini sebagai safety net.
         setInterval(() => {
-            fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
+            fetch(`/admin/iot/sync-area/{{ $area->park_area_id }}`)
                 .catch(err => console.error("Sync error:", err));
         }, 60000);
 

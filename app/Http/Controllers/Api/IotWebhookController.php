@@ -23,9 +23,21 @@ class IotWebhookController extends Controller
      */
     public function handle(Request $request): JsonResponse
     {
-        // 1. Verifikasi Webhook Signature (Opsional tapi disarankan)
-        // Untuk Reverb, signature dikirim di header X-Reverb-Signature atau X-Pusher-Signature
+        // 1. Verifikasi Webhook Signature
+        // Untuk Reverb/Pusher, signature dikirim di header X-Reverb-Signature atau X-Pusher-Signature
+        $secret = config('broadcasting.connections.reverb.secret');
         $signature = $request->header('X-Reverb-Signature') ?: $request->header('X-Pusher-Signature');
+
+        if ($secret && $signature) {
+            $expectedSignature = hash_hmac('sha256', $request->getContent(), $secret);
+            if (!hash_equals($expectedSignature, $signature)) {
+                Log::warning('Rejected: Invalid Webhook Signature');
+                return response()->json(['error' => 'Invalid signature.'], 401);
+            }
+        } elseif ($secret && !$signature) {
+            Log::warning('Rejected: Missing Webhook Signature');
+            return response()->json(['error' => 'Missing signature.'], 401);
+        }
 
         // Log::info('received', $request->all());
 

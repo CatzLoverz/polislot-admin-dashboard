@@ -467,5 +467,45 @@ class IotDetectionController extends Controller
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Endpoint untuk langsung menandai device sebagai offline dari Web Admin UI.
+     *
+     * Dipanggil oleh halaman Visualisasi ketika Presence Channel mendeteksi device
+     * 'leaving' (koneksi WS putus).
+     *
+     * @param \Illuminate\Http\Request $request Data input request
+     * @return \Illuminate\Http\JsonResponse Response status mark offline
+     */
+    public function markOffline(Request $request): JsonResponse
+    {
+        $request->validate([
+            'mac_address' => 'required|string',
+        ]);
+
+        $macAddress = $request->mac_address;
+
+        $isRegistered = IotDevice::where('device_mac_address', $macAddress)->exists();
+
+        if (! $isRegistered) {
+            Log::warning('markOffline rejected: Unregistered MAC', ['mac' => $macAddress]);
+            return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
+        }
+
+        $currentStatus = Cache::get("iot_status_{$macAddress}", 'offline');
+        if ($currentStatus === 'offline') {
+            return response()->json(['status' => 'success', 'message' => 'Device already offline.']);
+        }
+
+        try {
+            Log::info("markOffline: Memaksa device {$macAddress} ke OFFLINE via Web Admin.");
+            IotDevice::markDeviceOffline($macAddress);
+
+            return response()->json(['status' => 'success', 'message' => 'Device marked offline and broadcasts sent.']);
+        } catch (Exception $e) {
+            Log::error("markOffline failed for {$macAddress}: " . $e->getMessage());
+            return response()->json(['status' => 'error', 'message' => 'Failed to mark device offline.'], 500);
+        }
+    }
 }
 
