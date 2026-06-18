@@ -7,8 +7,8 @@
 #   private_key.pem     (RSA key enkripsi API)
 #   mariadb.cnf         (konfigurasi logging MariaDB)
 #   mosquitto.conf      (konfigurasi Mosquitto)
-#   mosquitto.passwd    (password file Mosquitto)
 #   logrotate-entrypoint.sh
+#   mosquitto/          (akan dibuat otomatis)
 #   storage/            (akan dibuat otomatis)
 # ============================================================
 
@@ -91,19 +91,25 @@ services:
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
       - ./mosquitto:/mosquitto
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
     command: >
       sh -c "
       mkdir -p /mosquitto &&
       touch /mosquitto/mosquitto.passwd &&
-      chown mosquitto:mosquitto /mosquitto/mosquitto.passwd &&
-      chmod 600 /mosquitto/mosquitto.passwd &&
+      chown root:root /mosquitto/mosquitto.passwd &&
+      chmod 0700 /mosquitto/mosquitto.passwd &&
       mosquitto_passwd -b /mosquitto/mosquitto.passwd \$${MQTT_AUTH_USERNAME} \$${MQTT_AUTH_PASSWORD} &&
       mosquitto_passwd -b /mosquitto/mosquitto.passwd \$${MQTT_MOBILE_USERNAME} \$${MQTT_MOBILE_PASSWORD} &&
+      chown mosquitto:mosquitto /mosquitto/mosquitto.passwd &&
+      chmod 0700 /mosquitto/mosquitto.passwd &&
       echo \"user \$${MQTT_AUTH_USERNAME}\" > /mosquitto/mosquitto.acl &&
       echo \"topic readwrite #\" >> /mosquitto/mosquitto.acl &&
       echo \"\" >> /mosquitto/mosquitto.acl &&
       echo \"user \$${MQTT_MOBILE_USERNAME}\" >> /mosquitto/mosquitto.acl &&
       echo \"topic read frontend/#\" >> /mosquitto/mosquitto.acl &&
+      chown mosquitto:mosquitto /mosquitto/mosquitto.acl &&
+      chmod 0700 /mosquitto/mosquitto.acl &&
       exec /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
       "
     networks:
@@ -148,4 +154,8 @@ networks:
 
 volumes:
   dbdata:
+    driver: local
+  mosquitto_data:
+    driver: local
+  mosquitto_log:
     driver: local

@@ -90,6 +90,7 @@ class MapVisualizationController extends Controller
             // Hitung Cooldown User
             $canValidate = true;
             $waitMinutes = 0;
+            $remainingSeconds = 0;
 
             if ($user) {
                 $lastValidation = UserValidation::where('user_id', $user->user_id)
@@ -97,10 +98,11 @@ class MapVisualizationController extends Controller
                     ->first();
 
                 if ($lastValidation) {
-                    $diffInMinutes = Carbon::parse($lastValidation->created_at)->diffInMinutes(now());
-                    if ($diffInMinutes < 15) {
+                    $diffInSeconds = Carbon::parse($lastValidation->created_at)->diffInSeconds(now());
+                    if ($diffInSeconds < 900) {
                         $canValidate = false;
-                        $waitMinutes = 15 - $diffInMinutes;
+                        $remainingSeconds = 900 - $diffInSeconds;
+                        $waitMinutes = ceil($remainingSeconds / 60);
                     }
                 }
             }
@@ -110,8 +112,9 @@ class MapVisualizationController extends Controller
                 'area_name' => $area->park_area_name,
                 'area_code' => $area->park_area_code,
                 'validation_cooldown' => [
-                    'can_validate' => $canValidate,
-                    'wait_minutes' => $waitMinutes,
+                    'can_validate'      => $canValidate,
+                    'wait_minutes'      => (int) $waitMinutes,
+                    'remaining_seconds' => (int) $remainingSeconds,
                 ],
                 'subareas'  => $formattedSubareas
             ];

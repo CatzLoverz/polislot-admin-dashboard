@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\JsonResponse;
+use \App\Models\IotDevice;
+use App\Events\IotCommandSent;
+use App\Events\SubareaStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\ParkSubarea;
 use App\Models\UserValidation;
 use App\Models\Validation;
 use App\Services\HistoryService;
 use App\Services\MissionService;
-use App\Events\SubareaStatusUpdated;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpMqtt\Client\Facades\MQTT;
 
 class UserValidationController extends Controller
 {
@@ -108,7 +112,7 @@ class UserValidationController extends Controller
 
             return DB::transaction(function () use ($request, $user, $areaName, $validationSetting, $points, $subarea) {
                 // 4. Simpan Validasi
-                UserValidation::create([
+                $userVal = UserValidation::create([
                     'user_id' => $user->user_id,
                     'validation_id' => $validationSetting ? $validationSetting->validation_id : 1,
                     'park_subarea_id' => $request->park_subarea_id,
@@ -118,6 +122,48 @@ class UserValidationController extends Controller
                 // 4.5. Evaluasi pergeseran threshold WMA & broadcast status update
                 $subarea->evaluateThresholdShift();
                 
+                // 4.6. Trigger snapshot jika ada device IoT terpasang dan online
+                if ($subarea->iotDevice) {
+                    $mac = $subarea->iotDevice->device_mac_address;
+                    $deviceStatus = IotDevice::getStatus($mac);
+                    
+                    if ($deviceStatus === 'online') {
+                        $cleanMac = str_replace(':', '', $mac);
+                        Cache::put("pending_mobile_validation_{$cleanMac}", $userVal->user_validation_id, 120); // 2 menit timeout
+                        
+                        $payloadData = [
+                            'action'       => 'snapshot',
+                            'timestamp'    => time(),
+                            'requested_by' => $user->name ?? 'mobile_user',
+                            'save_image'   => true
+                        ];
+                        
+                        // Generate signature
+                        $key32 = substr(hash('sha256', config('services.iot.secret'), true), 0, 32);
+                        $payloadData['signature'] = hash_hmac('sha256', json_encode($payloadData, JSON_UNESCAPED_SLASHES), $key32);
+
+                        // Publish via MQTT
+                        try {
+                            $topic = "polislot/device/{$mac}/command";
+                            $payload = json_encode($payloadData, JSON_UNESCAPED_SLASHES);
+                            $mqtt = MQTT::connection('publisher');
+                            $mqtt->publish($topic, $payload, 0);
+                            $mqtt->disconnect();
+                            Log::info("Perintah snapshot berhasil dikirim via Mobile Validation (MQTT)", ['mac' => $mac]);
+                        } catch (Exception $e) {
+                            Log::warning("Gagal mengirim perintah snapshot via MQTT", ['mac' => $mac, 'error' => $e->getMessage()]);
+                        }
+                        
+                        // Broadcast via Reverb WS
+                        try {
+                            broadcast(new IotCommandSent($mac, 'snapshot', $payloadData, $payloadData['signature']));
+                            Log::info("Perintah snapshot berhasil dikirim via Mobile Validation (WS)", ['mac' => $mac]);
+                        } catch (Exception $e) {
+                            Log::warning("Gagal mengirim perintah snapshot via WS", ['mac' => $mac, 'error' => $e->getMessage()]);
+                        }
+                    }
+                }
+
                 DB::afterCommit(function () use ($subarea) {
                     broadcast(new SubareaStatusUpdated($subarea));
                 });
