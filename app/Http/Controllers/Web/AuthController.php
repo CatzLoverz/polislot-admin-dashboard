@@ -59,7 +59,7 @@ class AuthController extends Controller
                 if (! $user) {
                     Log::warning('Email tidak ditemukan.');
 
-                    return redirect()->route('login.form')->with('swal_error_crud', 'Email tidak ditemukan.')->withInput($request->only('email'));
+                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah, atau akun sedang dikunci.')->withInput($request->only('email'));
                 }
 
                 $lastUpdate = $user->updated_at;
@@ -77,10 +77,9 @@ class AuthController extends Controller
                 }
 
                 if ($user->locked_until && now()->lt($user->locked_until)) {
-                    $minutes = ceil(now()->diffInSeconds($user->locked_until) / 60);
                     Log::warning('Akun dikunci.');
 
-                    return redirect()->route('login.form')->with('swal_error_crud', "Akun Anda dikunci. Coba lagi dalam {$minutes} menit.")
+                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah, atau akun sedang dikunci.')
                         ->withInput($request->only('email'));
                 }
 
@@ -101,14 +100,13 @@ class AuthController extends Controller
                     $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
                     Log::warning('Password salah, akun dikunci.');
 
-                    return redirect()->route('login.form')->with('swal_error_crud', "Akun Anda dikunci selama {$lockMinutes} menit.")
+                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah, atau akun sedang dikunci.')
                         ->withInput($request->only('email'));
                 }
 
-                $sisa = 4 - $user->failed_attempts;
                 Log::warning('Password salah.');
 
-                return redirect()->route('login.form')->with('swal_error_crud', "Password salah. Sisa percobaan: {$sisa} kali.")
+                return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah, atau akun sedang dikunci.')
                     ->withInput($request->only('email'));
             });
 
