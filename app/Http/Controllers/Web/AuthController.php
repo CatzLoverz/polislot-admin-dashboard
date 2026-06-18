@@ -59,7 +59,7 @@ class AuthController extends Controller
                 if (! $user) {
                     Log::warning('Email tidak ditemukan.');
 
-                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah, atau akun sedang dikunci.')->withInput($request->only('email'));
+                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah.')->withInput($request->only('email'));
                 }
 
                 $lastUpdate = $user->updated_at;
@@ -79,7 +79,7 @@ class AuthController extends Controller
                 if ($user->locked_until && now()->lt($user->locked_until)) {
                     Log::warning('Akun dikunci.');
 
-                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah, atau akun sedang dikunci.')
+                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah.')
                         ->withInput($request->only('email'));
                 }
 
@@ -100,13 +100,13 @@ class AuthController extends Controller
                     $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
                     Log::warning('Password salah, akun dikunci.');
 
-                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah, atau akun sedang dikunci.')
+                    return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah.')
                         ->withInput($request->only('email'));
                 }
 
                 Log::warning('Password salah.');
 
-                return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah, atau akun sedang dikunci.')
+                return redirect()->route('login.form')->with('swal_error_crud', 'Email atau Password salah.')
                     ->withInput($request->only('email'));
             });
 

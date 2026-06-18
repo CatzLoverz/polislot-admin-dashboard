@@ -244,7 +244,7 @@ class AuthController extends Controller
                 if (! $user) {
                     Log::warning('Email tidak ditemukan.');
 
-                    return $this->sendError('Email atau Password salah, atau akun sedang dikunci.', 401);
+                    return $this->sendError('Email atau Password salah.', 401);
                 }
 
                 $lastUpdate = $user->updated_at;
@@ -262,7 +262,7 @@ class AuthController extends Controller
                 if ($user->locked_until && now()->lt($user->locked_until)) {
                     Log::warning('Akun dikunci.');
 
-                    return $this->sendError('Email atau Password salah, atau akun sedang dikunci.', 401);
+                    return $this->sendError('Email atau Password salah.', 401);
                 }
 
                 if (! Hash::check($credentials['password'], $user->password)) {
@@ -273,13 +273,13 @@ class AuthController extends Controller
                         $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
                         Log::warning('Password salah, akun dikunci.');
 
-                        return $this->sendError('Email atau Password salah, atau akun sedang dikunci.', 401);
+                        return $this->sendError('Email atau Password salah.', 401);
                     }
 
                     $sisa = 4 - $user->failed_attempts;
                     Log::warning('Password salah.', ['sisa' => $sisa]);
 
-                    return $this->sendError('Email atau Password salah, atau akun sedang dikunci.', 401);
+                    return $this->sendError('Email atau Password salah.', 401);
                 }
 
                 $user->tokens()->delete();
