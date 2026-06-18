@@ -127,7 +127,7 @@
                                         
                                         {{-- Last Validation Report Time & Countdown --}}
                                         <small class="d-block mt-1 text-muted subarea-validation-time font-weight-bold" style="font-size: 10px; {{ (isset($sub->validation_expires_at) && $sub->validation_expires_at) ? '' : 'display: none;' }}">
-                                            <i class="fas fa-history mr-1"></i> Laporan: <span class="last-validated-time-val">
+                                            <i class="fas fa-history mr-1"></i> Validasi Terakhir: <span class="last-validated-time-val">
                                                 @if(isset($sub->last_validation_time) && $sub->last_validation_time)
                                                     {{ date('H:i', strtotime($sub->last_validation_time)) }}
                                                 @endif

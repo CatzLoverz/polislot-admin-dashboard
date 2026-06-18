@@ -144,7 +144,19 @@ class ParkSubarea extends Model
             $status = $votedStatus;
 
             if ($hasOnlineIot) {
-                if ($votedStatus === $cvStatus) {
+                $latestVoteForAnchor = $validVotes->first(); // karena sudah di orderBy('created_at', 'desc')
+                $anchorCvStatus = null;
+
+                if ($latestVoteForAnchor) {
+                    $capture = IotCapture::where('user_validation_id', $latestVoteForAnchor->user_validation_id)->first();
+                    if ($capture) {
+                        $anchorCvStatus = $capture->capture_ai_status;
+                    }
+                }
+
+                $cvStatusToCompare = $anchorCvStatus ?? $cvStatus;
+
+                if ($votedStatus === $cvStatusToCompare) {
                     $isValidated = true;
                 } else {
                     $hasUserReport = true;
