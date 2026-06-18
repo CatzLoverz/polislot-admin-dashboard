@@ -7,14 +7,13 @@ use Illuminate\Database\Seeder;
 
 class ValidationSeeder extends Seeder
 {
-    public function run(): void 
+    public function run(): void
     {
         Validation::create([
             'validation_points' => 100,
-            'validation_is_geofence_active' => false
+            'validation_is_geofence_active' => false,
         ]);
 
         $this->command->info('Seeder Validation berhasil dijalankan');
     }
 }
-

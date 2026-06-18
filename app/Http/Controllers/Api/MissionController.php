@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Log;
 
 class MissionController extends Controller
@@ -31,8 +30,6 @@ class MissionController extends Controller
      * 2. Daftar Misi Aktif beserta progres user saat ini
      * 3. Leaderboard Top 20 berdasarkan Lifetime Points
      * 4. Posisi User saat ini di Leaderboard
-     *
-     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -113,11 +110,11 @@ class MissionController extends Controller
 
             if ($user->role === 'user' && $user->email_verified_at !== null) {
                 $userRankPos = User::whereNotNull('email_verified_at')
-                                ->where('role', 'user')
-                                ->where('lifetime_points', '>', $user->lifetime_points)
-                                ->count() + 1;
+                    ->where('role', 'user')
+                    ->where('lifetime_points', '>', $user->lifetime_points)
+                    ->count() + 1;
             } else {
-                $userRankPos = 0; 
+                $userRankPos = 0;
             }
 
             $userRankData = [
@@ -135,6 +132,7 @@ class MissionController extends Controller
 
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
+
             return $this->sendError('Gagal memuat data misi: '.$e->getMessage(), 500);
         }
     }

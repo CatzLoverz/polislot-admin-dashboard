@@ -15,7 +15,7 @@ class UserHistoryTest extends TestCase
     #[Test]
     public function user_history_dapat_ditambahkan()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $historyData = [
@@ -30,7 +30,7 @@ class UserHistoryTest extends TestCase
 
         $this->assertDatabaseHas('user_histories', [
             'user_id' => $user->user_id,
-            'user_history_name' => 'Misi Selesai'
+            'user_history_name' => 'Misi Selesai',
         ]);
         $this->assertEquals(100, $history->user_history_points);
     }
@@ -38,7 +38,7 @@ class UserHistoryTest extends TestCase
     #[Test]
     public function user_history_dapat_didapatkan()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $history = UserHistory::create([
             'user_id' => $user->user_id,
@@ -57,7 +57,7 @@ class UserHistoryTest extends TestCase
     #[Test]
     public function user_history_dapat_diubah()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $history = UserHistory::create([
             'user_id' => $user->user_id,
@@ -67,19 +67,19 @@ class UserHistoryTest extends TestCase
         ]);
 
         $history->update([
-            'user_history_name' => 'Nama Benar'
+            'user_history_name' => 'Nama Benar',
         ]);
 
         $this->assertDatabaseHas('user_histories', [
             'user_history_id' => $history->user_history_id,
-            'user_history_name' => 'Nama Benar'
+            'user_history_name' => 'Nama Benar',
         ]);
     }
 
     #[Test]
     public function user_history_dapat_dihapus()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $history = UserHistory::create([
             'user_id' => $user->user_id,

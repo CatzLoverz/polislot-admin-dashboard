@@ -38,7 +38,6 @@ class UserValidationTest extends TestCase
         $this->assertEquals($validation->park_subarea_id, $sub->park_subarea_id);
     }
 
-
     #[Test]
     public function user_validation_dapat_dibaca()
     {
@@ -51,7 +50,7 @@ class UserValidationTest extends TestCase
             'user_id' => $user->user_id,
             'validation_id' => $valSetting->validation_id,
             'park_subarea_id' => $sub->park_subarea_id,
-            'user_validation_content' => 'penuh'
+            'user_validation_content' => 'penuh',
         ]);
 
         $found = UserValidation::find($uv->user_validation_id);
@@ -71,14 +70,14 @@ class UserValidationTest extends TestCase
             'user_id' => $user->user_id,
             'validation_id' => $valSetting->validation_id,
             'park_subarea_id' => $sub->park_subarea_id,
-            'user_validation_content' => 'penuh'
+            'user_validation_content' => 'penuh',
         ]);
 
         $uv->update(['user_validation_content' => 'terbatas']);
 
         $this->assertDatabaseHas('user_validations', [
             'user_validation_id' => $uv->user_validation_id,
-            'user_validation_content' => 'terbatas'
+            'user_validation_content' => 'terbatas',
         ]);
     }
 
@@ -94,7 +93,7 @@ class UserValidationTest extends TestCase
             'user_id' => $user->user_id,
             'validation_id' => $valSetting->validation_id,
             'park_subarea_id' => $sub->park_subarea_id,
-            'user_validation_content' => 'penuh'
+            'user_validation_content' => 'penuh',
         ]);
 
         $uv->delete();

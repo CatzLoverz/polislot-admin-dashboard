@@ -11,7 +11,9 @@ class UserMission extends Model
     use HasFactory;
 
     protected $table = 'user_missions';
+
     protected $primaryKey = 'user_mission_id';
+
     public $timestamps = true;
 
     protected $fillable = [
@@ -23,9 +25,9 @@ class UserMission extends Model
     ];
 
     protected $casts = [
-        'user_mission_current_value'  => 'integer',
-        'user_mission_is_completed'   => 'boolean',
-        'user_mission_completed_at'   => 'datetime',
+        'user_mission_current_value' => 'integer',
+        'user_mission_is_completed' => 'boolean',
+        'user_mission_completed_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

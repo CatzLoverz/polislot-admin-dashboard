@@ -19,7 +19,6 @@ class ValidationController extends Controller
     /**
      * Menampilkan halaman daftar pengaturan validasi.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -37,16 +36,17 @@ class ValidationController extends Controller
             // Return DataTables JSON
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->editColumn('updated_at', function($row){
+                ->editColumn('updated_at', function ($row) {
                     return $row->updated_at ? $row->updated_at->format('d-M-Y H:i') : '-';
                 })
-                ->addColumn('geofencing', function($row){
-                    $status = $row->validation_is_geofence_active 
-                        ? '<span class="badge badge-success">Aktif</span>' 
+                ->addColumn('geofencing', function ($row) {
+                    $status = $row->validation_is_geofence_active
+                        ? '<span class="badge badge-success">Aktif</span>'
                         : '<span class="badge badge-secondary">Nonaktif</span>';
+
                     return $status;
                 })
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $points = $row->validation_points;
                     $isGeofence = $row->validation_is_geofence_active ? 1 : 0;
                     $updateUrl = route('admin.validation.update', $row->validation_id);
@@ -74,9 +74,7 @@ class ValidationController extends Controller
     /**
      * Memproses pembaruan data poin validasi.
      *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function update(Request $request, $id): RedirectResponse
     {
@@ -84,11 +82,11 @@ class ValidationController extends Controller
             return DB::transaction(function () use ($request, $id) {
                 $validated = $request->validate([
                     'validation_points' => 'required|integer|min:1',
-                    'validation_is_geofence_active' => 'nullable|boolean'
+                    'validation_is_geofence_active' => 'nullable|boolean',
                 ]);
 
                 $validation = Validation::findOrFail($id);
-                
+
                 // Handle checkbox (jika tidak dicentang, value null/absent, kita anggap false)
                 $isGeofence = $request->has('validation_is_geofence_active');
 
@@ -105,9 +103,11 @@ class ValidationController extends Controller
 
         } catch (ValidationException $e) {
             Log::warning('Validasi gagal saat update pengaturan.', ['errors' => $e->errors()]);
+
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }

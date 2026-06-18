@@ -17,6 +17,6 @@ return [
     'sent' => 'Kami sudah mengirim link reset paassword melalui surel.',
     'throttled' => 'Mohon tunggu sebelum mencoba lagi.',
     'token' => 'Token ini tidak valid.',
-    'user' => "Kami tidak menemukan pengguna dengan alamat surel tersebut.",
+    'user' => 'Kami tidak menemukan pengguna dengan alamat surel tersebut.',
 
 ];

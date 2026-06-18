@@ -13,9 +13,9 @@ class ApiEncryptionTest extends TestCase
     public function it_ignores_non_api_requests()
     {
         $request = Request::create('/web-route', 'GET');
-        
-        $middleware = new ApiEncryption();
-        
+
+        $middleware = new ApiEncryption;
+
         $response = $middleware->handle($request, function ($req) {
             return response('OK');
         });
@@ -28,9 +28,9 @@ class ApiEncryptionTest extends TestCase
     {
         $request = Request::create('/api/test', 'GET');
         $request->headers->set('X-Session-Key', 'invalid_base64');
-        
-        $middleware = new ApiEncryption();
-        
+
+        $middleware = new ApiEncryption;
+
         $response = $middleware->handle($request, function ($req) {
             return response('OK');
         });
@@ -38,15 +38,15 @@ class ApiEncryptionTest extends TestCase
         // Tergantung apakah private key ada atau tidak di environment test
         $this->assertTrue(in_array($response->getStatusCode(), [400, 500]));
     }
-    
+
     #[Test]
     public function it_blocks_raw_authorization_without_x_auth_token()
     {
         $request = Request::create('/api/test', 'GET');
         $request->headers->set('Authorization', 'Bearer fake');
-        
-        $middleware = new ApiEncryption();
-        
+
+        $middleware = new ApiEncryption;
+
         $response = $middleware->handle($request, function ($req) {
             return response('OK');
         });

@@ -3,11 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Carbon\Carbon;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
-use Carbon\Carbon;
 
 class UserSeeder extends Seeder
 {
@@ -40,13 +39,13 @@ class UserSeeder extends Seeder
                 'role' => 'user',
                 'name' => $faker->name(),
                 'avatar' => null,
-                'email_verified_at' => $now, 
+                'email_verified_at' => $now,
                 'otp_code' => null,
                 'otp_expires_at' => null,
                 'failed_attempts' => 0,
                 'locked_until' => null,
-                'current_points' => 0, 
-                'lifetime_points' => 0, 
+                'current_points' => 0,
+                'lifetime_points' => 0,
             ]);
         }
 

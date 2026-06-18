@@ -13,8 +13,6 @@ class ApiEncryption
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -222,8 +220,6 @@ class ApiEncryption
 
     /**
      * Load private key from storage
-     * 
-     * @return string|null
      */
     private function loadPrivateKey(): ?string
     {
@@ -248,9 +244,6 @@ class ApiEncryption
 
     /**
      * Check if request is for API
-     * 
-     * @param Request $request
-     * @return bool
      */
     private function isApiRequest(Request $request): bool
     {
@@ -261,9 +254,6 @@ class ApiEncryption
 
     /**
      * Check if request method should have body
-     * 
-     * @param Request $request
-     * @return bool
      */
     private function shouldHaveBody(Request $request): bool
     {

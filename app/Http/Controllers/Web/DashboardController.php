@@ -21,8 +21,6 @@ class DashboardController extends Controller
 {
     /**
      * Display the dashboard index page with summary statistics.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -49,9 +47,6 @@ class DashboardController extends Controller
 
     /**
      * Fetch chart data for User Validation frequency.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function getChartData(Request $request): JsonResponse
     {
@@ -60,7 +55,7 @@ class DashboardController extends Controller
 
             // 1. Determine Date Grouping Format
             if ($period === 'month') {
-                $dateFormat = '%Y-%m'; 
+                $dateFormat = '%Y-%m';
             } elseif ($period === 'week') {
                 $dateFormat = '%Y-%u';
             } else {
@@ -76,19 +71,19 @@ class DashboardController extends Controller
                     DB::raw('count(*) as aggregate')
                 )
                 // Filter time range (optional optimization, e.g. last 30 days)
-                ->when($period == 'day', function($q) {
+                ->when($period == 'day', function ($q) {
                     $q->where('user_validations.created_at', '>=', Carbon::now()->subDays(30));
                 })
-                ->when($period == 'week', function($q) {
+                ->when($period == 'week', function ($q) {
                     $q->where('user_validations.created_at', '>=', Carbon::now()->subWeeks(12));
                 })
-                ->when($period == 'month', function($q) {
+                ->when($period == 'month', function ($q) {
                     $q->where('user_validations.created_at', '>=', Carbon::now()->subMonths(12));
                 })
                 ->groupBy('date', 'area_name')
                 ->orderBy('date', 'asc')
                 ->get();
-            
+
             // 3. Process Data for Chart.js
             // Get unique labels (dates) for the X-axis
             $labels = $query->pluck('date')->unique()->values();
@@ -103,8 +98,9 @@ class DashboardController extends Controller
 
             foreach ($groupedByArea as $areaName => $items) {
                 // Map data to the master labels to ensure alignment (fill 0 if missing)
-                $dataPoints = $labels->map(function($date) use ($items) {
+                $dataPoints = $labels->map(function ($date) use ($items) {
                     $record = $items->firstWhere('date', $date);
+
                     return $record ? $record->aggregate : 0;
                 });
 
@@ -114,7 +110,7 @@ class DashboardController extends Controller
                     'borderColor' => $colors[$colorIndex % count($colors)],
                     'backgroundColor' => 'transparent',
                     'borderWidth' => 2,
-                    'pointBorderColor' => "#FFF",
+                    'pointBorderColor' => '#FFF',
                     'pointBackgroundColor' => $colors[$colorIndex % count($colors)],
                     'pointRadius' => 4,
                     'fill' => false,
@@ -125,19 +121,18 @@ class DashboardController extends Controller
             return response()->json([
                 'labels' => $labels,
                 'datasets' => $datasets,
-                'period' => $period
+                'period' => $period,
             ]);
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json(['error' => 'Failed to load chart data'], 500);
         }
     }
 
     /**
      * Fetch top users leaderboard based on lifetime points.
-     *
-     * @return JsonResponse
      */
     public function getLeaderboard(): JsonResponse
     {
@@ -157,15 +152,13 @@ class DashboardController extends Controller
             return response()->json($leaders);
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json(['error' => 'Failed to load leaderboard'], 500);
         }
     }
 
     /**
      * Fetch realtime validation logs with optional area filtering.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function getRealtimeValidations(Request $request): JsonResponse
     {
@@ -184,7 +177,7 @@ class DashboardController extends Controller
 
             $validations = $query->get()->map(function ($v) {
                 return [
-                    'avatar' => $v->user->avatar ? asset('storage/' . $v->user->avatar) : null,
+                    'avatar' => $v->user->avatar ? asset('storage/'.$v->user->avatar) : null,
                     'username' => $v->user->name ?? 'Unknown',
                     'status' => $v->user_validation_content, // banyak, terbatas, penuh
                     'area' => $v->parkSubarea->parkArea->park_area_name ?? '-',
@@ -198,6 +191,7 @@ class DashboardController extends Controller
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json(['error' => 'Failed to load realtime data'], 500);
         }
     }

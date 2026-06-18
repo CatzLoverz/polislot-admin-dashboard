@@ -10,8 +10,8 @@ use Tests\TestCase;
 
 class InfoBoardControllerTest extends TestCase
 {
-    use RefreshDatabase;
     use \Illuminate\Foundation\Testing\WithoutMiddleware;
+    use RefreshDatabase;
 
     #[Test]
     public function index_returns_200_and_info_list()
@@ -20,7 +20,7 @@ class InfoBoardControllerTest extends TestCase
         InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Info',
-            'info_content' => 'Content'
+            'info_content' => 'Content',
         ]);
 
         $this->actingAs($user);
@@ -28,6 +28,6 @@ class InfoBoardControllerTest extends TestCase
         $response = $this->getJson('/api/info-board');
 
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success']);
+            ->assertJson(['status' => 'success']);
     }
 }

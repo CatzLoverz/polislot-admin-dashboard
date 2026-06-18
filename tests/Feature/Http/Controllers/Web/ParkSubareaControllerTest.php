@@ -14,6 +14,7 @@ class ParkSubareaControllerTest extends TestCase
     use RefreshDatabase;
 
     protected $admin;
+
     protected $area;
 
     protected function setUp(): void

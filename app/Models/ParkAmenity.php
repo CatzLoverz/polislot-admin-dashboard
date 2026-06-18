@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ParkAmenity extends Model
 {
     protected $table = 'park_amenities';
+
     protected $primaryKey = 'park_amenity_id';
-    
+
     protected $fillable = [
         'park_subarea_id',
         'park_amenity_name',
@@ -17,8 +18,6 @@ class ParkAmenity extends Model
 
     /**
      * Relasi ke subarea parkir.
-     *
-     * @return BelongsTo
      */
     public function parkSubarea(): BelongsTo
     {

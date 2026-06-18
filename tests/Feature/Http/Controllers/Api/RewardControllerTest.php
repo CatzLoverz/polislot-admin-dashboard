@@ -27,12 +27,12 @@ class RewardControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        
+
         Reward::create(['reward_name' => 'R1', 'reward_point_required' => 10, 'reward_type' => 'Voucher', 'reward_image' => 'a.jpg']);
 
         $response = $this->getJson('/api/rewards');
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success']);
+            ->assertJson(['status' => 'success']);
     }
 
     #[Test]
@@ -40,17 +40,17 @@ class RewardControllerTest extends TestCase
     {
         $user = User::factory()->create(['current_points' => 100]);
         $reward = Reward::create(['reward_name' => 'R1', 'reward_point_required' => 50, 'reward_type' => 'Voucher', 'reward_image' => 'a.jpg']);
-        
+
         $this->actingAs($user);
 
         $response = $this->postJson('/api/rewards/redeem', ['reward_id' => $reward->reward_id]);
 
         $response->assertStatus(201)
-                 ->assertJson(['status' => 'success', 'message' => 'Penukaran berhasil!']);
-        
+            ->assertJson(['status' => 'success', 'message' => 'Penukaran berhasil!']);
+
         $this->assertDatabaseHas('user_rewards', [
             'user_id' => $user->user_id,
-            'reward_id' => $reward->reward_id
+            'reward_id' => $reward->reward_id,
         ]);
     }
 
@@ -59,13 +59,13 @@ class RewardControllerTest extends TestCase
     {
         $user = User::factory()->create(['current_points' => 10]);
         $reward = Reward::create(['reward_name' => 'R1', 'reward_point_required' => 50, 'reward_type' => 'Voucher', 'reward_image' => 'a.jpg']);
-        
+
         $this->actingAs($user);
 
         $response = $this->postJson('/api/rewards/redeem', ['reward_id' => $reward->reward_id]);
 
         $response->assertStatus(422)
-                 ->assertJson(['message' => 'Poin Anda tidak mencukupi untuk reward ini.']);
+            ->assertJson(['message' => 'Poin Anda tidak mencukupi untuk reward ini.']);
     }
 
     #[Test]
@@ -75,7 +75,7 @@ class RewardControllerTest extends TestCase
         $this->actingAs($user);
 
         $response = $this->postJson('/api/rewards/redeem', []);
-        
+
         $response->assertStatus(422);
     }
 
@@ -90,13 +90,13 @@ class RewardControllerTest extends TestCase
             'user_id' => $user->user_id,
             'reward_id' => $reward->reward_id,
             'user_reward_code' => 'TEST-123',
-            'user_reward_status' => 'pending'
+            'user_reward_status' => 'pending',
         ]);
 
         $response = $this->getJson('/api/rewards/history');
-        
+
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success', 'message' => 'Riwayat penukaran berhasil diambil.'])
-                 ->assertJsonPath('data.0.name', 'R1');
+            ->assertJson(['status' => 'success', 'message' => 'Riwayat penukaran berhasil diambil.'])
+            ->assertJsonPath('data.0.name', 'R1');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\ParkSubarea;
+use Exception;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -83,13 +84,13 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
                 'fallbackStatus' => $this->fallbackStatus,
                 'fallbackStatusColor' => $this->fallbackStatusColor,
                 'commentCount' => $this->commentCount,
-                'timestamp' => time()
+                'timestamp' => time(),
             ];
             $mqtt = MQTT::connection('publisher');
             $mqtt->publish("frontend/parking_area/{$this->parkAreaId}", json_encode($mqttPayload), 1, true);
             $mqtt->disconnect();
-        } catch (\Exception $e) {
-            Log::warning("Failed to publish status update via MQTT: " . $e->getMessage());
+        } catch (Exception $e) {
+            Log::warning('Failed to publish status update via MQTT: '.$e->getMessage());
         }
     }
 

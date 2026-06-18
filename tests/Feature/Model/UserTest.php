@@ -46,16 +46,16 @@ class UserTest extends TestCase
     public function data_user_dapat_diubah()
     {
         $user = User::factory()->create([
-            'name' => 'Old Name'
+            'name' => 'Old Name',
         ]);
 
         $user->update([
-            'name' => 'New Name'
+            'name' => 'New Name',
         ]);
 
         $this->assertDatabaseHas('users', [
             'user_id' => $user->user_id,
-            'name' => 'New Name'
+            'name' => 'New Name',
         ]);
     }
 

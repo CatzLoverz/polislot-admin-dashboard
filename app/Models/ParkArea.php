@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ParkArea extends Model
 {
     protected $table = 'park_areas';
+
     protected $primaryKey = 'park_area_id';
-    
+
     protected $fillable = [
         'park_area_name',
         'park_area_code',
@@ -22,8 +23,6 @@ class ParkArea extends Model
 
     /**
      * Relasi ke subarea parkir yang ada di area ini.
-     *
-     * @return HasMany
      */
     public function parkSubarea(): HasMany
     {

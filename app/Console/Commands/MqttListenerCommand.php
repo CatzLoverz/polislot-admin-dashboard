@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Events\IotCountUpdated;
-use App\Events\IotDeviceStatusChanged;
 use App\Events\IotDetectionReceived;
+use App\Events\IotDeviceStatusChanged;
 use App\Events\SubareaStatusUpdated;
 use App\Models\IotCapture;
 use App\Models\IotDevice;
@@ -86,7 +86,7 @@ class MqttListenerCommand extends Command
 
             $this->info('Terhubung ke MQTT Broker. Mendengarkan polislot/device/+/snapshot...');
 
-            $mqtt->subscribe('polislot/device/+/snapshot', function (string $topic, string $message) use ($secretKey, $mqtt) {
+            $mqtt->subscribe('polislot/device/+/snapshot', function (string $topic, string $message) use ($secretKey) {
                 $this->info("Pesan diterima di topik: {$topic}");
 
                 try {
@@ -198,21 +198,17 @@ class MqttListenerCommand extends Command
                                         broadcast(new IotCountUpdated($payload['mac_address'], $payload['current_count']));
                                     });
                                 }
-                            });
 
-                            // Check pending validation in cache
-                            $cleanMac = str_replace(':', '', $payload['mac_address']);
-                            $pendingKey = "pending_validation_{$cleanMac}";
-                            if (Cache::has($pendingKey)) {
-                                $pending = Cache::get($pendingKey);
-                                Cache::forget($pendingKey);
+                                // Check pending validation in cache
+                                $cleanMac = str_replace(':', '', $payload['mac_address']);
+                                $pendingKey = "pending_validation_{$cleanMac}";
+                                $pendingMobileKey = "pending_mobile_validation_{$cleanMac}";
 
-                                $subarea = $device->subarea;
-                                if ($subarea) {
-                                    DB::transaction(function () use ($pending, $subarea, $device) {
-                                        // Find latest capture in this transaction
-                                        $latestCapture = IotCapture::where('device_id', $device->device_id)->orderBy('created_at', 'desc')->first();
+                                if (Cache::has($pendingKey)) {
+                                    $pending = Cache::get($pendingKey);
+                                    Cache::forget($pendingKey);
 
+                                    if ($subarea) {
                                         // Create UserValidation record
                                         $userVal = UserValidation::create([
                                             'user_id' => $pending['user_id'],
@@ -222,18 +218,25 @@ class MqttListenerCommand extends Command
                                         ]);
 
                                         // Associate with capture
-                                        if ($latestCapture) {
-                                            $latestCapture->user_validation_id = $userVal->user_validation_id;
-                                            $latestCapture->save();
-                                        }
+                                        $capture->user_validation_id = $userVal->user_validation_id;
+                                        $capture->save();
 
                                         $this->info("📈 [MQTT] Saved manual validation from admin snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
 
                                         // Evaluate WMA Threshold Shift!
                                         $subarea->evaluateThresholdShift();
-                                    });
+                                    }
+                                } elseif (Cache::has($pendingMobileKey)) {
+                                    $userValidationId = Cache::get($pendingMobileKey);
+                                    Cache::forget($pendingMobileKey);
+
+                                    // Associate with existing user validation from mobile
+                                    $capture->user_validation_id = $userValidationId;
+                                    $capture->save();
+
+                                    $this->info("📈 [MQTT] Linked snapshot to existing mobile validation: id={$userValidationId}");
                                 }
-                            }
+                            });
                         } else {
                             $this->info('ℹ️ Snapshot diterima tetapi tidak disimpan (save_image = false).');
                         }

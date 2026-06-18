@@ -5,6 +5,7 @@ namespace Tests\Unit\Services;
 use App\Models\User;
 use App\Models\UserHistory;
 use App\Services\HistoryService;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -18,13 +19,13 @@ class HistoryServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->historyService = new HistoryService();
+        $this->historyService = new HistoryService;
     }
 
     #[Test]
     public function log_mencatat_history_ke_database()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $this->historyService->log(
@@ -40,14 +41,14 @@ class HistoryServiceTest extends TestCase
             'user_history_type' => UserHistory::TYPE_MISSION,
             'user_history_name' => 'Misi Harian Selesai',
             'user_history_points' => 100,
-            'user_history_is_negative' => false
+            'user_history_is_negative' => false,
         ]);
     }
 
     #[Test]
     public function log_mencatat_history_negatif_dengan_benar()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $this->historyService->log(
@@ -61,7 +62,7 @@ class HistoryServiceTest extends TestCase
         $this->assertDatabaseHas('user_histories', [
             'user_id' => $user->user_id,
             'user_history_is_negative' => true,
-            'user_history_points' => 50
+            'user_history_points' => 50,
         ]);
     }
 
@@ -70,9 +71,9 @@ class HistoryServiceTest extends TestCase
     {
         // Simulasi ID user yang tidak valid akan menyebabkan QueryException (Foreign Key Constraint)
         // Service harus menangkap exception tersebut di block catch dan melog error (bukan throw exception)
-        
-        $nonExistentUserId = 99999; 
-        
+
+        $nonExistentUserId = 99999;
+
         // Pastikan tidak ada exception yang dilempar keluar
         try {
             $this->historyService->log(
@@ -82,8 +83,8 @@ class HistoryServiceTest extends TestCase
                 10
             );
             $this->assertTrue(true); // Berhasil melewati tanpa crash
-        } catch (\Exception $e) {
-            $this->fail('Service seharusnya menangkap exception: ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->fail('Service seharusnya menangkap exception: '.$e->getMessage());
         }
 
         // Pastikan tidak ada data masuk

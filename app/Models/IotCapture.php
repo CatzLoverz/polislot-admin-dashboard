@@ -11,6 +11,7 @@ class IotCapture extends Model
     use HasFactory;
 
     protected $table = 'iot_captures';
+
     protected $primaryKey = 'capture_id';
 
     protected $fillable = [
@@ -18,7 +19,7 @@ class IotCapture extends Model
         'device_id',
         'capture_image_path',
         'capture_is_trained',
-        'capture_ai_status'
+        'capture_ai_status',
     ];
 
     protected $casts = [
@@ -27,8 +28,6 @@ class IotCapture extends Model
 
     /**
      * Relasi ke perangkat IOT (IotDevice).
-     *
-     * @return BelongsTo
      */
     public function device(): BelongsTo
     {
@@ -37,8 +36,6 @@ class IotCapture extends Model
 
     /**
      * Relasi ke validasi pengguna (UserValidation).
-     *
-     * @return BelongsTo
      */
     public function userValidation(): BelongsTo
     {

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\JsonResponse;
-use Exception;
-use App\Http\Controllers\Controller;
-use App\Models\SubareaComment;
-use App\Models\ParkSubarea;
 use App\Events\SubareaStatusUpdated;
+use App\Http\Controllers\Controller;
+use App\Models\ParkSubarea;
+use App\Models\SubareaComment;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
-
 
 class SubareaCommentController extends Controller
 {
@@ -21,15 +20,14 @@ class SubareaCommentController extends Controller
      * Menampilkan daftar komentar berdasarkan Subarea dengan Paginasi.
      * Mirip dengan HistoryController, output diformat ulang.
      *
-     * @param Request $request (park_subarea_id, limit, page)
-     * @return JsonResponse
+     * @param  Request  $request  (park_subarea_id, limit, page)
      */
     public function index(Request $request): JsonResponse
     {
         // Validasi: Kita butuh ID Subarea untuk tahu komentar mana yang diambil
         $request->validate([
             'park_subarea_id' => 'required|exists:park_subareas,park_subarea_id',
-            'limit' => 'integer|min:1|max:100'
+            'limit' => 'integer|min:1|max:100',
         ]);
 
         try {
@@ -45,16 +43,16 @@ class SubareaCommentController extends Controller
             // Format data (Transformasi Collection)
             $formattedData = $comments->getCollection()->map(function ($item) {
                 return [
-                    'id'      => $item->subarea_comment_id,
-                    'user'    => [
-                        'id'     => $item->user->user_id, // Add ID for ownership check
-                        'name'   => $item->user->name ?? 'Unknown User',
+                    'id' => $item->subarea_comment_id,
+                    'user' => [
+                        'id' => $item->user->user_id, // Add ID for ownership check
+                        'name' => $item->user->name ?? 'Unknown User',
                         'avatar' => $item->user->avatar ?? null, // Frontend bisa handle default avatar
                     ],
                     'content' => $item->subarea_comment_content,
-                    'image'   => $item->subarea_comment_image ? asset('storage/' . $item->subarea_comment_image) : null,
-                    'date'    => $item->created_at->format('d M Y'),
-                    'time'    => $item->created_at->format('H:i'),
+                    'image' => $item->subarea_comment_image ? asset('storage/'.$item->subarea_comment_image) : null,
+                    'date' => $item->created_at->format('d M Y'),
+                    'time' => $item->created_at->format('H:i'),
                     'timestamp' => $item->created_at->toIso8601String(),
                 ];
             });
@@ -64,32 +62,30 @@ class SubareaCommentController extends Controller
                 'list' => $formattedData,
                 'pagination' => [
                     'current_page' => $comments->currentPage(),
-                    'last_page'    => $comments->lastPage(),
-                    'per_page'     => $comments->perPage(),
-                    'total'        => $comments->total(),
-                ]
+                    'last_page' => $comments->lastPage(),
+                    'per_page' => $comments->perPage(),
+                    'total' => $comments->total(),
+                ],
             ];
 
             return $this->sendSuccess('Daftar komentar berhasil diambil.', $responseData);
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return $this->sendError('Gagal memuat komentar.', 500);
         }
     }
 
     /**
      * Menyimpan komentar baru (Store).
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'park_subarea_id'         => 'required|exists:park_subareas,park_subarea_id',
+            'park_subarea_id' => 'required|exists:park_subareas,park_subarea_id',
             'subarea_comment_content' => 'required|string|max:500',
-            'subarea_comment_image'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'subarea_comment_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
@@ -102,10 +98,10 @@ class SubareaCommentController extends Controller
                 }
 
                 $comment = SubareaComment::create([
-                    'user_id'                 => $request->user()->user_id,
-                    'park_subarea_id'         => $request->park_subarea_id,
+                    'user_id' => $request->user()->user_id,
+                    'park_subarea_id' => $request->park_subarea_id,
                     'subarea_comment_content' => $request->subarea_comment_content,
-                    'subarea_comment_image'   => $imagePath
+                    'subarea_comment_image' => $imagePath,
                 ]);
 
                 $comment->load('user:user_id,name,avatar');
@@ -123,9 +119,11 @@ class SubareaCommentController extends Controller
             });
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
+
             return $this->sendValidationError($e);
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return $this->sendError('Gagal mengirim komentar.', 500);
         }
     }
@@ -134,19 +132,17 @@ class SubareaCommentController extends Controller
      * Memperbarui komentar (Update).
      * Mengganti konten atau gambar. Gambar lama akan dihapus jika ada gambar baru.
      *
-     * @param Request $request
-     * @param int $id ID SubareaComment
-     * @return JsonResponse
+     * @param  int  $id  ID SubareaComment
      */
     public function update(Request $request, $id): JsonResponse
     {
         if ($request->isMethod('put') || $request->isMethod('patch')) {
-             // Laravel handle ini otomatis, tapi request harus multipart/form-data
+            // Laravel handle ini otomatis, tapi request harus multipart/form-data
         }
 
         $request->validate([
             'subarea_comment_content' => 'required|string|max:500',
-            'subarea_comment_image'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'subarea_comment_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $comment = SubareaComment::findOrFail($id);
@@ -159,7 +155,7 @@ class SubareaCommentController extends Controller
                 }
 
                 $dataToUpdate = [
-                    'subarea_comment_content' => $request->subarea_comment_content
+                    'subarea_comment_content' => $request->subarea_comment_content,
                 ];
 
                 // Logika Update Image (Hapus Lama -> Simpan Baru)
@@ -189,10 +185,12 @@ class SubareaCommentController extends Controller
             });
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
+
             return $this->sendValidationError($e);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             $code = $e->getCode() === 403 ? 403 : 500;
+
             return $this->sendError($e->getMessage(), $code);
         }
     }
@@ -201,9 +199,7 @@ class SubareaCommentController extends Controller
      * Menghapus komentar (Destroy).
      * Menghapus data di database beserta file gambarnya di storage.
      *
-     * @param Request $request
-     * @param int $id ID SubareaComment
-     * @return JsonResponse
+     * @param  int  $id  ID SubareaComment
      */
     public function destroy(Request $request, $id): JsonResponse
     {
@@ -236,10 +232,12 @@ class SubareaCommentController extends Controller
             });
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
+
             return $this->sendValidationError($e);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             $code = $e->getCode() === 403 ? 403 : 500;
+
             return $this->sendError($e->getMessage(), $code);
         }
     }

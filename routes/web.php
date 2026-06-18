@@ -1,21 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AuthController;
-use App\Http\Controllers\Web\RewardController;
-use App\Http\Controllers\Web\MissionController;
-use App\Http\Controllers\Web\ProfileController;
-use App\Http\Controllers\Web\FeedbackController;
-use App\Http\Controllers\Web\ParkAreaController;
 use App\Http\Controllers\Web\DashboardController;
-use App\Http\Controllers\Web\InfoBoardController;
-use App\Http\Controllers\Web\ParkAmenityController;
-use App\Http\Controllers\Web\ParkSubareaController;
 use App\Http\Controllers\Web\FeedbackCategoryController;
-use App\Http\Controllers\Web\RewardVerificationController;
-use App\Http\Controllers\Web\ValidationController;
-use App\Http\Controllers\Web\UserFaqController;
+use App\Http\Controllers\Web\FeedbackController;
+use App\Http\Controllers\Web\InfoBoardController;
 use App\Http\Controllers\Web\IotDetectionController;
+use App\Http\Controllers\Web\MissionController;
+use App\Http\Controllers\Web\ParkAmenityController;
+use App\Http\Controllers\Web\ParkAreaController;
+use App\Http\Controllers\Web\ParkSubareaController;
+use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\RewardController;
+use App\Http\Controllers\Web\RewardVerificationController;
+use App\Http\Controllers\Web\UserFaqController;
+use App\Http\Controllers\Web\ValidationController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,7 +36,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/forgot-otp-verify', [AuthController::class, 'forgotPasswordOtpVerify'])->name('forgot_otp.verify');
     Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend'])->name('forgot_otp.resend');
 
-    // Form & pengiriman reset password 
+    // Form & pengiriman reset password
     Route::get('/reset-pass-form', [AuthController::class, 'resetPasswordForm'])->name('reset_pass.form');
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword'])->name('reset_pass.attempt');
 });
@@ -44,7 +44,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', 'role:admin,user'])->group(function () {
     // Rute Logout
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     // Rute Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/chart', [DashboardController::class, 'getChartData'])->name('dashboard.chart');
@@ -56,7 +56,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::prefix('admin/')->as('admin.')->middleware(['role:admin'])->group(function () {
-        
+
         // Route Park Area
         Route::resource('park-area', ParkAreaController::class);
 
@@ -67,10 +67,10 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
 
         // Route Park Amenity
         Route::resource('park-amenity', ParkAmenityController::class)->only(['store', 'destroy']);
-        
+
         // Route info_board
         Route::resource('info-board', InfoBoardController::class)->only(['index', 'store', 'update', 'destroy']);
-        
+
         // Route Setel Poin Validasi
         Route::resource('validation', ValidationController::class)->only(['index', 'update']);
 
@@ -81,7 +81,7 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         Route::resource('rewards', RewardController::class)->only(['index', 'store', 'update', 'destroy']);
 
         // Route Reward Verification
-        Route::prefix('rewards/verify')->as('rewards.verify.')->controller(RewardVerificationController::class)->group(function() {
+        Route::prefix('rewards/verify')->as('rewards.verify.')->controller(RewardVerificationController::class)->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/{id}', 'process')->name('process');
         });

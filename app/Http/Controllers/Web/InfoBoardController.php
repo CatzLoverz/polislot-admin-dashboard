@@ -20,7 +20,6 @@ class InfoBoardController extends Controller
     /**
      * Menampilkan halaman daftar semua info board.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -30,16 +29,16 @@ class InfoBoardController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('creator_name', function($row){
+                ->addColumn('creator_name', function ($row) {
                     return $row->user->name ?? 'Unknown';
                 })
-                ->editColumn('created_at', function($row){
+                ->editColumn('created_at', function ($row) {
                     return $row->created_at ? $row->created_at->format('d-M-Y H:i') : '-';
                 })
-                ->editColumn('updated_at', function($row){
+                ->editColumn('updated_at', function ($row) {
                     return $row->updated_at ? $row->updated_at->format('d-M-Y H:i') : '-';
                 })
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $infoTitle = e($row->info_title);
                     // Tombol Edit
                     $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit" 
@@ -51,7 +50,7 @@ class InfoBoardController extends Controller
                                     title="Edit '.$infoTitle.'"> 
                                     <i class="fa fa-edit"></i>
                                 </button>';
-                    
+
                     // Tombol Delete
                     $btnDelete = '<form action="'.route('admin.info-board.destroy', $row->info_id).'" 
                                         method="POST" 
@@ -78,26 +77,24 @@ class InfoBoardController extends Controller
 
     /**
      * Memproses penyimpanan data info board baru.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
                 $validated = $request->validate([
-                    'info_title'   => 'required|string|max:255',
+                    'info_title' => 'required|string|max:255',
                     'info_content' => 'required|string',
                 ]);
 
                 InfoBoard::create([
-                    'user_id'      => Auth::id(),
-                    'info_title'   => $validated['info_title'],
+                    'user_id' => Auth::id(),
+                    'info_title' => $validated['info_title'],
                     'info_content' => $validated['info_content'],
                 ]);
 
                 Log::info('Data info board baru berhasil disimpan.');
+
                 return redirect()->route('admin.info-board.index')
                     ->with('swal_success_crud', 'Informasi berhasil ditambahkan.');
             });
@@ -106,6 +103,7 @@ class InfoBoardController extends Controller
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menambahkan informasi.')->withInput();
         }
     }
@@ -113,23 +111,21 @@ class InfoBoardController extends Controller
     /**
      * Memproses pembaruan data info board.
      *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function update(Request $request, $id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request, $id) {
                 $validated = $request->validate([
-                    'info_title'   => 'required|string|max:255',
+                    'info_title' => 'required|string|max:255',
                     'info_content' => 'required|string',
                 ]);
 
                 $infoBoard = InfoBoard::findOrFail($id);
-                
+
                 $infoBoard->update([
-                    'info_title'   => $validated['info_title'],
+                    'info_title' => $validated['info_title'],
                     'info_content' => $validated['info_content'],
                 ]);
 
@@ -143,6 +139,7 @@ class InfoBoardController extends Controller
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
@@ -150,8 +147,7 @@ class InfoBoardController extends Controller
     /**
      * Memproses penghapusan data info board.
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function destroy($id): RedirectResponse
     {
@@ -168,6 +164,7 @@ class InfoBoardController extends Controller
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

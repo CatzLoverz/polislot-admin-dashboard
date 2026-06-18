@@ -14,9 +14,6 @@ class ParkAmenityController extends Controller
 {
     /**
      * Simpan satu fasilitas baru.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
@@ -36,13 +33,14 @@ class ParkAmenityController extends Controller
                 Log::info('Fasilitas ditambahkan.', ['subarea_id' => $request->park_subarea_id, 'amenity_id' => $amenity->park_amenity_id]);
 
                 return response()->json([
-                    'status' => 'success', 
+                    'status' => 'success',
                     'message' => 'Fasilitas ditambahkan.',
-                    'data' => $amenity
+                    'data' => $amenity,
                 ]);
             });
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json(['status' => 'error', 'message' => 'Gagal menyimpan.'], 500);
         }
     }
@@ -50,8 +48,7 @@ class ParkAmenityController extends Controller
     /**
      * Hapus satu fasilitas.
      *
-     * @param int $id
-     * @return JsonResponse
+     * @param  int  $id
      */
     public function destroy($id): JsonResponse
     {
@@ -59,12 +56,14 @@ class ParkAmenityController extends Controller
             return DB::transaction(function () use ($id) {
                 $amenity = ParkAmenity::findOrFail($id);
                 $amenity->delete();
-                
+
                 Log::info('Fasilitas dihapus.', ['amenity_id' => $id]);
+
                 return response()->json(['status' => 'success', 'message' => 'Fasilitas dihapus.']);
             });
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json(['status' => 'error', 'message' => 'Gagal menghapus.'], 500);
         }
     }

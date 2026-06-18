@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Http\Controllers\Web;
 
-use App\Models\User;
 use App\Mail\SendOtpMail;
+use App\Models\User;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -33,9 +32,9 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_form_redirect_ke_dashboard_jika_sudah_login()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create(['role' => 'admin']);
-        
+
         $this->actingAs($user);
 
         $response = $this->get(route('login.form'));
@@ -50,13 +49,13 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_berhasil_untuk_admin_dan_reset_lock_data()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'admin@test.com',
             'password' => Hash::make('Password123!'),
             'role' => 'admin',
             'failed_attempts' => 2, // Simulasi pernah gagal sebelumnya
-            'locked_until' => null
+            'locked_until' => null,
         ]);
 
         $response = $this->post(route('login.attempt'), [
@@ -76,7 +75,7 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_gagal_jika_bukan_admin_dianggap_email_tidak_ditemukan()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'user@test.com',
             'password' => Hash::make('Password123!'),
@@ -109,12 +108,12 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_gagal_password_salah_dan_increment_percobaan()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'admin@test.com',
             'password' => Hash::make('CorrectPass'),
             'role' => 'admin',
-            'failed_attempts' => 0
+            'failed_attempts' => 0,
         ]);
 
         $response = $this->post(route('login.attempt'), [
@@ -134,10 +133,10 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_mengunci_akun_setelah_4_kali_gagal()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'role' => 'admin',
-            'failed_attempts' => 3 // Sudah 3 kali gagal
+            'failed_attempts' => 3, // Sudah 3 kali gagal
         ]);
 
         // Gagal ke-4
@@ -158,11 +157,11 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_ditolak_jika_akun_sedang_terkunci()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'role' => 'admin',
             'locked_until' => now()->addMinutes(5), // Masih terkunci 5 menit
-            'password' => Hash::make('CorrectPass')
+            'password' => Hash::make('CorrectPass'),
         ]);
 
         // Coba login password benar pun tetap ditolak
@@ -179,12 +178,12 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_reset_failed_attempts_jika_sudah_lewat_10_menit_sejak_gagal_terakhir()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'role' => 'admin',
             'failed_attempts' => 2,
             'password' => Hash::make('CorrectPass'),
-            'updated_at' => now()->subMinutes(15) // Gagal terakhir 15 menit lalu
+            'updated_at' => now()->subMinutes(15), // Gagal terakhir 15 menit lalu
         ]);
 
         // Login lagi dengan password SALAH
@@ -194,20 +193,20 @@ class AuthControllerTest extends TestCase
         ]);
 
         $user->refresh();
-        // Logika: 
+        // Logika:
         // 1. Cek time > 10 min -> Reset attempts jadi 0.
         // 2. Cek Password -> Salah -> Increment jadi 1.
-        $this->assertEquals(1, $user->failed_attempts); 
+        $this->assertEquals(1, $user->failed_attempts);
     }
 
     #[Test]
     public function login_menangani_exception_sistem()
     {
-        DB::shouldReceive('transaction')->andThrow(new \Exception('DB Down'));
+        DB::shouldReceive('transaction')->andThrow(new Exception('DB Down'));
 
         $response = $this->post(route('login.attempt'), [
             'email' => 'admin@test.com',
-            'password' => 'pass'
+            'password' => 'pass',
         ]);
 
         $response->assertRedirect(route('login.form'));
@@ -221,7 +220,7 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function logout_berhasil_dan_hapus_session()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create(['role' => 'admin']);
         $this->actingAs($user);
 
@@ -247,19 +246,19 @@ class AuthControllerTest extends TestCase
     public function forgot_verify_mengirim_otp_dan_set_session()
     {
         Mail::fake();
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create(['email' => 'forgetful@test.com']);
 
         $response = $this->post(route('forgot.attempt'), [
-            'email' => 'forgetful@test.com'
+            'email' => 'forgetful@test.com',
         ]);
 
         $response->assertRedirect(route('forgot_otp.form'));
         $response->assertSessionHas('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
-        
+
         // Cek session
         $this->assertEquals('forgetful@test.com', session('email_for_password_reset'));
-        
+
         // Cek DB & Mail
         $user->refresh();
         $this->assertNotNull($user->otp_code);
@@ -270,7 +269,7 @@ class AuthControllerTest extends TestCase
     public function forgot_verify_gagal_jika_email_tidak_ada()
     {
         $response = $this->post(route('forgot.attempt'), [
-            'email' => 'ghost@test.com'
+            'email' => 'ghost@test.com',
         ]);
 
         // Controller menangkap ValidationException sebagai Exception umum
@@ -293,18 +292,18 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function otp_verify_sukses_redirect_ke_reset_password()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'otp@test.com',
             'otp_code' => '123456',
-            'otp_expires_at' => now()->addMinutes(10)
+            'otp_expires_at' => now()->addMinutes(10),
         ]);
 
         // Simulasi session dari langkah sebelumnya
         session()->put('email_for_password_reset', 'otp@test.com');
 
         $response = $this->post(route('forgot_otp.verify'), [
-            'otp' => '123456'
+            'otp' => '123456',
         ]);
 
         $response->assertRedirect(route('reset_pass.form'));
@@ -314,17 +313,17 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function otp_verify_gagal_otp_salah()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'otp@test.com',
             'otp_code' => '123456',
-            'otp_expires_at' => now()->addMinutes(10)
+            'otp_expires_at' => now()->addMinutes(10),
         ]);
 
         session()->put('email_for_password_reset', 'otp@test.com');
 
         $response = $this->post(route('forgot_otp.verify'), [
-            'otp' => '999999' // Salah
+            'otp' => '999999', // Salah
         ]);
 
         $response->assertRedirect();
@@ -335,17 +334,17 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function otp_verify_gagal_otp_expired()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'otp@test.com',
             'otp_code' => '123456',
-            'otp_expires_at' => now()->subMinute() // Expired
+            'otp_expires_at' => now()->subMinute(), // Expired
         ]);
 
         session()->put('email_for_password_reset', 'otp@test.com');
 
         $response = $this->post(route('forgot_otp.verify'), [
-            'otp' => '123456'
+            'otp' => '123456',
         ]);
 
         $response->assertSessionHas('swal_error_crud', 'Kode OTP salah atau telah kedaluwarsa.');
@@ -355,7 +354,7 @@ class AuthControllerTest extends TestCase
     public function otp_resend_berhasil_mengirim_ulang()
     {
         Mail::fake();
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create(['email' => 'otp@test.com']);
         session()->put('email_for_password_reset', 'otp@test.com');
 
@@ -363,7 +362,7 @@ class AuthControllerTest extends TestCase
 
         $response->assertRedirect(); // Back
         $response->assertSessionHas('swal_success_crud', 'Kode OTP baru telah dikirim ke email Anda.');
-        
+
         $user->refresh();
         $this->assertNotNull($user->otp_code);
         Mail::assertSent(SendOtpMail::class);
@@ -389,12 +388,12 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function reset_password_sukses_update_db_dan_clear_session()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'reset@test.com',
             'password' => Hash::make('OldPassword'),
             'otp_code' => '123456',
-            'locked_until' => now()->addHour() // Simulasi sedang terlock
+            'locked_until' => now()->addHour(), // Simulasi sedang terlock
         ]);
 
         session()->put('email_for_password_reset', 'reset@test.com');
@@ -404,7 +403,7 @@ class AuthControllerTest extends TestCase
 
         $response = $this->post(route('reset_pass.attempt'), [
             'password' => $newPassword,
-            'password_confirmation' => $newPassword
+            'password_confirmation' => $newPassword,
         ]);
 
         $response->assertRedirect(route('login.form'));
@@ -425,10 +424,10 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function reset_password_gagal_jika_password_baru_sama_dengan_lama()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => 'reset@test.com',
-            'password' => Hash::make('OldPassword123!')
+            'password' => Hash::make('OldPassword123!'),
         ]);
 
         session()->put('email_for_password_reset', 'reset@test.com');
@@ -436,7 +435,7 @@ class AuthControllerTest extends TestCase
 
         $response = $this->post(route('reset_pass.attempt'), [
             'password' => 'OldPassword123!',
-            'password_confirmation' => 'OldPassword123!'
+            'password_confirmation' => 'OldPassword123!',
         ]);
 
         $response->assertRedirect();
@@ -449,11 +448,11 @@ class AuthControllerTest extends TestCase
         session()->put('email_for_password_reset', 'test@test.com');
         session()->put('otp_verified', true);
 
-        DB::shouldReceive('transaction')->andThrow(new \Exception('Server Error'));
+        DB::shouldReceive('transaction')->andThrow(new Exception('Server Error'));
 
         $response = $this->post(route('reset_pass.attempt'), [
             'password' => 'NewPass123!',
-            'password_confirmation' => 'NewPass123!'
+            'password_confirmation' => 'NewPass123!',
         ]);
 
         $response->assertRedirect();

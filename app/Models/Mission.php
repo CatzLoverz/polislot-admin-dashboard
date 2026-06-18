@@ -11,19 +11,20 @@ class Mission extends Model
     use HasFactory;
 
     protected $table = 'missions';
+
     protected $primaryKey = 'mission_id';
-    
+
     // Konstanta untuk UI
     public const METRICS = [
         'VALIDATION_ACTION' => 'Melakukan Validasi Parkir',
-        'LOGIN_ACTION'      => 'Membuka Aplikasi (Login)',
-        'PROFILE_UPDATE'    => 'Memperbarui Profil (Avatar)',
+        'LOGIN_ACTION' => 'Membuka Aplikasi (Login)',
+        'PROFILE_UPDATE' => 'Memperbarui Profil (Avatar)',
     ];
 
     public const CYCLES = [
-        'NONE'    => 'Sekali Saja (Tidak Reset)',
-        'DAILY'   => 'Harian (Reset 00:00)',
-        'WEEKLY'  => 'Mingguan (Reset Senin)',
+        'NONE' => 'Sekali Saja (Tidak Reset)',
+        'DAILY' => 'Harian (Reset 00:00)',
+        'WEEKLY' => 'Mingguan (Reset Senin)',
         'MONTHLY' => 'Bulanan (Reset tgl 1)',
     ];
 
@@ -48,8 +49,6 @@ class Mission extends Model
 
     /**
      * Relasi ke misi yang diambil oleh pengguna (UserMission).
-     *
-     * @return HasMany
      */
     public function userMissions(): HasMany
     {

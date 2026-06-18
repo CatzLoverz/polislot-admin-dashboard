@@ -20,15 +20,16 @@ class ScrubAndTraceProcessorTest extends TestCase
 {
     public function test_it_extracts_method_name_from_closure_backtrace(): void
     {
-        $processor = new ScrubAndTraceProcessor();
+        $processor = new ScrubAndTraceProcessor;
 
         // We run a closure. Inside the closure, we invoke the processor.
-        $runClosure = function() use ($processor) {
+        $runClosure = function () use ($processor) {
             $record = [
                 'message' => 'Test message',
                 'context' => [],
                 'extra' => [],
             ];
+
             return $processor($record);
         };
 
@@ -44,28 +45,29 @@ class ScrubAndTraceProcessorTest extends TestCase
     public function test_it_syncs_mqtt_status_to_offline_due_to_inactivity(): void
     {
         Event::fake();
-        
+
         // Mock DB connection to avoid hitting actual database
         $mockConnection = Mockery::mock(Connection::class);
-        $mockConnection->shouldReceive('query')->andReturnUsing(function() use ($mockConnection) {
+        $mockConnection->shouldReceive('query')->andReturnUsing(function () use ($mockConnection) {
             $grammar = new MySqlGrammar($mockConnection);
-            $processor = new MySqlProcessor();
+            $processor = new MySqlProcessor;
+
             return new QueryBuilder($mockConnection, $grammar, $processor);
         });
         $mockConnection->shouldReceive('select')->andReturn([]);
         $mockConnection->shouldReceive('getTablePrefix')->andReturn('');
         $mockConnection->shouldReceive('getName')->andReturn('mariadb');
-        
+
         $resolver = Mockery::mock(ConnectionResolverInterface::class);
         $resolver->shouldReceive('connection')->andReturn($mockConnection);
         Model::setConnectionResolver($resolver);
 
         $mac = 'C0:35:32:17:EC:53';
-        
+
         // Put in cache that device is online via mqtt
         Cache::forever("iot_status_{$mac}", 'online');
         Cache::forever("iot_connection_type_{$mac}", 'mqtt');
-        
+
         // Set last seen to 70 seconds ago
         Cache::put("iot_last_seen_{$mac}", time() - 70);
 
@@ -81,11 +83,11 @@ class ScrubAndTraceProcessorTest extends TestCase
     {
         Event::fake();
         $mac = 'C0:35:32:17:EC:53';
-        
+
         // Put in cache that device is online via mqtt
         Cache::forever("iot_status_{$mac}", 'online');
         Cache::forever("iot_connection_type_{$mac}", 'mqtt');
-        
+
         // Set last seen to 20 seconds ago
         Cache::put("iot_last_seen_{$mac}", time() - 20);
 

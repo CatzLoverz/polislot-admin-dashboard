@@ -20,7 +20,6 @@ class RewardController extends Controller
     /**
      * Menampilkan halaman daftar master reward.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -30,24 +29,27 @@ class RewardController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->editColumn('reward_point_required', function($row){
-                    return number_format($row->reward_point_required) . ' Poin';
+                ->editColumn('reward_point_required', function ($row) {
+                    return number_format($row->reward_point_required).' Poin';
                 })
-                ->editColumn('reward_image', function($row){
-                    if($row->reward_image) {
-                        $url = asset('storage/' . $row->reward_image);
+                ->editColumn('reward_image', function ($row) {
+                    if ($row->reward_image) {
+                        $url = asset('storage/'.$row->reward_image);
+
                         return '<img src="'.$url.'" class="img-thumbnail" width="60" alt="Reward Image">';
                     }
+
                     return '<span class="text-muted text-small">No Image</span>';
                 })
-                ->editColumn('reward_type', function($row){
+                ->editColumn('reward_type', function ($row) {
                     $badge = $row->reward_type == 'Voucher' ? 'info' : 'primary';
+
                     return '<span class="badge badge-'.$badge.'">'.$row->reward_type.'</span>';
                 })
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $json = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
                     $title = e($row->reward_name);
-                    
+
                     $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit" 
                                     data-row="'.$json.'" 
                                     data-update-url="'.route('admin.rewards.update', $row->reward_id).'"
@@ -55,7 +57,7 @@ class RewardController extends Controller
                                     title="Edit '.$title.'">
                                     <i class="fa fa-edit"></i>
                                 </button>';
-                    
+
                     $btnDelete = '<form action="'.route('admin.rewards.destroy', $row->reward_id).'" 
                                         method="POST" class="delete-form d-inline"
                                         data-entity-name=" '.$title.'">
@@ -77,9 +79,6 @@ class RewardController extends Controller
 
     /**
      * Menyimpan data reward baru.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -99,7 +98,7 @@ class RewardController extends Controller
                 $reward = Reward::create($validated);
 
                 Log::info('Reward berhasil ditambahkan.', ['reward_id' => $reward->reward_id]);
-                
+
                 return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil ditambahkan.');
             });
 
@@ -107,6 +106,7 @@ class RewardController extends Controller
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
+
             return back()->with('swal_error_crud', 'Gagal menyimpan data.');
         }
     }
@@ -114,9 +114,7 @@ class RewardController extends Controller
     /**
      * Memperbarui data reward.
      *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function update(Request $request, $id): RedirectResponse
     {
@@ -141,7 +139,7 @@ class RewardController extends Controller
                 $reward->update($validated);
 
                 Log::info('Reward berhasil diperbarui.', ['reward_id' => $id]);
-                
+
                 return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil diperbarui.');
             });
 
@@ -149,6 +147,7 @@ class RewardController extends Controller
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal.');
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
+
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
@@ -156,27 +155,27 @@ class RewardController extends Controller
     /**
      * Menghapus data reward.
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
                 $reward = Reward::findOrFail($id);
-                
+
                 if ($reward->reward_image && Storage::disk('public')->exists($reward->reward_image)) {
                     Storage::disk('public')->delete($reward->reward_image);
                 }
 
                 $reward->delete();
-                
+
                 Log::info('Reward berhasil dihapus.', ['reward_id' => $id]);
-                
+
                 return redirect()->route('admin.rewards.index')->with('swal_success_crud', 'Reward berhasil dihapus.');
             });
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
+
             return back()->with('swal_error_crud', 'Gagal menghapus reward.');
         }
     }

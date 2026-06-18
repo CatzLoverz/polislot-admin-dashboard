@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Rules\NotCurrentPassword;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,32 +13,24 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;use Exception;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
     /**
      * Menampilkan halaman form untuk mengedit profil pengguna.
-     *
-     * @return View
      */
     public function edit(): View
     {
         $user = Auth::user();
 
-        
         return view('Contents.Profile.index', compact('user'));
     }
 
-
     /**
      * Memproses permintaan untuk memperbarui profil pengguna.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function update(Request $request): RedirectResponse
     {
@@ -47,8 +40,8 @@ class ProfileController extends Controller
         $passwordRules = [
             'required',
             'confirmed',
-            new NotCurrentPassword(),
-            PasswordRule::min(8)->mixedCase()->numbers()->symbols(), 
+            new NotCurrentPassword,
+            PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
         ];
 
         $rules = [
@@ -58,7 +51,7 @@ class ProfileController extends Controller
 
         if ($request->filled('new_password')) {
             $rules['current_password'] = ['required', 'current_password'];
-            $rules['new_password'] = $passwordRules; 
+            $rules['new_password'] = $passwordRules;
         }
 
         try {
@@ -74,28 +67,31 @@ class ProfileController extends Controller
                     $path = $request->file('avatar')->store('avatars', 'public');
                     $user->avatar = $path;
                 }
-                
+
                 // update password jika diisi
                 if (isset($validatedData['new_password'])) {
                     $user->password = Hash::make($validatedData['new_password']);
                     Log::info('Password diupdate.', ['user_id' => $user->user_id]);
                 }
 
-                /** @var \App\Models\User $user */
+                /** @var User $user */
                 $user->name = $validatedData['name'];
                 $user->save();
 
                 Auth::login($user);
 
                 Log::info('Profil berhasil diperbarui.', ['user_id' => $user->user_id]);
+
                 return redirect()->route('profile.edit')->with('swal_success_crud', 'Profil Anda berhasil diperbarui.');
             });
 
         } catch (ValidationException $e) {
-            Log::warning('Validasi data gagal.', [ 'user_id' => $user->user_id, 'errors' => $e->errors() ]);
+            Log::warning('Validasi data gagal.', ['user_id' => $user->user_id, 'errors' => $e->errors()]);
+
             return back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            Log::error('Terjadi error sistem saat memperbarui profil.', [ 'user_id' => $user->user_id, 'error' => $e->getMessage() ]);
+            Log::error('Terjadi error sistem saat memperbarui profil.', ['user_id' => $user->user_id, 'error' => $e->getMessage()]);
+
             return back()->with('swal_error_crud', 'Terjadi kesalahan pada server saat memperbarui profil.');
         }
     }

@@ -16,12 +16,13 @@ class IotWebhookControllerTest extends TestCase
     use RefreshDatabase;
 
     protected $device;
+
     protected $mac = '00:11:22:33:44:55';
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $area = ParkArea::create(['park_area_name' => 'Area', 'park_area_code' => 'AR', 'park_area_data' => '[]']);
         $subarea = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'Sub', 'current_count' => 10, 'park_subarea_polygon' => '[]']);
 
@@ -29,13 +30,13 @@ class IotWebhookControllerTest extends TestCase
             'device_mac_address' => $this->mac,
             'park_subarea_id' => $subarea->park_subarea_id,
         ]);
-        
+
         Event::fake([
             \App\Events\IotDeviceStatusChanged::class,
             \App\Events\SubareaStatusUpdated::class,
             \App\Events\IotCountUpdated::class,
             \App\Events\IotDetectionReceived::class,
-            \App\Events\IotCommandSent::class
+            \App\Events\IotCommandSent::class,
         ]);
     }
 
@@ -48,10 +49,10 @@ class IotWebhookControllerTest extends TestCase
                     'name' => 'member_added',
                     'channel' => 'presence-iot.device.001122334455',
                     'user_id' => '001122334455',
-                ]
-            ]
+                ],
+            ],
         ], [
-            'X-Reverb-Signature' => 'fake_signature'
+            'X-Reverb-Signature' => 'fake_signature',
         ]);
 
         $response->dump();
@@ -67,10 +68,10 @@ class IotWebhookControllerTest extends TestCase
                     'name' => 'member_removed',
                     'channel' => 'presence-iot.device.001122334455',
                     'user_id' => '001122334455',
-                ]
-            ]
+                ],
+            ],
         ], [
-            'X-Reverb-Signature' => 'fake_signature'
+            'X-Reverb-Signature' => 'fake_signature',
         ]);
 
         $response->assertStatus(200);

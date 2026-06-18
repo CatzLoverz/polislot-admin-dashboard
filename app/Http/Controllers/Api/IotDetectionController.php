@@ -445,6 +445,4 @@ class IotDetectionController extends Controller
 
         return response()->json(['status' => 'error', 'message' => 'Subarea not found.'], 404);
     }
-
-
 }

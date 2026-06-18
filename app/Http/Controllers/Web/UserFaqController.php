@@ -20,7 +20,6 @@ class UserFaqController extends Controller
     /**
      * Menampilkan halaman daftar semua FAQ.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -44,31 +43,31 @@ class UserFaqController extends Controller
 
                     // Tombol Edit
                     $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit"
-                                    data-id="' . $row->faq_id . '"
-                                    data-question="' . $faqQuestion . '"
-                                    data-answer="' . e($row->faq_answer) . '"
-                                    data-update-url="' . route('admin.user-faq.update', $row->faq_id) . '"
+                                    data-id="'.$row->faq_id.'"
+                                    data-question="'.$faqQuestion.'"
+                                    data-answer="'.e($row->faq_answer).'"
+                                    data-update-url="'.route('admin.user-faq.update', $row->faq_id).'"
                                     data-toggle="tooltip"
-                                    title="Edit ' . $faqQuestion . '">
+                                    title="Edit '.$faqQuestion.'">
                                     <i class="fa fa-edit"></i>
                                 </button>';
 
                     // Tombol Delete
-                    $btnDelete = '<form action="' . route('admin.user-faq.destroy', $row->faq_id) . '"
+                    $btnDelete = '<form action="'.route('admin.user-faq.destroy', $row->faq_id).'"
                                         method="POST"
                                         class="delete-form d-inline"
-                                        data-entity-name=" ' . $faqQuestion . '">
-                                        ' . csrf_field() . '
-                                        ' . method_field('DELETE') . '
+                                        data-entity-name=" '.$faqQuestion.'">
+                                        '.csrf_field().'
+                                        '.method_field('DELETE').'
                                         <button type="submit"
                                             class="btn btn-link btn-danger btn-lg"
                                             data-toggle="tooltip"
-                                            title="Hapus ' . $faqQuestion . '">
+                                            title="Hapus '.$faqQuestion.'">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                   </form>';
 
-                    return '<div class="form-button-action d-flex justify-content-center">' . $btnEdit . $btnDelete . '</div>';
+                    return '<div class="form-button-action d-flex justify-content-center">'.$btnEdit.$btnDelete.'</div>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -79,9 +78,6 @@ class UserFaqController extends Controller
 
     /**
      * Memproses penyimpanan data FAQ baru.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -89,13 +85,13 @@ class UserFaqController extends Controller
             return DB::transaction(function () use ($request) {
                 $validated = $request->validate([
                     'faq_question' => 'required|string|max:255',
-                    'faq_answer'   => 'required|string',
+                    'faq_answer' => 'required|string',
                 ]);
 
                 UserFaq::create([
-                    'user_id'      => Auth::id(),
+                    'user_id' => Auth::id(),
                     'faq_question' => $validated['faq_question'],
-                    'faq_answer'   => $validated['faq_answer'],
+                    'faq_answer' => $validated['faq_answer'],
                 ]);
 
                 Log::info('Data FAQ baru berhasil disimpan.');
@@ -108,6 +104,7 @@ class UserFaqController extends Controller
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menambahkan FAQ.')->withInput();
         }
     }
@@ -115,9 +112,7 @@ class UserFaqController extends Controller
     /**
      * Memproses pembaruan data FAQ.
      *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function update(Request $request, $id): RedirectResponse
     {
@@ -125,14 +120,14 @@ class UserFaqController extends Controller
             return DB::transaction(function () use ($request, $id) {
                 $validated = $request->validate([
                     'faq_question' => 'required|string|max:255',
-                    'faq_answer'   => 'required|string',
+                    'faq_answer' => 'required|string',
                 ]);
 
                 $faq = UserFaq::findOrFail($id);
 
                 $faq->update([
                     'faq_question' => $validated['faq_question'],
-                    'faq_answer'   => $validated['faq_answer'],
+                    'faq_answer' => $validated['faq_answer'],
                 ]);
 
                 Log::info('Data FAQ berhasil diperbarui.');
@@ -145,6 +140,7 @@ class UserFaqController extends Controller
             return back()->withErrors($e->errors())->withInput()->with('swal_error_crud', 'Validasi gagal, periksa inputan Anda.');
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal memperbarui FAQ.');
         }
     }
@@ -152,8 +148,7 @@ class UserFaqController extends Controller
     /**
      * Memproses penghapusan data FAQ.
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function destroy($id): RedirectResponse
     {
@@ -170,6 +165,7 @@ class UserFaqController extends Controller
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menghapus FAQ.');
         }
     }

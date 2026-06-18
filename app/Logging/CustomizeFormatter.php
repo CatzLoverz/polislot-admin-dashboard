@@ -22,8 +22,8 @@ class CustomizeFormatter
 
         foreach ($logger->getHandlers() as $handler) {
             // Pasang processor untuk scrub & trace
-            $handler->pushProcessor(new ScrubAndTraceProcessor());
-            
+            $handler->pushProcessor(new ScrubAndTraceProcessor);
+
             // Set format rapi untuk semua file log
             $handler->setFormatter($formatter);
         }

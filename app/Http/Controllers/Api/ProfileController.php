@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Rules\NotCurrentPassword;
 use App\Services\MissionService;
 use Exception;
@@ -27,33 +26,29 @@ class ProfileController extends Controller
 
     /**
      * Menampilkan data profil pengguna.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function show(Request $request): JsonResponse
     {
         try {
             $user = $request->user();
+
             return $this->sendSuccess('Data profil berhasil diambil.', $this->formatUser($user));
         } catch (Exception $e) {
-            Log::error('Gagal menampilkan profil. Error: ' . $e->getMessage());
+            Log::error('Gagal menampilkan profil. Error: '.$e->getMessage());
+
             return $this->sendError('Gagal mengambil data profil.', 500);
         }
     }
 
     /**
      * Memperbarui data profil pengguna.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function update(Request $request): JsonResponse
     {
         $user = $request->user();
         // Fix method PUT form-data
         if ($request->isMethod('put') || $request->isMethod('patch')) {
-             // Laravel handle ini otomatis, tapi request harus multipart/form-data
+            // Laravel handle ini otomatis, tapi request harus multipart/form-data
         }
 
         $rules = [
@@ -64,10 +59,10 @@ class ProfileController extends Controller
         if ($request->filled('new_password')) {
             $rules['current_password'] = ['required', 'current_password'];
             $rules['new_password'] = [
-                'required', 
-                'confirmed', 
+                'required',
+                'confirmed',
                 PasswordRule::min(8)->mixedCase()->numbers()->symbols(),
-                new NotCurrentPassword(),
+                new NotCurrentPassword,
             ];
         }
 
@@ -83,11 +78,11 @@ class ProfileController extends Controller
                     $user->avatar = $request->file('avatar')->store('avatars', 'public');
                     try {
                         $this->missionService->updateProgress($user->user_id, 'PROFILE_UPDATE');
-                
+
                     } catch (Exception $e) {
                         // Kita catch error misi agar tidak membatalkan update profil utama
                         // Log errornya saja untuk debugging
-                        Log::error("Gagal trigger misi: " . $e->getMessage());
+                        Log::error('Gagal trigger misi: '.$e->getMessage());
                     }
                 }
 
@@ -100,14 +95,17 @@ class ProfileController extends Controller
                 $user->name = $request->name;
                 $user->save();
                 Log::info('Profil berhasil diperbarui.');
+
                 return $this->sendSuccess('Profil berhasil diperbarui.', ['user' => $this->formatUser($user)]);
             });
 
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
+
             return $this->sendValidationError($e);
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return $this->sendError('Gagal memperbarui profil.', 500);
         }
     }

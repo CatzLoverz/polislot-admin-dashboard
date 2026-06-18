@@ -14,9 +14,9 @@ class RBACTest extends TestCase
     public function it_redirects_unauthenticated_web_users_to_login()
     {
         $request = Request::create('/admin/dashboard', 'GET');
-        
-        $middleware = new RBAC();
-        
+
+        $middleware = new RBAC;
+
         $response = $middleware->handle($request, function ($req) {
             return response('OK');
         });
@@ -29,9 +29,9 @@ class RBACTest extends TestCase
     {
         $request = Request::create('/api/test', 'GET');
         $request->headers->set('Accept', 'application/json');
-        
-        $middleware = new RBAC();
-        
+
+        $middleware = new RBAC;
+
         $response = $middleware->handle($request, function ($req) {
             return response('OK');
         });
@@ -47,9 +47,9 @@ class RBACTest extends TestCase
         $request->setUserResolver(function () use ($user) {
             return $user;
         });
-        
-        $middleware = new RBAC();
-        
+
+        $middleware = new RBAC;
+
         $response = $middleware->handle($request, function ($req) {
             return response('OK');
         }, 'admin');
@@ -66,9 +66,9 @@ class RBACTest extends TestCase
         $request->setUserResolver(function () use ($user) {
             return $user;
         });
-        
-        $middleware = new RBAC();
-        
+
+        $middleware = new RBAC;
+
         $response = $middleware->handle($request, function ($req) {
             return response('OK');
         }, 'admin');

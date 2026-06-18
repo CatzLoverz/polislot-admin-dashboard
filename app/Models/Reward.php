@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Reward extends Model
 {
     protected $table = 'rewards';
+
     protected $primaryKey = 'reward_id';
 
     protected $fillable = [
         'reward_type',
         'reward_name',
         'reward_point_required',
-        'reward_image'
+        'reward_image',
     ];
 
     protected $casts = [
@@ -26,8 +27,6 @@ class Reward extends Model
 
     /**
      * Relasi ke reward yang ditukarkan oleh pengguna (UserReward).
-     *
-     * @return HasMany
      */
     public function userRewards(): HasMany
     {

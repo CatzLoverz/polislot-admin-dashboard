@@ -41,7 +41,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {   
+    {
         Schema::dropIfExists('subarea_comments');
         Schema::dropIfExists('user_validations');
         Schema::dropIfExists('validations');

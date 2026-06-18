@@ -6,7 +6,6 @@ use App\Models\IotDevice;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Test;
@@ -17,7 +16,9 @@ class IotWsAuthControllerTest extends TestCase
     use RefreshDatabase;
 
     protected $device;
+
     protected $mac = '00:11:22:33:44:55';
+
     protected $secret = 'test-secret';
 
     protected function setUp(): void
@@ -34,13 +35,13 @@ class IotWsAuthControllerTest extends TestCase
             'device_mac_address' => $this->mac,
             'park_subarea_id' => $subarea->park_subarea_id,
         ]);
-        
+
         Event::fake([
             \App\Events\IotDeviceStatusChanged::class,
             \App\Events\SubareaStatusUpdated::class,
             \App\Events\IotCountUpdated::class,
             \App\Events\IotDetectionReceived::class,
-            \App\Events\IotCommandSent::class
+            \App\Events\IotCommandSent::class,
         ]);
     }
 
@@ -65,7 +66,7 @@ class IotWsAuthControllerTest extends TestCase
 
         $response->assertStatus(200)->assertJsonStructure(['auth', 'channel_data']);
     }
-    
+
     #[Test]
     public function authenticate_fails_with_invalid_mac()
     {

@@ -20,12 +20,12 @@ class ParkAmenityTest extends TestCase
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
 
         $amenity = ParkAmenity::create([
-            'park_subarea_id' => $sub->park_subarea_id, 
-            'park_amenity_name' => 'CCTV'
+            'park_subarea_id' => $sub->park_subarea_id,
+            'park_amenity_name' => 'CCTV',
         ]);
 
         $this->assertDatabaseHas('park_amenities', [
-            'park_amenity_name' => 'CCTV'
+            'park_amenity_name' => 'CCTV',
         ]);
     }
 
@@ -34,14 +34,14 @@ class ParkAmenityTest extends TestCase
     {
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
-        
+
         $amenity = ParkAmenity::create([
-            'park_subarea_id' => $sub->park_subarea_id, 
-            'park_amenity_name' => 'WiFi'
+            'park_subarea_id' => $sub->park_subarea_id,
+            'park_amenity_name' => 'WiFi',
         ]);
 
         $found = ParkAmenity::find($amenity->park_amenity_id);
-        
+
         $this->assertNotNull($found);
         $this->assertEquals('WiFi', $found->park_amenity_name);
     }
@@ -51,15 +51,15 @@ class ParkAmenityTest extends TestCase
     {
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
-        
+
         $amenity = ParkAmenity::create([
             'park_subarea_id' => $sub->park_subarea_id,
-            'park_amenity_name' => 'Toilet'
+            'park_amenity_name' => 'Toilet',
         ]);
         $amenity->update(['park_amenity_name' => 'Restroom']);
 
         $this->assertDatabaseHas('park_amenities', [
-            'park_amenity_name' => 'Restroom'
+            'park_amenity_name' => 'Restroom',
         ]);
     }
 
@@ -71,7 +71,7 @@ class ParkAmenityTest extends TestCase
 
         $amenity = ParkAmenity::create([
             'park_subarea_id' => $sub->park_subarea_id,
-            'park_amenity_name' => 'Musholla'
+            'park_amenity_name' => 'Musholla',
         ]);
         $amenity->delete();
 

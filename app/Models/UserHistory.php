@@ -11,6 +11,7 @@ class UserHistory extends Model
     use HasFactory;
 
     protected $table = 'user_histories';
+
     protected $primaryKey = 'user_history_id';
 
     protected $fillable = [
@@ -27,13 +28,13 @@ class UserHistory extends Model
     ];
 
     const TYPE_MISSION = 'mission';
+
     const TYPE_VALIDATION = 'validation';
+
     const TYPE_REDEEM = 'redeem';
 
     /**
      * Relasi ke pengguna terkait.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {

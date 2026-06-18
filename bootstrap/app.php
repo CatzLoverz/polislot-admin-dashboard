@@ -20,15 +20,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(TrustProxies::class);
         $middleware->alias([
-            # Default Laravel Middleware
+            // Default Laravel Middleware
             'auth' => Authenticate::class,
             'guest' => RedirectIfAuthenticated::class,
-            # Custom Middleware
+            // Custom Middleware
             'role' => RBAC::class,
-            # API Encyption
+            // API Encyption
             'encryptApi' => ApiEncryption::class,
         ]);
-        
+
         // PRIORITAS MIDDLEWARE
         // Pastikan ApiEncryption jalan DULUAN sebelum Auth
         $middleware->priority([

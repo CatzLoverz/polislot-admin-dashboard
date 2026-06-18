@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\IotDevice;
 use App\Models\ParkArea;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +20,6 @@ class ParkAreaController extends Controller
      * Menampilkan halaman daftar area parkir.
      * Menggunakan Yajra DataTables untuk memuat data.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -32,9 +30,9 @@ class ParkAreaController extends Controller
 
                 return DataTables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){
+                    ->addColumn('action', function ($row) {
                         $title = e($row->park_area_name);
-                        
+
                         // Tombol Detail/Kelola
                         $btnShow = '<a href="'.route('admin.park-area.show', $row->park_area_id).'" 
                                        class="btn btn-link btn-primary btn-lg" 
@@ -64,7 +62,8 @@ class ParkAreaController extends Controller
                     ->make(true);
 
             } catch (Exception $e) {
-                Log::error('Gagal memuat DataTables: ' . $e->getMessage());
+                Log::error('Gagal memuat DataTables: '.$e->getMessage());
+
                 return response()->json(['error' => 'Gagal memuat data.'], 500);
             }
         }
@@ -74,20 +73,16 @@ class ParkAreaController extends Controller
 
     /**
      * Menampilkan halaman form pembuatan area parkir baru.
-     *
-     * @return View
      */
     public function create(): View
     {
         $mapsApiKey = config('services.google.js_api_key');
+
         return view('Contents.ParkArea.create', compact('mapsApiKey'));
     }
 
     /**
      * Menyimpan data area parkir baru ke database.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -96,24 +91,24 @@ class ParkAreaController extends Controller
                 $validated = $request->validate([
                     'park_area_name' => 'required|string|max:255',
                     'park_area_code' => 'required|string|max:50|unique:park_areas,park_area_code',
-                    'center_lat'     => 'required|numeric',
-                    'center_lng'     => 'required|numeric',
-                    'zoom_level'     => 'required|integer',
+                    'center_lat' => 'required|numeric',
+                    'center_lng' => 'required|numeric',
+                    'zoom_level' => 'required|integer',
                 ]);
 
                 $parkArea = ParkArea::create([
                     'park_area_name' => $validated['park_area_name'],
                     'park_area_code' => $validated['park_area_code'],
                     'park_area_data' => [
-                        'lat'  => (float) $validated['center_lat'],
-                        'lng'  => (float) $validated['center_lng'],
-                        'zoom' => (int) $validated['zoom_level']
-                    ]
+                        'lat' => (float) $validated['center_lat'],
+                        'lng' => (float) $validated['center_lng'],
+                        'zoom' => (int) $validated['zoom_level'],
+                    ],
                 ]);
 
                 Log::info('Area parkir baru dibuat.', [
-                    'id' => $parkArea->park_area_id, 
-                    'code' => $parkArea->park_area_code
+                    'id' => $parkArea->park_area_id,
+                    'code' => $parkArea->park_area_code,
                 ]);
 
                 return redirect()->route('admin.park-area.index')
@@ -122,10 +117,12 @@ class ParkAreaController extends Controller
 
         } catch (ValidationException $e) {
             Log::error('Terjadi kesalahan', ['errors' => $e->errors()]);
+
             return back()->withErrors($e->errors())->withInput()
-                ->with('swal_error_crud', 'Validasi gagal, ' . $e->getMessage());
+                ->with('swal_error_crud', 'Validasi gagal, '.$e->getMessage());
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menyimpan data area.')->withInput();
         }
     }
@@ -133,7 +130,7 @@ class ParkAreaController extends Controller
     /**
      * Menampilkan detail area parkir dan peta interaktif untuk manajemen subarea.
      *
-     * @param int $id
+     * @param  int  $id
      * @return View|RedirectResponse
      */
     public function show($id)
@@ -143,12 +140,12 @@ class ParkAreaController extends Controller
             $area = ParkArea::with([
                 'parkSubarea.parkAmenity',
                 'parkSubarea.iotDevice',
-                'parkSubarea.userValidation' => function($query) {
+                'parkSubarea.userValidation' => function ($query) {
                     $query->orderBy('created_at', 'desc');
                 },
-                'parkSubarea.subareaComment.user' => function($query) {
+                'parkSubarea.subareaComment.user' => function ($query) {
                     $query->select('user_id', 'name', 'avatar');
-                }
+                },
             ])->findOrFail($id);
 
             $mapsApiKey = config('services.google.js_api_key');
@@ -172,6 +169,7 @@ class ParkAreaController extends Controller
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return redirect()->route('admin.park-area.index')
                 ->with('swal_error_crud', 'Terjadi kesalahan memuat data.');
         }
@@ -180,8 +178,7 @@ class ParkAreaController extends Controller
     /**
      * Menghapus area parkir beserta subareanya (Cascade Delete di DB).
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function destroy($id): RedirectResponse
     {
@@ -189,7 +186,7 @@ class ParkAreaController extends Controller
             return DB::transaction(function () use ($id) {
                 $area = ParkArea::findOrFail($id);
                 $name = $area->park_area_name;
-                
+
                 $area->delete();
 
                 Log::info('Area parkir dihapus.', ['id' => $id, 'name' => $name]);
@@ -200,6 +197,7 @@ class ParkAreaController extends Controller
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

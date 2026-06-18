@@ -1,22 +1,23 @@
 <?php
 
 namespace App\Models;
-use Exception;
 
+use App\Events\IotCommandSent;
+use App\Events\IotThresholdUpdated;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\Facades\MQTT;
-use App\Events\IotCommandSent;
-use App\Events\IotThresholdUpdated;
 
 class ParkSubarea extends Model
 {
     protected $table = 'park_subareas';
+
     protected $primaryKey = 'park_subarea_id';
-    
+
     protected $fillable = [
         'park_area_id',
         'park_subarea_name',
@@ -39,8 +40,6 @@ class ParkSubarea extends Model
 
     /**
      * Relasi ke area parkir utama.
-     *
-     * @return BelongsTo
      */
     public function parkArea(): BelongsTo
     {
@@ -49,8 +48,6 @@ class ParkSubarea extends Model
 
     /**
      * Relasi ke fasilitas yang ada di subarea ini.
-     *
-     * @return HasMany
      */
     public function parkAmenity(): HasMany
     {
@@ -59,8 +56,6 @@ class ParkSubarea extends Model
 
     /**
      * Relasi ke validasi parkir dari user.
-     *
-     * @return HasMany
      */
     public function userValidation(): HasMany
     {
@@ -69,8 +64,6 @@ class ParkSubarea extends Model
 
     /**
      * Relasi ke komentar subarea dari user.
-     *
-     * @return HasMany
      */
     public function subareaComment(): HasMany
     {
@@ -79,8 +72,6 @@ class ParkSubarea extends Model
 
     /**
      * Relasi ke perangkat IoT yang terpasang di subarea ini.
-     *
-     * @return HasOne
      */
     public function iotDevice(): HasOne
     {
@@ -90,8 +81,6 @@ class ParkSubarea extends Model
     /**
      * Mendapatkan status dan warna subarea terkini secara real-time.
      * Logika ini digabungkan dari controller untuk menghindari duplikasi kode.
-     * 
-     * @return array
      */
     public function getLiveStatus(): array
     {
@@ -135,7 +124,7 @@ class ParkSubarea extends Model
         if ($validVotes->isNotEmpty()) {
             $counts = $validVotes->countBy('user_validation_content');
             $maxVote = $counts->max();
-            $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
+            $candidates = $counts->keys()->filter(function ($key) use ($counts, $maxVote) {
                 return $counts[$key] === $maxVote;
             });
 
@@ -207,16 +196,16 @@ class ParkSubarea extends Model
         }
 
         return [
-            'status'                         => $status,
-            'status_color'                   => $status_color,
-            'is_validated'                   => $isValidated,
-            'has_user_report'                => $hasUserReport,
-            'has_online_iot'                 => $hasOnlineIot,
-            'validation_expires_at'          => $validationExpiresAt,
-            'last_validation_time'           => $lastValidationTime,
-            'validation_remaining_seconds'   => $validationRemainingSeconds,
-            'fallback_status'                => $fallbackStatus,
-            'fallback_status_color'          => $fallbackStatusColor,
+            'status' => $status,
+            'status_color' => $status_color,
+            'is_validated' => $isValidated,
+            'has_user_report' => $hasUserReport,
+            'has_online_iot' => $hasOnlineIot,
+            'validation_expires_at' => $validationExpiresAt,
+            'last_validation_time' => $lastValidationTime,
+            'validation_remaining_seconds' => $validationRemainingSeconds,
+            'fallback_status' => $fallbackStatus,
+            'fallback_status_color' => $fallbackStatusColor,
         ];
     }
 
@@ -241,9 +230,9 @@ class ParkSubarea extends Model
         // 2. Hitung mayoritas vote
         $counts = $validations->countBy('user_validation_content');
         $maxVote = $counts->max();
-        
+
         // Cari status dengan vote terbanyak
-        $candidates = $counts->keys()->filter(function($key) use ($counts, $maxVote) {
+        $candidates = $counts->keys()->filter(function ($key) use ($counts, $maxVote) {
             return $counts[$key] === $maxVote;
         });
 
@@ -268,7 +257,7 @@ class ParkSubarea extends Model
         // Hanya geser threshold jika status vote berbeda dengan status CV
         if ($votedStatus !== $cvStatus) {
             $alpha = 0.05; // Weight untuk WMA (5%)
-            
+
             if ($votedStatus === 'banyak') {
                 $this->threshold_banyak = ($this->threshold_banyak * (1 - $alpha)) + ($occupancy * $alpha);
             } elseif ($votedStatus === 'terbatas') {
@@ -293,16 +282,16 @@ class ParkSubarea extends Model
                 try {
                     broadcast(new IotThresholdUpdated($mac, $this->threshold_banyak, $this->threshold_terbatas));
                 } catch (Exception $e) {
-                    Log::warning("Failed to broadcast threshold update: " . $e->getMessage());
+                    Log::warning('Failed to broadcast threshold update: '.$e->getMessage());
                 }
 
                 $payloadData = [
-                    'action'            => 'update_config',
-                    'max_slots'         => (int) $this->max_slots,
+                    'action' => 'update_config',
+                    'max_slots' => (int) $this->max_slots,
                     'detection_polygon' => $this->detection_polygon ?? [],
-                    'threshold_banyak'  => (float) $this->threshold_banyak,
-                    'threshold_terbatas'=> (float) $this->threshold_terbatas,
-                    'timestamp'         => time(),
+                    'threshold_banyak' => (float) $this->threshold_banyak,
+                    'threshold_terbatas' => (float) $this->threshold_terbatas,
+                    'timestamp' => time(),
                 ];
 
                 // Generate signature
@@ -317,14 +306,14 @@ class ParkSubarea extends Model
                     $mqtt->publish($topic, $payload, 0);
                     $mqtt->disconnect();
                 } catch (Exception $e) {
-                    Log::warning("Failed to sync config via MQTT: " . $e->getMessage());
+                    Log::warning('Failed to sync config via MQTT: '.$e->getMessage());
                 }
 
                 // Broadcast WS
                 try {
                     broadcast(new IotCommandSent($mac, 'update_config', $payloadData, $payloadData['signature']));
                 } catch (Exception $e) {
-                    Log::warning("Failed to sync config via WS: " . $e->getMessage());
+                    Log::warning('Failed to sync config via WS: '.$e->getMessage());
                 }
             }
         }

@@ -19,7 +19,6 @@ class FeedbackCategoryController extends Controller
     /**
      * Menampilkan halaman daftar kategori feedback.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -29,10 +28,10 @@ class FeedbackCategoryController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->editColumn('created_at', function($row){
+                ->editColumn('created_at', function ($row) {
                     return $row->created_at ? $row->created_at->format('d M Y, H:i') : '-';
                 })
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $name = e($row->fbk_category_name);
 
                     // Tombol Edit (Trigger Modal)
@@ -44,7 +43,7 @@ class FeedbackCategoryController extends Controller
                                     title="Edit '.$name.'">
                                     <i class="fa fa-edit"></i>
                                 </button>';
-                    
+
                     // Tombol Hapus (SweetAlert)
                     $btnDelete = '<form action="'.route('admin.feedback-category.destroy', $row->fbk_category_id).'" 
                                         method="POST" 
@@ -71,9 +70,6 @@ class FeedbackCategoryController extends Controller
 
     /**
      * Memproses penyimpanan kategori baru.
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -88,7 +84,7 @@ class FeedbackCategoryController extends Controller
                 ]);
 
                 Log::info('Kategori baru berhasil disimpan.');
-                
+
                 return redirect()->route('admin.feedback-category.index')
                     ->with('swal_success_crud', 'Kategori berhasil ditambahkan.');
             });
@@ -98,6 +94,7 @@ class FeedbackCategoryController extends Controller
                 ->with('swal_error_crud', 'Validasi gagal, pastikan nama kategori belum ada.');
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menambahkan kategori.')->withInput();
         }
     }
@@ -105,9 +102,7 @@ class FeedbackCategoryController extends Controller
     /**
      * Memperbarui kategori.
      *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function update(Request $request, $id): RedirectResponse
     {
@@ -133,6 +128,7 @@ class FeedbackCategoryController extends Controller
                 ->with('swal_error_crud', 'Validasi gagal, nama kategori mungkin sudah ada.');
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal memperbarui data.');
         }
     }
@@ -140,15 +136,14 @@ class FeedbackCategoryController extends Controller
     /**
      * Menghapus kategori.
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
                 $category = FeedbackCategory::findOrFail($id);
-                
+
                 $category->delete();
 
                 Log::info('Kategori berhasil dihapus.');
@@ -159,6 +154,7 @@ class FeedbackCategoryController extends Controller
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

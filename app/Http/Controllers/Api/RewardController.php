@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use Exception;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reward;
 use App\Models\User;
 use App\Models\UserReward;
 use App\Services\HistoryService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +26,6 @@ class RewardController extends Controller
 
     /**
      * Mengambil daftar reward yang tersedia dan poin user saat ini.
-     *
-     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -62,9 +60,6 @@ class RewardController extends Controller
 
     /**
      * Melakukan penukaran reward (Redeem).
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function redeem(Request $request): JsonResponse
     {
@@ -85,6 +80,7 @@ class RewardController extends Controller
                 // Cek Poin Cukup
                 if ($user->current_points < $reward->reward_point_required) {
                     Log::warning("Poin tidak cukup. User: {$user->user_id}, Reward: {$reward->reward_id}");
+
                     return $this->sendError('Poin Anda tidak mencukupi untuk reward ini.', 422);
                 }
 
@@ -130,8 +126,6 @@ class RewardController extends Controller
 
     /**
      * Mengambil riwayat penukaran reward user.
-     *
-     * @return JsonResponse
      */
     public function history(): JsonResponse
     {

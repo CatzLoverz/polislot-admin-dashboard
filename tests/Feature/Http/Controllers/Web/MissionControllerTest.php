@@ -49,8 +49,8 @@ class MissionControllerTest extends TestCase
     public function update_modifies_mission()
     {
         $mission = Mission::create([
-            'mission_title' => 'Old', 
-            'mission_description' => 'Desc', 
+            'mission_title' => 'Old',
+            'mission_description' => 'Desc',
             'mission_points' => 10,
             'mission_type' => 'TARGET',
             'mission_metric_code' => 'LOGIN_ACTION',
@@ -71,7 +71,7 @@ class MissionControllerTest extends TestCase
             'mission_is_consecutive' => 0,
             'mission_is_active' => 1,
         ]);
-        
+
         $response->assertRedirect('/admin/missions')->assertSessionHas('swal_success_crud');
         $this->assertDatabaseHas('missions', ['mission_title' => 'New']);
     }
@@ -80,8 +80,8 @@ class MissionControllerTest extends TestCase
     public function destroy_deletes_mission()
     {
         $mission = Mission::create([
-            'mission_title' => 'To Delete', 
-            'mission_description' => 'Desc', 
+            'mission_title' => 'To Delete',
+            'mission_description' => 'Desc',
             'mission_points' => 10,
             'mission_type' => 'TARGET',
             'mission_metric_code' => 'LOGIN_ACTION',

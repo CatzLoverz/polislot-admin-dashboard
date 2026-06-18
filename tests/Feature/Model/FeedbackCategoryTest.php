@@ -17,7 +17,7 @@ class FeedbackCategoryTest extends TestCase
         $category = FeedbackCategory::create(['fbk_category_name' => 'UI/UX']);
 
         $this->assertDatabaseHas('feedback_categories', [
-            'fbk_category_name' => 'UI/UX'
+            'fbk_category_name' => 'UI/UX',
         ]);
     }
 
@@ -25,9 +25,9 @@ class FeedbackCategoryTest extends TestCase
     public function kategori_feedback_dapat_dibaca()
     {
         $category = FeedbackCategory::create(['fbk_category_name' => 'Read Test']);
-        
+
         $found = FeedbackCategory::find($category->fbk_category_id);
-        
+
         $this->assertNotNull($found);
         $this->assertEquals('Read Test', $found->fbk_category_name);
     }
@@ -40,7 +40,7 @@ class FeedbackCategoryTest extends TestCase
 
         $this->assertDatabaseHas('feedback_categories', [
             'fbk_category_id' => $category->fbk_category_id,
-            'fbk_category_name' => 'New Name'
+            'fbk_category_name' => 'New Name',
         ]);
     }
 
