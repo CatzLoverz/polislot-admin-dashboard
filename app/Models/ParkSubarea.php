@@ -230,6 +230,17 @@ class ParkSubarea extends Model
             return;
         }
 
+        
+        $device = $this->iotDevice;
+        if (!$device) {
+            return;
+        }
+        
+        $deviceStatus = IotDevice::syncStatus($device->device_mac_address);
+        if ($deviceStatus !== 'online') {
+            return; 
+        }
+
         // 1. Ambil semua validation dalam 5 menit terakhir
         $validations = $this->userValidation()
             ->where('created_at', '>=', now()->subMinutes(5))
