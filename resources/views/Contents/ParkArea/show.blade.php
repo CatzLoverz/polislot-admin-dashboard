@@ -89,6 +89,10 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
+                    <div class="bg-light p-2 text-center text-muted" style="font-size: 13px; border-bottom: 1px solid #ebedf2;">
+                        <i class="fas fa-info-circle text-primary mr-1"></i> 
+                        <strong>Tips:</strong> Geser titik (sudut) poligon di peta untuk mengubah bentuk. Klik kanan pada titik untuk menghapusnya.
+                    </div>
                     <div id="map" style="height: 650px; width: 100%; border-radius: 0 0 15px 15px; z-index: 1;"></div>
                 </div>
             </div>
@@ -399,6 +403,37 @@
             });
             
             polygonObjects[sub.park_subarea_id] = polygon;
+
+            // Hitung titik tengah (center) polygon untuk menempatkan label
+            let bounds = new google.maps.LatLngBounds();
+            sub.park_subarea_polygon.forEach(coord => {
+                bounds.extend(new google.maps.LatLng(parseFloat(coord.lat), parseFloat(coord.lng)));
+            });
+            let polygonCenter = bounds.getCenter();
+
+            // Buat elemen kustom untuk label nama subarea
+            const labelDiv = document.createElement("div");
+            labelDiv.style.backgroundColor = "rgba(255, 255, 255, 0.85)";
+            labelDiv.style.border = `2px solid ${polygonColor}`;
+            labelDiv.style.borderRadius = "6px";
+            labelDiv.style.padding = "2px 8px";
+            labelDiv.style.fontSize = "12px";
+            labelDiv.style.fontWeight = "bold";
+            labelDiv.style.color = "#333";
+            labelDiv.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
+            labelDiv.style.pointerEvents = "none"; // Biar klik tetap tembus ke polygon
+            labelDiv.style.whiteSpace = "nowrap";
+            labelDiv.innerText = sub.park_subarea_name;
+
+            const labelMarker = new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: polygonCenter,
+                content: labelDiv,
+                title: sub.park_subarea_name
+            });
+
+            if (!window.labelMarkers) window.labelMarkers = {};
+            window.labelMarkers[sub.park_subarea_id] = { marker: labelMarker, div: labelDiv };
 
             let infoWindow = new google.maps.InfoWindow({
                 content: `<b>${sub.park_subarea_name}</b>`
@@ -832,6 +867,11 @@
                 strokeColor: color,
                 fillColor: color
             });
+        }
+
+        // Update warna border label jika ada
+        if (window.labelMarkers && window.labelMarkers[subId]) {
+            window.labelMarkers[subId].div.style.border = `2px solid ${color}`;
         }
         
         // B. Update List Item di Kanan
