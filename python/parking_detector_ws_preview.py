@@ -21,6 +21,7 @@ import base64
 import asyncio
 import os
 import threading
+from dotenv import load_dotenv
 
 import cv2
 import numpy as np
@@ -30,6 +31,17 @@ import websockets
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from ultralytics import YOLO
+
+# Pastikan memuat .env dari folder yang sama dengan script
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(env_path)
+
+def get_env_or_fail(key):
+    val = os.getenv(key)
+    if val is None or val.strip() == "":
+        print(f"[-] FATAL ERROR: Variabel '{key}' tidak ditemukan atau kosong di file .env!")
+        sys.exit(1)
+    return val
 
 # ============================================================
 # KONFIGURASI IOT DEVICE (PARKING DETECTOR - WEBSOCKET DENGAN PREVIEW)
@@ -44,21 +56,24 @@ else:
         sys.exit(1)
 
 # Pengaturan Server Base URL (API endpoint HTTP POST)
-SERVER_BASE_URL = "http://127.0.0.1:8080" # Contoh: http://localhost:8000 atau domain produksi
+SERVER_BASE_URL = get_env_or_fail("SERVER_BASE_URL") # Contoh: http://localhost:8000 atau domain produksi
 
 # Pengaturan Reverb WebSocket (Sesuai setelan Reverb di Laravel .env)
-REVERB_HOST    = "127.0.0.1"
-REVERB_PORT    = 8080
-REVERB_SCHEME  = "ws"  # Gunakan "ws" untuk lokal, "wss" untuk tunnel produksi
+REVERB_HOST    = get_env_or_fail("REVERB_HOST")
+REVERB_PORT    = int(get_env_or_fail("REVERB_PORT"))
+REVERB_SCHEME  = get_env_or_fail("REVERB_SCHEME")  # Gunakan "ws" untuk lokal, "wss" untuk tunnel produksi
 
 # Keamanan (Harus SAMA persis dengan IOT_API_SECRET di Laravel .env)
-SHARED_SECRET = "pOl1sL0t_ioT_s3creT_k3y_2026"
+SHARED_SECRET = get_env_or_fail("SHARED_SECRET").strip().strip('"').strip("'")
 
 # Konfigurasi AI & Deteksi YOLOv8
-SOURCE = "0"            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
-YOLO_WEIGHTS = "yolov8n.pt"  # File weights model YOLOv8 (yolov8n.pt / custom model)
-CONFIDENCE_THRESHOLD = 0.4   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
-TARGET_CLASSES = [2, 3] # Filter index class YOLO: 2 = car (mobil), 3 = motorcycle (motor)
+SOURCE = get_env_or_fail("CAMERA_SOURCE")            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
+YOLO_WEIGHTS = get_env_or_fail("YOLO_WEIGHTS")  # File weights model YOLOv8 (yolov8n.pt / custom model)
+CONFIDENCE_THRESHOLD = float(get_env_or_fail("CONFIDENCE_THRESHOLD"))   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
+
+# Parsing TARGET_CLASSES (contoh di .env: 2,3)
+_target_classes_env = get_env_or_fail("TARGET_CLASSES")
+TARGET_CLASSES = [int(cls.strip()) for cls in _target_classes_env.split(',') if cls.strip().isdigit()] # Filter index class YOLO: 2 = car (mobil), 3 = motorcycle (motor)
 
 # ============================================================
 # KONFIGURASI API ENDPOINT & VARIABEL IN-MEMORY
@@ -68,7 +83,7 @@ API_SNAPSHOT_URL = f"{SERVER_BASE_URL}/api/iot/snapshot"
 API_COUNT_URL    = f"{SERVER_BASE_URL}/api/iot/count"
 API_CONFIG_URL   = f"{SERVER_BASE_URL}/api/iot/config"
 
-REVERB_APP_KEY = "xcubvd4inm14ayepjhro"
+REVERB_APP_KEY = get_env_or_fail("REVERB_APP_KEY")
 
 config_lock = threading.Lock()
 max_slots = 0

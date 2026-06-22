@@ -11,7 +11,19 @@ from Crypto.Util.Padding import pad
 import os
 import sys
 import threading
+from dotenv import load_dotenv
 from ultralytics import YOLO
+
+# Pastikan memuat .env dari folder yang sama dengan script
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(env_path)
+
+def get_env_or_fail(key):
+    val = os.getenv(key)
+    if val is None or val.strip() == "":
+        print(f"[-] FATAL ERROR: Variabel '{key}' tidak ditemukan atau kosong di file .env!")
+        sys.exit(1)
+    return val
 
 # ============================================================
 # KONFIGURASI IOT DEVICE (PARKING DETECTOR - MQTT DENGAN PREVIEW)
@@ -26,21 +38,24 @@ else:
         sys.exit(1)
 
 # Pengaturan Koneksi MQTT Broker
-BROKER = "mqtt.raihanatmaja.my.id"
-PORT = 443  # Cloudflare Tunnel menggunakan port 443 (HTTPS/WSS). Gunakan 1883 untuk local TCP.
+BROKER = get_env_or_fail("MQTT_BROKER")
+PORT = int(get_env_or_fail("MQTT_PORT"))  # Cloudflare Tunnel menggunakan port 443 (HTTPS/WSS). Gunakan 1883 untuk local TCP.
 
 # MQTT Authentication (sesuai dengan config Mosquitto broker)
-MQTT_USER = os.environ.get("MQTT_USER", "polislot_user")
-MQTT_PASSWORD = os.environ.get("MQTT_PASSWORD", "secure_password")
+MQTT_USER = get_env_or_fail("MQTT_USER")
+MQTT_PASSWORD = get_env_or_fail("MQTT_PASSWORD")
 
 # Keamanan (Harus SAMA persis dengan IOT_API_SECRET di Laravel .env)
-SHARED_SECRET = "pOl1sL0t_ioT_s3creT_k3y_2026"
+SHARED_SECRET = get_env_or_fail("SHARED_SECRET").strip().strip('"').strip("'")
 
 # Konfigurasi AI & Deteksi YOLOv8
-SOURCE = "0"            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
-YOLO_WEIGHTS = "yolov8n.pt"  # File weights model YOLOv8 (yolov8n.pt / custom model)
-CONFIDENCE_THRESHOLD = 0.4   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
-TARGET_CLASSES = [2, 3] # Filter index class YOLO: 2 = car (mobil), 3 = motorcycle (motor)
+SOURCE = get_env_or_fail("CAMERA_SOURCE")            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
+YOLO_WEIGHTS = get_env_or_fail("YOLO_WEIGHTS")  # File weights model YOLOv8 (yolov8n.pt / custom model)
+CONFIDENCE_THRESHOLD = float(get_env_or_fail("CONFIDENCE_THRESHOLD"))   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
+
+# Parsing TARGET_CLASSES (contoh di .env: 2,3)
+_target_classes_env = get_env_or_fail("TARGET_CLASSES")
+TARGET_CLASSES = [int(cls.strip()) for cls in _target_classes_env.split(',') if cls.strip().isdigit()] # Filter index class YOLO: 2 = car (mobil), 3 = motorcycle (motor)
 
 # ============================================================
 # KONFIGURASI TOPIK MQTT & VARIABEL IN-MEMORY
