@@ -77,16 +77,17 @@ class MissionController extends Controller
                 }
 
                 return [
-                    'mission_id' => $mission->mission_id,
-                    'title' => $mission->mission_title,
-                    'description' => $mission->mission_description,
-                    'points' => $mission->mission_points,
-                    'metric_code' => $mission->mission_metric_code,
-                    'threshold' => $mission->mission_threshold,
+                    'mission_id'    => $mission->mission_id,
+                    'title'         => $mission->mission_title,
+                    'description'   => $mission->mission_description,
+                    'points'        => $mission->mission_points,
+                    'metric_code'   => $mission->mission_metric_code,
+                    'mission_type'  => $mission->mission_type,
+                    'threshold'     => $mission->mission_threshold,
                     'current_value' => $currentValue,
-                    'percentage' => $percentage, // Ini yang dipakai UI Flutter
-                    'is_completed' => $isCompleted,
-                    'completed_at' => $completedAt ? Carbon::parse($completedAt)->format('d M Y, H:i') : null,
+                    'percentage'    => $percentage, // Ini yang dipakai UI Flutter
+                    'is_completed'  => $isCompleted,
+                    'completed_at'  => $completedAt ? Carbon::parse($completedAt)->format('d M Y, H:i') : null,
                 ];
             })->sortBy('is_completed')->values();
 
