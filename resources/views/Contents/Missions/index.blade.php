@@ -14,12 +14,12 @@
     cursor: pointer;
     transition: border-color 0.18s, background 0.18s;
     background: #fff;
-    /* Tidak ada height: 100% — biarkan konten menentukan tinggi */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     height: 100%;
+    width: 100%;
     box-sizing: border-box;
 }
 .radio-card:hover {
@@ -41,41 +41,30 @@
 }
 .radio-card .title {
     font-weight: 700;
-    font-size: 12px;
-    margin-bottom: 3px;
+    font-size: 13px;
+    margin-bottom: 4px;
     color: #333;
-    word-break: break-word;
+    word-break: normal;
+    overflow-wrap: break-word;
     text-align: center;
 }
 .radio-card .desc {
-    font-size: 10px;
+    font-size: 11px;
     color: #777;
     line-height: 1.4;
-    word-break: break-word;
+    word-break: normal;
     overflow-wrap: break-word;
     text-align: center;
-    white-space: normal;
 }
 
-/* === Card column containers — stretch agar semua kartu dalam satu baris sama tinggi === */
-.type-card-col,
-.cycle-card-col {
-    flex: 0 0 auto;
-    display: flex;       
-    flex-direction: column;
-}
-
-/* Label harus mengisi penuh tinggi kolom */
-.type-card-col > label,
-.cycle-card-col > label {
+/* === Container untuk menjaga tinggi kartu sama dalam satu baris === */
+.card-label-wrapper {
     display: flex;
-    flex: 1;
-}
-
-/* Baris kartu menggunakan align-items: stretch agar semua kolom sama tinggi */
-#typeCardsRow,
-#cycleCardsRow {
-    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 0;
+    cursor: pointer;
 }
 </style>
 @endpush
@@ -90,21 +79,23 @@
             </button>
         </div>
         <div class="card-body">
-            <table id="tableMission" class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th class="text-center">No</th>
-                        <th>Judul</th>
-                        <th>Tipe</th>
-                        <th>Detail Aturan</th>
-                        <th>Siklus Reset</th>
-                        <th>Reward</th>
-                        <th>Status</th>
-                        <th class="text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="tableMission" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th>Judul</th>
+                            <th>Tipe</th>
+                            <th>Detail Aturan</th>
+                            <th>Siklus Reset</th>
+                            <th>Reward</th>
+                            <th>Status</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -158,9 +149,9 @@
                             @endphp
                             @foreach($metrics as $code => $label)
                             <div class="col-md-4 mb-2">
-                                <label class="w-100 h-100 mb-0">
+                                <label class="card-label-wrapper">
                                     <input type="radio" name="mission_metric_code" value="{{ $code }}" class="radio-input" id="metric_{{ $code }}" required>
-                                    <div class="radio-card text-center">
+                                    <div class="radio-card p-2 text-center">
                                         <i class="{{ $metricDefs[$code]['icon'] ?? 'fas fa-star' }} icon"></i>
                                         <div class="title">{{ $metricDefs[$code]['label'] ?? $label }}</div>
                                         <div class="desc">{{ $metricDefs[$code]['desc'] ?? '' }}</div>
@@ -176,8 +167,8 @@
                         <label class="d-block mb-2">B. Tipe Perhitungan <span class="text-danger">*</span></label>
                         <div class="row justify-content-center" id="typeCardsRow">
                             {{-- TARGET --}}
-                            <div class="mb-2 type-card-col" id="colTypeTarget">
-                                <label class="w-100 h-100 mb-0">
+                            <div class="col-12 col-sm-6 col-md mb-2" id="colTypeTarget">
+                                <label class="card-label-wrapper">
                                     <input type="radio" name="mission_type" value="TARGET" class="radio-input" id="typeTarget" required>
                                     <div class="radio-card text-center p-2">
                                         <i class="fas fa-bullseye icon mb-1" style="font-size: 20px;"></i>
@@ -187,8 +178,8 @@
                                 </label>
                             </div>
                             {{-- SEQUENCE --}}
-                            <div class="mb-2 type-card-col" id="colTypeSequence">
-                                <label class="w-100 h-100 mb-0">
+                            <div class="col-12 col-sm-6 col-md mb-2" id="colTypeSequence">
+                                <label class="card-label-wrapper">
                                     <input type="radio" name="mission_type" value="SEQUENCE" class="radio-input" id="typeSequence" required>
                                     <div class="radio-card text-center p-2">
                                         <i class="fas fa-layer-group icon mb-1" style="font-size: 20px;"></i>
@@ -198,8 +189,8 @@
                                 </label>
                             </div>
                             {{-- SEQUENCE_STREAK --}}
-                            <div class="mb-2 type-card-col" id="colTypeStreak">
-                                <label class="w-100 h-100 mb-0">
+                            <div class="col-12 col-sm-6 col-md mb-2" id="colTypeStreak">
+                                <label class="card-label-wrapper">
                                     <input type="radio" name="mission_type" value="SEQUENCE_STREAK" class="radio-input" id="typeStreak" required>
                                     <div class="radio-card text-center p-2">
                                         <i class="fas fa-fire icon mb-1" style="font-size: 20px; color: #e74c3c;"></i>
@@ -224,12 +215,12 @@
                                 ];
                             @endphp
                             @foreach($cycles as $code => $label)
-                            <div class="mb-2 cycle-card-col" id="colCycle{{ $code }}">
-                                <label class="w-100 h-100 mb-0">
+                            <div class="col-12 col-sm-6 col-md mb-2" id="colCycle{{ $code }}">
+                                <label class="card-label-wrapper">
                                     <input type="radio" name="mission_reset_cycle" value="{{ $code }}" class="radio-input" id="cycle{{ $code }}" required>
                                     <div class="radio-card text-center p-2">
                                         <i class="{{ $cycleDefs[$code]['icon'] ?? 'fas fa-clock' }} icon mb-1" style="font-size: 18px;"></i>
-                                        <div class="title" style="font-size: 11px;">{{ $cycleDefs[$code]['label'] ?? $label }}</div>
+                                        <div class="title">{{ $cycleDefs[$code]['label'] ?? $label }}</div>
                                         <div class="desc">{{ $cycleDefs[$code]['desc'] ?? '' }}</div>
                                     </div>
                                 </label>
@@ -255,8 +246,8 @@
                     {{-- 4. Status Misi --}}
                     <h6 class="font-weight-bold text-primary mb-3"><i class="fas fa-toggle-on"></i> 4. Status Misi</h6>
                     <div class="row">
-                        <div class="col-6 mb-2">
-                            <label class="w-100 h-100 mb-0">
+                        <div class="col-12 col-sm-6 mb-2">
+                            <label class="card-label-wrapper">
                                 <input type="radio" name="mission_is_active" value="1" class="radio-input" id="statusActive" required>
                                 <div class="radio-card text-center p-2">
                                     <i class="fas fa-check-circle icon mb-1" style="font-size: 20px; color: #28a745;"></i>
@@ -265,8 +256,8 @@
                                 </div>
                             </label>
                         </div>
-                        <div class="col-6 mb-2">
-                            <label class="w-100 h-100 mb-0">
+                        <div class="col-12 col-sm-6 mb-2">
+                            <label class="card-label-wrapper">
                                 <input type="radio" name="mission_is_active" value="0" class="radio-input" id="statusInactive" required>
                                 <div class="radio-card text-center p-2">
                                     <i class="fas fa-pause-circle icon mb-1" style="font-size: 20px; color: #dc3545;"></i>
@@ -338,11 +329,7 @@ $(document).ready(function() {
         }
     };
 
-    /* ---- Compute equal card widths based on visible count ---- */
-    function setEqualWidth(selector, count) {
-        var pct = count > 0 ? Math.floor(100 / count) + '%' : '0%';
-        $(selector + ':visible').css('width', pct);
-    }
+
 
     /* ================================================================
      * Main adjust function — triggered on any radio change
@@ -385,13 +372,6 @@ $(document).ready(function() {
             $('input[name="mission_type"][value="' + rule.types[0] + '"]').prop('checked', true);
             currentType = rule.types[0];
         }
-        // Set equal width for visible type cards
-        var typeColWidth = visibleTypeCount > 0 ? (100 / visibleTypeCount).toFixed(4) + '%' : '0%';
-        $.each(typeColMap, function(val, colId) {
-            if (rule.types.indexOf(val) !== -1) {
-                $(colId).css('width', typeColWidth);
-            }
-        });
 
         /* --- C. Show / hide cycle cards --- */
         var allCycles = ['NONE', 'DAILY', 'WEEKLY', 'MONTHLY'];
@@ -413,13 +393,6 @@ $(document).ready(function() {
         if (!currentCycle || rule.cycles.indexOf(currentCycle) === -1) {
             $('input[name="mission_reset_cycle"][value="' + rule.cycles[0] + '"]').prop('checked', true);
         }
-        // Equal width for visible cycle cards
-        var cycleColWidth = visibleCycleCount > 0 ? (100 / visibleCycleCount).toFixed(4) + '%' : '0%';
-        allCycles.forEach(function(c) {
-            if (rule.cycles.indexOf(c) !== -1) {
-                $('#colCycle' + c).css('width', cycleColWidth);
-            }
-        });
 
         /* --- Threshold label & lock --- */
         if (currentType === 'TARGET') {

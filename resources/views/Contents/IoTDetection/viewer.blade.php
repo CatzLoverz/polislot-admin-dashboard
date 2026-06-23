@@ -109,18 +109,20 @@
     <div class="row mb-3">
         <div class="col-md-12">
             <div class="card shadow-sm">
-                <div class="card-body py-3 d-flex align-items-center">
-                    <i class="fas fa-microchip fa-lg text-primary mr-3"></i>
-                    <div class="mr-3">
-                        <label class="mb-0 font-weight-bold" for="device-selector">Pilih Perangkat IoT:</label>
-                        <div id="status-indicator" class="badge badge-{{ $initialStatus === 'online' ? 'success' : 'danger' }} ml-2">
-                            <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> {{ strtoupper($initialStatus) }}
+                <div class="card-body py-3 d-flex flex-column flex-md-row align-items-start align-items-md-center">
+                    <div class="d-flex align-items-center mb-2 mb-md-0">
+                        <i class="fas fa-microchip fa-lg text-primary mr-3"></i>
+                        <div class="mr-3">
+                            <label class="mb-0 font-weight-bold" for="device-selector">Pilih Perangkat IoT:</label>
+                            <div id="status-indicator" class="badge badge-{{ $initialStatus === 'online' ? 'success' : 'danger' }} ml-1">
+                                <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> {{ strtoupper($initialStatus) }}
+                            </div>
+                            <span class="badge badge-primary ml-1">
+                                <i class="fas fa-car mr-1"></i> Count: <strong id="current-count-badge">{{ $initialCount ?? 0 }}</strong>
+                            </span>
                         </div>
-                        <span class="badge badge-primary ml-2">
-                            <i class="fas fa-car mr-1"></i> Count: <strong id="current-count-badge">{{ $initialCount ?? 0 }}</strong>
-                        </span>
                     </div>
-                    <select class="form-control" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
+                    <select class="form-control mb-2 mb-md-0 w-100" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
                         @forelse($devices as $device)
                             <option value="{{ $device->device_mac_address }}" 
                                 {{ $targetMac === $device->device_mac_address ? 'selected' : '' }}>
@@ -134,7 +136,7 @@
                             <option value="" disabled selected>Tidak ada perangkat terdaftar</option>
                         @endforelse
                     </select>
-                    <span class="badge badge-info ml-3">
+                    <span class="badge badge-info ml-md-3 mt-2 mt-md-0">
                         <i class="fas fa-hdd mr-1"></i> {{ $devices->count() }} Perangkat
                     </span>
                 </div>
@@ -146,21 +148,21 @@
         {{-- Panel Kiri: Live Stream / Text Viewer --}}
         <div class="col-md-8">
             <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0 text-dark">
+                <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-2 mb-md-0 text-dark">
                         <i class="fas fa-satellite-dish mr-2"></i> Live Feed
                     </h4>
-                    <div class="d-flex align-items-center">
-                        <button class="btn btn-sm btn-success mr-1" id="btn-val-banyak" onclick="validateStream('banyak')">
+                    <div class="d-flex flex-wrap align-items-center">
+                        <button class="btn btn-sm btn-success m-1" id="btn-val-banyak" onclick="validateStream('banyak')">
                             <i class="fas fa-check-circle mr-1"></i> Banyak
                         </button>
-                        <button class="btn btn-sm btn-warning text-white mr-1" id="btn-val-terbatas" onclick="validateStream('terbatas')">
+                        <button class="btn btn-sm btn-warning text-white m-1" id="btn-val-terbatas" onclick="validateStream('terbatas')">
                             <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
                         </button>
-                        <button class="btn btn-sm btn-danger mr-2" id="btn-val-penuh" onclick="validateStream('penuh')">
+                        <button class="btn btn-sm btn-danger m-1" id="btn-val-penuh" onclick="validateStream('penuh')">
                             <i class="fas fa-times-circle mr-1"></i> Penuh
                         </button>
-                        <span class="badge badge-success" id="connection-status">
+                        <span class="badge badge-success m-1" id="connection-status">
                             <i class="fas fa-circle-notch fa-spin mr-1"></i> Menghubungkan...
                         </span>
                     </div>
@@ -239,17 +241,17 @@
                     
                     <div class="form-group p-0 text-dark">
                         <label class="font-weight-bold d-block">Polygon Bounding Box Deteksi (Multi-Zone)</label>
-                        <div class="btn-group mb-2" role="group">
-                            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-draw-mode" onclick="toggleDrawMode()">
+                        <div class="d-flex flex-wrap mb-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary m-1" id="btn-draw-mode" onclick="toggleDrawMode()">
                                 <i class="fas fa-edit"></i> Mode Menggambar
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="undoPoint()">
+                            <button type="button" class="btn btn-sm btn-outline-warning m-1" onclick="undoPoint()">
                                 <i class="fas fa-undo"></i> Batalkan Titik
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-success" onclick="closeCurrentPolygon()">
+                            <button type="button" class="btn btn-sm btn-outline-success m-1" onclick="closeCurrentPolygon()">
                                 <i class="fas fa-check"></i> Selesai Polygon
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearAllPolygons()">
+                            <button type="button" class="btn btn-sm btn-outline-danger m-1" onclick="clearAllPolygons()">
                                 <i class="fas fa-trash-alt"></i> Hapus Semua
                             </button>
                         </div>

@@ -1,16 +1,16 @@
 # Graph Report - polislot-admin-dashboard  (2026-06-23)
 
 ## Corpus Check
-- 232 files · ~79,696 words
+- 232 files · ~79,754 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1278 nodes · 2453 edges · 163 communities (132 shown, 31 thin omitted)
+- 1278 nodes · 2453 edges · 162 communities (132 shown, 30 thin omitted)
 - Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 187 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9fddadf1`
+- Built from commit: `d8388b06`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -73,7 +73,6 @@
 - [[_COMMUNITY_Community 123|Community 123]]
 - [[_COMMUNITY_Community 130|Community 130]]
 - [[_COMMUNITY_Community 135|Community 135]]
-- [[_COMMUNITY_Community 136|Community 136]]
 - [[_COMMUNITY_Community 137|Community 137]]
 - [[_COMMUNITY_Community 138|Community 138]]
 - [[_COMMUNITY_Community 139|Community 139]]
@@ -130,7 +129,7 @@
 - **Selenium Shared Login Flow** — mission_test_01_tambah_misi_test_add_mission, mission_test_02_ubah_misi_test_edit_mission, mission_test_03_hapus_misi_test_delete_mission, profil_test_01_view_profil_test_view_profile, profil_test_02_ubah_profil_test_edit_profile_name, reward_test_01_tambah_reward_test_add_reward, reward_test_02_ubah_reward_test_edit_reward, reward_test_03_hapus_reward_test_delete_reward, reward_test_04_view_verify_test_filter_verify_reward, userfaq_test_01_tambah_faq_test_add_faq, userfaq_test_02_ubah_faq_test_edit_faq, userfaq_test_03_hapus_faq_test_delete_faq [INFERRED 0.95]
 - **Selenium Driver Fixture Pattern** — mission_test_01_tambah_misi_driver, mission_test_02_ubah_misi_driver, mission_test_03_hapus_misi_driver, profil_test_01_view_profil_driver, profil_test_02_ubah_profil_driver, reward_test_01_tambah_reward_driver, reward_test_02_ubah_reward_driver, reward_test_03_hapus_reward_driver, reward_test_04_view_verify_driver, userfaq_test_01_tambah_faq_driver, userfaq_test_02_ubah_faq_driver, userfaq_test_03_hapus_faq_driver [INFERRED 0.95]
 
-## Communities (163 total, 31 thin omitted)
+## Communities (162 total, 30 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.06
@@ -329,8 +328,8 @@ Cohesion: 0.27
 Nodes (5): HasMany, Authenticatable, HasApiTokens, User, Notifiable
 
 ### Community 157 - "Community 157"
-Cohesion: 0.33
-Nodes (5): HasMany, BelongsTo, HasFactory, Mission, UserHistory
+Cohesion: 0.22
+Nodes (7): HasMany, BelongsTo, BelongsTo, HasFactory, Mission, UserHistory, UserMission
 
 ### Community 158 - "Community 158"
 Cohesion: 0.31
@@ -343,7 +342,7 @@ Nodes (3): RedirectResponse, Request, FeedbackCategoryController
 ## Knowledge Gaps
 - **138 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+133 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **31 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **30 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
