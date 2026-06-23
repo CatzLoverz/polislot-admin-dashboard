@@ -4,6 +4,82 @@
 @section('page_title', 'Manajemen Misi')
 @section('page_subtitle', 'Kelola daftar misi, aturan target, dan koin reward.')
 
+@push('styles')
+<style>
+/* === Radio Cards === */
+.radio-card {
+    border: 2px solid #ebeeef;
+    border-radius: 8px;
+    padding: 14px 8px;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+    background: #fff;
+    /* Tidak ada height: 100% — biarkan konten menentukan tinggi */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    box-sizing: border-box;
+}
+.radio-card:hover {
+    border-color: #b3d4fc;
+}
+.radio-input:checked + .radio-card {
+    border-color: #1572E8;
+    background-color: #f1f7ff;
+}
+.radio-input {
+    display: none;
+}
+.radio-card .icon {
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: #1572E8;
+    display: block;
+    flex-shrink: 0;
+}
+.radio-card .title {
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 3px;
+    color: #333;
+    word-break: break-word;
+    text-align: center;
+}
+.radio-card .desc {
+    font-size: 10px;
+    color: #777;
+    line-height: 1.4;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+    white-space: normal;
+}
+
+/* === Card column containers — stretch agar semua kartu dalam satu baris sama tinggi === */
+.type-card-col,
+.cycle-card-col {
+    flex: 0 0 auto;
+    display: flex;       
+    flex-direction: column;
+}
+
+/* Label harus mengisi penuh tinggi kolom */
+.type-card-col > label,
+.cycle-card-col > label {
+    display: flex;
+    flex: 1;
+}
+
+/* Baris kartu menggunakan align-items: stretch agar semua kolom sama tinggi */
+#typeCardsRow,
+#cycleCardsRow {
+    align-items: stretch;
+}
+</style>
+@endpush
+
 @section('content')
 <div class="page-inner mt--5">
     <div class="card">
@@ -141,10 +217,10 @@
                         <div class="row justify-content-center" id="cycleCardsRow">
                             @php
                                 $cycleDefs = [
-                                    'NONE'    => ['icon' => 'fas fa-infinity',       'label' => 'Tidak Reset'],
-                                    'DAILY'   => ['icon' => 'fas fa-sun',            'label' => 'Harian'],
-                                    'WEEKLY'  => ['icon' => 'fas fa-calendar-week',  'label' => 'Mingguan'],
-                                    'MONTHLY' => ['icon' => 'fas fa-calendar-alt',   'label' => 'Bulanan'],
+                                    'NONE'    => ['icon' => 'fas fa-infinity',     'label' => 'Tidak Reset',  'desc' => 'Misi hanya bisa diselesaikan sekali seumur hidup'],
+                                    'DAILY'   => ['icon' => 'fas fa-sun',          'label' => 'Harian',       'desc' => 'Progress direset setiap tengah malam (00:00)'],
+                                    'WEEKLY'  => ['icon' => 'fas fa-calendar',     'label' => 'Mingguan',     'desc' => 'Progress direset setiap hari Senin pagi'],
+                                    'MONTHLY' => ['icon' => 'fas fa-calendar-alt', 'label' => 'Bulanan',      'desc' => 'Progress direset setiap tanggal 1 bulan baru'],
                                 ];
                             @endphp
                             @foreach($cycles as $code => $label)
@@ -154,6 +230,7 @@
                                     <div class="radio-card text-center p-2">
                                         <i class="{{ $cycleDefs[$code]['icon'] ?? 'fas fa-clock' }} icon mb-1" style="font-size: 18px;"></i>
                                         <div class="title" style="font-size: 11px;">{{ $cycleDefs[$code]['label'] ?? $label }}</div>
+                                        <div class="desc">{{ $cycleDefs[$code]['desc'] ?? '' }}</div>
                                     </div>
                                 </label>
                             </div>
@@ -210,54 +287,6 @@
     </div>
 </div>
 @endsection
-
-@push('styles')
-<style>
-/* === Radio Cards === */
-.radio-card {
-    border: 2px solid #ebeeef;
-    border-radius: 8px;
-    padding: 14px 8px;
-    cursor: pointer;
-    transition: border-color 0.18s, background 0.18s;
-    height: 100%;
-    background: #fff;
-}
-.radio-card:hover {
-    border-color: #b3d4fc;
-}
-.radio-input:checked + .radio-card {
-    border-color: #1572E8;
-    background-color: #f1f7ff;
-}
-.radio-input {
-    display: none;
-}
-.radio-card .icon {
-    font-size: 22px;
-    margin-bottom: 6px;
-    color: #1572E8;
-    display: block;
-}
-.radio-card .title {
-    font-weight: 700;
-    font-size: 12px;
-    margin-bottom: 3px;
-    color: #333;
-}
-.radio-card .desc {
-    font-size: 10px;
-    color: #777;
-    line-height: 1.3;
-}
-
-/* === Type card columns — dynamic width === */
-.type-card-col,
-.cycle-card-col {
-    flex: 0 0 auto;
-}
-</style>
-@endpush
 
 @push('scripts')
 <script src="{{ asset('assets/js/plugin/datatables/datatables.min.js') }}"></script>

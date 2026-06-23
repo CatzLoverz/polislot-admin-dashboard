@@ -5,6 +5,8 @@
 @section('page_subtitle', 'Kelola konfigurasi deteksi parkir otomatis berdasarkan perangkat IoT yang terhubung.')
 
 @section('content')
+
+@push('styles')
 <style>
 .double-range-slider {
     position: absolute;
@@ -100,6 +102,8 @@
     border-color: #e9ecef !important;
 }
 </style>
+@endpush
+
 <div class="page-inner mt--5">
     {{-- Pemilihan Device --}}
     <div class="row mb-3">
