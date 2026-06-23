@@ -32,3 +32,4 @@ graphify-out/cache/
 .agent_out.log
 windows_terminal_bridge.ps1
 wsl_terminal_bridge.sh
+.graphify_python

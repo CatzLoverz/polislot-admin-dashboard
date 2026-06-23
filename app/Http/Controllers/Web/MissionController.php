@@ -20,7 +20,8 @@ class MissionController extends Controller
     /**
      * Menampilkan halaman daftar semua misi.
      *
-     * @return View|JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -31,20 +32,26 @@ class MissionController extends Controller
                 ->addIndexColumn()
                 ->editColumn('mission_points', fn ($row) => number_format($row->mission_points).' Poin')
                 ->editColumn('mission_type', function ($row) {
-                    $color = $row->mission_type === 'TARGET' ? 'info' : 'warning';
+                    $map = [
+                        'TARGET'          => ['color' => 'info',    'label' => 'TARGET'],
+                        'SEQUENCE'        => ['color' => 'warning',  'label' => 'SEQUENCE'],
+                        'SEQUENCE_STREAK' => ['color' => 'danger',   'label' => 'STREAK'],
+                    ];
+                    $badge = $map[$row->mission_type] ?? ['color' => 'secondary', 'label' => $row->mission_type];
 
-                    return "<span class='badge badge-{$color}'>{$row->mission_type}</span>";
+                    return "<span class='badge badge-{$badge['color']}'>{$badge['label']}</span>";
                 })
                 ->addColumn('cycle_info', function ($row) {
                     return Mission::CYCLES[$row->mission_reset_cycle] ?? $row->mission_reset_cycle;
                 })
                 ->addColumn('rules_detail', function ($row) {
+                    $metric = Mission::METRICS[$row->mission_metric_code] ?? $row->mission_metric_code;
                     if ($row->mission_type === 'TARGET') {
-                        return "Target: <b>{$row->mission_threshold}</b> <br><small class='text-muted'>Metric: {$row->mission_metric_code}</small>";
+                        return "Target: <b>{$row->mission_threshold}x</b> <br><small class='text-muted'>{$metric}</small>";
+                    } elseif ($row->mission_type === 'SEQUENCE') {
+                        return "Durasi: <b>{$row->mission_threshold} Hari</b> <span class='badge badge-secondary badge-sm'>Non-Streak</span><br><small class='text-muted'>{$metric}</small>";
                     } else {
-                        $mode = $row->mission_is_consecutive ? '(Berurut)' : '(Acak)';
-
-                        return "Durasi: <b>{$row->mission_threshold} Hari</b> {$mode} <br><small class='text-muted'>Metric: {$row->mission_metric_code}</small>";
+                        return "Durasi: <b>{$row->mission_threshold} Hari</b> <span class='badge badge-danger badge-sm'>Streak</span><br><small class='text-muted'>{$metric}</small>";
                     }
                 })
                 ->editColumn('mission_is_active', function ($row) {
@@ -53,7 +60,7 @@ class MissionController extends Controller
                         : '<span class="badge badge-danger">Non-Aktif</span>';
                 })
                 ->addColumn('action', function ($row) {
-                    $title = e($row->mission_title);
+                    $title    = e($row->mission_title);
                     $jsonData = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
 
                     $btnEdit = '<button class="btn btn-link btn-primary btn-lg btn-edit" 
@@ -85,32 +92,82 @@ class MissionController extends Controller
         }
 
         $metrics = Mission::METRICS;
-        $cycles = Mission::CYCLES;
+        $cycles  = Mission::CYCLES;
 
         return view('Contents.Missions.index', compact('metrics', 'cycles'));
     }
 
     /**
+     * Melakukan validasi aturan logika silang (cross-field) berdasarkan metric.
+     * Memastikan kombinasi mission_type, mission_reset_cycle, dan mission_threshold
+     * sesuai dengan aturan yang diizinkan per event metric.
+     *
+     * @param  string  $metric
+     * @param  string  $type
+     * @param  string  $cycle
+     * @param  int     $threshold
+     * @return array   Error messages jika tidak valid, array kosong jika valid.
+     */
+    private function validateCrossFieldRules(string $metric, string $type, string $cycle, int $threshold): array
+    {
+        $errors = [];
+
+        if ($metric === 'LOGIN_ACTION') {
+            // Login hanya boleh SEQUENCE atau SEQUENCE_STREAK
+            if ($type === 'TARGET') {
+                $errors['mission_type'] = 'Event Login hanya mendukung tipe SEQUENCE atau SEQUENCE STREAK.';
+            }
+        }
+
+        if ($metric === 'PROFILE_UPDATE') {
+            // Profile Update hanya boleh TARGET, cycle NONE, threshold 1
+            if ($type !== 'TARGET') {
+                $errors['mission_type'] = 'Event Perbarui Profil hanya mendukung tipe TARGET.';
+            }
+            if ($cycle !== 'NONE') {
+                $errors['mission_reset_cycle'] = 'Event Perbarui Profil hanya mendukung siklus Sekali Saja (NONE).';
+            }
+            if ($threshold !== 1) {
+                $errors['mission_threshold'] = 'Event Perbarui Profil hanya mendukung target 1 kali.';
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
      * Memproses penyimpanan data Misi baru.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($request) {
                 $validated = $request->validate([
-                    'mission_title' => 'required|string|max:255',
+                    'mission_title'       => 'required|string|max:255|unique:missions,mission_title',
                     'mission_description' => 'nullable|string',
-                    'mission_points' => 'required|integer|min:0',
-                    'mission_type' => 'required|in:TARGET,SEQUENCE',
+                    'mission_points'      => 'required|integer|min:0',
+                    'mission_type'        => ['required', Rule::in(array_keys(Mission::TYPES))],
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
                     'mission_reset_cycle' => ['required', Rule::in(array_keys(Mission::CYCLES))],
-                    'mission_threshold' => 'required|integer|min:1',
-                    'mission_is_consecutive' => 'nullable',
-                    'mission_is_active' => 'nullable',
+                    'mission_threshold'   => 'required|integer|min:1',
+                    'mission_is_active'   => 'nullable',
                 ]);
 
+                // Validasi logika silang (cross-field) per aturan metric
+                $crossErrors = $this->validateCrossFieldRules(
+                    $validated['mission_metric_code'],
+                    $validated['mission_type'],
+                    $validated['mission_reset_cycle'],
+                    (int) $validated['mission_threshold']
+                );
+                if (! empty($crossErrors)) {
+                    throw ValidationException::withMessages($crossErrors);
+                }
+
                 $validated['mission_is_active'] = $request->has('mission_is_active');
-                $validated['mission_is_consecutive'] = $request->has('mission_is_consecutive');
 
                 Mission::create($validated);
 
@@ -128,7 +185,9 @@ class MissionController extends Controller
     /**
      * Memproses pembaruan data Misi.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id): RedirectResponse
     {
@@ -137,19 +196,28 @@ class MissionController extends Controller
                 $mission = Mission::findOrFail($id);
 
                 $validated = $request->validate([
-                    'mission_title' => 'required|string|max:255',
+                    'mission_title'       => ['required', 'string', 'max:255', Rule::unique('missions', 'mission_title')->ignore($mission->mission_id, 'mission_id')],
                     'mission_description' => 'nullable|string',
-                    'mission_points' => 'required|integer|min:0',
-                    'mission_type' => 'required|in:TARGET,SEQUENCE',
+                    'mission_points'      => 'required|integer|min:0',
+                    'mission_type'        => ['required', Rule::in(array_keys(Mission::TYPES))],
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
                     'mission_reset_cycle' => ['required', Rule::in(array_keys(Mission::CYCLES))],
-                    'mission_threshold' => 'required|integer|min:1',
-                    'mission_is_consecutive' => 'nullable',
-                    'mission_is_active' => 'nullable',
+                    'mission_threshold'   => 'required|integer|min:1',
+                    'mission_is_active'   => 'nullable',
                 ]);
 
+                // Validasi logika silang (cross-field) per aturan metric
+                $crossErrors = $this->validateCrossFieldRules(
+                    $validated['mission_metric_code'],
+                    $validated['mission_type'],
+                    $validated['mission_reset_cycle'],
+                    (int) $validated['mission_threshold']
+                );
+                if (! empty($crossErrors)) {
+                    throw ValidationException::withMessages($crossErrors);
+                }
+
                 $validated['mission_is_active'] = $request->has('mission_is_active');
-                $validated['mission_is_consecutive'] = $request->has('mission_is_consecutive');
 
                 $mission->update($validated);
 
@@ -168,13 +236,14 @@ class MissionController extends Controller
      * Memproses penghapusan data Misi.
      *
      * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id): RedirectResponse
     {
         try {
             return DB::transaction(function () use ($id) {
                 $mission = Mission::findOrFail($id);
-                $title = $mission->mission_title;
+                $title   = $mission->mission_title;
 
                 $mission->delete();
 
@@ -190,3 +259,4 @@ class MissionController extends Controller
         }
     }
 }
+

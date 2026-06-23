@@ -103,42 +103,63 @@ class MissionService
             $shouldCheck = false;
 
             if ($mission->mission_type === 'TARGET') {
-                // Explicit Reset Handling untuk TARGET
+                // ============================================================
+                // TIPE: TARGET — Akumulasi total biasa, tidak peduli urutan hari
+                // ============================================================
                 if ($isReset) {
-                    // Jika baru saja direset (Ganti hari/minggu), mulai dari awal
+                    // Jika baru saja direset (ganti hari/minggu/bulan), mulai dari awal
                     $userMission->user_mission_current_value = $incrementValue;
                 } else {
                     // Akumulasi normal
                     $userMission->user_mission_current_value += $incrementValue;
                 }
                 $shouldCheck = true;
-            } elseif ($mission->mission_type === 'SEQUENCE') {
-                // Tipe Sequence: Butuh penanganan khusus saat Reset Siklus
 
+            } elseif ($mission->mission_type === 'SEQUENCE') {
+                // ============================================================
+                // TIPE: SEQUENCE (Non-Streak) — Progres per-hari, tidak harus berurut.
+                // Setiap hari yang unik dihitung +1, bolos tidak mereset progress.
+                // ============================================================
                 if ($isReset) {
-                    // KASUS A: Baru saja Reset Siklus (Misal: Senin Pagi)
-                    // Maka Streak dipaksa mulai dari 1 lagi.
+                    // KASUS A: Reset Siklus (misal ganti minggu/bulan) → mulai dari 1 lagi
                     $userMission->user_mission_current_value = 1;
                     $shouldCheck = true;
                 } elseif ($userMission->user_mission_current_value == 0) {
-                    // KASUS B: Baru pertama kali main
+                    // KASUS B: Baru pertama kali
                     $userMission->user_mission_current_value = 1;
                     $shouldCheck = true;
                 } elseif ($lastActionAt && $lastActionAt->isToday()) {
-                    // KASUS C: Anti-Spam (Sudah aksi hari ini, dan tidak ada reset)
-                    // Skip
+                    // KASUS C: Anti-Spam — sudah aksi hari ini, tidak ada reset. Skip.
+                } else {
+                    // KASUS D/E: Aksi hari lain (kemarin atau bolos > 1 hari)
+                    // Non-Streak: tetap akumulasi, bolos TIDAK memutus progress
+                    $userMission->user_mission_current_value += 1;
+                    $shouldCheck = true;
+                }
+
+            } elseif ($mission->mission_type === 'SEQUENCE_STREAK') {
+                // ============================================================
+                // TIPE: SEQUENCE_STREAK (Streak) — Progres per-hari, HARUS berurut.
+                // Bolos > 1 hari akan mereset progress ke 1 (mulai dari awal).
+                // ============================================================
+                if ($isReset) {
+                    // KASUS A: Reset Siklus (misal ganti minggu/bulan) → mulai dari 1 lagi
+                    $userMission->user_mission_current_value = 1;
+                    $shouldCheck = true;
+                } elseif ($userMission->user_mission_current_value == 0) {
+                    // KASUS B: Baru pertama kali
+                    $userMission->user_mission_current_value = 1;
+                    $shouldCheck = true;
+                } elseif ($lastActionAt && $lastActionAt->isToday()) {
+                    // KASUS C: Anti-Spam — sudah aksi hari ini. Skip.
                 } elseif ($lastActionAt && $lastActionAt->isYesterday()) {
-                    // KASUS D: Streak Lanjut (Aksi kemarin)
+                    // KASUS D: Streak Lanjut — aksi kemarin, hari ini lanjut
                     $userMission->user_mission_current_value += 1;
                     $shouldCheck = true;
                 } else {
-                    // KASUS E: Bolos > 1 hari (Streak Putus di tengah minggu)
-                    if ($mission->mission_is_consecutive) {
-                        $userMission->user_mission_current_value = 1;
-                        Log::info("Streak Reset: User {$userId} Mission {$mission->mission_id}");
-                    } else {
-                        $userMission->user_mission_current_value += 1; // Akumulasi Hari (Tidak Wajib Urut)
-                    }
+                    // KASUS E: Bolos > 1 hari → Streak Putus, reset ke 1
+                    $userMission->user_mission_current_value = 1;
+                    Log::info("Streak Reset (SEQUENCE_STREAK): User {$userId} Mission {$mission->mission_id}");
                     $shouldCheck = true;
                 }
             }

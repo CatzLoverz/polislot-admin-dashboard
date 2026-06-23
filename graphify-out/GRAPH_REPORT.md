@@ -1,16 +1,16 @@
-# Graph Report - polislot-admin-dashboard  (2026-06-18)
+# Graph Report - polislot-admin-dashboard  (2026-06-23)
 
 ## Corpus Check
-- 231 files · ~76,201 words
+- 232 files · ~79,696 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1242 nodes · 2341 edges · 156 communities (126 shown, 30 thin omitted)
+- 1278 nodes · 2453 edges · 163 communities (132 shown, 31 thin omitted)
 - Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 187 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `88877590`
+- Built from commit: `9fddadf1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -72,6 +72,7 @@
 - [[_COMMUNITY_Community 122|Community 122]]
 - [[_COMMUNITY_Community 123|Community 123]]
 - [[_COMMUNITY_Community 130|Community 130]]
+- [[_COMMUNITY_Community 135|Community 135]]
 - [[_COMMUNITY_Community 136|Community 136]]
 - [[_COMMUNITY_Community 137|Community 137]]
 - [[_COMMUNITY_Community 138|Community 138]]
@@ -87,23 +88,28 @@
 - [[_COMMUNITY_Community 148|Community 148]]
 - [[_COMMUNITY_Community 149|Community 149]]
 - [[_COMMUNITY_Community 150|Community 150]]
-- [[_COMMUNITY_Community 151|Community 151]]
-- [[_COMMUNITY_Community 152|Community 152]]
 - [[_COMMUNITY_Community 153|Community 153]]
 - [[_COMMUNITY_Community 154|Community 154]]
 - [[_COMMUNITY_Community 155|Community 155]]
+- [[_COMMUNITY_Community 156|Community 156]]
+- [[_COMMUNITY_Community 157|Community 157]]
+- [[_COMMUNITY_Community 158|Community 158]]
+- [[_COMMUNITY_Community 159|Community 159]]
+- [[_COMMUNITY_Community 162|Community 162]]
+- [[_COMMUNITY_Community 165|Community 165]]
+- [[_COMMUNITY_Community 166|Community 166]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `TestCase` - 113 edges
-2. `Controller` - 71 edges
-3. `Response` - 36 edges
-4. `AuthControllerTest` - 34 edges
-5. `Validation` - 29 edges
-6. `ParkSubarea` - 28 edges
-7. `AuthControllerTest` - 26 edges
-8. `UserMission` - 17 edges
-9. `ValidationException` - 16 edges
-10. `User` - 15 edges
+2. `ParkSubarea` - 71 edges
+3. `Controller` - 71 edges
+4. `Response` - 36 edges
+5. `AuthControllerTest` - 34 edges
+6. `Mission` - 30 edges
+7. `Validation` - 29 edges
+8. `AuthControllerTest` - 26 edges
+9. `UserMission` - 21 edges
+10. `ValidationException` - 18 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `BackupAuto` --rationale_for--> `Database Backup & Restore`  [INFERRED]
@@ -124,7 +130,7 @@
 - **Selenium Shared Login Flow** — mission_test_01_tambah_misi_test_add_mission, mission_test_02_ubah_misi_test_edit_mission, mission_test_03_hapus_misi_test_delete_mission, profil_test_01_view_profil_test_view_profile, profil_test_02_ubah_profil_test_edit_profile_name, reward_test_01_tambah_reward_test_add_reward, reward_test_02_ubah_reward_test_edit_reward, reward_test_03_hapus_reward_test_delete_reward, reward_test_04_view_verify_test_filter_verify_reward, userfaq_test_01_tambah_faq_test_add_faq, userfaq_test_02_ubah_faq_test_edit_faq, userfaq_test_03_hapus_faq_test_delete_faq [INFERRED 0.95]
 - **Selenium Driver Fixture Pattern** — mission_test_01_tambah_misi_driver, mission_test_02_ubah_misi_driver, mission_test_03_hapus_misi_driver, profil_test_01_view_profil_driver, profil_test_02_ubah_profil_driver, reward_test_01_tambah_reward_driver, reward_test_02_ubah_reward_driver, reward_test_03_hapus_reward_driver, reward_test_04_view_verify_driver, userfaq_test_01_tambah_faq_driver, userfaq_test_02_ubah_faq_driver, userfaq_test_03_hapus_faq_driver [INFERRED 0.95]
 
-## Communities (156 total, 30 thin omitted)
+## Communities (163 total, 31 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.06
@@ -135,8 +141,8 @@ Cohesion: 0.08
 Nodes (18): IotDetectionController, IotDetectionControllerTest, JsonResponse, Request, JsonResponse, Request, View, JsonResponse (+10 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.17
-Nodes (10): InfoBoardController, UserFaqController, JsonResponse, JsonResponse, JsonResponse, AuthorizesRequests, BaseController, Controller (+2 more)
+Cohesion: 0.15
+Nodes (11): FeedbackCategoryController, InfoBoardController, UserFaqController, JsonResponse, JsonResponse, JsonResponse, JsonResponse, AuthorizesRequests (+3 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.10
@@ -147,12 +153,12 @@ Cohesion: 0.09
 Nodes (20): HistoryService, RedirectResponse, Request, Command, BackupAuto, BackupClean, BackupDatabase, DbList (+12 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.08
-Nodes (19): AuthController, SubareaCommentController, JsonResponse, MissionService, Request, JsonResponse, Request, RedirectResponse (+11 more)
+Cohesion: 0.29
+Nodes (4): RedirectResponse, Request, View, AuthController
 
 ### Community 6 - "Community 6"
-Cohesion: 0.05
-Nodes (31): HasMany, BelongsTo, HasMany, BelongsTo, HasMany, HasMany, BelongsTo, HasMany (+23 more)
+Cohesion: 0.20
+Nodes (7): BelongsTo, BelongsTo, BelongsTo, Model, InfoBoard, ParkAmenity, UserReward
 
 ### Community 7 - "Community 7"
 Cohesion: 0.22
@@ -171,12 +177,12 @@ Cohesion: 0.11
 Nodes (16): Content, Dispatchable, Envelope, IotCommandSent, IotCountUpdated, IotDetectionReceived, IotDeviceStatusChanged, IotThresholdUpdated (+8 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.14
-Nodes (9): MissionController, JsonResponse, MissionService, HistoryService, Mission, UserMissionTest, MissionServiceTest, MissionService (+1 more)
+Cohesion: 0.23
+Nodes (6): HistoryService, Mission, UserMissionTest, MissionServiceTest, MissionService, UserMission
 
 ### Community 14 - "Community 14"
-Cohesion: 0.12
-Nodes (9): UserValidationController, UserValidationControllerTest, HistoryService, JsonResponse, MissionService, Request, UserValidationTest, ValidationTest (+1 more)
+Cohesion: 0.05
+Nodes (21): MapVisualizationController, SubareaCommentController, SubareaCommentControllerTest, UserValidationController, UserValidationControllerTest, JsonResponse, Request, JsonResponse (+13 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.32
@@ -187,12 +193,20 @@ Cohesion: 0.11
 Nodes (17): devDependencies, axios, concurrently, laravel-echo, laravel-vite-plugin, pusher-js, tailwindcss, @tailwindcss/vite (+9 more)
 
 ### Community 17 - "Community 17"
-Cohesion: 0.13
-Nodes (6): InfoBoardControllerTest, BaseTestCase, ExampleTest, UserTest, TestCase, ExampleTest
+Cohesion: 0.12
+Nodes (3): ParkAreaTest, UserTest, ExampleTest
+
+### Community 18 - "Community 18"
+Cohesion: 0.06
+Nodes (30): 1. Deployment Architecture, 2.1. Backend Server & Admin Dashboard (Via Docker - Recommended), 2.2. Backend Server (Instalasi Manual Lokal / XAMPP), 2.3. PoliSlot Mobile App (Flutter), 2.4. Perangkat Edge IoT (Parking Detector), 2. Installation Procedure, 3. Security Checklist, API & Komunikasi Data (+22 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.23
 Nodes (5): ProfileController, ProfileControllerTest, JsonResponse, MissionService, Request
+
+### Community 20 - "Community 20"
+Cohesion: 0.33
+Nodes (4): MissionController, MissionControllerTest, JsonResponse, MissionService
 
 ### Community 21 - "Community 21"
 Cohesion: 0.13
@@ -204,15 +218,11 @@ Nodes (5): JsonResponse, Request, View, DashboardController, DashboardController
 
 ### Community 23 - "Community 23"
 Cohesion: 0.10
-Nodes (19): 6. Generate Application Key, code:bash (docker compose exec app php artisan key:generate), 2. Generate RSA Keys (Wajib), 3. Instalasi Dependency, 4. Generate Application Key, 5. Migrasi Database & Seeding, 6. Setup Database Roles (RBAC), 8. Jalankan Aplikasi (+11 more)
+Nodes (20): 6. Generate Application Key, code:bash (docker compose exec app php artisan key:generate), code:ini (# Ganti dengan user "polislot_admin" yang dibuat di langkah ), 2. Generate RSA Keys (Wajib), 3. Instalasi Dependency, 4. Generate Application Key, 5. Migrasi Database & Seeding, 6. Setup Database Roles (RBAC) (+12 more)
 
 ### Community 24 - "Community 24"
 Cohesion: 0.08
-Nodes (25): Closure, Request, Closure, logrotate-entrypoint.sh script, Closure, Docker Compose Configuration, Logrotate Sidecar Container, Mosquitto MQTT Broker (+17 more)
-
-### Community 25 - "Community 25"
-Cohesion: 0.13
-Nodes (3): ParkAreaTest, ParkSubareaTest, ParkSubarea
+Nodes (24): Closure, Request, Closure, logrotate-entrypoint.sh script, Docker Compose Configuration, Logrotate Sidecar Container, Mosquitto MQTT Broker, Docker Installation Guide (+16 more)
 
 ### Community 26 - "Community 26"
 Cohesion: 0.32
@@ -231,36 +241,32 @@ Cohesion: 0.29
 Nodes (7): 1. Konfigurasi Environment (.env), code:ini (DB_CONNECTION=mariadb), code:ini (ADMIN_EMAIL=email_valid_anda@gmail.com), code:ini (MAIL_MAILER=smtp), code:ini (GOOGLE_MAPS_JS="isi_api_key_google_cloud_anda"), code:ini (TUNNEL_TOKEN="isi_token_cloudflare_tunnel_anda"), code:ini (MQTT_AUTH_USERNAME=MQTTPoliSlot)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.33
-Nodes (5): code:bash (chmod +x logrotate-entrypoint.sh), Instalasi dengan Docker, Khusus Pengguna Linux, Persiapan File Konfigurasi, Prasyarat
+Cohesion: 0.20
+Nodes (7): code:bash (chmod +x logrotate-entrypoint.sh), Instalasi dengan Docker, Khusus Pengguna Linux, Persiapan File Konfigurasi, Prasyarat, Instalasi Manual (Tanpa Docker), Prasyarat
 
 ### Community 36 - "Community 36"
-Cohesion: 0.13
-Nodes (10): RedirectResponse, Request, View, JsonResponse, RedirectResponse, Request, ParkAreaController, ParkAreaControllerTest (+2 more)
+Cohesion: 0.17
+Nodes (9): RedirectResponse, Request, View, JsonResponse, RedirectResponse, Request, ParkAreaController, ParkAreaControllerTest (+1 more)
 
 ### Community 37 - "Community 37"
 Cohesion: 0.33
 Nodes (5): 1. Import (Namespace / `use` Statement), 2. PHPDoc (Komentar Fungsi & Class), 3. Konvensi Penulisan Model (Eloquent), 4. Best Practices Laravel Lainnya, Aturan Standar Penulisan Kode PHP & Laravel (Coding Standards)
 
 ### Community 40 - "Community 40"
-Cohesion: 0.11
-Nodes (5): FeedbackCategoryControllerTest, MissionControllerTest, FeedbackCategoryTest, RewardTest, RefreshDatabase
+Cohesion: 0.08
+Nodes (11): FeedbackCategoryControllerTest, HistoryControllerTest, InfoBoardControllerTest, MapVisualizationControllerTest, BaseTestCase, FeedbackCategoryTest, RewardTest, UserRewardTest (+3 more)
 
 ### Community 41 - "Community 41"
-Cohesion: 0.67
-Nodes (3): code:ini (# Ganti dengan user "polislot_admin" yang dibuat di langkah ), 7. Atur Ulang Environment (.env) - PENTING, code:ini (# Ganti dengan user "polislot_admin")
-
-### Community 42 - "Community 42"
-Cohesion: 0.15
-Nodes (7): FeedbackController, FeedbackControllerTest, HistoryControllerTest, UserFaqControllerTest, JsonResponse, Request, WithoutMiddleware
+Cohesion: 0.34
+Nodes (4): AuthController, JsonResponse, MissionService, Request
 
 ### Community 46 - "Community 46"
 Cohesion: 0.20
 Nodes (6): BelongsTo, HasMany, UserFactory, Factory, IotDevice, static
 
-### Community 137 - "Community 137"
-Cohesion: 0.31
-Nodes (4): MapVisualizationController, MapVisualizationControllerTest, JsonResponse, Request
+### Community 135 - "Community 135"
+Cohesion: 0.70
+Nodes (3): HistoryController, JsonResponse, Request
 
 ### Community 138 - "Community 138"
 Cohesion: 0.33
@@ -271,8 +277,8 @@ Cohesion: 0.22
 Nodes (9): require, fakerphp/faker, laravel/framework, laravel/reverb, laravel/sanctum, laravel/tinker, php, php-mqtt/laravel-client (+1 more)
 
 ### Community 140 - "Community 140"
-Cohesion: 0.46
-Nodes (3): RedirectResponse, Request, MissionController
+Cohesion: 0.42
+Nodes (4): RedirectResponse, Request, ValidationException, MissionController
 
 ### Community 141 - "Community 141"
 Cohesion: 0.50
@@ -307,32 +313,52 @@ Cohesion: 0.53
 Nodes (3): RedirectResponse, Request, ValidationController
 
 ### Community 153 - "Community 153"
-Cohesion: 0.70
-Nodes (3): HistoryController, JsonResponse, Request
+Cohesion: 0.24
+Nodes (6): BelongsTo, HasMany, HasOne, evaluateThresholdShift, getLiveStatus, ParkSubarea
+
+### Community 154 - "Community 154"
+Cohesion: 0.46
+Nodes (3): RedirectResponse, Request, InfoBoardController
 
 ### Community 155 - "Community 155"
 Cohesion: 0.67
 Nodes (3): extra, laravel, dont-discover
 
+### Community 156 - "Community 156"
+Cohesion: 0.27
+Nodes (5): HasMany, Authenticatable, HasApiTokens, User, Notifiable
+
+### Community 157 - "Community 157"
+Cohesion: 0.33
+Nodes (5): HasMany, BelongsTo, HasFactory, Mission, UserHistory
+
+### Community 158 - "Community 158"
+Cohesion: 0.31
+Nodes (4): FeedbackController, FeedbackControllerTest, JsonResponse, Request
+
+### Community 159 - "Community 159"
+Cohesion: 0.46
+Nodes (3): RedirectResponse, Request, FeedbackCategoryController
+
 ## Knowledge Gaps
-- **115 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+110 more)
+- **138 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+133 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **30 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **31 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `TestCase` connect `Community 17` to `Community 1`, `Community 2`, `Community 3`, `Community 6`, `Community 8`, `Community 9`, `Community 138`, `Community 11`, `Community 137`, `Community 12`, `Community 14`, `Community 13`, `Community 18`, `Community 19`, `Community 20`, `Community 149`, `Community 150`, `Community 151`, `Community 24`, `Community 153`, `Community 154`, `Community 25`, `Community 152`, `Community 26`, `Community 22`, `Community 31`, `Community 32`, `Community 27`, `Community 33`, `Community 36`, `Community 38`, `Community 40`, `Community 42`?**
-  _High betweenness centrality (0.151) - this node is a cross-community bridge._
-- **Why does `Controller` connect `Community 2` to `Community 1`, `Community 3`, `Community 4`, `Community 5`, `Community 8`, `Community 9`, `Community 138`, `Community 137`, `Community 12`, `Community 140`, `Community 14`, `Community 141`, `Community 144`, `Community 15`, `Community 19`, `Community 20`, `Community 148`, `Community 22`, `Community 153`, `Community 154`, `Community 36`, `Community 42`?**
-  _High betweenness centrality (0.073) - this node is a cross-community bridge._
-- **Why does `ParkSubarea` connect `Community 25` to `Community 1`, `Community 36`, `Community 6`, `Community 137`, `Community 138`, `Community 9`, `Community 10`, `Community 14`, `Community 46`, `Community 17`, `Community 20`, `Community 150`, `Community 151`, `Community 22`?**
-  _High betweenness centrality (0.056) - this node is a cross-community bridge._
-- **Are the 34 inferred relationships involving `Response` (e.g. with `.receiveConfigQuery()` and `.receiveCount()`) actually correct?**
-  _`Response` has 34 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `TestCase` connect `Community 40` to `Community 1`, `Community 2`, `Community 3`, `Community 135`, `Community 8`, `Community 9`, `Community 138`, `Community 11`, `Community 12`, `Community 13`, `Community 14`, `Community 17`, `Community 19`, `Community 20`, `Community 149`, `Community 150`, `Community 22`, `Community 24`, `Community 25`, `Community 26`, `Community 27`, `Community 158`, `Community 31`, `Community 32`, `Community 33`, `Community 36`, `Community 38`, `Community 166`, `Community 42`?**
+  _High betweenness centrality (0.184) - this node is a cross-community bridge._
+- **Why does `API Encryption (RSA)` connect `Community 24` to `Community 40`?**
+  _High betweenness centrality (0.090) - this node is a cross-community bridge._
+- **Why does `Polislot Admin Dashboard` connect `Community 24` to `Community 34`, `Community 4`?**
+  _High betweenness centrality (0.079) - this node is a cross-community bridge._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
-  _119 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _142 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.06392405063291139 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05909351692484223 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.08246753246753247 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
+  _Cohesion score 0.1471861471861472 - nodes in this community are weakly interconnected._

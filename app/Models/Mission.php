@@ -17,15 +17,27 @@ class Mission extends Model
     // Konstanta untuk UI
     public const METRICS = [
         'VALIDATION_ACTION' => 'Melakukan Validasi Parkir',
-        'LOGIN_ACTION' => 'Membuka Aplikasi (Login)',
-        'PROFILE_UPDATE' => 'Memperbarui Profil (Avatar)',
+        'LOGIN_ACTION'      => 'Membuka Aplikasi (Login)',
+        'PROFILE_UPDATE'    => 'Memperbarui Profil (Avatar)',
     ];
 
     public const CYCLES = [
-        'NONE' => 'Sekali Saja (Tidak Reset)',
-        'DAILY' => 'Harian (Reset 00:00)',
-        'WEEKLY' => 'Mingguan (Reset Senin)',
+        'NONE'    => 'Sekali Saja (Tidak Reset)',
+        'DAILY'   => 'Harian (Reset 00:00)',
+        'WEEKLY'  => 'Mingguan (Reset Senin)',
         'MONTHLY' => 'Bulanan (Reset tgl 1)',
+    ];
+
+    /**
+     * Tipe perhitungan misi.
+     * TARGET         : Akumulasi biasa, bebas urutan hari.
+     * SEQUENCE       : Progres +1 per hari, tidak harus berturut-turut.
+     * SEQUENCE_STREAK: Progres +1 per hari, HARUS berturut-turut (streak).
+     */
+    public const TYPES = [
+        'TARGET'          => 'Target (Akumulasi)',
+        'SEQUENCE'        => 'Sequence (Non-Streak)',
+        'SEQUENCE_STREAK' => 'Sequence (Streak)',
     ];
 
     protected $fillable = [
@@ -36,14 +48,12 @@ class Mission extends Model
         'mission_reset_cycle',
         'mission_metric_code',
         'mission_threshold',
-        'mission_is_consecutive',
         'mission_is_active',
     ];
 
     protected $casts = [
-        'mission_points' => 'integer',
+        'mission_points'   => 'integer',
         'mission_threshold' => 'integer',
-        'mission_is_consecutive' => 'boolean',
         'mission_is_active' => 'boolean',
     ];
 
