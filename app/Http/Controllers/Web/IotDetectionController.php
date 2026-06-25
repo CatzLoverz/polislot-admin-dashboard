@@ -69,7 +69,7 @@ class IotDetectionController extends Controller
         }
 
         return view('Contents.IoTDetection.viewer', compact(
-            'devices', 'targetMac', 'initialStatus', 'maxSlots',
+            'devices', 'targetMac', 'initialStatus', 'maxSlots', 'selectedDevice',
             'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas', 'captures', 'initialCount',
             'validationExpiresAt', 'lastValidationTime', 'parkAreaId', 'parkSubareaId', 'isValidated', 'hasUserReport',
             'votedStatus', 'anchorCvStatus'

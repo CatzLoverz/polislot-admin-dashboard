@@ -112,8 +112,8 @@ class ParkSubareaController extends Controller
                 $subarea->update($dataToUpdate);
 
                 // === LOGIKA SYNC AMENITIES ===
-                if ($request->has('amenities')) {
-                    $newAmenities = $request->amenities ?? [];
+                if ($request->has('amenities_provided')) {
+                    $newAmenities = $request->input('amenities', []);
 
                     // 1. Hapus yang tidak ada di list baru
                     $subarea->parkAmenity()

@@ -108,8 +108,8 @@
                     <ul class="list-group list-group-flush subarea-list-container" style="max-height: 650px; overflow-y: auto; background-color: #f8f9fa;">
                         @forelse($area->parkSubarea as $sub)
                             <li class="list-group-item subarea-item" id="subarea-item-{{ $sub->park_subarea_id }}" data-id="{{ $sub->park_subarea_id }}" style="border-left: 5px solid {{ $sub->status_color }} !important;">
-                                <div class="d-flex justify-content-between align-items-start text-wrap">
-                                    <div style="width: 75%; max-width: 75%; word-wrap: break-word;">
+                                <div class="d-flex w-100 align-items-start">
+                                    <div style="width: 85%; word-wrap: break-word;" class="pr-1 text-wrap">
                                         <span class="font-weight-bold d-block text-dark subarea-name" style="font-size: 1.05rem;">{{ $sub->park_subarea_name }}</span>
                                         <small class="d-block mt-1 subarea-status-wrapper" style="font-weight: 600;">
                                             <span class="subarea-status-text" style="color: {{ $sub->status_color }}">
@@ -169,7 +169,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="d-flex flex-column align-items-center ml-1">
+                                    <div style="width: 15%;" class="d-flex flex-column align-items-center">
                                         @if($sub->iotDevice)
                                             {{-- Tombol Atur IoT --}}
                                             <a href="{{ route('admin.iot.index', ['mac' => $sub->iotDevice->device_mac_address]) }}" class="btn btn-icon btn-round btn-secondary btn-xs mb-1" 
@@ -285,7 +285,7 @@
                         <small class="text-muted">Isi MAC Address jika subarea ini dipasang perangkat IoT.</small>
                     </div>
                     <label>MAC Address (Opsional)</label>
-                    <input type="text" id="edit_device_mac" class="form-control" placeholder="Contoh: 00:1A:2B:3C:4D:5E">
+                    <input type="text" id="edit_device_mac" class="form-control" placeholder="Contoh: 00:1A:2B:3C:4D:5E" maxlength="17">
                 </div>
                 
                 <hr>
@@ -734,6 +734,7 @@
                 _token: "{{ csrf_token() }}", 
                 _method: "PUT", 
                 name: name,
+                amenities_provided: true,
                 amenities: tempAmenities,
                 device_mac_address: deviceMac
             },
@@ -1051,7 +1052,6 @@
     function initEcho() {
         if (typeof window.Echo !== 'undefined') {
             const areaId = "{{ $area->park_area_id }}";
-            
             // 1. Dengar event pembaruan subarea di area parkir ini (status, count, validasi, dll.)
             window.Echo.channel(`park-area.${areaId}`)
                 .listen('.subarea.updated', (e) => {
@@ -1238,6 +1238,14 @@
                     form.submit();
                 }
             });
+        });
+
+        // Event listener untuk otomatis format input MAC Address
+        $('#edit_device_mac').on('input', function(e) {
+            let val = e.target.value.replace(/[^a-fA-F0-9]/g, '').toUpperCase();
+            if (val.length > 12) val = val.substring(0, 12);
+            let formatted = val.match(/.{1,2}/g)?.join(':') || val;
+            e.target.value = formatted;
         });
     });
 </script>

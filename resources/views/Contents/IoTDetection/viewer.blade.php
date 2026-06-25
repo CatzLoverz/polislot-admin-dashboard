@@ -436,7 +436,7 @@
         const anchorCvStatusText = document.getElementById('anchor-cv-status-text');
         
         if (!reportContainer) return;
-        if (!lastValidationTime || !validationExpiresAt || (!isValidated && !hasUserReport)) {
+        if (!lastValidationTime || !validationExpiresAt) {
             reportContainer.style.display = 'none';
             return;
         }
@@ -472,6 +472,9 @@
             } else if (hasUserReport) {
                 if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
                 if (badgeBerbeda) badgeBerbeda.style.display = 'inline-block';
+            } else {
+                if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
+                if (badgeBerbeda) badgeBerbeda.style.display = 'none';
             }
         } else {
             reportContainer.style.display = 'none';
@@ -1321,9 +1324,9 @@
                 })
                 .listen('.count.updated', (e) => {
                     addLog(`Jumlah kendaraan terdeteksi: <strong>${e.count}</strong>`);
-                    const countBadge = document.getElementById('current-count-badge');
-                    if (countBadge) {
-                        countBadge.innerText = e.count;
+                    const countText = document.getElementById('realtime-count-text');
+                    if (countText) {
+                        countText.innerText = e.count;
                     }
                     if (typeof window.updateAvailabilityUI === 'function') window.updateAvailabilityUI();
                 })
@@ -1441,9 +1444,9 @@
 
             // Reset count badge ke 0 saat device offline
             // Ini memastikan UI konsisten dengan backend yang sudah reset current_count = 0
-            const countBadge = document.getElementById('current-count-badge');
-            if (countBadge) {
-                countBadge.innerText = '0';
+            const countText = document.getElementById('realtime-count-text');
+            if (countText) {
+                countText.innerText = '0';
             }
         }
     }
@@ -1512,7 +1515,7 @@
     
     // --- LOGIKA STATUS KETERSEDIAAN REAL-TIME ---
     function updateAvailabilityUI() {
-        const count = parseInt(document.getElementById('current-count-badge')?.innerText) || 0;
+        const count = parseInt(document.getElementById('realtime-count-text')?.innerText) || 0;
         const max = parseInt(document.getElementById('max-slots')?.value) || 1;
         const thBanyak = parseInt(document.getElementById('input-threshold-banyak')?.value) || 30;
         const thTerbatas = parseInt(document.getElementById('input-threshold-terbatas')?.value) || 80;
