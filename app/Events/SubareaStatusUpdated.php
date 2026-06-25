@@ -44,6 +44,10 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
 
     public $fallbackStatusColor;
 
+    public $votedStatus;
+
+    public $anchorCvStatus;
+
     /**
      * Create a new event instance.
      */
@@ -62,6 +66,8 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
         $this->validationRemainingSeconds = $live['validation_remaining_seconds'] ?? 0;
         $this->fallbackStatus = $live['fallback_status'] ?? 'netral';
         $this->fallbackStatusColor = $live['fallback_status_color'] ?? '#1572e8';
+        $this->votedStatus = $live['voted_status'] ?? null;
+        $this->anchorCvStatus = $live['anchor_cv_status'] ?? null;
 
         $this->currentCount = $subarea->current_count ?? 0;
         $this->maxSlots = $subarea->max_slots ?? 0;
@@ -83,6 +89,8 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
                 'validationRemainingSeconds' => $this->validationRemainingSeconds,
                 'fallbackStatus' => $this->fallbackStatus,
                 'fallbackStatusColor' => $this->fallbackStatusColor,
+                'votedStatus' => $this->votedStatus,
+                'anchorCvStatus' => $this->anchorCvStatus,
                 'commentCount' => $this->commentCount,
                 'timestamp' => time(),
             ];

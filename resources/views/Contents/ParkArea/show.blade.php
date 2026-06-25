@@ -170,6 +170,14 @@
                                     </div>
                                     
                                     <div class="d-flex align-items-center ml-1">
+                                        @if($sub->iotDevice)
+                                            {{-- Tombol Atur IoT --}}
+                                            <a href="{{ route('admin.iot.index', ['mac' => $sub->iotDevice->device_mac_address]) }}" class="btn btn-icon btn-round btn-secondary btn-xs mr-1" 
+                                                data-toggle="tooltip" title="Atur Konfigurasi IoT">
+                                                <i class="fas fa-microchip"></i>
+                                            </a>
+                                        @endif
+
                                         {{-- Tombol Lihat Komentar --}}
                                         <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mr-1 btn-comment-modal" 
                                             onclick="fetchAndOpenCommentModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}')"

@@ -109,36 +109,28 @@
     <div class="row mb-3">
         <div class="col-md-12">
             <div class="card shadow-sm">
-                <div class="card-body py-3 d-flex flex-column flex-md-row align-items-start align-items-md-center">
+                <div class="card-body py-3 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
                     <div class="d-flex align-items-center mb-2 mb-md-0">
-                        <i class="fas fa-microchip fa-lg text-primary mr-3"></i>
-                        <div class="mr-3">
-                            <label class="mb-0 font-weight-bold" for="device-selector">Pilih Perangkat IoT:</label>
-                            <div id="status-indicator" class="badge badge-{{ $initialStatus === 'online' ? 'success' : 'danger' }} ml-1">
-                                <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> {{ strtoupper($initialStatus) }}
-                            </div>
-                            <span class="badge badge-primary ml-1">
-                                <i class="fas fa-car mr-1"></i> Count: <strong id="current-count-badge">{{ $initialCount ?? 0 }}</strong>
+                        <i class="fas fa-microchip fa-2x text-primary mr-3"></i>
+                        <div>
+                            <h5 class="mb-0 font-weight-bold text-dark">
+                                @if(isset($selectedDevice) && $selectedDevice->subarea)
+                                    {{ $selectedDevice->subarea->parkArea->park_area_name ?? 'Area tidak diketahui' }}
+                                    / {{ $selectedDevice->subarea->park_subarea_name ?? 'Subarea tidak diketahui' }}
+                                @else
+                                    Perangkat IoT
+                                @endif
+                            </h5>
+                            <span class="text-muted" style="font-size: 13px;">
+                                MAC: <strong>{{ $targetMac }}</strong>
                             </span>
                         </div>
                     </div>
-                    <select class="form-control mb-2 mb-md-0 w-100" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
-                        @forelse($devices as $device)
-                            <option value="{{ $device->device_mac_address }}" 
-                                {{ $targetMac === $device->device_mac_address ? 'selected' : '' }}>
-                                {{ $device->device_mac_address }}
-                                @if($device->subarea)
-                                    — {{ $device->subarea->parkArea->park_area_name ?? 'Area tidak diketahui' }}
-                                    / {{ $device->subarea->park_subarea_name ?? 'Subarea tidak diketahui' }}
-                                @endif
-                            </option>
-                        @empty
-                            <option value="" disabled selected>Tidak ada perangkat terdaftar</option>
-                        @endforelse
-                    </select>
-                    <span class="badge badge-info ml-md-3 mt-2 mt-md-0">
-                        <i class="fas fa-hdd mr-1"></i> {{ $devices->count() }} Perangkat
-                    </span>
+                    <div>
+                        <div id="status-indicator" class="badge badge-{{ $initialStatus === 'online' ? 'success' : 'danger' }} ml-1" style="font-size: 13px; padding: 8px 12px;">
+                            <i class="fas fa-circle mr-1" style="font-size: 10px;"></i> {{ strtoupper($initialStatus) }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -256,47 +248,57 @@
                 <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
                     <div class="row align-items-center mb-3">
                         <div class="col-12 mb-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="font-weight-bold text-dark" style="font-size: 13px;">Ketersediaan:</span>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <span id="cv-status-text" class="font-weight-bold text-secondary" style="font-size: 16px;">
-                                    <i class="fas fa-spinner fa-spin mr-1"></i> MENGHITUNG...
-                                </span>
-                                <span id="validation-badge-tervalidasi" class="badge text-white ml-2" style="background-color: #31ce36; display: none; font-size: 10px; padding: 4px 6px;">
-                                    Tervalidasi
-                                </span>
-                                <span id="validation-badge-berbeda" class="badge text-white ml-2" style="background-color: #ffad46; display: none; font-size: 10px; padding: 4px 6px;">
-                                    Laporan Berbeda
-                                </span>
-                            </div>
-                            
-                            <div class="d-flex justify-content-between mt-1">
-                                <small class="text-muted" style="font-size: 11px;">
-                                    <span id="val-last-time-container" style="display: none;">
-                                        <i class="fas fa-history mr-1"></i> Validasi Terakhir: <span id="val-last-time">-</span>
+                            <!-- BLOK 1: Status AI (CV) -->
+                            <div class="p-3 mb-3 border rounded bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-robot mr-1 text-primary"></i> Status AI (CV):</span>
+                                    <small class="text-muted font-weight-bold" style="font-size: 11px;">
+                                        Terisi: <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span>/<span id="realtime-max-text">{{ $maxSlots }}</span> slot
+                                    </small>
+                                </div>
+                                <div class="d-flex align-items-center mt-2">
+                                    <span id="cv-status-text" class="font-weight-bold text-secondary" style="font-size: 16px;">
+                                        <i class="fas fa-spinner fa-spin mr-1"></i> MENGHITUNG...
                                     </span>
-                                </small>
-                                <small class="text-muted font-weight-bold" style="font-size: 11px;">
-                                    Terisi: <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span>/<span id="realtime-max-text">{{ $maxSlots }}</span> slot
-                                </small>
+                                </div>
+                                <div class="progress mt-2" style="height: 8px;">
+                                    <div id="availability-progress-bar" class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
                             </div>
-                            
-                            <div class="progress mt-1" style="height: 8px;">
-                                <div id="availability-progress-bar" class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+                            <!-- BLOK 2: Laporan Validasi -->
+                            <div id="val-report-container" class="p-3 border rounded" style="display: none; background-color: #fdfaf3;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-user-edit mr-1 text-warning"></i> Laporan Pengguna:</span>
+                                    <small class="text-muted" style="font-size: 11px;">
+                                        <i class="fas fa-history mr-1"></i> Terakhir: <span id="val-last-time">-</span>
+                                    </small>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span id="voted-status-text" class="font-weight-bold" style="font-size: 14px; text-transform: uppercase;">-</span>
+                                    <span id="validation-badge-tervalidasi" class="badge text-white ml-2" style="background-color: #31ce36; display: none; font-size: 10px; padding: 4px 6px;">
+                                        <i class="fas fa-check"></i> Tervalidasi
+                                    </span>
+                                    <span id="validation-badge-berbeda" class="badge text-white ml-2" style="background-color: #ffad46; display: none; font-size: 10px; padding: 4px 6px;">
+                                        <i class="fas fa-exclamation"></i> Laporan Berbeda
+                                    </span>
+                                </div>
+                                <div style="font-size: 11px;" class="text-muted">
+                                    Status AI saat laporan dibuat: <span id="anchor-cv-status-text" class="font-weight-bold text-dark" style="text-transform: uppercase;">-</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <hr>
                     <p class="small text-muted mb-2 text-center text-md-left">Simulasi validasi manual untuk menguji respons sistem:</p>
-                    <div class="d-flex flex-wrap justify-content-center justify-content-md-start">
-                        <button class="btn btn-sm btn-success m-1" id="btn-val-banyak" onclick="validateStream('banyak')">
+                    <div class="d-flex flex-column align-items-center align-items-md-start" style="max-width: 150px;">
+                        <button class="btn btn-sm btn-success mb-2 w-100 text-left" id="btn-val-banyak" onclick="validateStream('banyak')">
                             <i class="fas fa-check-circle mr-1"></i> Banyak
                         </button>
-                        <button class="btn btn-sm btn-warning text-white m-1" id="btn-val-terbatas" onclick="validateStream('terbatas')">
+                        <button class="btn btn-sm btn-warning text-white mb-2 w-100 text-left" id="btn-val-terbatas" onclick="validateStream('terbatas')">
                             <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
                         </button>
-                        <button class="btn btn-sm btn-danger m-1" id="btn-val-penuh" onclick="validateStream('penuh')">
+                        <button class="btn btn-sm btn-danger mb-2 w-100 text-left" id="btn-val-penuh" onclick="validateStream('penuh')">
                             <i class="fas fa-times-circle mr-1"></i> Penuh
                         </button>
                     </div>
@@ -415,17 +417,20 @@
     let isValidated = @json($isValidated ?? false);
     let hasUserReport = @json($hasUserReport ?? false);
 
+    let votedStatus = @json($votedStatus ?? null);
+    let anchorCvStatus = @json($anchorCvStatus ?? null);
+
     function updateValidationInfoUI() {
+        const reportContainer = document.getElementById('val-report-container');
         const badgeTervalidasi = document.getElementById('validation-badge-tervalidasi');
         const badgeBerbeda = document.getElementById('validation-badge-berbeda');
-        const timeContainer = document.getElementById('val-last-time-container');
         const timeText = document.getElementById('val-last-time');
+        const votedStatusText = document.getElementById('voted-status-text');
+        const anchorCvStatusText = document.getElementById('anchor-cv-status-text');
         
-        if (!timeContainer) return;
-        if (!lastValidationTime || !validationExpiresAt) {
-            timeContainer.style.display = 'none';
-            if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
-            if (badgeBerbeda) badgeBerbeda.style.display = 'none';
+        if (!reportContainer) return;
+        if (!lastValidationTime || !validationExpiresAt || (!isValidated && !hasUserReport)) {
+            reportContainer.style.display = 'none';
             return;
         }
         
@@ -434,8 +439,22 @@
         const startAt = new Date(lastValidationTime);
         
         if (now <= expiresAt) {
-            timeContainer.style.display = 'inline-block';
+            reportContainer.style.display = 'block';
             timeText.innerText = startAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            if (votedStatusText) {
+                votedStatusText.innerText = votedStatus ? votedStatus.toUpperCase() : '-';
+                if (votedStatus === 'banyak') votedStatusText.style.color = '#31ce36';
+                else if (votedStatus === 'terbatas') votedStatusText.style.color = '#ffad46';
+                else if (votedStatus === 'penuh') votedStatusText.style.color = '#f25961';
+                else votedStatusText.style.color = '#6861ce';
+            }
+            if (anchorCvStatusText) {
+                anchorCvStatusText.innerText = anchorCvStatus ? anchorCvStatus.toUpperCase() : '-';
+                if (anchorCvStatus === 'banyak') anchorCvStatusText.style.color = '#31ce36';
+                else if (anchorCvStatus === 'terbatas') anchorCvStatusText.style.color = '#ffad46';
+                else if (anchorCvStatus === 'penuh') anchorCvStatusText.style.color = '#f25961';
+                else anchorCvStatusText.style.color = '#6861ce';
+            }
 
             if (isValidated) {
                 if (badgeTervalidasi) badgeTervalidasi.style.display = 'inline-block';
@@ -445,9 +464,7 @@
                 if (badgeBerbeda) badgeBerbeda.style.display = 'inline-block';
             }
         } else {
-            timeContainer.style.display = 'none';
-            if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
-            if (badgeBerbeda) badgeBerbeda.style.display = 'none';
+            reportContainer.style.display = 'none';
         }
     }
 
@@ -1388,6 +1405,8 @@
                         hasUserReport = e.hasUserReport;
                         validationExpiresAt = e.validationExpiresAt;
                         lastValidationTime = e.lastValidationTime;
+                        votedStatus = e.votedStatus;
+                        anchorCvStatus = e.anchorCvStatus;
                         
                         if (typeof window.updateValidationInfoUI === 'function') {
                             window.updateValidationInfoUI();

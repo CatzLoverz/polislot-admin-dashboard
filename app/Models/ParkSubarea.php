@@ -119,6 +119,10 @@ class ParkSubarea extends Model
                 }
             }
         }
+        $isValidated = false;
+        $hasUserReport = false;
+        $votedStatus = null;
+        $anchorCvStatus = null;
 
         // 3. Bandingkan dengan hasil vote validasi pengguna
         if ($validVotes->isNotEmpty()) {
@@ -145,7 +149,6 @@ class ParkSubarea extends Model
 
             if ($hasOnlineIot) {
                 $latestVoteForAnchor = $validVotes->first(); // karena sudah di orderBy('created_at', 'desc')
-                $anchorCvStatus = null;
 
                 if ($latestVoteForAnchor) {
                     $capture = IotCapture::where('user_validation_id', $latestVoteForAnchor->user_validation_id)->first();
@@ -210,6 +213,8 @@ class ParkSubarea extends Model
         return [
             'status' => $status,
             'status_color' => $status_color,
+            'voted_status' => $votedStatus,
+            'anchor_cv_status' => $anchorCvStatus,
             'is_validated' => $isValidated,
             'has_user_report' => $hasUserReport,
             'has_online_iot' => $hasOnlineIot,

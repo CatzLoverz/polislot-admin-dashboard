@@ -154,11 +154,7 @@
                                     <p>Manajemen Area Parkir</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.iot.*') ? 'active' : '' }}">
-                                <a href="{{ route('admin.iot.index') }}"> <i class="fas fa-microchip"></i>
-                                    <span>Manajemen Konfigurasi Deteksi IoT</span>
-                                </a>
-                            </li>
+
                             @php
                                 $isGamificationActive = Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*');
                             @endphp
