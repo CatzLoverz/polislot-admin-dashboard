@@ -158,7 +158,7 @@ class MqttListenerCommand extends Command
 
                         if ($saveImage) {
                             // 3. Simpan gambar ke storage public
-                            $fileName = 'capture_'.time().'_'.str_replace(':', '', $payload['mac_address']).'.jpg';
+                            $fileName = 'capture_'.time().'_'.uniqid().'_'.str_replace(':', '', $payload['mac_address']).'.jpg';
                             $path = 'iot_captures/'.$fileName;
 
                             Storage::disk('public')->put($path, $decryptedImageBytes);
