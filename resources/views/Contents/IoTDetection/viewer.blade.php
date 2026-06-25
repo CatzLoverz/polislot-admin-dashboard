@@ -255,22 +255,36 @@
                 </div>
                 <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
                     <div class="row align-items-center mb-3">
-                        <div class="col-md-6 text-center text-md-left mb-2 mb-md-0">
-                            <span class="font-weight-bold d-block text-dark mb-1">Status Ketersediaan Saat Ini:</span>
-                            <div class="d-flex flex-column align-items-center align-items-md-start">
-                                <span id="realtime-availability-badge" class="badge badge-secondary mb-1" style="font-size: 14px; padding: 8px 12px;">
-                                    <i class="fas fa-spinner fa-spin mr-1"></i> Menghitung...
+                        <div class="col-12 mb-2">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="font-weight-bold text-dark" style="font-size: 13px;">Ketersediaan:</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <span id="cv-status-text" class="font-weight-bold text-secondary" style="font-size: 16px;">
+                                    <i class="fas fa-spinner fa-spin mr-1"></i> MENGHITUNG...
                                 </span>
-                                <small id="validation-info" class="text-muted" style="display: none; font-size: 11px;">
-                                    <i class="fas fa-clock mr-1"></i> Validasi: <span id="val-time-start">-</span> s/d <span id="val-time-end">-</span>
+                                <span id="validation-badge-tervalidasi" class="badge text-white ml-2" style="background-color: #31ce36; display: none; font-size: 10px; padding: 4px 6px;">
+                                    Tervalidasi
+                                </span>
+                                <span id="validation-badge-berbeda" class="badge text-white ml-2" style="background-color: #ffad46; display: none; font-size: 10px; padding: 4px 6px;">
+                                    Laporan Berbeda
+                                </span>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mt-1">
+                                <small class="text-muted" style="font-size: 11px;">
+                                    <span id="val-last-time-container" style="display: none;">
+                                        <i class="fas fa-history mr-1"></i> Validasi Terakhir: <span id="val-last-time">-</span>
+                                    </span>
+                                </small>
+                                <small class="text-muted font-weight-bold" style="font-size: 11px;">
+                                    Terisi: <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span>/<span id="realtime-max-text">{{ $maxSlots }}</span> slot
                                 </small>
                             </div>
-                        </div>
-                        <div class="col-md-6 text-center text-md-right">
-                            <span class="font-weight-bold d-block text-dark mb-1">Kapasitas Terisi:</span>
-                            <span class="badge badge-info" style="font-size: 14px; padding: 8px 12px;">
-                                <i class="fas fa-car mr-1"></i> <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span> / <span id="realtime-max-text">{{ $maxSlots }}</span>
-                            </span>
+                            
+                            <div class="progress mt-1" style="height: 8px;">
+                                <div id="availability-progress-bar" class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -398,15 +412,20 @@
 
     let lastValidationTime = @json($lastValidationTime ?? null);
     let validationExpiresAt = @json($validationExpiresAt ?? null);
+    let isValidated = @json($isValidated ?? false);
+    let hasUserReport = @json($hasUserReport ?? false);
 
     function updateValidationInfoUI() {
-        const infoEl = document.getElementById('validation-info');
-        const startEl = document.getElementById('val-time-start');
-        const endEl = document.getElementById('val-time-end');
+        const badgeTervalidasi = document.getElementById('validation-badge-tervalidasi');
+        const badgeBerbeda = document.getElementById('validation-badge-berbeda');
+        const timeContainer = document.getElementById('val-last-time-container');
+        const timeText = document.getElementById('val-last-time');
         
-        if (!infoEl) return;
+        if (!timeContainer) return;
         if (!lastValidationTime || !validationExpiresAt) {
-            infoEl.style.display = 'none';
+            timeContainer.style.display = 'none';
+            if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
+            if (badgeBerbeda) badgeBerbeda.style.display = 'none';
             return;
         }
         
@@ -415,11 +434,20 @@
         const startAt = new Date(lastValidationTime);
         
         if (now <= expiresAt) {
-            infoEl.style.display = 'block';
-            startEl.innerText = startAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            endEl.innerText = expiresAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            timeContainer.style.display = 'inline-block';
+            timeText.innerText = startAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+            if (isValidated) {
+                if (badgeTervalidasi) badgeTervalidasi.style.display = 'inline-block';
+                if (badgeBerbeda) badgeBerbeda.style.display = 'none';
+            } else if (hasUserReport) {
+                if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
+                if (badgeBerbeda) badgeBerbeda.style.display = 'inline-block';
+            }
         } else {
-            infoEl.style.display = 'none';
+            timeContainer.style.display = 'none';
+            if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
+            if (badgeBerbeda) badgeBerbeda.style.display = 'none';
         }
     }
 
@@ -1347,6 +1375,26 @@
                         addLog(`📡 Status ${e.status.toUpperCase()} diterima via MQTT/WS`);
                     }
                 });
+
+            // =====================================================
+            // PARK AREA CHANNEL — Realtime Validation Status
+            // =====================================================
+            @if(isset($parkAreaId) && $parkAreaId > 0)
+            window.Echo.channel('park-area.{{ $parkAreaId }}')
+                .listen('.subarea.updated', (e) => {
+                    // Cek apakah update ini untuk subarea perangkat yang sedang dilihat
+                    if (e.parkSubareaId === {{ $parkSubareaId ?? 0 }}) {
+                        isValidated = e.isValidated;
+                        hasUserReport = e.hasUserReport;
+                        validationExpiresAt = e.validationExpiresAt;
+                        lastValidationTime = e.lastValidationTime;
+                        
+                        if (typeof window.updateValidationInfoUI === 'function') {
+                            window.updateValidationInfoUI();
+                        }
+                    }
+                });
+            @endif
         } else {
             setTimeout(initStatusEcho, 500);
         }
@@ -1440,37 +1488,45 @@
         const thBanyak = parseInt(document.getElementById('input-threshold-banyak')?.value) || 30;
         const thTerbatas = parseInt(document.getElementById('input-threshold-terbatas')?.value) || 80;
 
-        const percentage = (count / max) * 100;
-        const badge = document.getElementById('realtime-availability-badge');
+        const percentage = Math.max(0, Math.min((count / max) * 100, 100));
+        const statusText = document.getElementById('cv-status-text');
         const countText = document.getElementById('realtime-count-text');
         const maxText = document.getElementById('realtime-max-text');
+        const progressBar = document.getElementById('availability-progress-bar');
 
         if (countText) countText.innerText = count;
         if (maxText) maxText.innerText = max;
 
-        if (badge) {
-            // Cek apakah ada validasi manual yang masih aktif
-            const now = new Date();
-            const expiresAt = validationExpiresAt ? new Date(validationExpiresAt) : new Date(0);
-            
-            // Jika ada validasi manual aktif, kita pertahankan teks dari manual validation
-            // Namun fallback perhitungan tetap kita sediakan (untuk antisipasi jika mau direset)
-            if (now <= expiresAt && badge.innerHTML.includes('(Validasi)')) {
-                return; // Biarkan badge validasi yang dioverride tetap tampil
-            }
+        if (progressBar) {
+            progressBar.style.width = percentage + '%';
+            progressBar.setAttribute('aria-valuenow', percentage);
+        }
 
+        if (statusText) {
             if (percentage >= thTerbatas) {
-                badge.className = "badge text-white mb-1";
-                badge.style.backgroundColor = "#f25961";
-                badge.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Penuh';
+                statusText.className = "font-weight-bold";
+                statusText.style.color = "#f25961";
+                statusText.innerHTML = '<i class="fas fa-times-circle mr-1"></i> PENUH';
+                if (progressBar) {
+                    progressBar.className = "progress-bar";
+                    progressBar.style.backgroundColor = "#f25961";
+                }
             } else if (percentage >= thBanyak) {
-                badge.className = "badge text-white mb-1";
-                badge.style.backgroundColor = "#ffad46";
-                badge.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Terbatas';
+                statusText.className = "font-weight-bold";
+                statusText.style.color = "#ffad46";
+                statusText.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> TERBATAS';
+                if (progressBar) {
+                    progressBar.className = "progress-bar";
+                    progressBar.style.backgroundColor = "#ffad46";
+                }
             } else {
-                badge.className = "badge text-white mb-1";
-                badge.style.backgroundColor = "#31ce36";
-                badge.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Banyak Tersedia';
+                statusText.className = "font-weight-bold";
+                statusText.style.color = "#31ce36";
+                statusText.innerHTML = '<i class="fas fa-check-circle mr-1"></i> BANYAK TERSEDIA';
+                if (progressBar) {
+                    progressBar.className = "progress-bar";
+                    progressBar.style.backgroundColor = "#31ce36";
+                }
             }
         }
     }

@@ -47,6 +47,10 @@ class IotDetectionController extends Controller
         $initialCount = $selectedDevice?->subarea?->current_count ?? 0;
 
         $liveStatusData = $selectedDevice?->subarea ? $selectedDevice->subarea->getLiveStatus() : [];
+        $parkAreaId = $selectedDevice?->subarea?->park_area_id ?? 0;
+        $parkSubareaId = $selectedDevice?->subarea?->park_subarea_id ?? 0;
+        $isValidated = $liveStatusData['is_validated'] ?? false;
+        $hasUserReport = $liveStatusData['has_user_report'] ?? false;
         $validationExpiresAt = $liveStatusData['validation_expires_at'] ?? null;
         $lastValidationTime = $liveStatusData['last_validation_time'] ?? null;
 
@@ -65,7 +69,7 @@ class IotDetectionController extends Controller
         return view('Contents.IoTDetection.viewer', compact(
             'devices', 'targetMac', 'initialStatus', 'maxSlots',
             'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas', 'captures', 'initialCount',
-            'validationExpiresAt', 'lastValidationTime'
+            'validationExpiresAt', 'lastValidationTime', 'parkAreaId', 'parkSubareaId', 'isValidated', 'hasUserReport'
         ));
     }
 
