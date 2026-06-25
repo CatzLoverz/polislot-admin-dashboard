@@ -13,9 +13,6 @@
 :80 {
     root * /var/www/html/public
 
-    # Force HSTS header
-    header Strict-Transport-Security "max-age=2592000; includeSubDomains;"
-
     # Reverse proxy WebSocket /app/* dan HTTP API /apps/* ke Reverb (internal port 8080)
     @websocket {
         path /app/* /apps/*

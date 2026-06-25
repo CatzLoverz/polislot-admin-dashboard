@@ -245,12 +245,7 @@
                             <button type="button" class="btn btn-sm btn-outline-primary m-1" id="btn-draw-mode" onclick="toggleDrawMode()">
                                 <i class="fas fa-edit"></i> Mode Menggambar
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-warning m-1" onclick="undoPoint()">
-                                <i class="fas fa-undo"></i> Batalkan Titik
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-success m-1" onclick="closeCurrentPolygon()">
-                                <i class="fas fa-check"></i> Selesai Polygon
-                            </button>
+
                             <button type="button" class="btn btn-sm btn-outline-danger m-1" onclick="clearAllPolygons()">
                                 <i class="fas fa-trash-alt"></i> Hapus Semua
                             </button>
@@ -723,12 +718,7 @@
         }
     }
 
-    function undoPoint() {
-        if (currentPoints.length > 0) {
-            currentPoints.pop();
-            draw();
-        }
-    }
+
 
     function closeCurrentPolygon() {
         if (currentPoints.length < 3) {
