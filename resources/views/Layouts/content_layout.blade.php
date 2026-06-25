@@ -149,7 +149,7 @@
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.park-area.*') ? 'active' : '' }}">
+                            <li class="nav-item {{ (Route::is('admin.park-area.*') || Route::is('admin.iot.*')) ? 'active' : '' }}">
                                 <a href="{{ Route('admin.park-area.index') }}"> <i class="fas fa-parking"></i>
                                     <p>Manajemen Area Parkir</p>
                                 </a>

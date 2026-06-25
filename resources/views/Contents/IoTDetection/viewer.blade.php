@@ -111,6 +111,11 @@
             <div class="card shadow-sm">
                 <div class="card-body py-3 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
                     <div class="d-flex align-items-center mb-2 mb-md-0">
+                        @if(isset($selectedDevice) && $selectedDevice->subarea)
+                            <a href="{{ route('admin.park-area.show', $selectedDevice->subarea->park_area_id) }}" class="btn btn-icon btn-round btn-light border mr-3" data-toggle="tooltip" title="Kembali ke Manajemen Subarea">
+                                <i class="fas fa-arrow-left"></i>
+                            </a>
+                        @endif
                         <i class="fas fa-microchip fa-2x text-primary mr-3"></i>
                         <div>
                             <h5 class="mb-0 font-weight-bold text-dark">
@@ -270,8 +275,9 @@
                             <div id="val-report-container" class="p-3 border rounded" style="display: none; background-color: #fdfaf3;">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-user-edit mr-1 text-warning"></i> Laporan Pengguna:</span>
-                                    <small class="text-muted" style="font-size: 11px;">
-                                        <i class="fas fa-history mr-1"></i> Terakhir: <span id="val-last-time">-</span>
+                                    <small class="text-muted text-right" style="font-size: 11px;">
+                                        <div class="mb-1"><i class="fas fa-history mr-1"></i> Terakhir: <span id="val-last-time">-</span></div>
+                                        <div><i class="fas fa-hourglass-half mr-1 text-danger"></i> Berakhir: <span id="val-expires-time" class="text-danger font-weight-bold">-</span></div>
                                     </small>
                                 </div>
                                 <div class="d-flex align-items-center mb-2">
@@ -425,6 +431,7 @@
         const badgeTervalidasi = document.getElementById('validation-badge-tervalidasi');
         const badgeBerbeda = document.getElementById('validation-badge-berbeda');
         const timeText = document.getElementById('val-last-time');
+        const expiresTimeText = document.getElementById('val-expires-time');
         const votedStatusText = document.getElementById('voted-status-text');
         const anchorCvStatusText = document.getElementById('anchor-cv-status-text');
         
@@ -441,6 +448,9 @@
         if (now <= expiresAt) {
             reportContainer.style.display = 'block';
             timeText.innerText = startAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            if (expiresTimeText) {
+                expiresTimeText.innerText = expiresAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            }
             if (votedStatusText) {
                 votedStatusText.innerText = votedStatus ? votedStatus.toUpperCase() : '-';
                 if (votedStatus === 'banyak') votedStatusText.style.color = '#31ce36';
@@ -1386,7 +1396,7 @@
             statusChannel = window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
                     console.log("📡 Status Received (MQTT/WS):", e);
-                    const selectedMac = document.getElementById('device-selector').value;
+                    const selectedMac = "{{ $targetMac }}";
                     if (e.macAddress.toLowerCase() === selectedMac.toLowerCase()) {
                         updateStatusUI(e.status);
                         addLog(`📡 Status ${e.status.toUpperCase()} diterima via MQTT/WS`);

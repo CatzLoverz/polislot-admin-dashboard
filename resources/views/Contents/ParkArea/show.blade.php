@@ -108,8 +108,8 @@
                     <ul class="list-group list-group-flush subarea-list-container" style="max-height: 650px; overflow-y: auto; background-color: #f8f9fa;">
                         @forelse($area->parkSubarea as $sub)
                             <li class="list-group-item subarea-item" id="subarea-item-{{ $sub->park_subarea_id }}" data-id="{{ $sub->park_subarea_id }}" style="border-left: 5px solid {{ $sub->status_color }} !important;">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div style="width: 65%;">
+                                <div class="d-flex justify-content-between align-items-start text-wrap">
+                                    <div style="width: 75%; max-width: 75%; word-wrap: break-word;">
                                         <span class="font-weight-bold d-block text-dark subarea-name" style="font-size: 1.05rem;">{{ $sub->park_subarea_name }}</span>
                                         <small class="d-block mt-1 subarea-status-wrapper" style="font-weight: 600;">
                                             <span class="subarea-status-text" style="color: {{ $sub->status_color }}">
@@ -169,17 +169,17 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="d-flex align-items-center ml-1">
+                                    <div class="d-flex flex-column align-items-center ml-1">
                                         @if($sub->iotDevice)
                                             {{-- Tombol Atur IoT --}}
-                                            <a href="{{ route('admin.iot.index', ['mac' => $sub->iotDevice->device_mac_address]) }}" class="btn btn-icon btn-round btn-secondary btn-xs mr-1" 
+                                            <a href="{{ route('admin.iot.index', ['mac' => $sub->iotDevice->device_mac_address]) }}" class="btn btn-icon btn-round btn-secondary btn-xs mb-1" 
                                                 data-toggle="tooltip" title="Atur Konfigurasi IoT">
                                                 <i class="fas fa-microchip"></i>
                                             </a>
                                         @endif
 
                                         {{-- Tombol Lihat Komentar --}}
-                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mr-1 btn-comment-modal" 
+                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mb-1 btn-comment-modal" 
                                             onclick="fetchAndOpenCommentModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}')"
                                             data-toggle="tooltip" title="Lihat Komentar">
                                             <i class="fas fa-comments"></i>
@@ -191,7 +191,7 @@
                                         </button>
 
                                         {{-- Tombol Edit (Existing) --}}
-                                        <button type="button" class="btn btn-icon btn-round btn-primary btn-xs mr-1" 
+                                        <button type="button" class="btn btn-icon btn-round btn-primary btn-xs mb-1" 
                                             onclick="openEditModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}', {{ json_encode($sub->parkAmenity) }}, {{ json_encode($sub->iotDevice) }})"
                                             data-toggle="tooltip" title="Edit Subarea">
                                             <i class="fa fa-edit"></i>
