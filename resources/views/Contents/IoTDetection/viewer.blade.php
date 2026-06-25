@@ -147,49 +147,52 @@
     <div class="row">
         {{-- Panel Kiri: Live Stream / Text Viewer --}}
         <div class="col-md-8">
-            <div class="card shadow-sm">
+            {{-- Panel Utama (Config & Live Feed Gabungan) --}}
+            <div class="card shadow-sm border-0">
                 <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center" style="border-radius: 15px 15px 0 0;">
                     <h4 class="card-title font-weight-bold mb-2 mb-md-0 text-dark">
-                        <i class="fas fa-satellite-dish mr-2"></i> Live Feed
+                        <i class="fas fa-cogs mr-2"></i> Pengaturan Deteksi & Threshold Subarea
                     </h4>
                     <div class="d-flex flex-wrap align-items-center">
-                        <button class="btn btn-sm btn-success m-1" id="btn-val-banyak" onclick="validateStream('banyak')">
-                            <i class="fas fa-check-circle mr-1"></i> Banyak
-                        </button>
-                        <button class="btn btn-sm btn-warning text-white m-1" id="btn-val-terbatas" onclick="validateStream('terbatas')">
-                            <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
-                        </button>
-                        <button class="btn btn-sm btn-danger m-1" id="btn-val-penuh" onclick="validateStream('penuh')">
-                            <i class="fas fa-times-circle mr-1"></i> Penuh
-                        </button>
                         <span class="badge badge-success m-1" id="connection-status">
                             <i class="fas fa-circle-notch fa-spin mr-1"></i> Menghubungkan...
                         </span>
                     </div>
                 </div>
-                <div class="card-body p-0 bg-light d-flex justify-content-center align-items-center" style="min-height: 400px; border-radius: 0 0 15px 15px;">
-                    <div id="feed-container" class="text-center p-4 w-100 h-100 position-relative d-flex justify-content-center align-items-center">
-                        <div id="placeholder-container">
-                            <i class="fas fa-image fa-4x text-muted mb-3"></i>
-                            <h5 class="text-muted" id="feed-placeholder">Menunggu data masuk dari MAC Address: <strong>{{ $targetMac }}</strong>...</h5>
+                <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
+                    
+                    {{-- Bagian Atas: Mode Menggambar & Hint --}}
+                    <div class="form-group p-0 text-dark mb-3">
+                        <div class="d-flex flex-wrap align-items-center mb-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary m-1" id="btn-draw-mode" onclick="toggleDrawMode()">
+                                <i class="fas fa-edit"></i> Mode Menggambar
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger m-1" onclick="clearAllPolygons()">
+                                <i class="fas fa-trash-alt"></i> Hapus Semua
+                            </button>
                         </div>
-                        <div id="canvas-container" class="position-relative d-none" style="max-width: 640px; margin: 0 auto;">
-                            <img id="live-image" src="" alt="Live Stream" class="img-fluid rounded shadow" style="max-height: 400px; display: block; width: 100%; height: auto;">
-                            <canvas id="drawing-canvas" class="position-absolute" style="top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: default; pointer-events: none;"></canvas>
+                        <div class="bg-light p-2 text-center text-muted" style="font-size: 13px; border-bottom: 1px solid #ebedf2; border-radius: 4px;">
+                            <i class="fas fa-info-circle text-primary mr-1"></i> 
+                            <strong>Tips:</strong> Saat Mode Menggambar aktif: klik kiri menaruh titik, klik titik pertama menutup, geser sudut mengubah bentuk, klik-kanan menghapus sudut, dan klik tengah garis menyisipkan sudut. Matikan mode menggambar untuk mengunci poligon.
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {{-- Panel Config Deteksi Subarea --}}
-            <div class="card shadow-sm mt-3 border-0">
-                <div class="card-header" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0 text-dark">
-                        <i class="fas fa-cogs mr-2"></i> Pengaturan Deteksi & Threshold Subarea
-                    </h4>
-                </div>
-                <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
-                    <div class="row text-dark">
+                    {{-- Bagian Tengah: Canvas/Live Feed --}}
+                    <div class="bg-light d-flex justify-content-center align-items-center mb-4" style="min-height: 400px; border-radius: 8px; border: 1px solid #ebedf2;">
+                        <div id="feed-container" class="text-center p-4 w-100 h-100 position-relative d-flex justify-content-center align-items-center">
+                            <div id="placeholder-container">
+                                <i class="fas fa-image fa-4x text-muted mb-3"></i>
+                                <h5 class="text-muted" id="feed-placeholder">Menunggu data masuk dari MAC Address: <strong>{{ $targetMac }}</strong>...</h5>
+                            </div>
+                            <div id="canvas-container" class="position-relative d-none" style="max-width: 640px; margin: 0 auto;">
+                                <img id="live-image" src="" alt="Live Stream" class="img-fluid rounded shadow" style="max-height: 400px; display: block; width: 100%; height: auto;">
+                                <canvas id="drawing-canvas" class="position-absolute" style="top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: default; pointer-events: auto;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{-- Bagian Bawah: Threshold Config & Simpan --}}
+                    <div class="row text-dark mb-3">
                         <div class="col-md-3">
                             <div class="form-group p-0">
                                 <label class="font-weight-bold" for="max-slots">Kapasitas Maksimal (Max Slot)</label>
@@ -237,27 +240,52 @@
                         </div>
                     </div>
                     
-                    <hr>
-                    
-                    <div class="form-group p-0 text-dark">
-                        <label class="font-weight-bold d-block">Polygon Bounding Box Deteksi (Multi-Zone)</label>
-                        <div class="d-flex flex-wrap mb-2">
-                            <button type="button" class="btn btn-sm btn-outline-primary m-1" id="btn-draw-mode" onclick="toggleDrawMode()">
-                                <i class="fas fa-edit"></i> Mode Menggambar
-                            </button>
-
-                            <button type="button" class="btn btn-sm btn-outline-danger m-1" onclick="clearAllPolygons()">
-                                <i class="fas fa-trash-alt"></i> Hapus Semua
-                            </button>
-                        </div>
-                        <small class="text-muted d-block mb-3">
-                            <i class="fas fa-info-circle mr-1"></i> Klik kiri untuk menaruh titik (min 3). <strong>Klik titik pertama</strong> untuk menutup, <strong>geser sudut</strong> untuk mengubah bentuk, <strong>klik-kanan sudut</strong> untuk menghapus, dan klik tengah garis untuk menyisipkan sudut baru. Anda dapat menggambar lebih dari satu zona deteksi.
-                        </small>
-                    </div>
-                    
                     <button class="btn btn-primary btn-block btn-round" onclick="saveDetectionConfig()">
                         <i class="fas fa-save mr-1"></i> Simpan Setelan Deteksi ke Server
                     </button>
+                </div>
+            </div>
+
+            {{-- Panel Simulasi Validasi & Status Subarea (Baru) --}}
+            <div class="card shadow-sm mt-3 border-0">
+                <div class="card-header" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0 text-dark">
+                        <i class="fas fa-vial mr-2"></i> Simulasi Validasi & Status Subarea
+                    </h4>
+                </div>
+                <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
+                    <div class="row align-items-center mb-3">
+                        <div class="col-md-6 text-center text-md-left mb-2 mb-md-0">
+                            <span class="font-weight-bold d-block text-dark mb-1">Status Ketersediaan Saat Ini:</span>
+                            <div class="d-flex flex-column align-items-center align-items-md-start">
+                                <span id="realtime-availability-badge" class="badge badge-secondary mb-1" style="font-size: 14px; padding: 8px 12px;">
+                                    <i class="fas fa-spinner fa-spin mr-1"></i> Menghitung...
+                                </span>
+                                <small id="validation-info" class="text-muted" style="display: none; font-size: 11px;">
+                                    <i class="fas fa-clock mr-1"></i> Validasi: <span id="val-time-start">-</span> s/d <span id="val-time-end">-</span>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center text-md-right">
+                            <span class="font-weight-bold d-block text-dark mb-1">Kapasitas Terisi:</span>
+                            <span class="badge badge-info" style="font-size: 14px; padding: 8px 12px;">
+                                <i class="fas fa-car mr-1"></i> <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span> / <span id="realtime-max-text">{{ $maxSlots }}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="small text-muted mb-2 text-center text-md-left">Simulasi validasi manual untuk menguji respons sistem:</p>
+                    <div class="d-flex flex-wrap justify-content-center justify-content-md-start">
+                        <button class="btn btn-sm btn-success m-1" id="btn-val-banyak" onclick="validateStream('banyak')">
+                            <i class="fas fa-check-circle mr-1"></i> Banyak
+                        </button>
+                        <button class="btn btn-sm btn-warning text-white m-1" id="btn-val-terbatas" onclick="validateStream('terbatas')">
+                            <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
+                        </button>
+                        <button class="btn btn-sm btn-danger m-1" id="btn-val-penuh" onclick="validateStream('penuh')">
+                            <i class="fas fa-times-circle mr-1"></i> Penuh
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -368,6 +396,38 @@
         }
     }
 
+    let lastValidationTime = @json($lastValidationTime ?? null);
+    let validationExpiresAt = @json($validationExpiresAt ?? null);
+
+    function updateValidationInfoUI() {
+        const infoEl = document.getElementById('validation-info');
+        const startEl = document.getElementById('val-time-start');
+        const endEl = document.getElementById('val-time-end');
+        
+        if (!infoEl) return;
+        if (!lastValidationTime || !validationExpiresAt) {
+            infoEl.style.display = 'none';
+            return;
+        }
+        
+        const now = new Date();
+        const expiresAt = new Date(validationExpiresAt);
+        const startAt = new Date(lastValidationTime);
+        
+        if (now <= expiresAt) {
+            infoEl.style.display = 'block';
+            startEl.innerText = startAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            endEl.innerText = expiresAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        } else {
+            infoEl.style.display = 'none';
+        }
+    }
+
+    // Cek secara berkala apakah validasi sudah kedaluwarsa (tiap 10 detik)
+    setInterval(updateValidationInfoUI, 10000);
+    // Panggil pertama kali
+    document.addEventListener('DOMContentLoaded', updateValidationInfoUI);
+
     // Navigasi ke device lain tanpa reload penuh
     function switchDevice(macAddress) {
         const url = new URL(window.location.href);
@@ -405,6 +465,31 @@
         .then(data => {
             if (data.success) {
                 safeAddLog(data.message);
+
+                // Optimistically update info waktu validasi (berlaku 5 menit)
+                const now = new Date();
+                lastValidationTime = now.toISOString();
+                validationExpiresAt = new Date(now.getTime() + 5 * 60000).toISOString();
+                updateValidationInfoUI();
+
+                // Override sementara badge realtime agar langsung merefleksikan validasi
+                const badge = document.getElementById('realtime-availability-badge');
+                if (badge) {
+                    if (content === 'penuh') {
+                        badge.className = "badge text-white mb-1";
+                        badge.style.backgroundColor = "#f25961";
+                        badge.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Penuh (Validasi)';
+                    } else if (content === 'terbatas') {
+                        badge.className = "badge text-white mb-1";
+                        badge.style.backgroundColor = "#ffad46";
+                        badge.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Terbatas (Validasi)';
+                    } else if (content === 'banyak') {
+                        badge.className = "badge text-white mb-1";
+                        badge.style.backgroundColor = "#31ce36";
+                        badge.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Banyak Tersedia (Validasi)';
+                    }
+                }
+
             } else {
                 Swal.fire({
                     title: 'Gagal!',
@@ -547,6 +632,7 @@
 
     if (canvas) {
         canvas.addEventListener('mousedown', (e) => {
+            if (!isDrawingMode) return;
             if (e.button !== 0) return; // hanya tombol kiri
             const { x, y } = eventToCanvas(e);
             didDrag = false;
@@ -571,6 +657,10 @@
         });
 
         canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawingMode) {
+                canvas.style.cursor = 'default';
+                return;
+            }
             const { x, y } = eventToCanvas(e);
 
             if (isDragging && dragTarget) {
@@ -627,6 +717,7 @@
 
         canvas.addEventListener('contextmenu', (e) => {
             e.preventDefault();
+            if (!isDrawingMode) return;
             const { x, y } = eventToCanvas(e);
             const v = hitTestVertex(x, y);
             if (!v) return;
@@ -1179,6 +1270,7 @@
                     if (countBadge) {
                         countBadge.innerText = e.count;
                     }
+                    if (typeof window.updateAvailabilityUI === 'function') window.updateAvailabilityUI();
                 })
                 .listen('.threshold.updated', (e) => {
                     addLog(`Threshold WMA bergeser: Banyak=<strong>${e.thresholdBanyak}%</strong>, Terbatas=<strong>${e.thresholdTerbatas}%</strong>`);
@@ -1340,5 +1432,65 @@
         // Jalankan inisialisasi awal
         updateSliderUI();
     }
+    
+    // --- LOGIKA STATUS KETERSEDIAAN REAL-TIME ---
+    function updateAvailabilityUI() {
+        const count = parseInt(document.getElementById('current-count-badge')?.innerText) || 0;
+        const max = parseInt(document.getElementById('max-slots')?.value) || 1;
+        const thBanyak = parseInt(document.getElementById('input-threshold-banyak')?.value) || 30;
+        const thTerbatas = parseInt(document.getElementById('input-threshold-terbatas')?.value) || 80;
+
+        const percentage = (count / max) * 100;
+        const badge = document.getElementById('realtime-availability-badge');
+        const countText = document.getElementById('realtime-count-text');
+        const maxText = document.getElementById('realtime-max-text');
+
+        if (countText) countText.innerText = count;
+        if (maxText) maxText.innerText = max;
+
+        if (badge) {
+            // Cek apakah ada validasi manual yang masih aktif
+            const now = new Date();
+            const expiresAt = validationExpiresAt ? new Date(validationExpiresAt) : new Date(0);
+            
+            // Jika ada validasi manual aktif, kita pertahankan teks dari manual validation
+            // Namun fallback perhitungan tetap kita sediakan (untuk antisipasi jika mau direset)
+            if (now <= expiresAt && badge.innerHTML.includes('(Validasi)')) {
+                return; // Biarkan badge validasi yang dioverride tetap tampil
+            }
+
+            if (percentage >= thTerbatas) {
+                badge.className = "badge text-white mb-1";
+                badge.style.backgroundColor = "#f25961";
+                badge.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Penuh';
+            } else if (percentage >= thBanyak) {
+                badge.className = "badge text-white mb-1";
+                badge.style.backgroundColor = "#ffad46";
+                badge.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Terbatas';
+            } else {
+                badge.className = "badge text-white mb-1";
+                badge.style.backgroundColor = "#31ce36";
+                badge.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Banyak Tersedia';
+            }
+        }
+    }
+
+    // Expose ke global dan pasang event listener agar realtime update jalan jika input diubah
+    window.updateAvailabilityUI = updateAvailabilityUI;
+    const maxSlotsInput = document.getElementById('max-slots');
+    if (maxSlotsInput) {
+        maxSlotsInput.addEventListener('input', updateAvailabilityUI);
+    }
+    // Override updateSliderUI untuk memanggil updateAvailabilityUI
+    const originalUpdateSliderUI = window.updateSliderUI;
+    window.updateSliderUI = function() {
+        originalUpdateSliderUI();
+        updateAvailabilityUI();
+    };
+    
+    // Jalankan pertama kali saat load
+    updateAvailabilityUI();
+    
+    // override di click save config / dll (optional, jika perlu)
 </script>
 @endpush

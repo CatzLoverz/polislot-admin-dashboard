@@ -46,6 +46,10 @@ class IotDetectionController extends Controller
         $thresholdTerbatas = $selectedDevice?->subarea?->threshold_terbatas ?? 80.0;
         $initialCount = $selectedDevice?->subarea?->current_count ?? 0;
 
+        $liveStatusData = $selectedDevice?->subarea ? $selectedDevice->subarea->getLiveStatus() : [];
+        $validationExpiresAt = $liveStatusData['validation_expires_at'] ?? null;
+        $lastValidationTime = $liveStatusData['last_validation_time'] ?? null;
+
         $captures = [];
         if ($selectedDevice) {
             $captures = IotCapture::where('device_id', $selectedDevice->device_id)
@@ -60,7 +64,8 @@ class IotDetectionController extends Controller
 
         return view('Contents.IoTDetection.viewer', compact(
             'devices', 'targetMac', 'initialStatus', 'maxSlots',
-            'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas', 'captures', 'initialCount'
+            'detectionPolygon', 'thresholdBanyak', 'thresholdTerbatas', 'captures', 'initialCount',
+            'validationExpiresAt', 'lastValidationTime'
         ));
     }
 
