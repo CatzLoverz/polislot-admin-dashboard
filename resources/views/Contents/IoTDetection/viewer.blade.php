@@ -175,7 +175,7 @@
                         </div>
                         <div id="canvas-container" class="position-relative d-none" style="max-width: 640px; margin: 0 auto;">
                             <img id="live-image" src="" alt="Live Stream" class="img-fluid rounded shadow" style="max-height: 400px; display: block; width: 100%; height: auto;">
-                            <canvas id="drawing-canvas" class="position-absolute" style="top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: crosshair; pointer-events: none;"></canvas>
+                            <canvas id="drawing-canvas" class="position-absolute" style="top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: default; pointer-events: none;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -256,7 +256,7 @@
                             </button>
                         </div>
                         <small class="text-muted d-block mb-3">
-                            <i class="fas fa-info-circle mr-1"></i> Klik kiri pada gambar untuk menaruh titik-titik (min 3 titik) kemudian klik <strong>Selesai Polygon</strong>. Anda dapat menggambar lebih dari satu zona deteksi.
+                            <i class="fas fa-info-circle mr-1"></i> Klik kiri untuk menaruh titik (min 3). <strong>Klik titik pertama</strong> untuk menutup, <strong>geser sudut</strong> untuk mengubah bentuk, <strong>klik-kanan sudut</strong> untuk menghapus, dan klik tengah garis untuk menyisipkan sudut baru. Anda dapat menggambar lebih dari satu zona deteksi.
                         </small>
                     </div>
                     
@@ -438,9 +438,20 @@
 
 <script>
     // --- LOGIKA CANVAS DRAWING OVERLAY ---
+    // Semua poligon (selesai & in-progress) disimpan dalam KOORDINAT NATURAL piksel gambar
+    // agar konsisten saat hit-testing dan tahan terhadap resize window.
     let completedPolygons = @json($detectionPolygon) || [];
     let currentPoints = [];
     let isDrawingMode = false;
+
+    // State editor (geser/sisip/hapus vertex meniru editor subarea)
+    let hoverVertex = null;   // {polyIndex, vertIndex} | null
+    let isDragging = false;
+    let dragTarget = null;    // {polyIndex, vertIndex}; polyIndex = -1 → currentPoints
+    let didDrag = false;      // bedakan klik vs geser
+
+    const VERTEX_HIT = 8;     // threshold piksel canvas untuk menyentuh vertex
+    const EDGE_HIT = 6;       // threshold piksel canvas untuk menyentuh garis
 
     const canvas = document.getElementById('drawing-canvas');
     const ctx = canvas?.getContext('2d');
@@ -448,11 +459,83 @@
 
     function initCanvas() {
         if (!liveImage || !canvas || liveImage.classList.contains('d-none') || !liveImage.clientWidth) return;
-        
+
         canvas.width = liveImage.clientWidth;
         canvas.height = liveImage.clientHeight;
-        
+        // Poligon selesai selalu bisa diedit (seperti subarea) — terima event permanen.
+        canvas.style.pointerEvents = 'auto';
+
         draw();
+    }
+
+    // --- Helper konversi koordinat ---
+    // Posisi event (client) → koordinat natural piksel gambar (integer).
+    function toNatural(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const sx = liveImage.naturalWidth / rect.width;
+        const sy = liveImage.naturalHeight / rect.height;
+        return [
+            Math.round((clientX - rect.left) * sx),
+            Math.round((clientY - rect.top) * sy)
+        ];
+    }
+
+    // Titik natural [x,y] → koordinat tampilan {x,y} pada canvas.
+    function toCanvas(pt) {
+        const sx = canvas.width / liveImage.naturalWidth;
+        const sy = canvas.height / liveImage.naturalHeight;
+        return { x: pt[0] * sx, y: pt[1] * sy };
+    }
+
+    // Posisi event (client) → koordinat piksel canvas (untuk hit-testing).
+    function eventToCanvas(e) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    // Jarak titik (px,py) ke segmen a-b (semua dalam koordinat canvas).
+    function distToSegment(px, py, a, b) {
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const lenSq = dx * dx + dy * dy;
+        if (lenSq === 0) return Math.hypot(px - a.x, py - a.y);
+        let t = ((px - a.x) * dx + (py - a.y) * dy) / lenSq;
+        t = Math.max(0, Math.min(1, t));
+        return Math.hypot(px - (a.x + t * dx), py - (a.y + t * dy));
+    }
+
+    // Cari vertex terdekat (≤ VERTEX_HIT) di semua poligon + currentPoints.
+    function hitTestVertex(cx, cy) {
+        let best = null;
+        let bestDist = VERTEX_HIT;
+        completedPolygons.forEach((poly, polyIndex) => {
+            poly.forEach((pt, vertIndex) => {
+                const c = toCanvas(pt);
+                const d = Math.hypot(c.x - cx, c.y - cy);
+                if (d <= bestDist) { bestDist = d; best = { polyIndex, vertIndex }; }
+            });
+        });
+        currentPoints.forEach((pt, vertIndex) => {
+            const c = toCanvas(pt);
+            const d = Math.hypot(c.x - cx, c.y - cy);
+            if (d <= bestDist) { bestDist = d; best = { polyIndex: -1, vertIndex }; }
+        });
+        return best;
+    }
+
+    // Cari segmen garis terdekat (≤ EDGE_HIT) pada poligon selesai untuk sisip vertex.
+    function hitTestEdge(cx, cy) {
+        let best = null;
+        let bestDist = EDGE_HIT;
+        completedPolygons.forEach((poly, polyIndex) => {
+            for (let i = 0; i < poly.length; i++) {
+                const a = toCanvas(poly[i]);
+                const b = toCanvas(poly[(i + 1) % poly.length]);
+                const d = distToSegment(cx, cy, a, b);
+                if (d <= bestDist) { bestDist = d; best = { polyIndex, edgeIndex: i }; }
+            }
+        });
+        return best;
     }
 
     if (liveImage) {
@@ -468,14 +551,124 @@
     window.addEventListener('resize', initCanvas);
 
     if (canvas) {
+        canvas.addEventListener('mousedown', (e) => {
+            if (e.button !== 0) return; // hanya tombol kiri
+            const { x, y } = eventToCanvas(e);
+            didDrag = false;
+
+            // 1) Mulai geser vertex bila menyentuh salah satu.
+            const v = hitTestVertex(x, y);
+            if (v) {
+                isDragging = true;
+                dragTarget = v;
+                return;
+            }
+
+            // 2) Sisip vertex di tengah garis poligon selesai lalu langsung geser.
+            const edge = hitTestEdge(x, y);
+            if (edge) {
+                const poly = completedPolygons[edge.polyIndex];
+                poly.splice(edge.edgeIndex + 1, 0, toNatural(e.clientX, e.clientY));
+                isDragging = true;
+                dragTarget = { polyIndex: edge.polyIndex, vertIndex: edge.edgeIndex + 1 };
+                draw();
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const { x, y } = eventToCanvas(e);
+
+            if (isDragging && dragTarget) {
+                const pt = toNatural(e.clientX, e.clientY);
+                if (dragTarget.polyIndex === -1) {
+                    currentPoints[dragTarget.vertIndex] = pt;
+                } else {
+                    completedPolygons[dragTarget.polyIndex][dragTarget.vertIndex] = pt;
+                }
+                didDrag = true;
+                draw();
+                return;
+            }
+
+            // Update hover + cursor afordans.
+            const v = hitTestVertex(x, y);
+            const edge = v ? null : hitTestEdge(x, y);
+            const prevHover = hoverVertex;
+            hoverVertex = v;
+            if (v) {
+                canvas.style.cursor = 'pointer';
+            } else if (edge) {
+                canvas.style.cursor = 'copy';
+            } else {
+                canvas.style.cursor = isDrawingMode ? 'crosshair' : 'default';
+            }
+            // Redraw hanya jika hover berubah agar hemat.
+            if (JSON.stringify(prevHover) !== JSON.stringify(hoverVertex)) draw();
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            dragTarget = null;
+        });
+
         canvas.addEventListener('click', (e) => {
+            // Abaikan klik yang sebenarnya hasil dari geser.
+            if (didDrag) { didDrag = false; return; }
             if (!isDrawingMode) return;
-            
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            currentPoints.push([x, y]);
+
+            // Klik titik pertama (≥3 titik) → tutup poligon.
+            if (currentPoints.length >= 3) {
+                const first = toCanvas(currentPoints[0]);
+                const { x, y } = eventToCanvas(e);
+                if (Math.hypot(first.x - x, first.y - y) <= VERTEX_HIT) {
+                    closeCurrentPolygon();
+                    return;
+                }
+            }
+
+            currentPoints.push(toNatural(e.clientX, e.clientY));
+            draw();
+        });
+
+        canvas.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            const { x, y } = eventToCanvas(e);
+            const v = hitTestVertex(x, y);
+            if (!v) return;
+
+            // Vertex pada poligon in-progress → cukup buang titiknya.
+            if (v.polyIndex === -1) {
+                currentPoints.splice(v.vertIndex, 1);
+                draw();
+                return;
+            }
+
+            const poly = completedPolygons[v.polyIndex];
+            // Bila poligon tinggal 3 titik, menghapus vertex akan merusaknya →
+            // konfirmasi hapus seluruh zona.
+            if (poly.length <= 3) {
+                Swal.fire({
+                    title: 'Hapus zona ini?',
+                    text: 'Poligon hanya punya 3 titik. Menghapus sudut akan menghapus seluruh zona deteksi ini.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus zona!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        completedPolygons.splice(v.polyIndex, 1);
+                        hoverVertex = null;
+                        draw();
+                        safeAddLog('Zona deteksi dihapus.');
+                    }
+                });
+                return;
+            }
+
+            poly.splice(v.vertIndex, 1);
+            hoverVertex = null;
             draw();
         });
     }
@@ -488,7 +681,7 @@
         if (isDrawingMode) {
             btn.classList.remove('btn-outline-primary');
             btn.classList.add('btn-primary');
-            canvas.style.pointerEvents = 'auto';
+            canvas.style.cursor = 'crosshair';
             safeAddLog('Mode menggambar aktif. Meminta snapshot terbaru dari perangkat IoT...');
 
             // Pemicu otomatis snapshot dari device IoT
@@ -524,7 +717,7 @@
         } else {
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-primary');
-            canvas.style.pointerEvents = 'none';
+            canvas.style.cursor = 'default';
             currentPoints = [];
             draw();
         }
@@ -548,16 +741,8 @@
             return;
         }
         
-        // Konversi koordinat canvas ke koordinat natural image
-        const scaleX = liveImage.naturalWidth / liveImage.clientWidth;
-        const scaleY = liveImage.naturalHeight / liveImage.clientHeight;
-        
-        const scaledPoints = currentPoints.map(pt => [
-            Math.round(pt[0] * scaleX),
-            Math.round(pt[1] * scaleY)
-        ]);
-        
-        completedPolygons.push(scaledPoints);
+        // currentPoints sudah dalam koordinat natural — cukup salin.
+        completedPolygons.push([...currentPoints]);
         currentPoints = [];
         draw();
         safeAddLog('Zona polygon baru selesai dibuat.');
@@ -587,18 +772,14 @@
         if (!ctx || !canvas || !liveImage) return;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        const scaleX = canvas.width / liveImage.naturalWidth;
-        const scaleY = canvas.height / liveImage.naturalHeight;
-        
-        // Draw completed polygons
+
+        // Draw completed polygons (koordinat natural → canvas via toCanvas).
         completedPolygons.forEach((poly, index) => {
             ctx.beginPath();
             poly.forEach((pt, i) => {
-                const cx = pt[0] * scaleX;
-                const cy = pt[1] * scaleY;
-                if (i === 0) ctx.moveTo(cx, cy);
-                else ctx.lineTo(cx, cy);
+                const c = toCanvas(pt);
+                if (i === 0) ctx.moveTo(c.x, c.y);
+                else ctx.lineTo(c.x, c.y);
             });
             ctx.closePath();
             ctx.fillStyle = 'rgba(49, 206, 54, 0.2)'; // Green transparent
@@ -606,31 +787,61 @@
             ctx.strokeStyle = '#31ce36'; // Green stroke
             ctx.lineWidth = 2;
             ctx.stroke();
-            
+
             // Draw label text
             if (poly.length > 0) {
+                const c0 = toCanvas(poly[0]);
                 ctx.fillStyle = '#1572e8';
                 ctx.font = 'bold 12px sans-serif';
-                ctx.fillText('Zona ' + (index + 1), poly[0][0] * scaleX, poly[0][1] * scaleY - 5);
+                ctx.fillText('Zona ' + (index + 1), c0.x, c0.y - 8);
             }
+
+            // Handle vertex — lingkaran putih ber-border warna zona (meniru pin subarea).
+            poly.forEach((pt, vertIndex) => {
+                const c = toCanvas(pt);
+                const isHover = hoverVertex && hoverVertex.polyIndex === index && hoverVertex.vertIndex === vertIndex;
+                const r = isHover ? 8 : 6;
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, r, 0, 2 * Math.PI);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.lineWidth = isHover ? 3 : 2;
+                ctx.strokeStyle = '#31ce36';
+                ctx.stroke();
+            });
         });
-        
-        // Draw current drawing points
+
+        // Draw current drawing points (juga koordinat natural).
         if (currentPoints.length > 0) {
             ctx.beginPath();
             currentPoints.forEach((pt, i) => {
-                if (i === 0) ctx.moveTo(pt[0], pt[1]);
-                else ctx.lineTo(pt[0], pt[1]);
+                const c = toCanvas(pt);
+                if (i === 0) ctx.moveTo(c.x, c.y);
+                else ctx.lineTo(c.x, c.y);
             });
             ctx.strokeStyle = '#ffad46'; // Orange stroke
             ctx.lineWidth = 2;
             ctx.stroke();
-            
-            currentPoints.forEach(pt => {
+
+            currentPoints.forEach((pt, i) => {
+                const c = toCanvas(pt);
+                const isFirst = i === 0;
+                const isHover = hoverVertex && hoverVertex.polyIndex === -1 && hoverVertex.vertIndex === i;
+                // Titik pertama dibuat menonjol saat ≥3 titik → afordans "klik untuk menutup".
+                const prominent = isFirst && currentPoints.length >= 3;
+                const r = prominent ? 8 : (isHover ? 6 : 4);
                 ctx.beginPath();
-                ctx.arc(pt[0], pt[1], 4, 0, 2 * Math.PI);
-                ctx.fillStyle = '#ffad46';
-                ctx.fill();
+                ctx.arc(c.x, c.y, r, 0, 2 * Math.PI);
+                if (prominent) {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = '#ffad46';
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = '#ffad46';
+                    ctx.fill();
+                }
             });
         }
     }
