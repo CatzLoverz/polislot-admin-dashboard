@@ -422,6 +422,17 @@ class MqttListenerCommand extends Command
                 }
             });
 
+            // actively check presence channel for ws devices for mobile clients that don't have presence awareness.
+            $reconcileInterval = max(5, (int) env('IOT_WS_RECONCILE_INTERVAL', 15));
+            $lastReconcileAt = 0.0;
+            $mqtt->registerLoopEventHandler(function ($client, float $elapsedTime) use (&$lastReconcileAt, $reconcileInterval) {
+                if (($elapsedTime - $lastReconcileAt) < $reconcileInterval) {
+                    return;
+                }
+                $lastReconcileAt = $elapsedTime;
+                $this->reconcileWsDeviceStatuses();
+            });
+
             $mqtt->loop(true);
 
         } catch (Exception $e) {
@@ -431,5 +442,43 @@ class MqttListenerCommand extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * Reconcile status device WebSocket secara periodik dengan Reverb presence channel.
+     *
+     * Hanya memeriksa device yang di-cache sebagai ONLINE dengan connection_type 'ws'
+     * (device MQTT sudah memiliki Last-Will Testament untuk mendeteksi offline secara
+     * real-time, jadi tidak perlu di-poll di sini). Untuk tiap device WS online,
+     * IotDevice::syncStatus() akan mengecek presence channel Reverb secara aktif; bila
+     * device sudah tidak ada di channel, syncStatus() memanggil markDeviceOffline() yang
+     * mem-broadcast SubareaStatusUpdated (sekaligus publish MQTT retained ke mobile).
+     */
+    private function reconcileWsDeviceStatuses(): void
+    {
+        try {
+            $devices = IotDevice::all();
+
+            foreach ($devices as $device) {
+                $mac = $device->device_mac_address;
+                $status = Cache::get("iot_status_{$mac}", 'offline');
+                $connectionType = Cache::get("iot_connection_type_{$mac}", 'ws');
+
+                // Lewati device yang memang sudah offline atau bukan koneksi WS.
+                if ($status !== 'online' || $connectionType !== 'ws') {
+                    continue;
+                }
+
+                // syncStatus() melakukan side-effect (markDeviceOffline -> broadcast +
+                // publish MQTT) hanya jika device benar-benar sudah keluar presence channel.
+                $actualStatus = IotDevice::syncStatus($mac);
+
+                if ($actualStatus === 'offline') {
+                    $this->info("🔌 [Reconcile] Device WS {$mac} terdeteksi OFFLINE (keluar presence channel). Status disinkronkan ke Web & Mobile.");
+                }
+            }
+        } catch (Exception $e) {
+            $this->error('[Reconcile] Gagal sinkronisasi status WS: '.$e->getMessage());
+        }
     }
 }
