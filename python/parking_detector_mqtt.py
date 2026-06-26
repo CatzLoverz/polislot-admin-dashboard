@@ -54,6 +54,7 @@ SHARED_SECRET = get_env_or_fail("SHARED_SECRET").strip().strip('"').strip("'")
 SOURCE = get_env_or_fail("CAMERA_SOURCE")            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
 YOLO_WEIGHTS = get_env_or_fail("YOLO_WEIGHTS")  # File weights model YOLOv8 (yolov8n.pt / custom model)
 CONFIDENCE_THRESHOLD = float(get_env_or_fail("CONFIDENCE_THRESHOLD"))   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
+ENABLE_DETECTION_LOG = os.getenv("ENABLE_DETECTION_LOG", "true").lower() == "true" # Tampilkan log deteksi di terminal
 
 # Parsing TARGET_CLASSES (contoh di .env: 2,3)
 _target_classes_env = get_env_or_fail("TARGET_CLASSES")
@@ -378,7 +379,8 @@ def main():
                                 vehicles_inside += 1
                 
                 current_vehicle_count = vehicles_inside
-                print(f"[🤖] Detection: {vehicles_inside} kendaraan di dalam zona deteksi")
+                if ENABLE_DETECTION_LOG:
+                    print(f"[🤖] Detection: {vehicles_inside} kendaraan di dalam zona deteksi")
 
                 # Send count to server
                 count_payload = {

@@ -112,8 +112,8 @@
                 <div class="card-body py-3 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
                     <div class="d-flex align-items-center mb-2 mb-md-0">
                         @if(isset($selectedDevice) && $selectedDevice->subarea)
-                            <a href="{{ route('admin.park-area.show', $selectedDevice->subarea->park_area_id) }}" class="btn btn-icon btn-round btn-light border mr-3" data-toggle="tooltip" title="Kembali ke Manajemen Subarea">
-                                <i class="fas fa-arrow-left"></i>
+                            <a href="{{ route('admin.park-area.show', $selectedDevice->subarea->park_area_id) }}" class="btn btn-light border btn-sm mr-3">
+                                <i class="fas fa-arrow-left mr-1"></i> Kembali
                             </a>
                         @endif
                         <i class="fas fa-microchip fa-2x text-primary mr-3"></i>
