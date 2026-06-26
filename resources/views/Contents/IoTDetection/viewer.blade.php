@@ -1449,6 +1449,11 @@
                 countText.innerText = '0';
             }
         }
+        
+        // Panggil updateAvailabilityUI untuk merefresh bar status CV
+        if (typeof window.updateAvailabilityUI === 'function') {
+            window.updateAvailabilityUI();
+        }
     }
     
     initStatusEcho();
@@ -1515,16 +1520,36 @@
     
     // --- LOGIKA STATUS KETERSEDIAAN REAL-TIME ---
     function updateAvailabilityUI() {
+        const statusText = document.getElementById('cv-status-text');
+        const progressBar = document.getElementById('availability-progress-bar');
+        
+        // Cek apakah device sedang offline
+        const indicator = document.getElementById('status-indicator');
+        const isOffline = indicator && indicator.innerText.includes('OFFLINE');
+        
+        if (isOffline) {
+            if (statusText) {
+                statusText.className = "font-weight-bold";
+                statusText.style.color = "#8d949a";
+                statusText.innerHTML = '<i class="fas fa-power-off mr-1"></i> OFFLINE / NETRAL';
+            }
+            if (progressBar) {
+                progressBar.className = "progress-bar";
+                progressBar.style.backgroundColor = "#8d949a";
+                progressBar.style.width = '0%';
+                progressBar.setAttribute('aria-valuenow', 0);
+            }
+            return; // Hentikan eksekusi normal
+        }
+
         const count = parseInt(document.getElementById('realtime-count-text')?.innerText) || 0;
         const max = parseInt(document.getElementById('max-slots')?.value) || 1;
         const thBanyak = parseInt(document.getElementById('input-threshold-banyak')?.value) || 30;
         const thTerbatas = parseInt(document.getElementById('input-threshold-terbatas')?.value) || 80;
 
         const percentage = Math.max(0, Math.min((count / max) * 100, 100));
-        const statusText = document.getElementById('cv-status-text');
         const countText = document.getElementById('realtime-count-text');
         const maxText = document.getElementById('realtime-max-text');
-        const progressBar = document.getElementById('availability-progress-bar');
 
         if (countText) countText.innerText = count;
         if (maxText) maxText.innerText = max;

@@ -81,8 +81,8 @@ services:
     container_name: polislot_mosquitto
     restart: unless-stopped
     ports:
-      - "127.0.0.1:1883:1883" # Local TCP untuk Laravel
-      - "127.0.0.1:9001:9001" # Local WebSockets untuk Cloudflare Tunnel
+      - "127.0.0.1:1883:1883" # TCP untuk Laravel
+      - "0.0.0.0:9001:9001"   # WebSockets untuk Cloudflare Tunnel
     environment:
       - MQTT_AUTH_USERNAME=${MQTT_AUTH_USERNAME:-polislot_user}
       - MQTT_AUTH_PASSWORD=${MQTT_AUTH_PASSWORD:-secure_password}
