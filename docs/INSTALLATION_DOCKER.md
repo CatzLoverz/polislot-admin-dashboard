@@ -69,40 +69,12 @@ Buka `.env` dan atur konfigurasi berikut:
     ```ini
     MQTT_AUTH_USERNAME=MQTTPoliSlot
     MQTT_AUTH_PASSWORD=password_mqtt_yang_aman
+    MQTT_MOBILE_USERNAME=MQTTPoliSlotMobile
+    MQTT_MOBILE_PASSWORD=mobile_secure_password
     ```
 
-### 2. Atur docker-compose.yml
-Pastikan file `docker-compose.yml` Anda memiliki konfigurasi seperti berikut.
 
-**PENTING**:
-1. Sesuaikan `MARIADB_ROOT_PASSWORD`.
-2. Jika ingin menggunakan **Cloudflare Tunnel**, harap **UNCOMMENT** bagian service `tunnel` di file `docker-compose.yml` Anda.
-
-```yaml
-services:
-  # ... (Services lainnya: app, tunnel) ...
-
-  db:
-    image: mariadb:latest
-    container_name: polislot_db
-    restart: unless-stopped
-    environment:
-      MARIADB_ROOT_PASSWORD: '...' # <--- GANTI INI dengan password root yang aman!
-    volumes:
-      - dbdata:/var/lib/mysql
-      # Mount Config Logging
-      - ./mariadb.cnf:/etc/mysql/conf.d/logging.cnf:ro
-      # Mount Folder Log ke Host
-      - ./storage/logs/mariadb:/var/log/mysql
-    ports:
-      - "127.0.0.1:3308:3306"
-    networks:
-      - polislot_net
-
-  # ... (Services lainnya: logrotate, scheduler) ...
-```
-
-### 3. Generate RSA Keys (Di Root)
+### 2. Generate RSA Keys (Di Root)
 **Wajib:** Generate pasangan kunci RSA untuk enkripsi API di **Root Folder** (sejajar dengan `docker-compose.yml`). Docker akan memount file ini ke lokasi yang tepat di dalam container.
 
 ```bash
@@ -111,34 +83,34 @@ openssl rsa -pubout -in private_key.pem -out public_key.pem
 ```
 *Note: Public key bisa disimpan untuk referensi, private key wajib ada.*
 
-### 4. Verifikasi Credential
+### 3. Verifikasi Credential
 Pastikan credential root di `.env` (DB_PASSWORD) cocok dengan `MARIADB_ROOT_PASSWORD` di `docker-compose.yml`.
 
-### 5. Menjalankan Container
+### 4. Menjalankan Container
 Jalankan Docker Compose.
 ```bash
 docker compose up -d
 ```
 
-### 6. Generate Application Key
+### 5. Generate Application Key
 Generate key aplikasi Laravel di dalam container.
 ```bash
 docker compose exec app php artisan key:generate
 ```
 
-### 7. Migrasi Database
+### 6. Migrasi Database
 Jalankan migrasi database (fresh install).
 ```bash
 docker compose exec app php artisan migrate --fresh
 ```
 
-### 8. Setup Admin User (Seeding)
+### 7. Setup Admin User (Seeding)
 Jalankan seeder untuk membuat data awal dan akun admin (menggunakan `ADMIN_EMAIL` & `ADMIN_PASSWORD` dari `.env`).
 ```bash
 docker compose exec app php artisan db:seed
 ```
 
-### 9. Setup Database Roles
+### 8. Setup Database Roles
 Buat user database khusus untuk aplikasi (RBAC) agar lebih aman.
 ```bash
 # Setup user database untuk Admin Dashboard
@@ -148,7 +120,7 @@ docker compose exec app php artisan db:setup-admin polislot_admin password_db_ad
 docker compose exec app php artisan db:setup-user polislot_mobile password_db_mobile
 ```
 
-### 10. Atur Ulang Environment (.env) - PENTING
+### 9. Atur Ulang Environment (.env) - PENTING
 Buka file `.env` kembali dan **GANTI** credential database root dengan user yang baru saja dibuat.
 
 ```ini
@@ -161,7 +133,7 @@ DB_USERNAME_MOBILE=polislot_mobile
 DB_PASSWORD_MOBILE=password_db_mobile
 ```
 
-### 11. Re-up Container
+### 10. Re-up Container
 Jalankan kembali docker compose untuk menerapkan seluruh perubahan environment (termasuk kredensial MQTT dan user database baru) dan memastikan seluruh sistem berjalan dengan benar.
 ```bash
 docker compose up -d --force-recreate

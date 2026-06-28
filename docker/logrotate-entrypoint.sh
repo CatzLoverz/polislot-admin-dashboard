@@ -8,8 +8,8 @@ apk add --no-cache logrotate
 # Jika folder log kosong/baru (misal habis dihapus), permissionnya mungkin root:root.
 # Kita harus ubah jadi 999:999 agar MariaDB bisa nulis log lagi.
 mkdir -p /var/log/mysql
-chown -R 999:999 /var/log/mysql
-chmod 775 /var/log/mysql
+chown -R 999:999 /var/log/mysql 2>/dev/null || true
+chmod 775 /var/log/mysql 2>/dev/null || true
 
 # 2. DETECT OWNER OF UID 999
 USR_999=$(awk -F: '$3 == 999 {print $1}' /etc/passwd)
