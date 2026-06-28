@@ -65,11 +65,22 @@ Buka `.env` dan atur konfigurasi berikut:
     ```ini
     TUNNEL_TOKEN="isi_token_cloudflare_tunnel_anda"
     ```
+- **Laravel Reverb (WebSocket) & IoT Security**: Konfigurasi ini dibutuhkan untuk fitur Realtime Dashboard dan keamanan perangkat IoT. Untuk `REVERB_HOST` dan `REVERB_SERVER_HOST`, gunakan nilai default untuk Docker (`127.0.0.1` dan `0.0.0.0`).
+    ```ini
+    REVERB_APP_ID="bebas_isi_angka_acak"
+    REVERB_APP_KEY="bebas_isi_karakter_acak"
+    REVERB_APP_SECRET="bebas_isi_karakter_acak_rahasia"
+    REVERB_HOST="127.0.0.1"
+    REVERB_SERVER_HOST="0.0.0.0"
+
+    # Shared secret untuk HMAC signature dan AES Encryption dari/ke perangkat IoT
+    IOT_API_SECRET="rahasia_iot_anda_disini"
+    ```
 - **MQTT Authentication (Mosquitto)**: Isi kredensial untuk broker MQTT. Autentikasi broker ini telah **diotomatisasi secara penuh** di dalam Docker kontainer pada saat kontainer dijalankan menggunakan variabel ini. Anda tidak perlu membuat berkas password secara manual.
     ```ini
-    MQTT_AUTH_USERNAME=MQTTPoliSlot
-    MQTT_AUTH_PASSWORD=password_mqtt_yang_aman
-    MQTT_MOBILE_USERNAME=MQTTPoliSlotMobile
+    MQTT_AUTH_USERNAME=polislot_user
+    MQTT_AUTH_PASSWORD=secure_password
+    MQTT_MOBILE_USERNAME=polislot_mobile
     MQTT_MOBILE_PASSWORD=mobile_secure_password
     ```
 
