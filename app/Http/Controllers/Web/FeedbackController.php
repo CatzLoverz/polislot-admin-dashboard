@@ -19,7 +19,6 @@ class FeedbackController extends Controller
     /**
      * Menampilkan halaman daftar feedback.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -31,21 +30,21 @@ class FeedbackController extends Controller
                 ->orderBy('created_at', 'desc');
 
             // 2. Logika Filter (Jika ada input dari dropdown)
-            if ($request->has('category_filter') && !empty($request->category_filter)) {
+            if ($request->has('category_filter') && ! empty($request->category_filter)) {
                 $query->where('fbk_category_id', $request->category_filter);
             }
 
             return DataTables::of($query)
                 ->addIndexColumn()
-                ->addColumn('category_name', function($row){
+                ->addColumn('category_name', function ($row) {
                     return $row->feedbackCategory->fbk_category_name ?? '-';
                 })
-                ->editColumn('created_at', function($row){
+                ->editColumn('created_at', function ($row) {
                     return $row->created_at ? $row->created_at->format('d M Y, H:i') : '-';
                 })
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     $title = e($row->feedback_title);
-                    
+
                     // Tombol Hapus
                     $btnDelete = '<form action="'.route('admin.feedback.destroy', $row->feedback_id).'" 
                                         method="POST" 
@@ -76,8 +75,7 @@ class FeedbackController extends Controller
     /**
      * Memproses penghapusan data feedback.
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function destroy($id): RedirectResponse
     {
@@ -94,6 +92,7 @@ class FeedbackController extends Controller
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menghapus data.');
         }
     }

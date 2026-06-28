@@ -4,9 +4,12 @@ Dashboard administrasi untuk mengelola aplikasi Polislot, termasuk manajemen pen
 
 ## 🚀 Fitur Utama
 
-- **Dashboard Realtime**: Monitoring aktivitas pengguna dan validasi.
+- **Deteksi Parkir Otomatis & IoT**: Integrasi sistem dengan perangkat keras (IoT) via MQTT, Websocket + http post untuk mendeteksi ketersediaan parkir kendaraan secara otomatis.
+- **Dashboard Realtime**: Monitoring aktivitas pengguna, status parkir, dan proses validasi secara instan menggunakan WebSocket (Laravel Reverb).
 - **Manajemen User**: Pengelolaan akun pengguna mobile dan admin.
-- **Area Parkir & Misi**: Pengaturan lokasi parkir dan misi yang tersedia.
+- **Manajemen Area Parkir**: Pengaturan lokasi parkir, Area & Subarea parkir.
+- **Manajemen Konfigurasi Deteksi IoT**: Pengaturan Poligon deteksi, jumlah slot parkir dan threshold status ketersediaan parkir.
+- **Manajemen Misi**: Pengaturan misi yang tersedia.
 - **Manajemen Hadiah**: Pengaturan hadiah yang dapat ditukarkan.
 - **Database Backup & Restore**:
     - Backup otomatis terjadwal (Hourly, Daily, 3-Days).
@@ -14,6 +17,7 @@ Dashboard administrasi untuk mengelola aplikasi Polislot, termasuk manajemen pen
     - Restore database lengkap.
 - **Keamanan Database (RBAC)**: Pemisahan privilege user database antara Admin Dashboard dan Mobile App.
 - **API Encryption**: Enkripsi end-to-end (RSA) untuk payload API mobile application.
+- **IoT Communication Security**: Pengamanan transmisi data perangkat keras menggunakan HMAC Signature dan AES Encryption (berlaku untuk payload HTTP, WebSocket, maupun MQTT), serta Autentikasi Kredensial (Username/Password) pada broker MQTT.
 
 ## 🛠️ Tech Stack
 
@@ -21,6 +25,7 @@ Dashboard administrasi untuk mengelola aplikasi Polislot, termasuk manajemen pen
 - **Database**: MySQL / MariaDB
 - **Frontend**: Blade Templates (Admin Dashboard)
 - **API**: Token via Sanctum (Mobile App Auth)
+- **Realtime & IoT**: Laravel Reverb (WebSocket Server) & Eclipse Mosquitto (MQTT Broker)
 
 ### Prerequisites External Service
 

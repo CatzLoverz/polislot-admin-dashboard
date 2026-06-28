@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('park_area_id');
             $table->string('park_area_name');
             $table->string('park_area_code');
-            $table->json('park_area_data'); 
-            
+            $table->json('park_area_data');
+
             $table->timestamps();
         });
 
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->id('park_subarea_id');
             $table->foreignId('park_area_id')->constrained('park_areas', 'park_area_id')->onDelete('cascade');
             $table->string('park_subarea_name');
-            $table->json('park_subarea_polygon'); 
+            $table->json('park_subarea_polygon');
             $table->integer('max_slots')->default(0);
             $table->json('detection_polygon')->nullable();
             $table->integer('current_count')->default(0);

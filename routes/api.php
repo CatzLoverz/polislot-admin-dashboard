@@ -5,22 +5,21 @@ use App\Http\Controllers\Api\FeedbackCategoryController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\Api\InfoBoardController;
+use App\Http\Controllers\Api\IotDetectionController;
+use App\Http\Controllers\Api\IotWebhookController;
+use App\Http\Controllers\Api\IotWsAuthController;
 use App\Http\Controllers\Api\MapVisualizationController;
 use App\Http\Controllers\Api\MissionController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\SubareaCommentController;
-use App\Http\Controllers\Api\UserValidationController;
-use App\Http\Controllers\Api\IotDetectionController;
-use App\Http\Controllers\Api\IotWsAuthController;
 use App\Http\Controllers\Api\UserFaqController;
-use App\Http\Controllers\Api\IotWebhookController;
+use App\Http\Controllers\Api\UserValidationController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('iot')->group(function() {
+Route::prefix('iot')->middleware('throttle:500,1')->group(function () {
     // Rute untuk IoT Device Broadcasting
     Route::post('/detection', [IotDetectionController::class, 'receiveDetection']);
-    Route::get('/sync-area/{id}', [IotDetectionController::class, 'syncArea']);
 
     // Rute autentikasi WebSocket untuk IoT Device (Presence Channel via Reverb)
     Route::post('/ws-auth', [IotWsAuthController::class, 'authenticate']);
@@ -47,7 +46,6 @@ Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
     Route::post('/forgot-otp-verify', [AuthController::class, 'forgotPasswordOtpVerify']);
     Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend']);
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPassword']);
-
 
     Route::middleware(['auth:sanctum', 'role:admin,user'])->group(function () {
 

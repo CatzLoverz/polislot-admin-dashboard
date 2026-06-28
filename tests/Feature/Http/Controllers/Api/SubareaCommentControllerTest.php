@@ -7,15 +7,15 @@ use App\Models\ParkSubarea;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SubareaCommentControllerTest extends TestCase
 {
-    use RefreshDatabase;
     use \Illuminate\Foundation\Testing\WithoutMiddleware;
+    use RefreshDatabase;
 
     protected function setUp(): void
     {
@@ -30,7 +30,7 @@ class SubareaCommentControllerTest extends TestCase
         $user = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
-        
+
         \App\Models\SubareaComment::create([
             'user_id' => $user->user_id,
             'park_subarea_id' => $sub->park_subarea_id,
@@ -38,12 +38,12 @@ class SubareaCommentControllerTest extends TestCase
         ]);
 
         $this->actingAs($user);
-        
+
         $response = $this->getJson("/api/comment?park_subarea_id={$sub->park_subarea_id}");
-        
+
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success'])
-                 ->assertJsonStructure(['data' => ['list', 'pagination']]);
+            ->assertJson(['status' => 'success'])
+            ->assertJsonStructure(['data' => ['list', 'pagination']]);
     }
 
     #[Test]
@@ -51,9 +51,9 @@ class SubareaCommentControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        
+
         $response = $this->getJson('/api/comment');
-        
+
         $response->assertStatus(422);
     }
 
@@ -69,15 +69,15 @@ class SubareaCommentControllerTest extends TestCase
         $response = $this->postJson('/api/comment', [
             'park_subarea_id' => $sub->park_subarea_id,
             'subarea_comment_content' => 'Parkiran penuh',
-            'subarea_comment_image' => UploadedFile::fake()->image('bukti.jpg')
+            'subarea_comment_image' => UploadedFile::fake()->image('bukti.jpg'),
         ]);
 
         $response->assertStatus(201)
-                 ->assertJson(['status' => 'success', 'message' => 'Komentar terkirim.']);
-        
+            ->assertJson(['status' => 'success', 'message' => 'Komentar terkirim.']);
+
         $this->assertDatabaseHas('subarea_comments', [
             'park_subarea_id' => $sub->park_subarea_id,
-            'subarea_comment_content' => 'Parkiran penuh'
+            'subarea_comment_content' => 'Parkiran penuh',
         ]);
     }
 
@@ -87,27 +87,27 @@ class SubareaCommentControllerTest extends TestCase
         $user = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
-        
+
         // Buat comment existing
         $this->actingAs($user);
         $post = $this->postJson('/api/comment', [
             'park_subarea_id' => $sub->park_subarea_id,
             'subarea_comment_content' => 'Old Content',
-            'subarea_comment_image' => UploadedFile::fake()->image('old.jpg')
+            'subarea_comment_image' => UploadedFile::fake()->image('old.jpg'),
         ]);
         $commentId = $post->json('data.subarea_comment_id');
 
         // Update
         $response = $this->putJson("/api/comment/{$commentId}", [
-            'subarea_comment_content' => 'New Content'
+            'subarea_comment_content' => 'New Content',
         ]);
 
         $response->assertStatus(200)
-                 ->assertJson(['message' => 'Komentar berhasil diperbarui.']);
-        
+            ->assertJson(['message' => 'Komentar berhasil diperbarui.']);
+
         $this->assertDatabaseHas('subarea_comments', [
             'subarea_comment_id' => $commentId,
-            'subarea_comment_content' => 'New Content'
+            'subarea_comment_content' => 'New Content',
         ]);
     }
 
@@ -117,20 +117,20 @@ class SubareaCommentControllerTest extends TestCase
         $user = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
-        
+
         $this->actingAs($user);
         $post = $this->postJson('/api/comment', [
             'park_subarea_id' => $sub->park_subarea_id,
             'subarea_comment_content' => 'To Delete',
-            'subarea_comment_image' => UploadedFile::fake()->image('del.jpg')
+            'subarea_comment_image' => UploadedFile::fake()->image('del.jpg'),
         ]);
         $commentId = $post->json('data.subarea_comment_id');
 
         $response = $this->deleteJson("/api/comment/{$commentId}");
 
         $response->assertStatus(200)
-                 ->assertJson(['message' => 'Komentar berhasil dihapus.']);
-        
+            ->assertJson(['message' => 'Komentar berhasil dihapus.']);
+
         $this->assertDatabaseMissing('subarea_comments', ['subarea_comment_id' => $commentId]);
     }
 
@@ -141,7 +141,7 @@ class SubareaCommentControllerTest extends TestCase
         $user2 = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
-        
+
         $this->actingAs($user1);
         $post = $this->postJson('/api/comment', [
             'park_subarea_id' => $sub->park_subarea_id,
@@ -152,11 +152,11 @@ class SubareaCommentControllerTest extends TestCase
         // User 2 tries to update
         $this->actingAs($user2);
         $response = $this->putJson("/api/comment/{$commentId}", [
-            'subarea_comment_content' => 'Hacked Content'
+            'subarea_comment_content' => 'Hacked Content',
         ]);
 
         $response->assertStatus(403)
-                 ->assertJson(['message' => 'Anda tidak berhak mengedit komentar ini.']);
+            ->assertJson(['message' => 'Anda tidak berhak mengedit komentar ini.']);
     }
 
     #[Test]
@@ -166,7 +166,7 @@ class SubareaCommentControllerTest extends TestCase
         $user2 = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => '[]']);
-        
+
         $this->actingAs($user1);
         $post = $this->postJson('/api/comment', [
             'park_subarea_id' => $sub->park_subarea_id,
@@ -179,6 +179,6 @@ class SubareaCommentControllerTest extends TestCase
         $response = $this->deleteJson("/api/comment/{$commentId}");
 
         $response->assertStatus(403)
-                 ->assertJson(['message' => 'Anda tidak berhak menghapus komentar ini.']);
+            ->assertJson(['message' => 'Anda tidak berhak menghapus komentar ini.']);
     }
 }

@@ -11,8 +11,9 @@ class Mission extends Model
     use HasFactory;
 
     protected $table = 'missions';
+
     protected $primaryKey = 'mission_id';
-    
+
     // Konstanta untuk UI
     public const METRICS = [
         'VALIDATION_ACTION' => 'Melakukan Validasi Parkir',
@@ -27,6 +28,18 @@ class Mission extends Model
         'MONTHLY' => 'Bulanan (Reset tgl 1)',
     ];
 
+    /**
+     * Tipe perhitungan misi.
+     * TARGET         : Akumulasi biasa, bebas urutan hari.
+     * SEQUENCE       : Progres +1 per hari, tidak harus berturut-turut.
+     * SEQUENCE_STREAK: Progres +1 per hari, HARUS berturut-turut (streak).
+     */
+    public const TYPES = [
+        'TARGET'          => 'Target (Akumulasi)',
+        'SEQUENCE'        => 'Sequence (Non-Streak)',
+        'SEQUENCE_STREAK' => 'Sequence (Streak)',
+    ];
+
     protected $fillable = [
         'mission_title',
         'mission_description',
@@ -35,21 +48,17 @@ class Mission extends Model
         'mission_reset_cycle',
         'mission_metric_code',
         'mission_threshold',
-        'mission_is_consecutive',
         'mission_is_active',
     ];
 
     protected $casts = [
-        'mission_points' => 'integer',
+        'mission_points'   => 'integer',
         'mission_threshold' => 'integer',
-        'mission_is_consecutive' => 'boolean',
         'mission_is_active' => 'boolean',
     ];
 
     /**
      * Relasi ke misi yang diambil oleh pengguna (UserMission).
-     *
-     * @return HasMany
      */
     public function userMissions(): HasMany
     {

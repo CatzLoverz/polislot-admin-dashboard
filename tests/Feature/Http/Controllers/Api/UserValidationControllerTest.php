@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Events\IotCommandSent;
+use App\Models\IotDevice;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
 use App\Models\User;
@@ -9,8 +11,12 @@ use App\Models\Validation;
 use App\Services\HistoryService;
 use App\Services\MissionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
+use Mockery;
+use PhpMqtt\Client\Contracts\MqttClient;
+use PhpMqtt\Client\Facades\MQTT;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -200,5 +206,53 @@ class UserValidationControllerTest extends TestCase
 
         $response->assertStatus(429)
             ->assertJson(['status' => 'error']);
+    }
+
+    #[Test]
+    public function store_triggers_snapshot_if_iot_device_attached_and_online()
+    {
+        config(['services.iot.secret' => 'test_secret']);
+        $user = User::factory()->create();
+        $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
+        $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => []]);
+
+        // Attach IoT device
+        $mac = '00:11:22:33:44:55';
+        IotDevice::create([
+            'device_mac_address' => $mac,
+            'park_subarea_id' => $sub->park_subarea_id,
+        ]);
+
+        // Mock device status as online
+        Cache::put("iot_status_{$mac}", 'online');
+
+        // Mock MQTT facade
+        $mockMqtt = Mockery::mock(MqttClient::class);
+        $mockMqtt->shouldReceive('publish')->with("polislot/device/{$mac}/command", Mockery::any(), 0);
+        $mockMqtt->shouldReceive('disconnect');
+        MQTT::shouldReceive('connection')->with('publisher')->andReturn($mockMqtt);
+
+        Validation::create([
+            'validation_points' => 10,
+            'validation_is_geofence_active' => false,
+        ]);
+
+        $this->actingAs($user);
+
+        $response = $this->postJson('/api/validation', [
+            'park_subarea_id' => $sub->park_subarea_id,
+            'user_validation_content' => 'penuh',
+        ]);
+
+        $response->assertStatus(201);
+
+        // Assert that the WS event was broadcasted
+        Event::assertDispatched(IotCommandSent::class, function ($event) use ($mac) {
+            return $event->macAddress === $mac && $event->action === 'snapshot';
+        });
+
+        // Assert pending validation is cached
+        $cleanMac = str_replace(':', '', $mac);
+        $this->assertTrue(Cache::has("pending_mobile_validation_{$cleanMac}"));
     }
 }

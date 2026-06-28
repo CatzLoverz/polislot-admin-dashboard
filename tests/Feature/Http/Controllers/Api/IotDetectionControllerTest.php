@@ -6,7 +6,6 @@ use App\Models\IotDevice;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +17,9 @@ class IotDetectionControllerTest extends TestCase
     use RefreshDatabase;
 
     protected $device;
+
     protected $mac = '00:11:22:33:44:55';
+
     protected $secret = 'test-secret';
 
     protected function setUp(): void
@@ -28,7 +29,7 @@ class IotDetectionControllerTest extends TestCase
 
         $area = ParkArea::create(['park_area_name' => 'Area', 'park_area_code' => 'AR', 'park_area_data' => '[]']);
         $subarea = ParkSubarea::create([
-            'park_area_id' => $area->park_area_id, 
+            'park_area_id' => $area->park_area_id,
             'park_subarea_name' => 'Sub',
             'park_subarea_polygon' => '[]',
             'max_slots' => 100,
@@ -38,13 +39,13 @@ class IotDetectionControllerTest extends TestCase
             'device_mac_address' => $this->mac,
             'park_subarea_id' => $subarea->park_subarea_id,
         ]);
-        
+
         Event::fake([
             \App\Events\IotDeviceStatusChanged::class,
             \App\Events\SubareaStatusUpdated::class,
             \App\Events\IotCountUpdated::class,
             \App\Events\IotDetectionReceived::class,
-            \App\Events\IotCommandSent::class
+            \App\Events\IotCommandSent::class,
         ]);
         Storage::fake('public');
     }
@@ -99,7 +100,7 @@ class IotDetectionControllerTest extends TestCase
     {
         $timestamp = time();
         $key32 = substr(hash('sha256', $this->secret, true), 0, 32);
-        
+
         $iv = openssl_random_pseudo_bytes(16);
         $image = 'fake_image_data';
         $encryptedImage = openssl_encrypt($image, 'aes-256-cbc', $key32, OPENSSL_RAW_DATA, $iv);
@@ -112,10 +113,10 @@ class IotDetectionControllerTest extends TestCase
             'current_count' => 10,
             'save_image' => true,
         ];
-        
+
         $dataToSign = json_encode($payloadToSign, JSON_UNESCAPED_SLASHES);
         $signature = hash_hmac('sha256', $dataToSign, $key32);
-        
+
         $payloadToSign['signature'] = $signature;
 
         $response = $this->postJson('/api/iot/snapshot', $payloadToSign);
@@ -130,7 +131,7 @@ class IotDetectionControllerTest extends TestCase
         $timestamp = time();
         $count = 5;
         $key32 = substr(hash('sha256', $this->secret, true), 0, 32);
-        
+
         $payloadToSign = [
             'mac_address' => $this->mac,
             'timestamp' => $timestamp,
@@ -154,7 +155,7 @@ class IotDetectionControllerTest extends TestCase
     {
         $timestamp = time();
         $key32 = substr(hash('sha256', $this->secret, true), 0, 32);
-        
+
         $dataToSign = "{$this->mac}:{$timestamp}";
         $signature = hash_hmac('sha256', $dataToSign, $key32);
 

@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -21,9 +20,7 @@ class ParkSubareaController extends Controller
      * Menyimpan subarea (Polygon) baru ke database.
      * Biasanya dipanggil via AJAX dari Map Editor.
      *
-     * @param Request $request
-     * @param int $park_area ID dari ParkArea induk
-     * @return JsonResponse
+     * @param  int  $park_area  ID dari ParkArea induk
      */
     public function store(Request $request, $park_area): JsonResponse
     {
@@ -31,8 +28,8 @@ class ParkSubareaController extends Controller
             return DB::transaction(function () use ($request, $park_area) {
                 // Validasi Input
                 $request->validate([
-                    'name'    => 'required|string|max:255',
-                    'polygon' => 'required|json' // Harus string JSON valid koordinat
+                    'name' => 'required|string|max:255',
+                    'polygon' => 'required|json', // Harus string JSON valid koordinat
                 ]);
 
                 // Pastikan Area Induk valid
@@ -40,33 +37,35 @@ class ParkSubareaController extends Controller
 
                 // Buat Subarea Baru
                 $subarea = ParkSubarea::create([
-                    'park_area_id'         => $area->park_area_id,
-                    'park_subarea_name'    => $request->name,
+                    'park_area_id' => $area->park_area_id,
+                    'park_subarea_name' => $request->name,
                     'park_subarea_polygon' => json_decode($request->polygon),
                 ]);
 
                 Log::info('Subarea baru ditambahkan.', [
-                    'area_id'    => $park_area,
+                    'area_id' => $park_area,
                     'subarea_id' => $subarea->park_subarea_id,
-                    'name'       => $subarea->park_subarea_name
+                    'name' => $subarea->park_subarea_name,
                 ]);
 
                 return response()->json([
-                    'status'  => 'success', 
+                    'status' => 'success',
                     'message' => 'Subarea berhasil disimpan.',
-                    'data'    => $subarea
+                    'data' => $subarea,
                 ]);
             });
 
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
+
             return response()->json([
-                'status' => 'error', 
+                'status' => 'error',
                 'message' => 'Validasi gagal.',
-                'errors' => $e->errors()
+                'errors' => $e->errors(),
             ], 422);
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan server.'], 500);
         }
     }
@@ -74,9 +73,7 @@ class ParkSubareaController extends Controller
     /**
      * Memperbarui data subarea (Nama atau Polygon).
      *
-     * @param Request $request
-     * @param int $id ID ParkSubarea
-     * @return JsonResponse
+     * @param  int  $id  ID ParkSubarea
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -88,17 +85,17 @@ class ParkSubareaController extends Controller
                 $currentDeviceId = $subarea->iotDevice?->device_id;
 
                 $request->validate([
-                    'name'      => 'required|string|max:255',
-                    'polygon'   => 'nullable|json',
+                    'name' => 'required|string|max:255',
+                    'polygon' => 'nullable|json',
                     'amenities' => 'nullable|array',
-                    'amenities.*'=> 'string|max:255',
-                    'device_mac_address'=> [
+                    'amenities.*' => 'string|max:255',
+                    'device_mac_address' => [
                         'nullable',
                         'string',
                         'max:17',
                         'regex:/^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$/',
-                        $currentDeviceId 
-                            ? 'unique:iot_devices,device_mac_address,' . $currentDeviceId . ',device_id'
+                        $currentDeviceId
+                            ? 'unique:iot_devices,device_mac_address,'.$currentDeviceId.',device_id'
                             : 'unique:iot_devices,device_mac_address',
                     ],
                 ]);
@@ -115,9 +112,9 @@ class ParkSubareaController extends Controller
                 $subarea->update($dataToUpdate);
 
                 // === LOGIKA SYNC AMENITIES ===
-                if ($request->has('amenities')) {
-                    $newAmenities = $request->amenities ?? [];
-                    
+                if ($request->has('amenities_provided')) {
+                    $newAmenities = $request->input('amenities', []);
+
                     // 1. Hapus yang tidak ada di list baru
                     $subarea->parkAmenity()
                         ->whereNotIn('park_amenity_name', $newAmenities)
@@ -126,9 +123,9 @@ class ParkSubareaController extends Controller
                     // 2. Tambah yang belum ada
                     $existingNames = $subarea->parkAmenity()->pluck('park_amenity_name')->toArray();
                     foreach ($newAmenities as $amenityName) {
-                        if (!in_array($amenityName, $existingNames)) {
+                        if (! in_array($amenityName, $existingNames)) {
                             $subarea->parkAmenity()->create([
-                                'park_amenity_name' => $amenityName
+                                'park_amenity_name' => $amenityName,
                             ]);
                         }
                     }
@@ -137,12 +134,12 @@ class ParkSubareaController extends Controller
                 // === LOGIKA SYNC IOT DEVICE ===
                 if ($request->has('device_mac_address')) {
                     $deviceMac = $request->device_mac_address;
-                    
-                    if (!empty($deviceMac)) {
+
+                    if (! empty($deviceMac)) {
                         $subarea->iotDevice()->updateOrCreate(
                             ['park_subarea_id' => $subarea->park_subarea_id],
                             [
-                                'device_mac_address' => $deviceMac
+                                'device_mac_address' => $deviceMac,
                             ]
                         );
                     } else {
@@ -152,7 +149,7 @@ class ParkSubareaController extends Controller
 
                 Log::info('Subarea & Fasilitas diperbarui.', [
                     'subarea_id' => $id,
-                    'name'       => $subarea->park_subarea_name
+                    'name' => $subarea->park_subarea_name,
                 ]);
 
                 // Broadcast updated status setelah transaksi commit
@@ -161,29 +158,30 @@ class ParkSubareaController extends Controller
                 });
 
                 return response()->json([
-                    'status'  => 'success', 
-                    'message' => 'Subarea berhasil diperbarui.'
+                    'status' => 'success',
+                    'message' => 'Subarea berhasil diperbarui.',
                 ]);
             });
 
         } catch (ValidationException $e) {
             Log::warning('Validasi error.', ['errors' => $e->errors()]);
+
             return response()->json([
-                'status' => 'error', 
+                'status' => 'error',
                 'message' => 'Validasi gagal.',
-                'errors' => $e->errors()
+                'errors' => $e->errors(),
             ], 422);
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            return response()->json(['status' => 'error', 'message' => $e->getMessage() . ' - ' . $e->getFile() . ':' . $e->getLine()], 500);
+
+            return response()->json(['status' => 'error', 'message' => $e->getMessage().' - '.$e->getFile().':'.$e->getLine()], 500);
         }
     }
 
     /**
      * Menghapus subarea.
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function destroy($id): RedirectResponse
     {
@@ -202,8 +200,8 @@ class ParkSubareaController extends Controller
                 $subarea->delete();
 
                 Log::info('Subarea dihapus.', [
-                    'subarea_id' => $id, 
-                    'name' => $name
+                    'subarea_id' => $id,
+                    'name' => $name,
                 ]);
 
                 return redirect()->route('admin.park-area.show', $areaId)
@@ -212,6 +210,7 @@ class ParkSubareaController extends Controller
 
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return back()->with('swal_error_crud', 'Gagal menghapus subarea.');
         }
     }
@@ -219,8 +218,7 @@ class ParkSubareaController extends Controller
     /**
      * Mengambil daftar komentar terbaru untuk subarea tertentu.
      *
-     * @param int $id
-     * @return JsonResponse
+     * @param  int  $id
      */
     public function getComments($id): JsonResponse
     {
@@ -245,12 +243,12 @@ class ParkSubareaController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'comments' => $comments
+                'comments' => $comments,
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 500);
         }
     }

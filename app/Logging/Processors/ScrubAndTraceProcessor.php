@@ -54,7 +54,7 @@ class ScrubAndTraceProcessor implements ProcessorInterface
                 $extra['user_agent'] = $request->userAgent();
                 $extra['url'] = $request->fullUrl();
                 $extra['method'] = $request->method();
-                
+
                 // Try to get user ID safely
                 try {
                     $extra['user_id'] = auth()->check() ? auth()->id() : 'guest';
@@ -63,7 +63,7 @@ class ScrubAndTraceProcessor implements ProcessorInterface
                 }
             }
         }
-        
+
         // Include unique request ID for tracing across multiple logs in same request
         $extra['request_id'] = $this->getRequestId();
 
@@ -73,7 +73,7 @@ class ScrubAndTraceProcessor implements ProcessorInterface
         // 4. Optional: Filter out excessively long "spam" string logs
         // e.g., if message itself is a giant base64 or json string
         if (is_string($message) && strlen($message) > 5000) {
-            $message = substr($message, 0, 500) . '... [TRUNCATED DUE TO SPAM FILTER]';
+            $message = substr($message, 0, 500).'... [TRUNCATED DUE TO SPAM FILTER]';
         }
 
         if ($isMonolog3) {
@@ -118,6 +118,7 @@ class ScrubAndTraceProcessor implements ProcessorInterface
                 return true;
             }
         }
+
         return false;
     }
 
@@ -149,11 +150,11 @@ class ScrubAndTraceProcessor implements ProcessorInterface
         foreach ($trace as $frame) {
             if (isset($frame['class'])) {
                 $class = $frame['class'];
-                if (!Str::startsWith($class, [
-                    'Illuminate\Log', 
-                    'Illuminate\Support\Facades', 
-                    'Monolog\\', 
-                    'App\Logging'
+                if (! Str::startsWith($class, [
+                    'Illuminate\Log',
+                    'Illuminate\Support\Facades',
+                    'Monolog\\',
+                    'App\Logging',
                 ])) {
                     $caller = $frame;
                     break;
@@ -161,7 +162,7 @@ class ScrubAndTraceProcessor implements ProcessorInterface
             }
         }
 
-        if (!$caller) {
+        if (! $caller) {
             return $message; // Fallback jika tidak ditemukan
         }
 

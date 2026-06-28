@@ -7,8 +7,8 @@
 #   private_key.pem     (RSA key enkripsi API)
 #   mariadb.cnf         (konfigurasi logging MariaDB)
 #   mosquitto.conf      (konfigurasi Mosquitto)
-#   mosquitto.passwd    (password file Mosquitto)
 #   logrotate-entrypoint.sh
+#   mosquitto/          (akan dibuat otomatis)
 #   storage/            (akan dibuat otomatis)
 # ============================================================
 
@@ -24,7 +24,7 @@ services:
     volumes:
       - ./.env:/var/www/html/.env
       - ./storage/public:/var/www/html/storage/app/public
-      - ./storage/logs:/var/www/html/storage/logs
+      - ./storage/logs/laravel:/var/www/html/storage/logs
       - ./storage/backups:/var/www/html/storage/app/backups
       - ./private_key.pem:/var/www/html/storage/app/private/keys/private_key.pem
     depends_on:
@@ -81,21 +81,35 @@ services:
     container_name: polislot_mosquitto
     restart: unless-stopped
     ports:
-      - "127.0.0.1:1883:1883" # Local TCP untuk Laravel
-      - "127.0.0.1:9001:9001" # Local WebSockets untuk Cloudflare Tunnel
+      - "127.0.0.1:1883:1883" # TCP untuk Laravel
+      - "0.0.0.0:9001:9001"   # WebSockets untuk Cloudflare Tunnel
     environment:
       - MQTT_AUTH_USERNAME=${MQTT_AUTH_USERNAME:-polislot_user}
       - MQTT_AUTH_PASSWORD=${MQTT_AUTH_PASSWORD:-secure_password}
+      - MQTT_MOBILE_USERNAME=${MQTT_MOBILE_USERNAME:-polislot_mobile}
+      - MQTT_MOBILE_PASSWORD=${MQTT_MOBILE_PASSWORD:-mobile_secure_password}
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
       - ./mosquitto:/mosquitto
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
     command: >
       sh -c "
       mkdir -p /mosquitto &&
       touch /mosquitto/mosquitto.passwd &&
-      chown mosquitto:mosquitto /mosquitto/mosquitto.passwd &&
-      chmod 600 /mosquitto/mosquitto.passwd &&
+      (chown root:root /mosquitto/mosquitto.passwd 2>/dev/null || true) &&
+      (chmod 0700 /mosquitto/mosquitto.passwd 2>/dev/null || true) &&
       mosquitto_passwd -b /mosquitto/mosquitto.passwd \$${MQTT_AUTH_USERNAME} \$${MQTT_AUTH_PASSWORD} &&
+      mosquitto_passwd -b /mosquitto/mosquitto.passwd \$${MQTT_MOBILE_USERNAME} \$${MQTT_MOBILE_PASSWORD} &&
+      (chown mosquitto:mosquitto /mosquitto/mosquitto.passwd 2>/dev/null || true) &&
+      (chmod 0700 /mosquitto/mosquitto.passwd 2>/dev/null || true) &&
+      echo \"user \$${MQTT_AUTH_USERNAME}\" > /mosquitto/mosquitto.acl &&
+      echo \"topic readwrite #\" >> /mosquitto/mosquitto.acl &&
+      echo \"\" >> /mosquitto/mosquitto.acl &&
+      echo \"user \$${MQTT_MOBILE_USERNAME}\" >> /mosquitto/mosquitto.acl &&
+      echo \"topic read frontend/#\" >> /mosquitto/mosquitto.acl &&
+      (chown mosquitto:mosquitto /mosquitto/mosquitto.acl 2>/dev/null || true) &&
+      (chmod 0700 /mosquitto/mosquitto.acl 2>/dev/null || true) &&
       exec /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
       "
     networks:
@@ -110,7 +124,7 @@ services:
     volumes:
       - ./.env:/var/www/html/.env
       - ./storage/public:/var/www/html/storage/app/public
-      - ./storage/logs:/var/www/html/storage/logs
+      - ./storage/logs/laravel:/var/www/html/storage/logs
       - ./storage/backups:/var/www/html/storage/app/backups
     depends_on:
       db:
@@ -129,8 +143,8 @@ services:
   #   container_name: polislot_tunnel
   #   restart: unless-stopped
   #   command: tunnel run
-  #   env_file:
-  #     - .env
+  #   environment:
+  #     - TUNNEL_TOKEN=${TUNNEL_TOKEN}
   #   networks:
   #     - polislot_net
 
@@ -140,4 +154,8 @@ networks:
 
 volumes:
   dbdata:
+    driver: local
+  mosquitto_data:
+    driver: local
+  mosquitto_log:
     driver: local

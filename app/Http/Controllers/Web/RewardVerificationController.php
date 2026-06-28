@@ -26,7 +26,6 @@ class RewardVerificationController extends Controller
     /**
      * Menampilkan daftar antrian klaim reward.
      *
-     * @param Request $request
      * @return View|JsonResponse
      */
     public function index(Request $request)
@@ -39,41 +38,44 @@ class RewardVerificationController extends Controller
                 $query->where('user_reward_status', $request->filter_status);
             }
             if ($request->filled('filter_type')) {
-                $query->whereHas('reward', function($q) use ($request) {
+                $query->whereHas('reward', function ($q) use ($request) {
                     $q->where('reward_type', $request->filter_type);
                 });
             }
 
-            if (!$request->order) {
+            if (! $request->order) {
                 $query->orderByRaw("FIELD(user_reward_status, 'pending', 'accepted', 'rejected')")
-                      ->orderBy('created_at', 'asc');
+                    ->orderBy('created_at', 'asc');
             }
 
             return DataTables::of($query)
                 ->addIndexColumn()
-                ->addColumn('user_name', fn($row) => $row->user->name ?? 'Unknown')
-                ->addColumn('reward_info', function($row){
+                ->addColumn('user_name', fn ($row) => $row->user->name ?? 'Unknown')
+                ->addColumn('reward_info', function ($row) {
                     $name = $row->reward->reward_name ?? '-';
                     $type = $row->reward->reward_type ?? '-';
+
                     return "<b>{$name}</b> <br><small class='text-muted'>{$type}</small>";
                 })
-                ->editColumn('user_reward_code', fn($row) => "<code>{$row->user_reward_code}</code>")
-                ->editColumn('user_reward_status', function($row){
+                ->editColumn('user_reward_code', fn ($row) => "<code>{$row->user_reward_code}</code>")
+                ->editColumn('user_reward_status', function ($row) {
                     $status = $row->user_reward_status;
                     $badges = ['pending' => 'warning', 'accepted' => 'success', 'rejected' => 'danger'];
                     $color = $badges[$status] ?? 'secondary';
-                    return "<span class='badge badge-{$color}'>" . strtoupper($status) . "</span>";
+
+                    return "<span class='badge badge-{$color}'>".strtoupper($status).'</span>';
                 })
-                ->editColumn('created_at', fn($row) => $row->created_at->format('d M Y H:i'))
+                ->editColumn('created_at', fn ($row) => $row->created_at->format('d M Y H:i'))
                 // PERUBAHAN: Menambahkan kolom Updated At
-                ->editColumn('updated_at', function($row) {
+                ->editColumn('updated_at', function ($row) {
                     // Jika status masih pending, tampilkan strip agar lebih bersih
                     if ($row->user_reward_status === 'pending') {
                         return '<span class="text-muted">-</span>';
                     }
+
                     return $row->updated_at ? $row->updated_at->format('d M Y H:i') : '-';
                 })
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     if ($row->user_reward_status !== 'pending') {
                         return '<span class="text-muted"><i class="fa fa-check-circle"></i> Selesai</span>';
                     }
@@ -112,9 +114,7 @@ class RewardVerificationController extends Controller
     /**
      * Memproses persetujuan atau penolakan klaim reward.
      *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function process(Request $request, $id): RedirectResponse
     {
@@ -123,7 +123,7 @@ class RewardVerificationController extends Controller
                 $claim = UserReward::with(['user', 'reward'])->lockForUpdate()->findOrFail($id);
                 $newStatus = $request->status;
 
-                if (!in_array($newStatus, ['accepted', 'rejected'])) {
+                if (! in_array($newStatus, ['accepted', 'rejected'])) {
                     return back()->with('swal_error_crud', 'Status tidak valid.');
                 }
 
@@ -142,30 +142,30 @@ class RewardVerificationController extends Controller
                         null,
                         true
                     );
-                    
+
                     $msg = 'Klaim berhasil diterima.';
-                } 
-                
+                }
+
                 // KASUS 2: DITOLAK (REJECTED)
                 elseif ($newStatus === 'rejected') {
                     $pointsToRefund = $claim->reward->reward_point_required ?? 0;
-                    
+
                     if ($pointsToRefund > 0 && $claim->user) {
                         $claim->user->increment('current_points', $pointsToRefund);
                         Log::info('Info: Poin dikembalikan ke user.', ['user_id' => $claim->user_id]);
 
                         // Catat History Refund
                         $this->historyService->log(
-                            $claim->user_id, 
-                            'redeem', 
-                            $claim->reward->reward_name, 
+                            $claim->user_id,
+                            'redeem',
+                            $claim->reward->reward_name,
                             $pointsToRefund,
                             false
                         );
                     }
                     $msg = 'Klaim ditolak, poin telah dikembalikan.';
                 }
-                
+
                 Log::info('Status klaim diperbarui.', ['id' => $id, 'status' => $newStatus]);
 
                 return back()->with('swal_success_crud', $msg);
@@ -173,6 +173,7 @@ class RewardVerificationController extends Controller
 
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
+
             return back()->with('swal_error_crud', 'Terjadi kesalahan sistem.');
         }
     }

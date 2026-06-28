@@ -48,12 +48,12 @@ class Controller extends BaseController
     protected function sendValidationError(ValidationException $e): JsonResponse
     {
         $firstError = collect($e->errors())->flatten()->first();
-        
+
         return response()->json([
             'status' => 'error',
             'message' => $firstError,
             'data' => null,
-            'errors' => $e->errors()
+            'errors' => $e->errors(),
         ], 422);
     }
 

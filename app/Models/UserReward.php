@@ -8,23 +8,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UserReward extends Model
 {
     protected $table = 'user_rewards';
+
     protected $primaryKey = 'user_reward_id';
 
     protected $fillable = [
         'user_id',
         'reward_id',
         'user_reward_code',
-        'user_reward_status'
+        'user_reward_status',
     ];
 
     const STATUS_PENDING = 'pending';
+
     const STATUS_ACCEPTED = 'accepted';
+
     const STATUS_REJECTED = 'rejected';
 
     /**
      * Relasi ke pengguna yang menukarkan reward.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -33,8 +34,6 @@ class UserReward extends Model
 
     /**
      * Relasi ke reward yang ditukarkan.
-     *
-     * @return BelongsTo
      */
     public function reward(): BelongsTo
     {

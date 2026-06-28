@@ -65,44 +65,27 @@ Buka `.env` dan atur konfigurasi berikut:
     ```ini
     TUNNEL_TOKEN="isi_token_cloudflare_tunnel_anda"
     ```
+- **Laravel Reverb (WebSocket) & IoT Security**: Konfigurasi ini dibutuhkan untuk fitur Realtime Dashboard dan keamanan perangkat IoT. Untuk `REVERB_HOST` dan `REVERB_SERVER_HOST`, gunakan nilai default untuk Docker (`127.0.0.1` dan `0.0.0.0`).
+    ```ini
+    REVERB_APP_ID="bebas_isi_angka_acak"
+    REVERB_APP_KEY="bebas_isi_karakter_acak"
+    REVERB_APP_SECRET="bebas_isi_karakter_acak_rahasia"
+    REVERB_HOST="127.0.0.1"
+    REVERB_SERVER_HOST="0.0.0.0"
+
+    # Shared secret untuk HMAC signature dan AES Encryption dari/ke perangkat IoT
+    IOT_API_SECRET="rahasia_iot_anda_disini"
+    ```
 - **MQTT Authentication (Mosquitto)**: Isi kredensial untuk broker MQTT. Autentikasi broker ini telah **diotomatisasi secara penuh** di dalam Docker kontainer pada saat kontainer dijalankan menggunakan variabel ini. Anda tidak perlu membuat berkas password secara manual.
     ```ini
-    MQTT_AUTH_USERNAME=MQTTPoliSlot
-    MQTT_AUTH_PASSWORD=password_mqtt_yang_aman
+    MQTT_AUTH_USERNAME=polislot_user
+    MQTT_AUTH_PASSWORD=secure_password
+    MQTT_MOBILE_USERNAME=polislot_mobile
+    MQTT_MOBILE_PASSWORD=mobile_secure_password
     ```
 
-### 2. Atur docker-compose.yml
-Pastikan file `docker-compose.yml` Anda memiliki konfigurasi seperti berikut.
 
-**PENTING**:
-1. Sesuaikan `MARIADB_ROOT_PASSWORD`.
-2. Jika ingin menggunakan **Cloudflare Tunnel**, harap **UNCOMMENT** bagian service `tunnel` di file `docker-compose.yml` Anda.
-
-```yaml
-services:
-  # ... (Services lainnya: app, tunnel) ...
-
-  db:
-    image: mariadb:latest
-    container_name: polislot_db
-    restart: unless-stopped
-    environment:
-      MARIADB_ROOT_PASSWORD: '...' # <--- GANTI INI dengan password root yang aman!
-    volumes:
-      - dbdata:/var/lib/mysql
-      # Mount Config Logging
-      - ./mariadb.cnf:/etc/mysql/conf.d/logging.cnf:ro
-      # Mount Folder Log ke Host
-      - ./storage/logs/mariadb:/var/log/mysql
-    ports:
-      - "127.0.0.1:3308:3306"
-    networks:
-      - polislot_net
-
-  # ... (Services lainnya: logrotate, scheduler) ...
-```
-
-### 3. Generate RSA Keys (Di Root)
+### 2. Generate RSA Keys (Di Root)
 **Wajib:** Generate pasangan kunci RSA untuk enkripsi API di **Root Folder** (sejajar dengan `docker-compose.yml`). Docker akan memount file ini ke lokasi yang tepat di dalam container.
 
 ```bash
@@ -111,34 +94,34 @@ openssl rsa -pubout -in private_key.pem -out public_key.pem
 ```
 *Note: Public key bisa disimpan untuk referensi, private key wajib ada.*
 
-### 4. Verifikasi Credential
+### 3. Verifikasi Credential
 Pastikan credential root di `.env` (DB_PASSWORD) cocok dengan `MARIADB_ROOT_PASSWORD` di `docker-compose.yml`.
 
-### 5. Menjalankan Container
+### 4. Menjalankan Container
 Jalankan Docker Compose.
 ```bash
 docker compose up -d
 ```
 
-### 6. Generate Application Key
+### 5. Generate Application Key
 Generate key aplikasi Laravel di dalam container.
 ```bash
 docker compose exec app php artisan key:generate
 ```
 
-### 7. Migrasi Database
+### 6. Migrasi Database
 Jalankan migrasi database (fresh install).
 ```bash
 docker compose exec app php artisan migrate --fresh
 ```
 
-### 8. Setup Admin User (Seeding)
+### 7. Setup Admin User (Seeding)
 Jalankan seeder untuk membuat data awal dan akun admin (menggunakan `ADMIN_EMAIL` & `ADMIN_PASSWORD` dari `.env`).
 ```bash
 docker compose exec app php artisan db:seed
 ```
 
-### 9. Setup Database Roles
+### 8. Setup Database Roles
 Buat user database khusus untuk aplikasi (RBAC) agar lebih aman.
 ```bash
 # Setup user database untuk Admin Dashboard
@@ -148,7 +131,7 @@ docker compose exec app php artisan db:setup-admin polislot_admin password_db_ad
 docker compose exec app php artisan db:setup-user polislot_mobile password_db_mobile
 ```
 
-### 10. Atur Ulang Environment (.env) - PENTING
+### 9. Atur Ulang Environment (.env) - PENTING
 Buka file `.env` kembali dan **GANTI** credential database root dengan user yang baru saja dibuat.
 
 ```ini
@@ -161,10 +144,25 @@ DB_USERNAME_MOBILE=polislot_mobile
 DB_PASSWORD_MOBILE=password_db_mobile
 ```
 
-### 11. Re-up Container
+### 10. Re-up Container
 Jalankan kembali docker compose untuk menerapkan seluruh perubahan environment (termasuk kredensial MQTT dan user database baru) dan memastikan seluruh sistem berjalan dengan benar.
 ```bash
 docker compose up -d --force-recreate
 ```
 
-Instalasi selesai! Aplikasi sekarang dapat diakses di `http://localhost:8080` (atau port yang Anda konfigurasi).
+### 11. Buat port forward local dan firewall rule - Optional untuk instalasi pada WSL
+Jika Anda menginstal dan menjalankan Docker di dalam WSL (Windows Subsystem for Linux), secara default layanan tersebut hanya bisa diakses dari komputer *host* (localhost). Agar aplikasi (Web Dashboard dan broker MQTT) dapat diakses oleh *device* lain di jaringan lokal (LAN) yang sama, Anda perlu membuka akses *port forwarding* dan Windows Firewall.
+
+Kami telah menyediakan skrip PowerShell untuk mengotomatisasi proses ini. Copy file **wsl-port-forward.ps1** tempatkan pada host/windows Anda (bukan WSL). Jalankan aplikasi **PowerShell** sebagai **Administrator** (Run as Administrator), arahkan ke *root directory* proyek, kemudian eksekusi skrip berikut:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File .\wsl-port-forward.ps1
+```
+
+> **Catatan**: Skrip ini akan melakukan *port forwarding* (port 8080, 1883, dan 9001) dari IP WSL ke `0.0.0.0` dan secara otomatis menambahkan aturan di Windows Firewall agar *inbound connection* diizinkan. Biarkan jendela PowerShell tetap terbuka (skrip terus berjalan). Jika Anda ingin menghentikan *port forwarding* dan menghapus aturan *firewall* yang telah dibuat, cukup tekan `CTRL+C` pada terminal PowerShell tersebut.
+
+---
+
+🎉 **Instalasi selesai!** Aplikasi sekarang dapat diakses melalui browser:
+- Dari komputer lokal: `http://localhost:8080`
+- Dari *device* lain di jaringan yang sama: `http://<IP_ADDRESS_KOMPUTER_ANDA>:8080`

@@ -30,7 +30,7 @@ class MissionTest extends TestCase
 
         $this->assertDatabaseHas('missions', [
             'mission_title' => 'Misi Harian',
-            'mission_metric_code' => 'LOGIN_ACTION'
+            'mission_metric_code' => 'LOGIN_ACTION',
         ]);
     }
 
@@ -44,11 +44,11 @@ class MissionTest extends TestCase
             'mission_points' => 10,
             'mission_threshold' => 1,
             'mission_is_active' => true,
-            'mission_reset_cycle' => 'DAILY'
+            'mission_reset_cycle' => 'DAILY',
         ]);
 
         $found = Mission::find($mission->mission_id);
-        
+
         $this->assertNotNull($found);
         $this->assertEquals('Read Mission', $found->mission_title);
     }
@@ -62,14 +62,14 @@ class MissionTest extends TestCase
             'mission_metric_code' => 'VALIDATION_ACTION', // Ganti 'TEST' dengan Valid Enum
             'mission_threshold' => 10,
             'mission_is_active' => true, // Tambahkan default
-            'mission_reset_cycle' => 'NONE' // Tambahkan default
+            'mission_reset_cycle' => 'NONE', // Tambahkan default
         ]);
 
         $mission->update(['mission_title' => 'Judul Baru']);
 
         $this->assertDatabaseHas('missions', [
             'mission_id' => $mission->mission_id,
-            'mission_title' => 'Judul Baru'
+            'mission_title' => 'Judul Baru',
         ]);
     }
 
@@ -82,13 +82,13 @@ class MissionTest extends TestCase
             'mission_metric_code' => 'VALIDATION_ACTION', // Ganti 'TEST' dengan Valid Enum
             'mission_threshold' => 10,
             'mission_is_active' => true,
-            'mission_reset_cycle' => 'NONE'
+            'mission_reset_cycle' => 'NONE',
         ]);
 
         $mission->delete();
 
         $this->assertDatabaseMissing('missions', [
-            'mission_id' => $mission->mission_id
+            'mission_id' => $mission->mission_id,
         ]);
     }
 }

@@ -7,8 +7,10 @@ Panduan ini menjelaskan cara menginstal dan menjalankan aplikasi Polislot Admin 
 Sebelum memulai, pastikan sistem Anda memiliki:
 - **PHP**: Versi 8.4 atau lebih baru.
 - **Composer**: Untuk manajemen dependensi PHP.
+- **Node.js & NPM**: Untuk manajemen dan kompilasi dependensi frontend (Tailwind CSS, Laravel Echo).
 - **MySQL / MariaDB**: Sebagai database server.
 - **Web Server**: Apache atau Nginx.
+- **Mosquitto MQTT Broker**: Dapat diinstal secara lokal pada OS Anda, atau menggunakan public broker.
 *Pastikan Anda juga telah memenuhi requirements external service (Google Cloud / Cloudflare) yang disebutkan di README utama.*
 
 ---
@@ -63,6 +65,28 @@ Buka file `.env` dan atur:
     ```ini
     GOOGLE_MAPS_JS="isi_api_key_google_cloud_anda"
     ```
+6.  **Laravel Reverb (WebSocket) & IoT Security**:
+    Atur konfigurasi server WebSocket dan *secret key* untuk perangkat IoT.
+    ```ini
+    REVERB_APP_ID="bebas_isi_angka_acak"
+    REVERB_APP_KEY="bebas_isi_karakter_acak"
+    REVERB_APP_SECRET="bebas_isi_karakter_acak_rahasia"
+    REVERB_HOST="127.0.0.1"
+    REVERB_SERVER_HOST="127.0.0.1"
+
+    # Shared secret untuk HMAC signature dan AES Encryption dari/ke perangkat IoT
+    IOT_API_SECRET="rahasia_iot_anda_disini"
+    ```
+7.  **MQTT Authentication (Mosquitto)**:
+    Sesuaikan dengan host dan kredensial broker MQTT yang Anda gunakan.
+    ```ini
+    MQTT_HOST=127.0.0.1
+    MQTT_PORT=1883
+    MQTT_AUTH_USERNAME=polislot_user
+    MQTT_AUTH_PASSWORD=secure_password
+    MQTT_MOBILE_USERNAME=polislot_mobile
+    MQTT_MOBILE_PASSWORD=mobile_secure_password
+    ```
 
 ### 2. Generate RSA Keys (Wajib)
 Generate pasangan kunci RSA untuk enkripsi API agar aplikasi mobile dapat terhubung.
@@ -73,9 +97,11 @@ openssl rsa -pubout -in storage/app/private/keys/private_key.pem -out storage/ap
 *Note: Public key bisa disimpan untuk referensi, private key wajib ada.*
 
 ### 3. Instalasi Dependency
-Install library PHP yang dibutuhkan menggunakan Composer.
+Install library PHP (Composer) dan dependensi Frontend (NPM) yang dibutuhkan.
 ```bash
 composer install
+npm install
+npm run build
 ```
 
 ### 4. Generate Application Key
@@ -113,16 +139,33 @@ DB_USERNAME_MOBILE=polislot_mobile
 DB_PASSWORD_MOBILE=password_db_mobile
 ```
 
-### 8. Jalankan Aplikasi
-Jalankan server pengembangan lokal.
-```bash
-php artisan serve
-```
-Aplikasi dapat diakses di `http://localhost:8080`.
+### 8. Menjalankan Service Aplikasi
+Untuk menjalankan aplikasi secara penuh di lingkungan lokal, Anda perlu membuka **beberapa terminal terpisah** di dalam folder proyek dan menjalankan perintah berikut secara bersamaan:
 
-### 9. Mengaktifkan Scheduler (Backup Otomatis)
-Fitur backup otomatis memerlukan scheduler yang berjalan. Buka terminal baru dan jalankan:
-```bash
-php artisan schedule:work
-```
-*Biarkan perintah ini berjalan di background/terminal terpisah.*
+1. **Web Server**:
+   ```bash
+   php artisan serve --port=8080
+   ```
+   *(Aplikasi dapat diakses melalui browser di `http://localhost:8080`)*
+
+2. **WebSocket Server (Reverb)**:
+   ```bash
+   php artisan reverb:start
+   ```
+
+3. **Queue Worker** (Untuk kelancaran eksekusi *event broadcasting*):
+   ```bash
+   php artisan queue:work
+   ```
+
+4. **MQTT Listener** (Untuk menerima data pembaruan parkir dari perangkat IoT):
+   ```bash
+   php artisan mqtt:listen
+   ```
+
+5. **Scheduler** (Dibutuhkan untuk Auto Backup database):
+   ```bash
+   php artisan schedule:work
+   ```
+
+*Pastikan semua terminal tersebut dibiarkan tetap terbuka dan berjalan di background (tidak tertutup).*

@@ -10,7 +10,7 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {   
+    {
         Schema::create('feedback_categories', function (Blueprint $table) {
             $table->id('fbk_category_id');
             $table->string('fbk_category_name', 255);

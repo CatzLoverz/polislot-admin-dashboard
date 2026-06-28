@@ -39,13 +39,27 @@
         };
     </script>
     <style>
-        /* CSS Fix untuk Akordion Sidebar yang tidak muncul di localhost */
-        .sidebar .nav .nav-item.submenu .collapse.show,
-        .sidebar .nav .nav-item.submenu .collapsing {
-            display: block !important;
+        /* ROOT CAUSE FIX: Atlantis menetapkan padding: .6rem 1rem pada .form-control
+           (specificity 0,3,0 dengan !important). Padding ini terlalu besar dan membuat
+           teks di native Chrome select menjadi tidak terpusat.
+
+           Solusi BENAR (sama dengan pendekatan Bootstrap 5): gunakan appearance:none
+           untuk mengambil alih rendering dari OS/browser, sehingga CSS sepenuhnya
+           mengontrol posisi teks. Arrow bawaan diganti dengan SVG custom.
+
+           Selector specificity 0,3,1 mengalahkan Atlantis (0,3,0) untuk !important. */
+        select.form-control:not([size]):not([multiple]) {
+            -webkit-appearance: none !important;
+            appearance: none !important;
             height: auto !important;
-            visibility: visible !important;
-            opacity: 1 !important;
+            padding-top: 0.375rem !important;
+            padding-bottom: 0.375rem !important;
+            padding-left: 1rem !important;
+            padding-right: 2rem !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0.75rem center !important;
+            background-size: 16px 12px !important;
         }
     </style>
     @stack('styles')
@@ -149,16 +163,12 @@
                                     <p>Manajemen Info Board</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.park-area.*') ? 'active' : '' }}">
+                            <li class="nav-item {{ (Route::is('admin.park-area.*') || Route::is('admin.iot.*')) ? 'active' : '' }}">
                                 <a href="{{ Route('admin.park-area.index') }}"> <i class="fas fa-parking"></i>
                                     <p>Manajemen Area Parkir</p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Route::is('admin.iot.*') ? 'active' : '' }}">
-                                <a href="{{ route('admin.iot.index') }}"> <i class="fas fa-microchip"></i>
-                                    <span>Manajemen Konfigurasi Deteksi IoT</span>
-                                </a>
-                            </li>
+
                             @php
                                 $isGamificationActive = Request::is('admin/validation*') || Request::is('admin/missions*') || Request::is('admin/rewards*') || Request::is('admin/rewards/verify*');
                             @endphp

@@ -28,7 +28,7 @@ class MapVisualizationControllerTest extends TestCase
         $response = $this->getJson('/api/map-visualization');
 
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success']);
+            ->assertJson(['status' => 'success']);
     }
 
     #[Test]
@@ -37,7 +37,7 @@ class MapVisualizationControllerTest extends TestCase
         $user = User::factory()->create();
         $area = ParkArea::create(['park_area_name' => 'A', 'park_area_code' => 'A', 'park_area_data' => []]);
         $subarea = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'S1', 'park_subarea_polygon' => []]);
-        
+
         // Buat records untuk mencegah foreign key error
         Validation::create(['validation_name' => 'Banyak', 'validation_slug' => 'banyak', 'validation_points' => 10]);
 
@@ -47,17 +47,17 @@ class MapVisualizationControllerTest extends TestCase
             'validation_id' => 1,
             'park_subarea_id' => $subarea->park_subarea_id,
             'user_validation_content' => 'banyak',
-            'created_at' => now()->subMinutes(5)
+            'created_at' => now()->subMinutes(5),
         ]);
 
         $this->actingAs($user);
-        
+
         $response = $this->getJson("/api/map-visualization/{$area->park_area_id}");
-        
+
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success'])
-                 ->assertJsonPath('data.area_name', 'A')
-                 ->assertJsonPath('data.validation_cooldown.can_validate', false);
+            ->assertJson(['status' => 'success'])
+            ->assertJsonPath('data.area_name', 'A')
+            ->assertJsonPath('data.validation_cooldown.can_validate', false);
     }
 
     #[Test]
@@ -65,10 +65,10 @@ class MapVisualizationControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        
-        $response = $this->getJson("/api/map-visualization/9999");
-        
+
+        $response = $this->getJson('/api/map-visualization/9999');
+
         $response->assertStatus(404)
-                 ->assertJson(['status' => 'error', 'message' => 'Area parkir tidak ditemukan.']);
+            ->assertJson(['status' => 'error', 'message' => 'Area parkir tidak ditemukan.']);
     }
 }

@@ -3,3 +3,5 @@ requests
 opencv-python
 paho-mqtt
 pycryptodome
+ultralytics
+python-dotenv

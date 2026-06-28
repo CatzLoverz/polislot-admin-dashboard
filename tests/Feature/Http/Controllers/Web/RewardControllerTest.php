@@ -45,11 +45,11 @@ class RewardControllerTest extends TestCase
     public function update_modifies_reward()
     {
         $reward = Reward::create([
-            'reward_name' => 'Old', 
-            'reward_description' => 'Desc', 
+            'reward_name' => 'Old',
+            'reward_description' => 'Desc',
             'reward_type' => 'Voucher',
-            'reward_point_required' => 50, 
-            'reward_stock' => 10
+            'reward_point_required' => 50,
+            'reward_stock' => 10,
         ]);
 
         $response = $this->actingAs($this->admin)->from('/admin/rewards')->put("/admin/rewards/{$reward->reward_id}", [
@@ -59,7 +59,7 @@ class RewardControllerTest extends TestCase
             'reward_point_required' => 100,
             'reward_stock' => 20,
         ]);
-        
+
         $response->assertRedirect('/admin/rewards')->assertSessionHas('swal_success_crud');
         $this->assertDatabaseHas('rewards', ['reward_name' => 'New']);
     }
@@ -68,11 +68,11 @@ class RewardControllerTest extends TestCase
     public function destroy_deletes_reward()
     {
         $reward = Reward::create([
-            'reward_name' => 'To Delete', 
-            'reward_description' => 'Desc', 
+            'reward_name' => 'To Delete',
+            'reward_description' => 'Desc',
             'reward_type' => 'Voucher',
-            'reward_point_required' => 50, 
-            'reward_stock' => 10
+            'reward_point_required' => 50,
+            'reward_stock' => 10,
         ]);
 
         $response = $this->actingAs($this->admin)->from('/admin/rewards')->delete("/admin/rewards/{$reward->reward_id}");

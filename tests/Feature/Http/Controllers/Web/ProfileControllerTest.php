@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers\Web;
 
-use App\Models\User;
-use App\Http\Middleware\RBAC; // Import Middleware RBAC
+use App\Http\Middleware\RBAC;
+use App\Models\User; // Import Middleware RBAC
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,7 @@ class ProfileControllerTest extends TestCase
     #[Test]
     public function edit_profile_halaman_dapat_diakses()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get(route('profile.edit'));
@@ -52,10 +53,10 @@ class ProfileControllerTest extends TestCase
     {
         Storage::fake('public');
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'name' => 'Old Name',
-            'avatar' => 'default_avatar.jpg'
+            'avatar' => 'default_avatar.jpg',
         ]);
 
         $file = UploadedFile::fake()->image('new_avatar.jpg');
@@ -64,7 +65,7 @@ class ProfileControllerTest extends TestCase
             ->from(route('profile.edit'))
             ->put(route('profile.update'), [
                 'name' => 'New Name',
-                'avatar' => $file
+                'avatar' => $file,
             ]);
 
         $response->assertRedirect(route('profile.edit'));
@@ -73,7 +74,7 @@ class ProfileControllerTest extends TestCase
         $user->refresh();
         $this->assertEquals('New Name', $user->name);
         $this->assertNotEquals('default_avatar.jpg', $user->avatar);
-        
+
         /** @var \Illuminate\Filesystem\FilesystemAdapter $fs */
         $fs = Storage::disk('public');
         $fs->assertExists($user->avatar);
@@ -89,9 +90,9 @@ class ProfileControllerTest extends TestCase
         $fs = Storage::disk('public');
         $path = $fs->putFile('avatars', $oldAvatar);
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
-            'avatar' => $path
+            'avatar' => $path,
         ]);
 
         $newAvatar = UploadedFile::fake()->image('new.jpg');
@@ -100,11 +101,11 @@ class ProfileControllerTest extends TestCase
             ->from(route('profile.edit'))
             ->put(route('profile.update'), [
                 'name' => 'Updated Name',
-                'avatar' => $newAvatar
+                'avatar' => $newAvatar,
             ]);
 
         $fs->assertMissing($path);
-        
+
         $user->refresh();
         $fs->assertExists($user->avatar);
     }
@@ -116,9 +117,9 @@ class ProfileControllerTest extends TestCase
     #[Test]
     public function update_password_berhasil()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
-            'password' => Hash::make('CurrentPass123!')
+            'password' => Hash::make('CurrentPass123!'),
         ]);
 
         $response = $this->actingAs($user)
@@ -140,9 +141,9 @@ class ProfileControllerTest extends TestCase
     #[Test]
     public function update_password_gagal_jika_password_lama_salah()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
-            'password' => Hash::make('CurrentPass123!')
+            'password' => Hash::make('CurrentPass123!'),
         ]);
 
         $response = $this->actingAs($user)
@@ -156,16 +157,16 @@ class ProfileControllerTest extends TestCase
 
         $response->assertRedirect(route('profile.edit'));
         $response->assertSessionHasErrors(['current_password']);
-        
+
         $this->assertTrue(Hash::check('CurrentPass123!', $user->refresh()->password));
     }
 
     #[Test]
     public function update_password_gagal_jika_password_baru_sama_dengan_lama()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
-            'password' => Hash::make('SamePass123!')
+            'password' => Hash::make('SamePass123!'),
         ]);
 
         $response = $this->actingAs($user)
@@ -188,10 +189,10 @@ class ProfileControllerTest extends TestCase
     #[Test]
     public function update_profile_menangani_exception_sistem_dan_rollback()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'name' => 'Original Name',
-            'password' => Hash::make('OldPass') // Password asli di DB
+            'password' => Hash::make('OldPass'), // Password asli di DB
         ]);
 
         // 🟢 SMART MOCKING:
@@ -202,15 +203,16 @@ class ProfileControllerTest extends TestCase
                 if ($inputPassword === 'OldPass') {
                     return true;
                 }
+
                 // 2. Validasi 'NotCurrentPassword': Input 'NewPass123!' harus dianggap BEDA (False)
-                return false; 
+                return false;
             });
 
         // Simulasi Error Sistem saat proses hashing password baru
         Hash::shouldReceive('make')
             ->once()
             ->with('NewPass123!')
-            ->andThrow(new \Exception('Simulated Hashing Error'));
+            ->andThrow(new Exception('Simulated Hashing Error'));
 
         $response = $this->actingAs($user)
             ->from(route('profile.edit'))
@@ -222,7 +224,7 @@ class ProfileControllerTest extends TestCase
             ]);
 
         $response->assertRedirect(route('profile.edit'));
-        
+
         // Assert pesan error sistem muncul (bukan error validasi)
         $response->assertSessionHas('swal_error_crud', 'Terjadi kesalahan pada server saat memperbarui profil.');
 

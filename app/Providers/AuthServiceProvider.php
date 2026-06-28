@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\User;                  
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;   
+use Illuminate\Support\Facades\Log;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -27,7 +27,6 @@ class AuthServiceProvider extends ServiceProvider
 
         // Log untuk memastikan metode boot() di AuthServiceProvider dieksekusi
         // Log::info('Metode boot() sedang dieksekusi.');
-
 
         /**
          * Gate: access-admin-features

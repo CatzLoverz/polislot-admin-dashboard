@@ -39,7 +39,7 @@ class FeedbackTest extends TestCase
         $feedback = Feedback::create([
             'fbk_category_id' => $category->fbk_category_id,
             'feedback_title' => 'Read Test',
-            'feedback_description' => 'Reading...'
+            'feedback_description' => 'Reading...',
         ]);
 
         $found = Feedback::find($feedback->feedback_id);
@@ -55,14 +55,14 @@ class FeedbackTest extends TestCase
         $feedback = Feedback::create([
             'fbk_category_id' => $category->fbk_category_id,
             'feedback_title' => 'Old Title',
-            'feedback_description' => 'Old Desc'
+            'feedback_description' => 'Old Desc',
         ]);
 
         $feedback->update(['feedback_title' => 'New Title']);
 
         $this->assertDatabaseHas('feedbacks', [
             'feedback_id' => $feedback->feedback_id,
-            'feedback_title' => 'New Title'
+            'feedback_title' => 'New Title',
         ]);
     }
 
@@ -74,7 +74,7 @@ class FeedbackTest extends TestCase
         $feedback = Feedback::create([
             'fbk_category_id' => $category->fbk_category_id,
             'feedback_title' => 'To Delete',
-            'feedback_description' => '...'
+            'feedback_description' => '...',
         ]);
 
         $feedback->delete();

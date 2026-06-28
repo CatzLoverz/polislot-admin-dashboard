@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Feedback extends Model
 {
     protected $table = 'feedbacks';
+
     protected $primaryKey = 'feedback_id';
+
     public $timestamps = true;
 
     protected $fillable = [
@@ -19,8 +21,6 @@ class Feedback extends Model
 
     /**
      * Relasi ke kategori feedback.
-     *
-     * @return BelongsTo
      */
     public function feedbackCategory(): BelongsTo
     {

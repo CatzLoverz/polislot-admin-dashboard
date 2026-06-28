@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Events\IotCountUpdated;
+use App\Events\IotDetectionReceived;
 use App\Events\IotDeviceStatusChanged;
-use App\Events\IotStreamReceived;
 use App\Events\SubareaStatusUpdated;
 use App\Models\IotCapture;
 use App\Models\IotDevice;
@@ -158,7 +158,7 @@ class MqttListenerCommand extends Command
 
                         if ($saveImage) {
                             // 3. Simpan gambar ke storage public
-                            $fileName = 'capture_'.time().'_'.str_replace(':', '', $payload['mac_address']).'.jpg';
+                            $fileName = 'capture_'.time().'_'.uniqid().'_'.str_replace(':', '', $payload['mac_address']).'.jpg';
                             $path = 'iot_captures/'.$fileName;
 
                             Storage::disk('public')->put($path, $decryptedImageBytes);
@@ -198,21 +198,17 @@ class MqttListenerCommand extends Command
                                         broadcast(new IotCountUpdated($payload['mac_address'], $payload['current_count']));
                                     });
                                 }
-                            });
 
-                            // Check pending validation in cache
-                            $cleanMac = str_replace(':', '', $payload['mac_address']);
-                            $pendingKey = "pending_validation_{$cleanMac}";
-                            if (Cache::has($pendingKey)) {
-                                $pending = Cache::get($pendingKey);
-                                Cache::forget($pendingKey);
+                                // Check pending validation in cache
+                                $cleanMac = str_replace(':', '', $payload['mac_address']);
+                                $pendingKey = "pending_validation_{$cleanMac}";
+                                $pendingMobileKey = "pending_mobile_validation_{$cleanMac}";
 
-                                $subarea = $device->subarea;
-                                if ($subarea) {
-                                    DB::transaction(function () use ($pending, $subarea, $device) {
-                                        // Find latest capture in this transaction
-                                        $latestCapture = IotCapture::where('device_id', $device->device_id)->orderBy('created_at', 'desc')->first();
+                                if (Cache::has($pendingKey)) {
+                                    $pending = Cache::get($pendingKey);
+                                    Cache::forget($pendingKey);
 
+                                    if ($subarea) {
                                         // Create UserValidation record
                                         $userVal = UserValidation::create([
                                             'user_id' => $pending['user_id'],
@@ -222,18 +218,25 @@ class MqttListenerCommand extends Command
                                         ]);
 
                                         // Associate with capture
-                                        if ($latestCapture) {
-                                            $latestCapture->user_validation_id = $userVal->user_validation_id;
-                                            $latestCapture->save();
-                                        }
+                                        $capture->user_validation_id = $userVal->user_validation_id;
+                                        $capture->save();
 
                                         $this->info("📈 [MQTT] Saved manual validation from admin snapshot: subarea={$subarea->park_subarea_name}, content={$pending['content']}");
 
                                         // Evaluate WMA Threshold Shift!
                                         $subarea->evaluateThresholdShift();
-                                    });
+                                    }
+                                } elseif (Cache::has($pendingMobileKey)) {
+                                    $userValidationId = Cache::get($pendingMobileKey);
+                                    Cache::forget($pendingMobileKey);
+
+                                    // Associate with existing user validation from mobile
+                                    $capture->user_validation_id = $userValidationId;
+                                    $capture->save();
+
+                                    $this->info("📈 [MQTT] Linked snapshot to existing mobile validation: id={$userValidationId}");
                                 }
-                            }
+                            });
                         } else {
                             $this->info('ℹ️ Snapshot diterima tetapi tidak disimpan (save_image = false).');
                         }
@@ -243,7 +246,7 @@ class MqttListenerCommand extends Command
 
                     // 5. Ubah bytes menjadi base64 string untuk UI HTML dan Broadcast ke Reverb
                     $imageBase64String = 'data:image/jpeg;base64,'.base64_encode($decryptedImageBytes);
-                    broadcast(new IotStreamReceived($payload['mac_address'], $imageBase64String, $saveImage));
+                    broadcast(new IotDetectionReceived($payload['mac_address'], $imageBase64String, $saveImage));
                     $this->info('📡 Gambar di-broadcast ke Web UI.');
                 } catch (Exception $e) {
                     $this->error('Error memproses pesan: '.$e->getMessage());
@@ -251,7 +254,7 @@ class MqttListenerCommand extends Command
             });
 
             // Listener tambahan untuk update count dari IoT Device via MQTT
-            $mqtt->subscribe('polislot/device/+/count', function (string $topic, string $message) use ($secretKey) {
+            $mqtt->subscribe('polislot/device/+/count', function (string $topic, string $message) use ($secretKey, $mqtt) {
                 try {
                     $payload = json_decode($message, true);
                     if (! $payload || ! isset($payload['signature'])) {
@@ -303,7 +306,9 @@ class MqttListenerCommand extends Command
                             broadcast(new IotCountUpdated($mac, $count));
 
                             // Broadcast subarea status update untuk halaman Visualisasi
-                            broadcast(new SubareaStatusUpdated($subarea));
+                            $event = new SubareaStatusUpdated($subarea);
+                            broadcast($event);
+                            $mqtt->publish("frontend/parking_area/{$subarea->park_area_id}", json_encode($event), 1, true);
                         }
                     }
                 } catch (Exception $e) {
@@ -312,7 +317,7 @@ class MqttListenerCommand extends Command
             });
 
             // Listener tambahan untuk status Online/Offline (LWT)
-            $mqtt->subscribe('polislot/device/+/status', function (string $topic, string $message) use ($secretKey) {
+            $mqtt->subscribe('polislot/device/+/status', function (string $topic, string $message) use ($secretKey, $mqtt) {
                 // Topic format: polislot/device/{MAC}/status
                 $parts = explode('/', $topic);
                 $mac = $parts[2] ?? 'unknown';
@@ -378,7 +383,9 @@ class MqttListenerCommand extends Command
 
                         // Broadcast count updated to 0
                         broadcast(new IotCountUpdated($mac, 0));
-                        broadcast(new SubareaStatusUpdated($subarea));
+                        $event = new SubareaStatusUpdated($subarea);
+                        broadcast($event);
+                        $mqtt->publish("frontend/parking_area/{$subarea->park_area_id}", json_encode($event), 1, true);
                         $this->info("📈 [MQTT] Device {$mac} went offline. Reset subarea count to 0.");
                     }
                 }
@@ -389,7 +396,9 @@ class MqttListenerCommand extends Command
                     if ($device && $device->subarea) {
                         $subarea = $device->subarea;
 
-                        broadcast(new SubareaStatusUpdated($subarea));
+                        $event = new SubareaStatusUpdated($subarea);
+                        broadcast($event);
+                        $mqtt->publish("frontend/parking_area/{$subarea->park_area_id}", json_encode($event), 1, true);
 
                         $payloadData = [
                             'action' => 'update_config',
@@ -413,6 +422,17 @@ class MqttListenerCommand extends Command
                 }
             });
 
+            // actively check presence channel for ws devices for mobile clients that don't have presence awareness.
+            $reconcileInterval = max(5, (int) env('IOT_WS_RECONCILE_INTERVAL', 15));
+            $lastReconcileAt = 0.0;
+            $mqtt->registerLoopEventHandler(function ($client, float $elapsedTime) use (&$lastReconcileAt, $reconcileInterval) {
+                if (($elapsedTime - $lastReconcileAt) < $reconcileInterval) {
+                    return;
+                }
+                $lastReconcileAt = $elapsedTime;
+                $this->reconcileWsDeviceStatuses();
+            });
+
             $mqtt->loop(true);
 
         } catch (Exception $e) {
@@ -422,5 +442,43 @@ class MqttListenerCommand extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * Reconcile status device WebSocket secara periodik dengan Reverb presence channel.
+     *
+     * Hanya memeriksa device yang di-cache sebagai ONLINE dengan connection_type 'ws'
+     * (device MQTT sudah memiliki Last-Will Testament untuk mendeteksi offline secara
+     * real-time, jadi tidak perlu di-poll di sini). Untuk tiap device WS online,
+     * IotDevice::syncStatus() akan mengecek presence channel Reverb secara aktif; bila
+     * device sudah tidak ada di channel, syncStatus() memanggil markDeviceOffline() yang
+     * mem-broadcast SubareaStatusUpdated (sekaligus publish MQTT retained ke mobile).
+     */
+    private function reconcileWsDeviceStatuses(): void
+    {
+        try {
+            $devices = IotDevice::all();
+
+            foreach ($devices as $device) {
+                $mac = $device->device_mac_address;
+                $status = Cache::get("iot_status_{$mac}", 'offline');
+                $connectionType = Cache::get("iot_connection_type_{$mac}", 'ws');
+
+                // Lewati device yang memang sudah offline atau bukan koneksi WS.
+                if ($status !== 'online' || $connectionType !== 'ws') {
+                    continue;
+                }
+
+                // syncStatus() melakukan side-effect (markDeviceOffline -> broadcast +
+                // publish MQTT) hanya jika device benar-benar sudah keluar presence channel.
+                $actualStatus = IotDevice::syncStatus($mac);
+
+                if ($actualStatus === 'offline') {
+                    $this->info("🔌 [Reconcile] Device WS {$mac} terdeteksi OFFLINE (keluar presence channel). Status disinkronkan ke Web & Mobile.");
+                }
+            }
+        } catch (Exception $e) {
+            $this->error('[Reconcile] Gagal sinkronisasi status WS: '.$e->getMessage());
+        }
     }
 }

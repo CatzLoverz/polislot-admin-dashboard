@@ -280,6 +280,8 @@ class IotDetectionController extends Controller
             // Check if there is a pending validation for this device
             $cleanMac = str_replace(':', '', $macAddress);
             $pendingKey = "pending_validation_{$cleanMac}";
+            $pendingMobileKey = "pending_mobile_validation_{$cleanMac}";
+
             if (Cache::has($pendingKey)) {
                 $pending = Cache::get($pendingKey);
                 Cache::forget($pendingKey);
@@ -308,6 +310,15 @@ class IotDetectionController extends Controller
                         broadcast(new SubareaStatusUpdated($subarea));
                     });
                 }
+            } elseif (Cache::has($pendingMobileKey)) {
+                $userValidationId = Cache::get($pendingMobileKey);
+                Cache::forget($pendingMobileKey);
+
+                // Associate with existing user validation from mobile
+                $capture->user_validation_id = $userValidationId;
+                $capture->save();
+
+                Log::info("Linked snapshot to existing mobile validation: id={$userValidationId}");
             }
         }
 

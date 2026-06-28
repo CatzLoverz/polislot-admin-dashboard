@@ -89,6 +89,10 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
+                    <div class="bg-light p-2 text-center text-muted" style="font-size: 13px; border-bottom: 1px solid #ebedf2;">
+                        <i class="fas fa-info-circle text-primary mr-1"></i> 
+                        <strong>Tips:</strong> Geser titik (sudut) poligon di peta untuk mengubah bentuk. Klik kanan pada titik untuk menghapusnya.
+                    </div>
                     <div id="map" style="height: 650px; width: 100%; border-radius: 0 0 15px 15px; z-index: 1;"></div>
                 </div>
             </div>
@@ -104,8 +108,8 @@
                     <ul class="list-group list-group-flush subarea-list-container" style="max-height: 650px; overflow-y: auto; background-color: #f8f9fa;">
                         @forelse($area->parkSubarea as $sub)
                             <li class="list-group-item subarea-item" id="subarea-item-{{ $sub->park_subarea_id }}" data-id="{{ $sub->park_subarea_id }}" style="border-left: 5px solid {{ $sub->status_color }} !important;">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div style="width: 65%;">
+                                <div class="d-flex w-100 align-items-start">
+                                    <div style="width: 85%; word-wrap: break-word;" class="pr-1 text-wrap">
                                         <span class="font-weight-bold d-block text-dark subarea-name" style="font-size: 1.05rem;">{{ $sub->park_subarea_name }}</span>
                                         <small class="d-block mt-1 subarea-status-wrapper" style="font-weight: 600;">
                                             <span class="subarea-status-text" style="color: {{ $sub->status_color }}">
@@ -127,7 +131,7 @@
                                         
                                         {{-- Last Validation Report Time & Countdown --}}
                                         <small class="d-block mt-1 text-muted subarea-validation-time font-weight-bold" style="font-size: 10px; {{ (isset($sub->validation_expires_at) && $sub->validation_expires_at) ? '' : 'display: none;' }}">
-                                            <i class="fas fa-history mr-1"></i> Laporan: <span class="last-validated-time-val">
+                                            <i class="fas fa-history mr-1"></i> Validasi Terakhir: <span class="last-validated-time-val">
                                                 @if(isset($sub->last_validation_time) && $sub->last_validation_time)
                                                     {{ date('H:i', strtotime($sub->last_validation_time)) }}
                                                 @endif
@@ -165,9 +169,17 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="d-flex align-items-center ml-1">
+                                    <div style="width: 15%;" class="d-flex flex-column align-items-center">
+                                        @if($sub->iotDevice)
+                                            {{-- Tombol Atur IoT --}}
+                                            <a href="{{ route('admin.iot.index', ['mac' => $sub->iotDevice->device_mac_address]) }}" class="btn btn-icon btn-round btn-secondary btn-xs mb-1" 
+                                                data-toggle="tooltip" title="Atur Konfigurasi IoT">
+                                                <i class="fas fa-microchip"></i>
+                                            </a>
+                                        @endif
+
                                         {{-- Tombol Lihat Komentar --}}
-                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mr-1 btn-comment-modal" 
+                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mb-1 btn-comment-modal" 
                                             onclick="fetchAndOpenCommentModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}')"
                                             data-toggle="tooltip" title="Lihat Komentar">
                                             <i class="fas fa-comments"></i>
@@ -179,7 +191,7 @@
                                         </button>
 
                                         {{-- Tombol Edit (Existing) --}}
-                                        <button type="button" class="btn btn-icon btn-round btn-primary btn-xs mr-1" 
+                                        <button type="button" class="btn btn-icon btn-round btn-primary btn-xs mb-1" 
                                             onclick="openEditModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}', {{ json_encode($sub->parkAmenity) }}, {{ json_encode($sub->iotDevice) }})"
                                             data-toggle="tooltip" title="Edit Subarea">
                                             <i class="fa fa-edit"></i>
@@ -273,7 +285,7 @@
                         <small class="text-muted">Isi MAC Address jika subarea ini dipasang perangkat IoT.</small>
                     </div>
                     <label>MAC Address (Opsional)</label>
-                    <input type="text" id="edit_device_mac" class="form-control" placeholder="Contoh: 00:1A:2B:3C:4D:5E">
+                    <input type="text" id="edit_device_mac" class="form-control" placeholder="Contoh: 00:1A:2B:3C:4D:5E" maxlength="17">
                 </div>
                 
                 <hr>
@@ -349,6 +361,8 @@
             'fallback_status' => $sub->fallback_status,
             'fallback_status_color' => $sub->fallback_status_color,
             'iot_status' => $sub->iot_status,
+            // Sertakan MAC address untuk Presence Channel listener
+            'device_mac' => $sub->iotDevice ? $sub->iotDevice->device_mac_address : null,
         ]);
     })); ?>;
     let currentPolygonObj = null;
@@ -397,6 +411,37 @@
             });
             
             polygonObjects[sub.park_subarea_id] = polygon;
+
+            // Hitung titik tengah (center) polygon untuk menempatkan label
+            let bounds = new google.maps.LatLngBounds();
+            sub.park_subarea_polygon.forEach(coord => {
+                bounds.extend(new google.maps.LatLng(parseFloat(coord.lat), parseFloat(coord.lng)));
+            });
+            let polygonCenter = bounds.getCenter();
+
+            // Buat elemen kustom untuk label nama subarea
+            const labelDiv = document.createElement("div");
+            labelDiv.style.backgroundColor = "rgba(255, 255, 255, 0.85)";
+            labelDiv.style.border = `2px solid ${polygonColor}`;
+            labelDiv.style.borderRadius = "6px";
+            labelDiv.style.padding = "2px 8px";
+            labelDiv.style.fontSize = "12px";
+            labelDiv.style.fontWeight = "bold";
+            labelDiv.style.color = "#333";
+            labelDiv.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
+            labelDiv.style.pointerEvents = "none"; // Biar klik tetap tembus ke polygon
+            labelDiv.style.whiteSpace = "nowrap";
+            labelDiv.innerText = sub.park_subarea_name;
+
+            const labelMarker = new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: polygonCenter,
+                content: labelDiv,
+                title: sub.park_subarea_name
+            });
+
+            if (!window.labelMarkers) window.labelMarkers = {};
+            window.labelMarkers[sub.park_subarea_id] = { marker: labelMarker, div: labelDiv };
 
             let infoWindow = new google.maps.InfoWindow({
                 content: `<b>${sub.park_subarea_name}</b>`
@@ -689,6 +734,7 @@
                 _token: "{{ csrf_token() }}", 
                 _method: "PUT", 
                 name: name,
+                amenities_provided: true,
                 amenities: tempAmenities,
                 device_mac_address: deviceMac
             },
@@ -830,6 +876,11 @@
                 strokeColor: color,
                 fillColor: color
             });
+        }
+
+        // Update warna border label jika ada
+        if (window.labelMarkers && window.labelMarkers[subId]) {
+            window.labelMarkers[subId].div.style.border = `2px solid ${color}`;
         }
         
         // B. Update List Item di Kanan
@@ -979,12 +1030,29 @@
         });
     }
 
+    // Helper: update badge IoT status di sidebar berdasarkan MAC address dan status
+    function updateIotBadgeByMac(mac, status) {
+        const badges = document.querySelectorAll(`.iot-status-badge[data-mac="${mac}"]`);
+        badges.forEach(badge => {
+            if (status === 'online') {
+                badge.className = "badge badge-success text-white mr-1 mb-1 p-1 iot-status-badge";
+                badge.innerHTML = '<i class="fas fa-signal"></i> IoT Online';
+                badge.setAttribute('title', 'IoT Online');
+                badge.setAttribute('data-original-title', 'IoT Online');
+            } else {
+                badge.className = "badge badge-danger text-white mr-1 mb-1 p-1 iot-status-badge";
+                badge.innerHTML = '<i class="fas fa-signal-slash"></i> IoT Offline';
+                badge.setAttribute('title', 'IoT Offline');
+                badge.setAttribute('data-original-title', 'IoT Offline');
+            }
+        });
+    }
+
     // Inisialisasi Echo listener untuk update real-time
     function initEcho() {
         if (typeof window.Echo !== 'undefined') {
             const areaId = "{{ $area->park_area_id }}";
-            
-            // 1. Dengar event pembaruan subarea di area parkir ini
+            // 1. Dengar event pembaruan subarea di area parkir ini (status, count, validasi, dll.)
             window.Echo.channel(`park-area.${areaId}`)
                 .listen('.subarea.updated', (e) => {
                     console.log("📡 Subarea Updated Event Received:", e);
@@ -1019,30 +1087,79 @@
                     updateSubareaUI(subId);
                 });
                 
-            // 2. Dengar status perangkat IoT (online/offline)
+            // 2. Dengar status perangkat IoT via broadcast event (FALLBACK dari MQTT/WS webhook)
             window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
-                    console.log("📡 Device Status Received (MQTT/WS):", e);
-                    
-                    const mac = e.macAddress;
-                    const status = e.status;
-                    
-                    // Cari semua badge status IoT dengan MAC address ini
-                    const badges = document.querySelectorAll(`.iot-status-badge[data-mac="${mac}"]`);
-                    badges.forEach(badge => {
-                        if (status === 'online') {
-                            badge.className = "badge badge-success text-white mr-1 mb-1 p-1 iot-status-badge";
-                            badge.innerHTML = '<i class="fas fa-signal"></i> IoT Online';
-                            badge.setAttribute('title', 'IoT Online');
-                            badge.setAttribute('data-original-title', 'IoT Online');
-                        } else {
-                            badge.className = "badge badge-danger text-white mr-1 mb-1 p-1 iot-status-badge";
-                            badge.innerHTML = '<i class="fas fa-signal-slash"></i> IoT Offline';
-                            badge.setAttribute('title', 'IoT Offline');
-                            badge.setAttribute('data-original-title', 'IoT Offline');
+                    console.log("📡 Device Status Received (MQTT/WS Broadcast):", e);
+                    updateIotBadgeByMac(e.macAddress, e.status);
+                });
+
+            // 3. Presence Channel per-device IoT — DETEKSI OFFLINE INSTAN
+            // Saat skrip IoT dimatikan, koneksi WS device putus → Reverb langsung
+            // mengirim event 'leaving' ke semua subscriber → UI update TANPA menunggu polling.
+            existingSubareas.forEach(sub => {
+                if (!sub.device_mac) return; // Skip subarea tanpa IoT device
+
+                const cleanMac = sub.device_mac.replace(/:/g, '');
+                const presenceChannelName = `iot.device.${cleanMac}`;
+
+                console.log(`🔗 Joining presence channel: ${presenceChannelName} (${sub.park_subarea_name})`);
+
+                window.Echo.join(presenceChannelName)
+                    .here((members) => {
+                        // Hydrate status saat pertama kali join berdasarkan anggota yang ada
+                        const isOnline = members.some(m => m.type === 'iot_device');
+                        console.log(`✅ Presence channel ready for ${sub.device_mac}: ${isOnline ? 'ONLINE' : 'OFFLINE'} (${members.length} member)`);
+                        // Tidak override badge di sini — biarkan server-rendered status berlaku.
+                        // Badge sudah di-render oleh Blade berdasarkan $sub->iot_status.
+                    })
+                    .joining((member) => {
+                        if (member.type === 'iot_device') {
+                            console.log(`✅ IoT Device ONLINE via Presence: ${sub.device_mac}`);
+                            updateIotBadgeByMac(sub.device_mac, 'online');
+                        }
+                    })
+                    .leaving((member) => {
+                        if (member.type === 'iot_device') {
+                            console.log(`❌ IoT Device OFFLINE via Presence: ${sub.device_mac}`);
+
+                            // ── LANGKAH 1: Update badge IoT di sidebar (instan) ──────────────────
+                            updateIotBadgeByMac(sub.device_mac, 'offline');
+
+                            // ── LANGKAH 2: Reset visualisasi polygon + status sidebar ke NETRAL ──
+                            // Saat IoT offline tidak ada data ketersediaan → tampilkan netral (biru).
+                            // CATATAN: fallbackStatus TIDAK bisa dipakai di sini karena nilainya
+                            // sama dengan status IoT saat device online (bukan status tanpa IoT).
+                            existingSubareas.forEach(s => {
+                                if (s.device_mac !== sub.device_mac) return;
+                                const subId = s.park_subarea_id;
+                                if (!subareaStates[subId]) return;
+
+                                subareaStates[subId].status       = 'netral';
+                                subareaStates[subId].color        = '#1572e8';
+                                subareaStates[subId].currentCount = 0;
+                                updateSubareaUI(subId);
+                                console.log(`🔄 Subarea ${subId} (${s.park_subarea_name}) → netral (IoT offline)`);
+                            });
+
+                            // ── LANGKAH 3: Panggil mark-offline ke backend (TANPA delay) ─────────
+                            // Endpoint ini langsung memanggil markDeviceOffline() tanpa
+                            // mengecek Reverb presence (menghindari race condition).
+                            // Efek samping: cache di-set offline + MQTT broadcast ke mobile.
+                            fetch('/admin/iot/mark-offline', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({ mac_address: sub.device_mac })
+                            })
+                                .then(r => r.json())
+                                .then(d => console.log(`🔄 mark-offline response (MQTT mobile notified):`, d))
+                                .catch(err => console.error("mark-offline error:", err));
                         }
                     });
-                });
+            });
         } else {
             setTimeout(initEcho, 500);
         }
@@ -1089,11 +1206,12 @@
         // Start expiration checking timer (check every 1 second for smooth countdowns)
         setInterval(checkValidationExpirations, 1000);
 
-        // Ping backend every 25 seconds to sync IoT statuses (fixes WS ghost connections)
+        // Fallback polling setiap 60 detik untuk mendeteksi ghost connections (WS yang putus tanpa event).
+        // Presence Channel sudah menangani offline instan; polling ini sebagai safety net.
         setInterval(() => {
-            fetch(`/api/iot/sync-area/{{ $area->park_area_id }}`)
+            fetch(`/admin/iot/sync-area/{{ $area->park_area_id }}`)
                 .catch(err => console.error("Sync error:", err));
-        }, 25000);
+        }, 60000);
 
         // Reset active comments state on modal close
         $('#modalComments').on('hidden.bs.modal', function () {
@@ -1120,6 +1238,14 @@
                     form.submit();
                 }
             });
+        });
+
+        // Event listener untuk otomatis format input MAC Address
+        $('#edit_device_mac').on('input', function(e) {
+            let val = e.target.value.replace(/[^a-fA-F0-9]/g, '').toUpperCase();
+            if (val.length > 12) val = val.substring(0, 12);
+            let formatted = val.match(/.{1,2}/g)?.join(':') || val;
+            e.target.value = formatted;
         });
     });
 </script>

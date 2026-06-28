@@ -29,15 +29,15 @@ fi
 echo "Fixing storage permissions..."
 # Gunakan ACL untuk storage agar www-data pasti bisa nulis
 # setfacl -R (Recursive) -m (Modify) u:www-data:rwx (Read Write Execute)
-if command -v setfacl >/dev/null; then
-    setfacl -R -m u:www-data:rwx /var/www/html/storage
-    setfacl -d -R -m u:www-data:rwx /var/www/html/storage
+if command -v setfacl >/dev/null && setfacl -m u:www-data:rwx /var/www/html/storage 2>/dev/null; then
+    setfacl -R -m u:www-data:rwx /var/www/html/storage || true
+    setfacl -d -R -m u:www-data:rwx /var/www/html/storage || true
 # Trigger auto-discovery untuk Laravel
     # php artisan package:discover --ansi
 else
     # Fallback jika setfacl gagal
-    chown -R www-data:www-data /var/www/html/storage
-    chmod -R 775 /var/www/html/storage
+    chown -R www-data:www-data /var/www/html/storage 2>/dev/null || echo "Note: Failed to chown storage (expected on some bind-mounts)"
+    chmod -R 775 /var/www/html/storage 2>/dev/null || echo "Note: Failed to chmod storage (expected on some bind-mounts)"
 fi
 
 # --- 2b. FIX BOOTSTRAP/CACHE PERMISSIONS ---
@@ -45,8 +45,8 @@ fi
 CACHE_DIR="/var/www/html/bootstrap/cache"
 if [ -d "$CACHE_DIR" ]; then
     echo "Fixing bootstrap/cache permissions..."
-    chown -R www-data:www-data "$CACHE_DIR"
-    chmod -R 775 "$CACHE_DIR"
+    chown -R www-data:www-data "$CACHE_DIR" 2>/dev/null || true
+    chmod -R 775 "$CACHE_DIR" 2>/dev/null || true
 fi
 
 # --- 3. SETUP STRUKTUR BACKUP ---
@@ -59,14 +59,14 @@ mkdir -p "$BACKUP_DIR/hourly"
 mkdir -p "$BACKUP_DIR/every_3days"
 
 # Pastikan permission backup folder terbuka untuk www-data
-chown -R www-data:www-data "$BACKUP_DIR"
-chmod -R 775 "$BACKUP_DIR"
+chown -R www-data:www-data "$BACKUP_DIR" 2>/dev/null || true
+chmod -R 775 "$BACKUP_DIR" 2>/dev/null || true
 
 # --- 4. SETUP PRIVATE KEYS ---
 KEY_DIR="/var/www/html/storage/app/private/keys"
 mkdir -p "$KEY_DIR"
-chown -R www-data:www-data "$KEY_DIR"
-chmod -R 775 "$KEY_DIR"
+chown -R www-data:www-data "$KEY_DIR" 2>/dev/null || true
+chmod -R 775 "$KEY_DIR" 2>/dev/null || true
 
 # --- 5. ENSURE STORAGE LINK ---
 LINK_PATH="/var/www/html/public/storage"
@@ -84,13 +84,8 @@ php artisan storage:link --force
 
 # Pastikan ownershipnya sesuai
 if [ -L "$LINK_PATH" ]; then
-    chown -h www-data:www-data "$LINK_PATH"
+    chown -h www-data:www-data "$LINK_PATH" 2>/dev/null || true
     echo "Symlink created successfully."
-fi
-
-# Ensure the symlink is owned by www-data (safety net)
-if [ -L "$LINK_PATH" ]; then
-    chown -h www-data:www-data "$LINK_PATH"
 fi
 
 echo "Environment Ready. Executing Command..."

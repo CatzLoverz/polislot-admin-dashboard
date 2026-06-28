@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Log;
 
 class MissionController extends Controller
@@ -31,8 +30,6 @@ class MissionController extends Controller
      * 2. Daftar Misi Aktif beserta progres user saat ini
      * 3. Leaderboard Top 20 berdasarkan Lifetime Points
      * 4. Posisi User saat ini di Leaderboard
-     *
-     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -80,16 +77,17 @@ class MissionController extends Controller
                 }
 
                 return [
-                    'mission_id' => $mission->mission_id,
-                    'title' => $mission->mission_title,
-                    'description' => $mission->mission_description,
-                    'points' => $mission->mission_points,
-                    'metric_code' => $mission->mission_metric_code,
-                    'threshold' => $mission->mission_threshold,
+                    'mission_id'    => $mission->mission_id,
+                    'title'         => $mission->mission_title,
+                    'description'   => $mission->mission_description,
+                    'points'        => $mission->mission_points,
+                    'metric_code'   => $mission->mission_metric_code,
+                    'mission_type'  => $mission->mission_type,
+                    'threshold'     => $mission->mission_threshold,
                     'current_value' => $currentValue,
-                    'percentage' => $percentage, // Ini yang dipakai UI Flutter
-                    'is_completed' => $isCompleted,
-                    'completed_at' => $completedAt ? Carbon::parse($completedAt)->format('d M Y, H:i') : null,
+                    'percentage'    => $percentage, // Ini yang dipakai UI Flutter
+                    'is_completed'  => $isCompleted,
+                    'completed_at'  => $completedAt ? Carbon::parse($completedAt)->format('d M Y, H:i') : null,
                 ];
             })->sortBy('is_completed')->values();
 
@@ -113,11 +111,11 @@ class MissionController extends Controller
 
             if ($user->role === 'user' && $user->email_verified_at !== null) {
                 $userRankPos = User::whereNotNull('email_verified_at')
-                                ->where('role', 'user')
-                                ->where('lifetime_points', '>', $user->lifetime_points)
-                                ->count() + 1;
+                    ->where('role', 'user')
+                    ->where('lifetime_points', '>', $user->lifetime_points)
+                    ->count() + 1;
             } else {
-                $userRankPos = 0; 
+                $userRankPos = 0;
             }
 
             $userRankData = [
@@ -135,6 +133,7 @@ class MissionController extends Controller
 
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
+
             return $this->sendError('Gagal memuat data misi: '.$e->getMessage(), 500);
         }
     }

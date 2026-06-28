@@ -3,11 +3,14 @@
 namespace App\Events;
 
 use App\Models\ParkSubarea;
+use Exception;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use PhpMqtt\Client\Facades\MQTT;
 
 class SubareaStatusUpdated implements ShouldBroadcastNow
 {
@@ -41,6 +44,10 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
 
     public $fallbackStatusColor;
 
+    public $votedStatus;
+
+    public $anchorCvStatus;
+
     /**
      * Create a new event instance.
      */
@@ -59,10 +66,40 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
         $this->validationRemainingSeconds = $live['validation_remaining_seconds'] ?? 0;
         $this->fallbackStatus = $live['fallback_status'] ?? 'netral';
         $this->fallbackStatusColor = $live['fallback_status_color'] ?? '#1572e8';
+        $this->votedStatus = $live['voted_status'] ?? null;
+        $this->anchorCvStatus = $live['anchor_cv_status'] ?? null;
 
         $this->currentCount = $subarea->current_count ?? 0;
         $this->maxSlots = $subarea->max_slots ?? 0;
         $this->commentCount = $subarea->subareaComment()->count();
+
+        // Publish ke MQTT untuk aplikasi mobile
+        try {
+            $mqttPayload = [
+                'type' => 'status_updated',
+                'parkSubareaId' => $this->parkSubareaId,
+                'status' => $this->status,
+                'statusColor' => $this->statusColor,
+                'isValidated' => $this->isValidated,
+                'hasUserReport' => $this->hasUserReport,
+                'currentCount' => $this->currentCount,
+                'maxSlots' => $this->maxSlots,
+                'validationExpiresAt' => $this->validationExpiresAt,
+                'lastValidationTime' => $this->lastValidationTime,
+                'validationRemainingSeconds' => $this->validationRemainingSeconds,
+                'fallbackStatus' => $this->fallbackStatus,
+                'fallbackStatusColor' => $this->fallbackStatusColor,
+                'votedStatus' => $this->votedStatus,
+                'anchorCvStatus' => $this->anchorCvStatus,
+                'commentCount' => $this->commentCount,
+                'timestamp' => time(),
+            ];
+            $mqtt = MQTT::connection('publisher');
+            $mqtt->publish("frontend/parking_area/{$this->parkAreaId}", json_encode($mqttPayload), 1, true);
+            $mqtt->disconnect();
+        } catch (Exception $e) {
+            Log::warning('Failed to publish status update via MQTT: '.$e->getMessage());
+        }
     }
 
     /**

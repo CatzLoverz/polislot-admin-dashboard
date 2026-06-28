@@ -16,16 +16,16 @@ class UserMissionTest extends TestCase
     #[Test]
     public function user_mission_dapat_dibuat_dan_berelasi()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
-        
+
         $mission = Mission::create([
             'mission_title' => 'Test Mission',
             'mission_type' => 'TARGET',
             'mission_metric_code' => 'VALIDATION_ACTION', // Valid Enum
             'mission_threshold' => 10,
             'mission_is_active' => true,
-            'mission_reset_cycle' => 'NONE'
+            'mission_reset_cycle' => 'NONE',
         ]);
 
         $userMission = UserMission::create([
@@ -38,7 +38,7 @@ class UserMissionTest extends TestCase
         $this->assertDatabaseHas('user_missions', [
             'user_id' => $user->user_id,
             'mission_id' => $mission->mission_id,
-            'user_mission_current_value' => 5
+            'user_mission_current_value' => 5,
         ]);
 
         // Test Relasi
@@ -49,17 +49,17 @@ class UserMissionTest extends TestCase
     #[Test]
     public function user_mission_dapat_diupdate()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
-        
+
         // Gunakan data valid agar tidak error Truncated
         $mission = Mission::create([
             'mission_title' => 'Valid Title',
-            'mission_metric_code' => 'VALIDATION_ACTION', 
-            'mission_type' => 'TARGET', 
+            'mission_metric_code' => 'VALIDATION_ACTION',
+            'mission_type' => 'TARGET',
             'mission_threshold' => 1,
             'mission_is_active' => true,
-            'mission_reset_cycle' => 'NONE'
+            'mission_reset_cycle' => 'NONE',
         ]);
 
         $userMission = UserMission::create([
@@ -69,30 +69,30 @@ class UserMissionTest extends TestCase
         ]);
 
         $userMission->update([
-            'user_mission_current_value' => 10, 
-            'user_mission_is_completed' => true
+            'user_mission_current_value' => 10,
+            'user_mission_is_completed' => true,
         ]);
 
         $this->assertDatabaseHas('user_missions', [
             'user_mission_id' => $userMission->user_mission_id,
             'user_mission_current_value' => 10,
-            'user_mission_is_completed' => true
+            'user_mission_is_completed' => true,
         ]);
     }
 
     #[Test]
     public function user_mission_dapat_dihapus()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
-        
+
         $mission = Mission::create([
             'mission_title' => 'Valid Title',
-            'mission_metric_code' => 'VALIDATION_ACTION', 
-            'mission_type' => 'TARGET', 
+            'mission_metric_code' => 'VALIDATION_ACTION',
+            'mission_type' => 'TARGET',
             'mission_threshold' => 1,
             'mission_is_active' => true,
-            'mission_reset_cycle' => 'NONE'
+            'mission_reset_cycle' => 'NONE',
         ]);
 
         $userMission = UserMission::create([
@@ -103,7 +103,7 @@ class UserMissionTest extends TestCase
         $userMission->delete();
 
         $this->assertDatabaseMissing('user_missions', [
-            'user_mission_id' => $userMission->user_mission_id
+            'user_mission_id' => $userMission->user_mission_id,
         ]);
     }
 }

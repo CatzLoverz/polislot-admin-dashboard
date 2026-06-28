@@ -3,18 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'users';
+
     protected $primaryKey = 'user_id';
+
     public $timestamps = true;
 
     protected $fillable = [
@@ -23,12 +24,12 @@ class User extends Authenticatable
         'role',
         'name',
         'avatar',
-        'otp_code',        
+        'otp_code',
         'otp_expires_at',
         'failed_attempts',
         'locked_until',
         'current_points',
-        'lifetime_points'
+        'lifetime_points',
     ];
 
     protected $hidden = [
@@ -40,16 +41,13 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'locked_until'      => 'datetime',
+            'locked_until' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    
     /**
      * Relasi ke Info Board.
-     *
-     * @return HasMany
      */
     public function infoBoard(): HasMany
     {
@@ -58,8 +56,6 @@ class User extends Authenticatable
 
     /**
      * Relasi ke User Mission.
-     *
-     * @return HasMany
      */
     public function userMission(): HasMany
     {
@@ -68,8 +64,6 @@ class User extends Authenticatable
 
     /**
      * Relasi ke User Reward.
-     *
-     * @return HasMany
      */
     public function userReward(): HasMany
     {
@@ -78,8 +72,6 @@ class User extends Authenticatable
 
     /**
      * Relasi ke User History.
-     *
-     * @return HasMany
      */
     public function userHistory(): HasMany
     {
@@ -88,8 +80,6 @@ class User extends Authenticatable
 
     /**
      * Relasi ke User Validation.
-     *
-     * @return HasMany
      */
     public function userValidation(): HasMany
     {
@@ -98,8 +88,6 @@ class User extends Authenticatable
 
     /**
      * Relasi ke Subarea Comment.
-     *
-     * @return HasMany
      */
     public function subareaComment(): HasMany
     {

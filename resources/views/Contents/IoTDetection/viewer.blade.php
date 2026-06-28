@@ -5,6 +5,8 @@
 @section('page_subtitle', 'Kelola konfigurasi deteksi parkir otomatis berdasarkan perangkat IoT yang terhubung.')
 
 @section('content')
+
+@push('styles')
 <style>
 .double-range-slider {
     position: absolute;
@@ -100,39 +102,40 @@
     border-color: #e9ecef !important;
 }
 </style>
+@endpush
+
 <div class="page-inner mt--5">
     {{-- Pemilihan Device --}}
     <div class="row mb-3">
         <div class="col-md-12">
             <div class="card shadow-sm">
-                <div class="card-body py-3 d-flex align-items-center">
-                    <i class="fas fa-microchip fa-lg text-primary mr-3"></i>
-                    <div class="mr-3">
-                        <label class="mb-0 font-weight-bold" for="device-selector">Pilih Perangkat IoT:</label>
-                        <div id="status-indicator" class="badge badge-{{ $initialStatus === 'online' ? 'success' : 'danger' }} ml-2">
-                            <i class="fas fa-circle mr-1" style="font-size: 8px;"></i> {{ strtoupper($initialStatus) }}
-                        </div>
-                        <span class="badge badge-primary ml-2">
-                            <i class="fas fa-car mr-1"></i> Count: <strong id="current-count-badge">{{ $initialCount ?? 0 }}</strong>
-                        </span>
-                    </div>
-                    <select class="form-control" id="device-selector" style="max-width: 450px;" onchange="switchDevice(this.value)">
-                        @forelse($devices as $device)
-                            <option value="{{ $device->device_mac_address }}" 
-                                {{ $targetMac === $device->device_mac_address ? 'selected' : '' }}>
-                                {{ $device->device_mac_address }}
-                                @if($device->subarea)
-                                    — {{ $device->subarea->parkArea->park_area_name ?? 'Area tidak diketahui' }}
-                                    / {{ $device->subarea->park_subarea_name ?? 'Subarea tidak diketahui' }}
+                <div class="card-body py-3 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
+                    <div class="d-flex align-items-center mb-2 mb-md-0">
+                        @if(isset($selectedDevice) && $selectedDevice->subarea)
+                            <a href="{{ route('admin.park-area.show', $selectedDevice->subarea->park_area_id) }}" class="btn btn-light border btn-sm mr-3">
+                                <i class="fas fa-arrow-left mr-1"></i> Kembali
+                            </a>
+                        @endif
+                        <i class="fas fa-microchip fa-2x text-primary mr-3"></i>
+                        <div>
+                            <h5 class="mb-0 font-weight-bold text-dark">
+                                @if(isset($selectedDevice) && $selectedDevice->subarea)
+                                    {{ $selectedDevice->subarea->parkArea->park_area_name ?? 'Area tidak diketahui' }}
+                                    / {{ $selectedDevice->subarea->park_subarea_name ?? 'Subarea tidak diketahui' }}
+                                @else
+                                    Perangkat IoT
                                 @endif
-                            </option>
-                        @empty
-                            <option value="" disabled selected>Tidak ada perangkat terdaftar</option>
-                        @endforelse
-                    </select>
-                    <span class="badge badge-info ml-3">
-                        <i class="fas fa-hdd mr-1"></i> {{ $devices->count() }} Perangkat
-                    </span>
+                            </h5>
+                            <span class="text-muted" style="font-size: 13px;">
+                                MAC: <strong>{{ $targetMac }}</strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="status-indicator" class="badge badge-{{ $initialStatus === 'online' ? 'success' : 'danger' }} ml-1" style="font-size: 13px; padding: 8px 12px;">
+                            <i class="fas fa-circle mr-1" style="font-size: 10px;"></i> {{ strtoupper($initialStatus) }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,49 +144,52 @@
     <div class="row">
         {{-- Panel Kiri: Live Stream / Text Viewer --}}
         <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0 text-dark">
-                        <i class="fas fa-satellite-dish mr-2"></i> Live Feed
+            {{-- Panel Utama (Config & Live Feed Gabungan) --}}
+            <div class="card shadow-sm border-0">
+                <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-2 mb-md-0 text-dark">
+                        <i class="fas fa-cogs mr-2"></i> Pengaturan Deteksi & Threshold Subarea
                     </h4>
-                    <div class="d-flex align-items-center">
-                        <button class="btn btn-sm btn-success mr-1" id="btn-val-banyak" onclick="validateStream('banyak')">
-                            <i class="fas fa-check-circle mr-1"></i> Banyak
-                        </button>
-                        <button class="btn btn-sm btn-warning text-white mr-1" id="btn-val-terbatas" onclick="validateStream('terbatas')">
-                            <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
-                        </button>
-                        <button class="btn btn-sm btn-danger mr-2" id="btn-val-penuh" onclick="validateStream('penuh')">
-                            <i class="fas fa-times-circle mr-1"></i> Penuh
-                        </button>
-                        <span class="badge badge-success" id="connection-status">
+                    <div class="d-flex flex-wrap align-items-center">
+                        <span class="badge badge-success m-1" id="connection-status">
                             <i class="fas fa-circle-notch fa-spin mr-1"></i> Menghubungkan...
                         </span>
                     </div>
                 </div>
-                <div class="card-body p-0 bg-light d-flex justify-content-center align-items-center" style="min-height: 400px; border-radius: 0 0 15px 15px;">
-                    <div id="feed-container" class="text-center p-4 w-100 h-100 position-relative d-flex justify-content-center align-items-center">
-                        <div id="placeholder-container">
-                            <i class="fas fa-image fa-4x text-muted mb-3"></i>
-                            <h5 class="text-muted" id="feed-placeholder">Menunggu data masuk dari MAC Address: <strong>{{ $targetMac }}</strong>...</h5>
+                <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
+                    
+                    {{-- Bagian Atas: Mode Menggambar & Hint --}}
+                    <div class="form-group p-0 text-dark mb-3">
+                        <div class="d-flex flex-wrap align-items-center mb-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary m-1" id="btn-draw-mode" onclick="toggleDrawMode()">
+                                <i class="fas fa-edit"></i> Mode Menggambar
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger m-1" onclick="clearAllPolygons()">
+                                <i class="fas fa-trash-alt"></i> Hapus Semua
+                            </button>
                         </div>
-                        <div id="canvas-container" class="position-relative d-none" style="max-width: 640px; margin: 0 auto;">
-                            <img id="live-image" src="" alt="Live Stream" class="img-fluid rounded shadow" style="max-height: 400px; display: block; width: 100%; height: auto;">
-                            <canvas id="drawing-canvas" class="position-absolute" style="top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: crosshair; pointer-events: none;"></canvas>
+                        <div class="bg-light p-2 text-center text-muted" style="font-size: 13px; border-bottom: 1px solid #ebedf2; border-radius: 4px;">
+                            <i class="fas fa-info-circle text-primary mr-1"></i> 
+                            <strong>Tips:</strong> Saat Mode Menggambar aktif: klik kiri menaruh titik, klik titik pertama menutup, geser sudut mengubah bentuk, klik-kanan menghapus sudut, dan klik tengah garis menyisipkan sudut. Matikan mode menggambar untuk mengunci poligon.
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {{-- Panel Config Deteksi Subarea --}}
-            <div class="card shadow-sm mt-3 border-0">
-                <div class="card-header" style="border-radius: 15px 15px 0 0;">
-                    <h4 class="card-title font-weight-bold mb-0 text-dark">
-                        <i class="fas fa-cogs mr-2"></i> Pengaturan Deteksi & Threshold Subarea
-                    </h4>
-                </div>
-                <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
-                    <div class="row text-dark">
+                    {{-- Bagian Tengah: Canvas/Live Feed --}}
+                    <div class="bg-light d-flex justify-content-center align-items-center mb-4" style="min-height: 400px; border-radius: 8px; border: 1px solid #ebedf2;">
+                        <div id="feed-container" class="text-center p-4 w-100 h-100 position-relative d-flex justify-content-center align-items-center">
+                            <div id="placeholder-container">
+                                <i class="fas fa-image fa-4x text-muted mb-3"></i>
+                                <h5 class="text-muted" id="feed-placeholder">Menunggu data masuk dari MAC Address: <strong>{{ $targetMac }}</strong>...</h5>
+                            </div>
+                            <div id="canvas-container" class="position-relative d-none" style="max-width: 640px; margin: 0 auto;">
+                                <img id="live-image" src="" alt="Live Stream" class="img-fluid rounded shadow" style="max-height: 400px; display: block; width: 100%; height: auto;">
+                                <canvas id="drawing-canvas" class="position-absolute" style="top: 0; left: 0; width: 100%; height: 100%; z-index: 10; cursor: default; pointer-events: auto;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{-- Bagian Bawah: Threshold Config & Simpan --}}
+                    <div class="row text-dark mb-3">
                         <div class="col-md-3">
                             <div class="form-group p-0">
                                 <label class="font-weight-bold" for="max-slots">Kapasitas Maksimal (Max Slot)</label>
@@ -231,32 +237,77 @@
                         </div>
                     </div>
                     
-                    <hr>
-                    
-                    <div class="form-group p-0 text-dark">
-                        <label class="font-weight-bold d-block">Polygon Bounding Box Deteksi (Multi-Zone)</label>
-                        <div class="btn-group mb-2" role="group">
-                            <button type="button" class="btn btn-sm btn-outline-primary" id="btn-draw-mode" onclick="toggleDrawMode()">
-                                <i class="fas fa-edit"></i> Mode Menggambar
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="undoPoint()">
-                                <i class="fas fa-undo"></i> Batalkan Titik
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-success" onclick="closeCurrentPolygon()">
-                                <i class="fas fa-check"></i> Selesai Polygon
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearAllPolygons()">
-                                <i class="fas fa-trash-alt"></i> Hapus Semua
-                            </button>
-                        </div>
-                        <small class="text-muted d-block mb-3">
-                            <i class="fas fa-info-circle mr-1"></i> Klik kiri pada gambar untuk menaruh titik-titik (min 3 titik) kemudian klik <strong>Selesai Polygon</strong>. Anda dapat menggambar lebih dari satu zona deteksi.
-                        </small>
-                    </div>
-                    
                     <button class="btn btn-primary btn-block btn-round" onclick="saveDetectionConfig()">
                         <i class="fas fa-save mr-1"></i> Simpan Setelan Deteksi ke Server
                     </button>
+                </div>
+            </div>
+
+            {{-- Panel Simulasi Validasi & Status Subarea (Baru) --}}
+            <div class="card shadow-sm mt-3 border-0">
+                <div class="card-header" style="border-radius: 15px 15px 0 0;">
+                    <h4 class="card-title font-weight-bold mb-0 text-dark">
+                        <i class="fas fa-vial mr-2"></i> Simulasi Validasi & Status Subarea
+                    </h4>
+                </div>
+                <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
+                    <div class="row align-items-center mb-3">
+                        <div class="col-12 mb-2">
+                            <!-- BLOK 1: Status AI (CV) -->
+                            <div class="p-3 mb-3 border rounded bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-robot mr-1 text-primary"></i> Status AI (CV):</span>
+                                    <small class="text-muted font-weight-bold" style="font-size: 11px;">
+                                        Terisi: <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span>/<span id="realtime-max-text">{{ $maxSlots }}</span> slot
+                                    </small>
+                                </div>
+                                <div class="d-flex align-items-center mt-2">
+                                    <span id="cv-status-text" class="font-weight-bold text-secondary" style="font-size: 16px;">
+                                        <i class="fas fa-spinner fa-spin mr-1"></i> MENGHITUNG...
+                                    </span>
+                                </div>
+                                <div class="progress mt-2" style="height: 8px;">
+                                    <div id="availability-progress-bar" class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+
+                            <!-- BLOK 2: Laporan Validasi -->
+                            <div id="val-report-container" class="p-3 border rounded" style="display: none; background-color: #fdfaf3;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-user-edit mr-1 text-warning"></i> Laporan Pengguna:</span>
+                                    <small class="text-muted text-right" style="font-size: 11px;">
+                                        <div class="mb-1"><i class="fas fa-history mr-1"></i> Terakhir: <span id="val-last-time">-</span></div>
+                                        <div><i class="fas fa-hourglass-half mr-1 text-danger"></i> Berakhir: <span id="val-expires-time" class="text-danger font-weight-bold">-</span></div>
+                                    </small>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span id="voted-status-text" class="font-weight-bold" style="font-size: 14px; text-transform: uppercase;">-</span>
+                                    <span id="validation-badge-tervalidasi" class="badge text-white ml-2" style="background-color: #31ce36; display: none; font-size: 10px; padding: 4px 6px;">
+                                        <i class="fas fa-check"></i> Tervalidasi
+                                    </span>
+                                    <span id="validation-badge-berbeda" class="badge text-white ml-2" style="background-color: #ffad46; display: none; font-size: 10px; padding: 4px 6px;">
+                                        <i class="fas fa-exclamation"></i> Laporan Berbeda
+                                    </span>
+                                </div>
+                                <div style="font-size: 11px;" class="text-muted">
+                                    Status AI saat laporan dibuat: <span id="anchor-cv-status-text" class="font-weight-bold text-dark" style="text-transform: uppercase;">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="small text-muted mb-2 text-center text-md-left">Simulasi validasi manual untuk menguji respons sistem:</p>
+                    <div class="d-flex flex-column align-items-center align-items-md-start" style="max-width: 150px;">
+                        <button class="btn btn-sm btn-success mb-2 w-100 text-left" id="btn-val-banyak" onclick="validateStream('banyak')">
+                            <i class="fas fa-check-circle mr-1"></i> Banyak
+                        </button>
+                        <button class="btn btn-sm btn-warning text-white mb-2 w-100 text-left" id="btn-val-terbatas" onclick="validateStream('terbatas')">
+                            <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
+                        </button>
+                        <button class="btn btn-sm btn-danger mb-2 w-100 text-left" id="btn-val-penuh" onclick="validateStream('penuh')">
+                            <i class="fas fa-times-circle mr-1"></i> Penuh
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -367,6 +418,74 @@
         }
     }
 
+    let lastValidationTime = @json($lastValidationTime ?? null);
+    let validationExpiresAt = @json($validationExpiresAt ?? null);
+    let isValidated = @json($isValidated ?? false);
+    let hasUserReport = @json($hasUserReport ?? false);
+
+    let votedStatus = @json($votedStatus ?? null);
+    let anchorCvStatus = @json($anchorCvStatus ?? null);
+
+    function updateValidationInfoUI() {
+        const reportContainer = document.getElementById('val-report-container');
+        const badgeTervalidasi = document.getElementById('validation-badge-tervalidasi');
+        const badgeBerbeda = document.getElementById('validation-badge-berbeda');
+        const timeText = document.getElementById('val-last-time');
+        const expiresTimeText = document.getElementById('val-expires-time');
+        const votedStatusText = document.getElementById('voted-status-text');
+        const anchorCvStatusText = document.getElementById('anchor-cv-status-text');
+        
+        if (!reportContainer) return;
+        if (!lastValidationTime || !validationExpiresAt) {
+            reportContainer.style.display = 'none';
+            return;
+        }
+        
+        const now = new Date();
+        const expiresAt = new Date(validationExpiresAt);
+        const startAt = new Date(lastValidationTime);
+        
+        if (now <= expiresAt) {
+            reportContainer.style.display = 'block';
+            timeText.innerText = startAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            if (expiresTimeText) {
+                expiresTimeText.innerText = expiresAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            }
+            if (votedStatusText) {
+                votedStatusText.innerText = votedStatus ? votedStatus.toUpperCase() : '-';
+                if (votedStatus === 'banyak') votedStatusText.style.color = '#31ce36';
+                else if (votedStatus === 'terbatas') votedStatusText.style.color = '#ffad46';
+                else if (votedStatus === 'penuh') votedStatusText.style.color = '#f25961';
+                else votedStatusText.style.color = '#6861ce';
+            }
+            if (anchorCvStatusText) {
+                anchorCvStatusText.innerText = anchorCvStatus ? anchorCvStatus.toUpperCase() : '-';
+                if (anchorCvStatus === 'banyak') anchorCvStatusText.style.color = '#31ce36';
+                else if (anchorCvStatus === 'terbatas') anchorCvStatusText.style.color = '#ffad46';
+                else if (anchorCvStatus === 'penuh') anchorCvStatusText.style.color = '#f25961';
+                else anchorCvStatusText.style.color = '#6861ce';
+            }
+
+            if (isValidated) {
+                if (badgeTervalidasi) badgeTervalidasi.style.display = 'inline-block';
+                if (badgeBerbeda) badgeBerbeda.style.display = 'none';
+            } else if (hasUserReport) {
+                if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
+                if (badgeBerbeda) badgeBerbeda.style.display = 'inline-block';
+            } else {
+                if (badgeTervalidasi) badgeTervalidasi.style.display = 'none';
+                if (badgeBerbeda) badgeBerbeda.style.display = 'none';
+            }
+        } else {
+            reportContainer.style.display = 'none';
+        }
+    }
+
+    // Cek secara berkala apakah validasi sudah kedaluwarsa (tiap 10 detik)
+    setInterval(updateValidationInfoUI, 10000);
+    // Panggil pertama kali
+    document.addEventListener('DOMContentLoaded', updateValidationInfoUI);
+
     // Navigasi ke device lain tanpa reload penuh
     function switchDevice(macAddress) {
         const url = new URL(window.location.href);
@@ -404,6 +523,31 @@
         .then(data => {
             if (data.success) {
                 safeAddLog(data.message);
+
+                // Optimistically update info waktu validasi (berlaku 5 menit)
+                const now = new Date();
+                lastValidationTime = now.toISOString();
+                validationExpiresAt = new Date(now.getTime() + 5 * 60000).toISOString();
+                updateValidationInfoUI();
+
+                // Override sementara badge realtime agar langsung merefleksikan validasi
+                const badge = document.getElementById('realtime-availability-badge');
+                if (badge) {
+                    if (content === 'penuh') {
+                        badge.className = "badge text-white mb-1";
+                        badge.style.backgroundColor = "#f25961";
+                        badge.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Penuh (Validasi)';
+                    } else if (content === 'terbatas') {
+                        badge.className = "badge text-white mb-1";
+                        badge.style.backgroundColor = "#ffad46";
+                        badge.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Terbatas (Validasi)';
+                    } else if (content === 'banyak') {
+                        badge.className = "badge text-white mb-1";
+                        badge.style.backgroundColor = "#31ce36";
+                        badge.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Banyak Tersedia (Validasi)';
+                    }
+                }
+
             } else {
                 Swal.fire({
                     title: 'Gagal!',
@@ -432,9 +576,20 @@
 
 <script>
     // --- LOGIKA CANVAS DRAWING OVERLAY ---
+    // Semua poligon (selesai & in-progress) disimpan dalam KOORDINAT NATURAL piksel gambar
+    // agar konsisten saat hit-testing dan tahan terhadap resize window.
     let completedPolygons = @json($detectionPolygon) || [];
     let currentPoints = [];
     let isDrawingMode = false;
+
+    // State editor (geser/sisip/hapus vertex meniru editor subarea)
+    let hoverVertex = null;   // {polyIndex, vertIndex} | null
+    let isDragging = false;
+    let dragTarget = null;    // {polyIndex, vertIndex}; polyIndex = -1 → currentPoints
+    let didDrag = false;      // bedakan klik vs geser
+
+    const VERTEX_HIT = 8;     // threshold piksel canvas untuk menyentuh vertex
+    const EDGE_HIT = 6;       // threshold piksel canvas untuk menyentuh garis
 
     const canvas = document.getElementById('drawing-canvas');
     const ctx = canvas?.getContext('2d');
@@ -442,11 +597,83 @@
 
     function initCanvas() {
         if (!liveImage || !canvas || liveImage.classList.contains('d-none') || !liveImage.clientWidth) return;
-        
+
         canvas.width = liveImage.clientWidth;
         canvas.height = liveImage.clientHeight;
-        
+        // Poligon selesai selalu bisa diedit (seperti subarea) — terima event permanen.
+        canvas.style.pointerEvents = 'auto';
+
         draw();
+    }
+
+    // --- Helper konversi koordinat ---
+    // Posisi event (client) → koordinat natural piksel gambar (integer).
+    function toNatural(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const sx = liveImage.naturalWidth / rect.width;
+        const sy = liveImage.naturalHeight / rect.height;
+        return [
+            Math.round((clientX - rect.left) * sx),
+            Math.round((clientY - rect.top) * sy)
+        ];
+    }
+
+    // Titik natural [x,y] → koordinat tampilan {x,y} pada canvas.
+    function toCanvas(pt) {
+        const sx = canvas.width / liveImage.naturalWidth;
+        const sy = canvas.height / liveImage.naturalHeight;
+        return { x: pt[0] * sx, y: pt[1] * sy };
+    }
+
+    // Posisi event (client) → koordinat piksel canvas (untuk hit-testing).
+    function eventToCanvas(e) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    // Jarak titik (px,py) ke segmen a-b (semua dalam koordinat canvas).
+    function distToSegment(px, py, a, b) {
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const lenSq = dx * dx + dy * dy;
+        if (lenSq === 0) return Math.hypot(px - a.x, py - a.y);
+        let t = ((px - a.x) * dx + (py - a.y) * dy) / lenSq;
+        t = Math.max(0, Math.min(1, t));
+        return Math.hypot(px - (a.x + t * dx), py - (a.y + t * dy));
+    }
+
+    // Cari vertex terdekat (≤ VERTEX_HIT) di semua poligon + currentPoints.
+    function hitTestVertex(cx, cy) {
+        let best = null;
+        let bestDist = VERTEX_HIT;
+        completedPolygons.forEach((poly, polyIndex) => {
+            poly.forEach((pt, vertIndex) => {
+                const c = toCanvas(pt);
+                const d = Math.hypot(c.x - cx, c.y - cy);
+                if (d <= bestDist) { bestDist = d; best = { polyIndex, vertIndex }; }
+            });
+        });
+        currentPoints.forEach((pt, vertIndex) => {
+            const c = toCanvas(pt);
+            const d = Math.hypot(c.x - cx, c.y - cy);
+            if (d <= bestDist) { bestDist = d; best = { polyIndex: -1, vertIndex }; }
+        });
+        return best;
+    }
+
+    // Cari segmen garis terdekat (≤ EDGE_HIT) pada poligon selesai untuk sisip vertex.
+    function hitTestEdge(cx, cy) {
+        let best = null;
+        let bestDist = EDGE_HIT;
+        completedPolygons.forEach((poly, polyIndex) => {
+            for (let i = 0; i < poly.length; i++) {
+                const a = toCanvas(poly[i]);
+                const b = toCanvas(poly[(i + 1) % poly.length]);
+                const d = distToSegment(cx, cy, a, b);
+                if (d <= bestDist) { bestDist = d; best = { polyIndex, edgeIndex: i }; }
+            }
+        });
+        return best;
     }
 
     if (liveImage) {
@@ -462,14 +689,130 @@
     window.addEventListener('resize', initCanvas);
 
     if (canvas) {
-        canvas.addEventListener('click', (e) => {
+        canvas.addEventListener('mousedown', (e) => {
             if (!isDrawingMode) return;
-            
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            currentPoints.push([x, y]);
+            if (e.button !== 0) return; // hanya tombol kiri
+            const { x, y } = eventToCanvas(e);
+            didDrag = false;
+
+            // 1) Mulai geser vertex bila menyentuh salah satu.
+            const v = hitTestVertex(x, y);
+            if (v) {
+                isDragging = true;
+                dragTarget = v;
+                return;
+            }
+
+            // 2) Sisip vertex di tengah garis poligon selesai lalu langsung geser.
+            const edge = hitTestEdge(x, y);
+            if (edge) {
+                const poly = completedPolygons[edge.polyIndex];
+                poly.splice(edge.edgeIndex + 1, 0, toNatural(e.clientX, e.clientY));
+                isDragging = true;
+                dragTarget = { polyIndex: edge.polyIndex, vertIndex: edge.edgeIndex + 1 };
+                draw();
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawingMode) {
+                canvas.style.cursor = 'default';
+                return;
+            }
+            const { x, y } = eventToCanvas(e);
+
+            if (isDragging && dragTarget) {
+                const pt = toNatural(e.clientX, e.clientY);
+                if (dragTarget.polyIndex === -1) {
+                    currentPoints[dragTarget.vertIndex] = pt;
+                } else {
+                    completedPolygons[dragTarget.polyIndex][dragTarget.vertIndex] = pt;
+                }
+                didDrag = true;
+                draw();
+                return;
+            }
+
+            // Update hover + cursor afordans.
+            const v = hitTestVertex(x, y);
+            const edge = v ? null : hitTestEdge(x, y);
+            const prevHover = hoverVertex;
+            hoverVertex = v;
+            if (v) {
+                canvas.style.cursor = 'pointer';
+            } else if (edge) {
+                canvas.style.cursor = 'copy';
+            } else {
+                canvas.style.cursor = isDrawingMode ? 'crosshair' : 'default';
+            }
+            // Redraw hanya jika hover berubah agar hemat.
+            if (JSON.stringify(prevHover) !== JSON.stringify(hoverVertex)) draw();
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            dragTarget = null;
+        });
+
+        canvas.addEventListener('click', (e) => {
+            // Abaikan klik yang sebenarnya hasil dari geser.
+            if (didDrag) { didDrag = false; return; }
+            if (!isDrawingMode) return;
+
+            // Klik titik pertama (≥3 titik) → tutup poligon.
+            if (currentPoints.length >= 3) {
+                const first = toCanvas(currentPoints[0]);
+                const { x, y } = eventToCanvas(e);
+                if (Math.hypot(first.x - x, first.y - y) <= VERTEX_HIT) {
+                    closeCurrentPolygon();
+                    return;
+                }
+            }
+
+            currentPoints.push(toNatural(e.clientX, e.clientY));
+            draw();
+        });
+
+        canvas.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            if (!isDrawingMode) return;
+            const { x, y } = eventToCanvas(e);
+            const v = hitTestVertex(x, y);
+            if (!v) return;
+
+            // Vertex pada poligon in-progress → cukup buang titiknya.
+            if (v.polyIndex === -1) {
+                currentPoints.splice(v.vertIndex, 1);
+                draw();
+                return;
+            }
+
+            const poly = completedPolygons[v.polyIndex];
+            // Bila poligon tinggal 3 titik, menghapus vertex akan merusaknya →
+            // konfirmasi hapus seluruh zona.
+            if (poly.length <= 3) {
+                Swal.fire({
+                    title: 'Hapus zona ini?',
+                    text: 'Poligon hanya punya 3 titik. Menghapus sudut akan menghapus seluruh zona deteksi ini.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus zona!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        completedPolygons.splice(v.polyIndex, 1);
+                        hoverVertex = null;
+                        draw();
+                        safeAddLog('Zona deteksi dihapus.');
+                    }
+                });
+                return;
+            }
+
+            poly.splice(v.vertIndex, 1);
+            hoverVertex = null;
             draw();
         });
     }
@@ -482,7 +825,7 @@
         if (isDrawingMode) {
             btn.classList.remove('btn-outline-primary');
             btn.classList.add('btn-primary');
-            canvas.style.pointerEvents = 'auto';
+            canvas.style.cursor = 'crosshair';
             safeAddLog('Mode menggambar aktif. Meminta snapshot terbaru dari perangkat IoT...');
 
             // Pemicu otomatis snapshot dari device IoT
@@ -518,18 +861,13 @@
         } else {
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-primary');
-            canvas.style.pointerEvents = 'none';
+            canvas.style.cursor = 'default';
             currentPoints = [];
             draw();
         }
     }
 
-    function undoPoint() {
-        if (currentPoints.length > 0) {
-            currentPoints.pop();
-            draw();
-        }
-    }
+
 
     function closeCurrentPolygon() {
         if (currentPoints.length < 3) {
@@ -542,16 +880,8 @@
             return;
         }
         
-        // Konversi koordinat canvas ke koordinat natural image
-        const scaleX = liveImage.naturalWidth / liveImage.clientWidth;
-        const scaleY = liveImage.naturalHeight / liveImage.clientHeight;
-        
-        const scaledPoints = currentPoints.map(pt => [
-            Math.round(pt[0] * scaleX),
-            Math.round(pt[1] * scaleY)
-        ]);
-        
-        completedPolygons.push(scaledPoints);
+        // currentPoints sudah dalam koordinat natural — cukup salin.
+        completedPolygons.push([...currentPoints]);
         currentPoints = [];
         draw();
         safeAddLog('Zona polygon baru selesai dibuat.');
@@ -581,18 +911,14 @@
         if (!ctx || !canvas || !liveImage) return;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        const scaleX = canvas.width / liveImage.naturalWidth;
-        const scaleY = canvas.height / liveImage.naturalHeight;
-        
-        // Draw completed polygons
+
+        // Draw completed polygons (koordinat natural → canvas via toCanvas).
         completedPolygons.forEach((poly, index) => {
             ctx.beginPath();
             poly.forEach((pt, i) => {
-                const cx = pt[0] * scaleX;
-                const cy = pt[1] * scaleY;
-                if (i === 0) ctx.moveTo(cx, cy);
-                else ctx.lineTo(cx, cy);
+                const c = toCanvas(pt);
+                if (i === 0) ctx.moveTo(c.x, c.y);
+                else ctx.lineTo(c.x, c.y);
             });
             ctx.closePath();
             ctx.fillStyle = 'rgba(49, 206, 54, 0.2)'; // Green transparent
@@ -600,31 +926,61 @@
             ctx.strokeStyle = '#31ce36'; // Green stroke
             ctx.lineWidth = 2;
             ctx.stroke();
-            
+
             // Draw label text
             if (poly.length > 0) {
+                const c0 = toCanvas(poly[0]);
                 ctx.fillStyle = '#1572e8';
                 ctx.font = 'bold 12px sans-serif';
-                ctx.fillText('Zona ' + (index + 1), poly[0][0] * scaleX, poly[0][1] * scaleY - 5);
+                ctx.fillText('Zona ' + (index + 1), c0.x, c0.y - 8);
             }
+
+            // Handle vertex — lingkaran putih ber-border warna zona (meniru pin subarea).
+            poly.forEach((pt, vertIndex) => {
+                const c = toCanvas(pt);
+                const isHover = hoverVertex && hoverVertex.polyIndex === index && hoverVertex.vertIndex === vertIndex;
+                const r = isHover ? 8 : 6;
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, r, 0, 2 * Math.PI);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.lineWidth = isHover ? 3 : 2;
+                ctx.strokeStyle = '#31ce36';
+                ctx.stroke();
+            });
         });
-        
-        // Draw current drawing points
+
+        // Draw current drawing points (juga koordinat natural).
         if (currentPoints.length > 0) {
             ctx.beginPath();
             currentPoints.forEach((pt, i) => {
-                if (i === 0) ctx.moveTo(pt[0], pt[1]);
-                else ctx.lineTo(pt[0], pt[1]);
+                const c = toCanvas(pt);
+                if (i === 0) ctx.moveTo(c.x, c.y);
+                else ctx.lineTo(c.x, c.y);
             });
             ctx.strokeStyle = '#ffad46'; // Orange stroke
             ctx.lineWidth = 2;
             ctx.stroke();
-            
-            currentPoints.forEach(pt => {
+
+            currentPoints.forEach((pt, i) => {
+                const c = toCanvas(pt);
+                const isFirst = i === 0;
+                const isHover = hoverVertex && hoverVertex.polyIndex === -1 && hoverVertex.vertIndex === i;
+                // Titik pertama dibuat menonjol saat ≥3 titik → afordans "klik untuk menutup".
+                const prominent = isFirst && currentPoints.length >= 3;
+                const r = prominent ? 8 : (isHover ? 6 : 4);
                 ctx.beginPath();
-                ctx.arc(pt[0], pt[1], 4, 0, 2 * Math.PI);
-                ctx.fillStyle = '#ffad46';
-                ctx.fill();
+                ctx.arc(c.x, c.y, r, 0, 2 * Math.PI);
+                if (prominent) {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = '#ffad46';
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = '#ffad46';
+                    ctx.fill();
+                }
             });
         }
     }
@@ -968,10 +1324,11 @@
                 })
                 .listen('.count.updated', (e) => {
                     addLog(`Jumlah kendaraan terdeteksi: <strong>${e.count}</strong>`);
-                    const countBadge = document.getElementById('current-count-badge');
-                    if (countBadge) {
-                        countBadge.innerText = e.count;
+                    const countText = document.getElementById('realtime-count-text');
+                    if (countText) {
+                        countText.innerText = e.count;
                     }
+                    if (typeof window.updateAvailabilityUI === 'function') window.updateAvailabilityUI();
                 })
                 .listen('.threshold.updated', (e) => {
                     addLog(`Threshold WMA bergeser: Banyak=<strong>${e.thresholdBanyak}%</strong>, Terbatas=<strong>${e.thresholdTerbatas}%</strong>`);
@@ -1042,12 +1399,34 @@
             statusChannel = window.Echo.channel('iot.status')
                 .listen('.device.status', (e) => {
                     console.log("📡 Status Received (MQTT/WS):", e);
-                    const selectedMac = document.getElementById('device-selector').value;
+                    const selectedMac = "{{ $targetMac }}";
                     if (e.macAddress.toLowerCase() === selectedMac.toLowerCase()) {
                         updateStatusUI(e.status);
                         addLog(`📡 Status ${e.status.toUpperCase()} diterima via MQTT/WS`);
                     }
                 });
+
+            // =====================================================
+            // PARK AREA CHANNEL — Realtime Validation Status
+            // =====================================================
+            @if(isset($parkAreaId) && $parkAreaId > 0)
+            window.Echo.channel('park-area.{{ $parkAreaId }}')
+                .listen('.subarea.updated', (e) => {
+                    // Cek apakah update ini untuk subarea perangkat yang sedang dilihat
+                    if (e.parkSubareaId === {{ $parkSubareaId ?? 0 }}) {
+                        isValidated = e.isValidated;
+                        hasUserReport = e.hasUserReport;
+                        validationExpiresAt = e.validationExpiresAt;
+                        lastValidationTime = e.lastValidationTime;
+                        votedStatus = e.votedStatus;
+                        anchorCvStatus = e.anchorCvStatus;
+                        
+                        if (typeof window.updateValidationInfoUI === 'function') {
+                            window.updateValidationInfoUI();
+                        }
+                    }
+                });
+            @endif
         } else {
             setTimeout(initStatusEcho, 500);
         }
@@ -1065,10 +1444,15 @@
 
             // Reset count badge ke 0 saat device offline
             // Ini memastikan UI konsisten dengan backend yang sudah reset current_count = 0
-            const countBadge = document.getElementById('current-count-badge');
-            if (countBadge) {
-                countBadge.innerText = '0';
+            const countText = document.getElementById('realtime-count-text');
+            if (countText) {
+                countText.innerText = '0';
             }
+        }
+        
+        // Panggil updateAvailabilityUI untuk merefresh bar status CV
+        if (typeof window.updateAvailabilityUI === 'function') {
+            window.updateAvailabilityUI();
         }
     }
     
@@ -1133,5 +1517,93 @@
         // Jalankan inisialisasi awal
         updateSliderUI();
     }
+    
+    // --- LOGIKA STATUS KETERSEDIAAN REAL-TIME ---
+    function updateAvailabilityUI() {
+        const statusText = document.getElementById('cv-status-text');
+        const progressBar = document.getElementById('availability-progress-bar');
+        
+        // Cek apakah device sedang offline
+        const indicator = document.getElementById('status-indicator');
+        const isOffline = indicator && indicator.innerText.includes('OFFLINE');
+        
+        if (isOffline) {
+            if (statusText) {
+                statusText.className = "font-weight-bold";
+                statusText.style.color = "#8d949a";
+                statusText.innerHTML = '<i class="fas fa-power-off mr-1"></i> OFFLINE / NETRAL';
+            }
+            if (progressBar) {
+                progressBar.className = "progress-bar";
+                progressBar.style.backgroundColor = "#8d949a";
+                progressBar.style.width = '0%';
+                progressBar.setAttribute('aria-valuenow', 0);
+            }
+            return; // Hentikan eksekusi normal
+        }
+
+        const count = parseInt(document.getElementById('realtime-count-text')?.innerText) || 0;
+        const max = parseInt(document.getElementById('max-slots')?.value) || 1;
+        const thBanyak = parseInt(document.getElementById('input-threshold-banyak')?.value) || 30;
+        const thTerbatas = parseInt(document.getElementById('input-threshold-terbatas')?.value) || 80;
+
+        const percentage = Math.max(0, Math.min((count / max) * 100, 100));
+        const countText = document.getElementById('realtime-count-text');
+        const maxText = document.getElementById('realtime-max-text');
+
+        if (countText) countText.innerText = count;
+        if (maxText) maxText.innerText = max;
+
+        if (progressBar) {
+            progressBar.style.width = percentage + '%';
+            progressBar.setAttribute('aria-valuenow', percentage);
+        }
+
+        if (statusText) {
+            if (percentage >= thTerbatas) {
+                statusText.className = "font-weight-bold";
+                statusText.style.color = "#f25961";
+                statusText.innerHTML = '<i class="fas fa-times-circle mr-1"></i> PENUH';
+                if (progressBar) {
+                    progressBar.className = "progress-bar";
+                    progressBar.style.backgroundColor = "#f25961";
+                }
+            } else if (percentage >= thBanyak) {
+                statusText.className = "font-weight-bold";
+                statusText.style.color = "#ffad46";
+                statusText.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> TERBATAS';
+                if (progressBar) {
+                    progressBar.className = "progress-bar";
+                    progressBar.style.backgroundColor = "#ffad46";
+                }
+            } else {
+                statusText.className = "font-weight-bold";
+                statusText.style.color = "#31ce36";
+                statusText.innerHTML = '<i class="fas fa-check-circle mr-1"></i> BANYAK TERSEDIA';
+                if (progressBar) {
+                    progressBar.className = "progress-bar";
+                    progressBar.style.backgroundColor = "#31ce36";
+                }
+            }
+        }
+    }
+
+    // Expose ke global dan pasang event listener agar realtime update jalan jika input diubah
+    window.updateAvailabilityUI = updateAvailabilityUI;
+    const maxSlotsInput = document.getElementById('max-slots');
+    if (maxSlotsInput) {
+        maxSlotsInput.addEventListener('input', updateAvailabilityUI);
+    }
+    // Override updateSliderUI untuk memanggil updateAvailabilityUI
+    const originalUpdateSliderUI = window.updateSliderUI;
+    window.updateSliderUI = function() {
+        originalUpdateSliderUI();
+        updateAvailabilityUI();
+    };
+    
+    // Jalankan pertama kali saat load
+    updateAvailabilityUI();
+    
+    // override di click save config / dll (optional, jika perlu)
 </script>
 @endpush

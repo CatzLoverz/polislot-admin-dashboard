@@ -5,11 +5,9 @@ namespace Tests\Unit\Services;
 use App\Models\Mission;
 use App\Models\User;
 use App\Models\UserMission;
-use App\Models\UserHistory;
 use App\Services\HistoryService;
 use App\Services\MissionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -22,9 +20,9 @@ class MissionServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // MENGGUNAKAN REAL OBJECT, BUKAN MOCK
-        $historyService = new HistoryService(); 
+        $historyService = new HistoryService;
         $this->missionService = new MissionService($historyService);
     }
 
@@ -35,7 +33,7 @@ class MissionServiceTest extends TestCase
     #[Test]
     public function misi_target_selesai_dan_mencatat_history()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create(['current_points' => 0]);
 
         $mission = Mission::create([
@@ -45,27 +43,27 @@ class MissionServiceTest extends TestCase
             'mission_threshold' => 5,
             'mission_points' => 100,
             'mission_is_active' => true,
-            'mission_reset_cycle' => 'NONE'
+            'mission_reset_cycle' => 'NONE',
         ]);
 
         // Progress 1: Tambah 2
         $this->missionService->updateProgress($user->user_id, 'VALIDATION_ACTION', 2);
-        
+
         // Belum selesai, belum ada history
         $this->assertDatabaseMissing('user_histories', [
             'user_id' => $user->user_id,
-            'user_history_name' => 'Validator Handal'
+            'user_history_name' => 'Validator Handal',
         ]);
 
         // Progress 2: Tambah 3 (Total 5) -> Selesai
         $this->missionService->updateProgress($user->user_id, 'VALIDATION_ACTION', 3);
-        
+
         // Assert History Terbuat (Integrasi HistoryService)
         $this->assertDatabaseHas('user_histories', [
             'user_id' => $user->user_id,
             'user_history_type' => 'mission',
             'user_history_name' => 'Validator Handal',
-            'user_history_points' => 100
+            'user_history_points' => 100,
         ]);
 
         // Assert Poin User Bertambah
@@ -80,7 +78,7 @@ class MissionServiceTest extends TestCase
     #[Test]
     public function misi_sequence_login_bertambah_dan_reset_manual_di_db()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $mission = Mission::create([
@@ -91,7 +89,7 @@ class MissionServiceTest extends TestCase
             'mission_points' => 50,
             'mission_is_active' => true,
             'mission_reset_cycle' => 'NONE',
-            'mission_is_consecutive' => true
+            'mission_is_consecutive' => true,
         ]);
 
         // Hari 1
@@ -108,14 +106,14 @@ class MissionServiceTest extends TestCase
         $this->assertDatabaseHas('user_missions', [
             'user_id' => $user->user_id,
             'mission_id' => $mission->mission_id,
-            'user_mission_current_value' => 2
+            'user_mission_current_value' => 2,
         ]);
     }
 
     #[Test]
     public function misi_sequence_consecutive_reset_jika_bolos()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $mission = Mission::create([
@@ -124,7 +122,7 @@ class MissionServiceTest extends TestCase
             'mission_type' => 'SEQUENCE',
             'mission_threshold' => 7,
             'mission_is_active' => true,
-            'mission_is_consecutive' => true 
+            'mission_is_consecutive' => true,
         ]);
 
         // Login
@@ -141,7 +139,7 @@ class MissionServiceTest extends TestCase
         $this->assertDatabaseHas('user_missions', [
             'user_id' => $user->user_id,
             'mission_id' => $mission->mission_id,
-            'user_mission_current_value' => 1
+            'user_mission_current_value' => 1,
         ]);
     }
 
@@ -152,7 +150,7 @@ class MissionServiceTest extends TestCase
     #[Test]
     public function misi_daily_reset_setelah_ganti_hari()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $mission = Mission::create([
@@ -161,7 +159,7 @@ class MissionServiceTest extends TestCase
             'mission_type' => 'TARGET',
             'mission_threshold' => 10,
             'mission_is_active' => true,
-            'mission_reset_cycle' => 'DAILY'
+            'mission_reset_cycle' => 'DAILY',
         ]);
 
         // Progress kemarin
@@ -178,7 +176,7 @@ class MissionServiceTest extends TestCase
         $this->assertDatabaseHas('user_missions', [
             'user_id' => $user->user_id,
             'mission_id' => $mission->mission_id,
-            'user_mission_current_value' => 1
+            'user_mission_current_value' => 1,
         ]);
     }
 }

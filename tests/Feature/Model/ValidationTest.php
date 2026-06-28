@@ -15,21 +15,20 @@ class ValidationTest extends TestCase
     public function validation_setting_dapat_dibuat()
     {
         $v = Validation::create([
-            'validation_points' => 50
+            'validation_points' => 50,
         ]);
 
         $this->assertDatabaseHas('validations', [
-            'validation_points' => 50
+            'validation_points' => 50,
         ]);
     }
-
 
     #[Test]
     public function validation_setting_dapat_dibaca()
     {
         $v = Validation::create(['validation_points' => 50]);
         $found = Validation::find($v->validation_id);
-        
+
         $this->assertNotNull($found);
         $this->assertEquals(50, $found->validation_points);
     }
@@ -42,7 +41,7 @@ class ValidationTest extends TestCase
 
         $this->assertDatabaseHas('validations', [
             'validation_id' => $v->validation_id,
-            'validation_points' => 100
+            'validation_points' => 100,
         ]);
     }
 

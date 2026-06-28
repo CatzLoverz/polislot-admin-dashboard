@@ -8,19 +8,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class SubareaComment extends Model
 {
     protected $table = 'subarea_comments';
+
     protected $primaryKey = 'subarea_comment_id';
-    
+
     protected $fillable = [
         'user_id',
         'park_subarea_id',
         'subarea_comment_content',
-        'subarea_comment_image'
+        'subarea_comment_image',
     ];
 
     /**
      * Relasi ke user pembuat komentar.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -29,8 +28,6 @@ class SubareaComment extends Model
 
     /**
      * Relasi ke subarea parkir yang dikomentari.
-     *
-     * @return BelongsTo
      */
     public function parkSubarea(): BelongsTo
     {

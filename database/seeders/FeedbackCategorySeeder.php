@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\FeedbackCategory;
-use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class FeedbackCategorySeeder extends Seeder
 {
@@ -25,7 +25,7 @@ class FeedbackCategorySeeder extends Seeder
 
         // Buat kategori lainnya
         $otherCategories = ['Bug / Error', 'Fitur Baru', 'Peningkatan UI/UX'];
-        
+
         foreach ($otherCategories as $category) {
             $categories[] = [
                 'fbk_category_name' => $category,
@@ -39,7 +39,7 @@ class FeedbackCategorySeeder extends Seeder
             FeedbackCategory::create($category);
         }
 
-        $this->command->info('Seeder berhasil: ' . count($categories) . ' kategori feedback telah dibuat.');
+        $this->command->info('Seeder berhasil: '.count($categories).' kategori feedback telah dibuat.');
         $this->command->info('Kategori "Lainnya" dibuat pertama untuk memastikan urutan dropdown.');
     }
 }

@@ -24,7 +24,7 @@ class UserFaqControllerTest extends TestCase
 
         $response = $this->getJson('/api/user-faq');
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success', 'message' => 'Data FAQ berhasil diambil.']);
+            ->assertJson(['status' => 'success', 'message' => 'Data FAQ berhasil diambil.']);
     }
 
     #[Test]
@@ -35,6 +35,6 @@ class UserFaqControllerTest extends TestCase
 
         $response = $this->getJson('/api/user-faq');
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success', 'message' => 'Tidak ada FAQ tersedia.']);
+            ->assertJson(['status' => 'success', 'message' => 'Tidak ada FAQ tersedia.']);
     }
 }

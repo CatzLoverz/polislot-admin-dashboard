@@ -10,8 +10,8 @@ use Tests\TestCase;
 
 class MissionControllerTest extends TestCase
 {
-    use RefreshDatabase;
     use \Illuminate\Foundation\Testing\WithoutMiddleware;
+    use RefreshDatabase;
 
     #[Test]
     public function index_returns_200_and_mission_data()
@@ -24,7 +24,7 @@ class MissionControllerTest extends TestCase
         $response = $this->getJson('/api/missions');
 
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success'])
-                 ->assertJsonStructure(['data' => ['missions', 'stats', 'leaderboard']]);
+            ->assertJson(['status' => 'success'])
+            ->assertJsonStructure(['data' => ['missions', 'stats', 'leaderboard']]);
     }
 }

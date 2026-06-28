@@ -8,19 +8,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UserValidation extends Model
 {
     protected $table = 'user_validations';
+
     protected $primaryKey = 'user_validation_id';
-    
+
     protected $fillable = [
         'user_id',
         'validation_id',
         'park_subarea_id',
-        'user_validation_content' // 'banyak', 'terbatas', 'penuh'
+        'user_validation_content', // 'banyak', 'terbatas', 'penuh'
     ];
 
     /**
      * Relasi ke pengguna yang melakukan validasi.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -29,8 +28,6 @@ class UserValidation extends Model
 
     /**
      * Relasi ke subarea parkir yang divalidasi.
-     *
-     * @return BelongsTo
      */
     public function parkSubarea(): BelongsTo
     {

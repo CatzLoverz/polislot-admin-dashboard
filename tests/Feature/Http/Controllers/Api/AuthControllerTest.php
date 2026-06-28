@@ -2,9 +2,10 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
-use App\Models\User;
 use App\Mail\SendOtpMail;
+use App\Models\User;
 use App\Services\MissionService;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Cache;
@@ -27,14 +28,14 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function auth_check_returns_200_and_triggers_mission_if_cache_empty()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
-        
+
         // Mock MissionService: Harus dipanggil karena cache kosong
         $this->mock(MissionService::class, function (MockInterface $mock) use ($user) {
             $mock->shouldReceive('updateProgress')
-                 ->once()
-                 ->with($user->user_id, 'LOGIN_ACTION');
+                ->once()
+                ->with($user->user_id, 'LOGIN_ACTION');
         });
 
         $this->actingAs($user);
@@ -42,24 +43,24 @@ class AuthControllerTest extends TestCase
         $response = $this->getJson('/api/user');
 
         $response->assertStatus(200)
-                 ->assertJson([
-                     'status' => 'success',
-                     'message' => 'Data profil berhasil diambil.'
-                 ]);
-        
+            ->assertJson([
+                'status' => 'success',
+                'message' => 'Data profil berhasil diambil.',
+            ]);
+
         // Pastikan cache tersimpan
-        $cacheKey = 'daily_login_' . $user->user_id . '_' . now()->format('Y-m-d');
+        $cacheKey = 'daily_login_'.$user->user_id.'_'.now()->format('Y-m-d');
         $this->assertTrue(Cache::has($cacheKey));
     }
 
     #[Test]
     public function auth_check_returns_200_but_no_mission_if_cache_exists()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
-        
+
         // Set Cache seolah-olah sudah login hari ini
-        $cacheKey = 'daily_login_' . $user->user_id . '_' . now()->format('Y-m-d');
+        $cacheKey = 'daily_login_'.$user->user_id.'_'.now()->format('Y-m-d');
         Cache::put($cacheKey, true, now()->endOfDay());
 
         // Mock MissionService: TIDAK boleh dipanggil
@@ -77,21 +78,21 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function auth_check_returns_200_even_if_service_fails()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         // Mock Exception
         $this->mock(MissionService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('updateProgress')->andThrow(new \Exception('Service Down'));
+            $mock->shouldReceive('updateProgress')->andThrow(new Exception('Service Down'));
         });
 
         $this->actingAs($user);
 
         $response = $this->getJson('/api/user');
-        
+
         // User tidak boleh error 500, hanya log error (internal) dan return data user
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success']);
+            ->assertJson(['status' => 'success']);
     }
 
     // =========================================================================
@@ -112,8 +113,8 @@ class AuthControllerTest extends TestCase
         $response = $this->postJson('/api/register-attempt', $data);
 
         $response->assertStatus(201)
-                 ->assertJson(['status' => 'success']);
-        
+            ->assertJson(['status' => 'success']);
+
         $this->assertDatabaseHas('users', ['email' => 'new@example.com']);
         Mail::assertSent(SendOtpMail::class);
     }
@@ -124,7 +125,7 @@ class AuthControllerTest extends TestCase
         Mail::fake();
         // User lama yg belum verif
         User::factory()->unverified()->create([
-            'email' => 'duplicate@example.com'
+            'email' => 'duplicate@example.com',
         ]);
 
         $data = [
@@ -137,12 +138,12 @@ class AuthControllerTest extends TestCase
         $response = $this->postJson('/api/register-attempt', $data);
 
         $response->assertStatus(201);
-        
+
         // Pastikan user di DB cuma 1 dan namanya terupdate
         $this->assertEquals(1, User::where('email', 'duplicate@example.com')->count());
         $this->assertDatabaseHas('users', [
             'email' => 'duplicate@example.com',
-            'name' => 'New Owner'
+            'name' => 'New Owner',
         ]);
     }
 
@@ -151,27 +152,27 @@ class AuthControllerTest extends TestCase
     {
         $response = $this->postJson('/api/register-attempt', [
             'email' => 'invalid-email',
-            'password' => 'short'
+            'password' => 'short',
         ]);
 
         $response->assertStatus(422)
-                 ->assertJson(['status' => 'error']);
+            ->assertJson(['status' => 'error']);
     }
 
     #[Test]
     public function register_attempt_returns_500_on_system_error()
     {
-        DB::shouldReceive('transaction')->andThrow(new \Exception('DB Error'));
+        DB::shouldReceive('transaction')->andThrow(new Exception('DB Error'));
 
         $response = $this->postJson('/api/register-attempt', [
             'name' => 'Test',
             'email' => 'test@test.com',
             'password' => 'Pass123!',
-            'password_confirmation' => 'Pass123!'
+            'password_confirmation' => 'Pass123!',
         ]);
 
         $response->assertStatus(500)
-                 ->assertJson(['message' => 'Terjadi kesalahan pada server.']);
+            ->assertJson(['message' => 'Terjadi kesalahan pada server.']);
     }
 
     // =========================================================================
@@ -181,20 +182,20 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function register_otp_verify_returns_200_on_success()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->unverified()->create([
             'otp_code' => '123456',
-            'otp_expires_at' => now()->addMinutes(10)
+            'otp_expires_at' => now()->addMinutes(10),
         ]);
 
         $response = $this->postJson('/api/register-otp-verify', [
             'email' => $user->email,
-            'otp' => '123456'
+            'otp' => '123456',
         ]);
 
         $response->assertStatus(200)
-                 ->assertJsonStructure(['data' => ['access_token']]);
-        
+            ->assertJsonStructure(['data' => ['access_token']]);
+
         $user->refresh();
         $this->assertNotNull($user->email_verified_at);
         $this->assertNull($user->otp_code);
@@ -203,34 +204,34 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function register_otp_verify_returns_400_if_already_verified()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create(); // Verified by default
 
         $response = $this->postJson('/api/register-otp-verify', [
             'email' => $user->email,
-            'otp' => '123456'
+            'otp' => '123456',
         ]);
 
         $response->assertStatus(400)
-                 ->assertJson(['message' => 'Email ini sudah terverifikasi.']);
+            ->assertJson(['message' => 'Email ini sudah terverifikasi.']);
     }
 
     #[Test]
     public function register_otp_verify_returns_422_if_otp_invalid_or_expired()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->unverified()->create([
             'otp_code' => '123456',
-            'otp_expires_at' => now()->subMinute() // Expired
+            'otp_expires_at' => now()->subMinute(), // Expired
         ]);
 
         $response = $this->postJson('/api/register-otp-verify', [
             'email' => $user->email,
-            'otp' => '123456'
+            'otp' => '123456',
         ]);
 
         $response->assertStatus(422)
-                 ->assertJson(['message' => 'Kode OTP salah atau telah kedaluwarsa.']);
+            ->assertJson(['message' => 'Kode OTP salah atau telah kedaluwarsa.']);
     }
 
     // =========================================================================
@@ -241,38 +242,38 @@ class AuthControllerTest extends TestCase
     public function register_otp_resend_returns_200_on_success()
     {
         Mail::fake();
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->unverified()->create();
 
         $response = $this->postJson('/api/register-otp-resend', [
-            'email' => $user->email
+            'email' => $user->email,
         ]);
 
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success']);
-        
+            ->assertJson(['status' => 'success']);
+
         Mail::assertSent(SendOtpMail::class);
     }
 
     #[Test]
     public function register_otp_resend_returns_400_if_already_verified()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->postJson('/api/register-otp-resend', [
-            'email' => $user->email
+            'email' => $user->email,
         ]);
 
         $response->assertStatus(400)
-                 ->assertJson(['message' => 'Email sudah terverifikasi.']);
+            ->assertJson(['message' => 'Email sudah terverifikasi.']);
     }
 
     #[Test]
     public function register_otp_resend_returns_422_if_email_missing()
     {
         $response = $this->postJson('/api/register-otp-resend', [
-            'email' => 'ghost@example.com'
+            'email' => 'ghost@example.com',
         ]);
 
         $response->assertStatus(422); // Validation error
@@ -285,21 +286,21 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_attempt_returns_200_and_resets_failures()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'password' => Hash::make('Correct!'),
             'failed_attempts' => 2,
-            'locked_until' => null
+            'locked_until' => null,
         ]);
 
         $response = $this->postJson('/api/login-attempt', [
             'email' => $user->email,
-            'password' => 'Correct!'
+            'password' => 'Correct!',
         ]);
 
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success']);
-        
+            ->assertJson(['status' => 'success']);
+
         $user->refresh();
         $this->assertEquals(0, $user->failed_attempts); // Harus direset
     }
@@ -307,18 +308,18 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_attempt_resets_failures_automatically_if_time_passed()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'password' => Hash::make('Correct!'),
             'failed_attempts' => 2,
-            'updated_at' => now()->subMinutes(15) // Lebih dari 10 menit lalu
+            'updated_at' => now()->subMinutes(15), // Lebih dari 10 menit lalu
         ]);
 
         // Coba login salah pun, dia akan reset dulu logicnya karena > 10 menit
         // Tapi karena password salah, attempt jadi 1.
         $response = $this->postJson('/api/login-attempt', [
             'email' => $user->email,
-            'password' => 'Wrong!'
+            'password' => 'Wrong!',
         ]);
 
         $user->refresh();
@@ -331,7 +332,7 @@ class AuthControllerTest extends TestCase
     {
         $response = $this->postJson('/api/login-attempt', [
             'email' => 'missing@example.com',
-            'password' => 'pass'
+            'password' => 'pass',
         ]);
         $response->assertStatus(404);
     }
@@ -339,15 +340,15 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_attempt_returns_403_if_unverified()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->unverified()->create([
             'password' => Hash::make('Pass'),
-            'role' => 'user'
+            'role' => 'user',
         ]);
 
         $response = $this->postJson('/api/login-attempt', [
             'email' => $user->email,
-            'password' => 'Pass'
+            'password' => 'Pass',
         ]);
         $response->assertStatus(403)->assertJson(['code' => 'UNVERIFIED']);
     }
@@ -355,14 +356,14 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_attempt_returns_403_if_locked()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
-            'locked_until' => now()->addMinutes(5)
+            'locked_until' => now()->addMinutes(5),
         ]);
 
         $response = $this->postJson('/api/login-attempt', [
             'email' => $user->email,
-            'password' => 'Any'
+            'password' => 'Any',
         ]);
         $response->assertStatus(403);
     }
@@ -370,15 +371,15 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function login_attempt_returns_403_and_locks_after_4_failures()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'password' => Hash::make('Correct!'),
-            'failed_attempts' => 3
+            'failed_attempts' => 3,
         ]);
 
         $response = $this->postJson('/api/login-attempt', [
             'email' => $user->email,
-            'password' => 'Wrong!'
+            'password' => 'Wrong!',
         ]);
 
         $response->assertStatus(403);
@@ -394,7 +395,7 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function logout_returns_200_on_success()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -407,7 +408,7 @@ class AuthControllerTest extends TestCase
     {
         // Tanpa actingAs / Token
         $response = $this->postJson('/api/logout');
-        // Middleware sanctum biasanya reject 401. 
+        // Middleware sanctum biasanya reject 401.
         // Jika bypass middleware auth di test, controller cek $request->user(), null -> 401.
         $response->assertStatus(401);
     }
@@ -420,16 +421,16 @@ class AuthControllerTest extends TestCase
     public function forgot_attempt_returns_200_on_success()
     {
         Mail::fake();
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->postJson('/api/forgot-attempt', [
-            'email' => $user->email
+            'email' => $user->email,
         ]);
 
         $response->assertStatus(200)
-                 ->assertJson(['status' => 'success']);
-        
+            ->assertJson(['status' => 'success']);
+
         $user->refresh();
         $this->assertNotNull($user->otp_code);
         Mail::assertSent(SendOtpMail::class);
@@ -439,11 +440,11 @@ class AuthControllerTest extends TestCase
     public function forgot_attempt_returns_422_if_email_not_found()
     {
         $response = $this->postJson('/api/forgot-attempt', [
-            'email' => 'nohere@example.com'
+            'email' => 'nohere@example.com',
         ]);
 
         $response->assertStatus(422)
-                 ->assertJson(['message' => 'Email tidak ditemukan.']);
+            ->assertJson(['message' => 'Email tidak ditemukan.']);
     }
 
     // =========================================================================
@@ -453,15 +454,15 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function forgot_otp_verify_returns_200_on_success()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'otp_code' => '654321',
-            'otp_expires_at' => now()->addMinutes(5)
+            'otp_expires_at' => now()->addMinutes(5),
         ]);
 
         $response = $this->postJson('/api/forgot-otp-verify', [
             'email' => $user->email,
-            'otp' => '654321'
+            'otp' => '654321',
         ]);
 
         $response->assertStatus(200);
@@ -470,15 +471,15 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function forgot_otp_verify_returns_400_if_invalid_or_expired()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'otp_code' => '654321',
-            'otp_expires_at' => now()->subMinutes(1)
+            'otp_expires_at' => now()->subMinutes(1),
         ]);
 
         $response = $this->postJson('/api/forgot-otp-verify', [
             'email' => $user->email,
-            'otp' => '654321'
+            'otp' => '654321',
         ]);
 
         $response->assertStatus(400);
@@ -492,11 +493,11 @@ class AuthControllerTest extends TestCase
     public function forgot_otp_resend_returns_200_on_success()
     {
         Mail::fake();
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->postJson('/api/forgot-otp-resend', [
-            'email' => $user->email
+            'email' => $user->email,
         ]);
 
         $response->assertStatus(200);
@@ -506,12 +507,12 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function forgot_otp_resend_returns_500_on_system_error()
     {
-        DB::shouldReceive('transaction')->andThrow(new \Exception('Error'));
-        /** @var \App\Models\User $user */
+        DB::shouldReceive('transaction')->andThrow(new Exception('Error'));
+        /** @var User $user */
         $user = User::factory()->create();
 
         $response = $this->postJson('/api/forgot-otp-resend', [
-            'email' => $user->email
+            'email' => $user->email,
         ]);
 
         $response->assertStatus(500);
@@ -524,21 +525,21 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function reset_pass_attempt_returns_200_on_success()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
             'password' => Hash::make('OldPassword'),
             'otp_code' => '123',
-            'locked_until' => now()->addHour() // Test clear lock
+            'locked_until' => now()->addHour(), // Test clear lock
         ]);
 
         $response = $this->postJson('/api/reset-pass-attempt', [
             'email' => $user->email,
             'password' => 'NewPass123!',
-            'password_confirmation' => 'NewPass123!'
+            'password_confirmation' => 'NewPass123!',
         ]);
 
         $response->assertStatus(200);
-        
+
         $user->refresh();
         $this->assertTrue(Hash::check('NewPass123!', $user->password));
         $this->assertNull($user->locked_until);
@@ -548,19 +549,19 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function reset_pass_attempt_returns_400_if_password_same_as_old()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = User::factory()->create([
-            'password' => Hash::make('OldPass123!')
+            'password' => Hash::make('OldPass123!'),
         ]);
 
         $response = $this->postJson('/api/reset-pass-attempt', [
             'email' => $user->email,
             'password' => 'OldPass123!',
-            'password_confirmation' => 'OldPass123!'
+            'password_confirmation' => 'OldPass123!',
         ]);
 
         $response->assertStatus(400)
-                 ->assertJson(['message' => 'Password baru tidak boleh sama dengan yang lama.']);
+            ->assertJson(['message' => 'Password baru tidak boleh sama dengan yang lama.']);
     }
 
     #[Test]
@@ -569,7 +570,7 @@ class AuthControllerTest extends TestCase
         $response = $this->postJson('/api/reset-pass-attempt', [
             'email' => 'mail@mail.com',
             'password' => 'short',
-            'password_confirmation' => 'short'
+            'password_confirmation' => 'short',
         ]);
         $response->assertStatus(422);
     }

@@ -19,12 +19,12 @@ class InfoBoardTest extends TestCase
         $info = InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Pengumuman Penting',
-            'info_content' => 'Area parkir A tutup sementara.'
+            'info_content' => 'Area parkir A tutup sementara.',
         ]);
 
         $this->assertDatabaseHas('info_boards', [
             'info_id' => $info->info_id,
-            'info_title' => 'Pengumuman Penting'
+            'info_title' => 'Pengumuman Penting',
         ]);
     }
 
@@ -35,11 +35,11 @@ class InfoBoardTest extends TestCase
         $info = InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Read Me',
-            'info_content' => 'Content'
+            'info_content' => 'Content',
         ]);
 
         $found = InfoBoard::find($info->info_id);
-        
+
         $this->assertNotNull($found);
         $this->assertEquals('Read Me', $found->info_title);
     }
@@ -51,14 +51,14 @@ class InfoBoardTest extends TestCase
         $info = InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Judul Lama',
-            'info_content' => '...'
+            'info_content' => '...',
         ]);
 
         $info->update(['info_title' => 'Judul Baru']);
 
         $this->assertDatabaseHas('info_boards', [
             'info_id' => $info->info_id,
-            'info_title' => 'Judul Baru'
+            'info_title' => 'Judul Baru',
         ]);
     }
 
@@ -69,7 +69,7 @@ class InfoBoardTest extends TestCase
         $info = InfoBoard::create([
             'user_id' => $user->user_id,
             'info_title' => 'Hapus Saya',
-            'info_content' => '...'
+            'info_content' => '...',
         ]);
 
         $info->delete();

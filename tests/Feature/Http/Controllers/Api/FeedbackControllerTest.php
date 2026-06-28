@@ -26,20 +26,20 @@ class FeedbackControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $cat = FeedbackCategory::create(['fbk_category_name' => 'General']);
-        
+
         $this->actingAs($user);
 
         $response = $this->postJson('/api/feedback', [
             'category' => $cat->fbk_category_id,
             'title' => 'Test Feedback',
-            'description' => 'Description'
+            'description' => 'Description',
         ]);
 
         $response->assertStatus(201)
-                 ->assertJson(['status' => 'success']);
+            ->assertJson(['status' => 'success']);
 
         $this->assertDatabaseHas('feedbacks', [
-            'feedback_title' => 'Test Feedback'
+            'feedback_title' => 'Test Feedback',
         ]);
     }
 
@@ -50,8 +50,8 @@ class FeedbackControllerTest extends TestCase
         $this->actingAs($user);
 
         $response = $this->postJson('/api/feedback', []);
-        
+
         $response->assertStatus(422)
-                 ->assertJsonStructure(['status', 'errors']);
+            ->assertJsonStructure(['status', 'errors']);
     }
 }

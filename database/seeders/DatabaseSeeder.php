@@ -3,14 +3,12 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\FeedbackCategory;
 use App\Models\Feedback;
+use App\Models\FeedbackCategory;
+use App\Models\User;
 use App\Models\Validation;
-
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -32,7 +30,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             FeedbackCategorySeeder::class,
             FeedbackSeeder::class,
-            ValidationSeeder::class
+            ValidationSeeder::class,
         ]);
     }
 }

@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Middleware\ApiEncryption;
+use App\Http\Middleware\RBAC;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Middleware\TrustProxies;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,22 +18,22 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->append(\App\Http\Middleware\TrustProxies::class);
+        $middleware->append(TrustProxies::class);
         $middleware->alias([
-            # Default Laravel Middleware
-            'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-            'guest' => \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class,
-            # Custom Middleware
-            'role' => App\Http\Middleware\RBAC::class,
-            # API Encyption
-            'encryptApi' => App\Http\Middleware\ApiEncryption::class,
+            // Default Laravel Middleware
+            'auth' => Authenticate::class,
+            'guest' => RedirectIfAuthenticated::class,
+            // Custom Middleware
+            'role' => RBAC::class,
+            // API Encyption
+            'encryptApi' => ApiEncryption::class,
         ]);
-        
+
         // PRIORITAS MIDDLEWARE
         // Pastikan ApiEncryption jalan DULUAN sebelum Auth
         $middleware->priority([
-            \App\Http\Middleware\ApiEncryption::class,
-            \Illuminate\Auth\Middleware\Authenticate::class,
+            ApiEncryption::class,
+            Authenticate::class,
         ]);
         $middleware->redirectGuestsTo(fn () => route('login.form'));
     })

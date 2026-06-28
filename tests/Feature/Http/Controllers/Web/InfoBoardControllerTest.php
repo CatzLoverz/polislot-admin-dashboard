@@ -47,7 +47,7 @@ class InfoBoardControllerTest extends TestCase
             'info_title' => 'New',
             'info_content' => 'Desc',
         ]);
-        
+
         $response->assertRedirect('/admin/info-board')->assertSessionHas('swal_success_crud');
         $this->assertDatabaseHas('info_boards', ['info_title' => 'New']);
     }

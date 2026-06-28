@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Models;
-use Exception;
 
-use App\Events\IotDeviceStatusChanged;
 use App\Events\IotCountUpdated;
+use App\Events\IotDeviceStatusChanged;
 use App\Events\SubareaStatusUpdated;
-use App\Models\IotCapture;
-use App\Models\ParkSubarea;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,7 +52,7 @@ class IotDevice extends Model
 
     /**
      * Dapatkan status perangkat (READ-ONLY).
-     * 
+     *
      * Method ini HANYA membaca status dari cache tanpa side-effects.
      * Aman dipanggil dari controller/views tanpa memicu broadcast events.
      * Untuk sinkronisasi aktif dengan Reverb/MQTT, gunakan syncStatus().
@@ -66,11 +64,11 @@ class IotDevice extends Model
 
     /**
      * Sinkronisasi status perangkat dengan verifikasi aktual ke Reverb/MQTT.
-     * 
-     * Method ini melakukan side-effects: update cache, broadcast events, 
+     *
+     * Method ini melakukan side-effects: update cache, broadcast events,
      * dan reset database jika device ternyata sudah offline.
      * HANYA panggil dari background processes (MqttListenerCommand, scheduled tasks).
-     * 
+     *
      * @return string Status aktual setelah sinkronisasi ('online' atau 'offline')
      */
     public static function syncStatus(string $mac): string
@@ -88,7 +86,7 @@ class IotDevice extends Model
             $shouldGoOffline = static::checkReverbPresence($mac);
         } elseif ($connectionType === 'mqtt') {
             $lastSeen = Cache::get("iot_last_seen_{$mac}");
-            if (!$lastSeen || (time() - $lastSeen) > 60) {
+            if (! $lastSeen || (time() - $lastSeen) > 60) {
                 Log::info("MQTT sync: Device {$mac} inactive for more than 60 seconds. Setting to offline.");
                 $shouldGoOffline = true;
             }
@@ -104,7 +102,7 @@ class IotDevice extends Model
 
     /**
      * Verifikasi keberadaan device di Reverb presence channel.
-     * 
+     *
      * @return bool True jika device HARUS di-set offline (tidak ditemukan di channel)
      */
     private static function checkReverbPresence(string $mac): bool
@@ -124,11 +122,13 @@ class IotDevice extends Model
                     }
                 }
                 Log::info("Reverb sync: Device {$mac} not found in presence channel. Setting to offline.");
+
                 return true; // Device TIDAK ditemukan
             }
         } catch (ApiErrorException $e) {
             if ($e->getCode() === 404) {
                 Log::info("Reverb sync: Channel not found (404) for device {$mac}. Setting to offline.");
+
                 return true; // Channel tidak ada = device offline
             }
             Log::warning("Reverb sync failed (API error) for device {$mac}", [
@@ -150,7 +150,7 @@ class IotDevice extends Model
      * Tandai device sebagai offline: update cache, broadcast events, reset database.
      * Semua side-effects terisolasi di method ini.
      */
-    private static function markDeviceOffline(string $mac): void
+    public static function markDeviceOffline(string $mac): void
     {
         // Update cache
         Cache::forever("iot_status_{$mac}", 'offline');
@@ -171,6 +171,7 @@ class IotDevice extends Model
     }
 
     protected $table = 'iot_devices';
+
     protected $primaryKey = 'device_id';
 
     protected $fillable = [
@@ -180,8 +181,6 @@ class IotDevice extends Model
 
     /**
      * Relasi ke ParkSubarea tempat device ini terpasang.
-     *
-     * @return BelongsTo
      */
     public function subarea(): BelongsTo
     {
@@ -190,8 +189,6 @@ class IotDevice extends Model
 
     /**
      * Relasi ke IotCapture (history jepretan kamera device ini).
-     *
-     * @return HasMany
      */
     public function captures(): HasMany
     {
