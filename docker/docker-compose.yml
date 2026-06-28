@@ -143,8 +143,8 @@ services:
   #   container_name: polislot_tunnel
   #   restart: unless-stopped
   #   command: tunnel run
-  #   env_file:
-  #     - .env
+  #   environment:
+  #     - TUNNEL_TOKEN=${TUNNEL_TOKEN}
   #   networks:
   #     - polislot_net
 

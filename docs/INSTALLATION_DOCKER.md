@@ -139,4 +139,19 @@ Jalankan kembali docker compose untuk menerapkan seluruh perubahan environment (
 docker compose up -d --force-recreate
 ```
 
-Instalasi selesai! Aplikasi sekarang dapat diakses di `http://localhost:8080` (atau port yang Anda konfigurasi).
+### 11. Buat port forward local dan firewall rule - Optional untuk instalasi pada WSL
+Jika Anda menginstal dan menjalankan Docker di dalam WSL (Windows Subsystem for Linux), secara default layanan tersebut hanya bisa diakses dari komputer *host* (localhost). Agar aplikasi (Web Dashboard dan broker MQTT) dapat diakses oleh *device* lain di jaringan lokal (LAN) yang sama, Anda perlu membuka akses *port forwarding* dan Windows Firewall.
+
+Kami telah menyediakan skrip PowerShell untuk mengotomatisasi proses ini. Copy file **wsl-port-forward.ps1** tempatkan pada host/windows Anda (bukan WSL). Jalankan aplikasi **PowerShell** sebagai **Administrator** (Run as Administrator), arahkan ke *root directory* proyek, kemudian eksekusi skrip berikut:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File .\wsl-port-forward.ps1
+```
+
+> **Catatan**: Skrip ini akan melakukan *port forwarding* (port 8080, 1883, dan 9001) dari IP WSL ke `0.0.0.0` dan secara otomatis menambahkan aturan di Windows Firewall agar *inbound connection* diizinkan. Biarkan jendela PowerShell tetap terbuka (skrip terus berjalan). Jika Anda ingin menghentikan *port forwarding* dan menghapus aturan *firewall* yang telah dibuat, cukup tekan `CTRL+C` pada terminal PowerShell tersebut.
+
+---
+
+🎉 **Instalasi selesai!** Aplikasi sekarang dapat diakses melalui browser:
+- Dari komputer lokal: `http://localhost:8080`
+- Dari *device* lain di jaringan yang sama: `http://<IP_ADDRESS_KOMPUTER_ANDA>:8080`
