@@ -163,7 +163,7 @@ class AuthController extends Controller
                 $request->validate(['email' => 'required|email|exists:users,email']);
                 $validatedData = $request->only('email');
                 $user = User::where('email', $validatedData['email'])->first();
-                $otpCode = rand(100000, 999999);
+                $otpCode = random_int(100000, 999999);
 
                 $user->otp_code = $otpCode;
                 $user->otp_expires_at = Carbon::now()->addMinutes(10);
@@ -238,7 +238,7 @@ class AuthController extends Controller
         try {
             return DB::transaction(function () use ($email) {
                 $user = User::where('email', $email)->firstOrFail();
-                $newOtpCode = rand(100000, 999999);
+                $newOtpCode = random_int(100000, 999999);
                 $user->otp_code = $newOtpCode;
                 $user->otp_expires_at = Carbon::now()->addMinutes(10);
                 $user->save();

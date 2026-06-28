@@ -94,7 +94,7 @@ class AuthController extends Controller
                     ],
                 ]);
 
-                $otpCode = rand(100000, 999999);
+                $otpCode = random_int(100000, 999999);
 
                 $user = User::create([
                     'name' => $validatedData['name'],
@@ -197,7 +197,7 @@ class AuthController extends Controller
                     return $this->sendError('Email sudah terverifikasi.', 400);
                 }
 
-                $newOtpCode = rand(100000, 999999);
+                $newOtpCode = random_int(100000, 999999);
                 $user->update([
                     'otp_code' => $newOtpCode,
                     'otp_expires_at' => Carbon::now()->addMinutes(10),
@@ -342,7 +342,7 @@ class AuthController extends Controller
                 $validatedData = $request->validate(['email' => 'required|email|exists:users,email']);
                 $user = User::where('email', $validatedData['email'])->lockForUpdate()->first();
 
-                $otpCode = rand(100000, 999999);
+                $otpCode = random_int(100000, 999999);
                 $user->otp_code = $otpCode;
                 $user->otp_expires_at = Carbon::now()->addMinutes(10);
                 $user->save();
@@ -401,7 +401,7 @@ class AuthController extends Controller
                 $request->validate(['email' => 'required|email|exists:users,email']);
                 $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
 
-                $newOtpCode = rand(100000, 999999);
+                $newOtpCode = random_int(100000, 999999);
                 $user->update([
                     'otp_code' => $newOtpCode,
                     'otp_expires_at' => Carbon::now()->addMinutes(10),
