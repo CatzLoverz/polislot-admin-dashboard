@@ -328,13 +328,13 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_attempt_returns_404_if_email_not_found()
+    public function login_attempt_returns_401_if_email_not_found()
     {
         $response = $this->postJson('/api/login-attempt', [
             'email' => 'missing@example.com',
             'password' => 'pass',
         ]);
-        $response->assertStatus(404);
+        $response->assertStatus(401);
     }
 
     #[Test]
@@ -354,7 +354,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_attempt_returns_403_if_locked()
+    public function login_attempt_returns_401_if_locked()
     {
         /** @var User $user */
         $user = User::factory()->create([
@@ -365,11 +365,11 @@ class AuthControllerTest extends TestCase
             'email' => $user->email,
             'password' => 'Any',
         ]);
-        $response->assertStatus(403);
+        $response->assertStatus(401);
     }
 
     #[Test]
-    public function login_attempt_returns_403_and_locks_after_4_failures()
+    public function login_attempt_returns_401_and_locks_after_4_failures()
     {
         /** @var User $user */
         $user = User::factory()->create([
@@ -382,7 +382,7 @@ class AuthControllerTest extends TestCase
             'password' => 'Wrong!',
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(401);
         $user->refresh();
         $this->assertNotNull($user->locked_until);
         $this->assertEquals(0, $user->failed_attempts); // Reset setelah lock

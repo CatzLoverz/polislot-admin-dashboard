@@ -119,7 +119,7 @@ class MissionServiceTest extends TestCase
         $mission = Mission::create([
             'mission_title' => 'Rajin Login',
             'mission_metric_code' => 'LOGIN_ACTION',
-            'mission_type' => 'SEQUENCE',
+            'mission_type' => 'SEQUENCE_STREAK',
             'mission_threshold' => 7,
             'mission_is_active' => true,
             'mission_is_consecutive' => true,

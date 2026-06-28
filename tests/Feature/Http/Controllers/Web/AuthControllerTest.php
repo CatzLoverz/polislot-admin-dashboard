@@ -88,8 +88,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('login.form'));
-        // Pesan error sesuai query: Email tidak ditemukan (karena difilter where role admin)
-        $response->assertSessionHas('swal_error_crud', 'Email tidak ditemukan.');
+        $response->assertSessionHas('swal_error_crud', 'Email atau Password salah.');
         $this->assertGuest();
     }
 
@@ -102,7 +101,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('login.form'));
-        $response->assertSessionHas('swal_error_crud', 'Email tidak ditemukan.');
+        $response->assertSessionHas('swal_error_crud', 'Email atau Password salah.');
     }
 
     #[Test]
@@ -123,8 +122,7 @@ class AuthControllerTest extends TestCase
 
         $response->assertRedirect(route('login.form'));
         $response->assertSessionHas('swal_error_crud');
-        // Cek pesan sisa percobaan
-        $response->assertSessionHas('swal_error_crud', 'Password salah. Sisa percobaan: 3 kali.');
+        $response->assertSessionHas('swal_error_crud', 'Email atau Password salah.');
 
         $user->refresh();
         $this->assertEquals(1, $user->failed_attempts);
@@ -146,8 +144,8 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('login.form'));
-        // Cek pesan terkunci
-        $this->assertStringContainsString('Akun Anda dikunci selama 10 menit', session('swal_error_crud'));
+        // Cek pesan
+        $response->assertSessionHas('swal_error_crud', 'Email atau Password salah.');
 
         $user->refresh();
         $this->assertNotNull($user->locked_until);
@@ -171,7 +169,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('login.form'));
-        $this->assertStringContainsString('Akun Anda dikunci', session('swal_error_crud'));
+        $response->assertSessionHas('swal_error_crud', 'Email atau Password salah.');
         $this->assertGuest();
     }
 

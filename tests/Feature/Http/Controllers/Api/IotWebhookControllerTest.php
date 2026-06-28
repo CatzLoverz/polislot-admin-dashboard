@@ -22,6 +22,7 @@ class IotWebhookControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config(['broadcasting.connections.reverb.secret' => null]);
 
         $area = ParkArea::create(['park_area_name' => 'Area', 'park_area_code' => 'AR', 'park_area_data' => '[]']);
         $subarea = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'Sub', 'current_count' => 10, 'park_subarea_polygon' => '[]']);
