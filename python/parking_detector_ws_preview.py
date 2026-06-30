@@ -70,6 +70,7 @@ SHARED_SECRET = get_env_or_fail("SHARED_SECRET").strip().strip('"').strip("'")
 SOURCE = get_env_or_fail("CAMERA_SOURCE")            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
 YOLO_WEIGHTS = get_env_or_fail("YOLO_WEIGHTS")  # File weights model YOLOv8 (yolov8n.pt / custom model)
 CONFIDENCE_THRESHOLD = float(get_env_or_fail("CONFIDENCE_THRESHOLD"))   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
+ENABLE_DEBUG_LOG = os.getenv("ENABLE_DEBUG_LOG", "false").lower() == "true" # Tampilkan log debug jaringan yang repetitif
 
 # Parsing TARGET_CLASSES (contoh di .env: 2,3)
 _target_classes_env = get_env_or_fail("TARGET_CLASSES")
@@ -92,6 +93,9 @@ threshold_banyak = 30.0
 threshold_terbatas = 80.0
 current_vehicle_count = 0
 ws_connected = False
+last_http_success_time = time.time()
+ws_client = None
+ws_loop = None
 
 # File cache konfigurasi lokal
 CONFIG_FILE = f"config_cache_{MAC_ADDRESS.replace(':', '')}.json"
@@ -335,12 +339,14 @@ async def websocket_client():
     ws_uri = f"{REVERB_SCHEME}://{REVERB_HOST}:{REVERB_PORT}/app/{REVERB_APP_KEY}?protocol=7&client=python&version=1.0"
 
     reconnect_attempts = 0
-    max_reconnects = 20
 
-    while reconnect_attempts < max_reconnects:
+    while True:
         try:
-            print(f"\n[🔗] Menghubungkan ke Reverb WebSocket ({ws_uri})...")
+            if ENABLE_DEBUG_LOG:
+                print(f"\n[🔗] Menghubungkan ke Reverb WebSocket ({ws_uri})...")
             async with websockets.connect(ws_uri, ping_interval=25, ping_timeout=10) as ws:
+                global ws_client
+                ws_client = ws
                 reconnect_attempts = 0
                 
                 # 1. Wait for connection established
@@ -358,13 +364,17 @@ async def websocket_client():
                 timestamp = int(time.time())
                 signature = generate_auth_signature(MAC_ADDRESS, timestamp)
                 
-                auth_resp = requests.post(API_WS_AUTH_URL, json={
+                auth_payload = {
                     'socket_id': socket_id,
                     'channel_name': channel_name,
                     'mac_address': MAC_ADDRESS,
                     'timestamp': timestamp,
                     'signature': signature,
-                }, timeout=10)
+                }
+                
+                import functools
+                loop = asyncio.get_running_loop()
+                auth_resp = await loop.run_in_executor(None, functools.partial(requests.post, API_WS_AUTH_URL, json=auth_payload, timeout=10))
 
                 if auth_resp.status_code == 403:
                     print(f"[FATAL] Device '{MAC_ADDRESS}' TIDAK TERDAFTAR di server!")
@@ -377,7 +387,7 @@ async def websocket_client():
                 print("[+] Auth WebSocket berhasil.")
 
                 # Sinkronisasi config terbaru dari server
-                fetch_remote_config()
+                await loop.run_in_executor(None, fetch_remote_config)
 
                 # 3. Subscribe to Presence Channel
                 subscribe_msg = {
@@ -402,25 +412,30 @@ async def websocket_client():
                         print(f"[📡] Status: ONLINE (Subscribed ke {channel_name})")
                         ws_connected = True
                     elif event == 'command.sent':
-                        handle_command(msg.get('data', '{}'))
+                        threading.Thread(target=handle_command, args=(msg.get('data', '{}'),), daemon=True).start()
                     elif event == 'pusher:error':
                         print(f"[-] Pusher error: {msg.get('data')}")
 
         except websockets.exceptions.ConnectionClosedError as e:
             ws_connected = False
-            print(f"[-] WS Koneksi terputus: {e}")
+            if ENABLE_DEBUG_LOG:
+                print(f"[-] WS Koneksi terputus: {e}")
         except Exception as e:
             ws_connected = False
-            print(f"[-] WS Error: {e}")
+            if ENABLE_DEBUG_LOG:
+                print(f"[-] WS Error: {e}")
 
         reconnect_attempts += 1
-        print(f"[🔄] Reconnecting in 5s... ({reconnect_attempts}/{max_reconnects})")
+        if ENABLE_DEBUG_LOG:
+            print(f"[🔄] Reconnecting in 5s... (Attempt: {reconnect_attempts})")
         await asyncio.sleep(5)
 
 # Async loop runner untuk thread latar belakang
 def start_websocket_thread():
+    global ws_loop
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
+    ws_loop = loop
     try:
         loop.run_until_complete(websocket_client())
     except Exception as e:
@@ -523,17 +538,32 @@ def main():
                         
                         # Definisikan sub-thread pengiriman agar post request tidak mendatangkan delay frame
                         def send_count():
+                            global last_http_success_time
                             try:
                                 resp = requests.post(API_COUNT_URL, json=count_payload, timeout=5)
-                                if resp.status_code != 200:
+                                if resp.status_code == 200:
+                                    last_http_success_time = time.time()
+                                elif ENABLE_DEBUG_LOG:
                                     print(f"[-] Gagal mengirim count: {resp.status_code} — {resp.text}")
                             except Exception as e:
-                                print(f"[-] Error mengirim count: {e}")
+                                if ENABLE_DEBUG_LOG:
+                                    print(f"[-] Error mengirim count: {e}")
                         
                         threading.Thread(target=send_count, daemon=True).start()
                     else:
-                        print("[🤖] WS Terputus, pengiriman count dilewati.")
+                        if ENABLE_DEBUG_LOG:
+                            print("[🤖] WS Terputus, pengiriman count dilewati.")
                     last_count_send_time = now
+
+            # Watchdog pengecekan HTTP / TCP Half-Open untuk WS
+            if ws_connected and (time.time() - last_http_success_time > 30):
+                print("[-] Deteksi TCP Half-Open (Tidak ada response API sukses selama 30 detik). Mereset WS...")
+                if ws_client and ws_loop:
+                    try:
+                        asyncio.run_coroutine_threadsafe(ws_client.close(), ws_loop)
+                    except Exception:
+                        pass
+                last_http_success_time = time.time()
 
             # OpenCV Window refresh event loop (juga mendeteksi tombol 'q' untuk quit)
             if cv2.waitKey(30) & 0xFF == ord('q'):

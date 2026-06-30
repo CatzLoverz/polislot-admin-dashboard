@@ -55,6 +55,7 @@ SOURCE = get_env_or_fail("CAMERA_SOURCE")            # Sumber video: "0" untuk w
 YOLO_WEIGHTS = get_env_or_fail("YOLO_WEIGHTS")  # File weights model YOLOv8 (yolov8n.pt / custom model)
 CONFIDENCE_THRESHOLD = float(get_env_or_fail("CONFIDENCE_THRESHOLD"))   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
 ENABLE_DETECTION_LOG = os.getenv("ENABLE_DETECTION_LOG", "true").lower() == "true" # Tampilkan log deteksi di terminal
+ENABLE_DEBUG_LOG = os.getenv("ENABLE_DEBUG_LOG", "false").lower() == "true" # Tampilkan log debug jaringan yang repetitif
 
 # Parsing TARGET_CLASSES (contoh di .env: 2,3)
 _target_classes_env = get_env_or_fail("TARGET_CLASSES")
@@ -75,6 +76,7 @@ detection_polygons = []
 threshold_banyak = 30.0
 threshold_terbatas = 80.0
 current_vehicle_count = 0
+last_puback_time = time.time()
 
 # File cache konfigurasi lokal
 CONFIG_FILE = f"config_cache_{MAC_ADDRESS.replace(':', '')}.json"
@@ -216,12 +218,9 @@ def on_connect_success(client):
     client.subscribe(TOPIC_SERVER_STATUS)
     print(f"[+] Subscribed ke command topic: {TOPIC_COMMAND}")
     
-    # Berikan jeda 1 detik agar broker selesai mendaftarkan subscription
+    # Berikan jeda 1 detik secara asinkron agar broker selesai mendaftarkan subscription
     # sebelum status online dikirim (mencegah race condition push config)
-    time.sleep(1.0)
-    
-    # Announce status ONLINE
-    send_status_update(client, "online")
+    threading.Timer(1.0, send_status_update, args=[client, "online"]).start()
 
 def send_status_update(client, status):
     payload = {"status": status, "mac_address": MAC_ADDRESS}
@@ -235,12 +234,22 @@ if CALLBACK_API_VERSION is not None:
             on_connect_success(client)
         else:
             print(f"[-] Gagal terhubung, reason: {reason_code}")
+
+    def on_disconnect(client, userdata, flags, reason_code, properties):
+        print(f"[-] Terputus dari MQTT Broker, reason_code: {reason_code}")
 else:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             on_connect_success(client)
         else:
             print(f"[-] Gagal terhubung, rc: {rc}")
+
+    def on_disconnect(client, userdata, rc):
+        print(f"[-] Terputus dari MQTT Broker, rc: {rc}")
+
+def on_publish(client, userdata, mid, *args, **kwargs):
+    global last_puback_time
+    last_puback_time = time.time()
 
 def on_message(client, userdata, msg):
     global max_slots, detection_polygons, threshold_banyak, threshold_terbatas, stream
@@ -342,15 +351,19 @@ def main():
         client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
 
     client.on_connect = on_connect
+    client.on_disconnect = on_disconnect
+    client.on_publish = on_publish
     client.on_message = on_message
 
     protocol_prefix = "ws://" if transport_mode == "websockets" else "mqtt://"
     print(f"[+] Menghubungkan ke MQTT Broker {protocol_prefix}{BROKER}:{PORT} ...")
     client.connect(BROKER, PORT, 60)
     
-    # Start MQTT Loop in a separate background thread
-    mqtt_thread = threading.Thread(target=client.loop_forever, daemon=True)
-    mqtt_thread.start()
+    # Start MQTT Loop with paho-mqtt background thread
+    client.loop_start()
+
+    global last_puback_time
+    last_puback_time = time.time()
 
     # Main detection loop (every 2 seconds)
     try:
@@ -391,6 +404,15 @@ def main():
                 count_payload["signature"] = generate_hmac_signature(count_payload)
                 client.publish(TOPIC_COUNT, json.dumps(count_payload, separators=(',', ':')), qos=1)
                 
+            # Watchdog pengecekan TCP Half-Open
+            if time.time() - last_puback_time > 30:
+                print("[-] Deteksi TCP Half-Open (Tidak ada ACK dari server selama 30 detik). Mereset koneksi...")
+                try:
+                    client.reconnect()
+                except Exception as e:
+                    print(f"[-] Gagal reconnect: {e}")
+                last_puback_time = time.time()
+
             # Control execution rate to run every ~2 seconds
             elapsed = time.time() - start_time
             sleep_time = max(0.1, 2.0 - elapsed)
@@ -404,6 +426,7 @@ def main():
         time.sleep(0.5)
         stream.stop()
         client.disconnect()
+        client.loop_stop()
         print("[+] Selesai.")
 
 if __name__ == "__main__":

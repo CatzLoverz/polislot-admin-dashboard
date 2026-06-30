@@ -46,7 +46,8 @@ MQTT_USER = get_env_or_fail("MQTT_USER")
 MQTT_PASSWORD = get_env_or_fail("MQTT_PASSWORD")
 # Protokol MQTT (tcp / ws)
 MQTT_PROTOCOL = os.getenv("MQTT_PROTOCOL", "tcp").lower()
-
+ENABLE_DETECTION_LOG = os.getenv("ENABLE_DETECTION_LOG", "true").lower() == "true" # Tampilkan log deteksi di terminal
+ENABLE_DEBUG_LOG = os.getenv("ENABLE_DEBUG_LOG", "false").lower() == "true" # Tampilkan log debug jaringan yang repetitif
 # Keamanan (Harus SAMA persis dengan IOT_API_SECRET di Laravel .env)
 SHARED_SECRET = get_env_or_fail("SHARED_SECRET").strip().strip('"').strip("'")
 
@@ -74,6 +75,7 @@ detection_polygons = []
 threshold_banyak = 30.0
 threshold_terbatas = 80.0
 current_vehicle_count = 0
+last_puback_time = time.time()
 
 # File cache konfigurasi lokal
 CONFIG_FILE = f"config_cache_{MAC_ADDRESS.replace(':', '')}.json"
@@ -215,12 +217,9 @@ def on_connect_success(client):
     client.subscribe(TOPIC_SERVER_STATUS)
     print(f"[+] Subscribed ke command topic: {TOPIC_COMMAND}")
     
-    # Berikan jeda 1 detik agar broker selesai mendaftarkan subscription
+    # Berikan jeda 1 detik secara asinkron agar broker selesai mendaftarkan subscription
     # sebelum status online dikirim (mencegah race condition push config)
-    time.sleep(1.0)
-    
-    # Announce status ONLINE
-    send_status_update(client, "online")
+    threading.Timer(1.0, send_status_update, args=[client, "online"]).start()
 
 def send_status_update(client, status):
     payload = {"status": status, "mac_address": MAC_ADDRESS}
@@ -234,12 +233,22 @@ if CALLBACK_API_VERSION is not None:
             on_connect_success(client)
         else:
             print(f"[-] Gagal terhubung, reason: {reason_code}")
+
+    def on_disconnect(client, userdata, flags, reason_code, properties):
+        print(f"[-] Terputus dari MQTT Broker, reason_code: {reason_code}")
 else:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             on_connect_success(client)
         else:
             print(f"[-] Gagal terhubung, rc: {rc}")
+
+    def on_disconnect(client, userdata, rc):
+        print(f"[-] Terputus dari MQTT Broker, rc: {rc}")
+
+def on_publish(client, userdata, mid, *args, **kwargs):
+    global last_puback_time
+    last_puback_time = time.time()
 
 def on_message(client, userdata, msg):
     global max_slots, detection_polygons, threshold_banyak, threshold_terbatas, stream
@@ -341,15 +350,19 @@ def main():
         client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
 
     client.on_connect = on_connect
+    client.on_disconnect = on_disconnect
+    client.on_publish = on_publish
     client.on_message = on_message
 
     protocol_prefix = "ws://" if transport_mode == "websockets" else "mqtt://"
     print(f"[+] Menghubungkan ke MQTT Broker {protocol_prefix}{BROKER}:{PORT} ...")
     client.connect(BROKER, PORT, 60)
     
-    # Start MQTT Loop in a separate background thread
-    mqtt_thread = threading.Thread(target=client.loop_forever, daemon=True)
-    mqtt_thread.start()
+    # Start MQTT Loop with paho-mqtt background thread
+    client.loop_start()
+
+    global last_puback_time
+    last_puback_time = time.time()
 
     print("[+] Preview Window aktif. Tekan 'q' untuk keluar.")
     last_count_send_time = 0
@@ -426,6 +439,15 @@ def main():
                     client.publish(TOPIC_COUNT, json.dumps(count_payload, separators=(',', ':')), qos=1)
                     last_count_send_time = now
 
+            # Watchdog pengecekan TCP Half-Open
+            if time.time() - last_puback_time > 30:
+                print("[-] Deteksi TCP Half-Open (Tidak ada ACK dari server selama 30 detik). Mereset koneksi...")
+                try:
+                    client.reconnect()
+                except Exception as e:
+                    print(f"[-] Gagal reconnect: {e}")
+                last_puback_time = time.time()
+
             # OpenCV Window refresh event loop (juga mendeteksi tombol 'q' untuk quit)
             if cv2.waitKey(30) & 0xFF == ord('q'):
                 break
@@ -438,6 +460,7 @@ def main():
         time.sleep(0.5)
         stream.stop()
         client.disconnect()
+        client.loop_stop()
         cv2.destroyAllWindows()
         print("[+] Selesai.")
 
