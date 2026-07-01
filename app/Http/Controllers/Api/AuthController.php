@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
@@ -287,19 +288,25 @@ class AuthController extends Controller
                 $user->tokens()->delete();
                 $tokenAuth = $user->createToken('auth_token')->plainTextToken;
 
-                // Buat single-use token untuk reset password via email
+                // Buat single-use token untuk reset password via email (disimpan di kolom khusus)
                 $resetToken = Str::random(40);
                 $user->update([
-                    'failed_attempts' => 0, 
-                    'locked_until' => null,
-                    'otp_code' => $resetToken,
-                    'otp_expires_at' => now()->addHours(1),
+                    'failed_attempts'        => 0,
+                    'locked_until'           => null,
+                    'reset_token'            => $resetToken,
+                    'reset_token_expires_at' => now()->addHours(1),
                 ]);
 
-                // Kirim email notifikasi login
-                $ipAddress = $request->ip();
-                $userAgent = $request->header('User-Agent');
-                Mail::to($user->email)->send(new LoginNotificationMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $userAgent, $resetToken));
+                // Kirim email notifikasi login (dibatasi 1 email per 5 menit per user untuk mencegah flooding)
+                $emailRateLimitKey = 'login_notification_email_' . $user->user_id;
+                if (!RateLimiter::tooManyAttempts($emailRateLimitKey, 1)) {
+                    RateLimiter::hit($emailRateLimitKey, 300); // 5 menit (300 detik)
+                    $ipAddress = $request->ip();
+                    $userAgent = $request->header('User-Agent');
+                    Mail::to($user->email)->send(new LoginNotificationMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $userAgent, $resetToken));
+                } else {
+                    Log::info('Email notifikasi login dilewati (rate limit aktif).', ['user_id' => $user->user_id]);
+                }
 
                 Log::info('Login berhasil.', ['user' => $user->user_id]);
 
@@ -454,8 +461,12 @@ class AuthController extends Controller
 
                 $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
 
-                // Verifikasi token
-                if (!$user->otp_code || $user->otp_code !== $request->token || Carbon::now()->gt($user->otp_expires_at)) {
+                // Verifikasi token dari kolom reset_token (terpisah dari otp_code)
+                if (
+                    !$user->reset_token ||
+                    !hash_equals($user->reset_token, $request->token) ||
+                    Carbon::now()->gt($user->reset_token_expires_at)
+                ) {
                     Log::warning('Token reset tidak valid atau kadaluarsa.');
                     return $this->sendError('Link pemulihan tidak valid atau sudah kadaluarsa (hanya bisa dipakai sekali).', 400);
                 }
@@ -466,11 +477,11 @@ class AuthController extends Controller
                     return $this->sendError('Password baru tidak boleh sama dengan yang lama.', 400);
                 }
 
-                $user->password = Hash::make($request->password);
-                $user->otp_code = null;
-                $user->otp_expires_at = null;
+                $user->password       = Hash::make($request->password);
+                $user->reset_token            = null;  // Hapus token setelah dipakai (single-use)
+                $user->reset_token_expires_at = null;
                 $user->failed_attempts = 0;
-                $user->locked_until = null;
+                $user->locked_until    = null;
                 $user->save();
 
                 // Hapus sesi login saat pemulihan akun (logout dari semua perangkat)
