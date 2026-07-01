@@ -141,7 +141,7 @@
 
                                         {{-- Kapasitas Slot (Dynamic) --}}
                                         <small class="d-block mt-1 text-muted subarea-occupancy font-weight-bold" style="font-size: 11px; {{ ($sub->iotDevice && $sub->max_slots > 0) ? '' : 'display: none;' }}">
-                                            <i class="fas fa-car mr-1"></i> Terisi: <span class="current-count-val">{{ $sub->current_count ?? 0 }}</span>/<span class="max-slots-val">{{ $sub->max_slots ?? 0 }}</span> slot
+                                            <i class="fas fa-car mr-1"></i> Tersedia: <span class="available-count-val">{{ max(0, ($sub->max_slots ?? 0) - ($sub->current_count ?? 0)) }}</span> | Terisi: <span class="current-count-val">{{ $sub->current_count ?? 0 }}</span>
                                         </small>
                                         
                                         {{-- Amenities --}}
@@ -945,10 +945,10 @@
             if (occupancySpan) {
                 if (maxSlots > 0) {
                     occupancySpan.style.display = 'block';
+                    const availableVal = occupancySpan.querySelector('.available-count-val');
+                    if (availableVal) availableVal.innerText = Math.max(0, maxSlots - currentCount);
                     const countVal = occupancySpan.querySelector('.current-count-val');
                     if (countVal) countVal.innerText = currentCount;
-                    const maxVal = occupancySpan.querySelector('.max-slots-val');
-                    if (maxVal) maxVal.innerText = maxSlots;
                 } else {
                     occupancySpan.style.display = 'none';
                 }

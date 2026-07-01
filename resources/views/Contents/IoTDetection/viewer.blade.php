@@ -258,7 +258,7 @@
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-robot mr-1 text-primary"></i> Status AI (CV):</span>
                                     <small class="text-muted font-weight-bold" style="font-size: 11px;">
-                                        Terisi: <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span>/<span id="realtime-max-text">{{ $maxSlots }}</span> slot
+                                        Tersedia: <span id="realtime-available-text">{{ max(0, $maxSlots - ($initialCount ?? 0)) }}</span> | Terisi: <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span>
                                     </small>
                                 </div>
                                 <div class="d-flex align-items-center mt-2">
@@ -1502,10 +1502,15 @@
         segPenuh.style.left = valTerbatas + '%';
         segPenuh.style.width = (100 - valTerbatas) + '%';
 
+        // Hitung slot integer
+        const maxSlots = parseInt(document.getElementById('max-slots').value) || 0;
+        let slotBanyak = Math.round((valBanyak / 100) * maxSlots);
+        let slotTerbatas = Math.round((valTerbatas / 100) * maxSlots);
+
         // Update label teks
-        labelBanyakRange.innerText = `0% - ${valBanyak}%`;
-        labelTerbatasRange.innerText = `${valBanyak}% - ${valTerbatas}%`;
-        labelPenuhRange.innerText = `${valTerbatas}% - 100%`;
+        labelBanyakRange.innerHTML = `<span style="font-size: 0.75rem;">(0 - ${slotBanyak} slot)</span><br>0% - ${valBanyak}%`;
+        labelTerbatasRange.innerHTML = `<span style="font-size: 0.75rem;">(${slotBanyak} - ${slotTerbatas} slot)</span><br>${valBanyak}% - ${valTerbatas}%`;
+        labelPenuhRange.innerHTML = `<span style="font-size: 0.75rem;">(${slotTerbatas} - ${maxSlots} slot)</span><br>${valTerbatas}% - 100%`;
     }
 
     // Bug #5: Expose updateSliderUI ke global scope agar event listener bisa akses
@@ -1548,11 +1553,11 @@
         const thTerbatas = parseInt(document.getElementById('input-threshold-terbatas')?.value) || 80;
 
         const percentage = Math.max(0, Math.min((count / max) * 100, 100));
+        const availableText = document.getElementById('realtime-available-text');
         const countText = document.getElementById('realtime-count-text');
-        const maxText = document.getElementById('realtime-max-text');
 
+        if (availableText) availableText.innerText = Math.max(0, max - count);
         if (countText) countText.innerText = count;
-        if (maxText) maxText.innerText = max;
 
         if (progressBar) {
             progressBar.style.width = percentage + '%';
@@ -1592,7 +1597,12 @@
     window.updateAvailabilityUI = updateAvailabilityUI;
     const maxSlotsInput = document.getElementById('max-slots');
     if (maxSlotsInput) {
-        maxSlotsInput.addEventListener('input', updateAvailabilityUI);
+        maxSlotsInput.addEventListener('input', () => {
+            updateAvailabilityUI();
+            if (typeof window.updateSliderUI === 'function') {
+                window.updateSliderUI();
+            }
+        });
     }
     // Override updateSliderUI untuk memanggil updateAvailabilityUI
     const originalUpdateSliderUI = window.updateSliderUI;
