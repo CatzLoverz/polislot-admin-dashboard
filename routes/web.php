@@ -25,7 +25,10 @@ Route::get('/', function () {
 
 // Rute untuk handle Deep Link dari email Reset Password
 Route::get('/app-redirect', function (Request $request) {
-    return view('redirect_app', ['email' => $request->query('email')]);
+    return view('redirect_app', [
+        'email' => $request->query('email'),
+        'token' => $request->query('token')
+    ]);
 })->name('app.redirect');
 
 Route::middleware('guest')->group(function () {

@@ -7,7 +7,8 @@
     <script>
         window.onload = function() {
             var email = "{{ $email ?? '' }}";
-            var url = "polislot://forgot-password" + (email ? "?email=" + encodeURIComponent(email) : "");
+            var token = "{{ $token ?? '' }}";
+            var url = "polislot://reset-password" + (email ? "?email=" + encodeURIComponent(email) : "") + (token ? "&token=" + encodeURIComponent(token) : "");
             
             // Coba redirect otomatis ke aplikasi
             window.location.href = url;
@@ -24,7 +25,7 @@
     
     <div id="fallback-msg" style="display: none; margin-top: 20px;">
         <p style="color: #666; font-size: 14px;">Jika aplikasi tidak terbuka otomatis, kemungkinan aplikasi belum terpasang atau perangkat Anda tidak mendukung Deep Link.</p>
-        <p><a href="polislot://forgot-password?email={{ urlencode($email ?? '') }}" style="padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">Klik di sini untuk mencoba lagi</a></p>
+        <p><a href="polislot://reset-password?email={{ urlencode($email ?? '') }}&token={{ urlencode($token ?? '') }}" style="padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">Klik di sini untuk mencoba lagi</a></p>
     </div>
 </body>
 </html>

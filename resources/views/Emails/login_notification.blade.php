@@ -17,7 +17,7 @@
         <p>Jika ini adalah Anda, maka Anda dapat mengabaikan email ini.</p>
         <p>Jika Anda tidak merasa melakukan login ini, segera amankan akun Anda dengan mengubah kata sandi.</p>
         <div style="text-align: center; margin: 30px 0;">
-            <a href="{{ route('app.redirect', ['email' => $user->email]) }}" style="background-color: #007BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            <a href="{{ route('app.redirect', ['email' => $user->email, 'token' => $token]) }}" style="background-color: #007BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
                 Pulihkan Akun / Reset Password
             </a>
         </div>

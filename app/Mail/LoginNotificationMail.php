@@ -16,13 +16,15 @@ class LoginNotificationMail extends Mailable
     public $loginTime;
     public $ipAddress;
     public $userAgent;
+    public $token;
 
-    public function __construct($user, $loginTime, $ipAddress, $userAgent)
+    public function __construct($user, $loginTime, $ipAddress, $userAgent, $token)
     {
         $this->user = $user;
         $this->loginTime = $loginTime;
         $this->ipAddress = $ipAddress;
         $this->userAgent = $userAgent;
+        $this->token = $token;
     }
 
     public function envelope(): Envelope

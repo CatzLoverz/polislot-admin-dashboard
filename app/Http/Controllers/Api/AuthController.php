@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
 
@@ -284,19 +285,26 @@ class AuthController extends Controller
                 }
 
                 $user->tokens()->delete();
-                $token = $user->createToken('auth_token')->plainTextToken;
+                $tokenAuth = $user->createToken('auth_token')->plainTextToken;
 
-                $user->update(['failed_attempts' => 0, 'locked_until' => null]);
+                // Buat single-use token untuk reset password via email
+                $resetToken = Str::random(40);
+                $user->update([
+                    'failed_attempts' => 0, 
+                    'locked_until' => null,
+                    'otp_code' => $resetToken,
+                    'otp_expires_at' => now()->addHours(1),
+                ]);
 
                 // Kirim email notifikasi login
                 $ipAddress = $request->ip();
                 $userAgent = $request->header('User-Agent');
-                Mail::to($user->email)->send(new LoginNotificationMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $userAgent));
+                Mail::to($user->email)->send(new LoginNotificationMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $userAgent, $resetToken));
 
                 Log::info('Login berhasil.', ['user' => $user->user_id]);
 
                 return $this->sendSuccess('Login berhasil!', [
-                    'access_token' => $token,
+                    'access_token' => $tokenAuth,
                     'token_type' => 'Bearer',
                     'user' => $this->formatUser($user),
                 ]);
@@ -441,9 +449,16 @@ class AuthController extends Controller
                 $request->validate([
                     'email' => 'required|email|exists:users,email',
                     'password' => ['required', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols()],
+                    'token' => 'required|string', // Pastikan wajib
                 ]);
 
                 $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
+
+                // Verifikasi token
+                if (!$user->otp_code || $user->otp_code !== $request->token || Carbon::now()->gt($user->otp_expires_at)) {
+                    Log::warning('Token reset tidak valid atau kadaluarsa.');
+                    return $this->sendError('Link pemulihan tidak valid atau sudah kadaluarsa (hanya bisa dipakai sekali).', 400);
+                }
 
                 if (Hash::check($request->password, $user->password)) {
                     Log::warning('Password baru sama dengan lama.');
@@ -458,7 +473,10 @@ class AuthController extends Controller
                 $user->locked_until = null;
                 $user->save();
 
-                Log::info('Password direset.');
+                // Hapus sesi login saat pemulihan akun (logout dari semua perangkat)
+                $user->tokens()->delete();
+
+                Log::info('Password direset dan sesi dibersihkan.');
 
                 return $this->sendSuccess('Password berhasil direset. Silakan login.');
             });
