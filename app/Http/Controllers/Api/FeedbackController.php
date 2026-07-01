@@ -28,8 +28,6 @@ class FeedbackController extends Controller
                     'description' => 'nullable|string',
                 ]);
 
-                $user = Auth::user();
-
                 // 2. Simpan Feedback ke Database
                 // Menggunakan strip_tags untuk sanitasi input string dasar
                 $feedback = Feedback::create([

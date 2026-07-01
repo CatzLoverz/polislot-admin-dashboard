@@ -1,13 +1,18 @@
-# Graph Report - .  (2026-06-25)
+# Graph Report - polislot-admin-dashboard  (2026-07-02)
 
 ## Corpus Check
-- 236 files · ~79,754 words
+- 236 files · ~84,132 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1172 nodes · 1954 edges · 166 communities (130 shown, 36 thin omitted)
-- Extraction: 90% EXTRACTED · 10% INFERRED · 0% AMBIGUOUS · INFERRED: 190 edges (avg confidence: 0.8)
-- Token cost: 59,988 input · 0 output
+- 1268 nodes · 2049 edges · 175 communities (140 shown, 35 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 190 edges (avg confidence: 0.8)
+- Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `1a5037c2`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Auth Controller & Login Flow|Auth Controller & Login Flow]]
@@ -95,6 +100,12 @@
 - [[_COMMUNITY_Community 115|Community 115]]
 - [[_COMMUNITY_Community 116|Community 116]]
 - [[_COMMUNITY_Community 135|Community 135]]
+- [[_COMMUNITY_Community 166|Community 166]]
+- [[_COMMUNITY_Community 167|Community 167]]
+- [[_COMMUNITY_Community 168|Community 168]]
+- [[_COMMUNITY_Community 169|Community 169]]
+- [[_COMMUNITY_Community 170|Community 170]]
+- [[_COMMUNITY_Community 171|Community 171]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `TestCase` - 92 edges
@@ -128,19 +139,19 @@
 - **IoT Parking Detection Pipeline** — project_summary_edge_iot_parking_detector, docker_compose_mosquitto_service, project_summary_hmac_shared_secret, requirements_python_iot_dependencies [INFERRED 0.80]
 - **PoliSlot Three-Component Architecture** — docker_compose_app_service, project_summary_mobile_app_flutter, project_summary_edge_iot_parking_detector [INFERRED 0.85]
 
-## Communities (166 total, 36 thin omitted)
+## Communities (175 total, 35 thin omitted)
 
 ### Community 0 - "Auth Controller & Login Flow"
 Cohesion: 0.06
-Nodes (25): AuthController, IotWebhookController, RewardController, JsonResponse, MissionService, Request, JsonResponse, Request (+17 more)
+Nodes (25): AuthController, RewardController, SubareaCommentController, JsonResponse, MissionService, Request, HistoryService, JsonResponse (+17 more)
 
 ### Community 1 - "IoT Detection Controller"
-Cohesion: 0.07
-Nodes (22): IotDetectionController, JsonResponse, Request, JsonResponse, Request, View, JsonResponse, Request (+14 more)
+Cohesion: 0.30
+Nodes (4): JsonResponse, Request, View, IotDetectionController
 
 ### Community 2 - "IoT Broadcast Events"
-Cohesion: 0.09
-Nodes (15): Content, Dispatchable, Envelope, IotCommandSent, IotCountUpdated, IotDetectionReceived, IotDeviceStatusChanged, IotThresholdUpdated (+7 more)
+Cohesion: 0.08
+Nodes (18): Content, Envelope, Content, Envelope, Dispatchable, IotCommandSent, IotCountUpdated, IotDetectionReceived (+10 more)
 
 ### Community 3 - "Mission Controller & Service"
 Cohesion: 0.09
@@ -155,16 +166,12 @@ Cohesion: 0.10
 Nodes (14): HistoryService, RedirectResponse, Request, Command, BackupAuto, BackupClean, BackupDatabase, DbList (+6 more)
 
 ### Community 7 - "Deployment & Infrastructure"
-Cohesion: 0.09
-Nodes (27): Development Cycle Workflow, App Service (Laravel/Reverb/Queue), DB Service (MariaDB), Logrotate Sidecar Service, Mosquitto MQTT Broker Service, Scheduler Service (Laravel Cron), Cloudflare Tunnel Service (Optional), Docker Deploy Bundle (DockerHub Image) (+19 more)
+Cohesion: 0.08
+Nodes (32): Development Cycle Workflow, App Service (Laravel/Reverb/Queue), DB Service (MariaDB), Logrotate Sidecar Service, Mosquitto MQTT Broker Service, Scheduler Service (Laravel Cron), Cloudflare Tunnel Service (Optional), Docker Deploy Bundle (DockerHub Image) (+24 more)
 
 ### Community 8 - "Subarea Comment & Amenity Tests"
-Cohesion: 0.12
-Nodes (5): SubareaCommentControllerTest, ParkAmenityTest, ParkSubareaTest, SubareaCommentTest, ParkSubarea
-
-### Community 10 - "Feedback/History/Mission Tests"
-Cohesion: 0.11
-Nodes (5): FeedbackCategoryControllerTest, HistoryControllerTest, MissionControllerTest, InfoBoardTest, RefreshDatabase
+Cohesion: 0.09
+Nodes (6): SubareaCommentControllerTest, ParkAmenityTest, ParkSubareaTest, SubareaCommentTest, ParkSubarea, ParkSubareaControllerTest
 
 ### Community 11 - "Parking Detector WebSocket"
 Cohesion: 0.19
@@ -175,24 +182,24 @@ Cohesion: 0.19
 Nodes (15): CameraStream, encrypt_image_aes(), fetch_remote_config(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command(), is_inside_any_polygon() (+7 more)
 
 ### Community 13 - "InfoBoard & IoT WS Auth Tests"
-Cohesion: 0.11
-Nodes (6): InfoBoardControllerTest, IotWsAuthControllerTest, BaseTestCase, ExampleTest, TestCase, ExampleTest
+Cohesion: 0.09
+Nodes (8): FeedbackCategoryControllerTest, HistoryControllerTest, BaseTestCase, ExampleTest, ParkAreaTest, HistoryServiceTest, TestCase, ExampleTest
 
 ### Community 14 - "User Validation Geofence Tests"
-Cohesion: 0.15
+Cohesion: 0.13
 Nodes (4): UserValidationControllerTest, UserValidationTest, ValidationTest, Validation
 
 ### Community 15 - "Parking Detector MQTT"
-Cohesion: 0.21
+Cohesion: 0.18
 Nodes (13): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_inside_any_polygon(), is_inside_polygon(), load_local_config(), main() (+5 more)
 
 ### Community 16 - "Parking Detector MQTT Preview"
-Cohesion: 0.21
+Cohesion: 0.18
 Nodes (13): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_inside_any_polygon(), is_inside_polygon(), load_local_config(), main() (+5 more)
 
 ### Community 17 - "FeedbackCategory & InfoBoard Controllers"
-Cohesion: 0.17
-Nodes (9): FeedbackCategoryController, InfoBoardController, JsonResponse, JsonResponse, JsonResponse, AuthorizesRequests, BaseController, Controller (+1 more)
+Cohesion: 0.16
+Nodes (10): FeedbackCategoryController, IotWsAuthController, JsonResponse, JsonResponse, Request, JsonResponse, AuthorizesRequests, BaseController (+2 more)
 
 ### Community 18 - "Frontend Dependencies (npm)"
 Cohesion: 0.11
@@ -207,8 +214,8 @@ Cohesion: 0.17
 Nodes (5): BelongsTo, HasMany, UserFactory, IotDevice, static
 
 ### Community 21 - "Controller Tests (Map/FAQ)"
-Cohesion: 0.18
-Nodes (4): FeedbackControllerTest, MapVisualizationControllerTest, UserFaqControllerTest, WithoutMiddleware
+Cohesion: 0.10
+Nodes (5): FeedbackControllerTest, MapVisualizationControllerTest, RewardControllerTest, UserFaqControllerTest, WithoutMiddleware
 
 ### Community 22 - "User Model"
 Cohesion: 0.26
@@ -250,9 +257,13 @@ Nodes (9): require, fakerphp/faker, laravel/framework, laravel/reverb, laravel/s
 Cohesion: 0.43
 Nodes (4): ProfileController, JsonResponse, MissionService, Request
 
+### Community 35 - "Community 35"
+Cohesion: 0.06
+Nodes (30): 1. Deployment Architecture, 2.1. Backend Server & Admin Dashboard (Via Docker - Recommended), 2.2. Backend Server (Instalasi Manual Lokal / XAMPP), 2.3. PoliSlot Mobile App (Flutter), 2.4. Perangkat Edge IoT (Parking Detector), 2. Installation Procedure, 3. Security Checklist, API & Komunikasi Data (+22 more)
+
 ### Community 36 - "Community 36"
-Cohesion: 0.57
-Nodes (3): SubareaCommentController, JsonResponse, Request
+Cohesion: 0.07
+Nodes (27): 10. Re-up Container, 11. Buat port forward local dan firewall rule - Optional untuk instalasi pada WSL, 1. Konfigurasi Environment (.env), 2. Generate RSA Keys (Di Root), 3. Verifikasi Credential, 4. Menjalankan Container, 5. Generate Application Key, 6. Migrasi Database (+19 more)
 
 ### Community 37 - "Community 37"
 Cohesion: 0.46
@@ -298,6 +309,18 @@ Nodes (3): MapVisualizationController, JsonResponse, Request
 Cohesion: 0.53
 Nodes (3): RedirectResponse, Request, ValidationController
 
+### Community 56 - "Community 56"
+Cohesion: 0.08
+Nodes (7): InfoBoardControllerTest, IotWebhookControllerTest, IotWsAuthControllerTest, MissionControllerTest, RewardTest, UserRewardTest, RefreshDatabase
+
+### Community 57 - "Community 57"
+Cohesion: 0.24
+Nodes (3): ApiEncryptionTest, RBACTest, Response
+
+### Community 58 - "Community 58"
+Cohesion: 0.53
+Nodes (3): IotDetectionController, JsonResponse, Request
+
 ### Community 59 - "Community 59"
 Cohesion: 0.60
 Nodes (3): FeedbackController, JsonResponse, Request
@@ -306,9 +329,13 @@ Nodes (3): FeedbackController, JsonResponse, Request
 Cohesion: 0.60
 Nodes (3): HistoryController, JsonResponse, Request
 
+### Community 61 - "Community 61"
+Cohesion: 0.39
+Nodes (4): JsonResponse, Request, View, DashboardController
+
 ### Community 62 - "Community 62"
-Cohesion: 0.60
-Nodes (3): IotWsAuthController, JsonResponse, Request
+Cohesion: 0.53
+Nodes (3): IotWebhookController, JsonResponse, Request
 
 ### Community 67 - "Community 67"
 Cohesion: 0.60
@@ -317,6 +344,18 @@ Nodes (3): Closure, NotCurrentPassword, ValidationRule
 ### Community 68 - "Community 68"
 Cohesion: 0.40
 Nodes (5): autoload, psr-4, App\\, Database\\Factories\\, Database\\Seeders\\
+
+### Community 69 - "Community 69"
+Cohesion: 0.53
+Nodes (3): JsonResponse, Request, ParkAmenityController
+
+### Community 70 - "Community 70"
+Cohesion: 0.33
+Nodes (5): 1. Import (Namespace / `use` Statement), 2. PHPDoc (Komentar Fungsi & Class), 3. Konvensi Penulisan Model (Eloquent), 4. Best Practices Laravel Lainnya, Aturan Standar Penulisan Kode PHP & Laravel (Coding Standards)
+
+### Community 72 - "Community 72"
+Cohesion: 0.60
+Nodes (3): Closure, Request, RBAC
 
 ### Community 77 - "Community 77"
 Cohesion: 0.67
@@ -327,24 +366,24 @@ Cohesion: 0.67
 Nodes (3): extra, laravel, dont-discover
 
 ## Knowledge Gaps
-- **69 isolated node(s):** `HistoryService`, `$schema`, `name`, `type`, `description` (+64 more)
+- **127 isolated node(s):** `HistoryService`, `$schema`, `name`, `type`, `description` (+122 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **36 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **35 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ParkSubarea` connect `Subarea Comment & Amenity Tests` to `IoT Detection Controller`, `IoT Broadcast Events`, `Community 36`, `Community 72`, `Feedback/History/Mission Tests`, `InfoBoard & IoT WS Auth Tests`, `User Validation Geofence Tests`, `User Validation Controller`, `Controller Tests (Map/FAQ)`, `IoT Detection Tests`, `Community 61`, `Park Subarea Controller`?**
-  _High betweenness centrality (0.125) - this node is a cross-community bridge._
-- **Why does `TestCase` connect `InfoBoard & IoT WS Auth Tests` to `IoT Detection Controller`, `Mission Controller & Service`, `Feedback Module`, `Auth Controller Tests (EN)`, `Subarea Comment & Amenity Tests`, `Auth Controller Tests (ID)`, `Feedback/History/Mission Tests`, `User Validation Geofence Tests`, `Controller Tests (Map/FAQ)`, `Profile Controller Tests (EN)`, `Profile Controller Tests (ID)`, `IoT Detection Tests`, `Community 35`, `Community 47`, `Community 48`, `Community 49`, `Community 50`, `Community 54`, `Community 55`, `Community 56`, `Community 57`, `Community 58`, `Community 61`, `Community 69`, `Community 70`, `Community 71`, `Community 72`?**
-  _High betweenness centrality (0.124) - this node is a cross-community bridge._
-- **Why does `Controller` connect `FeedbackCategory & InfoBoard Controllers` to `Auth Controller & Login Flow`, `IoT Detection Controller`, `Mission Controller & Service`, `Feedback Module`, `Backup & DB Commands`, `User FAQ Module`, `Mission Controller Validation`, `User Validation Controller`, `Park Subarea Controller`, `Profile Controller`, `Community 36`, `Community 37`, `Community 38`, `Community 39`, `Community 43`, `Community 51`, `Community 52`, `Community 59`, `Community 60`, `Community 62`?**
-  _High betweenness centrality (0.080) - this node is a cross-community bridge._
+- **Why does `TestCase` connect `InfoBoard & IoT WS Auth Tests` to `Mission Controller & Service`, `Feedback Module`, `Auth Controller Tests (EN)`, `Subarea Comment & Amenity Tests`, `Auth Controller Tests (ID)`, `Feedback/History/Mission Tests`, `User Validation Geofence Tests`, `Controller Tests (Map/FAQ)`, `Profile Controller Tests (EN)`, `Profile Controller Tests (ID)`, `IoT Detection Tests`, `Community 47`, `Community 48`, `Community 49`, `Community 50`, `Community 54`, `Community 55`, `Community 56`, `Community 57`, `Community 71`?**
+  _High betweenness centrality (0.110) - this node is a cross-community bridge._
+- **Why does `ParkSubarea` connect `Subarea Comment & Amenity Tests` to `Auth Controller & Login Flow`, `IoT Broadcast Events`, `User Validation Geofence Tests`, `Community 61`, `Controller Tests (Map/FAQ)`, `Community 56`, `IoT Detection Tests`, `User Validation Controller`, `Park Subarea Controller`?**
+  _High betweenness centrality (0.092) - this node is a cross-community bridge._
+- **Why does `Controller` connect `FeedbackCategory & InfoBoard Controllers` to `Auth Controller & Login Flow`, `IoT Detection Controller`, `Mission Controller & Service`, `Feedback Module`, `Backup & DB Commands`, `User FAQ Module`, `Mission Controller Validation`, `User Validation Controller`, `Park Subarea Controller`, `Profile Controller`, `Community 37`, `Community 38`, `Community 167`, `Community 39`, `Community 43`, `Community 51`, `Community 52`, `Community 58`, `Community 59`, `Community 60`, `Community 61`, `Community 62`, `Community 69`?**
+  _High betweenness centrality (0.072) - this node is a cross-community bridge._
 - **Are the 34 inferred relationships involving `Response` (e.g. with `.receiveConfigQuery()` and `.receiveCount()`) actually correct?**
   _`Response` has 34 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `HistoryService`, `$schema`, `name` to the rest of the system?**
-  _76 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _134 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Auth Controller & Login Flow` be split into smaller, more focused modules?**
-  _Cohesion score 0.0594679186228482 - nodes in this community are weakly interconnected._
-- **Should `IoT Detection Controller` be split into smaller, more focused modules?**
-  _Cohesion score 0.06721311475409836 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05997778600518327 - nodes in this community are weakly interconnected._
+- **Should `IoT Broadcast Events` be split into smaller, more focused modules?**
+  _Cohesion score 0.0792156862745098 - nodes in this community are weakly interconnected._
