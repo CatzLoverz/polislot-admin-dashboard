@@ -334,7 +334,7 @@ def handle_command(raw_data):
 # DETECTOR BACKGROUND THREAD (Runs YOLO & Sends Count)
 # ============================================================
 def detector_loop(model, confidence):
-    global current_vehicle_count, stream, ws_connected
+    global current_vehicle_count, stream, ws_connected, last_http_success_time
     print("[+] Detector thread started.")
     
     while True:

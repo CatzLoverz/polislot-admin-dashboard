@@ -445,7 +445,7 @@ def start_websocket_thread():
 # MAIN
 # ============================================================
 def main():
-    global stream, current_vehicle_count, max_slots, detection_polygons
+    global stream, current_vehicle_count, max_slots, detection_polygons, last_http_success_time
     
     # Memuat konfigurasi dari cache lokal jika tersedia
     load_local_config()
