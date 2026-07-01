@@ -202,9 +202,9 @@
                                 <!-- Visual labels similar to standard PoliSlot colors -->
                                 <div class="d-flex justify-content-between text-center mb-2">
                                     <div style="flex: 1;">
-                                        <span class="badge text-white font-weight-bold" style="background-color: #31ce36; border-radius: 6px; font-size: 10px; padding: 4px 8px;">
-                                            <i class="fas fa-check-circle mr-1"></i> Banyak
-                                        </span>
+                                        <div class="status-pill status-pill-banyak">
+                                            <i class="fas fa-check-circle mr-1"></i> Banyak Tersedia
+                                        </div>
                                         <div class="mt-1 font-weight-bold" style="color: #31ce36; font-size: 0.85rem;"><span id="label-banyak-range">0% - 30%</span></div>
                                     </div>
                                     <div style="flex: 1;">
@@ -299,7 +299,7 @@
                     <p class="small text-muted mb-2 text-center text-md-left">Simulasi validasi manual untuk menguji respons sistem:</p>
                     <div class="d-flex flex-column align-items-center align-items-md-start" style="max-width: 150px;">
                         <button class="btn btn-sm btn-success mb-2 w-100 text-left" id="btn-val-banyak" onclick="validateStream('banyak')">
-                            <i class="fas fa-check-circle mr-1"></i> Banyak
+                            <i class="fas fa-check-circle mr-1"></i> Banyak Tersedia
                         </button>
                         <button class="btn btn-sm btn-warning text-white mb-2 w-100 text-left" id="btn-val-terbatas" onclick="validateStream('terbatas')">
                             <i class="fas fa-exclamation-circle mr-1"></i> Terbatas
