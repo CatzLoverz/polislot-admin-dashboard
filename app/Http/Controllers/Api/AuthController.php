@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\LoginNotificationMail;
 use App\Mail\SendOtpMail;
 use App\Models\User;
 use App\Services\MissionService;
@@ -286,6 +287,11 @@ class AuthController extends Controller
                 $token = $user->createToken('auth_token')->plainTextToken;
 
                 $user->update(['failed_attempts' => 0, 'locked_until' => null]);
+
+                // Kirim email notifikasi login
+                $ipAddress = $request->ip();
+                $userAgent = $request->header('User-Agent');
+                Mail::to($user->email)->send(new LoginNotificationMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $userAgent));
 
                 Log::info('Login berhasil.', ['user' => $user->user_id]);
 
