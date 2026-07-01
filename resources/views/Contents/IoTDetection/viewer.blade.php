@@ -257,7 +257,7 @@
                             <div class="p-3 mb-3 border rounded bg-light">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-robot mr-1 text-primary"></i> Status AI (CV):</span>
-                                    <small class="text-muted font-weight-bold" style="font-size: 11px;">
+                                    <small class="text-muted font-weight-bold" style="font-size: 11px;" id="slot-availability-text" {!! $device->device_status !== 'online' ? 'style="display: none;"' : '' !!}>
                                         Tersedia: <span id="realtime-available-text">{{ max(0, $maxSlots - ($initialCount ?? 0)) }}</span> | Terisi: <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span>
                                     </small>
                                 </div>
@@ -1434,13 +1434,20 @@
 
     function updateStatusUI(status) {
         const indicator = document.getElementById('status-indicator');
-        if (!indicator) return;
+        const slotAvailabilityText = document.getElementById('slot-availability-text');
+
         if (status === 'online') {
-            indicator.className = "badge badge-success ml-2";
-            indicator.innerHTML = '<i class="fas fa-circle mr-1" style="font-size: 8px;"></i> ONLINE';
+            if (indicator) {
+                indicator.className = "badge badge-success ml-2";
+                indicator.innerHTML = '<i class="fas fa-circle mr-1" style="font-size: 8px;"></i> ONLINE';
+            }
+            if (slotAvailabilityText) slotAvailabilityText.style.display = 'inline';
         } else {
-            indicator.className = "badge badge-danger ml-2";
-            indicator.innerHTML = '<i class="fas fa-circle mr-1" style="font-size: 8px;"></i> OFFLINE';
+            if (indicator) {
+                indicator.className = "badge badge-danger ml-2";
+                indicator.innerHTML = '<i class="fas fa-circle mr-1" style="font-size: 8px;"></i> OFFLINE';
+            }
+            if (slotAvailabilityText) slotAvailabilityText.style.display = 'none';
 
             // Reset count badge ke 0 saat device offline
             // Ini memastikan UI konsisten dengan backend yang sudah reset current_count = 0
