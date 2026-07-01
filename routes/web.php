@@ -15,11 +15,18 @@ use App\Http\Controllers\Web\RewardController;
 use App\Http\Controllers\Web\RewardVerificationController;
 use App\Http\Controllers\Web\UserFaqController;
 use App\Http\Controllers\Web\ValidationController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Rute untuk handle Deep Link dari email Reset Password
+Route::get('/app-redirect', function (Request $request) {
+    return view('redirect_app', ['email' => $request->query('email')]);
+})->name('app.redirect');
 
 Route::middleware('guest')->group(function () {
     // Rute Login
