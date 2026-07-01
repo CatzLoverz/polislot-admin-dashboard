@@ -257,7 +257,7 @@
                             <div class="p-3 mb-3 border rounded bg-light">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-robot mr-1 text-primary"></i> Status AI (CV):</span>
-                                    <small class="text-muted font-weight-bold" style="font-size: 11px;" id="slot-availability-text" {!! $device->device_status !== 'online' ? 'style="display: none;"' : '' !!}>
+                                    <small class="text-muted font-weight-bold" style="font-size: 11px;" id="slot-availability-text" {!! (!isset($initialStatus) || $initialStatus !== 'online') ? 'style="display: none;"' : '' !!}>
                                         Tersedia: <span id="realtime-available-text">{{ max(0, $maxSlots - ($initialCount ?? 0)) }}</span> | Terisi: <span id="realtime-count-text">{{ $initialCount ?? 0 }}</span>
                                     </small>
                                 </div>

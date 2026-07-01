@@ -943,7 +943,7 @@
             // Update slot count dynamically
             const occupancySpan = item.querySelector('.subarea-occupancy');
             if (occupancySpan) {
-                if (maxSlots > 0 && state.fallbackStatus !== 'netral') {
+                if (maxSlots > 0 && state.iotStatus === 'online') {
                     occupancySpan.style.display = 'block';
                     const availableVal = occupancySpan.querySelector('.available-count-val');
                     if (availableVal) availableVal.innerText = Math.max(0, maxSlots - currentCount);
@@ -1117,6 +1117,15 @@
                         if (member.type === 'iot_device') {
                             console.log(`✅ IoT Device ONLINE via Presence: ${sub.device_mac}`);
                             updateIotBadgeByMac(sub.device_mac, 'online');
+                            
+                            existingSubareas.forEach(s => {
+                                if (s.device_mac !== sub.device_mac) return;
+                                const subId = s.park_subarea_id;
+                                if (subareaStates[subId]) {
+                                    subareaStates[subId].iotStatus = 'online';
+                                    updateSubareaUI(subId);
+                                }
+                            });
                         }
                     })
                     .leaving((member) => {
@@ -1138,6 +1147,7 @@
                                 subareaStates[subId].status       = 'netral';
                                 subareaStates[subId].color        = '#1572e8';
                                 subareaStates[subId].currentCount = 0;
+                                subareaStates[subId].iotStatus    = 'offline';
                                 updateSubareaUI(subId);
                                 console.log(`🔄 Subarea ${subId} (${s.park_subarea_name}) → netral (IoT offline)`);
                             });
@@ -1193,7 +1203,8 @@
                 fallbackColor: sub.fallback_status_color || '#1572e8',
                 currentCount: sub.current_count ?? 0,
                 maxSlots: sub.max_slots ?? 0,
-                commentCount: commentCount
+                commentCount: commentCount,
+                iotStatus: sub.iot_status || 'offline'
             };
         });
         
