@@ -46,11 +46,11 @@ def get_env_or_fail(key):
 # ============================================================
 # KONFIGURASI IOT DEVICE (PARKING DETECTOR - WEBSOCKET DENGAN PREVIEW)
 # ============================================================
-# Ambil MAC Address dari argumen terminal, atau minta input jika kosong
+# Ambil MAC Address dari argumen terminal (argv[1]), atau fallback ke env variable MAC_ADDRESS
 if len(sys.argv) > 1:
     MAC_ADDRESS = sys.argv[1]
 else:
-    MAC_ADDRESS = input("Masukkan MAC Address perangkat (contoh: 00:1A:2B:3C:4D:5E): ").strip()
+    MAC_ADDRESS = os.getenv("MAC_ADDRESS", "").strip()
     if not MAC_ADDRESS:
         print("[-] MAC Address tidak boleh kosong!")
         sys.exit(1)
@@ -70,6 +70,7 @@ SHARED_SECRET = get_env_or_fail("SHARED_SECRET").strip().strip('"').strip("'")
 SOURCE = get_env_or_fail("CAMERA_SOURCE")            # Sumber video: "0" untuk webcam default, atau path video file / RTSP URL
 YOLO_WEIGHTS = get_env_or_fail("YOLO_WEIGHTS")  # File weights model YOLOv8 (yolov8n.pt / custom model)
 CONFIDENCE_THRESHOLD = float(get_env_or_fail("CONFIDENCE_THRESHOLD"))   # Ambang batas kepercayaan YOLOv8 (0.0 s.d 1.0)
+ENABLE_DETECTION_LOG = os.getenv("ENABLE_DETECTION_LOG", "true").lower() == "true" # Tampilkan log deteksi di terminal
 ENABLE_DEBUG_LOG = os.getenv("ENABLE_DEBUG_LOG", "false").lower() == "true" # Tampilkan log debug jaringan yang repetitif
 
 # Parsing TARGET_CLASSES (contoh di .env: 2,3)
@@ -483,12 +484,27 @@ def main():
                         cv2.polylines(preview_frame, [pts], True, (0, 255, 255), 2)
                 
                 # 3. Jalankan YOLOv8 Prediksi pada frame asli
+                predict_start = time.time()
                 results = model.predict(frame, conf=CONFIDENCE_THRESHOLD, classes=TARGET_CLASSES, verbose=False)
-                
+                predict_ms = (time.time() - predict_start) * 1000.0
+
                 vehicles_inside = 0
-                
+                box_count = 0
+                speed_text = f"inference {predict_ms:.1f}ms"
+
                 if results and len(results) > 0:
-                    boxes = results[0].boxes
+                    res0 = results[0]
+                    boxes = res0.boxes
+                    box_count = len(boxes)
+                    if hasattr(res0, 'speed'):
+                        try:
+                            speed_val = res0.speed
+                            if isinstance(speed_val, dict):
+                                speed_text = ', '.join(f"{k}: {v:.1f}ms" for k, v in speed_val.items())
+                            else:
+                                speed_text = str(speed_val)
+                        except Exception:
+                            speed_text = f"inference {predict_ms:.1f}ms"
                     for box in boxes:
                         x1, y1, x2, y2 = map(int, box.xyxy[0])
                         conf = float(box.conf[0])
@@ -511,6 +527,8 @@ def main():
                         cv2.putText(preview_frame, label, (x1, y1 - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
 
                 current_vehicle_count = vehicles_inside
+                if ENABLE_DETECTION_LOG:
+                    print(f"[🤖] Detection: {vehicles_inside} kendaraan di dalam zona deteksi | boxes={box_count} | {speed_text}")
 
                 # 4. Tulis informasi visual pada window preview
                 status_text = f"Count: {vehicles_inside} | Max Slots: {current_max_slots}"

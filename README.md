@@ -48,12 +48,14 @@ polislot-admin-dashboard/
 ├── database/                 # Migrations & Seeders
 ├── docs/                     # Dokumentasi Instalasi
 │   ├── INSTALLATION_DOCKER.md
-│   └── INSTALLATION_MANUAL.md
+│   ├── INSTALLATION_MANUAL.md
+│   └── INSTALLATION_IOT_EDGE.md
+├── python/                   # Script Edge IoT (YOLOv8 Parking Detector)
 ├── resources/views/          # Halaman Web (Blade)
 ├── routes/                   # Definisi URL (web.php & api.php)
 └── storage/
     ├── app/
-    │   ├── private/keys      # Lokasi RSA Keys (Generated saat install)		
+    │   ├── private/keys      # Lokasi RSA Keys (Generated saat install)
     │   └── public            # Storage penyimpanan media
     └── logs/                 # Log laravel dan mariadb
 ```
@@ -67,6 +69,9 @@ Silakan pilih metode instalasi yang sesuai dengan kebutuhan Anda:
 
 - **[💻 Instalasi Manual](docs/INSTALLATION_MANUAL.md)**  
   Instalasi manual menggunakan PHP & Composer di mesin lokal (XAMPP/Laragon/Native Linux).
+
+- **[🚗 Instalasi Perangkat Edge IoT](docs/INSTALLATION_IOT_EDGE.md)**  
+  Panduan setup script Python di perangkat edge (Raspberry Pi / mini-PC) untuk deteksi kendaraan via MQTT atau WebSocket.
 
 ## 🧰 Custom Utility Commands
 
