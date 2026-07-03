@@ -196,16 +196,22 @@ def encrypt_image_aes(image_bytes):
 # ============================================================
 # MULTI-POLYGON DETECTOR HELPER
 # ============================================================
-def is_inside_polygon(point, polygon):
+def is_bbox_in_polygon(bbox, polygon, iou_threshold=0.5):
     if len(polygon) < 3:
         return False
-    polygon_np = np.array(polygon, dtype=np.int32)
-    dist = cv2.pointPolygonTest(polygon_np, (float(point[0]), float(point[1])), False)
-    return dist >= 0
+    x1, y1, x2, y2 = bbox
+    w, h = x2 - x1, y2 - y1
+    if w <= 0 or h <= 0:
+        return False
+    poly_shifted = np.array([[(p[0] - x1, p[1] - y1) for p in polygon]], dtype=np.int32)
+    mask = np.zeros((h, w), dtype=np.uint8)
+    cv2.fillPoly(mask, poly_shifted, 255)
+    intersect_area = cv2.countNonZero(mask)
+    return (intersect_area / float(w * h)) >= iou_threshold
 
-def is_inside_any_polygon(point, polygons):
+def is_bbox_in_any_polygon(bbox, polygons, iou_threshold=0.5):
     for poly in polygons:
-        if is_inside_polygon(point, poly):
+        if is_bbox_in_polygon(bbox, poly, iou_threshold):
             return True
     return False
 
@@ -509,19 +515,21 @@ def main():
                         x1, y1, x2, y2 = map(int, box.xyxy[0])
                         conf = float(box.conf[0])
                         cls = int(box.cls[0])
-                        ref_point = (int((x1 + x2) / 2), y2)
+                        bbox = (x1, y1, x2, y2)
                         
-                        # Cek apakah titik acuan berada dalam polygon deteksi
+                        # Cek proporsi bounding box yang masuk polygon
                         is_inside = False
                         if len(polys) > 0:
-                            if is_inside_any_polygon(ref_point, polys):
+                            if is_bbox_in_any_polygon(bbox, polys):
                                 vehicles_inside += 1
                                 is_inside = True
                         
                         # Gambar Bounding Box (Hijau jika di dalam polygon, Merah jika di luar)
                         color = (0, 255, 0) if is_inside else (0, 0, 255)
                         cv2.rectangle(preview_frame, (x1, y1), (x2, y2), color, 2)
-                        cv2.circle(preview_frame, ref_point, 5, color, -1)
+                        # Gambar titik tengah box
+                        center_point = (int((x1 + x2) / 2), int((y1 + y2) / 2))
+                        cv2.circle(preview_frame, center_point, 5, color, -1)
                         
                         label = f"{model.names[cls]} {conf:.2f}"
                         cv2.putText(preview_frame, label, (x1, y1 - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)

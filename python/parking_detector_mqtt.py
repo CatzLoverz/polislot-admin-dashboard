@@ -135,16 +135,22 @@ def generate_hmac_signature(payload_dict):
 # ============================================================
 # MULTI-POLYGON DETECTOR HELPER
 # ============================================================
-def is_inside_polygon(point, polygon):
+def is_bbox_in_polygon(bbox, polygon, iou_threshold=0.5):
     if len(polygon) < 3:
         return False
-    polygon_np = np.array(polygon, dtype=np.int32)
-    dist = cv2.pointPolygonTest(polygon_np, (float(point[0]), float(point[1])), False)
-    return dist >= 0
+    x1, y1, x2, y2 = bbox
+    w, h = x2 - x1, y2 - y1
+    if w <= 0 or h <= 0:
+        return False
+    poly_shifted = np.array([[(p[0] - x1, p[1] - y1) for p in polygon]], dtype=np.int32)
+    mask = np.zeros((h, w), dtype=np.uint8)
+    cv2.fillPoly(mask, poly_shifted, 255)
+    intersect_area = cv2.countNonZero(mask)
+    return (intersect_area / float(w * h)) >= iou_threshold
 
-def is_inside_any_polygon(point, polygons):
+def is_bbox_in_any_polygon(bbox, polygons, iou_threshold=0.5):
     for poly in polygons:
-        if is_inside_polygon(point, poly):
+        if is_bbox_in_polygon(bbox, poly, iou_threshold):
             return True
     return False
 
@@ -398,11 +404,10 @@ def main():
                             speed_text = f"inference {predict_ms:.1f}ms"
                     for box in boxes:
                         x1, y1, x2, y2 = map(int, box.xyxy[0])
-                        # Bottom center (reference point of vehicle)
-                        ref_point = (int((x1 + x2) / 2), y2)
+                        bbox = (x1, y1, x2, y2)
                         
                         if len(polys) > 0:
-                            if is_inside_any_polygon(ref_point, polys):
+                            if is_bbox_in_any_polygon(bbox, polys):
                                 vehicles_inside += 1
                 
                 current_vehicle_count = vehicles_inside
