@@ -153,7 +153,7 @@ class MissionController extends Controller
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
                     'mission_reset_cycle' => ['required', Rule::in(array_keys(Mission::CYCLES))],
                     'mission_threshold'   => 'required|integer|min:1',
-                    'mission_is_active'   => 'nullable',
+                    'mission_is_active'   => 'required|boolean',
                 ]);
 
                 // Validasi logika silang (cross-field) per aturan metric
@@ -167,7 +167,7 @@ class MissionController extends Controller
                     throw ValidationException::withMessages($crossErrors);
                 }
 
-                $validated['mission_is_active'] = $request->has('mission_is_active');
+                $validated['mission_is_active'] = $request->boolean('mission_is_active');
 
                 Mission::create($validated);
 
@@ -203,7 +203,7 @@ class MissionController extends Controller
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
                     'mission_reset_cycle' => ['required', Rule::in(array_keys(Mission::CYCLES))],
                     'mission_threshold'   => 'required|integer|min:1',
-                    'mission_is_active'   => 'nullable',
+                    'mission_is_active'   => 'required|boolean',
                 ]);
 
                 // Validasi logika silang (cross-field) per aturan metric
@@ -217,7 +217,7 @@ class MissionController extends Controller
                     throw ValidationException::withMessages($crossErrors);
                 }
 
-                $validated['mission_is_active'] = $request->has('mission_is_active');
+                $validated['mission_is_active'] = $request->boolean('mission_is_active');
 
                 $mission->update($validated);
 
