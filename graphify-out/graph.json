@@ -1025,7 +1025,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_infoboardcontroller",
-      "community": 167,
+      "community": 17,
       "norm_label": "infoboardcontroller.php"
     },
     {
@@ -1035,7 +1035,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_infoboardcontroller_infoboardcontroller",
-      "community": 167,
+      "community": 17,
       "norm_label": "infoboardcontroller"
     },
     {
@@ -1045,7 +1045,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "api_infoboardcontroller_infoboardcontroller_index",
-      "community": 167,
+      "community": 17,
       "norm_label": ".index()"
     },
     {
@@ -1055,7 +1055,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "app_http_controllers_api_infoboardcontroller_php_jsonresponse",
-      "community": 167,
+      "community": 17,
       "norm_label": "jsonresponse"
     },
     {
@@ -1065,7 +1065,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_iotdetectioncontroller",
-      "community": 58,
+      "community": 1,
       "norm_label": "iotdetectioncontroller.php"
     },
     {
@@ -1075,7 +1075,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "api_iotdetectioncontroller_iotdetectioncontroller",
-      "community": 58,
+      "community": 1,
       "norm_label": "iotdetectioncontroller"
     },
     {
@@ -1085,7 +1085,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "api_iotdetectioncontroller_iotdetectioncontroller_validatemacaddress",
-      "community": 58,
+      "community": 1,
       "norm_label": ".validatemacaddress()"
     },
     {
@@ -1095,7 +1095,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "api_iotdetectioncontroller_iotdetectioncontroller_receivedetection",
-      "community": 58,
+      "community": 1,
       "norm_label": ".receivedetection()"
     },
     {
@@ -1105,7 +1105,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller_php_request",
-      "community": 58,
+      "community": 1,
       "norm_label": "request"
     },
     {
@@ -1115,7 +1115,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller_php_jsonresponse",
-      "community": 58,
+      "community": 1,
       "norm_label": "jsonresponse"
     },
     {
@@ -1125,7 +1125,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "api_iotdetectioncontroller_iotdetectioncontroller_receivesnapshot",
-      "community": 58,
+      "community": 1,
       "norm_label": ".receivesnapshot()"
     },
     {
@@ -1135,7 +1135,7 @@
       "source_location": "L337",
       "_origin": "ast",
       "id": "api_iotdetectioncontroller_iotdetectioncontroller_receivecount",
-      "community": 58,
+      "community": 1,
       "norm_label": ".receivecount()"
     },
     {
@@ -1145,7 +1145,7 @@
       "source_location": "L401",
       "_origin": "ast",
       "id": "api_iotdetectioncontroller_iotdetectioncontroller_receiveconfigquery",
-      "community": 58,
+      "community": 1,
       "norm_label": ".receiveconfigquery()"
     },
     {
@@ -1215,7 +1215,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_iotwsauthcontroller",
-      "community": 17,
+      "community": 74,
       "norm_label": "iotwsauthcontroller.php"
     },
     {
@@ -1225,7 +1225,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "api_iotwsauthcontroller_iotwsauthcontroller",
-      "community": 17,
+      "community": 74,
       "norm_label": "iotwsauthcontroller"
     },
     {
@@ -1235,7 +1235,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "api_iotwsauthcontroller_iotwsauthcontroller_authenticate",
-      "community": 17,
+      "community": 74,
       "norm_label": ".authenticate()"
     },
     {
@@ -1245,7 +1245,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwsauthcontroller_php_request",
-      "community": 17,
+      "community": 74,
       "norm_label": "request"
     },
     {
@@ -1255,7 +1255,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwsauthcontroller_php_jsonresponse",
-      "community": 17,
+      "community": 74,
       "norm_label": "jsonresponse"
     },
     {
@@ -1555,7 +1555,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_subareacommentcontroller",
-      "community": 0,
+      "community": 8,
       "norm_label": "subareacommentcontroller.php"
     },
     {
@@ -1565,7 +1565,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "api_subareacommentcontroller_subareacommentcontroller",
-      "community": 0,
+      "community": 8,
       "norm_label": "subareacommentcontroller"
     },
     {
@@ -1575,7 +1575,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "api_subareacommentcontroller_subareacommentcontroller_index",
-      "community": 0,
+      "community": 8,
       "norm_label": ".index()"
     },
     {
@@ -1585,7 +1585,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_api_subareacommentcontroller_php_request",
-      "community": 0,
+      "community": 8,
       "norm_label": "request"
     },
     {
@@ -1595,7 +1595,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_api_subareacommentcontroller_php_jsonresponse",
-      "community": 0,
+      "community": 8,
       "norm_label": "jsonresponse"
     },
     {
@@ -1605,7 +1605,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "api_subareacommentcontroller_subareacommentcontroller_store",
-      "community": 0,
+      "community": 8,
       "norm_label": ".store()"
     },
     {
@@ -1615,7 +1615,7 @@
       "source_location": "L137",
       "_origin": "ast",
       "id": "api_subareacommentcontroller_subareacommentcontroller_update",
-      "community": 0,
+      "community": 8,
       "norm_label": ".update()"
     },
     {
@@ -1625,7 +1625,7 @@
       "source_location": "L204",
       "_origin": "ast",
       "id": "api_subareacommentcontroller_subareacommentcontroller_destroy",
-      "community": 0,
+      "community": 8,
       "norm_label": ".destroy()"
     },
     {
@@ -1635,7 +1635,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_userfaqcontroller",
-      "community": 19,
+      "community": 176,
       "norm_label": "userfaqcontroller.php"
     },
     {
@@ -1645,7 +1645,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_userfaqcontroller_userfaqcontroller",
-      "community": 19,
+      "community": 176,
       "norm_label": "userfaqcontroller"
     },
     {
@@ -1655,7 +1655,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "api_userfaqcontroller_userfaqcontroller_index",
-      "community": 19,
+      "community": 176,
       "norm_label": ".index()"
     },
     {
@@ -1665,7 +1665,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "app_http_controllers_api_userfaqcontroller_php_jsonresponse",
-      "community": 19,
+      "community": 176,
       "norm_label": "jsonresponse"
     },
     {
@@ -1675,7 +1675,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_uservalidationcontroller",
-      "community": 29,
+      "community": 8,
       "norm_label": "uservalidationcontroller.php"
     },
     {
@@ -1685,7 +1685,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "api_uservalidationcontroller_uservalidationcontroller",
-      "community": 29,
+      "community": 8,
       "norm_label": "uservalidationcontroller"
     },
     {
@@ -1695,7 +1695,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "api_uservalidationcontroller_uservalidationcontroller_construct",
-      "community": 29,
+      "community": 8,
       "norm_label": ".__construct()"
     },
     {
@@ -1705,7 +1705,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller_php_missionservice",
-      "community": 29,
+      "community": 8,
       "norm_label": "missionservice"
     },
     {
@@ -1715,7 +1715,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller_php_historyservice",
-      "community": 29,
+      "community": 8,
       "norm_label": "historyservice"
     },
     {
@@ -1725,7 +1725,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "api_uservalidationcontroller_uservalidationcontroller_store",
-      "community": 29,
+      "community": 8,
       "norm_label": ".store()"
     },
     {
@@ -1735,7 +1735,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller_php_request",
-      "community": 29,
+      "community": 8,
       "norm_label": "request"
     },
     {
@@ -1745,7 +1745,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller_php_jsonresponse",
-      "community": 29,
+      "community": 8,
       "norm_label": "jsonresponse"
     },
     {
@@ -1755,7 +1755,7 @@
       "source_location": "L201",
       "_origin": "ast",
       "id": "api_uservalidationcontroller_uservalidationcontroller_calculatedistance",
-      "community": 29,
+      "community": 8,
       "norm_label": ".calculatedistance()"
     },
     {
@@ -2025,7 +2025,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_dashboardcontroller",
-      "community": 61,
+      "community": 1,
       "norm_label": "dashboardcontroller.php"
     },
     {
@@ -2035,7 +2035,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "web_dashboardcontroller_dashboardcontroller",
-      "community": 61,
+      "community": 1,
       "norm_label": "dashboardcontroller"
     },
     {
@@ -2045,7 +2045,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "web_dashboardcontroller_dashboardcontroller_index",
-      "community": 61,
+      "community": 1,
       "norm_label": ".index()"
     },
     {
@@ -2055,7 +2055,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_php_view",
-      "community": 61,
+      "community": 1,
       "norm_label": "view"
     },
     {
@@ -2065,7 +2065,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "web_dashboardcontroller_dashboardcontroller_getchartdata",
-      "community": 61,
+      "community": 1,
       "norm_label": ".getchartdata()"
     },
     {
@@ -2075,7 +2075,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_php_request",
-      "community": 61,
+      "community": 1,
       "norm_label": "request"
     },
     {
@@ -2085,7 +2085,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_php_jsonresponse",
-      "community": 61,
+      "community": 1,
       "norm_label": "jsonresponse"
     },
     {
@@ -2095,7 +2095,7 @@
       "source_location": "L137",
       "_origin": "ast",
       "id": "web_dashboardcontroller_dashboardcontroller_getleaderboard",
-      "community": 61,
+      "community": 1,
       "norm_label": ".getleaderboard()"
     },
     {
@@ -2105,7 +2105,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "web_dashboardcontroller_dashboardcontroller_getrealtimevalidations",
-      "community": 61,
+      "community": 1,
       "norm_label": ".getrealtimevalidations()"
     },
     {
@@ -2255,7 +2255,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_infoboardcontroller",
-      "community": 38,
+      "community": 0,
       "norm_label": "infoboardcontroller.php"
     },
     {
@@ -2265,7 +2265,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "web_infoboardcontroller_infoboardcontroller",
-      "community": 38,
+      "community": 0,
       "norm_label": "infoboardcontroller"
     },
     {
@@ -2275,7 +2275,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "web_infoboardcontroller_infoboardcontroller_index",
-      "community": 38,
+      "community": 0,
       "norm_label": ".index()"
     },
     {
@@ -2285,7 +2285,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_web_infoboardcontroller_php_request",
-      "community": 38,
+      "community": 0,
       "norm_label": "request"
     },
     {
@@ -2295,7 +2295,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "web_infoboardcontroller_infoboardcontroller_store",
-      "community": 38,
+      "community": 0,
       "norm_label": ".store()"
     },
     {
@@ -2305,7 +2305,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "app_http_controllers_web_infoboardcontroller_php_redirectresponse",
-      "community": 38,
+      "community": 0,
       "norm_label": "redirectresponse"
     },
     {
@@ -2315,7 +2315,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "web_infoboardcontroller_infoboardcontroller_update",
-      "community": 38,
+      "community": 0,
       "norm_label": ".update()"
     },
     {
@@ -2325,7 +2325,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "web_infoboardcontroller_infoboardcontroller_destroy",
-      "community": 38,
+      "community": 0,
       "norm_label": ".destroy()"
     },
     {
@@ -2575,7 +2575,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_parkamenitycontroller",
-      "community": 69,
+      "community": 1,
       "norm_label": "parkamenitycontroller.php"
     },
     {
@@ -2585,7 +2585,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "web_parkamenitycontroller_parkamenitycontroller",
-      "community": 69,
+      "community": 1,
       "norm_label": "parkamenitycontroller"
     },
     {
@@ -2595,7 +2595,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "web_parkamenitycontroller_parkamenitycontroller_store",
-      "community": 69,
+      "community": 1,
       "norm_label": ".store()"
     },
     {
@@ -2605,7 +2605,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkamenitycontroller_php_request",
-      "community": 69,
+      "community": 1,
       "norm_label": "request"
     },
     {
@@ -2615,7 +2615,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkamenitycontroller_php_jsonresponse",
-      "community": 69,
+      "community": 1,
       "norm_label": "jsonresponse"
     },
     {
@@ -2625,7 +2625,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "web_parkamenitycontroller_parkamenitycontroller_destroy",
-      "community": 69,
+      "community": 1,
       "norm_label": ".destroy()"
     },
     {
@@ -2735,7 +2735,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_parksubareacontroller",
-      "community": 30,
+      "community": 8,
       "norm_label": "parksubareacontroller.php"
     },
     {
@@ -2745,7 +2745,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "web_parksubareacontroller_parksubareacontroller",
-      "community": 30,
+      "community": 8,
       "norm_label": "parksubareacontroller"
     },
     {
@@ -2755,7 +2755,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "web_parksubareacontroller_parksubareacontroller_store",
-      "community": 30,
+      "community": 8,
       "norm_label": ".store()"
     },
     {
@@ -2765,7 +2765,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_php_request",
-      "community": 30,
+      "community": 8,
       "norm_label": "request"
     },
     {
@@ -2775,7 +2775,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_php_jsonresponse",
-      "community": 30,
+      "community": 8,
       "norm_label": "jsonresponse"
     },
     {
@@ -2785,7 +2785,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "web_parksubareacontroller_parksubareacontroller_update",
-      "community": 30,
+      "community": 8,
       "norm_label": ".update()"
     },
     {
@@ -2795,7 +2795,7 @@
       "source_location": "L186",
       "_origin": "ast",
       "id": "web_parksubareacontroller_parksubareacontroller_destroy",
-      "community": 30,
+      "community": 8,
       "norm_label": ".destroy()"
     },
     {
@@ -2805,7 +2805,7 @@
       "source_location": "L186",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_php_redirectresponse",
-      "community": 30,
+      "community": 8,
       "norm_label": "redirectresponse"
     },
     {
@@ -2815,7 +2815,7 @@
       "source_location": "L223",
       "_origin": "ast",
       "id": "web_parksubareacontroller_parksubareacontroller_getcomments",
-      "community": 30,
+      "community": 8,
       "norm_label": ".getcomments()"
     },
     {
@@ -3275,7 +3275,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "middleware_rbac",
-      "community": 72,
+      "community": 1,
       "norm_label": "rbac.php"
     },
     {
@@ -3285,7 +3285,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "middleware_rbac_rbac",
-      "community": 72,
+      "community": 1,
       "norm_label": "rbac"
     },
     {
@@ -3295,7 +3295,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "middleware_rbac_rbac_handle",
-      "community": 72,
+      "community": 1,
       "norm_label": ".handle()"
     },
     {
@@ -3305,7 +3305,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_http_middleware_rbac_php_request",
-      "community": 72,
+      "community": 1,
       "norm_label": "request"
     },
     {
@@ -3315,7 +3315,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_http_middleware_rbac_php_closure",
-      "community": 72,
+      "community": 1,
       "norm_label": "closure"
     },
     {
@@ -3325,7 +3325,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "response",
-      "community": 57,
+      "community": 1,
       "norm_label": "response"
     },
     {
@@ -3785,7 +3785,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_iotcapture",
-      "community": 166,
+      "community": 1,
       "norm_label": "iotcapture.php"
     },
     {
@@ -3795,7 +3795,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "models_iotcapture_iotcapture",
-      "community": 166,
+      "community": 1,
       "norm_label": "iotcapture"
     },
     {
@@ -3815,7 +3815,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "models_iotcapture_iotcapture_device",
-      "community": 166,
+      "community": 1,
       "norm_label": ".device()"
     },
     {
@@ -3825,7 +3825,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "app_models_iotcapture_php_belongsto",
-      "community": 166,
+      "community": 1,
       "norm_label": "belongsto"
     },
     {
@@ -3835,7 +3835,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "models_iotcapture_iotcapture_uservalidation",
-      "community": 166,
+      "community": 1,
       "norm_label": ".uservalidation()"
     },
     {
@@ -3845,7 +3845,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_iotdevice",
-      "community": 20,
+      "community": 4,
       "norm_label": "iotdevice.php"
     },
     {
@@ -3855,7 +3855,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "models_iotdevice_iotdevice",
-      "community": 20,
+      "community": 4,
       "norm_label": "iotdevice"
     },
     {
@@ -3865,7 +3865,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "models_iotdevice_iotdevice_booted",
-      "community": 20,
+      "community": 4,
       "norm_label": ".booted()"
     },
     {
@@ -3875,7 +3875,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "models_iotdevice_iotdevice_getstatus",
-      "community": 20,
+      "community": 4,
       "norm_label": ".getstatus()"
     },
     {
@@ -3885,7 +3885,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "models_iotdevice_iotdevice_syncstatus",
-      "community": 20,
+      "community": 4,
       "norm_label": ".syncstatus()"
     },
     {
@@ -3895,7 +3895,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "models_iotdevice_iotdevice_checkreverbpresence",
-      "community": 20,
+      "community": 4,
       "norm_label": ".checkreverbpresence()"
     },
     {
@@ -3905,7 +3905,7 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "models_iotdevice_iotdevice_markdeviceoffline",
-      "community": 20,
+      "community": 4,
       "norm_label": ".markdeviceoffline()"
     },
     {
@@ -3915,7 +3915,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "models_iotdevice_iotdevice_subarea",
-      "community": 20,
+      "community": 4,
       "norm_label": ".subarea()"
     },
     {
@@ -3925,7 +3925,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "app_models_iotdevice_php_belongsto",
-      "community": 20,
+      "community": 4,
       "norm_label": "belongsto"
     },
     {
@@ -3935,7 +3935,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "models_iotdevice_iotdevice_captures",
-      "community": 20,
+      "community": 4,
       "norm_label": ".captures()"
     },
     {
@@ -3945,7 +3945,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "app_models_iotdevice_php_hasmany",
-      "community": 20,
+      "community": 4,
       "norm_label": "hasmany"
     },
     {
@@ -3995,7 +3995,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_parkamenity",
-      "community": 26,
+      "community": 177,
       "norm_label": "parkamenity.php"
     },
     {
@@ -4005,7 +4005,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "models_parkamenity_parkamenity",
-      "community": 26,
+      "community": 177,
       "norm_label": "parkamenity"
     },
     {
@@ -4015,7 +4015,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "models_parkamenity_parkamenity_parksubarea",
-      "community": 26,
+      "community": 177,
       "norm_label": ".parksubarea()"
     },
     {
@@ -4025,7 +4025,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "app_models_parkamenity_php_belongsto",
-      "community": 26,
+      "community": 177,
       "norm_label": "belongsto"
     },
     {
@@ -4035,7 +4035,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "models_parkarea",
-      "community": 74,
+      "community": 26,
       "norm_label": "parkarea.php"
     },
     {
@@ -4045,7 +4045,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "models_parkarea_parkarea",
-      "community": 74,
+      "community": 26,
       "norm_label": "parkarea"
     },
     {
@@ -4055,7 +4055,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "models_parkarea_parkarea_parksubarea",
-      "community": 74,
+      "community": 26,
       "norm_label": ".parksubarea()"
     },
     {
@@ -4065,7 +4065,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "app_models_parkarea_php_hasmany",
-      "community": 74,
+      "community": 26,
       "norm_label": "hasmany"
     },
     {
@@ -4655,7 +4655,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "models_validation_validation",
-      "community": 14,
+      "community": 8,
       "norm_label": "validation"
     },
     {
@@ -5605,7 +5605,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "factories_userfactory_userfactory",
-      "community": 20,
+      "community": 4,
       "norm_label": "userfactory"
     },
     {
@@ -5625,7 +5625,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "factories_userfactory_userfactory_definition",
-      "community": 20,
+      "community": 4,
       "norm_label": ".definition()"
     },
     {
@@ -5635,7 +5635,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "factories_userfactory_userfactory_unverified",
-      "community": 20,
+      "community": 4,
       "norm_label": ".unverified()"
     },
     {
@@ -5645,7 +5645,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "static",
-      "community": 20,
+      "community": 4,
       "norm_label": "static"
     },
     {
@@ -5655,7 +5655,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "factories_userfactory_userfactory_admin",
-      "community": 20,
+      "community": 4,
       "norm_label": ".admin()"
     },
     {
@@ -6545,6 +6545,26 @@
       "norm_label": "index.php"
     },
     {
+      "label": "model_ncnn.py",
+      "file_type": "code",
+      "source_file": "python/models/best3_ncnn_model/model_ncnn.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "best3_ncnn_model_model_ncnn",
+      "community": 179,
+      "norm_label": "model_ncnn.py"
+    },
+    {
+      "label": "test_inference()",
+      "file_type": "code",
+      "source_file": "python/models/best3_ncnn_model/model_ncnn.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "best3_ncnn_model_model_ncnn_test_inference",
+      "community": 179,
+      "norm_label": "test_inference()"
+    },
+    {
       "label": "parking_detector_mqtt.py",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
@@ -6615,30 +6635,30 @@
       "norm_label": "generate_hmac_signature()"
     },
     {
-      "label": "is_inside_polygon()",
+      "label": "is_bbox_in_polygon()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
       "source_location": "L138",
       "_origin": "ast",
-      "id": "python_parking_detector_mqtt_is_inside_polygon",
+      "id": "python_parking_detector_mqtt_is_bbox_in_polygon",
       "community": 15,
-      "norm_label": "is_inside_polygon()"
+      "norm_label": "is_bbox_in_polygon()"
     },
     {
-      "label": "is_inside_any_polygon()",
+      "label": "is_bbox_in_any_polygon()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L145",
+      "source_location": "L151",
       "_origin": "ast",
-      "id": "python_parking_detector_mqtt_is_inside_any_polygon",
+      "id": "python_parking_detector_mqtt_is_bbox_in_any_polygon",
       "community": 15,
-      "norm_label": "is_inside_any_polygon()"
+      "norm_label": "is_bbox_in_any_polygon()"
     },
     {
       "label": "CameraStream",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L154",
+      "source_location": "L160",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_camerastream",
       "community": 15,
@@ -6648,7 +6668,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L155",
+      "source_location": "L161",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_camerastream_init",
       "community": 15,
@@ -6658,7 +6678,7 @@
       "label": "._update()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L166",
+      "source_location": "L172",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_camerastream_update",
       "community": 15,
@@ -6668,7 +6688,7 @@
       "label": ".read()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L183",
+      "source_location": "L189",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_camerastream_read",
       "community": 15,
@@ -6678,7 +6698,7 @@
       "label": ".capture_jpeg()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L187",
+      "source_location": "L193",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_camerastream_capture_jpeg",
       "community": 15,
@@ -6688,7 +6708,7 @@
       "label": ".stop()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L198",
+      "source_location": "L204",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_camerastream_stop",
       "community": 15,
@@ -6698,7 +6718,7 @@
       "label": "on_connect_success()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L213",
+      "source_location": "L219",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_on_connect_success",
       "community": 15,
@@ -6708,7 +6728,7 @@
       "label": "send_status_update()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L225",
+      "source_location": "L231",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_send_status_update",
       "community": 15,
@@ -6718,7 +6738,7 @@
       "label": "on_connect()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L232",
+      "source_location": "L238",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_on_connect",
       "community": 15,
@@ -6728,7 +6748,7 @@
       "label": "on_disconnect()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L238",
+      "source_location": "L244",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_on_disconnect",
       "community": 15,
@@ -6738,7 +6758,7 @@
       "label": "on_publish()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L250",
+      "source_location": "L256",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_on_publish",
       "community": 15,
@@ -6748,7 +6768,7 @@
       "label": "on_message()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L254",
+      "source_location": "L260",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_on_message",
       "community": 15,
@@ -6758,7 +6778,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L320",
+      "source_location": "L326",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_main",
       "community": 15,
@@ -6835,30 +6855,30 @@
       "norm_label": "generate_hmac_signature()"
     },
     {
-      "label": "is_inside_polygon()",
+      "label": "is_bbox_in_polygon()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
       "source_location": "L137",
       "_origin": "ast",
-      "id": "python_parking_detector_mqtt_preview_is_inside_polygon",
+      "id": "python_parking_detector_mqtt_preview_is_bbox_in_polygon",
       "community": 16,
-      "norm_label": "is_inside_polygon()"
+      "norm_label": "is_bbox_in_polygon()"
     },
     {
-      "label": "is_inside_any_polygon()",
+      "label": "is_bbox_in_any_polygon()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L144",
+      "source_location": "L150",
       "_origin": "ast",
-      "id": "python_parking_detector_mqtt_preview_is_inside_any_polygon",
+      "id": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon",
       "community": 16,
-      "norm_label": "is_inside_any_polygon()"
+      "norm_label": "is_bbox_in_any_polygon()"
     },
     {
       "label": "CameraStream",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L153",
+      "source_location": "L159",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_camerastream",
       "community": 16,
@@ -6868,7 +6888,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L154",
+      "source_location": "L160",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_camerastream_init",
       "community": 16,
@@ -6878,7 +6898,7 @@
       "label": "._update()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L165",
+      "source_location": "L171",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_camerastream_update",
       "community": 16,
@@ -6888,7 +6908,7 @@
       "label": ".read()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L182",
+      "source_location": "L188",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_camerastream_read",
       "community": 16,
@@ -6898,7 +6918,7 @@
       "label": ".capture_jpeg()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L186",
+      "source_location": "L192",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_camerastream_capture_jpeg",
       "community": 16,
@@ -6908,7 +6928,7 @@
       "label": ".stop()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L197",
+      "source_location": "L203",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_camerastream_stop",
       "community": 16,
@@ -6918,7 +6938,7 @@
       "label": "on_connect_success()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L212",
+      "source_location": "L218",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_on_connect_success",
       "community": 16,
@@ -6928,7 +6948,7 @@
       "label": "send_status_update()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L224",
+      "source_location": "L230",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_send_status_update",
       "community": 16,
@@ -6938,7 +6958,7 @@
       "label": "on_connect()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L231",
+      "source_location": "L237",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_on_connect",
       "community": 16,
@@ -6948,7 +6968,7 @@
       "label": "on_disconnect()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L237",
+      "source_location": "L243",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_on_disconnect",
       "community": 16,
@@ -6958,7 +6978,7 @@
       "label": "on_publish()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L249",
+      "source_location": "L255",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_on_publish",
       "community": 16,
@@ -6968,7 +6988,7 @@
       "label": "on_message()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L253",
+      "source_location": "L259",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_on_message",
       "community": 16,
@@ -6978,7 +6998,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L319",
+      "source_location": "L325",
       "_origin": "ast",
       "id": "python_parking_detector_mqtt_preview_main",
       "community": 16,
@@ -7075,30 +7095,30 @@
       "norm_label": "encrypt_image_aes()"
     },
     {
-      "label": "is_inside_polygon()",
+      "label": "is_bbox_in_polygon()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
       "source_location": "L199",
       "_origin": "ast",
-      "id": "python_parking_detector_ws_is_inside_polygon",
+      "id": "python_parking_detector_ws_is_bbox_in_polygon",
       "community": 11,
-      "norm_label": "is_inside_polygon()"
+      "norm_label": "is_bbox_in_polygon()"
     },
     {
-      "label": "is_inside_any_polygon()",
+      "label": "is_bbox_in_any_polygon()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L206",
+      "source_location": "L212",
       "_origin": "ast",
-      "id": "python_parking_detector_ws_is_inside_any_polygon",
+      "id": "python_parking_detector_ws_is_bbox_in_any_polygon",
       "community": 11,
-      "norm_label": "is_inside_any_polygon()"
+      "norm_label": "is_bbox_in_any_polygon()"
     },
     {
       "label": "CameraStream",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L215",
+      "source_location": "L221",
       "_origin": "ast",
       "id": "python_parking_detector_ws_camerastream",
       "community": 11,
@@ -7108,7 +7128,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L216",
+      "source_location": "L222",
       "_origin": "ast",
       "id": "python_parking_detector_ws_camerastream_init",
       "community": 11,
@@ -7118,7 +7138,7 @@
       "label": "._update()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L227",
+      "source_location": "L233",
       "_origin": "ast",
       "id": "python_parking_detector_ws_camerastream_update",
       "community": 11,
@@ -7128,7 +7148,7 @@
       "label": ".read()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L244",
+      "source_location": "L250",
       "_origin": "ast",
       "id": "python_parking_detector_ws_camerastream_read",
       "community": 11,
@@ -7138,7 +7158,7 @@
       "label": ".capture_jpeg()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L248",
+      "source_location": "L254",
       "_origin": "ast",
       "id": "python_parking_detector_ws_camerastream_capture_jpeg",
       "community": 11,
@@ -7148,7 +7168,7 @@
       "label": ".stop()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L259",
+      "source_location": "L265",
       "_origin": "ast",
       "id": "python_parking_detector_ws_camerastream_stop",
       "community": 11,
@@ -7158,7 +7178,7 @@
       "label": "handle_command()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L269",
+      "source_location": "L275",
       "_origin": "ast",
       "id": "python_parking_detector_ws_handle_command",
       "community": 11,
@@ -7168,7 +7188,7 @@
       "label": "detector_loop()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L336",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "python_parking_detector_ws_detector_loop",
       "community": 11,
@@ -7178,7 +7198,7 @@
       "label": "websocket_client()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L408",
+      "source_location": "L429",
       "_origin": "ast",
       "id": "python_parking_detector_ws_websocket_client",
       "community": 11,
@@ -7188,7 +7208,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L509",
+      "source_location": "L530",
       "_origin": "ast",
       "id": "python_parking_detector_ws_main",
       "community": 11,
@@ -7228,7 +7248,7 @@
       "label": "save_local_config()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L103",
+      "source_location": "L104",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_save_local_config",
       "community": 12,
@@ -7238,7 +7258,7 @@
       "label": "load_local_config()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L119",
+      "source_location": "L120",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_load_local_config",
       "community": 12,
@@ -7248,7 +7268,7 @@
       "label": "fetch_remote_config()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L134",
+      "source_location": "L135",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_fetch_remote_config",
       "community": 12,
@@ -7258,7 +7278,7 @@
       "label": "get_aes_key()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L174",
+      "source_location": "L175",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_get_aes_key",
       "community": 12,
@@ -7268,7 +7288,7 @@
       "label": "generate_auth_signature()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L177",
+      "source_location": "L178",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_generate_auth_signature",
       "community": 12,
@@ -7278,7 +7298,7 @@
       "label": "generate_hmac_signature()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L182",
+      "source_location": "L183",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_generate_hmac_signature",
       "community": 12,
@@ -7288,37 +7308,37 @@
       "label": "encrypt_image_aes()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L187",
+      "source_location": "L188",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_encrypt_image_aes",
       "community": 12,
       "norm_label": "encrypt_image_aes()"
     },
     {
-      "label": "is_inside_polygon()",
+      "label": "is_bbox_in_polygon()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L198",
+      "source_location": "L199",
       "_origin": "ast",
-      "id": "python_parking_detector_ws_preview_is_inside_polygon",
+      "id": "python_parking_detector_ws_preview_is_bbox_in_polygon",
       "community": 12,
-      "norm_label": "is_inside_polygon()"
+      "norm_label": "is_bbox_in_polygon()"
     },
     {
-      "label": "is_inside_any_polygon()",
+      "label": "is_bbox_in_any_polygon()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L205",
+      "source_location": "L212",
       "_origin": "ast",
-      "id": "python_parking_detector_ws_preview_is_inside_any_polygon",
+      "id": "python_parking_detector_ws_preview_is_bbox_in_any_polygon",
       "community": 12,
-      "norm_label": "is_inside_any_polygon()"
+      "norm_label": "is_bbox_in_any_polygon()"
     },
     {
       "label": "CameraStream",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L214",
+      "source_location": "L221",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_camerastream",
       "community": 12,
@@ -7328,7 +7348,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L215",
+      "source_location": "L222",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_camerastream_init",
       "community": 12,
@@ -7338,7 +7358,7 @@
       "label": "._update()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L226",
+      "source_location": "L233",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_camerastream_update",
       "community": 12,
@@ -7348,7 +7368,7 @@
       "label": ".read()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L243",
+      "source_location": "L250",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_camerastream_read",
       "community": 12,
@@ -7358,7 +7378,7 @@
       "label": ".capture_jpeg()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L247",
+      "source_location": "L254",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_camerastream_capture_jpeg",
       "community": 12,
@@ -7368,7 +7388,7 @@
       "label": ".stop()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L258",
+      "source_location": "L265",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_camerastream_stop",
       "community": 12,
@@ -7378,7 +7398,7 @@
       "label": "handle_command()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L268",
+      "source_location": "L275",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_handle_command",
       "community": 12,
@@ -7388,7 +7408,7 @@
       "label": "websocket_client()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L335",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_websocket_client",
       "community": 12,
@@ -7398,7 +7418,7 @@
       "label": "start_websocket_thread()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L434",
+      "source_location": "L441",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_start_websocket_thread",
       "community": 12,
@@ -7408,7 +7428,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L447",
+      "source_location": "L454",
       "_origin": "ast",
       "id": "python_parking_detector_ws_preview_main",
       "community": 12,
@@ -8151,7 +8171,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_feedbackcategorycontrollertest",
-      "community": 13,
+      "community": 56,
       "norm_label": "feedbackcategorycontrollertest.php"
     },
     {
@@ -8161,7 +8181,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_feedbackcategorycontrollertest_feedbackcategorycontrollertest",
-      "community": 13,
+      "community": 56,
       "norm_label": "feedbackcategorycontrollertest"
     },
     {
@@ -8171,7 +8191,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "api_feedbackcategorycontrollertest_feedbackcategorycontrollertest_index_returns_200_and_list",
-      "community": 13,
+      "community": 56,
       "norm_label": ".index_returns_200_and_list()"
     },
     {
@@ -8231,7 +8251,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_historycontrollertest",
-      "community": 13,
+      "community": 56,
       "norm_label": "historycontrollertest.php"
     },
     {
@@ -8241,7 +8261,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_historycontrollertest_historycontrollertest",
-      "community": 13,
+      "community": 56,
       "norm_label": "historycontrollertest"
     },
     {
@@ -8251,7 +8271,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "api_historycontrollertest_historycontrollertest_index_returns_200_and_history_list",
-      "community": 13,
+      "community": 56,
       "norm_label": ".index_returns_200_and_history_list()"
     },
     {
@@ -8261,7 +8281,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_infoboardcontrollertest",
-      "community": 56,
+      "community": 13,
       "norm_label": "infoboardcontrollertest.php"
     },
     {
@@ -8271,7 +8291,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_infoboardcontrollertest_infoboardcontrollertest",
-      "community": 56,
+      "community": 13,
       "norm_label": "infoboardcontrollertest"
     },
     {
@@ -8281,7 +8301,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "api_infoboardcontrollertest_infoboardcontrollertest_index_returns_200_and_info_list",
-      "community": 56,
+      "community": 13,
       "norm_label": ".index_returns_200_and_info_list()"
     },
     {
@@ -8431,7 +8451,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_iotwsauthcontrollertest",
-      "community": 56,
+      "community": 166,
       "norm_label": "iotwsauthcontrollertest.php"
     },
     {
@@ -8441,7 +8461,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "api_iotwsauthcontrollertest_iotwsauthcontrollertest",
-      "community": 56,
+      "community": 166,
       "norm_label": "iotwsauthcontrollertest"
     },
     {
@@ -8451,7 +8471,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "api_iotwsauthcontrollertest_iotwsauthcontrollertest_setup",
-      "community": 56,
+      "community": 166,
       "norm_label": ".setup()"
     },
     {
@@ -8461,7 +8481,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "api_iotwsauthcontrollertest_iotwsauthcontrollertest_authenticate_succeeds_with_valid_credentials",
-      "community": 56,
+      "community": 166,
       "norm_label": ".authenticate_succeeds_with_valid_credentials()"
     },
     {
@@ -8471,7 +8491,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "api_iotwsauthcontrollertest_iotwsauthcontrollertest_authenticate_fails_with_invalid_mac",
-      "community": 56,
+      "community": 166,
       "norm_label": ".authenticate_fails_with_invalid_mac()"
     },
     {
@@ -8511,7 +8531,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "api_mapvisualizationcontrollertest_mapvisualizationcontrollertest_show_returns_200_and_detail_data",
-      "community": 21,
+      "community": 8,
       "norm_label": ".show_returns_200_and_detail_data()"
     },
     {
@@ -8531,7 +8551,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_missioncontrollertest",
-      "community": 56,
+      "community": 13,
       "norm_label": "missioncontrollertest.php"
     },
     {
@@ -8541,7 +8561,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "api_missioncontrollertest_missioncontrollertest",
-      "community": 56,
+      "community": 13,
       "norm_label": "missioncontrollertest"
     },
     {
@@ -8741,7 +8761,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_subareacommentcontrollertest",
-      "community": 8,
+      "community": 56,
       "norm_label": "subareacommentcontrollertest.php"
     },
     {
@@ -8881,7 +8901,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest",
-      "community": 14,
+      "community": 8,
       "norm_label": "uservalidationcontrollertest.php"
     },
     {
@@ -8891,7 +8911,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest",
-      "community": 14,
+      "community": 8,
       "norm_label": "uservalidationcontrollertest"
     },
     {
@@ -8901,7 +8921,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest_setup",
-      "community": 14,
+      "community": 8,
       "norm_label": ".setup()"
     },
     {
@@ -8911,7 +8931,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_201_when_geofence_disabled_and_no_location_provided",
-      "community": 14,
+      "community": 8,
       "norm_label": ".store_returns_201_when_geofence_disabled_and_no_location_provided()"
     },
     {
@@ -8921,7 +8941,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_400_when_geofence_enabled_but_no_location",
-      "community": 14,
+      "community": 8,
       "norm_label": ".store_returns_400_when_geofence_enabled_but_no_location()"
     },
     {
@@ -8931,7 +8951,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_422_when_geofence_enabled_and_user_too_far",
-      "community": 14,
+      "community": 8,
       "norm_label": ".store_returns_422_when_geofence_enabled_and_user_too_far()"
     },
     {
@@ -8941,7 +8961,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_201_when_geofence_enabled_and_user_nearby",
-      "community": 14,
+      "community": 8,
       "norm_label": ".store_returns_201_when_geofence_enabled_and_user_nearby()"
     },
     {
@@ -8951,7 +8971,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_422_if_payload_invalid",
-      "community": 14,
+      "community": 8,
       "norm_label": ".store_returns_422_if_payload_invalid()"
     },
     {
@@ -8961,7 +8981,7 @@
       "source_location": "L181",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_429_if_cooldown_active",
-      "community": 14,
+      "community": 8,
       "norm_label": ".store_returns_429_if_cooldown_active()"
     },
     {
@@ -8971,7 +8991,7 @@
       "source_location": "L211",
       "_origin": "ast",
       "id": "api_uservalidationcontrollertest_uservalidationcontrollertest_store_triggers_snapshot_if_iot_device_attached_and_online",
-      "community": 14,
+      "community": 8,
       "norm_label": ".store_triggers_snapshot_if_iot_device_attached_and_online()"
     },
     {
@@ -8981,7 +9001,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_authcontrollertest",
-      "community": 13,
+      "community": 56,
       "norm_label": "authcontrollertest.php"
     },
     {
@@ -9511,7 +9531,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_parksubareacontrollertest",
-      "community": 8,
+      "community": 72,
       "norm_label": "parksubareacontrollertest.php"
     },
     {
@@ -9521,7 +9541,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "web_parksubareacontrollertest_parksubareacontrollertest",
-      "community": 8,
+      "community": 72,
       "norm_label": "parksubareacontrollertest"
     },
     {
@@ -9531,7 +9551,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "web_parksubareacontrollertest_parksubareacontrollertest_setup",
-      "community": 8,
+      "community": 72,
       "norm_label": ".setup()"
     },
     {
@@ -9541,7 +9561,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "web_parksubareacontrollertest_parksubareacontrollertest_store_creates_park_subarea",
-      "community": 8,
+      "community": 72,
       "norm_label": ".store_creates_park_subarea()"
     },
     {
@@ -9551,7 +9571,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "web_parksubareacontrollertest_parksubareacontrollertest_update_modifies_park_subarea",
-      "community": 8,
+      "community": 72,
       "norm_label": ".update_modifies_park_subarea()"
     },
     {
@@ -9561,7 +9581,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "web_parksubareacontrollertest_parksubareacontrollertest_destroy_deletes_park_subarea",
-      "community": 8,
+      "community": 72,
       "norm_label": ".destroy_deletes_park_subarea()"
     },
     {
@@ -9741,7 +9761,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "middleware_apiencryptiontest",
-      "community": 57,
+      "community": 1,
       "norm_label": "apiencryptiontest.php"
     },
     {
@@ -9751,7 +9771,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "middleware_apiencryptiontest_apiencryptiontest",
-      "community": 57,
+      "community": 1,
       "norm_label": "apiencryptiontest"
     },
     {
@@ -9761,7 +9781,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "middleware_apiencryptiontest_apiencryptiontest_it_ignores_non_api_requests",
-      "community": 57,
+      "community": 1,
       "norm_label": ".it_ignores_non_api_requests()"
     },
     {
@@ -9771,7 +9791,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "middleware_apiencryptiontest_apiencryptiontest_it_returns_500_or_400_if_key_or_session_invalid",
-      "community": 57,
+      "community": 1,
       "norm_label": ".it_returns_500_or_400_if_key_or_session_invalid()"
     },
     {
@@ -9781,7 +9801,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "middleware_apiencryptiontest_apiencryptiontest_it_blocks_raw_authorization_without_x_auth_token",
-      "community": 57,
+      "community": 1,
       "norm_label": ".it_blocks_raw_authorization_without_x_auth_token()"
     },
     {
@@ -9791,7 +9811,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "middleware_rbactest",
-      "community": 57,
+      "community": 1,
       "norm_label": "rbactest.php"
     },
     {
@@ -9801,7 +9821,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "middleware_rbactest_rbactest",
-      "community": 57,
+      "community": 1,
       "norm_label": "rbactest"
     },
     {
@@ -9811,7 +9831,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "middleware_rbactest_rbactest_it_redirects_unauthenticated_web_users_to_login",
-      "community": 57,
+      "community": 1,
       "norm_label": ".it_redirects_unauthenticated_web_users_to_login()"
     },
     {
@@ -9821,7 +9841,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "middleware_rbactest_rbactest_it_returns_401_for_unauthenticated_api_users",
-      "community": 57,
+      "community": 1,
       "norm_label": ".it_returns_401_for_unauthenticated_api_users()"
     },
     {
@@ -9831,7 +9851,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "middleware_rbactest_rbactest_it_allows_authorized_role",
-      "community": 57,
+      "community": 1,
       "norm_label": ".it_allows_authorized_role()"
     },
     {
@@ -9841,7 +9861,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "middleware_rbactest_rbactest_it_blocks_unauthorized_role_for_api",
-      "community": 57,
+      "community": 1,
       "norm_label": ".it_blocks_unauthorized_role_for_api()"
     },
     {
@@ -10091,7 +10111,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_parkamenitytest",
-      "community": 8,
+      "community": 56,
       "norm_label": "parkamenitytest.php"
     },
     {
@@ -10151,7 +10171,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_parkareatest",
-      "community": 13,
+      "community": 167,
       "norm_label": "parkareatest.php"
     },
     {
@@ -10161,7 +10181,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "model_parkareatest_parkareatest",
-      "community": 13,
+      "community": 167,
       "norm_label": "parkareatest"
     },
     {
@@ -10171,7 +10191,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "model_parkareatest_parkareatest_area_parkir_dapat_dibuat",
-      "community": 13,
+      "community": 167,
       "norm_label": ".area_parkir_dapat_dibuat()"
     },
     {
@@ -10181,7 +10201,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "model_parkareatest_parkareatest_area_parkir_dapat_diupdate",
-      "community": 13,
+      "community": 167,
       "norm_label": ".area_parkir_dapat_diupdate()"
     },
     {
@@ -10191,7 +10211,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "model_parkareatest_parkareatest_area_parkir_dapat_dihapus",
-      "community": 13,
+      "community": 167,
       "norm_label": ".area_parkir_dapat_dihapus()"
     },
     {
@@ -10201,7 +10221,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_parksubareatest",
-      "community": 8,
+      "community": 56,
       "norm_label": "parksubareatest.php"
     },
     {
@@ -10261,7 +10281,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_rewardtest",
-      "community": 56,
+      "community": 175,
       "norm_label": "rewardtest.php"
     },
     {
@@ -10271,7 +10291,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "model_rewardtest_rewardtest",
-      "community": 56,
+      "community": 175,
       "norm_label": "rewardtest"
     },
     {
@@ -10281,7 +10301,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "model_rewardtest_rewardtest_reward_dapat_dibuat",
-      "community": 56,
+      "community": 175,
       "norm_label": ".reward_dapat_dibuat()"
     },
     {
@@ -10291,7 +10311,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "model_rewardtest_rewardtest_reward_dapat_diupdate",
-      "community": 56,
+      "community": 175,
       "norm_label": ".reward_dapat_diupdate()"
     },
     {
@@ -10301,7 +10321,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "model_rewardtest_rewardtest_reward_dapat_dihapus",
-      "community": 56,
+      "community": 175,
       "norm_label": ".reward_dapat_dihapus()"
     },
     {
@@ -10311,7 +10331,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_subareacommenttest",
-      "community": 8,
+      "community": 13,
       "norm_label": "subareacommenttest.php"
     },
     {
@@ -10481,7 +10501,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_userrewardtest",
-      "community": 56,
+      "community": 58,
       "norm_label": "userrewardtest.php"
     },
     {
@@ -10491,7 +10511,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "model_userrewardtest_userrewardtest",
-      "community": 56,
+      "community": 58,
       "norm_label": "userrewardtest"
     },
     {
@@ -10501,7 +10521,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "model_userrewardtest_userrewardtest_user_reward_dapat_dibuat",
-      "community": 56,
+      "community": 58,
       "norm_label": ".user_reward_dapat_dibuat()"
     },
     {
@@ -10511,7 +10531,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "model_userrewardtest_userrewardtest_user_reward_dapat_dibaca",
-      "community": 56,
+      "community": 58,
       "norm_label": ".user_reward_dapat_dibaca()"
     },
     {
@@ -10521,7 +10541,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "model_userrewardtest_userrewardtest_user_reward_dapat_diupdate",
-      "community": 56,
+      "community": 58,
       "norm_label": ".user_reward_dapat_diupdate()"
     },
     {
@@ -10531,7 +10551,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "model_userrewardtest_userrewardtest_user_reward_dapat_dihapus",
-      "community": 56,
+      "community": 58,
       "norm_label": ".user_reward_dapat_dihapus()"
     },
     {
@@ -10541,7 +10561,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_usertest",
-      "community": 55,
+      "community": 61,
       "norm_label": "usertest.php"
     },
     {
@@ -10551,7 +10571,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "model_usertest_usertest",
-      "community": 55,
+      "community": 61,
       "norm_label": "usertest"
     },
     {
@@ -10561,7 +10581,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "model_usertest_usertest_data_user_dapat_ditambahkan",
-      "community": 55,
+      "community": 61,
       "norm_label": ".data_user_dapat_ditambahkan()"
     },
     {
@@ -10571,7 +10591,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "model_usertest_usertest_data_user_dapat_didapatkan",
-      "community": 55,
+      "community": 61,
       "norm_label": ".data_user_dapat_didapatkan()"
     },
     {
@@ -10581,7 +10601,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "model_usertest_usertest_data_user_dapat_diubah",
-      "community": 55,
+      "community": 61,
       "norm_label": ".data_user_dapat_diubah()"
     },
     {
@@ -10591,7 +10611,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "model_usertest_usertest_data_user_dapat_dihapus",
-      "community": 55,
+      "community": 61,
       "norm_label": ".data_user_dapat_dihapus()"
     },
     {
@@ -10601,7 +10621,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_uservalidationtest",
-      "community": 14,
+      "community": 8,
       "norm_label": "uservalidationtest.php"
     },
     {
@@ -10611,7 +10631,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "model_uservalidationtest_uservalidationtest",
-      "community": 14,
+      "community": 8,
       "norm_label": "uservalidationtest"
     },
     {
@@ -10621,7 +10641,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "model_uservalidationtest_uservalidationtest_user_validation_dapat_dibuat",
-      "community": 14,
+      "community": 8,
       "norm_label": ".user_validation_dapat_dibuat()"
     },
     {
@@ -10631,7 +10651,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "model_uservalidationtest_uservalidationtest_user_validation_dapat_dibaca",
-      "community": 14,
+      "community": 8,
       "norm_label": ".user_validation_dapat_dibaca()"
     },
     {
@@ -10641,7 +10661,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "model_uservalidationtest_uservalidationtest_user_validation_dapat_diupdate",
-      "community": 14,
+      "community": 8,
       "norm_label": ".user_validation_dapat_diupdate()"
     },
     {
@@ -10651,7 +10671,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "model_uservalidationtest_uservalidationtest_user_validation_dapat_dihapus",
-      "community": 14,
+      "community": 8,
       "norm_label": ".user_validation_dapat_dihapus()"
     },
     {
@@ -10661,7 +10681,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "model_validationtest",
-      "community": 14,
+      "community": 56,
       "norm_label": "validationtest.php"
     },
     {
@@ -10671,7 +10691,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "model_validationtest_validationtest",
-      "community": 14,
+      "community": 8,
       "norm_label": "validationtest"
     },
     {
@@ -10681,7 +10701,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "model_validationtest_validationtest_validation_setting_dapat_dibuat",
-      "community": 14,
+      "community": 8,
       "norm_label": ".validation_setting_dapat_dibuat()"
     },
     {
@@ -10691,7 +10711,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "model_validationtest_validationtest_validation_setting_dapat_dibaca",
-      "community": 14,
+      "community": 8,
       "norm_label": ".validation_setting_dapat_dibaca()"
     },
     {
@@ -10701,7 +10721,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "model_validationtest_validationtest_validation_setting_dapat_diupdate",
-      "community": 14,
+      "community": 8,
       "norm_label": ".validation_setting_dapat_diupdate()"
     },
     {
@@ -10711,7 +10731,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "model_validationtest_validationtest_validation_setting_dapat_dihapus",
-      "community": 14,
+      "community": 8,
       "norm_label": ".validation_setting_dapat_dihapus()"
     },
     {
@@ -10831,7 +10851,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "service_historyservicetest",
-      "community": 13,
+      "community": 69,
       "norm_label": "historyservicetest.php"
     },
     {
@@ -10841,7 +10861,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "service_historyservicetest_historyservicetest",
-      "community": 13,
+      "community": 69,
       "norm_label": "historyservicetest"
     },
     {
@@ -10851,7 +10871,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "service_historyservicetest_historyservicetest_setup",
-      "community": 13,
+      "community": 69,
       "norm_label": ".setup()"
     },
     {
@@ -10861,7 +10881,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "service_historyservicetest_historyservicetest_log_mencatat_history_ke_database",
-      "community": 13,
+      "community": 69,
       "norm_label": ".log_mencatat_history_ke_database()"
     },
     {
@@ -10871,7 +10891,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "service_historyservicetest_historyservicetest_log_mencatat_history_negatif_dengan_benar",
-      "community": 13,
+      "community": 69,
       "norm_label": ".log_mencatat_history_negatif_dengan_benar()"
     },
     {
@@ -10881,7 +10901,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "service_historyservicetest_historyservicetest_log_menangani_exception_tanpa_menghentikan_aplikasi",
-      "community": 13,
+      "community": 69,
       "norm_label": ".log_menangani_exception_tanpa_menghentikan_aplikasi()"
     },
     {
@@ -10891,7 +10911,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "service_missionservicetest",
-      "community": 13,
+      "community": 56,
       "norm_label": "missionservicetest.php"
     },
     {
@@ -11711,7 +11731,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "readme",
-      "community": 36,
+      "community": 14,
       "norm_label": "readme.md"
     },
     {
@@ -11768,7 +11788,7 @@
       "label": "\ud83d\udcd6 Panduan Instalasi",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L61",
+      "source_location": "L63",
       "_origin": "ast",
       "id": "readme_panduan_instalasi",
       "community": 7,
@@ -11778,7 +11798,7 @@
       "label": "\ud83e\uddf0 Custom Utility Commands",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L71",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "readme_custom_utility_commands",
       "community": 7,
@@ -11791,7 +11811,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_installation_docker",
-      "community": 36,
+      "community": 14,
       "norm_label": "installation_docker.md"
     },
     {
@@ -11801,7 +11821,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_installation_docker_instalasi_dengan_docker",
-      "community": 36,
+      "community": 14,
       "norm_label": "instalasi dengan docker"
     },
     {
@@ -11811,7 +11831,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "docs_installation_docker_prasyarat",
-      "community": 36,
+      "community": 14,
       "norm_label": "prasyarat"
     },
     {
@@ -11821,7 +11841,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "docs_installation_docker_persiapan_file_konfigurasi",
-      "community": 36,
+      "community": 14,
       "norm_label": "persiapan file konfigurasi"
     },
     {
@@ -11831,7 +11851,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "docs_installation_docker_khusus_pengguna_linux",
-      "community": 36,
+      "community": 14,
       "norm_label": "khusus pengguna linux"
     },
     {
@@ -11955,13 +11975,203 @@
       "norm_label": "11. buat port forward local dan firewall rule - optional untuk instalasi pada wsl"
     },
     {
+      "label": "INSTALLATION_IOT_EDGE.md",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge",
+      "community": 14,
+      "norm_label": "installation_iot_edge.md"
+    },
+    {
+      "label": "\ud83d\ude97 PoliSlot \u2014 Perangkat Edge IoT Deteksi Parkir",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "community": 30,
+      "norm_label": "\ud83d\ude97 polislot \u2014 perangkat edge iot deteksi parkir"
+    },
+    {
+      "label": "\ud83d\udccb Daftar Script",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_daftar_script",
+      "community": 30,
+      "norm_label": "\ud83d\udccb daftar script"
+    },
+    {
+      "label": "\u2699\ufe0f Persyaratan Sistem",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_persyaratan_sistem",
+      "community": 30,
+      "norm_label": "\u2699\ufe0f persyaratan sistem"
+    },
+    {
+      "label": "\ud83d\ude80 Instalasi",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_instalasi",
+      "community": 29,
+      "norm_label": "\ud83d\ude80 instalasi"
+    },
+    {
+      "label": "1. Salin Folder `python/` ke Perangkat Edge",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_1_salin_folder_python_ke_perangkat_edge",
+      "community": 29,
+      "norm_label": "1. salin folder `python/` ke perangkat edge"
+    },
+    {
+      "label": "2. Buat Virtual Environment (Disarankan)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_2_buat_virtual_environment_disarankan",
+      "community": 29,
+      "norm_label": "2. buat virtual environment (disarankan)"
+    },
+    {
+      "label": "3. Install Dependensi",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_3_install_dependensi",
+      "community": 29,
+      "norm_label": "3. install dependensi"
+    },
+    {
+      "label": "4. Konfigurasi File `.env`",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L70",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_4_konfigurasi_file_env",
+      "community": 29,
+      "norm_label": "4. konfigurasi file `.env`"
+    },
+    {
+      "label": "Format Model yang Didukung (`YOLO_WEIGHTS`)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L150",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_format_model_yang_didukung_yolo_weights",
+      "community": 29,
+      "norm_label": "format model yang didukung (`yolo_weights`)"
+    },
+    {
+      "label": "\u25b6\ufe0f Menjalankan Script",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L167",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_menjalankan_script",
+      "community": 38,
+      "norm_label": "\u25b6\ufe0f menjalankan script"
+    },
+    {
+      "label": "Sintaks",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L171",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_sintaks",
+      "community": 38,
+      "norm_label": "sintaks"
+    },
+    {
+      "label": "Contoh \u2014 MQTT Headless",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L177",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_contoh_mqtt_headless",
+      "community": 38,
+      "norm_label": "contoh \u2014 mqtt headless"
+    },
+    {
+      "label": "Contoh \u2014 MQTT dengan Preview",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L187",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_contoh_mqtt_dengan_preview",
+      "community": 38,
+      "norm_label": "contoh \u2014 mqtt dengan preview"
+    },
+    {
+      "label": "Contoh \u2014 WebSocket Headless",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L193",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_contoh_websocket_headless",
+      "community": 38,
+      "norm_label": "contoh \u2014 websocket headless"
+    },
+    {
+      "label": "Contoh \u2014 WebSocket dengan Preview",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L199",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_contoh_websocket_dengan_preview",
+      "community": 38,
+      "norm_label": "contoh \u2014 websocket dengan preview"
+    },
+    {
+      "label": "\ud83d\udd10 Keamanan",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L209",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_keamanan",
+      "community": 30,
+      "norm_label": "\ud83d\udd10 keamanan"
+    },
+    {
+      "label": "\ud83c\udf10 Koneksi Melalui Cloudflare Tunnel (Produksi)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L217",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_koneksi_melalui_cloudflare_tunnel_produksi",
+      "community": 30,
+      "norm_label": "\ud83c\udf10 koneksi melalui cloudflare tunnel (produksi)"
+    },
+    {
+      "label": "\ud83d\uddc2\ufe0f Caching Konfigurasi Lokal",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L238",
+      "_origin": "ast",
+      "id": "docs_installation_iot_edge_caching_konfigurasi_lokal",
+      "community": 30,
+      "norm_label": "\ud83d\uddc2\ufe0f caching konfigurasi lokal"
+    },
+    {
       "label": "INSTALLATION_MANUAL.md",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_installation_manual",
-      "community": 36,
+      "community": 14,
       "norm_label": "installation_manual.md"
     },
     {
@@ -11971,7 +12181,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "community": 36,
+      "community": 14,
       "norm_label": "instalasi manual (tanpa docker)"
     },
     {
@@ -11981,7 +12191,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "docs_installation_manual_prasyarat",
-      "community": 36,
+      "community": 14,
       "norm_label": "prasyarat"
     },
     {
@@ -11991,7 +12201,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "docs_installation_manual_langkah_instalasi",
-      "community": 36,
+      "community": 20,
       "norm_label": "langkah instalasi"
     },
     {
@@ -12001,7 +12211,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "docs_installation_manual_1_konfigurasi_environment_env",
-      "community": 36,
+      "community": 20,
       "norm_label": "1. konfigurasi environment (.env)"
     },
     {
@@ -12011,7 +12221,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "docs_installation_manual_2_generate_rsa_keys_wajib",
-      "community": 36,
+      "community": 20,
       "norm_label": "2. generate rsa keys (wajib)"
     },
     {
@@ -12021,7 +12231,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "docs_installation_manual_3_instalasi_dependency",
-      "community": 36,
+      "community": 20,
       "norm_label": "3. instalasi dependency"
     },
     {
@@ -12031,7 +12241,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "docs_installation_manual_4_generate_application_key",
-      "community": 36,
+      "community": 20,
       "norm_label": "4. generate application key"
     },
     {
@@ -12041,7 +12251,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "docs_installation_manual_5_migrasi_database_seeding",
-      "community": 36,
+      "community": 20,
       "norm_label": "5. migrasi database & seeding"
     },
     {
@@ -12051,7 +12261,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "docs_installation_manual_6_setup_database_roles_rbac",
-      "community": 36,
+      "community": 20,
       "norm_label": "6. setup database roles (rbac)"
     },
     {
@@ -12061,18 +12271,118 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "docs_installation_manual_7_atur_ulang_environment_env_penting",
-      "community": 36,
+      "community": 20,
       "norm_label": "7. atur ulang environment (.env) - penting"
     },
     {
-      "label": "8. Menjalankan Service Aplikasi",
+      "label": "8. Konfigurasi Manual MQTT Broker (Mosquitto)",
       "file_type": "document",
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L142",
       "_origin": "ast",
-      "id": "docs_installation_manual_8_menjalankan_service_aplikasi",
-      "community": 36,
-      "norm_label": "8. menjalankan service aplikasi"
+      "id": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "community": 57,
+      "norm_label": "8. konfigurasi manual mqtt broker (mosquitto)"
+    },
+    {
+      "label": "A. Instalasi Mosquitto",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L147",
+      "_origin": "ast",
+      "id": "docs_installation_manual_a_instalasi_mosquitto",
+      "community": 57,
+      "norm_label": "a. instalasi mosquitto"
+    },
+    {
+      "label": "B. Konfigurasi `mosquitto.conf`",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L155",
+      "_origin": "ast",
+      "id": "docs_installation_manual_b_konfigurasi_mosquitto_conf",
+      "community": 57,
+      "norm_label": "b. konfigurasi `mosquitto.conf`"
+    },
+    {
+      "label": "C. Membuat File Password & Kredensial User",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L175",
+      "_origin": "ast",
+      "id": "docs_installation_manual_c_membuat_file_password_kredensial_user",
+      "community": 57,
+      "norm_label": "c. membuat file password & kredensial user"
+    },
+    {
+      "label": "D. Membuat File ACL (Access Control List)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L192",
+      "_origin": "ast",
+      "id": "docs_installation_manual_d_membuat_file_acl_access_control_list",
+      "community": 57,
+      "norm_label": "d. membuat file acl (access control list)"
+    },
+    {
+      "label": "E. Menjalankan Service Mosquitto",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L207",
+      "_origin": "ast",
+      "id": "docs_installation_manual_e_menjalankan_service_mosquitto",
+      "community": 57,
+      "norm_label": "e. menjalankan service mosquitto"
+    },
+    {
+      "label": "9. Mengatasi Masalah Koneksi Broker Satu Jaringan (Troubleshooting)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L221",
+      "_origin": "ast",
+      "id": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
+      "community": 178,
+      "norm_label": "9. mengatasi masalah koneksi broker satu jaringan (troubleshooting)"
+    },
+    {
+      "label": "A. Konfigurasi IP Host & Port (.env)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L224",
+      "_origin": "ast",
+      "id": "docs_installation_manual_a_konfigurasi_ip_host_port_env",
+      "community": 178,
+      "norm_label": "a. konfigurasi ip host & port (.env)"
+    },
+    {
+      "label": "B. Windows Defender Firewall (Sering Menjadi Penyebab Utama)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L244",
+      "_origin": "ast",
+      "id": "docs_installation_manual_b_windows_defender_firewall_sering_menjadi_penyebab_utama",
+      "community": 178,
+      "norm_label": "b. windows defender firewall (sering menjadi penyebab utama)"
+    },
+    {
+      "label": "C. Isolasi Jaringan Router (AP Isolation)",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L254",
+      "_origin": "ast",
+      "id": "docs_installation_manual_c_isolasi_jaringan_router_ap_isolation",
+      "community": 178,
+      "norm_label": "c. isolasi jaringan router (ap isolation)"
+    },
+    {
+      "label": "10. Menjalankan Service Aplikasi",
+      "file_type": "document",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L261",
+      "_origin": "ast",
+      "id": "docs_installation_manual_10_menjalankan_service_aplikasi",
+      "community": 20,
+      "norm_label": "10. menjalankan service aplikasi"
     },
     {
       "label": "PROJECT_SUMMARY.md",
@@ -13305,9 +13615,9 @@
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
       "source_location": "L457",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_mqttlistenercommand_mqttlistenercommand",
-      "target": "commands_mqttlistenercommand_mqttlistenercommand_reconcilewsdevicestatuses",
-      "confidence_score": 1.0
+      "target": "commands_mqttlistenercommand_mqttlistenercommand_reconcilewsdevicestatuses"
     },
     {
       "relation": "calls",
@@ -13316,9 +13626,9 @@
       "source_file": "app/Console/Commands/MqttListenerCommand.php",
       "source_location": "L433",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_mqttlistenercommand_mqttlistenercommand_handle",
-      "target": "commands_mqttlistenercommand_mqttlistenercommand_reconcilewsdevicestatuses",
-      "confidence_score": 1.0
+      "target": "commands_mqttlistenercommand_mqttlistenercommand_reconcilewsdevicestatuses"
     },
     {
       "relation": "calls",
@@ -14006,9 +14316,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail",
-      "target": "serializesmodels",
-      "confidence_score": 1.0
+      "target": "serializesmodels"
     },
     {
       "relation": "mixes_in",
@@ -14016,9 +14326,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail",
-      "target": "serializesmodels",
-      "confidence_score": 1.0
+      "target": "serializesmodels"
     },
     {
       "relation": "imports",
@@ -21888,9 +22198,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail",
-      "target": "app_mail_loginnotificationmail_php_content",
-      "confidence_score": 1.0
+      "target": "app_mail_loginnotificationmail_php_content"
     },
     {
       "relation": "imports",
@@ -21899,9 +22209,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail",
-      "target": "app_mail_loginnotificationmail_php_envelope",
-      "confidence_score": 1.0
+      "target": "app_mail_loginnotificationmail_php_envelope"
     },
     {
       "relation": "contains",
@@ -21909,9 +22219,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail",
-      "target": "mail_loginnotificationmail_loginnotificationmail",
-      "confidence_score": 1.0
+      "target": "mail_loginnotificationmail_loginnotificationmail"
     },
     {
       "relation": "imports",
@@ -21920,9 +22230,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail",
-      "target": "mailable",
-      "confidence_score": 1.0
+      "target": "mailable"
     },
     {
       "relation": "imports",
@@ -21931,9 +22241,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail",
-      "target": "queueable",
-      "confidence_score": 1.0
+      "target": "queueable"
     },
     {
       "relation": "method",
@@ -21941,9 +22251,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail",
-      "target": "mail_loginnotificationmail_loginnotificationmail_attachments",
-      "confidence_score": 1.0
+      "target": "mail_loginnotificationmail_loginnotificationmail_attachments"
     },
     {
       "relation": "method",
@@ -21951,9 +22261,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail",
-      "target": "mail_loginnotificationmail_loginnotificationmail_construct",
-      "confidence_score": 1.0
+      "target": "mail_loginnotificationmail_loginnotificationmail_construct"
     },
     {
       "relation": "method",
@@ -21961,9 +22271,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail",
-      "target": "mail_loginnotificationmail_loginnotificationmail_content",
-      "confidence_score": 1.0
+      "target": "mail_loginnotificationmail_loginnotificationmail_content"
     },
     {
       "relation": "method",
@@ -21971,9 +22281,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail",
-      "target": "mail_loginnotificationmail_loginnotificationmail_envelope",
-      "confidence_score": 1.0
+      "target": "mail_loginnotificationmail_loginnotificationmail_envelope"
     },
     {
       "relation": "inherits",
@@ -21981,9 +22291,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail",
-      "target": "mailable",
-      "confidence_score": 1.0
+      "target": "mailable"
     },
     {
       "relation": "mixes_in",
@@ -21991,9 +22301,9 @@
       "source_file": "app/Mail/LoginNotificationMail.php",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail",
-      "target": "queueable",
-      "confidence_score": 1.0
+      "target": "queueable"
     },
     {
       "relation": "imports",
@@ -22044,9 +22354,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "context": "return_type",
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail_envelope",
-      "target": "app_mail_loginnotificationmail_php_envelope",
-      "confidence_score": 1.0
+      "target": "app_mail_loginnotificationmail_php_envelope"
     },
     {
       "relation": "references",
@@ -22055,9 +22365,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "context": "return_type",
+      "confidence_score": 1.0,
       "source": "mail_loginnotificationmail_loginnotificationmail_content",
-      "target": "app_mail_loginnotificationmail_php_content",
-      "confidence_score": 1.0
+      "target": "app_mail_loginnotificationmail_php_content"
     },
     {
       "relation": "imports",
@@ -22066,9 +22376,9 @@
       "source_file": "app/Mail/SendOtpMail.php",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_sendotpmail",
-      "target": "app_mail_sendotpmail_php_content",
-      "confidence_score": 1.0
+      "target": "app_mail_sendotpmail_php_content"
     },
     {
       "relation": "imports",
@@ -22077,9 +22387,9 @@
       "source_file": "app/Mail/SendOtpMail.php",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mail_sendotpmail",
-      "target": "app_mail_sendotpmail_php_envelope",
-      "confidence_score": 1.0
+      "target": "app_mail_sendotpmail_php_envelope"
     },
     {
       "relation": "contains",
@@ -22138,9 +22448,9 @@
       "source_location": "L28",
       "weight": 1.0,
       "context": "return_type",
+      "confidence_score": 1.0,
       "source": "mail_sendotpmail_sendotpmail_envelope",
-      "target": "app_mail_sendotpmail_php_envelope",
-      "confidence_score": 1.0
+      "target": "app_mail_sendotpmail_php_envelope"
     },
     {
       "relation": "references",
@@ -22149,9 +22459,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "context": "return_type",
+      "confidence_score": 1.0,
       "source": "mail_sendotpmail_sendotpmail_content",
-      "target": "app_mail_sendotpmail_php_content",
-      "confidence_score": 1.0
+      "target": "app_mail_sendotpmail_php_content"
     },
     {
       "relation": "imports",
@@ -26246,6 +26556,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "python/models/best3_ncnn_model/model_ncnn.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "best3_ncnn_model_model_ncnn",
+      "target": "best3_ncnn_model_model_ncnn_test_inference",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt.py",
       "source_location": "L151",
       "weight": 1.0,
@@ -26297,21 +26617,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L142",
+      "source_location": "L151",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt",
-      "target": "python_parking_detector_mqtt_is_inside_any_polygon"
+      "target": "python_parking_detector_mqtt_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L135",
+      "source_location": "L138",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt",
-      "target": "python_parking_detector_mqtt_is_inside_polygon"
+      "target": "python_parking_detector_mqtt_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -26359,9 +26679,9 @@
       "source_file": "python/parking_detector_mqtt.py",
       "source_location": "L247",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt",
-      "target": "python_parking_detector_mqtt_on_disconnect",
-      "confidence_score": 1.0
+      "target": "python_parking_detector_mqtt_on_disconnect"
     },
     {
       "relation": "contains",
@@ -26379,9 +26699,9 @@
       "source_file": "python/parking_detector_mqtt.py",
       "source_location": "L250",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt",
-      "target": "python_parking_detector_mqtt_on_publish",
-      "confidence_score": 1.0
+      "target": "python_parking_detector_mqtt_on_publish"
     },
     {
       "relation": "contains",
@@ -26496,22 +26816,22 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L144",
+      "source_location": "L153",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "python_parking_detector_mqtt_is_inside_any_polygon",
-      "target": "python_parking_detector_mqtt_is_inside_polygon"
+      "source": "python_parking_detector_mqtt_is_bbox_in_any_polygon",
+      "target": "python_parking_detector_mqtt_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt.py",
-      "source_location": "L377",
+      "source_location": "L410",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_main",
-      "target": "python_parking_detector_mqtt_is_inside_any_polygon"
+      "target": "python_parking_detector_mqtt_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -26727,21 +27047,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L142",
+      "source_location": "L150",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview",
-      "target": "python_parking_detector_mqtt_preview_is_inside_any_polygon"
+      "target": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L135",
+      "source_location": "L137",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview",
-      "target": "python_parking_detector_mqtt_preview_is_inside_polygon"
+      "target": "python_parking_detector_mqtt_preview_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -26789,9 +27109,9 @@
       "source_file": "python/parking_detector_mqtt_preview.py",
       "source_location": "L246",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview",
-      "target": "python_parking_detector_mqtt_preview_on_disconnect",
-      "confidence_score": 1.0
+      "target": "python_parking_detector_mqtt_preview_on_disconnect"
     },
     {
       "relation": "contains",
@@ -26809,9 +27129,9 @@
       "source_file": "python/parking_detector_mqtt_preview.py",
       "source_location": "L249",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview",
-      "target": "python_parking_detector_mqtt_preview_on_publish",
-      "confidence_score": 1.0
+      "target": "python_parking_detector_mqtt_preview_on_publish"
     },
     {
       "relation": "contains",
@@ -26926,22 +27246,22 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L144",
+      "source_location": "L152",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "python_parking_detector_mqtt_preview_is_inside_any_polygon",
-      "target": "python_parking_detector_mqtt_preview_is_inside_polygon"
+      "source": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon",
+      "target": "python_parking_detector_mqtt_preview_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_mqtt_preview.py",
-      "source_location": "L391",
+      "source_location": "L425",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview_main",
-      "target": "python_parking_detector_mqtt_preview_is_inside_any_polygon"
+      "target": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -27197,21 +27517,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L201",
+      "source_location": "L212",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws",
-      "target": "python_parking_detector_ws_is_inside_any_polygon"
+      "target": "python_parking_detector_ws_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L194",
+      "source_location": "L199",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws",
-      "target": "python_parking_detector_ws_is_inside_polygon"
+      "target": "python_parking_detector_ws_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27400,22 +27720,22 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L203",
+      "source_location": "L214",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "python_parking_detector_ws_is_inside_any_polygon",
-      "target": "python_parking_detector_ws_is_inside_polygon"
+      "source": "python_parking_detector_ws_is_bbox_in_any_polygon",
+      "target": "python_parking_detector_ws_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_ws.py",
-      "source_location": "L353",
+      "source_location": "L379",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_detector_loop",
-      "target": "python_parking_detector_ws_is_inside_any_polygon"
+      "target": "python_parking_detector_ws_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -27639,21 +27959,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L201",
+      "source_location": "L212",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_preview",
-      "target": "python_parking_detector_ws_preview_is_inside_any_polygon"
+      "target": "python_parking_detector_ws_preview_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L194",
+      "source_location": "L199",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_preview",
-      "target": "python_parking_detector_ws_preview_is_inside_polygon"
+      "target": "python_parking_detector_ws_preview_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27852,22 +28172,22 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L203",
+      "source_location": "L214",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "python_parking_detector_ws_preview_is_inside_any_polygon",
-      "target": "python_parking_detector_ws_preview_is_inside_polygon"
+      "source": "python_parking_detector_ws_preview_is_bbox_in_any_polygon",
+      "target": "python_parking_detector_ws_preview_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "python/parking_detector_ws_preview.py",
-      "source_location": "L486",
+      "source_location": "L523",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_preview_main",
-      "target": "python_parking_detector_ws_preview_is_inside_any_polygon"
+      "target": "python_parking_detector_ws_preview_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -28239,9 +28559,9 @@
       "source_file": "tests/Feature/Http/Controllers/Api/AuthControllerTest.php",
       "source_location": "L371",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_authcontrollertest_authcontrollertest",
-      "target": "api_authcontrollertest_authcontrollertest_login_attempt_returns_401_and_locks_after_4_failures",
-      "confidence_score": 1.0
+      "target": "api_authcontrollertest_authcontrollertest_login_attempt_returns_401_and_locks_after_4_failures"
     },
     {
       "relation": "method",
@@ -28249,9 +28569,9 @@
       "source_file": "tests/Feature/Http/Controllers/Api/AuthControllerTest.php",
       "source_location": "L330",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_authcontrollertest_authcontrollertest",
-      "target": "api_authcontrollertest_authcontrollertest_login_attempt_returns_401_if_email_not_found",
-      "confidence_score": 1.0
+      "target": "api_authcontrollertest_authcontrollertest_login_attempt_returns_401_if_email_not_found"
     },
     {
       "relation": "method",
@@ -28259,9 +28579,9 @@
       "source_file": "tests/Feature/Http/Controllers/Api/AuthControllerTest.php",
       "source_location": "L356",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_authcontrollertest_authcontrollertest",
-      "target": "api_authcontrollertest_authcontrollertest_login_attempt_returns_401_if_locked",
-      "confidence_score": 1.0
+      "target": "api_authcontrollertest_authcontrollertest_login_attempt_returns_401_if_locked"
     },
     {
       "relation": "method",
@@ -33127,9 +33447,9 @@
       "source_file": ".agents/rules/coding_standards.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "rules_coding_standards",
-      "target": "rules_coding_standards_aturan_standar_penulisan_kode_php_laravel_coding_standards",
-      "confidence_score": 1.0
+      "target": "rules_coding_standards_aturan_standar_penulisan_kode_php_laravel_coding_standards"
     },
     {
       "relation": "contains",
@@ -33137,9 +33457,9 @@
       "source_file": ".agents/rules/coding_standards.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "rules_coding_standards_aturan_standar_penulisan_kode_php_laravel_coding_standards",
-      "target": "rules_coding_standards_1_import_namespace_use_statement",
-      "confidence_score": 1.0
+      "target": "rules_coding_standards_1_import_namespace_use_statement"
     },
     {
       "relation": "contains",
@@ -33147,9 +33467,9 @@
       "source_file": ".agents/rules/coding_standards.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "rules_coding_standards_aturan_standar_penulisan_kode_php_laravel_coding_standards",
-      "target": "rules_coding_standards_2_phpdoc_komentar_fungsi_class",
-      "confidence_score": 1.0
+      "target": "rules_coding_standards_2_phpdoc_komentar_fungsi_class"
     },
     {
       "relation": "contains",
@@ -33157,9 +33477,9 @@
       "source_file": ".agents/rules/coding_standards.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "rules_coding_standards_aturan_standar_penulisan_kode_php_laravel_coding_standards",
-      "target": "rules_coding_standards_3_konvensi_penulisan_model_eloquent",
-      "confidence_score": 1.0
+      "target": "rules_coding_standards_3_konvensi_penulisan_model_eloquent"
     },
     {
       "relation": "contains",
@@ -33167,9 +33487,9 @@
       "source_file": ".agents/rules/coding_standards.md",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "rules_coding_standards_aturan_standar_penulisan_kode_php_laravel_coding_standards",
-      "target": "rules_coding_standards_4_best_practices_laravel_lainnya",
-      "confidence_score": 1.0
+      "target": "rules_coding_standards_4_best_practices_laravel_lainnya"
     },
     {
       "relation": "contains",
@@ -33177,9 +33497,9 @@
       "source_file": ".agents/rules/environment_isolation.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "rules_environment_isolation",
-      "target": "rules_environment_isolation_aturan_pemisahan_lingkungan_pengembangan_dan_runtime_docker",
-      "confidence_score": 1.0
+      "target": "rules_environment_isolation_aturan_pemisahan_lingkungan_pengembangan_dan_runtime_docker"
     },
     {
       "relation": "contains",
@@ -33187,9 +33507,9 @@
       "source_file": ".agents/rules/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "rules_graphify",
-      "target": "rules_graphify_graphify",
-      "confidence_score": 1.0
+      "target": "rules_graphify_graphify"
     },
     {
       "relation": "contains",
@@ -33197,9 +33517,9 @@
       "source_file": ".agents/workflows/development_cycle.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflows_development_cycle",
-      "target": "workflows_development_cycle_workflow_siklus_pengembangan_kode_tersendiri",
-      "confidence_score": 1.0
+      "target": "workflows_development_cycle_workflow_siklus_pengembangan_kode_tersendiri"
     },
     {
       "relation": "contains",
@@ -33207,9 +33527,9 @@
       "source_file": ".agents/workflows/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "workflows_graphify",
-      "target": "workflows_graphify_workflow_graphify",
-      "confidence_score": 1.0
+      "target": "workflows_graphify_workflow_graphify"
     },
     {
       "relation": "references",
@@ -33217,8 +33537,18 @@
       "source_file": "README.md",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "docs_installation_docker",
+      "target": "docs_installation_docker"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "docs_installation_iot_edge",
       "confidence_score": 1.0
     },
     {
@@ -33227,9 +33557,9 @@
       "source_file": "README.md",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "docs_installation_manual",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual"
     },
     {
       "relation": "contains",
@@ -33237,9 +33567,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_polislot_admin_dashboard",
-      "confidence_score": 1.0
+      "target": "readme_polislot_admin_dashboard"
     },
     {
       "relation": "references",
@@ -33277,9 +33607,9 @@
       "source_file": "README.md",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_polislot_admin_dashboard",
-      "target": "readme_custom_utility_commands",
-      "confidence_score": 1.0
+      "target": "readme_custom_utility_commands"
     },
     {
       "relation": "references",
@@ -33297,9 +33627,9 @@
       "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_polislot_admin_dashboard",
-      "target": "readme_fitur_utama",
-      "confidence_score": 1.0
+      "target": "readme_fitur_utama"
     },
     {
       "relation": "contains",
@@ -33307,9 +33637,9 @@
       "source_file": "README.md",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_polislot_admin_dashboard",
-      "target": "readme_panduan_instalasi",
-      "confidence_score": 1.0
+      "target": "readme_panduan_instalasi"
     },
     {
       "relation": "references",
@@ -33327,9 +33657,9 @@
       "source_file": "README.md",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_polislot_admin_dashboard",
-      "target": "readme_struktur_direktori",
-      "confidence_score": 1.0
+      "target": "readme_struktur_direktori"
     },
     {
       "relation": "references",
@@ -33347,9 +33677,9 @@
       "source_file": "README.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_tech_stack",
-      "target": "readme_prerequisites_external_service",
-      "confidence_score": 1.0
+      "target": "readme_prerequisites_external_service"
     },
     {
       "relation": "contains",
@@ -33357,9 +33687,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker",
-      "target": "docs_installation_docker_instalasi_dengan_docker",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_instalasi_dengan_docker"
     },
     {
       "relation": "contains",
@@ -33367,9 +33697,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_instalasi_dengan_docker",
-      "target": "docs_installation_docker_langkah_instalasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_langkah_instalasi"
     },
     {
       "relation": "contains",
@@ -33377,9 +33707,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_instalasi_dengan_docker",
-      "target": "docs_installation_docker_prasyarat",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_prasyarat"
     },
     {
       "relation": "contains",
@@ -33387,9 +33717,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_prasyarat",
-      "target": "docs_installation_docker_khusus_pengguna_linux",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_khusus_pengguna_linux"
     },
     {
       "relation": "contains",
@@ -33397,9 +33727,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_prasyarat",
-      "target": "docs_installation_docker_persiapan_file_konfigurasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_persiapan_file_konfigurasi"
     },
     {
       "relation": "contains",
@@ -33407,9 +33737,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_10_re_up_container",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_10_re_up_container"
     },
     {
       "relation": "contains",
@@ -33417,9 +33747,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_11_buat_port_forward_local_dan_firewall_rule_optional_untuk_instalasi_pada_wsl",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_11_buat_port_forward_local_dan_firewall_rule_optional_untuk_instalasi_pada_wsl"
     },
     {
       "relation": "contains",
@@ -33427,9 +33757,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_1_konfigurasi_environment_env",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_1_konfigurasi_environment_env"
     },
     {
       "relation": "contains",
@@ -33437,9 +33767,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_2_generate_rsa_keys_di_root",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_2_generate_rsa_keys_di_root"
     },
     {
       "relation": "contains",
@@ -33447,9 +33777,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_3_verifikasi_credential",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_3_verifikasi_credential"
     },
     {
       "relation": "contains",
@@ -33457,9 +33787,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_4_menjalankan_container",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_4_menjalankan_container"
     },
     {
       "relation": "contains",
@@ -33467,9 +33797,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_5_generate_application_key",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_5_generate_application_key"
     },
     {
       "relation": "contains",
@@ -33477,9 +33807,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_6_migrasi_database",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_6_migrasi_database"
     },
     {
       "relation": "contains",
@@ -33487,9 +33817,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_7_setup_admin_user_seeding",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_7_setup_admin_user_seeding"
     },
     {
       "relation": "contains",
@@ -33497,9 +33827,9 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L124",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_8_setup_database_roles",
-      "confidence_score": 1.0
+      "target": "docs_installation_docker_8_setup_database_roles"
     },
     {
       "relation": "contains",
@@ -33507,8 +33837,188 @@
       "source_file": "docs/INSTALLATION_DOCKER.md",
       "source_location": "L134",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_docker_langkah_instalasi",
-      "target": "docs_installation_docker_9_atur_ulang_environment_env_penting",
+      "target": "docs_installation_docker_9_atur_ulang_environment_env_penting"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge",
+      "target": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L238",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "target": "docs_installation_iot_edge_caching_konfigurasi_lokal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "target": "docs_installation_iot_edge_daftar_script",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "target": "docs_installation_iot_edge_instalasi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "target": "docs_installation_iot_edge_keamanan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L217",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "target": "docs_installation_iot_edge_koneksi_melalui_cloudflare_tunnel_produksi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L167",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "target": "docs_installation_iot_edge_menjalankan_script",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "target": "docs_installation_iot_edge_persyaratan_sistem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_instalasi",
+      "target": "docs_installation_iot_edge_1_salin_folder_python_ke_perangkat_edge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_instalasi",
+      "target": "docs_installation_iot_edge_2_buat_virtual_environment_disarankan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_instalasi",
+      "target": "docs_installation_iot_edge_3_install_dependensi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_instalasi",
+      "target": "docs_installation_iot_edge_4_konfigurasi_file_env",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_instalasi",
+      "target": "docs_installation_iot_edge_format_model_yang_didukung_yolo_weights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_menjalankan_script",
+      "target": "docs_installation_iot_edge_contoh_mqtt_dengan_preview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L177",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_menjalankan_script",
+      "target": "docs_installation_iot_edge_contoh_mqtt_headless",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_menjalankan_script",
+      "target": "docs_installation_iot_edge_contoh_websocket_dengan_preview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_menjalankan_script",
+      "target": "docs_installation_iot_edge_contoh_websocket_headless",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_IOT_EDGE.md",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "docs_installation_iot_edge_menjalankan_script",
+      "target": "docs_installation_iot_edge_sintaks",
       "confidence_score": 1.0
     },
     {
@@ -33517,9 +34027,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual",
-      "target": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_instalasi_manual_tanpa_docker"
     },
     {
       "relation": "contains",
@@ -33527,9 +34037,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "target": "docs_installation_manual_langkah_instalasi",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_langkah_instalasi"
     },
     {
       "relation": "contains",
@@ -33537,8 +34047,18 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_instalasi_manual_tanpa_docker",
-      "target": "docs_installation_manual_prasyarat",
+      "target": "docs_installation_manual_prasyarat"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L261",
+      "weight": 1.0,
+      "source": "docs_installation_manual_langkah_instalasi",
+      "target": "docs_installation_manual_10_menjalankan_service_aplikasi",
       "confidence_score": 1.0
     },
     {
@@ -33547,9 +34067,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_1_konfigurasi_environment_env",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_1_konfigurasi_environment_env"
     },
     {
       "relation": "contains",
@@ -33557,9 +34077,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_2_generate_rsa_keys_wajib",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_2_generate_rsa_keys_wajib"
     },
     {
       "relation": "contains",
@@ -33567,9 +34087,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_3_instalasi_dependency",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_3_instalasi_dependency"
     },
     {
       "relation": "contains",
@@ -33577,9 +34097,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_4_generate_application_key",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_4_generate_application_key"
     },
     {
       "relation": "contains",
@@ -33587,9 +34107,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_5_migrasi_database_seeding",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_5_migrasi_database_seeding"
     },
     {
       "relation": "contains",
@@ -33597,9 +34117,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_6_setup_database_roles_rbac",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_6_setup_database_roles_rbac"
     },
     {
       "relation": "contains",
@@ -33607,9 +34127,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_7_atur_ulang_environment_env_penting",
-      "confidence_score": 1.0
+      "target": "docs_installation_manual_7_atur_ulang_environment_env_penting"
     },
     {
       "relation": "contains",
@@ -33618,7 +34138,97 @@
       "source_location": "L142",
       "weight": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_8_menjalankan_service_aplikasi",
+      "target": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L221",
+      "weight": 1.0,
+      "source": "docs_installation_manual_langkah_instalasi",
+      "target": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "target": "docs_installation_manual_a_instalasi_mosquitto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "target": "docs_installation_manual_b_konfigurasi_mosquitto_conf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L175",
+      "weight": 1.0,
+      "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "target": "docs_installation_manual_c_membuat_file_password_kredensial_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L192",
+      "weight": 1.0,
+      "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "target": "docs_installation_manual_d_membuat_file_acl_access_control_list",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L207",
+      "weight": 1.0,
+      "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "target": "docs_installation_manual_e_menjalankan_service_mosquitto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
+      "target": "docs_installation_manual_a_konfigurasi_ip_host_port_env",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
+      "target": "docs_installation_manual_b_windows_defender_firewall_sering_menjadi_penyebab_utama",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/INSTALLATION_MANUAL.md",
+      "source_location": "L254",
+      "weight": 1.0,
+      "source": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
+      "target": "docs_installation_manual_c_isolasi_jaringan_router_ap_isolation",
       "confidence_score": 1.0
     },
     {
@@ -33627,9 +34237,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary",
-      "target": "docs_project_summary_ringkasan_proyek_polislot",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_ringkasan_proyek_polislot"
     },
     {
       "relation": "contains",
@@ -33637,9 +34247,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_ringkasan_proyek_polislot",
-      "target": "docs_project_summary_1_deployment_architecture",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_1_deployment_architecture"
     },
     {
       "relation": "contains",
@@ -33647,9 +34257,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_ringkasan_proyek_polislot",
-      "target": "docs_project_summary_2_installation_procedure",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_2_installation_procedure"
     },
     {
       "relation": "contains",
@@ -33657,9 +34267,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L237",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_ringkasan_proyek_polislot",
-      "target": "docs_project_summary_3_security_checklist",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_3_security_checklist"
     },
     {
       "relation": "contains",
@@ -33667,9 +34277,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_installation_procedure",
-      "target": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended"
     },
     {
       "relation": "contains",
@@ -33677,9 +34287,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L124",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_installation_procedure",
-      "target": "docs_project_summary_2_2_backend_server_instalasi_manual_lokal_xampp",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_2_2_backend_server_instalasi_manual_lokal_xampp"
     },
     {
       "relation": "contains",
@@ -33687,9 +34297,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L144",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_installation_procedure",
-      "target": "docs_project_summary_2_3_polislot_mobile_app_flutter",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_2_3_polislot_mobile_app_flutter"
     },
     {
       "relation": "contains",
@@ -33697,9 +34307,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L190",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_installation_procedure",
-      "target": "docs_project_summary_2_4_perangkat_edge_iot_parking_detector",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_2_4_perangkat_edge_iot_parking_detector"
     },
     {
       "relation": "contains",
@@ -33707,9 +34317,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "target": "docs_project_summary_langkah_1_persiapan_file_konfigurasi",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_1_persiapan_file_konfigurasi"
     },
     {
       "relation": "contains",
@@ -33717,9 +34327,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "target": "docs_project_summary_langkah_2_konfigurasi_environment_env",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_2_konfigurasi_environment_env"
     },
     {
       "relation": "contains",
@@ -33727,9 +34337,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "target": "docs_project_summary_langkah_3_konfigurasi_docker_compose_yml",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_3_konfigurasi_docker_compose_yml"
     },
     {
       "relation": "contains",
@@ -33737,9 +34347,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "target": "docs_project_summary_langkah_4_generate_rsa_keys_penting",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_4_generate_rsa_keys_penting"
     },
     {
       "relation": "contains",
@@ -33747,9 +34357,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "target": "docs_project_summary_langkah_5_jalankan_kontainer_docker",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_5_jalankan_kontainer_docker"
     },
     {
       "relation": "contains",
@@ -33757,9 +34367,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "target": "docs_project_summary_langkah_6_inisialisasi_aplikasi_laravel",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_6_inisialisasi_aplikasi_laravel"
     },
     {
       "relation": "contains",
@@ -33767,9 +34377,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "target": "docs_project_summary_langkah_7_setup_role_based_access_control_rbac_database",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_7_setup_role_based_access_control_rbac_database"
     },
     {
       "relation": "contains",
@@ -33777,9 +34387,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
-      "target": "docs_project_summary_langkah_8_finalisasi_konfigurasi",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_8_finalisasi_konfigurasi"
     },
     {
       "relation": "contains",
@@ -33787,9 +34397,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L146",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_3_polislot_mobile_app_flutter",
-      "target": "docs_project_summary_langkah_1_persiapan_perangkat_lunak",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_1_persiapan_perangkat_lunak"
     },
     {
       "relation": "contains",
@@ -33797,9 +34407,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_3_polislot_mobile_app_flutter",
-      "target": "docs_project_summary_langkah_2_kloning_pengunduhan_dependensi",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_2_kloning_pengunduhan_dependensi"
     },
     {
       "relation": "contains",
@@ -33807,9 +34417,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_3_polislot_mobile_app_flutter",
-      "target": "docs_project_summary_langkah_3_konfigurasi_environment_google_maps",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_3_konfigurasi_environment_google_maps"
     },
     {
       "relation": "contains",
@@ -33817,9 +34427,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_3_polislot_mobile_app_flutter",
-      "target": "docs_project_summary_langkah_4_kunci_publik_rsa",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_4_kunci_publik_rsa"
     },
     {
       "relation": "contains",
@@ -33827,9 +34437,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L172",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_3_polislot_mobile_app_flutter",
-      "target": "docs_project_summary_langkah_5_code_generation_riverpod",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_5_code_generation_riverpod"
     },
     {
       "relation": "contains",
@@ -33837,9 +34447,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L178",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_3_polislot_mobile_app_flutter",
-      "target": "docs_project_summary_langkah_6_kompilasi_dan_jalankan_aplikasi",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_6_kompilasi_dan_jalankan_aplikasi"
     },
     {
       "relation": "contains",
@@ -33847,9 +34457,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L194",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_4_perangkat_edge_iot_parking_detector",
-      "target": "docs_project_summary_langkah_1_persiapan_perangkat_keras_dan_lunak",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_1_persiapan_perangkat_keras_dan_lunak"
     },
     {
       "relation": "contains",
@@ -33857,9 +34467,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L199",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_4_perangkat_edge_iot_parking_detector",
-      "target": "docs_project_summary_langkah_2_instalasi_dependensi_python",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_2_instalasi_dependensi_python"
     },
     {
       "relation": "contains",
@@ -33867,9 +34477,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L206",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_4_perangkat_edge_iot_parking_detector",
-      "target": "docs_project_summary_langkah_3_konfigurasi_internal_skrip_krusial",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_3_konfigurasi_internal_skrip_krusial"
     },
     {
       "relation": "contains",
@@ -33877,9 +34487,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L214",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_4_perangkat_edge_iot_parking_detector",
-      "target": "docs_project_summary_langkah_4_konfigurasi_kredensial_mqtt",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_4_konfigurasi_kredensial_mqtt"
     },
     {
       "relation": "contains",
@@ -33887,9 +34497,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L227",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_2_4_perangkat_edge_iot_parking_detector",
-      "target": "docs_project_summary_langkah_5_menjalankan_skrip_deteksi",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_langkah_5_menjalankan_skrip_deteksi"
     },
     {
       "relation": "contains",
@@ -33897,9 +34507,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L253",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_3_security_checklist",
-      "target": "docs_project_summary_api_komunikasi_data",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_api_komunikasi_data"
     },
     {
       "relation": "contains",
@@ -33907,9 +34517,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L260",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_3_security_checklist",
-      "target": "docs_project_summary_aplikasi_mobile_backend_code",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_aplikasi_mobile_backend_code"
     },
     {
       "relation": "contains",
@@ -33917,9 +34527,9 @@
       "source_file": "docs/PROJECT_SUMMARY.md",
       "source_location": "L241",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_project_summary_3_security_checklist",
-      "target": "docs_project_summary_infrastruktur_konfigurasi_server",
-      "confidence_score": 1.0
+      "target": "docs_project_summary_infrastruktur_konfigurasi_server"
     },
     {
       "relation": "references",
@@ -34316,5 +34926,5 @@
       "source_file": "docs/PROJECT_SUMMARY.md"
     }
   ],
-  "built_at_commit": "1a5037c286a52d85060443e59b80fb173869ce28"
+  "built_at_commit": "51c18907deacc2330f137aff041312dc0fd3a44a"
 }

@@ -139,7 +139,126 @@ DB_USERNAME_MOBILE=polislot_mobile
 DB_PASSWORD_MOBILE=password_db_mobile
 ```
 
-### 8. Menjalankan Service Aplikasi
+### 8. Konfigurasi Manual MQTT Broker (Mosquitto)
+*(Lewati langkah ini jika Anda menggunakan Broker MQTT Publik/Cloud eksternal).*
+
+Untuk menjalankan Mosquitto secara lokal dan membiarkan perangkat dalam satu jaringan (IoT Edge & Mobile App) terhubung ke Broker Anda secara manual:
+
+#### A. Instalasi Mosquitto
+- **Windows**: Unduh installer dari [mosquitto.org](https://mosquitto.org/download/) dan jalankan instalasi. Secara default, ia akan terinstal di `C:\Program Files\mosquitto\`.
+- **Linux (Ubuntu/Debian)**:
+  ```bash
+  sudo apt update
+  sudo apt install mosquitto mosquitto-clients
+  ```
+
+#### B. Konfigurasi `mosquitto.conf`
+Mosquitto v2.x secara default hanya mendengarkan koneksi pada `localhost` (127.0.0.1) dan memblokir koneksi dari luar. Agar perangkat lain dalam satu jaringan bisa terhubung:
+1. Buka file konfigurasi Mosquitto (Windows: `C:\Program Files\mosquitto\mosquitto.conf`, Linux: `/etc/mosquitto/mosquitto.conf`).
+2. Ubah atau tambahkan baris berikut untuk mengaktifkan listener port 1883 (TCP) dan port 9001 (WebSockets) untuk semua interface jaringan (`0.0.0.0`):
+   ```ini
+   # Listener TCP Utama (untuk Laravel & Perangkat IoT Edge)
+   listener 1883 0.0.0.0
+   protocol mqtt
+
+   # Listener WebSockets (untuk Mobile App)
+   listener 9001 0.0.0.0
+   protocol websockets
+
+   # Keamanan & Autentikasi
+   allow_anonymous false
+   password_file C:/Program Files/mosquitto/mosquitto.passwd
+   acl_file C:/Program Files/mosquitto/mosquitto.acl
+   ```
+   *(Catatan untuk pengguna Linux: Ganti path `C:/Program Files/mosquitto/` menjadi `/etc/mosquitto/`)*.
+
+#### C. Membuat File Password & Kredensial User
+Buat kredensial autentikasi agar broker aman dari akses luar yang tidak berizin.
+1. Buka Command Prompt/Terminal sebagai **Administrator**.
+2. Masuk ke direktori Mosquitto (jika di Windows):
+   ```cmd
+   cd "C:\Program Files\mosquitto"
+   ```
+3. Buat berkas password dan tambahkan user pertama (`polislot_user` untuk backend Laravel & IoT Edge):
+   ```cmd
+   mosquitto_passwd -c mosquitto.passwd polislot_user
+   ```
+   *Masukkan password ketika diminta (contoh: `secure_password` sesuai dengan `.env`).*
+4. Tambahkan user kedua untuk aplikasi mobile (`polislot_mobile`):
+   ```cmd
+   mosquitto_passwd -b mosquitto.passwd polislot_mobile mobile_secure_password
+   ```
+
+#### D. Membuat File ACL (Access Control List)
+Buat file bernama `mosquitto.acl` di direktori mosquitto untuk membatasi hak akses tiap user:
+1. Buat berkas teks baru bernama `mosquitto.acl`.
+2. Isi berkas tersebut dengan konfigurasi berikut:
+   ```ini
+   # User Backend & IoT Edge (Bisa membaca dan menulis semua topik)
+   user polislot_user
+   topic readwrite #
+
+   # User Mobile App (Hanya bisa membaca topik status parkir)
+   user polislot_mobile
+   topic read frontend/#
+   ```
+3. Simpan berkas tersebut di direktori yang sama dengan `mosquitto.conf`.
+
+#### E. Menjalankan Service Mosquitto
+Jalankan broker Mosquitto secara manual menggunakan file konfigurasi yang telah diubah:
+- **Windows (Command Prompt):**
+  ```cmd
+  net stop mosquitto
+  "C:\Program Files\mosquitto\mosquitto.exe" -c "C:\Program Files\mosquitto\mosquitto.conf" -v
+  ```
+- **Linux:**
+  ```bash
+  sudo systemctl restart mosquitto
+  ```
+
+---
+
+### 9. Mengatasi Masalah Koneksi Broker Satu Jaringan (Troubleshooting)
+Jika perangkat IoT Edge atau Mobile App Anda **gagal terhubung ke broker meskipun berada dalam satu jaringan Wi-Fi/LAN**, lakukan langkah-langkah berikut:
+
+#### A. Konfigurasi IP Host & Port (.env)
+- **Perangkat IoT Edge (.env)**:
+  Ubah `MQTT_BROKER` menjadi IP lokal PC/Server Anda yang menjalankan broker (misal `192.168.1.100`), **BUKAN** `127.0.0.1` atau `localhost`.
+  ```dotenv
+  MQTT_BROKER=192.168.1.100
+  MQTT_PORT=1883
+  MQTT_PROTOCOL=tcp
+  ```
+- **Mobile App (.env)**:
+  Gunakan IP lokal server MQTT Anda pada `MQTT_HOST`. Untuk pengetesan lokal tanpa sertifikat SSL (HTTPS/TLS), ubah `MQTT_SCHEME` ke `ws` (WebSockets unencrypted) dan arahkan ke port WebSockets Mosquitto (default `9001`).
+  ```dotenv
+  MQTT_HOST=192.168.1.100
+  MQTT_PORT=9001
+  MQTT_SCHEME=ws
+  MQTT_USERNAME=polislot_mobile
+  MQTT_PASSWORD=mobile_secure_password
+  ```
+- **Laravel Server (.env)**:
+  Jika Laravel berjalan di mesin yang sama dengan Mosquitto, gunakan `MQTT_HOST=127.0.0.1`. Jika berbeda mesin, gunakan IP lokal server Mosquitto.
+
+#### B. Windows Defender Firewall (Sering Menjadi Penyebab Utama)
+Windows Defender Firewall secara default memblokir semua koneksi masuk (inbound) pada port 1883 dan 9001. Anda wajib membuat aturan baru (Inbound Rule) di komputer server:
+1. Buka **Windows Defender Firewall with Advanced Security**.
+2. Klik **Inbound Rules** di panel kiri, lalu klik **New Rule...** di panel kanan.
+3. Pilih **Port** -> **Next**.
+4. Pilih **TCP** dan isi **Specific local ports** dengan `1883, 9001` -> **Next**.
+5. Pilih **Allow the connection** -> **Next**.
+6. Centang **Domain**, **Private**, dan **Public** -> **Next**.
+7. Beri nama aturan tersebut (misalnya `Mosquitto MQTT Broker`) lalu klik **Finish**.
+
+#### C. Isolasi Jaringan Router (AP Isolation)
+Beberapa router Wi-Fi (terutama router publik, kosan, atau kantor) mengaktifkan fitur **AP Isolation** (Client Isolation). Fitur ini mencegah sesama perangkat yang terhubung ke Wi-Fi yang sama untuk berkomunikasi secara lokal.
+- **Gejala**: Anda bisa melakukan ping ke internet dari kedua perangkat, tetapi tidak bisa melakukan ping antar perangkat (misal dari HP ke laptop server).
+- **Solusi**: Matikan fitur AP Isolation/Client Isolation di pengaturan Router Anda, atau gunakan tethering Wi-Fi dari handphone sebagai jaringan lokal alternatif untuk pengetesan.
+
+---
+
+### 10. Menjalankan Service Aplikasi
 Untuk menjalankan aplikasi secara penuh di lingkungan lokal, Anda perlu membuka **beberapa terminal terpisah** di dalam folder proyek dan menjalankan perintah berikut secara bersamaan:
 
 1. **Web Server**:

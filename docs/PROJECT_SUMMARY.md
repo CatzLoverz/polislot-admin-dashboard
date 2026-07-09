@@ -160,7 +160,7 @@ Salin file `.env.example` menjadi `.env` di *root* proyek mobile dan lengkapi ni
 ```env
 API_BASE_URL=http://<ip-backend-atau-domain>/api
 MQTT_HOST=127.0.0.1:8080
-MQTT_WSS_PORT=8080
+MQTT_PORT=9001
 MQTT_USERNAME=MQTTPoliSlot
 MQTT_PASSWORD=password_mqtt_anda
 GOOGLE_MAPS_API_KEY=isi_dengan_api_key_google_maps_anda
