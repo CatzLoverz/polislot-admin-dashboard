@@ -95,7 +95,7 @@ class ValidationController extends Controller
                     'validation_is_geofence_active' => $isGeofence,
                 ]);
 
-                Log::info('Pengaturan validasi diperbarui.');
+                Log::info('Pengaturan validasi diperbarui.', ['id' => $id]);
 
                 return redirect()->route('admin.validation.index')
                     ->with('swal_success_crud', 'Pengaturan validasi berhasil diperbarui.');

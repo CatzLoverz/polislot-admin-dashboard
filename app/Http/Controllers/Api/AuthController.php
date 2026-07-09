@@ -110,7 +110,7 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($otpCode, 'Emails.registration_otp', 'Kode Verifikasi Akun Anda'));
 
-                Log::info('Registrasi berhasil.');
+                Log::info('Registrasi berhasil.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess(
                     'Registrasi berhasil! Cek email Anda untuk kode OTP.',
@@ -163,7 +163,7 @@ class AuthController extends Controller
 
                 $token = $user->createToken('auth_token')->plainTextToken;
 
-                Log::info('Verifikasi OTP berhasil.');
+                Log::info('Verifikasi OTP berhasil.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Verifikasi berhasil! Selamat datang.', [
                     'access_token' => $token,
@@ -208,7 +208,7 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'Emails.registration_otp', 'Kode Verifikasi Akun Anda'));
 
-                Log::info('OTP registrasi baru dikirim.');
+                Log::info('OTP registrasi baru dikirim.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Kode OTP baru telah dikirim.', ['email' => $user->email]);
             });
@@ -340,7 +340,7 @@ class AuthController extends Controller
             if ($token) {
                 $token->delete();
             }
-            Log::info('Pengguna logout.');
+            Log::info('Pengguna logout.', ['user_id' => $user->user_id]);
 
             return $this->sendSuccess('Berhasil logout.');
         }
@@ -370,7 +370,7 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($otpCode, 'Emails.reset_password_otp', 'Kode Reset Password'));
 
-                Log::info('OTP reset password dikirim.');
+                Log::info('OTP reset password dikirim.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Kode OTP telah dikirim ke email Anda.', ['email' => $user->email]);
             });
@@ -401,7 +401,7 @@ class AuthController extends Controller
                 return $this->sendError('Kode OTP salah atau telah kedaluwarsa.', 400);
             }
 
-            Log::info('OTP valid.');
+            Log::info('OTP valid.', ['user_id' => $user->user_id]);
 
             return $this->sendSuccess('OTP valid. Silakan reset password.', ['email' => $user->email]);
 
@@ -430,7 +430,7 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'Emails.reset_password_otp', 'Kode Reset Password'));
 
-                Log::info('OTP reset baru dikirim.');
+                Log::info('OTP reset baru dikirim.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Kode OTP baru telah dikirim ke email Anda.', ['email' => $user->email]);
             });
@@ -487,7 +487,7 @@ class AuthController extends Controller
                 // Hapus sesi login saat pemulihan akun (logout dari semua perangkat)
                 $user->tokens()->delete();
 
-                Log::info('Password direset dan sesi dibersihkan.');
+                Log::info('Password direset dan sesi dibersihkan.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Password berhasil direset. Silakan login.');
             });

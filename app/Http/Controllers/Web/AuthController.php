@@ -87,7 +87,7 @@ class AuthController extends Controller
                     $request->session()->regenerate();
                     $user->update(['failed_attempts' => 0, 'locked_until' => null]);
 
-                    Log::info('Login berhasil.');
+                    Log::info('Login berhasil.', ['user_id' => $user->user_id]);
 
                     return redirect()->intended(route('dashboard'))
                         ->with('swal_success_login', 'Login Berhasil! Selamat datang, '.$user->name.'.');
@@ -130,7 +130,7 @@ class AuthController extends Controller
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                Log::info('Pengguna telah logout.');
+                Log::info('Pengguna telah logout.', ['user_id' => $user->user_id]);
 
                 return redirect()->route('login.form');
             });
@@ -173,7 +173,7 @@ class AuthController extends Controller
 
                 $request->session()->put('email_for_password_reset', $user->email);
 
-                Log::info('OTP reset password dikirim.');
+                Log::info('OTP reset password dikirim.', ['user_id' => $user->user_id]);
 
                 return redirect()->route('forgot_otp.form')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
             });
@@ -215,7 +215,7 @@ class AuthController extends Controller
                 }
                 session()->put('otp_verified', true);
 
-                Log::info('OTP valid.');
+                Log::info('OTP valid.', ['user_id' => $user->user_id]);
 
                 return redirect()->route('reset_pass.form')->with('swal_success_crud', 'OTP berhasil diverifikasi!');
             });
@@ -245,7 +245,7 @@ class AuthController extends Controller
 
                 Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'Emails.reset_password_otp', 'Kode Reset Password Anda'));
 
-                Log::info('OTP reset baru dikirim.');
+                Log::info('OTP reset baru dikirim.', ['user_id' => $user->user_id]);
 
                 return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim ke email Anda.');
             });
@@ -307,7 +307,7 @@ class AuthController extends Controller
                 $user->save();
                 session()->forget(['email_for_password_reset', 'otp_verified']);
 
-                Log::info('Password direset.');
+                Log::info('Password direset.', ['user_id' => $user->user_id]);
 
                 return redirect()->route('login.form')->with('swal_success_crud', 'Password berhasil direset! Silakan login.');
             });

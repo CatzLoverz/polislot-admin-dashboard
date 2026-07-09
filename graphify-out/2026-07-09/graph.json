@@ -2552,7 +2552,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/MissionController.php",
-      "source_location": "L194",
+      "source_location": "L192",
       "_origin": "ast",
       "id": "web_missioncontroller_missioncontroller_update",
       "community": 25,
@@ -2562,7 +2562,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "app/Http/Controllers/Web/MissionController.php",
-      "source_location": "L245",
+      "source_location": "L241",
       "_origin": "ast",
       "id": "web_missioncontroller_missioncontroller_destroy",
       "community": 25,
@@ -26559,9 +26559,9 @@
       "source_file": "python/models/best3_ncnn_model/model_ncnn.py",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "best3_ncnn_model_model_ncnn",
-      "target": "best3_ncnn_model_model_ncnn_test_inference"
+      "target": "best3_ncnn_model_model_ncnn_test_inference",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -26619,9 +26619,9 @@
       "source_file": "python/parking_detector_mqtt.py",
       "source_location": "L151",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt",
-      "target": "python_parking_detector_mqtt_is_bbox_in_any_polygon"
+      "target": "python_parking_detector_mqtt_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -26629,9 +26629,9 @@
       "source_file": "python/parking_detector_mqtt.py",
       "source_location": "L138",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt",
-      "target": "python_parking_detector_mqtt_is_bbox_in_polygon"
+      "target": "python_parking_detector_mqtt_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -26818,9 +26818,9 @@
       "source_file": "python/parking_detector_mqtt.py",
       "source_location": "L153",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_is_bbox_in_any_polygon",
-      "target": "python_parking_detector_mqtt_is_bbox_in_polygon"
+      "target": "python_parking_detector_mqtt_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -26829,9 +26829,9 @@
       "source_file": "python/parking_detector_mqtt.py",
       "source_location": "L410",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_main",
-      "target": "python_parking_detector_mqtt_is_bbox_in_any_polygon"
+      "target": "python_parking_detector_mqtt_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -27049,9 +27049,9 @@
       "source_file": "python/parking_detector_mqtt_preview.py",
       "source_location": "L150",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview",
-      "target": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon"
+      "target": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27059,9 +27059,9 @@
       "source_file": "python/parking_detector_mqtt_preview.py",
       "source_location": "L137",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview",
-      "target": "python_parking_detector_mqtt_preview_is_bbox_in_polygon"
+      "target": "python_parking_detector_mqtt_preview_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27248,9 +27248,9 @@
       "source_file": "python/parking_detector_mqtt_preview.py",
       "source_location": "L152",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon",
-      "target": "python_parking_detector_mqtt_preview_is_bbox_in_polygon"
+      "target": "python_parking_detector_mqtt_preview_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -27259,9 +27259,9 @@
       "source_file": "python/parking_detector_mqtt_preview.py",
       "source_location": "L425",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_mqtt_preview_main",
-      "target": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon"
+      "target": "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -27519,9 +27519,9 @@
       "source_file": "python/parking_detector_ws.py",
       "source_location": "L212",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws",
-      "target": "python_parking_detector_ws_is_bbox_in_any_polygon"
+      "target": "python_parking_detector_ws_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27529,9 +27529,9 @@
       "source_file": "python/parking_detector_ws.py",
       "source_location": "L199",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws",
-      "target": "python_parking_detector_ws_is_bbox_in_polygon"
+      "target": "python_parking_detector_ws_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27722,9 +27722,9 @@
       "source_file": "python/parking_detector_ws.py",
       "source_location": "L214",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_is_bbox_in_any_polygon",
-      "target": "python_parking_detector_ws_is_bbox_in_polygon"
+      "target": "python_parking_detector_ws_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -27733,9 +27733,9 @@
       "source_file": "python/parking_detector_ws.py",
       "source_location": "L379",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_detector_loop",
-      "target": "python_parking_detector_ws_is_bbox_in_any_polygon"
+      "target": "python_parking_detector_ws_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -27961,9 +27961,9 @@
       "source_file": "python/parking_detector_ws_preview.py",
       "source_location": "L212",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_preview",
-      "target": "python_parking_detector_ws_preview_is_bbox_in_any_polygon"
+      "target": "python_parking_detector_ws_preview_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -27971,9 +27971,9 @@
       "source_file": "python/parking_detector_ws_preview.py",
       "source_location": "L199",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_preview",
-      "target": "python_parking_detector_ws_preview_is_bbox_in_polygon"
+      "target": "python_parking_detector_ws_preview_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -28174,9 +28174,9 @@
       "source_file": "python/parking_detector_ws_preview.py",
       "source_location": "L214",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_preview_is_bbox_in_any_polygon",
-      "target": "python_parking_detector_ws_preview_is_bbox_in_polygon"
+      "target": "python_parking_detector_ws_preview_is_bbox_in_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -28185,9 +28185,9 @@
       "source_file": "python/parking_detector_ws_preview.py",
       "source_location": "L523",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "python_parking_detector_ws_preview_main",
-      "target": "python_parking_detector_ws_preview_is_bbox_in_any_polygon"
+      "target": "python_parking_detector_ws_preview_is_bbox_in_any_polygon",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -33547,9 +33547,9 @@
       "source_file": "README.md",
       "source_location": "L73",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "readme",
-      "target": "docs_installation_iot_edge"
+      "target": "docs_installation_iot_edge",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -33847,9 +33847,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge",
-      "target": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir"
+      "target": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33857,9 +33857,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L238",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
-      "target": "docs_installation_iot_edge_caching_konfigurasi_lokal"
+      "target": "docs_installation_iot_edge_caching_konfigurasi_lokal",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33867,9 +33867,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
-      "target": "docs_installation_iot_edge_daftar_script"
+      "target": "docs_installation_iot_edge_daftar_script",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33877,9 +33877,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L32",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
-      "target": "docs_installation_iot_edge_instalasi"
+      "target": "docs_installation_iot_edge_instalasi",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33887,9 +33887,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L209",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
-      "target": "docs_installation_iot_edge_keamanan"
+      "target": "docs_installation_iot_edge_keamanan",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33897,9 +33897,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L217",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
-      "target": "docs_installation_iot_edge_koneksi_melalui_cloudflare_tunnel_produksi"
+      "target": "docs_installation_iot_edge_koneksi_melalui_cloudflare_tunnel_produksi",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33907,9 +33907,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L167",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
-      "target": "docs_installation_iot_edge_menjalankan_script"
+      "target": "docs_installation_iot_edge_menjalankan_script",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33917,9 +33917,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L23",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir",
-      "target": "docs_installation_iot_edge_persyaratan_sistem"
+      "target": "docs_installation_iot_edge_persyaratan_sistem",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33927,9 +33927,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L34",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_instalasi",
-      "target": "docs_installation_iot_edge_1_salin_folder_python_ke_perangkat_edge"
+      "target": "docs_installation_iot_edge_1_salin_folder_python_ke_perangkat_edge",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33937,9 +33937,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L38",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_instalasi",
-      "target": "docs_installation_iot_edge_2_buat_virtual_environment_disarankan"
+      "target": "docs_installation_iot_edge_2_buat_virtual_environment_disarankan",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33947,9 +33947,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L50",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_instalasi",
-      "target": "docs_installation_iot_edge_3_install_dependensi"
+      "target": "docs_installation_iot_edge_3_install_dependensi",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33957,9 +33957,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L70",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_instalasi",
-      "target": "docs_installation_iot_edge_4_konfigurasi_file_env"
+      "target": "docs_installation_iot_edge_4_konfigurasi_file_env",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33967,9 +33967,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L150",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_instalasi",
-      "target": "docs_installation_iot_edge_format_model_yang_didukung_yolo_weights"
+      "target": "docs_installation_iot_edge_format_model_yang_didukung_yolo_weights",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33977,9 +33977,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L187",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_menjalankan_script",
-      "target": "docs_installation_iot_edge_contoh_mqtt_dengan_preview"
+      "target": "docs_installation_iot_edge_contoh_mqtt_dengan_preview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33987,9 +33987,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L177",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_menjalankan_script",
-      "target": "docs_installation_iot_edge_contoh_mqtt_headless"
+      "target": "docs_installation_iot_edge_contoh_mqtt_headless",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -33997,9 +33997,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L199",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_menjalankan_script",
-      "target": "docs_installation_iot_edge_contoh_websocket_dengan_preview"
+      "target": "docs_installation_iot_edge_contoh_websocket_dengan_preview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34007,9 +34007,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L193",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_menjalankan_script",
-      "target": "docs_installation_iot_edge_contoh_websocket_headless"
+      "target": "docs_installation_iot_edge_contoh_websocket_headless",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34017,9 +34017,9 @@
       "source_file": "docs/INSTALLATION_IOT_EDGE.md",
       "source_location": "L171",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_iot_edge_menjalankan_script",
-      "target": "docs_installation_iot_edge_sintaks"
+      "target": "docs_installation_iot_edge_sintaks",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34057,9 +34057,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L261",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_10_menjalankan_service_aplikasi"
+      "target": "docs_installation_manual_10_menjalankan_service_aplikasi",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34137,9 +34137,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L142",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto"
+      "target": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34147,9 +34147,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L221",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_langkah_instalasi",
-      "target": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting"
+      "target": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34157,9 +34157,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L147",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
-      "target": "docs_installation_manual_a_instalasi_mosquitto"
+      "target": "docs_installation_manual_a_instalasi_mosquitto",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34167,9 +34167,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L155",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
-      "target": "docs_installation_manual_b_konfigurasi_mosquitto_conf"
+      "target": "docs_installation_manual_b_konfigurasi_mosquitto_conf",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34177,9 +34177,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L175",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
-      "target": "docs_installation_manual_c_membuat_file_password_kredensial_user"
+      "target": "docs_installation_manual_c_membuat_file_password_kredensial_user",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34187,9 +34187,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L192",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
-      "target": "docs_installation_manual_d_membuat_file_acl_access_control_list"
+      "target": "docs_installation_manual_d_membuat_file_acl_access_control_list",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34197,9 +34197,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L207",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
-      "target": "docs_installation_manual_e_menjalankan_service_mosquitto"
+      "target": "docs_installation_manual_e_menjalankan_service_mosquitto",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34207,9 +34207,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L224",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
-      "target": "docs_installation_manual_a_konfigurasi_ip_host_port_env"
+      "target": "docs_installation_manual_a_konfigurasi_ip_host_port_env",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34217,9 +34217,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L244",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
-      "target": "docs_installation_manual_b_windows_defender_firewall_sering_menjadi_penyebab_utama"
+      "target": "docs_installation_manual_b_windows_defender_firewall_sering_menjadi_penyebab_utama",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34227,9 +34227,9 @@
       "source_file": "docs/INSTALLATION_MANUAL.md",
       "source_location": "L254",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
-      "target": "docs_installation_manual_c_isolasi_jaringan_router_ap_isolation"
+      "target": "docs_installation_manual_c_isolasi_jaringan_router_ap_isolation",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -34926,5 +34926,5 @@
       "source_file": "docs/PROJECT_SUMMARY.md"
     }
   ],
-  "built_at_commit": "fa45088a726155dbbea0eb5b1f37a841360d9f89"
+  "built_at_commit": "51c18907deacc2330f137aff041312dc0fd3a44a"
 }

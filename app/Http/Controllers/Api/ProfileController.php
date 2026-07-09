@@ -94,7 +94,7 @@ class ProfileController extends Controller
                 // 3. Nama
                 $user->name = $request->name;
                 $user->save();
-                Log::info('Profil berhasil diperbarui.');
+                Log::info('Profil berhasil diperbarui.', ['user_id' => $user->user_id]);
 
                 return $this->sendSuccess('Profil berhasil diperbarui.', ['user' => $this->formatUser($user)]);
             });

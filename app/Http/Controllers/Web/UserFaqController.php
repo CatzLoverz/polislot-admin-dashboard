@@ -88,13 +88,13 @@ class UserFaqController extends Controller
                     'faq_answer' => 'required|string',
                 ]);
 
-                UserFaq::create([
+                $faq = UserFaq::create([
                     'user_id' => Auth::id(),
                     'faq_question' => $validated['faq_question'],
                     'faq_answer' => $validated['faq_answer'],
                 ]);
 
-                Log::info('Data FAQ baru berhasil disimpan.');
+                Log::info('Data FAQ baru berhasil disimpan.', ['id' => $faq->faq_id, 'question' => $faq->faq_question]);
 
                 return redirect()->route('admin.user-faq.index')
                     ->with('swal_success_crud', 'FAQ berhasil ditambahkan.');
@@ -130,7 +130,7 @@ class UserFaqController extends Controller
                     'faq_answer' => $validated['faq_answer'],
                 ]);
 
-                Log::info('Data FAQ berhasil diperbarui.');
+                Log::info('Data FAQ berhasil diperbarui.', ['id' => $id, 'question' => $faq->faq_question]);
 
                 return redirect()->route('admin.user-faq.index')
                     ->with('swal_success_crud', 'FAQ berhasil diperbarui.');
@@ -157,7 +157,7 @@ class UserFaqController extends Controller
                 $faq = UserFaq::findOrFail($id);
                 $faq->delete();
 
-                Log::info('Data FAQ berhasil dihapus.');
+                Log::info('Data FAQ berhasil dihapus.', ['id' => $id]);
 
                 return redirect()->route('admin.user-faq.index')
                     ->with('swal_success_crud', 'FAQ berhasil dihapus.');

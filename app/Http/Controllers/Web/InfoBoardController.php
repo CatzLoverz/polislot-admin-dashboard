@@ -87,13 +87,13 @@ class InfoBoardController extends Controller
                     'info_content' => 'required|string',
                 ]);
 
-                InfoBoard::create([
+                $infoBoard = InfoBoard::create([
                     'user_id' => Auth::id(),
                     'info_title' => $validated['info_title'],
                     'info_content' => $validated['info_content'],
                 ]);
 
-                Log::info('Data info board baru berhasil disimpan.');
+                Log::info('Data info board baru berhasil disimpan.', ['id' => $infoBoard->info_id, 'title' => $infoBoard->info_title]);
 
                 return redirect()->route('admin.info-board.index')
                     ->with('swal_success_crud', 'Informasi berhasil ditambahkan.');
@@ -129,7 +129,7 @@ class InfoBoardController extends Controller
                     'info_content' => $validated['info_content'],
                 ]);
 
-                Log::info('Data info board berhasil diperbarui.');
+                Log::info('Data info board berhasil diperbarui.', ['id' => $id, 'title' => $infoBoard->info_title]);
 
                 return redirect()->route('admin.info-board.index')
                     ->with('swal_success_crud', 'Informasi berhasil diperbarui.');
@@ -156,7 +156,7 @@ class InfoBoardController extends Controller
                 $infoBoard = InfoBoard::findOrFail($id);
                 $infoBoard->delete();
 
-                Log::info('Data info board berhasil dihapus.');
+                Log::info('Data info board berhasil dihapus.', ['id' => $id]);
 
                 return redirect()->route('admin.info-board.index')
                     ->with('swal_success_crud', 'Informasi berhasil dihapus.');

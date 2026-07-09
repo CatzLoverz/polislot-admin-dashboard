@@ -106,7 +106,7 @@ class SubareaCommentController extends Controller
 
                 $comment->load('user:user_id,name,avatar');
 
-                Log::info('Comment baru ditambahkan.');
+                Log::info('Comment baru ditambahkan.', ['comment_id' => $comment->subarea_comment_id, 'user_id' => $comment->user_id]);
 
                 $subarea = ParkSubarea::find($request->park_subarea_id);
                 if ($subarea) {
@@ -172,7 +172,7 @@ class SubareaCommentController extends Controller
                 $comment->update($dataToUpdate);
                 $comment->load('user:user_id,name,avatar');
 
-                Log::info('Comment Berhasil Diupdate.');
+                Log::info('Comment Berhasil Diupdate.', ['comment_id' => $comment->subarea_comment_id, 'user_id' => $comment->user_id]);
 
                 $subarea = ParkSubarea::find($comment->park_subarea_id);
                 if ($subarea) {
@@ -219,7 +219,7 @@ class SubareaCommentController extends Controller
 
                 $comment->delete();
 
-                Log::info('Comment dihapus.');
+                Log::info('Comment dihapus.', ['comment_id' => $id, 'user_id' => $comment->user_id]);
 
                 $subarea = ParkSubarea::find($comment->park_subarea_id);
                 if ($subarea) {

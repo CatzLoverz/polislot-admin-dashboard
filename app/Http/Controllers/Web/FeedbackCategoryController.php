@@ -79,11 +79,11 @@ class FeedbackCategoryController extends Controller
                     'fbk_category_name' => 'required|string|max:255|unique:feedback_categories,fbk_category_name',
                 ]);
 
-                FeedbackCategory::create([
+                $category = FeedbackCategory::create([
                     'fbk_category_name' => $validated['fbk_category_name'],
                 ]);
 
-                Log::info('Kategori baru berhasil disimpan.');
+                Log::info('Kategori baru berhasil disimpan.', ['id' => $category->fbk_category_id, 'name' => $category->fbk_category_name]);
 
                 return redirect()->route('admin.feedback-category.index')
                     ->with('swal_success_crud', 'Kategori berhasil ditambahkan.');
@@ -117,7 +117,7 @@ class FeedbackCategoryController extends Controller
                     'fbk_category_name' => $validated['fbk_category_name'],
                 ]);
 
-                Log::info('Kategori berhasil diperbarui.');
+                Log::info('Kategori berhasil diperbarui.', ['id' => $id, 'name' => $category->fbk_category_name]);
 
                 return redirect()->route('admin.feedback-category.index')
                     ->with('swal_success_crud', 'Kategori berhasil diperbarui.');
@@ -146,7 +146,7 @@ class FeedbackCategoryController extends Controller
 
                 $category->delete();
 
-                Log::info('Kategori berhasil dihapus.');
+                Log::info('Kategori berhasil dihapus.', ['id' => $id]);
 
                 return redirect()->route('admin.feedback-category.index')
                     ->with('swal_success_crud', 'Kategori berhasil dihapus.');

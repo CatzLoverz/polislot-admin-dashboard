@@ -169,7 +169,9 @@ class MissionController extends Controller
 
                 $validated['mission_is_active'] = $request->boolean('mission_is_active');
 
-                Mission::create($validated);
+                $mission = Mission::create($validated);
+
+                Log::info('Mission baru ditambahkan.', ['id' => $mission->mission_id, 'title' => $mission->mission_title]);
 
                 return redirect()->route('admin.missions.index')->with('swal_success_crud', 'Misi berhasil ditambahkan.');
             });
@@ -220,6 +222,8 @@ class MissionController extends Controller
                 $validated['mission_is_active'] = $request->boolean('mission_is_active');
 
                 $mission->update($validated);
+
+                Log::info('Mission diperbarui.', ['id' => $mission->mission_id, 'title' => $mission->mission_title]);
 
                 return redirect()->route('admin.missions.index')->with('swal_success_crud', 'Misi berhasil diperbarui.');
             });

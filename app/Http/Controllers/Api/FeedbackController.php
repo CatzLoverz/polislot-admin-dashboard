@@ -36,7 +36,7 @@ class FeedbackController extends Controller
                     'feedback_description' => strip_tags($validatedData['description'] ?? ''),
                 ]);
 
-                Log::info('Feedback tersimpan.');
+                Log::info('Feedback tersimpan.', ['feedback_id' => $feedback->feedback_id]);
 
                 // 3. Kembalikan Response Sukses
                 return $this->sendSuccess('Feedback berhasil dikirim. Terima kasih atas masukan Anda!', [
