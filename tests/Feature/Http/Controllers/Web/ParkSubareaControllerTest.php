@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers\Web;
 
+use \App\Events\SubareaStatusUpdated;
+use \Illuminate\Support\Facades\Event;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
 use App\Models\User;
@@ -29,7 +31,7 @@ class ParkSubareaControllerTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->postJson("/admin/park-area/{$this->area->park_area_id}/subarea", [
             'name' => 'Subarea 1',
-            'polygon' => '[]',
+            'polygon' => '[{"lat":-6.2,"lng":106.8},{"lat":-6.21,"lng":106.81},{"lat":-6.22,"lng":106.82}]',
         ]);
         $response->assertStatus(200)->assertJson(['status' => 'success']);
         $this->assertDatabaseHas('park_subareas', ['park_subarea_name' => 'Subarea 1']);
@@ -38,14 +40,26 @@ class ParkSubareaControllerTest extends TestCase
     #[Test]
     public function update_modifies_park_subarea()
     {
-        \Illuminate\Support\Facades\Event::fake([\App\Events\SubareaStatusUpdated::class]);
+        Event::fake([SubareaStatusUpdated::class]);
         $sub = ParkSubarea::create(['park_area_id' => $this->area->park_area_id, 'park_subarea_name' => 'Old', 'park_subarea_polygon' => '[]', 'max_slots' => 5]);
         $response = $this->actingAs($this->admin)->putJson("/admin/park-subarea/{$sub->park_subarea_id}", [
             'name' => 'New',
-            'polygon' => '[]',
+            'polygon' => '[{"lat":-6.2,"lng":106.8},{"lat":-6.21,"lng":106.81},{"lat":-6.22,"lng":106.82}]',
         ]);
         $response->assertStatus(200)->assertJson(['status' => 'success']);
         $this->assertDatabaseHas('park_subareas', ['park_subarea_name' => 'New']);
+    }
+
+    #[Test]
+    public function update_with_fewer_than_three_points_deletes_subarea()
+    {
+        $sub = ParkSubarea::create(['park_area_id' => $this->area->park_area_id, 'park_subarea_name' => 'Old', 'park_subarea_polygon' => '[]', 'max_slots' => 5]);
+        $response = $this->actingAs($this->admin)->putJson("/admin/park-subarea/{$sub->park_subarea_id}", [
+            'name' => 'Old',
+            'polygon' => '[{"lat":-6.2,"lng":106.8},{"lat":-6.21,"lng":106.81}]',
+        ]);
+        $response->assertStatus(200)->assertJson(['status' => 'success', 'deleted' => true]);
+        $this->assertDatabaseMissing('park_subareas', ['park_subarea_id' => $sub->park_subarea_id]);
     }
 
     #[Test]

@@ -29,7 +29,23 @@ class ParkSubareaController extends Controller
                 // Validasi Input
                 $request->validate([
                     'name' => 'required|string|max:255',
-                    'polygon' => 'required|json', // Harus string JSON valid koordinat
+                    'polygon' => [
+                        'required',
+                        'json',
+                        function ($attribute, $value, $fail) {
+                            $coords = json_decode($value, true);
+                            if (!is_array($coords) || count($coords) < 3) {
+                                $fail('Polygon harus memiliki minimal 3 sudut.');
+                                return;
+                            }
+                            foreach ($coords as $point) {
+                                if (!is_array($point) || !isset($point['lat']) || !isset($point['lng'])) {
+                                    $fail('Format koordinat polygon tidak valid.');
+                                    return;
+                                }
+                            }
+                        }
+                    ],
                 ]);
 
                 // Pastikan Area Induk valid
@@ -81,12 +97,62 @@ class ParkSubareaController extends Controller
             return DB::transaction(function () use ($request, $id) {
                 $subarea = ParkSubarea::findOrFail($id);
 
+                // Hapus subarea jika input polygon dikirim dan kosong atau kurang dari 3 sudut
+                $deleteSubarea = false;
+                if ($request->has('polygon')) {
+                    $polygonVal = $request->input('polygon');
+                    if (is_null($polygonVal) || $polygonVal === '' || $polygonVal === '[]') {
+                        $deleteSubarea = true;
+                    } else {
+                        $coords = json_decode($polygonVal, true);
+                        if (json_last_error() === JSON_ERROR_NONE) {
+                            if (is_array($coords) && count($coords) < 3) {
+                                $deleteSubarea = true;
+                            }
+                        }
+                    }
+                }
+
+                if ($deleteSubarea) {
+                    if ($subarea->iotDevice) {
+                        $subarea->iotDevice->delete();
+                    }
+                    $subarea->delete();
+
+                    Log::info('Subarea dihapus karena poligon dihapus atau kurang dari 3 sudut.', [
+                        'subarea_id' => $id,
+                        'name' => $subarea->park_subarea_name,
+                    ]);
+
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Subarea berhasil dihapus karena poligon dihapus.',
+                        'deleted' => true,
+                    ]);
+                }
+
                 // Ambil device_id milik subarea ini (untuk self-exclude unique check)
                 $currentDeviceId = $subarea->iotDevice?->device_id;
 
                 $request->validate([
                     'name' => 'required|string|max:255',
-                    'polygon' => 'nullable|json',
+                    'polygon' => [
+                        'nullable',
+                        'json',
+                        function ($attribute, $value, $fail) {
+                            $coords = json_decode($value, true);
+                            if (!is_array($coords) || count($coords) < 3) {
+                                $fail('Polygon harus memiliki minimal 3 sudut.');
+                                return;
+                            }
+                            foreach ($coords as $point) {
+                                if (!is_array($point) || !isset($point['lat']) || !isset($point['lng'])) {
+                                    $fail('Format koordinat polygon tidak valid.');
+                                    return;
+                                }
+                            }
+                        }
+                    ],
                     'amenities' => 'nullable|array',
                     'amenities.*' => 'string|max:255',
                     'device_mac_address' => [

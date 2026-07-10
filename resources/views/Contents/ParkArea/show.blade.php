@@ -653,8 +653,18 @@
             type: "POST",
             data: { _token: "{{ csrf_token() }}", _method: "PUT", name: name, polygon: polygonJson },
             success: function(res) {
-                const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
-                Toast.fire({ icon: 'success', title: 'Peta tersimpan otomatis!' });
+                if (res.deleted) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Subarea Dihapus',
+                        text: 'Subarea otomatis dihapus karena polygon memiliki kurang dari 3 sudut.',
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
+                    Toast.fire({ icon: 'success', title: 'Peta tersimpan otomatis!' });
+                }
             }
         });
     }
