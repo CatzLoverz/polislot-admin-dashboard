@@ -334,7 +334,8 @@ $(document).ready(function() {
     /* ================================================================
      * Main adjust function — triggered on any radio change
      * ================================================================ */
-    function adjustMissionOptions() {
+    function adjustMissionOptions(isInitializing) {
+        isInitializing = typeof isInitializing !== 'undefined' ? isInitializing : false;
         var metric = $('input[name="mission_metric_code"]:checked').val();
         if (!metric) return; // nothing chosen yet
 
@@ -408,7 +409,7 @@ $(document).ready(function() {
             $('#hintThreshold').text('Event ini hanya membutuhkan 1 kali aksi dan tidak bisa diubah.');
         } else {
             $('#inputThreshold').prop('readonly', false);
-            if ($('#inputThreshold').val() == 1 && metric !== 'PROFILE_UPDATE') {
+            if (!isInitializing && $('#inputThreshold').val() == 1 && metric !== 'PROFILE_UPDATE') {
                 $('#inputThreshold').val(''); // clear placeholder-like locked value
             }
         }
@@ -416,7 +417,7 @@ $(document).ready(function() {
 
     /* Listen on all radio changes */
     $(document).on('change', 'input[name="mission_metric_code"], input[name="mission_type"]', function() {
-        adjustMissionOptions();
+        adjustMissionOptions(false);
     });
 
     /* ================================================================
@@ -438,7 +439,7 @@ $(document).ready(function() {
         $('input[name="mission_is_active"][value="1"]').prop('checked', true);
         $('#inputThreshold').prop('readonly', false);
 
-        adjustMissionOptions();
+        adjustMissionOptions(true);
     }
 
     /* ================================================================
@@ -477,7 +478,7 @@ $(document).ready(function() {
         $('input[name="mission_reset_cycle"][value="' + row.mission_reset_cycle  + '"]').prop('checked', true);
         $('input[name="mission_is_active"][value="'   + (row.mission_is_active ? '1' : '0') + '"]').prop('checked', true);
 
-        adjustMissionOptions();
+        adjustMissionOptions(true);
 
         $('#modalMission').modal('show');
     });
