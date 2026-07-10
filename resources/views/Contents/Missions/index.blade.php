@@ -127,8 +127,8 @@
                             <input type="number" name="mission_points" class="form-control" placeholder="0" min="0" required>
                         </div>
                         <div class="col-md-12 form-group">
-                            <label>Deskripsi Singkat</label>
-                            <textarea name="mission_description" class="form-control" rows="2" placeholder="Masukkan Deskripsi Misi"></textarea>
+                            <label>Deskripsi Singkat <span class="text-danger">*</span></label>
+                            <textarea name="mission_description" class="form-control" rows="2" placeholder="Masukkan Deskripsi Misi" required></textarea>
                         </div>
                     </div>
 

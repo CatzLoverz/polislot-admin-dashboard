@@ -147,7 +147,7 @@ class MissionController extends Controller
             return DB::transaction(function () use ($request) {
                 $validated = $request->validate([
                     'mission_title'       => 'required|string|max:255|unique:missions,mission_title',
-                    'mission_description' => 'nullable|string',
+                    'mission_description' => 'required|string',
                     'mission_points'      => 'required|integer|min:0',
                     'mission_type'        => ['required', Rule::in(array_keys(Mission::TYPES))],
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
@@ -199,7 +199,7 @@ class MissionController extends Controller
 
                 $validated = $request->validate([
                     'mission_title'       => ['required', 'string', 'max:255', Rule::unique('missions', 'mission_title')->ignore($mission->mission_id, 'mission_id')],
-                    'mission_description' => 'nullable|string',
+                    'mission_description' => 'required|string',
                     'mission_points'      => 'required|integer|min:0',
                     'mission_type'        => ['required', Rule::in(array_keys(Mission::TYPES))],
                     'mission_metric_code' => ['required', Rule::in(array_keys(Mission::METRICS))],
