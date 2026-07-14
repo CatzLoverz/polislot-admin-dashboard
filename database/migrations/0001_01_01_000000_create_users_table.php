@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->string('reset_token')->nullable();        // Token khusus reset via email login
-            $table->timestamp('reset_token_expires_at')->nullable(); // Expiry token tersebut
             $table->integer('failed_attempts')->default(0);
             $table->timestamp('locked_until')->nullable();
             $table->rememberToken();

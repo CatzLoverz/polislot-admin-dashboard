@@ -294,7 +294,6 @@ class AuthController extends Controller
                     'failed_attempts'        => 0,
                     'locked_until'           => null,
                     'reset_token'            => $resetToken,
-                    'reset_token_expires_at' => now()->addHours(1),
                 ]);
 
                 // Kirim email notifikasi login (dibatasi 1 email per 5 menit per user untuk mencegah flooding)
@@ -462,24 +461,18 @@ class AuthController extends Controller
                 $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
 
                 // Verifikasi token dari kolom reset_token (terpisah dari otp_code)
-                if (
-                    !$user->reset_token ||
-                    !hash_equals($user->reset_token, $request->token) ||
-                    Carbon::now()->gt($user->reset_token_expires_at)
-                ) {
-                    Log::warning('Token reset tidak valid atau kadaluarsa.');
+                if (!$user->reset_token || !hash_equals($user->reset_token, $request->token)) {
+                    Log::warning('Token reset tidak valid.');
                     return $this->sendError('Link pemulihan tidak valid atau sudah kadaluarsa (hanya bisa dipakai sekali).', 400);
                 }
 
                 if (Hash::check($request->password, $user->password)) {
                     Log::warning('Password baru sama dengan lama.');
-
                     return $this->sendError('Password baru tidak boleh sama dengan yang lama.', 400);
                 }
 
                 $user->password       = Hash::make($request->password);
                 $user->reset_token            = null;  // Hapus token setelah dipakai (single-use)
-                $user->reset_token_expires_at = null;
                 $user->failed_attempts = 0;
                 $user->locked_until    = null;
                 $user->save();
