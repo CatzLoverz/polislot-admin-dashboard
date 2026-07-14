@@ -11,6 +11,12 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="Stress">
+            <directory>tests/Stress</directory>
+        </testsuite>
+        <testsuite name="Performance">
+            <directory>tests/Performance</directory>
+        </testsuite>
     </testsuites>
     <source>
         <include>
@@ -29,9 +35,9 @@
         <env name="BROADCAST_DRIVER" value="log"/>
 
         <env name="DB_CONNECTION" value="mariadb"/>
-        
+
         <env name="DB_DATABASE" value="polislot_testing"/>
-        
+
         <env name="DB_MOBILE_DATABASE" value="polislot_testing"/>
 
         <env name="DB_USERNAME" value="admin"/>
