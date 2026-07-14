@@ -203,10 +203,9 @@ class SubareaCommentController extends Controller
      */
     public function destroy(Request $request, $id): JsonResponse
     {
-        $comment = SubareaComment::findOrFail($id);
-
         try {
-            return DB::transaction(function () use ($request, $comment) {
+            $comment = SubareaComment::findOrFail($id);
+            return DB::transaction(function () use ($request, $comment, $id) {
                 // Cek Kepemilikan (Authorization)
                 if ($comment->user_id !== $request->user()->user_id) {
                     throw new Exception('Anda tidak berhak menghapus komentar ini.', 403);
@@ -224,7 +223,9 @@ class SubareaCommentController extends Controller
                 $subarea = ParkSubarea::find($comment->park_subarea_id);
                 if ($subarea) {
                     DB::afterCommit(function () use ($subarea) {
-                        broadcast(new SubareaStatusUpdated($subarea));
+                        try {
+                            broadcast(new SubareaStatusUpdated($subarea));
+                        } catch (\Throwable) {}
                     });
                 }
 

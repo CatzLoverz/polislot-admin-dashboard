@@ -128,6 +128,7 @@ class SubareaCommentControllerTest extends TestCase
 
         $response = $this->deleteJson("/api/comment/{$commentId}");
 
+        dump($response->getContent());
         $response->assertStatus(200)
             ->assertJson(['message' => 'Komentar berhasil dihapus.']);
 

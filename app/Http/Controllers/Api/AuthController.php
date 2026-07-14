@@ -473,6 +473,8 @@ class AuthController extends Controller
 
                 $user->password       = Hash::make($request->password);
                 $user->reset_token            = null;  // Hapus token setelah dipakai (single-use)
+                $user->otp_code       = null;
+                $user->otp_expires_at = null;
                 $user->failed_attempts = 0;
                 $user->locked_until    = null;
                 $user->save();
