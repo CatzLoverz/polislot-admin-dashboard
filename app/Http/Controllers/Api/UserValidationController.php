@@ -26,6 +26,12 @@ class UserValidationController extends Controller
 
     protected $historyService;
 
+    /**
+     * Konstruktor.
+     *
+     * @param MissionService $missionService Service misi
+     * @param HistoryService $historyService Service history
+     */
     public function __construct(MissionService $missionService, HistoryService $historyService)
     {
         $this->missionService = $missionService;
@@ -34,6 +40,9 @@ class UserValidationController extends Controller
 
     /**
      * Memproses validasi parkir dari user.
+     *
+     * @param  Request  $request  Input (subarea_id, content, lokasi)
+     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {

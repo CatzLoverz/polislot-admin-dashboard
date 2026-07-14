@@ -1,0 +1,56 @@
+{
+  "allowlist": [
+    {
+      "command": "git status",
+      "description": "Check git status"
+    },
+    {
+      "command": "git diff",
+      "description": "View git diff"
+    },
+    {
+      "command": "git log",
+      "description": "View git log"
+    },
+    {
+      "command": "ls -la",
+      "description": "List files"
+    },
+    {
+      "command": "mkdir -p",
+      "description": "Create directories"
+    },
+    {
+      "command": "composer install",
+      "description": "Install PHP dependencies"
+    },
+    {
+      "command": "composer require",
+      "description": "Add PHP dependency"
+    },
+    {
+      "command": "php artisan",
+      "description": "Run artisan commands"
+    },
+    {
+      "command": "./vendor/bin/pint",
+      "description": "Run Laravel Pint formatting"
+    },
+    {
+      "command": "./vendor/bin/pint --test",
+      "description": "Test Laravel Pint formatting"
+    },
+    {
+      "command": "chmod +x",
+      "description": "Make file executable"
+    },
+    {
+      "command": "find app",
+      "description": "Search in app directory"
+    },
+    {
+      "command": "grep -r",
+      "description": "Search files recursively"
+    }
+  ]
+}

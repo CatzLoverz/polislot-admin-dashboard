@@ -13,6 +13,11 @@ class DbList extends Command
 
     protected $description = 'Menampilkan daftar file backup database di folder storage/backups';
 
+    /**
+     * Jalankan perintah.
+     *
+     * @return int Status keberhasilan perintah
+     */
     public function handle()
     {
         $rootBackupPath = storage_path('app/backups');

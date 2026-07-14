@@ -12,6 +12,8 @@ class UserFaqController extends Controller
 {
     /**
      * Ambil semua data FAQ dari yang terbaru.
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {

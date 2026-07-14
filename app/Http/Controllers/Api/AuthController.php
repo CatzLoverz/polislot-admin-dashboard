@@ -25,7 +25,11 @@ class AuthController extends Controller
 {
     protected $missionService;
 
-    // Inject MissionService via Constructor
+    /**
+     * Konstruktor.
+     *
+     * @param MissionService $missionService Service misi
+     */
     public function __construct(MissionService $missionService)
     {
         $this->missionService = $missionService;

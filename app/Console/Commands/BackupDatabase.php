@@ -16,6 +16,11 @@ class BackupDatabase extends Command
 
     protected $description = 'Backup database MySQL/MariaDB (Fleksibel Win/Linux)';
 
+    /**
+     * Jalankan perintah backup.
+     *
+     * @return int Status keberhasilan perintah (0 untuk sukses, 1 untuk gagal)
+     */
     public function handle()
     {
         $config = config('database.connections.mariadb');

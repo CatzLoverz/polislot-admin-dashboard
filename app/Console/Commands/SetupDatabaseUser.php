@@ -21,6 +21,11 @@ class SetupDatabaseUser extends Command
      */
     protected $description = 'Membuat user database user dan menyetel privilege.';
 
+    /**
+     * Jalankan perintah setup user.
+     *
+     * @return int Status keberhasilan perintah
+     */
     public function handle()
     {
         $username = $this->argument('username');

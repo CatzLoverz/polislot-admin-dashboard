@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 
 class LoginNotificationMail extends Mailable
 {
@@ -18,6 +19,15 @@ class LoginNotificationMail extends Mailable
     public $userAgent;
     public $token;
 
+    /**
+     * Konstruktor mail notifikasi login.
+     *
+     * @param User $user User yang melakukan login
+     * @param string $loginTime Waktu login
+     * @param string $ipAddress Alamat IP
+     * @param string $userAgent User agent browser
+     * @param string $token Token untuk verifikasi
+     */
     public function __construct($user, $loginTime, $ipAddress, $userAgent, $token)
     {
         $this->user = $user;
@@ -27,6 +37,11 @@ class LoginNotificationMail extends Mailable
         $this->token = $token;
     }
 
+    /**
+     * Konfigurasi envelope email.
+     *
+     * @return Envelope
+     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -34,6 +49,11 @@ class LoginNotificationMail extends Mailable
         );
     }
 
+    /**
+     * Konfigurasi konten email.
+     *
+     * @return Content
+     */
     public function content(): Content
     {
         return new Content(
@@ -41,6 +61,11 @@ class LoginNotificationMail extends Mailable
         );
     }
 
+    /**
+     * Lampiran email.
+     *
+     * @return array
+     */
     public function attachments(): array
     {
         return [];

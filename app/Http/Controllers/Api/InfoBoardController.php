@@ -12,6 +12,8 @@ class InfoBoardController extends Controller
 {
     /**
      * Ambil data info board dari yang terbaru.
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {

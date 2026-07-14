@@ -18,6 +18,11 @@ class MissionController extends Controller
 {
     protected $missionService;
 
+    /**
+     * Konstruktor.
+     *
+     * @param MissionService $missionService Service misi
+     */
     public function __construct(MissionService $missionService)
     {
         $this->missionService = $missionService;
@@ -25,11 +30,10 @@ class MissionController extends Controller
 
     /**
      * Mengambil data halaman Misi & Leaderboard secara agregat.
-     * Data mencakup:
-     * 1. Statistik User (Total Misi Selesai & Lifetime Points)
-     * 2. Daftar Misi Aktif beserta progres user saat ini
-     * 3. Leaderboard Top 20 berdasarkan Lifetime Points
-     * 4. Posisi User saat ini di Leaderboard
+     * Data mencakup: statistik user (total misi selesai & lifetime points),
+     * daftar misi aktif dengan progres, leaderboard top 20, dan posisi user saat ini.
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {

@@ -30,11 +30,21 @@ class UserMission extends Model
         'user_mission_completed_at' => 'datetime',
     ];
 
+    /**
+     * Relasi ke user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
+    /**
+     * Relasi ke misi.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function mission(): BelongsTo
     {
         return $this->belongsTo(Mission::class, 'mission_id', 'mission_id');

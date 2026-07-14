@@ -15,6 +15,11 @@ class BackupClean extends Command
 
     protected $description = 'Hapus file backup lama dari folder storage/app/backups/manual';
 
+    /**
+     * Hapus file backup lama.
+     *
+     * @return int Status keberhasilan perintah
+     */
     public function handle()
     {
         $days = (int) $this->option('days');

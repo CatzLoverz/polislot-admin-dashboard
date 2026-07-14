@@ -19,6 +19,11 @@ class RewardController extends Controller
 {
     protected $historyService;
 
+    /**
+     * Konstruktor.
+     *
+     * @param HistoryService $historyService Service history
+     */
     public function __construct(HistoryService $historyService)
     {
         $this->historyService = $historyService;
@@ -26,6 +31,8 @@ class RewardController extends Controller
 
     /**
      * Mengambil daftar reward yang tersedia dan poin user saat ini.
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -60,6 +67,9 @@ class RewardController extends Controller
 
     /**
      * Melakukan penukaran reward (Redeem).
+     *
+     * @param  Request  $request  Input (reward_id)
+     * @return JsonResponse
      */
     public function redeem(Request $request): JsonResponse
     {
@@ -126,6 +136,8 @@ class RewardController extends Controller
 
     /**
      * Mengambil riwayat penukaran reward user.
+     *
+     * @return JsonResponse
      */
     public function history(): JsonResponse
     {

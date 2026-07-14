@@ -18,6 +18,13 @@ class SendOtpMail extends Mailable
 
     public $subject;
 
+    /**
+     * Konstruktor mail.
+     *
+     * @param string $otpCode Kode OTP yang akan dikirim
+     * @param string $viewName Nama view email yang digunakan
+     * @param string $subject Subjek email
+     */
     public function __construct($otpCode, $viewName, $subject)
     {
         $this->otpCode = $otpCode;
@@ -25,6 +32,11 @@ class SendOtpMail extends Mailable
         $this->subject = $subject;
     }
 
+    /**
+     * Konfigurasi envelope email.
+     *
+     * @return Envelope
+     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -32,6 +44,11 @@ class SendOtpMail extends Mailable
         );
     }
 
+    /**
+     * Konfigurasi konten email.
+     *
+     * @return Content
+     */
     public function content(): Content
     {
         return new Content(
@@ -39,6 +56,11 @@ class SendOtpMail extends Mailable
         );
     }
 
+    /**
+     * Lampiran email.
+     *
+     * @return array
+     */
     public function attachments(): array
     {
         return [];

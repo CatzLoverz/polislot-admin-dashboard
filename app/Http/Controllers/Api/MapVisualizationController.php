@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Log;
 class MapVisualizationController extends Controller
 {
     /**
-     * Menampilkan list Area parkir
+     * Menampilkan list area parkir dengan jumlah subarea.
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -38,9 +40,11 @@ class MapVisualizationController extends Controller
     }
 
     /**
-     * Menampilkan detail Area beserta Subarea, Polygon, Amenities, Status, dan Jumlah Komentar.
+     * Menampilkan detail area beserta subarea, polygon, amenities, status, dan jumlah komentar.
      *
-     * @param  int  $id  (park_area_id)
+     * @param  Request  $request  Request dengan user terautentikasi
+     * @param  int  $id  ID ParkArea
+     * @return JsonResponse
      */
     public function show(Request $request, $id): JsonResponse
     {

@@ -21,6 +21,11 @@ class SetupDatabaseAdmin extends Command
      */
     protected $description = 'Membuat user database admin dan menyetel privilege.';
 
+    /**
+     * Jalankan perintah setup admin.
+     *
+     * @return int Status keberhasilan perintah
+     */
     public function handle()
     {
         $username = $this->argument('username');

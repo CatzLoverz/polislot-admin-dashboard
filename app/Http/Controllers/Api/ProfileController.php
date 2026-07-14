@@ -19,6 +19,11 @@ class ProfileController extends Controller
 {
     protected $missionService;
 
+    /**
+     * Konstruktor.
+     *
+     * @param MissionService $missionService Service misi
+     */
     public function __construct(MissionService $missionService)
     {
         $this->missionService = $missionService;
@@ -26,6 +31,8 @@ class ProfileController extends Controller
 
     /**
      * Menampilkan data profil pengguna.
+     *
+     * @return JsonResponse
      */
     public function show(Request $request): JsonResponse
     {
@@ -41,7 +48,10 @@ class ProfileController extends Controller
     }
 
     /**
-     * Memperbarui data profil pengguna.
+     * Memperbarui data profil pengguna (nama/avatar/password).
+     *
+     * @param  Request  $request  Input (name, avatar, new_password, etc)
+     * @return JsonResponse
      */
     public function update(Request $request): JsonResponse
     {

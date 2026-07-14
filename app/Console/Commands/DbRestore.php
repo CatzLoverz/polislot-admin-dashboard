@@ -13,6 +13,11 @@ class DbRestore extends Command
 
     protected $description = 'Restore database dari file SQL di storage/backups';
 
+    /**
+     * Jalankan perintah restore.
+     *
+     * @return int Status keberhasilan perintah
+     */
     public function handle()
     {
         $filename = $this->argument('filename');

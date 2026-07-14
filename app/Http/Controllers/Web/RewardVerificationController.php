@@ -18,6 +18,11 @@ class RewardVerificationController extends Controller
 {
     protected $historyService;
 
+    /**
+     * Konstruktor.
+     *
+     * @param HistoryService $historyService Service history
+     */
     public function __construct(HistoryService $historyService)
     {
         $this->historyService = $historyService;

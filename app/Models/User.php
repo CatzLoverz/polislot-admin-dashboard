@@ -38,6 +38,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * Dapatkan attribute casting.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

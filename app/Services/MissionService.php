@@ -14,6 +14,11 @@ class MissionService
     protected $historyService;
 
     // 3. Inject via Constructor
+    /**
+     * Konstruktor.
+     *
+     * @param HistoryService $historyService Service history
+     */
     public function __construct(HistoryService $historyService)
     {
         $this->historyService = $historyService;

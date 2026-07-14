@@ -15,7 +15,10 @@ use Illuminate\Validation\ValidationException;
 class FeedbackController extends Controller
 {
     /**
-     * Mempproses penyimpanan feedback baru dari pengguna.
+     * Memproses penyimpanan feedback baru dari pengguna.
+     *
+     * @param  Request  $request  Data input (category, title, description)
+     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {

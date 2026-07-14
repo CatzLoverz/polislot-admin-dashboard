@@ -16,6 +16,11 @@ class BackupAuto extends Command
 
     protected $description = 'Backup database (Fleksibel Win/Linux) untuk scheduler';
 
+    /**
+     * Jalankan perintah backup otomatis.
+     *
+     * @return int Status keberhasilan perintah
+     */
     public function handle()
     {
         $filename = $this->argument('filename');
