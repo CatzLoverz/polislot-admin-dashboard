@@ -1,0 +1,2015 @@
+{
+  "communities": {
+    "0": [
+      "app_console_commands_mqttlistenercommand",
+      "app_events_iotcommandsent",
+      "app_events_iotcommandsent_iotcommandsent",
+      "app_events_iotcommandsent_iotcommandsent_broadcastas",
+      "app_events_iotcommandsent_iotcommandsent_broadcaston",
+      "app_events_iotcommandsent_iotcommandsent_construct",
+      "app_events_iotcountupdated",
+      "app_events_iotcountupdated_iotcountupdated",
+      "app_events_iotcountupdated_iotcountupdated_broadcastas",
+      "app_events_iotcountupdated_iotcountupdated_broadcaston",
+      "app_events_iotcountupdated_iotcountupdated_construct",
+      "app_events_iotdetectionreceived",
+      "app_events_iotdetectionreceived_iotdetectionreceived",
+      "app_events_iotdetectionreceived_iotdetectionreceived_broadcastas",
+      "app_events_iotdetectionreceived_iotdetectionreceived_broadcaston",
+      "app_events_iotdetectionreceived_iotdetectionreceived_construct",
+      "app_events_iotdevicestatuschanged",
+      "app_events_iotdevicestatuschanged_iotdevicestatuschanged",
+      "app_events_iotdevicestatuschanged_iotdevicestatuschanged_broadcastas",
+      "app_events_iotdevicestatuschanged_iotdevicestatuschanged_broadcaston",
+      "app_events_iotdevicestatuschanged_iotdevicestatuschanged_construct",
+      "app_events_iotthresholdupdated",
+      "app_events_iotthresholdupdated_iotthresholdupdated",
+      "app_events_iotthresholdupdated_iotthresholdupdated_broadcastas",
+      "app_events_iotthresholdupdated_iotthresholdupdated_broadcaston",
+      "app_events_iotthresholdupdated_iotthresholdupdated_construct",
+      "app_events_subareastatusupdated",
+      "app_events_subareastatusupdated_subareastatusupdated",
+      "app_events_subareastatusupdated_subareastatusupdated_broadcastas",
+      "app_events_subareastatusupdated_subareastatusupdated_broadcaston",
+      "app_events_subareastatusupdated_subareastatusupdated_construct",
+      "app_http_controllers_api_iotdetectioncontroller",
+      "app_http_controllers_api_iotwebhookcontroller",
+      "app_http_controllers_api_iotwsauthcontroller",
+      "app_http_controllers_api_iotwsauthcontroller_iotwsauthcontroller",
+      "app_http_controllers_api_iotwsauthcontroller_iotwsauthcontroller_authenticate",
+      "app_http_controllers_api_iotwsauthcontroller_php_jsonresponse",
+      "app_http_controllers_api_iotwsauthcontroller_php_request",
+      "app_http_controllers_api_uservalidationcontroller",
+      "app_http_controllers_api_uservalidationcontroller_php_jsonresponse",
+      "app_http_controllers_api_uservalidationcontroller_php_request",
+      "app_http_controllers_api_uservalidationcontroller_uservalidationcontroller",
+      "app_http_controllers_api_uservalidationcontroller_uservalidationcontroller_calculatedistance",
+      "app_http_controllers_api_uservalidationcontroller_uservalidationcontroller_store",
+      "app_http_controllers_web_iotdetectioncontroller",
+      "app_models_iotdevice",
+      "app_models_parksubarea",
+      "app_models_uservalidation",
+      "app_models_uservalidation_php_belongsto",
+      "app_models_uservalidation_uservalidation",
+      "app_models_uservalidation_uservalidation_parksubarea",
+      "app_models_uservalidation_uservalidation_user",
+      "belongsto",
+      "config_cache",
+      "dispatchable",
+      "hasone",
+      "interactswithsockets",
+      "routes_api",
+      "serializesmodels",
+      "shouldbroadcastnow",
+      "tests_unit_scrubandtraceprocessortest"
+    ],
+    "1": [
+      "app_http_controllers_api_historycontroller",
+      "app_http_controllers_api_historycontroller_historycontroller",
+      "app_http_controllers_api_historycontroller_historycontroller_index",
+      "app_http_controllers_api_historycontroller_php_jsonresponse",
+      "app_http_controllers_api_historycontroller_php_request",
+      "app_http_controllers_api_mapvisualizationcontroller",
+      "app_http_controllers_api_mapvisualizationcontroller_mapvisualizationcontroller",
+      "app_http_controllers_api_mapvisualizationcontroller_mapvisualizationcontroller_index",
+      "app_http_controllers_api_mapvisualizationcontroller_mapvisualizationcontroller_show",
+      "app_http_controllers_api_mapvisualizationcontroller_php_jsonresponse",
+      "app_http_controllers_api_mapvisualizationcontroller_php_request",
+      "app_http_controllers_api_profilecontroller",
+      "app_http_controllers_api_profilecontroller_php_jsonresponse",
+      "app_http_controllers_api_profilecontroller_php_missionservice",
+      "app_http_controllers_api_profilecontroller_php_request",
+      "app_http_controllers_api_profilecontroller_profilecontroller",
+      "app_http_controllers_api_profilecontroller_profilecontroller_construct",
+      "app_http_controllers_api_profilecontroller_profilecontroller_show",
+      "app_http_controllers_api_profilecontroller_profilecontroller_update",
+      "app_http_controllers_api_userfaqcontroller",
+      "app_http_controllers_api_userfaqcontroller_php_jsonresponse",
+      "app_http_controllers_api_userfaqcontroller_userfaqcontroller",
+      "app_http_controllers_api_userfaqcontroller_userfaqcontroller_index",
+      "app_http_controllers_controller",
+      "app_http_controllers_controller_controller",
+      "app_http_controllers_controller_controller_formatuser",
+      "app_http_controllers_controller_controller_senderror",
+      "app_http_controllers_controller_controller_sendsuccess",
+      "app_http_controllers_controller_controller_sendvalidationerror",
+      "app_http_controllers_controller_php_jsonresponse",
+      "app_http_controllers_web_parkamenitycontroller",
+      "app_http_controllers_web_parkamenitycontroller_parkamenitycontroller",
+      "app_http_controllers_web_parkamenitycontroller_parkamenitycontroller_destroy",
+      "app_http_controllers_web_parkamenitycontroller_parkamenitycontroller_store",
+      "app_http_controllers_web_parkamenitycontroller_php_jsonresponse",
+      "app_http_controllers_web_parkamenitycontroller_php_request",
+      "app_http_controllers_web_profilecontroller",
+      "app_http_controllers_web_profilecontroller_php_redirectresponse",
+      "app_http_controllers_web_profilecontroller_php_request",
+      "app_http_controllers_web_profilecontroller_php_view",
+      "app_http_controllers_web_profilecontroller_profilecontroller",
+      "app_http_controllers_web_profilecontroller_profilecontroller_edit",
+      "app_http_controllers_web_profilecontroller_profilecontroller_update",
+      "app_models_parkamenity",
+      "app_models_parkamenity_parkamenity",
+      "app_models_parkamenity_parkamenity_parksubarea",
+      "app_models_parkamenity_php_belongsto",
+      "app_rules_notcurrentpassword",
+      "app_rules_notcurrentpassword_notcurrentpassword",
+      "app_rules_notcurrentpassword_notcurrentpassword_validate",
+      "app_rules_notcurrentpassword_php_closure",
+      "authorizesrequests",
+      "basecontroller",
+      "validatesrequests",
+      "validationexception",
+      "validationrule"
+    ],
+    "2": [
+      "app_http_controllers_api_feedbackcontroller",
+      "app_http_controllers_api_feedbackcontroller_feedbackcontroller",
+      "app_http_controllers_api_feedbackcontroller_feedbackcontroller_store",
+      "app_http_controllers_api_feedbackcontroller_php_jsonresponse",
+      "app_http_controllers_api_feedbackcontroller_php_request",
+      "app_http_controllers_api_subareacommentcontroller",
+      "app_http_controllers_api_subareacommentcontroller_php_jsonresponse",
+      "app_http_controllers_api_subareacommentcontroller_php_request",
+      "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller",
+      "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller_destroy",
+      "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller_index",
+      "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller_store",
+      "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller_update",
+      "app_http_controllers_web_feedbackcategorycontroller",
+      "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller",
+      "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller_destroy",
+      "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller_index",
+      "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller_store",
+      "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller_update",
+      "app_http_controllers_web_feedbackcategorycontroller_php_redirectresponse",
+      "app_http_controllers_web_feedbackcategorycontroller_php_request",
+      "app_http_controllers_web_missioncontroller",
+      "app_http_controllers_web_missioncontroller_missioncontroller",
+      "app_http_controllers_web_missioncontroller_missioncontroller_destroy",
+      "app_http_controllers_web_missioncontroller_missioncontroller_index",
+      "app_http_controllers_web_missioncontroller_missioncontroller_store",
+      "app_http_controllers_web_missioncontroller_missioncontroller_update",
+      "app_http_controllers_web_missioncontroller_missioncontroller_validatecrossfieldrules",
+      "app_http_controllers_web_missioncontroller_php_redirectresponse",
+      "app_http_controllers_web_missioncontroller_php_request",
+      "app_http_controllers_web_parksubareacontroller",
+      "app_http_controllers_web_parksubareacontroller_parksubareacontroller",
+      "app_http_controllers_web_parksubareacontroller_parksubareacontroller_destroy",
+      "app_http_controllers_web_parksubareacontroller_parksubareacontroller_getcomments",
+      "app_http_controllers_web_parksubareacontroller_parksubareacontroller_store",
+      "app_http_controllers_web_parksubareacontroller_parksubareacontroller_update",
+      "app_http_controllers_web_parksubareacontroller_php_jsonresponse",
+      "app_http_controllers_web_parksubareacontroller_php_redirectresponse",
+      "app_http_controllers_web_parksubareacontroller_php_request",
+      "app_http_controllers_web_userfaqcontroller",
+      "app_http_controllers_web_userfaqcontroller_php_redirectresponse",
+      "app_http_controllers_web_userfaqcontroller_php_request",
+      "app_http_controllers_web_userfaqcontroller_userfaqcontroller",
+      "app_http_controllers_web_userfaqcontroller_userfaqcontroller_destroy",
+      "app_http_controllers_web_userfaqcontroller_userfaqcontroller_index",
+      "app_http_controllers_web_userfaqcontroller_userfaqcontroller_store",
+      "app_http_controllers_web_userfaqcontroller_userfaqcontroller_update",
+      "app_http_controllers_web_validationcontroller",
+      "app_http_controllers_web_validationcontroller_php_redirectresponse",
+      "app_http_controllers_web_validationcontroller_php_request",
+      "app_http_controllers_web_validationcontroller_validationcontroller",
+      "app_http_controllers_web_validationcontroller_validationcontroller_index",
+      "app_http_controllers_web_validationcontroller_validationcontroller_update",
+      "controller"
+    ],
+    "3": [
+      "app_models_user_user",
+      "app_models_user_user_casts",
+      "authenticatable",
+      "hasapitokens",
+      "notifiable",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_auth_check_returns_200_and_triggers_mission_if_cache_empty",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_auth_check_returns_200_but_no_mission_if_cache_exists",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_auth_check_returns_200_even_if_service_fails",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_forgot_attempt_returns_200_on_success",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_forgot_attempt_returns_422_if_email_not_found",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_forgot_otp_resend_returns_200_on_success",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_forgot_otp_resend_returns_500_on_system_error",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_forgot_otp_verify_returns_200_on_success",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_forgot_otp_verify_returns_400_if_invalid_or_expired",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_login_attempt_resets_failures_automatically_if_time_passed",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_login_attempt_returns_200_and_resets_failures",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_login_attempt_returns_401_and_locks_after_4_failures",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_login_attempt_returns_401_if_email_not_found",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_login_attempt_returns_401_if_locked",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_login_attempt_returns_403_if_unverified",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_logout_returns_200_on_success",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_logout_returns_401_if_token_invalid",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_attempt_returns_201_for_new_user",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_attempt_returns_201_overwriting_unverified_user",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_attempt_returns_422_if_validation_fails",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_attempt_returns_500_on_system_error",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_otp_resend_returns_200_on_success",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_otp_resend_returns_400_if_already_verified",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_otp_resend_returns_422_if_email_missing",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_otp_verify_returns_200_on_success",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_otp_verify_returns_400_if_already_verified",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_register_otp_verify_returns_422_if_otp_invalid_or_expired",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_reset_pass_attempt_returns_200_on_success",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_reset_pass_attempt_returns_400_if_password_same_as_old",
+      "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest_reset_pass_attempt_returns_422_if_validation_fails",
+      "tests_feature_http_controllers_api_mapvisualizationcontrollertest_mapvisualizationcontrollertest_show_returns_404_if_not_found",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_index_returns_422_if_no_id",
+      "tests_feature_http_controllers_api_userfaqcontrollertest_userfaqcontrollertest_index_returns_200_when_empty",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_422_if_payload_invalid",
+      "tests_feature_model_usertest_usertest",
+      "tests_feature_model_usertest_usertest_data_user_dapat_didapatkan",
+      "tests_feature_model_usertest_usertest_data_user_dapat_dihapus",
+      "tests_feature_model_usertest_usertest_data_user_dapat_ditambahkan",
+      "tests_feature_model_usertest_usertest_data_user_dapat_diubah"
+    ],
+    "4": [
+      "app_http_controllers_api_missioncontroller",
+      "app_http_controllers_api_missioncontroller_missioncontroller",
+      "app_http_controllers_api_missioncontroller_missioncontroller_construct",
+      "app_http_controllers_api_missioncontroller_missioncontroller_index",
+      "app_http_controllers_api_missioncontroller_php_jsonresponse",
+      "app_models_iotcapture",
+      "app_models_iotcapture_iotcapture",
+      "app_models_iotcapture_iotcapture_device",
+      "app_models_iotcapture_iotcapture_uservalidation",
+      "app_models_iotcapture_php_belongsto",
+      "app_models_mission_mission",
+      "app_models_mission_mission_usermissions",
+      "app_models_mission_php_hasmany",
+      "app_models_subareacomment",
+      "app_models_subareacomment_php_belongsto",
+      "app_models_subareacomment_subareacomment",
+      "app_models_subareacomment_subareacomment_parksubarea",
+      "app_models_subareacomment_subareacomment_user",
+      "app_models_userfaq",
+      "app_models_userfaq_php_belongsto",
+      "app_models_userfaq_userfaq",
+      "app_models_userfaq_userfaq_user",
+      "app_models_userhistory_php_belongsto",
+      "app_models_userhistory_userhistory",
+      "app_models_userhistory_userhistory_user",
+      "app_models_usermission",
+      "app_models_usermission_php_belongsto",
+      "app_models_usermission_usermission",
+      "app_models_usermission_usermission_mission",
+      "app_models_usermission_usermission_user",
+      "app_models_validation",
+      "app_services_missionservice_missionservice",
+      "app_services_missionservice_missionservice_awardpoints",
+      "app_services_missionservice_missionservice_checkandresetcycle",
+      "app_services_missionservice_missionservice_checkresetallmissions",
+      "app_services_missionservice_missionservice_processmission",
+      "app_services_missionservice_missionservice_updateprogress",
+      "hasfactory",
+      "model",
+      "tests_feature_http_controllers_api_historycontrollertest_historycontrollertest_index_returns_200_and_history_list",
+      "tests_feature_http_controllers_api_missioncontrollertest_missioncontrollertest_index_returns_200_and_mission_data",
+      "tests_feature_http_controllers_api_userfaqcontrollertest_userfaqcontrollertest_index_returns_200_and_list"
+    ],
+    "5": [
+      "app_models_reward",
+      "app_models_user",
+      "app_services_missionservice",
+      "basetestcase",
+      "refreshdatabase",
+      "tests_feature_exampletest",
+      "tests_feature_exampletest_exampletest",
+      "tests_feature_exampletest_exampletest_test_the_application_returns_a_successful_response",
+      "tests_feature_http_controllers_api_feedbackcategorycontrollertest",
+      "tests_feature_http_controllers_api_feedbackcategorycontrollertest_feedbackcategorycontrollertest",
+      "tests_feature_http_controllers_api_feedbackcontrollertest",
+      "tests_feature_http_controllers_api_feedbackcontrollertest_feedbackcontrollertest",
+      "tests_feature_http_controllers_api_feedbackcontrollertest_feedbackcontrollertest_setup",
+      "tests_feature_http_controllers_api_feedbackcontrollertest_feedbackcontrollertest_store_returns_201_when_successful",
+      "tests_feature_http_controllers_api_feedbackcontrollertest_feedbackcontrollertest_store_returns_422_if_validation_fails",
+      "tests_feature_http_controllers_api_historycontrollertest",
+      "tests_feature_http_controllers_api_historycontrollertest_historycontrollertest",
+      "tests_feature_http_controllers_api_infoboardcontrollertest",
+      "tests_feature_http_controllers_api_infoboardcontrollertest_infoboardcontrollertest",
+      "tests_feature_http_controllers_api_missioncontrollertest",
+      "tests_feature_http_controllers_api_missioncontrollertest_missioncontrollertest",
+      "tests_feature_http_controllers_api_profilecontrollertest",
+      "tests_feature_http_controllers_api_rewardcontrollertest",
+      "tests_feature_http_controllers_api_userfaqcontrollertest",
+      "tests_feature_http_controllers_api_userfaqcontrollertest_userfaqcontrollertest",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest",
+      "tests_feature_http_controllers_web_dashboardcontrollertest",
+      "tests_feature_http_controllers_web_infoboardcontrollertest",
+      "tests_feature_http_controllers_web_profilecontrollertest",
+      "tests_feature_http_controllers_web_rewardcontrollertest",
+      "tests_feature_http_middleware_rbactest",
+      "tests_feature_model_feedbacktest",
+      "tests_feature_model_infoboardtest",
+      "tests_feature_model_rewardtest",
+      "tests_feature_model_userrewardtest",
+      "tests_feature_model_usertest",
+      "tests_testcase",
+      "tests_testcase_testcase",
+      "tests_unit_exampletest",
+      "tests_unit_exampletest_exampletest",
+      "tests_unit_exampletest_exampletest_test_that_true_is_true",
+      "withoutmiddleware"
+    ],
+    "6": [
+      "app_models_mission",
+      "app_models_userhistory",
+      "app_services_historyservice",
+      "config_mail",
+      "testcase",
+      "tests_feature_http_controllers_api_authcontrollertest",
+      "tests_feature_http_controllers_web_authcontrollertest",
+      "tests_feature_http_controllers_web_missioncontrollertest",
+      "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest",
+      "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_destroy_deletes_mission",
+      "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_index_returns_view",
+      "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_setup",
+      "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_store_creates_mission",
+      "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_update_modifies_mission",
+      "tests_feature_model_feedbackcategorytest",
+      "tests_feature_model_feedbackcategorytest_feedbackcategorytest",
+      "tests_feature_model_feedbackcategorytest_feedbackcategorytest_kategori_feedback_dapat_dibaca",
+      "tests_feature_model_feedbackcategorytest_feedbackcategorytest_kategori_feedback_dapat_dibuat",
+      "tests_feature_model_feedbackcategorytest_feedbackcategorytest_kategori_feedback_dapat_dihapus",
+      "tests_feature_model_feedbackcategorytest_feedbackcategorytest_kategori_feedback_dapat_diupdate",
+      "tests_feature_model_missiontest",
+      "tests_feature_model_missiontest_missiontest",
+      "tests_feature_model_missiontest_missiontest_mission_dapat_dibaca",
+      "tests_feature_model_missiontest_missiontest_mission_dapat_dihapus",
+      "tests_feature_model_missiontest_missiontest_mission_dapat_ditambahkan",
+      "tests_feature_model_missiontest_missiontest_mission_dapat_diubah",
+      "tests_feature_model_rewardtest_rewardtest",
+      "tests_feature_model_rewardtest_rewardtest_reward_dapat_dibuat",
+      "tests_feature_model_rewardtest_rewardtest_reward_dapat_dihapus",
+      "tests_feature_model_rewardtest_rewardtest_reward_dapat_diupdate",
+      "tests_feature_model_userhistorytest",
+      "tests_feature_model_usermissiontest",
+      "tests_feature_model_validationtest",
+      "tests_feature_model_validationtest_validationtest",
+      "tests_feature_model_validationtest_validationtest_validation_setting_dapat_dibaca",
+      "tests_feature_model_validationtest_validationtest_validation_setting_dapat_dibuat",
+      "tests_feature_model_validationtest_validationtest_validation_setting_dapat_dihapus",
+      "tests_feature_model_validationtest_validationtest_validation_setting_dapat_diupdate",
+      "tests_unit_service_historyservicetest",
+      "tests_unit_service_missionservicetest"
+    ],
+    "7": [
+      "app_http_controllers_api_feedbackcategorycontroller",
+      "app_http_controllers_api_feedbackcategorycontroller_feedbackcategorycontroller",
+      "app_http_controllers_api_feedbackcategorycontroller_feedbackcategorycontroller_index",
+      "app_http_controllers_api_feedbackcategorycontroller_php_jsonresponse",
+      "app_http_controllers_web_feedbackcontroller",
+      "app_http_controllers_web_feedbackcontroller_feedbackcontroller",
+      "app_http_controllers_web_feedbackcontroller_feedbackcontroller_destroy",
+      "app_http_controllers_web_feedbackcontroller_feedbackcontroller_index",
+      "app_http_controllers_web_feedbackcontroller_php_redirectresponse",
+      "app_http_controllers_web_feedbackcontroller_php_request",
+      "app_models_feedback",
+      "app_models_feedback_feedback",
+      "app_models_feedback_feedback_feedbackcategory",
+      "app_models_feedback_php_belongsto",
+      "app_models_feedbackcategory",
+      "app_models_feedbackcategory_feedbackcategory",
+      "app_models_feedbackcategory_feedbackcategory_feedbacks",
+      "app_models_feedbackcategory_php_hasmany",
+      "database_seeders_databaseseeder",
+      "database_seeders_databaseseeder_databaseseeder",
+      "database_seeders_databaseseeder_databaseseeder_run",
+      "database_seeders_feedbackcategoryseeder",
+      "database_seeders_feedbackcategoryseeder_feedbackcategoryseeder",
+      "database_seeders_feedbackcategoryseeder_feedbackcategoryseeder_run",
+      "database_seeders_feedbackseeder",
+      "database_seeders_feedbackseeder_feedbackseeder",
+      "database_seeders_feedbackseeder_feedbackseeder_generatedescription",
+      "database_seeders_feedbackseeder_feedbackseeder_generatetitle",
+      "database_seeders_feedbackseeder_feedbackseeder_run",
+      "database_seeders_userseeder",
+      "database_seeders_userseeder_userseeder",
+      "database_seeders_userseeder_userseeder_run",
+      "database_seeders_validationseeder",
+      "database_seeders_validationseeder_validationseeder",
+      "database_seeders_validationseeder_validationseeder_run",
+      "seeder",
+      "tests_feature_http_controllers_api_feedbackcategorycontrollertest_feedbackcategorycontrollertest_index_returns_200_and_list"
+    ],
+    "8": [
+      "app_models_parksubarea_parksubarea",
+      "app_models_parksubarea_parksubarea_parkamenity",
+      "app_models_parksubarea_parksubarea_parkarea",
+      "app_models_parksubarea_parksubarea_subareacomment",
+      "app_models_parksubarea_php_hasmany",
+      "tests_feature_http_controllers_web_parksubareacontrollertest",
+      "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest",
+      "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_destroy_deletes_park_subarea",
+      "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_setup",
+      "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_store_creates_park_subarea",
+      "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_update_modifies_park_subarea",
+      "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_update_with_fewer_than_three_points_deletes_subarea",
+      "tests_feature_model_parkamenitytest",
+      "tests_feature_model_parkamenitytest_parkamenitytest",
+      "tests_feature_model_parkamenitytest_parkamenitytest_amenities_dapat_dibaca",
+      "tests_feature_model_parkamenitytest_parkamenitytest_amenities_dapat_dibuat",
+      "tests_feature_model_parkamenitytest_parkamenitytest_amenities_dapat_dihapus",
+      "tests_feature_model_parkamenitytest_parkamenitytest_amenities_dapat_diupdate",
+      "tests_feature_model_parksubareatest",
+      "tests_feature_model_parksubareatest_parksubareatest",
+      "tests_feature_model_parksubareatest_parksubareatest_subarea_dapat_dibaca",
+      "tests_feature_model_parksubareatest_parksubareatest_subarea_dapat_dibuat_dengan_relasi_area",
+      "tests_feature_model_parksubareatest_parksubareatest_subarea_dapat_dihapus",
+      "tests_feature_model_parksubareatest_parksubareatest_subarea_dapat_diupdate",
+      "tests_feature_model_subareacommenttest_subareacommenttest",
+      "tests_feature_model_subareacommenttest_subareacommenttest_comment_dapat_dibaca",
+      "tests_feature_model_subareacommenttest_subareacommenttest_comment_dapat_dibuat",
+      "tests_feature_model_subareacommenttest_subareacommenttest_comment_dapat_dihapus",
+      "tests_feature_model_subareacommenttest_subareacommenttest_comment_dapat_diupdate",
+      "tests_feature_model_uservalidationtest",
+      "tests_feature_model_uservalidationtest_uservalidationtest",
+      "tests_feature_model_uservalidationtest_uservalidationtest_user_validation_dapat_dibaca",
+      "tests_feature_model_uservalidationtest_uservalidationtest_user_validation_dapat_dibuat",
+      "tests_feature_model_uservalidationtest_uservalidationtest_user_validation_dapat_dihapus",
+      "tests_feature_model_uservalidationtest_uservalidationtest_user_validation_dapat_diupdate"
+    ],
+    "9": [
+      "app_http_controllers_api_authcontroller",
+      "app_http_controllers_api_authcontroller_authcontroller",
+      "app_http_controllers_api_authcontroller_authcontroller_authcheck",
+      "app_http_controllers_api_authcontroller_authcontroller_construct",
+      "app_http_controllers_api_authcontroller_authcontroller_forgotpasswordotpresend",
+      "app_http_controllers_api_authcontroller_authcontroller_forgotpasswordotpverify",
+      "app_http_controllers_api_authcontroller_authcontroller_forgotpasswordverify",
+      "app_http_controllers_api_authcontroller_authcontroller_login",
+      "app_http_controllers_api_authcontroller_authcontroller_logout",
+      "app_http_controllers_api_authcontroller_authcontroller_register",
+      "app_http_controllers_api_authcontroller_authcontroller_registerotpresend",
+      "app_http_controllers_api_authcontroller_authcontroller_registerotpverify",
+      "app_http_controllers_api_authcontroller_authcontroller_resetpassword",
+      "app_http_controllers_api_authcontroller_php_jsonresponse",
+      "app_http_controllers_api_authcontroller_php_missionservice",
+      "app_http_controllers_api_authcontroller_php_request",
+      "app_mail_loginnotificationmail",
+      "app_mail_loginnotificationmail_loginnotificationmail",
+      "app_mail_loginnotificationmail_loginnotificationmail_attachments",
+      "app_mail_loginnotificationmail_loginnotificationmail_construct",
+      "app_mail_loginnotificationmail_loginnotificationmail_content",
+      "app_mail_loginnotificationmail_loginnotificationmail_envelope",
+      "app_mail_sendotpmail",
+      "app_mail_sendotpmail_php_content",
+      "app_mail_sendotpmail_php_envelope",
+      "app_mail_sendotpmail_sendotpmail",
+      "app_mail_sendotpmail_sendotpmail_attachments",
+      "app_mail_sendotpmail_sendotpmail_construct",
+      "app_mail_sendotpmail_sendotpmail_content",
+      "app_mail_sendotpmail_sendotpmail_envelope",
+      "content",
+      "envelope",
+      "mailable",
+      "queueable"
+    ],
+    "10": [
+      "docs_project_summary",
+      "docs_project_summary_1_deployment_architecture",
+      "docs_project_summary_2_1_backend_server_admin_dashboard_via_docker_recommended",
+      "docs_project_summary_2_2_backend_server_instalasi_manual_lokal_xampp",
+      "docs_project_summary_2_3_polislot_mobile_app_flutter",
+      "docs_project_summary_2_4_perangkat_edge_iot_parking_detector",
+      "docs_project_summary_2_installation_procedure",
+      "docs_project_summary_3_security_checklist",
+      "docs_project_summary_api_komunikasi_data",
+      "docs_project_summary_aplikasi_mobile_backend_code",
+      "docs_project_summary_infrastruktur_konfigurasi_server",
+      "docs_project_summary_langkah_1_persiapan_file_konfigurasi",
+      "docs_project_summary_langkah_1_persiapan_perangkat_lunak",
+      "docs_project_summary_langkah_2_instalasi_dependensi_python",
+      "docs_project_summary_langkah_2_kloning_pengunduhan_dependensi",
+      "docs_project_summary_langkah_2_konfigurasi_environment_env",
+      "docs_project_summary_langkah_3_konfigurasi_docker_compose_yml",
+      "docs_project_summary_langkah_3_konfigurasi_environment_google_maps",
+      "docs_project_summary_langkah_3_konfigurasi_internal_skrip_krusial",
+      "docs_project_summary_langkah_4_generate_rsa_keys_penting",
+      "docs_project_summary_langkah_4_konfigurasi_kredensial_mqtt",
+      "docs_project_summary_langkah_4_kunci_publik_rsa",
+      "docs_project_summary_langkah_5_code_generation_riverpod",
+      "docs_project_summary_langkah_5_jalankan_kontainer_docker",
+      "docs_project_summary_langkah_5_menjalankan_skrip_deteksi",
+      "docs_project_summary_langkah_6_inisialisasi_aplikasi_laravel",
+      "docs_project_summary_langkah_6_kompilasi_dan_jalankan_aplikasi",
+      "docs_project_summary_langkah_7_setup_role_based_access_control_rbac_database",
+      "docs_project_summary_langkah_8_finalisasi_konfigurasi",
+      "docs_project_summary_ringkasan_proyek_polislot"
+    ],
+    "11": [
+      "app_http_controllers_api_infoboardcontroller",
+      "app_http_controllers_api_infoboardcontroller_infoboardcontroller",
+      "app_http_controllers_api_infoboardcontroller_infoboardcontroller_index",
+      "app_http_controllers_api_infoboardcontroller_php_jsonresponse",
+      "app_http_controllers_web_infoboardcontroller",
+      "app_http_controllers_web_infoboardcontroller_infoboardcontroller",
+      "app_http_controllers_web_infoboardcontroller_infoboardcontroller_destroy",
+      "app_http_controllers_web_infoboardcontroller_infoboardcontroller_index",
+      "app_http_controllers_web_infoboardcontroller_infoboardcontroller_store",
+      "app_http_controllers_web_infoboardcontroller_infoboardcontroller_update",
+      "app_http_controllers_web_infoboardcontroller_php_redirectresponse",
+      "app_http_controllers_web_infoboardcontroller_php_request",
+      "app_models_infoboard",
+      "app_models_infoboard_infoboard",
+      "app_models_infoboard_infoboard_user",
+      "app_models_infoboard_php_belongsto",
+      "app_models_user_user_infoboard",
+      "tests_feature_http_controllers_api_infoboardcontrollertest_infoboardcontrollertest_index_returns_200_and_info_list",
+      "tests_feature_http_controllers_web_infoboardcontrollertest_infoboardcontrollertest",
+      "tests_feature_http_controllers_web_infoboardcontrollertest_infoboardcontrollertest_destroy_deletes_info_board",
+      "tests_feature_http_controllers_web_infoboardcontrollertest_infoboardcontrollertest_index_returns_view",
+      "tests_feature_http_controllers_web_infoboardcontrollertest_infoboardcontrollertest_setup",
+      "tests_feature_http_controllers_web_infoboardcontrollertest_infoboardcontrollertest_store_creates_info_board",
+      "tests_feature_http_controllers_web_infoboardcontrollertest_infoboardcontrollertest_update_modifies_info_board",
+      "tests_feature_model_infoboardtest_infoboardtest",
+      "tests_feature_model_infoboardtest_infoboardtest_infoboard_dapat_dibaca",
+      "tests_feature_model_infoboardtest_infoboardtest_infoboard_dapat_dibuat",
+      "tests_feature_model_infoboardtest_infoboardtest_infoboard_dapat_dihapus",
+      "tests_feature_model_infoboardtest_infoboardtest_infoboard_dapat_diupdate"
+    ],
+    "12": [
+      "axios",
+      "concurrently",
+      "laravel_echo",
+      "laravel_vite_plugin",
+      "package",
+      "package_devdependencies",
+      "package_devdependencies_axios",
+      "package_devdependencies_concurrently",
+      "package_devdependencies_laravel_echo",
+      "package_devdependencies_laravel_vite_plugin",
+      "package_devdependencies_pusher_js",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_tailwindcss_vite",
+      "package_devdependencies_vite",
+      "package_overrides",
+      "package_overrides_shell_quote",
+      "package_private",
+      "package_schema",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_type",
+      "pusher_js",
+      "tailwindcss",
+      "tailwindcss_vite",
+      "vite"
+    ],
+    "13": [
+      "app_http_controllers_web_rewardcontroller",
+      "app_http_controllers_web_rewardcontroller_php_redirectresponse",
+      "app_http_controllers_web_rewardcontroller_php_request",
+      "app_http_controllers_web_rewardcontroller_rewardcontroller",
+      "app_http_controllers_web_rewardcontroller_rewardcontroller_destroy",
+      "app_http_controllers_web_rewardcontroller_rewardcontroller_index",
+      "app_http_controllers_web_rewardcontroller_rewardcontroller_store",
+      "app_http_controllers_web_rewardcontroller_rewardcontroller_update",
+      "app_models_reward_php_hasmany",
+      "app_models_reward_reward",
+      "app_models_reward_reward_userrewards",
+      "tests_feature_http_controllers_api_rewardcontrollertest_rewardcontrollertest",
+      "tests_feature_http_controllers_api_rewardcontrollertest_rewardcontrollertest_history_returns_200_and_list",
+      "tests_feature_http_controllers_api_rewardcontrollertest_rewardcontrollertest_index_returns_200_and_list",
+      "tests_feature_http_controllers_api_rewardcontrollertest_rewardcontrollertest_redeem_returns_201_when_successful",
+      "tests_feature_http_controllers_api_rewardcontrollertest_rewardcontrollertest_redeem_returns_422_if_points_insufficient",
+      "tests_feature_http_controllers_api_rewardcontrollertest_rewardcontrollertest_redeem_returns_422_if_reward_id_missing",
+      "tests_feature_http_controllers_api_rewardcontrollertest_rewardcontrollertest_setup",
+      "tests_feature_http_controllers_web_rewardcontrollertest_rewardcontrollertest",
+      "tests_feature_http_controllers_web_rewardcontrollertest_rewardcontrollertest_destroy_deletes_reward",
+      "tests_feature_http_controllers_web_rewardcontrollertest_rewardcontrollertest_index_returns_view",
+      "tests_feature_http_controllers_web_rewardcontrollertest_rewardcontrollertest_setup",
+      "tests_feature_http_controllers_web_rewardcontrollertest_rewardcontrollertest_store_creates_reward",
+      "tests_feature_http_controllers_web_rewardcontrollertest_rewardcontrollertest_update_modifies_reward"
+    ],
+    "14": [
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_forgot_form_dapat_diakses",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_forgot_verify_gagal_jika_email_tidak_ada",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_forgot_verify_mengirim_otp_dan_set_session",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_berhasil_untuk_admin_dan_reset_lock_data",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_ditolak_jika_akun_sedang_terkunci",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_form_dapat_diakses_jika_belum_login",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_form_redirect_ke_dashboard_jika_sudah_login",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_gagal_email_tidak_terdaftar",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_gagal_jika_bukan_admin_dianggap_email_tidak_ditemukan",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_gagal_password_salah_dan_increment_percobaan",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_menangani_exception_sistem",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_mengunci_akun_setelah_4_kali_gagal",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_login_reset_failed_attempts_jika_sudah_lewat_10_menit_sejak_gagal_terakhir",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_logout_berhasil_dan_hapus_session",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_otp_form_redirect_jika_tidak_ada_session_email",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_otp_resend_berhasil_mengirim_ulang",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_otp_verify_gagal_otp_expired",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_otp_verify_gagal_otp_salah",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_otp_verify_sukses_redirect_ke_reset_password",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_reset_form_redirect_jika_sesi_invalid",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_reset_password_gagal_jika_password_baru_sama_dengan_lama",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_reset_password_menangani_exception",
+      "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest_reset_password_sukses_update_db_dan_clear_session"
+    ],
+    "15": [
+      "app_console_commands_backupauto",
+      "app_console_commands_backupauto_backupauto",
+      "app_console_commands_backupauto_backupauto_handle",
+      "app_console_commands_backupclean",
+      "app_console_commands_backupclean_backupclean",
+      "app_console_commands_backupclean_backupclean_handle",
+      "app_console_commands_backupdatabase",
+      "app_console_commands_backupdatabase_backupdatabase",
+      "app_console_commands_dblist",
+      "app_console_commands_dblist_dblist",
+      "app_console_commands_dblist_dblist_handle",
+      "app_console_commands_dbrestore",
+      "app_console_commands_dbrestore_dbrestore",
+      "app_console_commands_dbrestore_dbrestore_handle",
+      "app_console_commands_setupdatabaseadmin",
+      "app_console_commands_setupdatabaseadmin_setupdatabaseadmin",
+      "app_console_commands_setupdatabaseadmin_setupdatabaseadmin_handle",
+      "app_console_commands_setupdatabaseuser",
+      "app_console_commands_setupdatabaseuser_setupdatabaseuser",
+      "app_console_commands_setupdatabaseuser_setupdatabaseuser_handle",
+      "command",
+      "loggableoutput"
+    ],
+    "16": [
+      "app_models_parkarea_parkarea",
+      "app_models_validation_validation",
+      "tests_feature_http_controllers_api_mapvisualizationcontrollertest",
+      "tests_feature_http_controllers_api_mapvisualizationcontrollertest_mapvisualizationcontrollertest",
+      "tests_feature_http_controllers_api_mapvisualizationcontrollertest_mapvisualizationcontrollertest_index_returns_200_and_data",
+      "tests_feature_http_controllers_api_mapvisualizationcontrollertest_mapvisualizationcontrollertest_show_returns_200_and_detail_data",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_destroy_comment_returns_200_on_success",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_destroy_returns_403_if_not_owner",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_index_returns_200_and_list",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_setup",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_store_comment_returns_201_on_success",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_update_comment_returns_200_on_success",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_update_returns_403_if_not_owner",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest_setup",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_201_when_geofence_disabled_and_no_location_provided",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_201_when_geofence_enabled_and_user_nearby",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_400_when_geofence_enabled_but_no_location",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_422_when_geofence_enabled_and_user_too_far",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest_store_returns_429_if_cooldown_active",
+      "tests_feature_http_controllers_api_uservalidationcontrollertest_uservalidationcontrollertest_store_triggers_snapshot_if_iot_device_attached_and_online"
+    ],
+    "17": [
+      "python_parking_detector_mqtt",
+      "python_parking_detector_mqtt_camerastream",
+      "python_parking_detector_mqtt_camerastream_capture_jpeg",
+      "python_parking_detector_mqtt_camerastream_init",
+      "python_parking_detector_mqtt_camerastream_read",
+      "python_parking_detector_mqtt_camerastream_stop",
+      "python_parking_detector_mqtt_camerastream_update",
+      "python_parking_detector_mqtt_encrypt_image_aes",
+      "python_parking_detector_mqtt_generate_hmac_signature",
+      "python_parking_detector_mqtt_get_aes_key",
+      "python_parking_detector_mqtt_get_env_or_fail",
+      "python_parking_detector_mqtt_is_bbox_in_any_polygon",
+      "python_parking_detector_mqtt_is_bbox_in_polygon",
+      "python_parking_detector_mqtt_load_local_config",
+      "python_parking_detector_mqtt_main",
+      "python_parking_detector_mqtt_on_connect",
+      "python_parking_detector_mqtt_on_connect_success",
+      "python_parking_detector_mqtt_on_disconnect",
+      "python_parking_detector_mqtt_on_message",
+      "python_parking_detector_mqtt_on_publish",
+      "python_parking_detector_mqtt_save_local_config",
+      "python_parking_detector_mqtt_send_status_update"
+    ],
+    "18": [
+      "python_parking_detector_mqtt_preview",
+      "python_parking_detector_mqtt_preview_camerastream",
+      "python_parking_detector_mqtt_preview_camerastream_capture_jpeg",
+      "python_parking_detector_mqtt_preview_camerastream_init",
+      "python_parking_detector_mqtt_preview_camerastream_read",
+      "python_parking_detector_mqtt_preview_camerastream_stop",
+      "python_parking_detector_mqtt_preview_camerastream_update",
+      "python_parking_detector_mqtt_preview_encrypt_image_aes",
+      "python_parking_detector_mqtt_preview_generate_hmac_signature",
+      "python_parking_detector_mqtt_preview_get_aes_key",
+      "python_parking_detector_mqtt_preview_get_env_or_fail",
+      "python_parking_detector_mqtt_preview_is_bbox_in_any_polygon",
+      "python_parking_detector_mqtt_preview_is_bbox_in_polygon",
+      "python_parking_detector_mqtt_preview_load_local_config",
+      "python_parking_detector_mqtt_preview_main",
+      "python_parking_detector_mqtt_preview_on_connect",
+      "python_parking_detector_mqtt_preview_on_connect_success",
+      "python_parking_detector_mqtt_preview_on_disconnect",
+      "python_parking_detector_mqtt_preview_on_message",
+      "python_parking_detector_mqtt_preview_on_publish",
+      "python_parking_detector_mqtt_preview_save_local_config",
+      "python_parking_detector_mqtt_preview_send_status_update"
+    ],
+    "19": [
+      "python_parking_detector_ws",
+      "python_parking_detector_ws_camerastream",
+      "python_parking_detector_ws_camerastream_capture_jpeg",
+      "python_parking_detector_ws_camerastream_init",
+      "python_parking_detector_ws_camerastream_read",
+      "python_parking_detector_ws_camerastream_stop",
+      "python_parking_detector_ws_camerastream_update",
+      "python_parking_detector_ws_detector_loop",
+      "python_parking_detector_ws_encrypt_image_aes",
+      "python_parking_detector_ws_fetch_remote_config",
+      "python_parking_detector_ws_generate_auth_signature",
+      "python_parking_detector_ws_generate_hmac_signature",
+      "python_parking_detector_ws_get_aes_key",
+      "python_parking_detector_ws_get_env_or_fail",
+      "python_parking_detector_ws_handle_command",
+      "python_parking_detector_ws_is_bbox_in_any_polygon",
+      "python_parking_detector_ws_is_bbox_in_polygon",
+      "python_parking_detector_ws_load_local_config",
+      "python_parking_detector_ws_main",
+      "python_parking_detector_ws_rationale_1",
+      "python_parking_detector_ws_save_local_config",
+      "python_parking_detector_ws_websocket_client"
+    ],
+    "20": [
+      "python_parking_detector_ws_preview",
+      "python_parking_detector_ws_preview_camerastream",
+      "python_parking_detector_ws_preview_camerastream_capture_jpeg",
+      "python_parking_detector_ws_preview_camerastream_init",
+      "python_parking_detector_ws_preview_camerastream_read",
+      "python_parking_detector_ws_preview_camerastream_stop",
+      "python_parking_detector_ws_preview_camerastream_update",
+      "python_parking_detector_ws_preview_encrypt_image_aes",
+      "python_parking_detector_ws_preview_fetch_remote_config",
+      "python_parking_detector_ws_preview_generate_auth_signature",
+      "python_parking_detector_ws_preview_generate_hmac_signature",
+      "python_parking_detector_ws_preview_get_aes_key",
+      "python_parking_detector_ws_preview_get_env_or_fail",
+      "python_parking_detector_ws_preview_handle_command",
+      "python_parking_detector_ws_preview_is_bbox_in_any_polygon",
+      "python_parking_detector_ws_preview_is_bbox_in_polygon",
+      "python_parking_detector_ws_preview_load_local_config",
+      "python_parking_detector_ws_preview_main",
+      "python_parking_detector_ws_preview_rationale_1",
+      "python_parking_detector_ws_preview_save_local_config",
+      "python_parking_detector_ws_preview_start_websocket_thread",
+      "python_parking_detector_ws_preview_websocket_client"
+    ],
+    "21": [
+      "app_console_commands_mqttlistenercommand_mqttlistenercommand",
+      "app_console_commands_mqttlistenercommand_mqttlistenercommand_handle",
+      "app_console_commands_mqttlistenercommand_mqttlistenercommand_reconcilewsdevicestatuses",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_deletebatch",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_downloadbatch",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_generatecommandsignature",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_index",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_markoffline",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_savesettings",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_sendcommandtodevice",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_syncarea",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_triggersnapshot",
+      "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_validatestream",
+      "app_http_controllers_web_iotdetectioncontroller_php_jsonresponse",
+      "app_http_controllers_web_iotdetectioncontroller_php_request",
+      "app_http_controllers_web_iotdetectioncontroller_php_view",
+      "app_models_parksubarea_parksubarea_evaluatethresholdshift",
+      "app_models_parksubarea_parksubarea_getlivestatus",
+      "app_models_parksubarea_parksubarea_iotdevice",
+      "app_models_parksubarea_parksubarea_uservalidation"
+    ],
+    "22": [
+      "app_models_parkarea",
+      "app_models_parkarea_parkarea_parksubarea",
+      "app_models_parkarea_php_hasmany",
+      "tests_feature_http_controllers_api_iotwebhookcontrollertest",
+      "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest",
+      "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest_it_handles_member_added",
+      "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest_it_handles_member_removed",
+      "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest_setup",
+      "tests_feature_http_controllers_api_iotwsauthcontrollertest",
+      "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest",
+      "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest_authenticate_fails_with_invalid_mac",
+      "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest_authenticate_succeeds_with_valid_credentials",
+      "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest_setup",
+      "tests_feature_http_controllers_api_subareacommentcontrollertest",
+      "tests_feature_model_parkareatest",
+      "tests_feature_model_parkareatest_parkareatest",
+      "tests_feature_model_parkareatest_parkareatest_area_parkir_dapat_dibuat",
+      "tests_feature_model_parkareatest_parkareatest_area_parkir_dapat_dihapus",
+      "tests_feature_model_parkareatest_parkareatest_area_parkir_dapat_diupdate",
+      "tests_feature_model_subareacommenttest"
+    ],
+    "23": [
+      "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller",
+      "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_receiveconfigquery",
+      "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_receivecount",
+      "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_receivedetection",
+      "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_receivesnapshot",
+      "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_validatemacaddress",
+      "app_http_controllers_api_iotdetectioncontroller_php_jsonresponse",
+      "app_http_controllers_api_iotdetectioncontroller_php_request",
+      "app_models_iotdevice_iotdevice",
+      "app_models_iotdevice_iotdevice_captures",
+      "app_models_iotdevice_iotdevice_getstatus",
+      "app_models_iotdevice_iotdevice_subarea",
+      "app_models_iotdevice_php_belongsto",
+      "app_models_iotdevice_php_hasmany",
+      "tests_unit_scrubandtraceprocessortest_scrubandtraceprocessortest",
+      "tests_unit_scrubandtraceprocessortest_scrubandtraceprocessortest_test_it_extracts_method_name_from_closure_backtrace",
+      "tests_unit_scrubandtraceprocessortest_scrubandtraceprocessortest_test_it_keeps_mqtt_status_online_when_recently_seen",
+      "tests_unit_scrubandtraceprocessortest_scrubandtraceprocessortest_test_it_syncs_mqtt_status_to_offline_due_to_inactivity"
+    ],
+    "24": [
+      "app_http_controllers_web_authcontroller",
+      "app_http_controllers_web_authcontroller_authcontroller",
+      "app_http_controllers_web_authcontroller_authcontroller_forgotpasswordform",
+      "app_http_controllers_web_authcontroller_authcontroller_forgotpasswordotpform",
+      "app_http_controllers_web_authcontroller_authcontroller_forgotpasswordotpresend",
+      "app_http_controllers_web_authcontroller_authcontroller_forgotpasswordotpverify",
+      "app_http_controllers_web_authcontroller_authcontroller_forgotpasswordverify",
+      "app_http_controllers_web_authcontroller_authcontroller_login",
+      "app_http_controllers_web_authcontroller_authcontroller_loginform",
+      "app_http_controllers_web_authcontroller_authcontroller_logout",
+      "app_http_controllers_web_authcontroller_authcontroller_resetpassword",
+      "app_http_controllers_web_authcontroller_authcontroller_resetpasswordform",
+      "app_http_controllers_web_authcontroller_php_redirectresponse",
+      "app_http_controllers_web_authcontroller_php_request",
+      "app_http_controllers_web_authcontroller_php_view"
+    ],
+    "25": [
+      "composer_scripts",
+      "composer_scripts_dev",
+      "composer_scripts_post_autoload_dump",
+      "composer_scripts_post_root_package_install",
+      "composer_scripts_post_update_cmd",
+      "composer_scripts_test",
+      "ref_composer_config_disableprocesstimeout",
+      "ref_illuminate_foundation_composerscripts_postautoloaddump",
+      "ref_npx_concurrently_c_93c5fd_c4b5fd_fb7185_fdba74_php_artisan_serve_php_artisan_queue_listen_tries_1_php_artisan_pail_timeout_0_npm_run_dev_names_server_queue_logs_vite_kill_others",
+      "ref_php_artisan_config_clear_ansi",
+      "ref_php_artisan_package_discover_ansi",
+      "ref_php_artisan_test",
+      "ref_php_artisan_vendor_publish_tag_laravel_assets_ansi_force",
+      "ref_php_r_file_exists_env_copy_env_example_env"
+    ],
+    "26": [
+      "app_http_middleware_apiencryption",
+      "app_http_middleware_apiencryption_apiencryption",
+      "app_http_middleware_apiencryption_apiencryption_handle",
+      "app_http_middleware_apiencryption_apiencryption_isapirequest",
+      "app_http_middleware_apiencryption_apiencryption_loadprivatekey",
+      "app_http_middleware_apiencryption_apiencryption_shouldhavebody",
+      "app_http_middleware_apiencryption_php_closure",
+      "app_http_middleware_apiencryption_php_request",
+      "tests_feature_http_middleware_apiencryptiontest",
+      "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest",
+      "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_blocks_raw_authorization_without_x_auth_token",
+      "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_ignores_non_api_requests",
+      "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_returns_500_or_400_if_key_or_session_invalid"
+    ],
+    "27": [
+      "app_console_commands_backupdatabase_backupdatabase_handle",
+      "app_http_controllers_api_rewardcontroller_rewardcontroller_construct",
+      "app_http_controllers_api_uservalidationcontroller_uservalidationcontroller_construct",
+      "app_http_controllers_web_rewardverificationcontroller",
+      "app_http_controllers_web_rewardverificationcontroller_php_redirectresponse",
+      "app_http_controllers_web_rewardverificationcontroller_php_request",
+      "app_http_controllers_web_rewardverificationcontroller_rewardverificationcontroller",
+      "app_http_controllers_web_rewardverificationcontroller_rewardverificationcontroller_construct",
+      "app_http_controllers_web_rewardverificationcontroller_rewardverificationcontroller_index",
+      "app_http_controllers_web_rewardverificationcontroller_rewardverificationcontroller_process",
+      "app_services_historyservice_historyservice",
+      "app_services_missionservice_missionservice_construct"
+    ],
+    "28": [
+      "app_console_traits_loggableoutput",
+      "app_console_traits_loggableoutput_error",
+      "app_console_traits_loggableoutput_info",
+      "app_console_traits_loggableoutput_loginfo",
+      "app_console_traits_loggableoutput_warn",
+      "app_http_controllers_api_iotwebhookcontroller_iotwebhookcontroller",
+      "app_http_controllers_api_iotwebhookcontroller_iotwebhookcontroller_handle",
+      "app_http_controllers_api_iotwebhookcontroller_iotwebhookcontroller_updatestatus",
+      "app_http_controllers_api_iotwebhookcontroller_php_jsonresponse",
+      "app_http_controllers_api_iotwebhookcontroller_php_request",
+      "app_models_iotdevice_iotdevice_checkreverbpresence",
+      "app_services_historyservice_historyservice_log"
+    ],
+    "29": [
+      "app_http_controllers_api_rewardcontroller",
+      "app_http_controllers_api_rewardcontroller_php_jsonresponse",
+      "app_http_controllers_api_rewardcontroller_php_request",
+      "app_http_controllers_api_rewardcontroller_rewardcontroller",
+      "app_http_controllers_api_rewardcontroller_rewardcontroller_history",
+      "app_http_controllers_api_rewardcontroller_rewardcontroller_index",
+      "app_http_controllers_api_rewardcontroller_rewardcontroller_redeem",
+      "app_models_userreward",
+      "app_models_userreward_php_belongsto",
+      "app_models_userreward_userreward",
+      "app_models_userreward_userreward_reward",
+      "app_models_userreward_userreward_user"
+    ],
+    "30": [
+      "app_logging_customizeformatter",
+      "app_logging_customizeformatter_customizeformatter",
+      "app_logging_customizeformatter_customizeformatter_invoke",
+      "app_logging_processors_scrubandtraceprocessor",
+      "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor",
+      "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_getrequestid",
+      "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_injectprefix",
+      "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_invoke",
+      "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_scrubarray",
+      "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_shouldscrub",
+      "config_logging",
+      "processorinterface"
+    ],
+    "31": [
+      "docs_installation_docker_10_re_up_container",
+      "docs_installation_docker_11_buat_port_forward_local_dan_firewall_rule_optional_untuk_instalasi_pada_wsl",
+      "docs_installation_docker_1_konfigurasi_environment_env",
+      "docs_installation_docker_2_generate_rsa_keys_di_root",
+      "docs_installation_docker_3_verifikasi_credential",
+      "docs_installation_docker_4_menjalankan_container",
+      "docs_installation_docker_5_generate_application_key",
+      "docs_installation_docker_6_migrasi_database",
+      "docs_installation_docker_7_setup_admin_user_seeding",
+      "docs_installation_docker_8_setup_database_roles",
+      "docs_installation_docker_9_atur_ulang_environment_env_penting",
+      "docs_installation_docker_langkah_instalasi"
+    ],
+    "32": [
+      "app_models_user_user_usermission",
+      "tests_feature_model_usermissiontest_usermissiontest",
+      "tests_feature_model_usermissiontest_usermissiontest_user_mission_dapat_dibuat_dan_berelasi",
+      "tests_feature_model_usermissiontest_usermissiontest_user_mission_dapat_dihapus",
+      "tests_feature_model_usermissiontest_usermissiontest_user_mission_dapat_diupdate",
+      "tests_unit_service_missionservicetest_missionservicetest",
+      "tests_unit_service_missionservicetest_missionservicetest_misi_daily_reset_setelah_ganti_hari",
+      "tests_unit_service_missionservicetest_missionservicetest_misi_sequence_consecutive_reset_jika_bolos",
+      "tests_unit_service_missionservicetest_missionservicetest_misi_sequence_login_bertambah_dan_reset_manual_di_db",
+      "tests_unit_service_missionservicetest_missionservicetest_misi_target_selesai_dan_mencatat_history",
+      "tests_unit_service_missionservicetest_missionservicetest_setup"
+    ],
+    "33": [
+      "composer",
+      "composer_description",
+      "composer_extra",
+      "composer_extra_laravel",
+      "composer_laravel_dont_discover",
+      "composer_license",
+      "composer_minimum_stability",
+      "composer_name",
+      "composer_prefer_stable",
+      "composer_schema",
+      "composer_type"
+    ],
+    "34": [
+      "app_http_controllers_web_dashboardcontroller",
+      "app_http_controllers_web_dashboardcontroller_dashboardcontroller",
+      "app_http_controllers_web_dashboardcontroller_dashboardcontroller_getchartdata",
+      "app_http_controllers_web_dashboardcontroller_dashboardcontroller_getleaderboard",
+      "app_http_controllers_web_dashboardcontroller_dashboardcontroller_getrealtimevalidations",
+      "app_http_controllers_web_dashboardcontroller_dashboardcontroller_index",
+      "app_http_controllers_web_dashboardcontroller_php_jsonresponse",
+      "app_http_controllers_web_dashboardcontroller_php_request",
+      "app_http_controllers_web_dashboardcontroller_php_view",
+      "routes_web"
+    ],
+    "35": [
+      "app_http_controllers_web_parkareacontroller",
+      "app_http_controllers_web_parkareacontroller_parkareacontroller",
+      "app_http_controllers_web_parkareacontroller_parkareacontroller_create",
+      "app_http_controllers_web_parkareacontroller_parkareacontroller_destroy",
+      "app_http_controllers_web_parkareacontroller_parkareacontroller_index",
+      "app_http_controllers_web_parkareacontroller_parkareacontroller_show",
+      "app_http_controllers_web_parkareacontroller_parkareacontroller_store",
+      "app_http_controllers_web_parkareacontroller_php_redirectresponse",
+      "app_http_controllers_web_parkareacontroller_php_request",
+      "app_http_controllers_web_parkareacontroller_php_view"
+    ],
+    "36": [
+      "app_http_middleware_rbac",
+      "app_http_middleware_rbac_php_closure",
+      "app_http_middleware_rbac_php_request",
+      "app_http_middleware_rbac_rbac",
+      "app_http_middleware_rbac_rbac_handle",
+      "app_http_middleware_trustproxies",
+      "app_http_middleware_trustproxies_trustproxies",
+      "bootstrap_app",
+      "middleware",
+      "response"
+    ],
+    "37": [
+      "app_models_iotdevice_iotdevice_booted",
+      "app_models_iotdevice_iotdevice_markdeviceoffline",
+      "app_models_iotdevice_iotdevice_syncstatus",
+      "database_factories_userfactory",
+      "database_factories_userfactory_userfactory",
+      "database_factories_userfactory_userfactory_admin",
+      "database_factories_userfactory_userfactory_definition",
+      "database_factories_userfactory_userfactory_unverified",
+      "factory",
+      "static"
+    ],
+    "38": [
+      "docs_installation_docker",
+      "docs_installation_docker_instalasi_dengan_docker",
+      "docs_installation_docker_khusus_pengguna_linux",
+      "docs_installation_docker_persiapan_file_konfigurasi",
+      "docs_installation_docker_prasyarat",
+      "docs_installation_iot_edge",
+      "docs_installation_manual",
+      "docs_installation_manual_instalasi_manual_tanpa_docker",
+      "docs_installation_manual_prasyarat",
+      "readme"
+    ],
+    "39": [
+      "app_models_user_php_hasmany",
+      "app_models_user_user_subareacomment",
+      "app_models_user_user_userreward",
+      "app_models_user_user_uservalidation",
+      "tests_feature_model_userrewardtest_userrewardtest",
+      "tests_feature_model_userrewardtest_userrewardtest_user_reward_dapat_dibaca",
+      "tests_feature_model_userrewardtest_userrewardtest_user_reward_dapat_dibuat",
+      "tests_feature_model_userrewardtest_userrewardtest_user_reward_dapat_dihapus",
+      "tests_feature_model_userrewardtest_userrewardtest_user_reward_dapat_diupdate"
+    ],
+    "40": [
+      "app_providers_appserviceprovider",
+      "app_providers_appserviceprovider_appserviceprovider",
+      "app_providers_appserviceprovider_appserviceprovider_boot",
+      "app_providers_appserviceprovider_appserviceprovider_register",
+      "app_providers_authserviceprovider",
+      "app_providers_authserviceprovider_authserviceprovider",
+      "app_providers_authserviceprovider_authserviceprovider_boot",
+      "bootstrap_providers",
+      "serviceprovider"
+    ],
+    "41": [
+      "composer_require",
+      "composer_require_fakerphp_faker",
+      "composer_require_laravel_framework",
+      "composer_require_laravel_reverb",
+      "composer_require_laravel_sanctum",
+      "composer_require_laravel_tinker",
+      "composer_require_php",
+      "composer_require_php_mqtt_laravel_client",
+      "composer_require_yajra_laravel_datatables"
+    ],
+    "42": [
+      "docs_installation_manual_10_menjalankan_service_aplikasi",
+      "docs_installation_manual_1_konfigurasi_environment_env",
+      "docs_installation_manual_2_generate_rsa_keys_wajib",
+      "docs_installation_manual_3_instalasi_dependency",
+      "docs_installation_manual_4_generate_application_key",
+      "docs_installation_manual_5_migrasi_database_seeding",
+      "docs_installation_manual_6_setup_database_roles_rbac",
+      "docs_installation_manual_7_atur_ulang_environment_env_penting",
+      "docs_installation_manual_langkah_instalasi"
+    ],
+    "43": [
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest",
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest",
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest_receive_config_query_succeeds",
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest_receive_count_succeeds",
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest_receive_detection_fails_with_invalid_signature",
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest_receive_detection_fails_with_unregistered_mac",
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest_receive_detection_succeeds_with_valid_signature",
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest_receive_snapshot_succeeds",
+      "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest_setup"
+    ],
+    "44": [
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest",
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest_show_profile_returns_200_and_user_data",
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest_show_profile_returns_200_handling_exceptions",
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest_update_password_returns_200_on_success",
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest_update_password_returns_422_if_validation_fails",
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest_update_profile_returns_200_and_triggers_mission_on_avatar_update",
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest_update_profile_returns_200_basic_without_file",
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest_update_profile_returns_200_even_if_mission_service_fails",
+      "tests_feature_http_controllers_api_profilecontrollertest_profilecontrollertest_update_profile_returns_500_on_fatal_error"
+    ],
+    "45": [
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest",
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest_edit_profile_halaman_dapat_diakses",
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest_setup",
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest_update_password_berhasil",
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest_update_password_gagal_jika_password_baru_sama_dengan_lama",
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest_update_password_gagal_jika_password_lama_salah",
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest_update_profile_menangani_exception_sistem_dan_rollback",
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest_update_profile_menghapus_avatar_lama_jika_bukan_default",
+      "tests_feature_http_controllers_web_profilecontrollertest_profilecontrollertest_update_profile_nama_dan_avatar_berhasil"
+    ],
+    "46": [
+      "composer_allow_plugins_pestphp_pest_plugin",
+      "composer_allow_plugins_php_http_discovery",
+      "composer_config",
+      "composer_config_allow_plugins",
+      "composer_config_optimize_autoloader",
+      "composer_config_preferred_install",
+      "composer_config_sort_packages"
+    ],
+    "47": [
+      "composer_require_dev",
+      "composer_require_dev_laravel_pail",
+      "composer_require_dev_laravel_pint",
+      "composer_require_dev_laravel_sail",
+      "composer_require_dev_mockery_mockery",
+      "composer_require_dev_nunomaduro_collision",
+      "composer_require_dev_phpunit_phpunit"
+    ],
+    "48": [
+      "readme_custom_utility_commands",
+      "readme_fitur_utama",
+      "readme_panduan_instalasi",
+      "readme_polislot_admin_dashboard",
+      "readme_prerequisites_external_service",
+      "readme_struktur_direktori",
+      "readme_tech_stack"
+    ],
+    "49": [
+      "tests_feature_http_controllers_web_parkareacontrollertest",
+      "tests_feature_http_controllers_web_parkareacontrollertest_parkareacontrollertest",
+      "tests_feature_http_controllers_web_parkareacontrollertest_parkareacontrollertest_destroy_deletes_park_area",
+      "tests_feature_http_controllers_web_parkareacontrollertest_parkareacontrollertest_index_returns_view",
+      "tests_feature_http_controllers_web_parkareacontrollertest_parkareacontrollertest_setup",
+      "tests_feature_http_controllers_web_parkareacontrollertest_parkareacontrollertest_show_returns_view",
+      "tests_feature_http_controllers_web_parkareacontrollertest_parkareacontrollertest_store_creates_park_area"
+    ],
+    "50": [
+      "agents_rules_coding_standards",
+      "agents_rules_coding_standards_1_import_namespace_use_statement",
+      "agents_rules_coding_standards_2_phpdoc_komentar_fungsi_class",
+      "agents_rules_coding_standards_3_konvensi_penulisan_model_eloquent",
+      "agents_rules_coding_standards_4_best_practices_laravel_lainnya",
+      "agents_rules_coding_standards_aturan_standar_penulisan_kode_php_laravel_coding_standards"
+    ],
+    "51": [
+      "app_models_user_user_userhistory",
+      "tests_feature_model_userhistorytest_userhistorytest",
+      "tests_feature_model_userhistorytest_userhistorytest_user_history_dapat_didapatkan",
+      "tests_feature_model_userhistorytest_userhistorytest_user_history_dapat_dihapus",
+      "tests_feature_model_userhistorytest_userhistorytest_user_history_dapat_ditambahkan",
+      "tests_feature_model_userhistorytest_userhistorytest_user_history_dapat_diubah"
+    ],
+    "52": [
+      "docs_installation_iot_edge_1_salin_folder_python_ke_perangkat_edge",
+      "docs_installation_iot_edge_2_buat_virtual_environment_disarankan",
+      "docs_installation_iot_edge_3_install_dependensi",
+      "docs_installation_iot_edge_4_konfigurasi_file_env",
+      "docs_installation_iot_edge_format_model_yang_didukung_yolo_weights",
+      "docs_installation_iot_edge_instalasi"
+    ],
+    "53": [
+      "docs_installation_iot_edge_caching_konfigurasi_lokal",
+      "docs_installation_iot_edge_daftar_script",
+      "docs_installation_iot_edge_keamanan",
+      "docs_installation_iot_edge_koneksi_melalui_cloudflare_tunnel_produksi",
+      "docs_installation_iot_edge_persyaratan_sistem",
+      "docs_installation_iot_edge_polislot_perangkat_edge_iot_deteksi_parkir"
+    ],
+    "54": [
+      "docs_installation_iot_edge_contoh_mqtt_dengan_preview",
+      "docs_installation_iot_edge_contoh_mqtt_headless",
+      "docs_installation_iot_edge_contoh_websocket_dengan_preview",
+      "docs_installation_iot_edge_contoh_websocket_headless",
+      "docs_installation_iot_edge_menjalankan_script",
+      "docs_installation_iot_edge_sintaks"
+    ],
+    "55": [
+      "docs_installation_manual_8_konfigurasi_manual_mqtt_broker_mosquitto",
+      "docs_installation_manual_a_instalasi_mosquitto",
+      "docs_installation_manual_b_konfigurasi_mosquitto_conf",
+      "docs_installation_manual_c_membuat_file_password_kredensial_user",
+      "docs_installation_manual_d_membuat_file_acl_access_control_list",
+      "docs_installation_manual_e_menjalankan_service_mosquitto"
+    ],
+    "56": [
+      "tests_feature_http_controllers_web_dashboardcontrollertest_dashboardcontrollertest",
+      "tests_feature_http_controllers_web_dashboardcontrollertest_dashboardcontrollertest_chart_data_returns_json",
+      "tests_feature_http_controllers_web_dashboardcontrollertest_dashboardcontrollertest_index_returns_dashboard_view",
+      "tests_feature_http_controllers_web_dashboardcontrollertest_dashboardcontrollertest_leaderboard_returns_json",
+      "tests_feature_http_controllers_web_dashboardcontrollertest_dashboardcontrollertest_realtime_validations_returns_json",
+      "tests_feature_http_controllers_web_dashboardcontrollertest_dashboardcontrollertest_setup"
+    ],
+    "57": [
+      "tests_selenium_login_test_login_ui",
+      "tests_selenium_login_test_login_ui_polislotlogintest",
+      "tests_selenium_login_test_login_ui_polislotlogintest_setup",
+      "tests_selenium_login_test_login_ui_polislotlogintest_teardown",
+      "tests_selenium_login_test_login_ui_polislotlogintest_test_01_login_sukses",
+      "tests_selenium_login_test_login_ui_polislotlogintest_test_02_login_gagal_kredensial_salah"
+    ],
+    "58": [
+      "composer_autoload",
+      "composer_autoload_psr_4",
+      "composer_psr_4_app",
+      "composer_psr_4_database_factories",
+      "composer_psr_4_database_seeders"
+    ],
+    "59": [
+      "tests_feature_http_middleware_rbactest_rbactest",
+      "tests_feature_http_middleware_rbactest_rbactest_it_allows_authorized_role",
+      "tests_feature_http_middleware_rbactest_rbactest_it_blocks_unauthorized_role_for_api",
+      "tests_feature_http_middleware_rbactest_rbactest_it_redirects_unauthenticated_web_users_to_login",
+      "tests_feature_http_middleware_rbactest_rbactest_it_returns_401_for_unauthenticated_api_users"
+    ],
+    "60": [
+      "tests_feature_model_feedbacktest_feedbacktest",
+      "tests_feature_model_feedbacktest_feedbacktest_feedback_dapat_dibaca",
+      "tests_feature_model_feedbacktest_feedbacktest_feedback_dapat_dibuat",
+      "tests_feature_model_feedbacktest_feedbacktest_feedback_dapat_dihapus",
+      "tests_feature_model_feedbacktest_feedbacktest_feedback_dapat_diupdate"
+    ],
+    "61": [
+      "tests_unit_service_historyservicetest_historyservicetest",
+      "tests_unit_service_historyservicetest_historyservicetest_log_menangani_exception_tanpa_menghentikan_aplikasi",
+      "tests_unit_service_historyservicetest_historyservicetest_log_mencatat_history_ke_database",
+      "tests_unit_service_historyservicetest_historyservicetest_log_mencatat_history_negatif_dengan_benar",
+      "tests_unit_service_historyservicetest_historyservicetest_setup"
+    ],
+    "62": [
+      "composer_scripts_post_create_project_cmd",
+      "ref_php_artisan_key_generate_ansi",
+      "ref_php_artisan_migrate_graceful_ansi",
+      "ref_php_r_file_exists_database_database_sqlite_touch_database_database_sqlite"
+    ],
+    "63": [
+      "docs_installation_manual_9_mengatasi_masalah_koneksi_broker_satu_jaringan_troubleshooting",
+      "docs_installation_manual_a_konfigurasi_ip_host_port_env",
+      "docs_installation_manual_b_windows_defender_firewall_sering_menjadi_penyebab_utama",
+      "docs_installation_manual_c_isolasi_jaringan_router_ap_isolation"
+    ],
+    "64": [
+      "composer_autoload_dev",
+      "composer_autoload_dev_psr_4",
+      "composer_psr_4_tests"
+    ],
+    "65": [
+      "composer_keywords",
+      "ref_framework",
+      "ref_laravel"
+    ],
+    "66": [
+      "database_migrations_0001_01_01_000000_create_users_table",
+      "database_migrations_0001_01_01_000000_create_users_table_down",
+      "database_migrations_0001_01_01_000000_create_users_table_up"
+    ],
+    "67": [
+      "database_migrations_0001_01_01_000001_create_cache_table",
+      "database_migrations_0001_01_01_000001_create_cache_table_down",
+      "database_migrations_0001_01_01_000001_create_cache_table_up"
+    ],
+    "68": [
+      "database_migrations_0001_01_01_000002_create_jobs_table",
+      "database_migrations_0001_01_01_000002_create_jobs_table_down",
+      "database_migrations_0001_01_01_000002_create_jobs_table_up"
+    ],
+    "69": [
+      "database_migrations_2025_09_30_040549_create_personal_access_tokens_table",
+      "database_migrations_2025_09_30_040549_create_personal_access_tokens_table_down",
+      "database_migrations_2025_09_30_040549_create_personal_access_tokens_table_up"
+    ],
+    "70": [
+      "database_migrations_2025_10_03_011549_create_info_boards_table",
+      "database_migrations_2025_10_03_011549_create_info_boards_table_down",
+      "database_migrations_2025_10_03_011549_create_info_boards_table_up"
+    ],
+    "71": [
+      "database_migrations_2025_11_21_103711_create_feedbacks_table",
+      "database_migrations_2025_11_21_103711_create_feedbacks_table_down",
+      "database_migrations_2025_11_21_103711_create_feedbacks_table_up"
+    ],
+    "72": [
+      "database_migrations_2025_12_07_185238_create_missions_table",
+      "database_migrations_2025_12_07_185238_create_missions_table_down",
+      "database_migrations_2025_12_07_185238_create_missions_table_up"
+    ],
+    "73": [
+      "database_migrations_2025_12_11_215950_create_rewards_table",
+      "database_migrations_2025_12_11_215950_create_rewards_table_down",
+      "database_migrations_2025_12_11_215950_create_rewards_table_up"
+    ],
+    "74": [
+      "database_migrations_2025_12_14_105407_create_user_histories_table",
+      "database_migrations_2025_12_14_105407_create_user_histories_table_down",
+      "database_migrations_2025_12_14_105407_create_user_histories_table_up"
+    ],
+    "75": [
+      "database_migrations_2025_12_14_183526_create_park_areas_table",
+      "database_migrations_2025_12_14_183526_create_park_areas_table_down",
+      "database_migrations_2025_12_14_183526_create_park_areas_table_up"
+    ],
+    "76": [
+      "database_migrations_2025_12_14_214256_create_validations_table",
+      "database_migrations_2025_12_14_214256_create_validations_table_down",
+      "database_migrations_2025_12_14_214256_create_validations_table_up"
+    ],
+    "77": [
+      "database_migrations_2026_04_20_000000_create_iot_devices_table",
+      "database_migrations_2026_04_20_000000_create_iot_devices_table_down",
+      "database_migrations_2026_04_20_000000_create_iot_devices_table_up"
+    ],
+    "78": [
+      "database_migrations_2026_04_20_000001_create_iot_captures_table",
+      "database_migrations_2026_04_20_000001_create_iot_captures_table_down",
+      "database_migrations_2026_04_20_000001_create_iot_captures_table_up"
+    ],
+    "79": [
+      "database_migrations_2026_04_23_202454_create_user_faq_table",
+      "database_migrations_2026_04_23_202454_create_user_faq_table_down",
+      "database_migrations_2026_04_23_202454_create_user_faq_table_up"
+    ],
+    "80": [
+      "resources_js_app",
+      "resources_js_bootstrap",
+      "resources_js_echo"
+    ],
+    "81": [
+      "tests_selenium_feedbackcategory_test_01_tambah_feedback",
+      "tests_selenium_feedbackcategory_test_01_tambah_feedback_driver",
+      "tests_selenium_feedbackcategory_test_01_tambah_feedback_test_add_feedback_category"
+    ],
+    "82": [
+      "tests_selenium_feedbackcategory_test_02_ubah_feedback",
+      "tests_selenium_feedbackcategory_test_02_ubah_feedback_driver",
+      "tests_selenium_feedbackcategory_test_02_ubah_feedback_test_edit_feedback_category"
+    ],
+    "83": [
+      "tests_selenium_feedbackcategory_test_03_hapus_feedback",
+      "tests_selenium_feedbackcategory_test_03_hapus_feedback_driver",
+      "tests_selenium_feedbackcategory_test_03_hapus_feedback_test_delete_feedback_category"
+    ],
+    "84": [
+      "tests_selenium_infoboard_test_01_tambah_infoboard",
+      "tests_selenium_infoboard_test_01_tambah_infoboard_driver",
+      "tests_selenium_infoboard_test_01_tambah_infoboard_test_add_info_board"
+    ],
+    "85": [
+      "tests_selenium_infoboard_test_02_ubah_infoboard",
+      "tests_selenium_infoboard_test_02_ubah_infoboard_driver",
+      "tests_selenium_infoboard_test_02_ubah_infoboard_test_edit_info_board"
+    ],
+    "86": [
+      "tests_selenium_infoboard_test_03_hapus_infoboard",
+      "tests_selenium_infoboard_test_03_hapus_infoboard_driver",
+      "tests_selenium_infoboard_test_03_hapus_infoboard_test_delete_info_board"
+    ],
+    "87": [
+      "tests_selenium_mission_test_01_tambah_misi",
+      "tests_selenium_mission_test_01_tambah_misi_driver",
+      "tests_selenium_mission_test_01_tambah_misi_test_add_mission"
+    ],
+    "88": [
+      "tests_selenium_mission_test_02_ubah_misi",
+      "tests_selenium_mission_test_02_ubah_misi_driver",
+      "tests_selenium_mission_test_02_ubah_misi_test_edit_mission"
+    ],
+    "89": [
+      "tests_selenium_mission_test_03_hapus_misi",
+      "tests_selenium_mission_test_03_hapus_misi_driver",
+      "tests_selenium_mission_test_03_hapus_misi_test_delete_mission"
+    ],
+    "90": [
+      "tests_selenium_profil_test_01_view_profil",
+      "tests_selenium_profil_test_01_view_profil_driver",
+      "tests_selenium_profil_test_01_view_profil_test_view_profile"
+    ],
+    "91": [
+      "tests_selenium_profil_test_02_ubah_profil",
+      "tests_selenium_profil_test_02_ubah_profil_driver",
+      "tests_selenium_profil_test_02_ubah_profil_test_edit_profile_name"
+    ],
+    "92": [
+      "tests_selenium_reward_test_01_tambah_reward",
+      "tests_selenium_reward_test_01_tambah_reward_driver",
+      "tests_selenium_reward_test_01_tambah_reward_test_add_reward"
+    ],
+    "93": [
+      "tests_selenium_reward_test_02_ubah_reward",
+      "tests_selenium_reward_test_02_ubah_reward_driver",
+      "tests_selenium_reward_test_02_ubah_reward_test_edit_reward"
+    ],
+    "94": [
+      "tests_selenium_reward_test_03_hapus_reward",
+      "tests_selenium_reward_test_03_hapus_reward_driver",
+      "tests_selenium_reward_test_03_hapus_reward_test_delete_reward"
+    ],
+    "95": [
+      "tests_selenium_reward_test_04_view_verify",
+      "tests_selenium_reward_test_04_view_verify_driver",
+      "tests_selenium_reward_test_04_view_verify_test_filter_verify_reward"
+    ],
+    "96": [
+      "tests_selenium_userfaq_test_01_tambah_faq",
+      "tests_selenium_userfaq_test_01_tambah_faq_driver",
+      "tests_selenium_userfaq_test_01_tambah_faq_test_add_faq"
+    ],
+    "97": [
+      "tests_selenium_userfaq_test_02_ubah_faq",
+      "tests_selenium_userfaq_test_02_ubah_faq_driver",
+      "tests_selenium_userfaq_test_02_ubah_faq_test_edit_faq"
+    ],
+    "98": [
+      "tests_selenium_userfaq_test_03_hapus_faq",
+      "tests_selenium_userfaq_test_03_hapus_faq_driver",
+      "tests_selenium_userfaq_test_03_hapus_faq_test_delete_faq"
+    ],
+    "99": [
+      "agents_rules_environment_isolation",
+      "agents_rules_environment_isolation_aturan_pemisahan_lingkungan_pengembangan_dan_runtime_docker"
+    ],
+    "100": [
+      "agents_rules_graphify",
+      "agents_rules_graphify_graphify"
+    ],
+    "101": [
+      "agents_workflows_development_cycle",
+      "agents_workflows_development_cycle_workflow_siklus_pengembangan_kode_tersendiri"
+    ],
+    "102": [
+      "agents_workflows_graphify",
+      "agents_workflows_graphify_workflow_graphify"
+    ],
+    "103": [
+      "contents_iotdetection_partials_captures_grid",
+      "resources_views_contents_iotdetection_viewer_blade"
+    ],
+    "104": [
+      "docker_docker_compose_app_service",
+      "docker_docker_installation_files_deploy_bundle"
+    ],
+    "105": [
+      "docker_entrypoint",
+      "docker_entrypoint_sh__entry"
+    ],
+    "106": [
+      "docker_logrotate_entrypoint",
+      "docker_logrotate_entrypoint_sh__entry"
+    ],
+    "107": [
+      "docs_project_summary_security_checklist",
+      "public_robots_disallow_all"
+    ],
+    "108": [
+      "github_copilot_instructions",
+      "github_copilot_instructions_graphify"
+    ],
+    "109": [
+      "python_models_best3_ncnn_model_model_ncnn",
+      "python_models_best3_ncnn_model_model_ncnn_test_inference"
+    ],
+    "110": [
+      "agents_rules_coding_standards_basecontroller_api_format"
+    ],
+    "111": [
+      "agents_rules_coding_standards_db_transaction_handling"
+    ],
+    "112": [
+      "agents_rules_coding_standards_eloquent_model_convention"
+    ],
+    "113": [
+      "agents_rules_coding_standards_fat_model_skinny_controller"
+    ],
+    "114": [
+      "agents_rules_coding_standards_n_plus_1_prevention"
+    ],
+    "115": [
+      "agents_rules_coding_standards_namespace_imports"
+    ],
+    "116": [
+      "agents_rules_coding_standards_php_laravel_standards"
+    ],
+    "117": [
+      "agents_rules_coding_standards_phpdoc"
+    ],
+    "118": [
+      "agents_rules_environment_isolation_dev_runtime_separation"
+    ],
+    "119": [
+      "agents_rules_environment_isolation_docker_runtime_readonly"
+    ],
+    "120": [
+      "agents_rules_graphify_graphify_rule"
+    ],
+    "121": [
+      "agents_workflows_development_cycle_workflow"
+    ],
+    "122": [
+      "agents_workflows_graphify_graphify_workflow"
+    ],
+    "123": [
+      "app_mail_loginnotificationmail_php_content"
+    ],
+    "124": [
+      "app_mail_loginnotificationmail_php_envelope"
+    ],
+    "125": [
+      "app_models_parksubarea_php_belongsto"
+    ],
+    "126": [
+      "artisan"
+    ],
+    "127": [
+      "config_app"
+    ],
+    "128": [
+      "config_auth"
+    ],
+    "129": [
+      "config_broadcasting"
+    ],
+    "130": [
+      "config_database"
+    ],
+    "131": [
+      "config_filesystems"
+    ],
+    "132": [
+      "config_mqtt_client"
+    ],
+    "133": [
+      "config_queue"
+    ],
+    "134": [
+      "config_reverb"
+    ],
+    "135": [
+      "config_sanctum"
+    ],
+    "136": [
+      "config_services"
+    ],
+    "137": [
+      "config_session"
+    ],
+    "138": [
+      "docker_docker_compose_db_service"
+    ],
+    "139": [
+      "docker_docker_compose_logrotate_service"
+    ],
+    "140": [
+      "docker_docker_compose_mosquitto_service"
+    ],
+    "141": [
+      "docker_docker_compose_scheduler_service"
+    ],
+    "142": [
+      "docker_docker_compose_tunnel_service"
+    ],
+    "143": [
+      "docker_wsl_port_forward"
+    ],
+    "144": [
+      "docs_installation_docker_md"
+    ],
+    "145": [
+      "docs_installation_manual_manual_install"
+    ],
+    "146": [
+      "docs_installation_manual_rsa_key_generation"
+    ],
+    "147": [
+      "docs_project_summary_deployment_architecture"
+    ],
+    "148": [
+      "docs_project_summary_edge_iot_parking_detector"
+    ],
+    "149": [
+      "docs_project_summary_hmac_shared_secret"
+    ],
+    "150": [
+      "docs_project_summary_hybrid_encryption"
+    ],
+    "151": [
+      "docs_project_summary_mobile_app_flutter"
+    ],
+    "152": [
+      "docs_project_summary_project_summary"
+    ],
+    "153": [
+      "lang_id_auth"
+    ],
+    "154": [
+      "lang_id_pagination"
+    ],
+    "155": [
+      "lang_id_passwords"
+    ],
+    "156": [
+      "lang_id_validation"
+    ],
+    "157": [
+      "public_index"
+    ],
+    "158": [
+      "python_requirements_python_iot_dependencies"
+    ],
+    "159": [
+      "readme_api_encryption"
+    ],
+    "160": [
+      "readme_artisan_commands"
+    ],
+    "161": [
+      "readme_database_backup_restore"
+    ],
+    "162": [
+      "readme_rbac_security"
+    ],
+    "163": [
+      "resources_views_contents_auth_forgotpass_forgot_form_blade"
+    ],
+    "164": [
+      "resources_views_contents_auth_forgotpass_forgot_new_pass_blade"
+    ],
+    "165": [
+      "resources_views_contents_auth_forgotpass_forgot_otp_blade"
+    ],
+    "166": [
+      "resources_views_contents_auth_login_blade"
+    ],
+    "167": [
+      "resources_views_contents_auth_register_blade"
+    ],
+    "168": [
+      "resources_views_contents_dashboard_index_blade"
+    ],
+    "169": [
+      "resources_views_contents_feedback_index_blade"
+    ],
+    "170": [
+      "resources_views_contents_feedbackcategory_index_blade"
+    ],
+    "171": [
+      "resources_views_contents_infoboard_index_blade"
+    ],
+    "172": [
+      "resources_views_contents_iotdetection_partials_captures_grid_blade"
+    ],
+    "173": [
+      "resources_views_contents_missions_index_blade"
+    ],
+    "174": [
+      "resources_views_contents_parkarea_create_blade"
+    ],
+    "175": [
+      "resources_views_contents_parkarea_index_blade"
+    ],
+    "176": [
+      "resources_views_contents_parkarea_show_blade"
+    ],
+    "177": [
+      "resources_views_contents_profile_index_blade"
+    ],
+    "178": [
+      "resources_views_contents_rewards_index_blade"
+    ],
+    "179": [
+      "resources_views_contents_rewards_verify_blade"
+    ],
+    "180": [
+      "resources_views_contents_userfaq_index_blade"
+    ],
+    "181": [
+      "resources_views_contents_validation_index_blade"
+    ],
+    "182": [
+      "resources_views_emails_login_notification_blade"
+    ],
+    "183": [
+      "resources_views_emails_registration_otp_blade"
+    ],
+    "184": [
+      "resources_views_emails_reset_password_otp_blade"
+    ],
+    "185": [
+      "resources_views_layouts_auth_layout_blade"
+    ],
+    "186": [
+      "resources_views_layouts_content_layout_blade"
+    ],
+    "187": [
+      "resources_views_redirect_app_blade"
+    ],
+    "188": [
+      "resources_views_welcome_blade"
+    ],
+    "189": [
+      "routes_channels"
+    ],
+    "190": [
+      "routes_console"
+    ],
+    "191": [
+      "vite_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.07650273224043716,
+    "1": 0.05844155844155844,
+    "2": 0.06988120195667366,
+    "3": 0.06868686868686869,
+    "4": 0.08362369337979095,
+    "5": 0.1173054587688734,
+    "6": 0.0641025641025641,
+    "7": 0.0915915915915916,
+    "8": 0.12436974789915967,
+    "9": 0.1140819964349376,
+    "10": 0.06896551724137931,
+    "11": 0.10837438423645321,
+    "12": 0.07692307692307693,
+    "13": 0.13405797101449277,
+    "14": 0.08333333333333333,
+    "15": 0.17316017316017315,
+    "16": 0.1645021645021645,
+    "17": 0.19480519480519481,
+    "18": 0.19480519480519481,
+    "19": 0.18614718614718614,
+    "20": 0.19047619047619047,
+    "21": 0.20476190476190476,
+    "22": 0.1,
+    "23": 0.20261437908496732,
+    "24": 0.2571428571428571,
+    "25": 0.14285714285714285,
+    "26": 0.23076923076923078,
+    "27": 0.22727272727272727,
+    "28": 0.21212121212121213,
+    "29": 0.2878787878787879,
+    "30": 0.24242424242424243,
+    "31": 0.16666666666666666,
+    "32": 0.2545454545454545,
+    "33": 0.18181818181818182,
+    "34": 0.3333333333333333,
+    "35": 0.3111111111111111,
+    "36": 0.28888888888888886,
+    "37": 0.26666666666666666,
+    "38": 0.2,
+    "39": 0.3055555555555556,
+    "40": 0.2777777777777778,
+    "41": 0.2222222222222222,
+    "42": 0.2222222222222222,
+    "43": 0.2222222222222222,
+    "44": 0.2222222222222222,
+    "45": 0.2222222222222222,
+    "46": 0.2857142857142857,
+    "47": 0.2857142857142857,
+    "48": 0.2857142857142857,
+    "49": 0.2857142857142857,
+    "50": 0.3333333333333333,
+    "51": 0.5333333333333333,
+    "52": 0.3333333333333333,
+    "53": 0.3333333333333333,
+    "54": 0.3333333333333333,
+    "55": 0.3333333333333333,
+    "56": 0.3333333333333333,
+    "57": 0.3333333333333333,
+    "58": 0.4,
+    "59": 0.4,
+    "60": 0.4,
+    "61": 0.4,
+    "62": 0.5,
+    "63": 0.5,
+    "64": 0.6666666666666666,
+    "65": 0.6666666666666666,
+    "66": 0.6666666666666666,
+    "67": 0.6666666666666666,
+    "68": 0.6666666666666666,
+    "69": 0.6666666666666666,
+    "70": 0.6666666666666666,
+    "71": 0.6666666666666666,
+    "72": 0.6666666666666666,
+    "73": 0.6666666666666666,
+    "74": 0.6666666666666666,
+    "75": 0.6666666666666666,
+    "76": 0.6666666666666666,
+    "77": 0.6666666666666666,
+    "78": 0.6666666666666666,
+    "79": 0.6666666666666666,
+    "80": 0.6666666666666666,
+    "81": 0.6666666666666666,
+    "82": 0.6666666666666666,
+    "83": 0.6666666666666666,
+    "84": 0.6666666666666666,
+    "85": 0.6666666666666666,
+    "86": 0.6666666666666666,
+    "87": 0.6666666666666666,
+    "88": 0.6666666666666666,
+    "89": 0.6666666666666666,
+    "90": 0.6666666666666666,
+    "91": 0.6666666666666666,
+    "92": 0.6666666666666666,
+    "93": 0.6666666666666666,
+    "94": 0.6666666666666666,
+    "95": 0.6666666666666666,
+    "96": 0.6666666666666666,
+    "97": 0.6666666666666666,
+    "98": 0.6666666666666666,
+    "99": 1.0,
+    "100": 1.0,
+    "101": 1.0,
+    "102": 1.0,
+    "103": 1.0,
+    "104": 1.0,
+    "105": 1.0,
+    "106": 1.0,
+    "107": 1.0,
+    "108": 1.0,
+    "109": 1.0,
+    "110": 1.0,
+    "111": 1.0,
+    "112": 1.0,
+    "113": 1.0,
+    "114": 1.0,
+    "115": 1.0,
+    "116": 1.0,
+    "117": 1.0,
+    "118": 1.0,
+    "119": 1.0,
+    "120": 1.0,
+    "121": 1.0,
+    "122": 1.0,
+    "123": 1.0,
+    "124": 1.0,
+    "125": 1.0,
+    "126": 1.0,
+    "127": 1.0,
+    "128": 1.0,
+    "129": 1.0,
+    "130": 1.0,
+    "131": 1.0,
+    "132": 1.0,
+    "133": 1.0,
+    "134": 1.0,
+    "135": 1.0,
+    "136": 1.0,
+    "137": 1.0,
+    "138": 1.0,
+    "139": 1.0,
+    "140": 1.0,
+    "141": 1.0,
+    "142": 1.0,
+    "143": 1.0,
+    "144": 1.0,
+    "145": 1.0,
+    "146": 1.0,
+    "147": 1.0,
+    "148": 1.0,
+    "149": 1.0,
+    "150": 1.0,
+    "151": 1.0,
+    "152": 1.0,
+    "153": 1.0,
+    "154": 1.0,
+    "155": 1.0,
+    "156": 1.0,
+    "157": 1.0,
+    "158": 1.0,
+    "159": 1.0,
+    "160": 1.0,
+    "161": 1.0,
+    "162": 1.0,
+    "163": 1.0,
+    "164": 1.0,
+    "165": 1.0,
+    "166": 1.0,
+    "167": 1.0,
+    "168": 1.0,
+    "169": 1.0,
+    "170": 1.0,
+    "171": 1.0,
+    "172": 1.0,
+    "173": 1.0,
+    "174": 1.0,
+    "175": 1.0,
+    "176": 1.0,
+    "177": 1.0,
+    "178": 1.0,
+    "179": 1.0,
+    "180": 1.0,
+    "181": 1.0,
+    "182": 1.0,
+    "183": 1.0,
+    "184": 1.0,
+    "185": 1.0,
+    "186": 1.0,
+    "187": 1.0,
+    "188": 1.0,
+    "189": 1.0,
+    "190": 1.0,
+    "191": 1.0
+  },
+  "gods": [
+    {
+      "id": "app_models_user_user",
+      "label": "User",
+      "degree": 161
+    },
+    {
+      "id": "app_models_parksubarea_parksubarea",
+      "label": "ParkSubarea",
+      "degree": 70
+    },
+    {
+      "id": "tests_testcase_testcase",
+      "label": "TestCase",
+      "degree": 48
+    },
+    {
+      "id": "app_http_controllers_controller_controller",
+      "label": "Controller",
+      "degree": 44
+    },
+    {
+      "id": "tests_feature_http_controllers_api_authcontrollertest_authcontrollertest",
+      "label": "AuthControllerTest",
+      "degree": 34
+    },
+    {
+      "id": "app_models_parkarea_parkarea",
+      "label": "ParkArea",
+      "degree": 28
+    },
+    {
+      "id": "tests_feature_http_controllers_web_authcontrollertest_authcontrollertest",
+      "label": "AuthControllerTest",
+      "degree": 26
+    },
+    {
+      "id": "app_models_iotdevice_iotdevice",
+      "label": "IotDevice",
+      "degree": 23
+    },
+    {
+      "id": "app_models_reward_reward",
+      "label": "Reward",
+      "degree": 14
+    },
+    {
+      "id": "app_models_validation_validation",
+      "label": "Validation",
+      "degree": 13
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Robots Disallow-All Policy",
+      "target": "Production Security Checklist",
+      "source_files": [
+        "public/robots.txt",
+        "docs/PROJECT_SUMMARY.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "main()",
+      "target": "start_websocket_thread()",
+      "source_files": [
+        "python/parking_detector_ws.py",
+        "python/parking_detector_ws_preview.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "indirect_call",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "FeedbackCategoryController",
+      "target": "Controller",
+      "source_files": [
+        "app/Http/Controllers/Api/FeedbackCategoryController.php",
+        "app/Http/Controllers/Controller.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "inherits",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "InfoBoardController",
+      "target": "Controller",
+      "source_files": [
+        "app/Http/Controllers/Api/InfoBoardController.php",
+        "app/Http/Controllers/Controller.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "inherits",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "IotDetectionController",
+      "target": "Controller",
+      "source_files": [
+        "app/Http/Controllers/Api/IotDetectionController.php",
+        "app/Http/Controllers/Controller.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "inherits",
+      "why": "bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

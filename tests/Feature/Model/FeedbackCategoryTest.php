@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Models;
+namespace Tests\Feature\Model;
 
 use App\Models\FeedbackCategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;

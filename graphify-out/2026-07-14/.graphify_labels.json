@@ -178,5 +178,20 @@
   "176": "Community 176",
   "177": "Community 177",
   "178": "Community 178",
-  "179": "Community 179"
+  "179": "Community 179",
+  "180": "Community 180",
+  "181": "Community 181",
+  "182": "Community 182",
+  "183": "Community 183",
+  "184": "Community 184",
+  "185": "Community 185",
+  "186": "Community 186",
+  "187": "Community 187",
+  "188": "login_notification.blade.php",
+  "189": "registration_otp.blade.php",
+  "190": "reset_password_otp.blade.php",
+  "191": "auth_layout.blade.php",
+  "192": "content_layout.blade.php",
+  "193": "redirect_app.blade.php",
+  "194": "welcome.blade.php"
 }

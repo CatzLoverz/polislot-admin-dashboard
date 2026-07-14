@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Models;
+namespace Tests\Feature\Model;
 
 use App\Models\ParkAmenity;
 use App\Models\ParkArea;
