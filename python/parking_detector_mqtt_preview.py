@@ -92,9 +92,11 @@ def save_local_config():
             }
         with open(CONFIG_FILE, "w") as f:
             json.dump(config_data, f, indent=4)
-        print(f"[💾] Config disimpan secara lokal ke {CONFIG_FILE}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[💾] Config disimpan secara lokal ke {CONFIG_FILE}")
     except Exception as e:
-        print(f"[-] Gagal menyimpan config lokal: {e}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[-] Gagal menyimpan config lokal: {e}")
 
 def load_local_config():
     global max_slots, detection_polygons, threshold_banyak, threshold_terbatas
@@ -107,9 +109,11 @@ def load_local_config():
                 detection_polygons = config_data.get("detection_polygon", detection_polygons)
                 threshold_banyak = config_data.get("threshold_banyak", threshold_banyak)
                 threshold_terbatas = config_data.get("threshold_terbatas", threshold_terbatas)
-            print(f"[💾] Berhasil memuat config lokal: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
+            if ENABLE_DEBUG_LOG:
+                print(f"[💾] Berhasil memuat config lokal: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
         except Exception as e:
-            print(f"[-] Gagal memuat config lokal: {e}")
+            if ENABLE_DEBUG_LOG:
+                print(f"[-] Gagal memuat config lokal: {e}")
 
 
 # ============================================================
@@ -216,12 +220,14 @@ except AttributeError:
     CALLBACK_API_VERSION = None
 
 def on_connect_success(client):
-    print(f"[+] Terhubung ke MQTT Broker ({BROKER}:{PORT})")
-    
+    if ENABLE_DEBUG_LOG:
+        print(f"[+] Terhubung ke MQTT Broker ({BROKER}:{PORT})")
+
     # Subscribe topics
     client.subscribe(TOPIC_COMMAND)
     client.subscribe(TOPIC_SERVER_STATUS)
-    print(f"[+] Subscribed ke command topic: {TOPIC_COMMAND}")
+    if ENABLE_DEBUG_LOG:
+        print(f"[+] Subscribed ke command topic: {TOPIC_COMMAND}")
     
     # Berikan jeda 1 detik secara asinkron agar broker selesai mendaftarkan subscription
     # sebelum status online dikirim (mencegah race condition push config)
@@ -231,26 +237,31 @@ def send_status_update(client, status):
     payload = {"status": status, "mac_address": MAC_ADDRESS}
     payload["signature"] = generate_hmac_signature(payload)
     client.publish(TOPIC_STATUS, json.dumps(payload, separators=(',', ':')), qos=1, retain=True)
-    print(f"[📡] Status presence terkirim: {status.upper()}")
+    if ENABLE_DEBUG_LOG:
+        print(f"[📡] Status presence terkirim: {status.upper()}")
 
 if CALLBACK_API_VERSION is not None:
     def on_connect(client, userdata, flags, reason_code, properties):
         if reason_code == 0:
             on_connect_success(client)
         else:
-            print(f"[-] Gagal terhubung, reason: {reason_code}")
+            if ENABLE_DEBUG_LOG:
+                print(f"[-] Gagal terhubung, reason: {reason_code}")
 
     def on_disconnect(client, userdata, flags, reason_code, properties):
-        print(f"[-] Terputus dari MQTT Broker, reason_code: {reason_code}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[-] Terputus dari MQTT Broker, reason_code: {reason_code}")
 else:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             on_connect_success(client)
         else:
-            print(f"[-] Gagal terhubung, rc: {rc}")
+            if ENABLE_DEBUG_LOG:
+                print(f"[-] Gagal terhubung, rc: {rc}")
 
     def on_disconnect(client, userdata, rc):
-        print(f"[-] Terputus dari MQTT Broker, rc: {rc}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[-] Terputus dari MQTT Broker, rc: {rc}")
 
 def on_publish(client, userdata, mid, *args, **kwargs):
     global last_puback_time
@@ -265,32 +276,37 @@ def on_message(client, userdata, msg):
         # Verify signature
         received_signature = payload.pop("signature", None)
         if not received_signature:
-            print("[⚠️] DITOLAK: Perintah tidak memiliki HMAC Signature.")
+            if ENABLE_DEBUG_LOG:
+                print("[⚠️] DITOLAK: Perintah tidak memiliki HMAC Signature.")
             return
-            
+
         calculated_signature = generate_hmac_signature(payload)
         if not hmac.compare_digest(received_signature, calculated_signature):
-            print("[🚨] DITOLAK: Signature tidak cocok!")
+            if ENABLE_DEBUG_LOG:
+                print("[🚨] DITOLAK: Signature tidak cocok!")
             return
-            
+
         action = payload.get("action")
-        print(f"\n[📥] Perintah terverifikasi: {action}")
-        
+        if ENABLE_DEBUG_LOG:
+            print(f"\n[📥] Perintah terverifikasi: {action}")
+
         if action == "update_config":
             with config_lock:
                 max_slots = payload.get("max_slots", max_slots)
                 detection_polygons = payload.get("detection_polygon", detection_polygons)
                 threshold_banyak = payload.get("threshold_banyak", threshold_banyak)
                 threshold_terbatas = payload.get("threshold_terbatas", threshold_terbatas)
-            print(f"[⚙️] Config diupdate: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
+            if ENABLE_DEBUG_LOG:
+                print(f"[⚙️] Config diupdate: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
             save_local_config()
 
         elif action == "snapshot":
-            print("[📸] Mengambil snapshot...")
+            if ENABLE_DEBUG_LOG:
+                print("[📸] Mengambil snapshot...")
             if stream:
                 image_bytes = stream.capture_jpeg()
                 iv_b64, encrypted_b64 = encrypt_image_aes(image_bytes)
-                
+
                 response_payload = {
                     "mac_address": MAC_ADDRESS,
                     "timestamp": int(time.time()),
@@ -300,24 +316,28 @@ def on_message(client, userdata, msg):
                 }
                 if "save_image" in payload:
                     response_payload["save_image"] = payload["save_image"]
-                
+
                 response_payload["signature"] = generate_hmac_signature(response_payload)
                 client.publish(TOPIC_SNAPSHOT, json.dumps(response_payload), qos=1)
-                print("[📤] Snapshot terenkripsi & ditandatangani berhasil dikirim.")
+                if ENABLE_DEBUG_LOG:
+                    print("[📤] Snapshot terenkripsi & ditandatangani berhasil dikirim.")
 
         elif action == "connection_test":
-            print("[🏓] Connection test, mengirim status online...")
+            if ENABLE_DEBUG_LOG:
+                print("[🏓] Connection test, mengirim status online...")
             send_status_update(client, "online")
 
 
         elif msg.topic == TOPIC_SERVER_STATUS:
             server_status = payload.get("status", "").upper()
             if server_status == "ONLINE":
-                print("[🌐] Server online, mengirim ulang status presence...")
+                if ENABLE_DEBUG_LOG:
+                    print("[🌐] Server online, mengirim ulang status presence...")
                 send_status_update(client, "online")
 
     except Exception as e:
-        print(f"[-] Gagal memproses pesan: {e}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[-] Gagal memproses pesan: {e}")
 
 # ============================================================
 # MAIN AI & VISUALIZATION LOOP
@@ -361,7 +381,8 @@ def main():
     client.on_message = on_message
 
     protocol_prefix = "ws://" if transport_mode == "websockets" else "mqtt://"
-    print(f"[+] Menghubungkan ke MQTT Broker {protocol_prefix}{BROKER}:{PORT} ...")
+    if ENABLE_DEBUG_LOG:
+        print(f"[+] Menghubungkan ke MQTT Broker {protocol_prefix}{BROKER}:{PORT} ...")
     client.connect(BROKER, PORT, 60)
     
     # Start MQTT Loop with paho-mqtt background thread
@@ -466,11 +487,13 @@ def main():
 
             # Watchdog pengecekan TCP Half-Open
             if time.time() - last_puback_time > 30:
-                print("[-] Deteksi TCP Half-Open (Tidak ada ACK dari server selama 30 detik). Mereset koneksi...")
+                if ENABLE_DEBUG_LOG:
+                    print("[-] Deteksi TCP Half-Open (Tidak ada ACK dari server selama 30 detik). Mereset koneksi...")
                 try:
                     client.reconnect()
                 except Exception as e:
-                    print(f"[-] Gagal reconnect: {e}")
+                    if ENABLE_DEBUG_LOG:
+                        print(f"[-] Gagal reconnect: {e}")
                 last_puback_time = time.time()
 
             # OpenCV Window refresh event loop (juga mendeteksi tombol 'q' untuk quit)

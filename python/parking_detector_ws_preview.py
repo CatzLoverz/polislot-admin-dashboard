@@ -113,9 +113,11 @@ def save_local_config():
             }
         with open(CONFIG_FILE, "w") as f:
             json.dump(config_data, f, indent=4)
-        print(f"[💾] Config disimpan secara lokal ke {CONFIG_FILE}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[💾] Config disimpan secara lokal ke {CONFIG_FILE}")
     except Exception as e:
-        print(f"[-] Gagal menyimpan config lokal: {e}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[-] Gagal menyimpan config lokal: {e}")
 
 def load_local_config():
     global max_slots, detection_polygons, threshold_banyak, threshold_terbatas
@@ -128,9 +130,11 @@ def load_local_config():
                 detection_polygons = config_data.get("detection_polygon", detection_polygons)
                 threshold_banyak = config_data.get("threshold_banyak", threshold_banyak)
                 threshold_terbatas = config_data.get("threshold_terbatas", threshold_terbatas)
-            print(f"[💾] Berhasil memuat config lokal: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
+            if ENABLE_DEBUG_LOG:
+                print(f"[💾] Berhasil memuat config lokal: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
         except Exception as e:
-            print(f"[-] Gagal memuat config lokal: {e}")
+            if ENABLE_DEBUG_LOG:
+                print(f"[-] Gagal memuat config lokal: {e}")
 
 def fetch_remote_config():
     global max_slots, detection_polygons, threshold_banyak, threshold_terbatas
@@ -147,9 +151,10 @@ def fetch_remote_config():
             "signature": signature
         }
         
-        print(f"[📥] Mencoba mengambil konfigurasi terbaru dari server: {API_CONFIG_URL} ...")
+        if ENABLE_DEBUG_LOG:
+            print(f"[📥] Mencoba mengambil konfigurasi terbaru dari server: {API_CONFIG_URL} ...")
         resp = requests.post(API_CONFIG_URL, json=payload, timeout=10)
-        
+
         if resp.status_code == 200:
             res_data = resp.json()
             if res_data.get("status") == "success":
@@ -159,14 +164,18 @@ def fetch_remote_config():
                     detection_polygons = cfg.get("detection_polygon", detection_polygons)
                     threshold_banyak = cfg.get("threshold_banyak", threshold_banyak)
                     threshold_terbatas = cfg.get("threshold_terbatas", threshold_terbatas)
-                print(f"[✅] Berhasil sinkronisasi config dari server: max_slots={max_slots}, polygons_count={len(detection_polygons)}")
+                if ENABLE_DEBUG_LOG:
+                    print(f"[✅] Berhasil sinkronisasi config dari server: max_slots={max_slots}, polygons_count={len(detection_polygons)}")
                 save_local_config()
             else:
-                print(f"[⚠️] Gagal sinkronisasi config: {res_data.get('message')}")
+                if ENABLE_DEBUG_LOG:
+                    print(f"[⚠️] Gagal sinkronisasi config: {res_data.get('message')}")
         else:
-            print(f"[⚠️] HTTP request gagal saat sinkronisasi config: status_code={resp.status_code}")
+            if ENABLE_DEBUG_LOG:
+                print(f"[⚠️] HTTP request gagal saat sinkronisasi config: status_code={resp.status_code}")
     except Exception as e:
-        print(f"[-] Gagal sinkronisasi config via HTTP: {e}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[-] Gagal sinkronisasi config via HTTP: {e}")
 
 
 # ============================================================
@@ -228,7 +237,8 @@ class CameraStream:
         self.lock = threading.Lock()
         self.thread = threading.Thread(target=self._update, daemon=True)
         self.thread.start()
-        print(f"[INFO] Camera stream started on source: {source}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[INFO] Camera stream started on source: {source}")
 
     def _update(self):
         # Warmup camera sensor
@@ -281,18 +291,21 @@ def handle_command(raw_data):
             cmd_data = json.loads(cmd_data)
 
         action = cmd_data.get('action', payload.get('action', ''))
-        print(f"\n[📥] Perintah WS diterima: {action}")
+        if ENABLE_DEBUG_LOG:
+            print(f"\n[📥] Perintah WS diterima: {action}")
 
         # Signature verification
         received_signature = cmd_data.get('signature', '')
         if not received_signature:
-            print("[⚠️] DITOLAK: Perintah tidak memiliki HMAC Signature.")
+            if ENABLE_DEBUG_LOG:
+                print("[⚠️] DITOLAK: Perintah tidak memiliki HMAC Signature.")
             return
 
         verify_data = {k: v for k, v in cmd_data.items() if k != 'signature'}
         calculated = generate_hmac_signature(verify_data)
         if not hmac.compare_digest(received_signature, calculated):
-            print("[🚨] DITOLAK: Signature tidak valid!")
+            if ENABLE_DEBUG_LOG:
+                print("[🚨] DITOLAK: Signature tidak valid!")
             return
 
         if action == 'update_config':
@@ -301,15 +314,17 @@ def handle_command(raw_data):
                 detection_polygons = cmd_data.get('detection_polygon', detection_polygons)
                 threshold_banyak = cmd_data.get('threshold_banyak', threshold_banyak)
                 threshold_terbatas = cmd_data.get('threshold_terbatas', threshold_terbatas)
-            print(f"[⚙️] Config diupdate via WS: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
+            if ENABLE_DEBUG_LOG:
+                print(f"[⚙️] Config diupdate via WS: max_slots={max_slots}, polygons_count={len(detection_polygons)}, thresholds=({threshold_banyak}%, {threshold_terbatas}%)")
             save_local_config()
 
         elif action == 'snapshot':
-            print("[📸] Mengambil snapshot...")
+            if ENABLE_DEBUG_LOG:
+                print("[📸] Mengambil snapshot...")
             if stream:
                 image_bytes = stream.capture_jpeg()
                 iv_b64, encrypted_b64 = encrypt_image_aes(image_bytes)
-                
+
                 response_payload = {
                     "mac_address": MAC_ADDRESS,
                     "timestamp": int(time.time()),
@@ -321,20 +336,25 @@ def handle_command(raw_data):
                     response_payload["save_image"] = cmd_data["save_image"]
 
                 response_payload["signature"] = generate_hmac_signature(response_payload)
-                
-                print("[📤] Mengirim gambar terenkripsi ke server via POST...")
+
+                if ENABLE_DEBUG_LOG:
+                    print("[📤] Mengirim gambar terenkripsi ke server via POST...")
                 resp = requests.post(API_SNAPSHOT_URL, json=response_payload, timeout=15)
                 if resp.status_code == 200:
-                    print("[✅] Snapshot terenkripsi & ditandatangani berhasil dikirim.")
+                    if ENABLE_DEBUG_LOG:
+                        print("[✅] Snapshot terenkripsi & ditandatangani berhasil dikirim.")
                 else:
-                    print(f"[-] Gagal mengirim snapshot: {resp.status_code} — {resp.text}")
+                    if ENABLE_DEBUG_LOG:
+                        print(f"[-] Gagal mengirim snapshot: {resp.status_code} — {resp.text}")
 
         elif action == 'connection_test':
-            print("[🏓] Connection test diterima dari server.")
+            if ENABLE_DEBUG_LOG:
+                print("[🏓] Connection test diterima dari server.")
 
 
     except Exception as e:
-        print(f"[-] Error memproses command: {e}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[-] Error memproses command: {e}")
 
 # ============================================================
 # WEBSOCKET CONNECTION MANAGER
@@ -360,12 +380,14 @@ async def websocket_client():
                 raw = await ws.recv()
                 msg = json.loads(raw)
                 if msg.get('event') != 'pusher:connection_established':
-                    print(f"[-] Unexpected event: {msg.get('event')}")
+                    if ENABLE_DEBUG_LOG:
+                        print(f"[-] Unexpected event: {msg.get('event')}")
                     continue
 
                 conn_data = json.loads(msg['data'])
                 socket_id = conn_data['socket_id']
-                print(f"[+] Terhubung ke Reverb! socket_id: {socket_id}")
+                if ENABLE_DEBUG_LOG:
+                    print(f"[+] Terhubung ke Reverb! socket_id: {socket_id}")
 
                 # 2. Auth via API Server
                 timestamp = int(time.time())
@@ -391,7 +413,8 @@ async def websocket_client():
                     break
 
                 auth_data = auth_resp.json()
-                print("[+] Auth WebSocket berhasil.")
+                if ENABLE_DEBUG_LOG:
+                    print("[+] Auth WebSocket berhasil.")
 
                 # Sinkronisasi config terbaru dari server
                 await loop.run_in_executor(None, fetch_remote_config)
@@ -406,7 +429,8 @@ async def websocket_client():
                     }
                 }
                 await ws.send(json.dumps(subscribe_msg))
-                print(f"[📡] Subscribing ke channel {channel_name}...")
+                if ENABLE_DEBUG_LOG:
+                    print(f"[📡] Subscribing ke channel {channel_name}...")
 
                 # 4. Listen for incoming commands
                 async for raw_msg in ws:
@@ -446,7 +470,8 @@ def start_websocket_thread():
     try:
         loop.run_until_complete(websocket_client())
     except Exception as e:
-        print(f"[-] WS Client thread stopped: {e}")
+        if ENABLE_DEBUG_LOG:
+            print(f"[-] WS Client thread stopped: {e}")
 
 # ============================================================
 # MAIN
@@ -583,7 +608,8 @@ def main():
 
             # Watchdog pengecekan HTTP / TCP Half-Open untuk WS
             if ws_connected and (time.time() - last_http_success_time > 30):
-                print("[-] Deteksi TCP Half-Open (Tidak ada response API sukses selama 30 detik). Mereset WS...")
+                if ENABLE_DEBUG_LOG:
+                    print("[-] Deteksi TCP Half-Open (Tidak ada response API sukses selama 30 detik). Mereset WS...")
                 if ws_client and ws_loop:
                     try:
                         asyncio.run_coroutine_threadsafe(ws_client.close(), ws_loop)
