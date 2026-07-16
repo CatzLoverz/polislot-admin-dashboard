@@ -22,6 +22,8 @@ class IotWsAuthController extends Controller
      * 2. Verifikasi HMAC-SHA256 signature menggunakan IOT_API_SECRET
      * 3. Validasi MAC address terdaftar di database
      * 4. Return Pusher-compatible auth response
+     * @param  Request $request
+     * @return JsonResponse
      */
     public function authenticate(Request $request): JsonResponse
     {

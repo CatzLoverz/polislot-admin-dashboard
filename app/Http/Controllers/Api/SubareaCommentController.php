@@ -20,7 +20,8 @@ class SubareaCommentController extends Controller
      * Menampilkan daftar komentar berdasarkan Subarea dengan Paginasi.
      * Mirip dengan HistoryController, output diformat ulang.
      *
-     * @param  Request  $request  (park_subarea_id, limit, page)
+     * @param  Request $request Data filter (park_subarea_id, limit, page)
+     * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
     {
@@ -79,6 +80,9 @@ class SubareaCommentController extends Controller
 
     /**
      * Menyimpan komentar baru (Store).
+     *
+     * @param  Request $request
+     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
@@ -132,7 +136,9 @@ class SubareaCommentController extends Controller
      * Memperbarui komentar (Update).
      * Mengganti konten atau gambar. Gambar lama akan dihapus jika ada gambar baru.
      *
-     * @param  int  $id  ID SubareaComment
+     * @param  Request $request
+     * @param  int $id ID SubareaComment
+     * @return JsonResponse
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -199,7 +205,9 @@ class SubareaCommentController extends Controller
      * Menghapus komentar (Destroy).
      * Menghapus data di database beserta file gambarnya di storage.
      *
-     * @param  int  $id  ID SubareaComment
+     * @param  Request $request
+     * @param  int $id ID SubareaComment
+     * @return JsonResponse
      */
     public function destroy(Request $request, $id): JsonResponse
     {

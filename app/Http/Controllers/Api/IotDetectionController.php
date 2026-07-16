@@ -23,6 +23,9 @@ class IotDetectionController extends Controller
 {
     /**
      * Helper: Validasi MAC Address terdaftar (cache-aware).
+     *
+     * @param  string $macAddress MAC address perangkat
+     * @return bool
      */
     private function validateMacAddress(string $macAddress): bool
     {
@@ -47,6 +50,9 @@ class IotDetectionController extends Controller
      * 1. MAC Address divalidasi terhadap database (harus terdaftar)
      * 2. Request di-sign dengan HMAC-SHA256 menggunakan API secret
      * 3. Timestamp dalam signature mencegah replay attack (±5 menit)
+     *
+     * @param  Request $request
+     * @return JsonResponse
      */
     public function receiveDetection(Request $request): JsonResponse
     {
@@ -159,6 +165,9 @@ class IotDetectionController extends Controller
      * Padanan HTTP dari MQTT topic "polislot/device/{MAC}/snapshot".
      *
      * Flow: Device capture → AES encrypt → HTTP POST → Decrypt → Save DB → Broadcast Reverb
+     *
+     * @param  Request $request
+     * @return JsonResponse
      */
     public function receiveSnapshot(Request $request): JsonResponse
     {
@@ -333,6 +342,9 @@ class IotDetectionController extends Controller
 
     /**
      * Endpoint untuk menerima hitungan (count) kendaraan dari IoT device.
+     *
+     * @param  Request $request
+     * @return JsonResponse
      */
     public function receiveCount(Request $request): JsonResponse
     {
@@ -397,6 +409,9 @@ class IotDetectionController extends Controller
 
     /**
      * Endpoint untuk memberikan konfigurasi terbaru ke IoT device pada saat startup.
+     *
+     * @param  Request $request
+     * @return JsonResponse
      */
     public function receiveConfigQuery(Request $request): JsonResponse
     {

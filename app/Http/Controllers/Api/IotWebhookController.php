@@ -20,6 +20,9 @@ class IotWebhookController extends Controller
     /**
      * Handle Webhooks from Reverb/Pusher.
      * Digunakan untuk mendeteksi kapan IoT Device join/leave presence channel.
+     *
+     * @param  Request $request
+     * @return JsonResponse
      */
     public function handle(Request $request): JsonResponse
     {
@@ -79,6 +82,10 @@ class IotWebhookController extends Controller
 
     /**
      * Update status di cache dan broadcast ke UI.
+     *
+     * @param  string $mac MAC address perangkat
+     * @param  string $status Status baru ('online'/'offline')
+     * @return void
      */
     private function updateStatus(string $mac, string $status)
     {

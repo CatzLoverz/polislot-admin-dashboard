@@ -20,8 +20,8 @@ class MissionController extends Controller
     /**
      * Menampilkan halaman daftar semua misi.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\View\View|\Illuminate\Http\JsonResponse
+     * @param  Request $request
+     * @return View|JsonResponse
      */
     public function index(Request $request)
     {
@@ -138,8 +138,8 @@ class MissionController extends Controller
     /**
      * Memproses penyimpanan data Misi baru.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -187,9 +187,9 @@ class MissionController extends Controller
     /**
      * Memproses pembaruan data Misi.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(Request $request, $id): RedirectResponse
     {
@@ -240,7 +240,7 @@ class MissionController extends Controller
      * Memproses penghapusan data Misi.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy($id): RedirectResponse
     {
