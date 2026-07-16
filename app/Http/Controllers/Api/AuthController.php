@@ -501,4 +501,57 @@ class AuthController extends Controller
             return $this->sendError('Gagal mereset password.', 500);
         }
     }
+
+    /**
+     * Memproses penyimpanan password baru menggunakan OTP (khusus Mobile).
+     */
+    public function resetPasswordByOtp(Request $request): JsonResponse
+    {
+        try {
+            return DB::transaction(function () use ($request) {
+                $request->validate([
+                    'email' => 'required|email|exists:users,email',
+                    'password' => ['required', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()->symbols()],
+                    'token' => 'required|numeric|digits:6', // Dianggap sebagai OTP
+                ]);
+
+                $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
+
+                // Verifikasi OTP
+                if ($user->otp_code != $request->token || Carbon::now()->gt($user->otp_expires_at)) {
+                    Log::warning('OTP reset tidak valid atau kadaluarsa.');
+                    return $this->sendError('Kode OTP tidak valid atau sudah kadaluarsa.', 400);
+                }
+
+                if (Hash::check($request->password, $user->password)) {
+                    Log::warning('Password baru sama dengan lama.');
+                    return $this->sendError('Password baru tidak boleh sama dengan yang lama.', 400);
+                }
+
+                $user->password       = Hash::make($request->password);
+                $user->otp_code       = null;
+                $user->otp_expires_at = null;
+                $user->reset_token    = null; // Hapus juga token link untuk keamanan
+                $user->failed_attempts = 0;
+                $user->locked_until    = null;
+                $user->save();
+
+                // Hapus sesi login saat pemulihan akun (logout dari semua perangkat)
+                $user->tokens()->delete();
+
+                Log::info('Password direset via OTP dan sesi dibersihkan.', ['user_id' => $user->user_id]);
+
+                return $this->sendSuccess('Password berhasil direset. Silakan login.');
+            });
+
+        } catch (ValidationException $e) {
+            Log::warning('Validasi error.', ['errors' => $e->errors()]);
+
+            return $this->sendValidationError($e);
+        } catch (Exception $e) {
+            Log::error('Error sistem.', ['error' => $e->getMessage()]);
+
+            return $this->sendError('Gagal mereset password.', 500);
+        }
+    }
 }
