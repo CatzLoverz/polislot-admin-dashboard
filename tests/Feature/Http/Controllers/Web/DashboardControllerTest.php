@@ -34,6 +34,13 @@ class DashboardControllerTest extends TestCase
     }
 
     #[Test]
+    public function detection_chart_data_returns_json()
+    {
+        $response = $this->actingAs($this->admin)->get('/dashboard/detection-chart');
+        $response->assertStatus(200)->assertJsonStructure(['labels', 'datasets', 'filter_type']);
+    }
+
+    #[Test]
     public function leaderboard_returns_json()
     {
         User::factory()->create(['role' => 'user', 'lifetime_points' => 100, 'email_verified_at' => now()]);

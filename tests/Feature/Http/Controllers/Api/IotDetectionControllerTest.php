@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Api;
 use App\Models\IotDevice;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
+use App\Models\ParkSubareaHistory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
@@ -148,6 +149,12 @@ class IotDetectionControllerTest extends TestCase
         ]);
 
         $response->assertStatus(200);
+
+        // Verifikasi bahwa history log terisi dengan benar
+        $this->assertDatabaseHas('park_subarea_histories', [
+            'park_subarea_id' => $this->device->park_subarea_id,
+            'current_count' => $count,
+        ]);
     }
 
     #[Test]

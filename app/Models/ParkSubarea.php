@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\IotCommandSent;
 use App\Events\IotThresholdUpdated;
+use App\Models\ParkSubareaHistory;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -345,5 +346,51 @@ class ParkSubarea extends Model
                 }
             }
         }
+    }
+
+    /**
+     * Relasi ke data histori deteksi otomatis subarea.
+     *
+     * @return HasMany
+     */
+    public function parkSubareaHistories(): HasMany
+    {
+        return $this->hasMany(ParkSubareaHistory::class, 'park_subarea_id', 'park_subarea_id');
+    }
+
+    /**
+     * Catat data ketersediaan parkir otomatis (YOLO) ke histori, dibatasi per 20 menit per subarea.
+     *
+     * @param int $count Jumlah kendaraan terdeteksi
+     * @return void
+     */
+    public function logOccupancy(int $count): void
+    {
+        if ($this->max_slots <= 0) {
+            return;
+        }
+
+        $recentHistoryExists = ParkSubareaHistory::where('park_subarea_id', $this->park_subarea_id)
+            ->where('created_at', '>=', now()->subMinutes(20))
+            ->exists();
+
+        if ($recentHistoryExists) {
+            return;
+        }
+
+        $occupancy = ($count / $this->max_slots) * 100;
+        $status = 'terbatas';
+        if ($occupancy < ($this->threshold_banyak ?? 30.0)) {
+            $status = 'banyak';
+        } elseif ($occupancy >= ($this->threshold_terbatas ?? 80.0)) {
+            $status = 'penuh';
+        }
+
+        ParkSubareaHistory::create([
+            'park_subarea_id' => $this->park_subarea_id,
+            'current_count' => $count,
+            'max_slots' => $this->max_slots,
+            'status' => $status,
+        ]);
     }
 }

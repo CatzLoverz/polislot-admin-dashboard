@@ -300,6 +300,7 @@ class MqttListenerCommand extends Command
                             DB::transaction(function () use ($subarea, $count) {
                                 $subarea->current_count = $count;
                                 $subarea->save();
+                                $subarea->logOccupancy($count);
                             });
 
                             // Broadcast count update

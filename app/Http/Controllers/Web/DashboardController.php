@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\ParkArea;
 use App\Models\ParkSubarea;
+use App\Models\ParkSubareaHistory;
 use App\Models\User;
 use App\Models\UserReward;
 use App\Models\UserValidation;
@@ -158,6 +159,123 @@ class DashboardController extends Controller
             Log::error($e->getMessage());
 
             return response()->json(['error' => 'Failed to load chart data'], 500);
+        }
+    }
+
+    /**
+     * Fetch data for Automatic Detection Availability chart.
+     * Menampilkan rata-rata slot tersedia per jam dengan warna berdasarkan status
+     * dan mengacu pada data histori ketersediaan parkir yang diambil setiap 20 menit.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDetectionChartData(Request $request): JsonResponse
+    {
+        try {
+            $filterType = $request->input('filter_type', 'tanggal');
+            $from = null;
+            $to = null;
+
+            switch ($filterType) {
+                case 'tanggal':
+                    $fromStr = $request->input('date_from', Carbon::now()->subDays(30)->toDateString());
+                    $toStr = $request->input('date_to', $fromStr);
+                    $from = Carbon::parse($fromStr)->startOfDay();
+                    $to = Carbon::parse($toStr)->endOfDay();
+                    break;
+
+                case 'bulan':
+                    $fromStr = $request->input('month_from', Carbon::now()->format('Y-m'));
+                    $toStr = $request->input('month_to', $fromStr);
+                    $from = Carbon::parse($fromStr . '-01')->startOfMonth();
+                    $to = Carbon::parse($toStr . '-01')->endOfMonth();
+                    break;
+
+                case 'tahun':
+                    $fromYear = $request->input('year_from', Carbon::now()->year);
+                    $toYear = $request->input('year_to', $fromYear);
+                    $from = Carbon::createFromDate($fromYear, 1, 1)->startOfYear();
+                    $to = Carbon::createFromDate($toYear, 12, 31)->endOfYear();
+                    break;
+            }
+
+            $queryBuilder = ParkSubareaHistory::join('park_subareas', 'park_subarea_histories.park_subarea_id', '=', 'park_subareas.park_subarea_id')
+                ->join('park_areas', 'park_subareas.park_area_id', '=', 'park_areas.park_area_id')
+                ->select(
+                    DB::raw("HOUR(park_subarea_histories.created_at) as hour"),
+                    'park_subarea_histories.status',
+                    'park_subarea_histories.current_count',
+                    'park_subarea_histories.max_slots'
+                )
+                ->whereBetween('park_subarea_histories.created_at', [$from, $to]);
+
+            $areaId = $request->input('area_id');
+            if ($areaId && $areaId !== 'all') {
+                $queryBuilder->where('park_areas.park_area_id', $areaId);
+            }
+
+            $records = $queryBuilder->get();
+
+            $labels = collect();
+            $dataPoints = collect();
+            $backgroundColors = collect();
+
+            for ($hour = 0; $hour < 24; $hour++) {
+                $labels->push(sprintf('%02d:00', $hour));
+
+                $hourRecords = $records->filter(function ($r) use ($hour) {
+                    return $r->hour == $hour;
+                });
+
+                if ($hourRecords->isNotEmpty()) {
+                    // Average available slots (Y-axis)
+                    $totalAvailable = $hourRecords->sum(function ($r) {
+                        return max(0, $r->max_slots - $r->current_count);
+                    });
+                    $avgAvailable = $totalAvailable / $hourRecords->count();
+
+                    // Find majority status (most frequent status)
+                    $statusCounts = $hourRecords->countBy('status');
+                    $majorityStatus = $statusCounts->keys()->first();
+                    $maxCount = 0;
+                    foreach ($statusCounts as $status => $count) {
+                        if ($count > $maxCount) {
+                            $maxCount = $count;
+                            $majorityStatus = $status;
+                        }
+                    }
+
+                    $colors = [
+                        'banyak' => '#28a745',
+                        'terbatas' => '#ffc107',
+                        'penuh' => '#dc3545',
+                    ];
+                    $color = $colors[$majorityStatus] ?? '#e8e8e8';
+
+                    $dataPoints->push(round($avgAvailable, 1));
+                    $backgroundColors->push($color);
+                } else {
+                    $dataPoints->push(0);
+                    $backgroundColors->push('#e8e8e8');
+                }
+            }
+
+            return response()->json([
+                'labels' => $labels,
+                'datasets' => [[
+                    'label' => 'Rata-rata Slot Tersedia',
+                    'data' => $dataPoints,
+                    'backgroundColor' => $backgroundColors,
+                    'borderColor' => $backgroundColors,
+                    'borderWidth' => 1,
+                ]],
+                'filter_type' => $filterType,
+            ]);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+
+            return response()->json(['error' => 'Failed to load detection chart data'], 500);
         }
     }
 

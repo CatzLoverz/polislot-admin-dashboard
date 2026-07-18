@@ -85,6 +85,21 @@
             </div>
         </div>
     </div>
+    <!-- Row 1.5: Automatic Detection Parking Availability Statistics -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Statistik Ketersediaan Parkir Deteksi Otomatis</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="min-height: 375px">
+                        <canvas id="detectionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Row 2: Validation Chart -->
     <div class="row">
         <div class="col-md-12">
@@ -266,6 +281,55 @@
             });
         }
 
+        // --- 1.5. Detection Chart ---
+        const ctxDetection = document.getElementById('detectionChart').getContext('2d');
+        let detectionChart = null;
+
+        function loadDetectionChart(filterType, params = {}) {
+            let requestData = Object.assign({ filter_type: filterType }, params);
+            let areaId = $('#chartAreaFilter').val();
+            if (areaId) requestData.area_id = areaId;
+
+            $.get("{{ route('dashboard.detection_chart') }}", requestData, function (response) {
+                if (detectionChart) {
+                    detectionChart.destroy();
+                }
+
+                detectionChart = new Chart(ctxDetection, {
+                    type: 'bar',
+                    data: {
+                        labels: response.labels,
+                        datasets: response.datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Rata-rata Slot Tersedia'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Jam'
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: { left: 15, right: 15, top: 15, bottom: 15 }
+                        }
+                    }
+                });
+            });
+        }
+
         // --- Consolidated Calendar Filter Dropdown ---
         // Keep dropdown open when interacting inside
         $('#chartFilterDropdown .dropdown-menu').on('click', function (e) {
@@ -345,6 +409,7 @@
             $('#filterDropdownLabel').text(rangeLabel);
 
             loadChart(type, params);
+            loadDetectionChart(type, params);
 
             // Close dropdown
             $('#chartFilterDropdown').removeClass('show');
@@ -378,6 +443,10 @@
         $('#filterDropdownLabel').text(defaultAreaName + ' | Tanggal: ' + initFrom + ' s/d ' + initTo);
 
         loadChart('tanggal', {
+            date_from: initFrom,
+            date_to: initTo
+        });
+        loadDetectionChart('tanggal', {
             date_from: initFrom,
             date_to: initTo
         });

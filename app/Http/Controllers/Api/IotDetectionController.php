@@ -396,6 +396,7 @@ class IotDetectionController extends Controller
             $subarea = $device->subarea;
             $subarea->current_count = (int) $request->count;
             $subarea->save();
+            $subarea->logOccupancy((int) $request->count);
 
             // Broadcast count updated
             broadcast(new IotCountUpdated($macAddress, $request->count));
