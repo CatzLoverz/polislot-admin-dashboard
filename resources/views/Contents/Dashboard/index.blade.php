@@ -157,6 +157,21 @@
                     <div class="chart-container" style="min-height: 375px">
                         <canvas id="detectionChart"></canvas>
                     </div>
+                    <!-- Legend hint for detection chart -->
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="d-flex align-items-center mr-3">
+                            <span class="d-inline-block" style="width: 14px; height: 14px; background: #28a745; border-radius: 3px; margin-right: 5px;"></span>
+                            <small>Banyak Tersedia</small>
+                        </div>
+                        <div class="d-flex align-items-center mr-3">
+                            <span class="d-inline-block" style="width: 14px; height: 14px; background: #ffc107; border-radius: 3px; margin-right: 5px;"></span>
+                            <small>Terbatas</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="d-inline-block" style="width: 14px; height: 14px; background: #dc3545; border-radius: 3px; margin-right: 5px;"></span>
+                            <small>Penuh</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,7 +182,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Statistik Validasi Pengguna</div>
+                        <div class="card-title">Statistik Laporan Validasi Pengguna</div>
                         <div class="card-tools">
                             <!-- Consolidated Calendar Filter Dropdown -->
                             <div class="dropdown d-inline-block" id="chartFilterDropdown">
@@ -327,11 +342,19 @@
                         },
                         scales: {
                             x: {
-                                stacked: true
+                                stacked: true,
+                                title: {
+                                    display: true,
+                                    text: 'Jam'
+                                }
                             },
                             y: {
                                 stacked: true,
-                                beginAtZero: true
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Frekuensi Validasi Pengguna'
+                                }
                             }
                         },
                         layout: {
@@ -703,7 +726,8 @@
 @push('styles')
 <style>
     /* CSS Override rigid untuk dropdown filter agar posisinya stabil di kanan dan tidak offside */
-    #chartFilterDropdown .dropdown-menu {
+    #chartFilterDropdown .dropdown-menu,
+    #detectionChartFilterDropdown .dropdown-menu {
         position: absolute !important;
         left: auto !important;
         right: 0 !important;
