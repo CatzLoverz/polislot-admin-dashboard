@@ -93,13 +93,63 @@
                     <div class="card-head-row">
                         <div class="card-title">Statistik Validasi Pengguna</div>
                         <div class="card-tools">
+                            <!-- Consolidated Calendar Filter Dropdown -->
+                            <div class="dropdown d-inline-block" id="chartFilterDropdown">
+                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-calendar-alt mr-1"></i> <span id="filterDropdownLabel">Filter Tanggal</span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="dropdownMenuButton" style="min-width: 280px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border-radius: 6px; transform: none !important; right: 0 !important; left: auto !important; top: 100% !important;">
+                                    <div class="form-group p-0 mb-2">
+                                        <label class="small font-weight-bold mb-1">Area Parkir</label>
+                                        <select id="chartAreaFilter" class="form-control form-control-sm">
+                                            <option value="all">Semua Area</option>
+                                            @foreach($parkAreas as $area)
+                                                <option value="{{ $area->park_area_id }}">{{ $area->park_area_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                            <select id="chartPeriodFilter" class="form-control form-control-sm d-inline-block"
-                                style="width: 100px;">
-                                <option value="day">Harian</option>
-                                <option value="week">Mingguan</option>
-                                <option value="month">Bulanan</option>
-                            </select>
+                                    <div class="form-group p-0 mb-2">
+                                        <label class="small font-weight-bold mb-1">Tipe Filter</label>
+                                        <select id="filterType" class="form-control form-control-sm">
+                                            <option value="tanggal">Tanggal</option>
+                                            <option value="bulan">Bulan</option>
+                                            <option value="tahun">Tahun</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-check p-0 mb-3">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" id="rangeToggle">
+                                            <span class="form-check-sign small">Rentang Waktu</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group p-0 mb-3">
+                                        <label class="small font-weight-bold mb-1">Pilih Waktu</label>
+
+                                        <!-- Tanggal Inputs -->
+                                        <div class="filter-inputs-group" id="groupTanggal">
+                                            <input type="date" class="form-control form-control-sm mb-1" id="dateFrom">
+                                            <input type="date" class="form-control form-control-sm d-none" id="dateTo">
+                                        </div>
+
+                                        <!-- Bulan Inputs -->
+                                        <div class="filter-inputs-group d-none" id="groupBulan">
+                                            <input type="month" class="form-control form-control-sm mb-1" id="monthFrom">
+                                            <input type="month" class="form-control form-control-sm d-none" id="monthTo">
+                                        </div>
+
+                                        <!-- Tahun Inputs -->
+                                        <div class="filter-inputs-group d-none" id="groupTahun">
+                                            <input type="number" class="form-control form-control-sm mb-1" id="yearFrom" value="{{ date('Y') }}" placeholder="Tahun Mulai">
+                                            <input type="number" class="form-control form-control-sm d-none" id="yearTo" value="{{ date('Y') }}" placeholder="Tahun Akhir">
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-xs btn-primary btn-block" id="applyChartFilter">Terapkan</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,14 +226,19 @@
         const ctx = document.getElementById('validationChart').getContext('2d');
         let validationChart = null;
 
-        function loadChart(period) {
-            $.get("{{ route('dashboard.chart') }}", { period: period }, function (response) {
+        function loadChart(filterType, params = {}) {
+            let requestData = Object.assign({ filter_type: filterType }, params);
+            // Tambah area_id dari filter
+            let areaId = $('#chartAreaFilter').val();
+            if (areaId) requestData.area_id = areaId;
+
+            $.get("{{ route('dashboard.chart') }}", requestData, function (response) {
                 if (validationChart) {
                     validationChart.destroy();
                 }
 
                 validationChart = new Chart(ctx, {
-                    type: 'line',
+                    type: 'bar',
                     data: {
                         labels: response.labels,
                         datasets: response.datasets
@@ -191,15 +246,17 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        legend: { position: 'bottom' },
-                        tooltips: {
-                            bodySpacing: 4,
-                            mode: "nearest",
-                            intersect: 0,
-                            position: "nearest",
-                            xPadding: 10,
-                            yPadding: 10,
-                            caretPadding: 10
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true
+                            }
                         },
                         layout: {
                             padding: { left: 15, right: 15, top: 15, bottom: 15 }
@@ -209,12 +266,125 @@
             });
         }
 
-        // Initial Load
-        loadChart('day');
+        // --- Consolidated Calendar Filter Dropdown ---
+        // Keep dropdown open when interacting inside
+        $('#chartFilterDropdown .dropdown-menu').on('click', function (e) {
+            e.stopPropagation();
+        });
 
-        // Filter Events
-        $('#chartPeriodFilter').change(function () {
-            loadChart($(this).val());
+        function updateInputsVisibility() {
+            const type = $('#filterType').val();
+            const isRange = $('#rangeToggle').is(':checked');
+
+            // Sembunyikan semua input "hingga" terlebih dahulu
+            $('#dateTo, #monthTo, #yearTo').addClass('d-none');
+
+            // Tampilkan input "hingga" hanya jika range toggle aktif
+            if (isRange) {
+                const idMap = { tanggal: '#dateTo', bulan: '#monthTo', tahun: '#yearTo' };
+                $(idMap[type]).removeClass('d-none');
+            }
+        }
+
+        // Mode switcher
+        $('#filterType').change(function () {
+            const type = $(this).val();
+            $('.filter-inputs-group').addClass('d-none');
+            $('#group' + type.charAt(0).toUpperCase() + type.slice(1)).removeClass('d-none');
+
+            // Perbarui visibilitas input "hingga"
+            updateInputsVisibility();
+
+            const labelMap = { tanggal: 'Filter Tanggal', bulan: 'Filter Bulan', tahun: 'Filter Tahun' };
+            $('#filterDropdownLabel').text(labelMap[type] || 'Filter');
+        });
+
+        // Range toggle
+        $('#rangeToggle').change(function () {
+            updateInputsVisibility();
+        });
+
+        // Apply Filter
+        $('#applyChartFilter').click(function () {
+            const type = $('#filterType').val();
+            let params = {};
+            const isRange = $('#rangeToggle').is(':checked');
+
+            if (type === 'tanggal') {
+                params.date_from = $('#dateFrom').val();
+                if (isRange) params.date_to = $('#dateTo').val();
+            } else if (type === 'bulan') {
+                params.month_from = $('#monthFrom').val();
+                if (isRange) params.month_to = $('#monthTo').val();
+            } else if (type === 'tahun') {
+                params.year_from = $('#yearFrom').val();
+                if (isRange) params.year_to = $('#yearTo').val();
+            }
+
+            if (!params.date_from && !params.month_from && !params.year_from) {
+                return;
+            }
+
+            // Dapatkan nama area parkir yang dipilih
+            const areaName = $('#chartAreaFilter option:selected').text();
+
+            // Update dropdown button label to show area and range
+            const labelMap = { tanggal: 'Tanggal', bulan: 'Bulan', tahun: 'Tahun' };
+            let rangeLabel = areaName + ' | ' + labelMap[type] + ': ';
+            if (isRange) {
+                const fromId = { tanggal: '#dateFrom', bulan: '#monthFrom', tahun: '#yearFrom' };
+                const toId = { tanggal: '#dateTo', bulan: '#monthTo', rangeToggle: '#yearTo' }; // yearTo selector fix
+                const toIdReal = { tanggal: '#dateTo', bulan: '#monthTo', tahun: '#yearTo' };
+                const fromVal = $(fromId[type]).val();
+                const toVal = $(toIdReal[type]).val();
+                rangeLabel += (fromVal || '-') + ' s/d ' + (toVal || '-');
+            } else {
+                const singleId = { tanggal: '#dateFrom', bulan: '#monthFrom', tahun: '#yearFrom' };
+                rangeLabel += $(singleId[type]).val() || '-';
+            }
+            $('#filterDropdownLabel').text(rangeLabel);
+
+            loadChart(type, params);
+
+            // Close dropdown
+            $('#chartFilterDropdown').removeClass('show');
+            $('#chartFilterDropdown .dropdown-menu').removeClass('show');
+        });
+
+        // Initial Load: Tanggal Range (Last 30 Days)
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+
+        const formatDate = (date) => {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        };
+
+        const initFrom = formatDate(thirtyDaysAgo);
+        const initTo = formatDate(today);
+
+        $('#dateFrom').val(initFrom);
+        $('#dateTo').val(initTo);
+        $('#rangeToggle').prop('checked', true);
+
+        // Panggil visibility manager
+        updateInputsVisibility();
+
+        // Label awal dengan info Area default "Semua Area"
+        const defaultAreaName = $('#chartAreaFilter option:selected').text();
+        $('#filterDropdownLabel').text(defaultAreaName + ' | Tanggal: ' + initFrom + ' s/d ' + initTo);
+
+        loadChart('tanggal', {
+            date_from: initFrom,
+            date_to: initTo
+        });
+
+        // Re-load chart when area filter changes
+        $('#chartAreaFilter').change(function () {
+            $('#applyChartFilter').click();
         });
 
 
@@ -307,4 +477,17 @@
         });
     });
 </script>
+@endpush
+
+@push('styles')
+<style>
+    /* CSS Override rigid untuk dropdown filter agar posisinya stabil di kanan dan tidak offside */
+    #chartFilterDropdown .dropdown-menu {
+        position: absolute !important;
+        left: auto !important;
+        right: 0 !important;
+        transform: none !important;
+        top: 100% !important;
+    }
+</style>
 @endpush

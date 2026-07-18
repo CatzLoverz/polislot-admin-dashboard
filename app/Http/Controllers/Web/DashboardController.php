@@ -47,81 +47,111 @@ class DashboardController extends Controller
 
     /**
      * Fetch chart data for User Validation frequency.
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
     public function getChartData(Request $request): JsonResponse
     {
         try {
-            $period = $request->input('period', 'day'); // day, week, month
+            $filterType = $request->input('filter_type', 'tanggal');
+            $labels = collect();
+            $dateFormat = '%Y-%m-%d';
+            $from = null;
+            $to = null;
 
-            // 1. Determine Date Grouping Format
-            if ($period === 'month') {
-                $dateFormat = '%Y-%m';
-            } elseif ($period === 'week') {
-                $dateFormat = '%Y-%u';
-            } else {
-                $dateFormat = '%Y-%m-%d';
+            $dateFormat = '%Y-%m-%d';
+            $from = null;
+            $to = null;
+
+            switch ($filterType) {
+                case 'tanggal':
+                    $dateFormat = '%Y-%m-%d';
+                    $fromStr = $request->input('date_from', Carbon::now()->subDays(30)->toDateString());
+                    $toStr = $request->input('date_to', $fromStr);
+                    $from = Carbon::parse($fromStr)->startOfDay();
+                    $to = Carbon::parse($toStr)->endOfDay();
+                    break;
+
+                case 'bulan':
+                    $dateFormat = '%Y-%u'; // ISO Week
+                    $fromStr = $request->input('month_from', Carbon::now()->format('Y-m'));
+                    $toStr = $request->input('month_to', $fromStr);
+                    $from = Carbon::parse($fromStr . '-01')->startOfMonth();
+                    $to = Carbon::parse($toStr . '-01')->endOfMonth();
+                    break;
+
+                case 'tahun':
+                    $dateFormat = '%Y-%m';
+                    $fromYear = $request->input('year_from', Carbon::now()->year);
+                    $toYear = $request->input('year_to', $fromYear);
+                    $from = Carbon::createFromDate($fromYear, 1, 1)->startOfYear();
+                    $to = Carbon::createFromDate($toYear, 12, 31)->endOfYear();
+                    break;
             }
 
-            // 2. Query Aggregate Data (Group by Date AND Area)
-            $query = UserValidation::join('park_subareas', 'user_validations.park_subarea_id', '=', 'park_subareas.park_subarea_id')
+            // 2. Query Aggregate Data (Group by HOUR AND Status)
+            $queryBuilder = UserValidation::join('park_subareas', 'user_validations.park_subarea_id', '=', 'park_subareas.park_subarea_id')
                 ->join('park_areas', 'park_subareas.park_area_id', '=', 'park_areas.park_area_id')
                 ->select(
-                    DB::raw("DATE_FORMAT(user_validations.created_at, '$dateFormat') as date"),
-                    'park_areas.park_area_name as area_name',
+                    DB::raw("HOUR(user_validations.created_at) as hour"),
+                    'user_validations.user_validation_content as status',
                     DB::raw('count(*) as aggregate')
                 )
-                // Filter time range (optional optimization, e.g. last 30 days)
-                ->when($period == 'day', function ($q) {
-                    $q->where('user_validations.created_at', '>=', Carbon::now()->subDays(30));
-                })
-                ->when($period == 'week', function ($q) {
-                    $q->where('user_validations.created_at', '>=', Carbon::now()->subWeeks(12));
-                })
-                ->when($period == 'month', function ($q) {
-                    $q->where('user_validations.created_at', '>=', Carbon::now()->subMonths(12));
-                })
-                ->groupBy('date', 'area_name')
-                ->orderBy('date', 'asc')
+                ->whereBetween('user_validations.created_at', [$from, $to]);
+
+            $areaId = $request->input('area_id');
+            if ($areaId && $areaId !== 'all') {
+                $queryBuilder->where('park_areas.park_area_id', $areaId);
+            }
+
+            $query = $queryBuilder->groupBy('hour', 'status')
                 ->get();
 
             // 3. Process Data for Chart.js
-            // Get unique labels (dates) for the X-axis
-            $labels = $query->pluck('date')->unique()->values();
+            // Generate labels for 24 hours
+            $labels = collect();
+            for ($hour = 0; $hour < 24; $hour++) {
+                $labels->push(sprintf('%02d:00', $hour));
+            }
 
-            // Group by Area to build datasets
-            $groupedByArea = $query->groupBy('area_name');
+            // Group by Status to build datasets
+            $statuses = ['banyak', 'terbatas', 'penuh'];
+            $statusLabels = [
+                'banyak' => 'Banyak Tersedia',
+                'terbatas' => 'Terbatas',
+                'penuh' => 'Penuh',
+            ];
+            $colors = [
+                'banyak' => '#28a745',
+                'terbatas' => '#ffc107',
+                'penuh' => '#dc3545',
+            ];
+            $groupedByStatus = $query->groupBy('status');
             $datasets = [];
 
-            // Pre-defined colors for lines (can be expanded)
-            $colors = ['#1d7af3', '#f3545d', '#59d05d', '#ffad46', '#6861ce', '#f0f0f0'];
-            $colorIndex = 0;
-
-            foreach ($groupedByArea as $areaName => $items) {
-                // Map data to the master labels to ensure alignment (fill 0 if missing)
-                $dataPoints = $labels->map(function ($date) use ($items) {
-                    $record = $items->firstWhere('date', $date);
-
-                    return $record ? $record->aggregate : 0;
-                });
+            foreach ($statuses as $status) {
+                $items = $groupedByStatus->get($status, collect());
+                // Map data to the 24 hours labels
+                $dataPoints = collect();
+                for ($hour = 0; $hour < 24; $hour++) {
+                    $record = $items->firstWhere('hour', $hour);
+                    $dataPoints->push($record ? $record->aggregate : 0);
+                }
 
                 $datasets[] = [
-                    'label' => $areaName,
+                    'label' => $statusLabels[$status],
                     'data' => $dataPoints,
-                    'borderColor' => $colors[$colorIndex % count($colors)],
-                    'backgroundColor' => 'transparent',
-                    'borderWidth' => 2,
-                    'pointBorderColor' => '#FFF',
-                    'pointBackgroundColor' => $colors[$colorIndex % count($colors)],
-                    'pointRadius' => 4,
-                    'fill' => false,
+                    'borderColor' => $colors[$status],
+                    'backgroundColor' => $colors[$status],
+                    'borderWidth' => 1,
                 ];
-                $colorIndex++;
             }
 
             return response()->json([
                 'labels' => $labels,
                 'datasets' => $datasets,
-                'period' => $period,
+                'filter_type' => $filterType,
             ]);
 
         } catch (Exception $e) {
