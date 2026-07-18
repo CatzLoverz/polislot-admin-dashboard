@@ -90,7 +90,68 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Statistik Ketersediaan Parkir Deteksi Otomatis</div>
+                    <div class="card-head-row">
+                        <div class="card-title">Statistik Ketersediaan Parkir Deteksi Otomatis</div>
+                        <div class="card-tools">
+                            <!-- Consolidated Calendar Filter Dropdown for Detection -->
+                            <div class="dropdown d-inline-block" id="detectionChartFilterDropdown">
+                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="detectionDropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-calendar-alt mr-1"></i> <span id="detectionFilterDropdownLabel">Filter Tanggal</span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="detectionDropdownMenuButton" style="min-width: 280px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border-radius: 6px; transform: none !important; right: 0 !important; left: auto !important; top: 100% !important;">
+                                    <div class="form-group p-0 mb-2">
+                                        <label class="small font-weight-bold mb-1">Area Parkir</label>
+                                        <select id="detectionChartAreaFilter" class="form-control form-control-sm">
+                                            <option value="all">Semua Area</option>
+                                            @foreach($parkAreas as $area)
+                                                <option value="{{ $area->park_area_id }}">{{ $area->park_area_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group p-0 mb-2">
+                                        <label class="small font-weight-bold mb-1">Tipe Filter</label>
+                                        <select id="detectionFilterType" class="form-control form-control-sm">
+                                            <option value="tanggal">Tanggal</option>
+                                            <option value="bulan">Bulan</option>
+                                            <option value="tahun">Tahun</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-check p-0 mb-3">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" id="detectionRangeToggle">
+                                            <span class="form-check-sign small">Rentang Waktu</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group p-0 mb-3">
+                                        <label class="small font-weight-bold mb-1">Pilih Waktu</label>
+
+                                        <!-- Tanggal Inputs -->
+                                        <div class="filter-inputs-group" id="detectionGroupTanggal">
+                                            <input type="date" class="form-control form-control-sm mb-1" id="detectionDateFrom">
+                                            <input type="date" class="form-control form-control-sm d-none" id="detectionDateTo">
+                                        </div>
+
+                                        <!-- Bulan Inputs -->
+                                        <div class="filter-inputs-group d-none" id="detectionGroupBulan">
+                                            <input type="month" class="form-control form-control-sm mb-1" id="detectionMonthFrom">
+                                            <input type="month" class="form-control form-control-sm d-none" id="detectionMonthTo">
+                                        </div>
+
+                                        <!-- Tahun Inputs -->
+                                        <div class="filter-inputs-group d-none" id="detectionGroupTahun">
+                                            <input type="number" class="form-control form-control-sm mb-1" id="detectionYearFrom" value="{{ date('Y') }}" placeholder="Tahun Mulai">
+                                            <input type="number" class="form-control form-control-sm d-none" id="detectionYearTo" value="{{ date('Y') }}" placeholder="Tahun Akhir">
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-xs btn-primary btn-block" id="applyDetectionChartFilter">Terapkan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="chart-container" style="min-height: 375px">
@@ -287,7 +348,7 @@
 
         function loadDetectionChart(filterType, params = {}) {
             let requestData = Object.assign({ filter_type: filterType }, params);
-            let areaId = $('#chartAreaFilter').val();
+            let areaId = $('#detectionChartAreaFilter').val();
             if (areaId) requestData.area_id = areaId;
 
             $.get("{{ route('dashboard.detection_chart') }}", requestData, function (response) {
@@ -330,7 +391,7 @@
             });
         }
 
-        // --- Consolidated Calendar Filter Dropdown ---
+        // --- Consolidated Calendar Filter Dropdown for Validation Chart ---
         // Keep dropdown open when interacting inside
         $('#chartFilterDropdown .dropdown-menu').on('click', function (e) {
             e.stopPropagation();
@@ -409,11 +470,88 @@
             $('#filterDropdownLabel').text(rangeLabel);
 
             loadChart(type, params);
-            loadDetectionChart(type, params);
 
             // Close dropdown
             $('#chartFilterDropdown').removeClass('show');
             $('#chartFilterDropdown .dropdown-menu').removeClass('show');
+        });
+
+        // --- Consolidated Calendar Filter Dropdown for Detection Chart ---
+        $('#detectionChartFilterDropdown .dropdown-menu').on('click', function (e) {
+            e.stopPropagation();
+        });
+
+        function updateDetectionInputsVisibility() {
+            const type = $('#detectionFilterType').val();
+            const isRange = $('#detectionRangeToggle').is(':checked');
+
+            $('#detectionDateTo, #detectionMonthTo, #detectionYearTo').addClass('d-none');
+
+            if (isRange) {
+                const idMap = { tanggal: '#detectionDateTo', bulan: '#detectionMonthTo', tahun: '#detectionYearTo' };
+                $(idMap[type]).removeClass('d-none');
+            }
+        }
+
+        // Mode switcher for detection
+        $('#detectionFilterType').change(function () {
+            const type = $(this).val();
+            $('#detectionChartFilterDropdown .filter-inputs-group').addClass('d-none');
+            $('#detectionGroup' + type.charAt(0).toUpperCase() + type.slice(1)).removeClass('d-none');
+
+            updateDetectionInputsVisibility();
+
+            const labelMap = { tanggal: 'Filter Tanggal', bulan: 'Filter Bulan', tahun: 'Filter Tahun' };
+            $('#detectionFilterDropdownLabel').text(labelMap[type] || 'Filter');
+        });
+
+        // Range toggle for detection
+        $('#detectionRangeToggle').change(function () {
+            updateDetectionInputsVisibility();
+        });
+
+        // Apply Filter for detection
+        $('#applyDetectionChartFilter').click(function () {
+            const type = $('#detectionFilterType').val();
+            let params = {};
+            const isRange = $('#detectionRangeToggle').is(':checked');
+
+            if (type === 'tanggal') {
+                params.date_from = $('#detectionDateFrom').val();
+                if (isRange) params.date_to = $('#detectionDateTo').val();
+            } else if (type === 'bulan') {
+                params.month_from = $('#detectionMonthFrom').val();
+                if (isRange) params.month_to = $('#detectionMonthTo').val();
+            } else if (type === 'tahun') {
+                params.year_from = $('#detectionYearFrom').val();
+                if (isRange) params.year_to = $('#detectionYearTo').val();
+            }
+
+            if (!params.date_from && !params.month_from && !params.year_from) {
+                return;
+            }
+
+            const areaName = $('#detectionChartAreaFilter option:selected').text();
+
+            const labelMap = { tanggal: 'Tanggal', bulan: 'Bulan', tahun: 'Tahun' };
+            let rangeLabel = areaName + ' | ' + labelMap[type] + ': ';
+            if (isRange) {
+                const fromId = { tanggal: '#detectionDateFrom', bulan: '#detectionMonthFrom', tahun: '#detectionYearFrom' };
+                const toIdReal = { tanggal: '#detectionDateTo', bulan: '#detectionMonthTo', tahun: '#detectionYearTo' };
+                const fromVal = $(fromId[type]).val();
+                const toVal = $(toIdReal[type]).val();
+                rangeLabel += (fromVal || '-') + ' s/d ' + (toVal || '-');
+            } else {
+                const singleId = { tanggal: '#detectionDateFrom', bulan: '#detectionMonthFrom', tahun: '#detectionYearFrom' };
+                rangeLabel += $(singleId[type]).val() || '-';
+            }
+            $('#detectionFilterDropdownLabel').text(rangeLabel);
+
+            loadDetectionChart(type, params);
+
+            // Close dropdown
+            $('#detectionChartFilterDropdown').removeClass('show');
+            $('#detectionChartFilterDropdown .dropdown-menu').removeClass('show');
         });
 
         // Initial Load: Tanggal Range (Last 30 Days)
@@ -431,16 +569,26 @@
         const initFrom = formatDate(thirtyDaysAgo);
         const initTo = formatDate(today);
 
+        // Validation Chart Default Values
         $('#dateFrom').val(initFrom);
         $('#dateTo').val(initTo);
         $('#rangeToggle').prop('checked', true);
 
+        // Detection Chart Default Values
+        $('#detectionDateFrom').val(initFrom);
+        $('#detectionDateTo').val(initTo);
+        $('#detectionRangeToggle').prop('checked', true);
+
         // Panggil visibility manager
         updateInputsVisibility();
+        updateDetectionInputsVisibility();
 
         // Label awal dengan info Area default "Semua Area"
         const defaultAreaName = $('#chartAreaFilter option:selected').text();
         $('#filterDropdownLabel').text(defaultAreaName + ' | Tanggal: ' + initFrom + ' s/d ' + initTo);
+
+        const defaultDetectionAreaName = $('#detectionChartAreaFilter option:selected').text();
+        $('#detectionFilterDropdownLabel').text(defaultDetectionAreaName + ' | Tanggal: ' + initFrom + ' s/d ' + initTo);
 
         loadChart('tanggal', {
             date_from: initFrom,
@@ -454,6 +602,10 @@
         // Re-load chart when area filter changes
         $('#chartAreaFilter').change(function () {
             $('#applyChartFilter').click();
+        });
+
+        $('#detectionChartAreaFilter').change(function () {
+            $('#applyDetectionChartFilter').click();
         });
 
 
