@@ -173,37 +173,39 @@ class DashboardController extends Controller
     public function getDetectionChartData(Request $request): JsonResponse
     {
         try {
-            $filterType = $request->input('filter_type', 'tanggal');
+            $filterType = $request->input('filter_type', 'minggu');
             $from = null;
             $to = null;
 
             switch ($filterType) {
+                case 'minggu':
+                    $weekStr = $request->input('week_from', Carbon::now()->startOfWeek()->format('Y-m-d'));
+                    if (preg_match('/(\d{4})-W(\d{2})/', $weekStr, $m)) {
+                        $from = Carbon::now()->setISODate((int)$m[1], (int)$m[2])->startOfWeek();
+                    } else {
+                        $from = Carbon::parse($weekStr)->startOfWeek();
+                    }
+                    $to = $from->copy()->endOfWeek();
+                    break;
+
                 case 'tanggal':
-                    $fromStr = $request->input('date_from', Carbon::now()->subDays(30)->toDateString());
+                default:
+                    $fromStr = $request->input('date_from', Carbon::now()->toDateString());
                     $toStr = $request->input('date_to', $fromStr);
                     $from = Carbon::parse($fromStr)->startOfDay();
                     $to = Carbon::parse($toStr)->endOfDay();
                     break;
-
-                case 'bulan':
-                    $fromStr = $request->input('month_from', Carbon::now()->format('Y-m'));
-                    $toStr = $request->input('month_to', $fromStr);
-                    $from = Carbon::parse($fromStr . '-01')->startOfMonth();
-                    $to = Carbon::parse($toStr . '-01')->endOfMonth();
-                    break;
-
-                case 'tahun':
-                    $fromYear = $request->input('year_from', Carbon::now()->year);
-                    $toYear = $request->input('year_to', $fromYear);
-                    $from = Carbon::createFromDate($fromYear, 1, 1)->startOfYear();
-                    $to = Carbon::createFromDate($toYear, 12, 31)->endOfYear();
-                    break;
             }
+
+            $isWeekly = ($filterType === 'minggu');
+            $timeColumn = $isWeekly
+                ? DB::raw("DAYOFWEEK(park_subarea_histories.created_at) as day_num")
+                : DB::raw("HOUR(park_subarea_histories.created_at) as hour");
 
             $queryBuilder = ParkSubareaHistory::join('park_subareas', 'park_subarea_histories.park_subarea_id', '=', 'park_subareas.park_subarea_id')
                 ->join('park_areas', 'park_subareas.park_area_id', '=', 'park_areas.park_area_id')
                 ->select(
-                    DB::raw("HOUR(park_subarea_histories.created_at) as hour"),
+                    $timeColumn,
                     'park_subarea_histories.status',
                     'park_subarea_histories.current_count',
                     'park_subarea_histories.max_slots'
@@ -220,48 +222,78 @@ class DashboardController extends Controller
             $labels = collect();
             $dataPoints = collect();
             $backgroundColors = collect();
+            $drillDates = [];
 
-            for ($hour = 0; $hour < 24; $hour++) {
-                $labels->push(sprintf('%02d:00', $hour));
+            $colors = [
+                'banyak' => '#28a745',
+                'terbatas' => '#ffc107',
+                'penuh' => '#dc3545',
+            ];
 
-                $hourRecords = $records->filter(function ($r) use ($hour) {
-                    return $r->hour == $hour;
-                });
+            if ($isWeekly) {
+                // DAYOFWEEK: 1=Sun, 2=Mon, ..., 7=Sat → map to Mon=0 .. Sun=6
+                $dayLabels = ['Senin', 'Selasa', 'Rabu', 'Kamis', "Jum'at", 'Sabtu', 'Minggu'];
+                $dayToIndex = [2 => 0, 3 => 1, 4 => 2, 5 => 3, 6 => 4, 7 => 5, 1 => 6];
 
-                if ($hourRecords->isNotEmpty()) {
-                    // Average available slots (Y-axis)
-                    $totalAvailable = $hourRecords->sum(function ($r) {
-                        return max(0, $r->max_slots - $r->current_count);
-                    });
-                    $avgAvailable = $totalAvailable / $hourRecords->count();
+                for ($i = 0; $i < 7; $i++) {
+                    $labels->push($dayLabels[$i]);
+                    $drillDates[] = $from->copy()->addDays($i)->format('Y-m-d');
 
-                    // Find majority status (most frequent status)
-                    $statusCounts = $hourRecords->countBy('status');
-                    $majorityStatus = $statusCounts->keys()->first();
-                    $maxCount = 0;
-                    foreach ($statusCounts as $status => $count) {
-                        if ($count > $maxCount) {
-                            $maxCount = $count;
-                            $majorityStatus = $status;
+                    $targetDayNum = array_search($i, $dayToIndex);
+                    $dayRecords = $records->filter(fn($r) => $r->day_num == $targetDayNum);
+
+                    if ($dayRecords->isNotEmpty()) {
+                        $totalAvailable = $dayRecords->sum(fn($r) => max(0, $r->max_slots - $r->current_count));
+                        $avgAvailable = $totalAvailable / $dayRecords->count();
+
+                        $statusCounts = $dayRecords->countBy('status');
+                        $majorityStatus = $statusCounts->keys()->first();
+                        $maxCount = 0;
+                        foreach ($statusCounts as $status => $count) {
+                            if ($count > $maxCount) {
+                                $maxCount = $count;
+                                $majorityStatus = $status;
+                            }
                         }
+
+                        $dataPoints->push(round($avgAvailable, 1));
+                        $backgroundColors->push($colors[$majorityStatus] ?? '#e8e8e8');
+                    } else {
+                        $dataPoints->push(0);
+                        $backgroundColors->push('#e8e8e8');
                     }
+                }
+            } else {
+                // Hourly mode (daily drill-down)
+                for ($hour = 0; $hour < 24; $hour++) {
+                    $labels->push(sprintf('%02d:00', $hour));
 
-                    $colors = [
-                        'banyak' => '#28a745',
-                        'terbatas' => '#ffc107',
-                        'penuh' => '#dc3545',
-                    ];
-                    $color = $colors[$majorityStatus] ?? '#e8e8e8';
+                    $hourRecords = $records->filter(fn($r) => $r->hour == $hour);
 
-                    $dataPoints->push(round($avgAvailable, 1));
-                    $backgroundColors->push($color);
-                } else {
-                    $dataPoints->push(0);
-                    $backgroundColors->push('#e8e8e8');
+                    if ($hourRecords->isNotEmpty()) {
+                        $totalAvailable = $hourRecords->sum(fn($r) => max(0, $r->max_slots - $r->current_count));
+                        $avgAvailable = $totalAvailable / $hourRecords->count();
+
+                        $statusCounts = $hourRecords->countBy('status');
+                        $majorityStatus = $statusCounts->keys()->first();
+                        $maxCount = 0;
+                        foreach ($statusCounts as $status => $count) {
+                            if ($count > $maxCount) {
+                                $maxCount = $count;
+                                $majorityStatus = $status;
+                            }
+                        }
+
+                        $dataPoints->push(round($avgAvailable, 1));
+                        $backgroundColors->push($colors[$majorityStatus] ?? '#e8e8e8');
+                    } else {
+                        $dataPoints->push(0);
+                        $backgroundColors->push('#e8e8e8');
+                    }
                 }
             }
 
-            return response()->json([
+            $response = [
                 'labels' => $labels,
                 'datasets' => [[
                     'label' => 'Rata-rata Slot Tersedia',
@@ -271,7 +303,13 @@ class DashboardController extends Controller
                     'borderWidth' => 1,
                 ]],
                 'filter_type' => $filterType,
-            ]);
+            ];
+
+            if ($isWeekly) {
+                $response['drill_dates'] = $drillDates;
+            }
+
+            return response()->json($response);
         } catch (Exception $e) {
             Log::error($e->getMessage());
 

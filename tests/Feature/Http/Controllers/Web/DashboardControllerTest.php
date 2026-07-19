@@ -99,4 +99,49 @@ class DashboardControllerTest extends TestCase
         // Rata-rata slot kosong: ( (50 - 10) + (50 - 20) ) / 2 = (40 + 30) / 2 = 35
         $this->assertEquals(35.0, $dataPoint);
     }
+
+    #[Test]
+    public function detection_chart_weekly_returns_valid_data()
+    {
+        $area = ParkArea::create(['park_area_name' => 'Area Weekly', 'park_area_code' => 'AW', 'park_area_data' => '[]']);
+        $sub = ParkSubarea::create(['park_area_id' => $area->park_area_id, 'park_subarea_name' => 'Sub Weekly', 'park_subarea_polygon' => '[]', 'max_slots' => 50]);
+
+        $monday = now()->startOfWeek();
+
+        // Seed records on Monday
+        ParkSubareaHistory::create([
+            'park_subarea_id' => $sub->park_subarea_id,
+            'current_count' => 10,
+            'max_slots' => 50,
+            'status' => 'banyak',
+            'created_at' => $monday,
+        ]);
+
+        // Seed records on Wednesday
+        ParkSubareaHistory::create([
+            'park_subarea_id' => $sub->park_subarea_id,
+            'current_count' => 35,
+            'max_slots' => 50,
+            'status' => 'terbatas',
+            'created_at' => $monday->copy()->addDays(2),
+        ]);
+
+        $response = $this->actingAs($this->admin)->get(
+            '/dashboard/detection-chart?filter_type=minggu&week_from=' . $monday->toDateString()
+        );
+        $response->assertStatus(200);
+
+        $json = $response->json();
+
+        // Should have 7 labels (Senin - Minggu)
+        $this->assertCount(7, $json['labels']);
+        $this->assertArrayHasKey('drill_dates', $json);
+        $this->assertCount(7, $json['drill_dates']);
+
+        // Monday (index 0): slot kosong = 50 - 10 = 40
+        $this->assertEquals(40.0, $json['datasets'][0]['data'][0]);
+
+        // Wednesday (index 2): slot kosong = 50 - 35 = 15
+        $this->assertEquals(15.0, $json['datasets'][0]['data'][2]);
+    }
 }
