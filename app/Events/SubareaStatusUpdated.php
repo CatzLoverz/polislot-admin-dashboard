@@ -48,6 +48,8 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
 
     public $anchorCvStatus;
 
+    public $iotStatus;
+
     /**
      * Create a new event instance.
      */
@@ -68,6 +70,7 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
         $this->fallbackStatusColor = $live['fallback_status_color'] ?? '#1572e8';
         $this->votedStatus = $live['voted_status'] ?? null;
         $this->anchorCvStatus = $live['anchor_cv_status'] ?? null;
+        $this->iotStatus = $live['has_online_iot'] ? 'online' : 'offline';
 
         $this->currentCount = $subarea->current_count ?? 0;
         $this->maxSlots = $subarea->max_slots ?? 0;
@@ -92,6 +95,7 @@ class SubareaStatusUpdated implements ShouldBroadcastNow
                 'votedStatus' => $this->votedStatus,
                 'anchorCvStatus' => $this->anchorCvStatus,
                 'commentCount' => $this->commentCount,
+                'iotStatus' => $this->iotStatus,
                 'timestamp' => time(),
             ];
             $mqtt = MQTT::connection('publisher');

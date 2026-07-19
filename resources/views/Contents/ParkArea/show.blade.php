@@ -1082,8 +1082,11 @@
                         subareaStates[subId].currentCount = e.currentCount;
                         subareaStates[subId].maxSlots = e.maxSlots;
                         subareaStates[subId].commentCount = e.commentCount;
+                        if (e.iotStatus) {
+                            subareaStates[subId].iotStatus = e.iotStatus;
+                        }
                     }
-                    
+
                     // Trigger UI update
                     updateSubareaUI(subId);
                 });
@@ -1093,6 +1096,54 @@
                 .listen('.device.status', (e) => {
                     console.log("📡 Device Status Received (MQTT/WS Broadcast):", e);
                     updateIotBadgeByMac(e.macAddress, e.status);
+
+                    // Sync local state & trigger UI update for all subareas associated with this MAC
+                    existingSubareas.forEach(s => {
+                        if (s.device_mac !== e.macAddress) return;
+                        const subId = s.park_subarea_id;
+                        if (subareaStates[subId]) {
+                            const oldStatus = subareaStates[subId].iotStatus;
+                            subareaStates[subId].iotStatus = e.status;
+
+                            if (oldStatus !== e.status) {
+                                if (e.status === 'online') {
+                                    // Ambil status terbaru dari server
+                                    fetch(`/admin/park-subarea/${subId}/status`)
+                                        .then(r => r.json())
+                                        .then(res => {
+                                            if (res.status === 'success') {
+                                                subareaStates[subId].status = res.data.status;
+                                                subareaStates[subId].color = res.data.status_color;
+                                                subareaStates[subId].currentCount = res.current_count;
+                                                subareaStates[subId].maxSlots = res.max_slots;
+                                                subareaStates[subId].isValidated = res.data.is_validated;
+                                                subareaStates[subId].hasUserReport = res.data.has_user_report;
+                                                subareaStates[subId].validationExpiresAt = res.data.validation_expires_at;
+                                                subareaStates[subId].lastValidationTime = res.data.last_validation_time;
+
+                                                let remainingSec = res.data.validation_remaining_seconds || 0;
+                                                if (!remainingSec && res.data.validation_expires_at) {
+                                                    const expires = new Date(res.data.validation_expires_at);
+                                                    const diffMs = expires - new Date();
+                                                    remainingSec = Math.max(0, Math.floor(diffMs / 1000));
+                                                }
+                                                subareaStates[subId].validationRemainingSeconds = Math.floor(remainingSec);
+
+                                                updateSubareaUI(subId);
+                                            }
+                                        })
+                                        .catch(err => console.error("fetch status error:", err));
+                                } else {
+                                    // Reset local state if offline
+                                    subareaStates[subId].status       = 'netral';
+                                    subareaStates[subId].color        = '#1572e8';
+                                    subareaStates[subId].currentCount = 0;
+                                    subareaStates[subId].maxSlots     = 0;
+                                    updateSubareaUI(subId);
+                                }
+                            }
+                        }
+                    });
                 });
 
             // 3. Presence Channel per-device IoT — DETEKSI OFFLINE INSTAN
