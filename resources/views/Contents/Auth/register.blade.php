@@ -22,7 +22,6 @@
 
                     <form action="{{ route('register.attempt') }}" method="POST">
                         @csrf
-                    {{-- Common Fields --}}
                         <div class="form-group">
                             <label for="name">Nama Lengkap</label>
                             <input type="text" id="name" name="name" class="form-control form-control-lg" placeholder="Masukkan Nama Lengkap" value="{{ old('name') }}" required>

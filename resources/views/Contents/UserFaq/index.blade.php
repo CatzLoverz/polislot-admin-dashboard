@@ -29,7 +29,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Diisi oleh DataTables AJAX --}}
                             </tbody>
                         </table>
                     </div>
@@ -39,9 +38,6 @@
     </div>
 </div>
 
-{{-- ============================================================ --}}
-{{-- MODAL: Tambah / Edit FAQ                                      --}}
-{{-- ============================================================ --}}
 <div class="modal fade" id="modalFaq" tabindex="-1" role="dialog" aria-labelledby="modalFaqLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -53,15 +49,12 @@
                 </button>
             </div>
 
-            {{-- Form digunakan untuk Store maupun Update --}}
             <form id="form-faq" method="POST" action="{{ route('admin.user-faq.store') }}">
                 @csrf
-                {{-- Field method-spoofing untuk PUT (diisi via JS saat Edit) --}}
                 <input type="hidden" name="_method" id="form-method" value="POST">
 
                 <div class="modal-body">
 
-                    {{-- Tampilkan error validasi jika ada (untuk non-AJAX submit) --}}
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <ul class="mb-0 pl-3">
@@ -127,9 +120,6 @@
         </div>
     </div>
 </div>
-{{-- ============================================================ --}}
-{{-- AKHIR MODAL                                                   --}}
-{{-- ============================================================ --}}
 
 @endsection
 

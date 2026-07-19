@@ -111,11 +111,10 @@
             </div>
             <form id="formMission" method="POST">
                 @csrf
-                <div id="methodPut"></div> {{-- Tempat inject @method('PUT') --}}
+                <div id="methodPut"></div>
 
                 <div class="modal-body">
 
-                    {{-- 1. Informasi Dasar --}}
                     <h6 class="font-weight-bold text-primary mb-3"><i class="fas fa-info-circle"></i> 1. Informasi Dasar</h6>
                     <div class="row">
                         <div class="col-md-8 form-group">
@@ -134,7 +133,6 @@
 
                     <hr>
 
-                    {{-- 2. Event Pemicu --}}
                     <h6 class="font-weight-bold text-primary mb-3"><i class="fas fa-cogs"></i> 2. Kondisi Misi</h6>
 
                     <div class="form-group pt-0">
@@ -162,11 +160,9 @@
                         </div>
                     </div>
 
-                    {{-- B. Tipe Perhitungan — kondisional per metric --}}
                     <div class="form-group pt-0" id="sectionType">
                         <label class="d-block mb-2">B. Tipe Perhitungan <span class="text-danger">*</span></label>
                         <div class="row justify-content-center" id="typeCardsRow">
-                            {{-- TARGET --}}
                             <div class="col-12 col-sm-6 col-md mb-2" id="colTypeTarget">
                                 <label class="card-label-wrapper">
                                     <input type="radio" name="mission_type" value="TARGET" class="radio-input" id="typeTarget" required>
@@ -177,7 +173,6 @@
                                     </div>
                                 </label>
                             </div>
-                            {{-- SEQUENCE --}}
                             <div class="col-12 col-sm-6 col-md mb-2" id="colTypeSequence">
                                 <label class="card-label-wrapper">
                                     <input type="radio" name="mission_type" value="SEQUENCE" class="radio-input" id="typeSequence" required>
@@ -188,7 +183,6 @@
                                     </div>
                                 </label>
                             </div>
-                            {{-- SEQUENCE_STREAK --}}
                             <div class="col-12 col-sm-6 col-md mb-2" id="colTypeStreak">
                                 <label class="card-label-wrapper">
                                     <input type="radio" name="mission_type" value="SEQUENCE_STREAK" class="radio-input" id="typeStreak" required>
@@ -202,7 +196,6 @@
                         </div>
                     </div>
 
-                    {{-- C. Siklus Reset — kondisional per metric --}}
                     <div class="form-group pt-0" id="sectionCycle">
                         <label class="d-block mb-2">C. Siklus Reset <span class="text-danger">*</span></label>
                         <div class="row justify-content-center" id="cycleCardsRow">
@@ -231,7 +224,6 @@
 
                     <hr>
 
-                    {{-- 3. Target Pencapaian --}}
                     <h6 class="font-weight-bold text-primary mb-3"><i class="fas fa-flag-checkered"></i> 3. Target Pencapaian</h6>
                     <div class="row">
                         <div class="col-md-12 form-group">
@@ -243,7 +235,6 @@
 
                     <hr>
 
-                    {{-- 4. Status Misi --}}
                     <h6 class="font-weight-bold text-primary mb-3"><i class="fas fa-toggle-on"></i> 4. Status Misi</h6>
                     <div class="row">
                         <div class="col-12 col-sm-6 mb-2">

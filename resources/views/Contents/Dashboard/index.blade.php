@@ -6,7 +6,6 @@
 
 @section('content')
 <div class="page-inner mt--5">
-    <!-- Row 1: Summary Cards -->
     <div class="row row-card-no-pd">
         <div class="col-sm-6 col-md-3">
             <div class="card card-stats card-round">
@@ -85,7 +84,6 @@
             </div>
         </div>
     </div>
-    <!-- Row 1.5: Automatic Detection Parking Availability Statistics -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -93,7 +91,6 @@
                     <div class="card-head-row">
                         <div class="card-title">Statistik Ketersediaan Parkir Deteksi Otomatis</div>
                         <div class="card-tools">
-                            <!-- Consolidated Calendar Filter Dropdown for Detection -->
                             <div class="dropdown d-inline-block" id="detectionChartFilterDropdown">
                                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="detectionDropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-calendar-alt mr-1"></i> <span id="detectionFilterDropdownLabel">Filter Tanggal</span>
@@ -120,12 +117,10 @@
                                     <div class="form-group p-0 mb-3">
                                         <label class="small font-weight-bold mb-1">Pilih Waktu</label>
 
-                                        <!-- Minggu Inputs -->
                                         <div class="filter-inputs-group" id="detectionGroupMinggu">
                                             <input type="week" class="form-control form-control-sm mb-1" id="detectionWeekFrom">
                                         </div>
 
-                                        <!-- Tanggal Inputs (drill-down) -->
                                         <div class="filter-inputs-group d-none" id="detectionGroupTanggal">
                                             <input type="date" class="form-control form-control-sm mb-1" id="detectionDateFrom">
                                         </div>
@@ -141,7 +136,6 @@
                     <div class="chart-container" style="min-height: 375px">
                         <canvas id="detectionChart"></canvas>
                     </div>
-                    <!-- Legend hint for detection chart -->
                     <div class="d-flex justify-content-center mt-3">
                         <div class="d-flex align-items-center mr-3">
                             <span class="d-inline-block" style="width: 14px; height: 14px; background: #28a745; border-radius: 3px; margin-right: 5px;"></span>
@@ -160,7 +154,6 @@
             </div>
         </div>
     </div>
-    <!-- Row 2: Validation Chart -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -168,7 +161,6 @@
                     <div class="card-head-row">
                         <div class="card-title">Statistik Laporan Validasi Pengguna</div>
                         <div class="card-tools">
-                            <!-- Consolidated Calendar Filter Dropdown -->
                             <div class="dropdown d-inline-block" id="chartFilterDropdown">
                                 <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-calendar-alt mr-1"></i> <span id="filterDropdownLabel">Filter Tanggal</span>
@@ -203,19 +195,16 @@
                                     <div class="form-group p-0 mb-3">
                                         <label class="small font-weight-bold mb-1">Pilih Waktu</label>
 
-                                        <!-- Tanggal Inputs -->
                                         <div class="filter-inputs-group" id="groupTanggal">
                                             <input type="date" class="form-control form-control-sm mb-1" id="dateFrom">
                                             <input type="date" class="form-control form-control-sm d-none" id="dateTo">
                                         </div>
 
-                                        <!-- Bulan Inputs -->
                                         <div class="filter-inputs-group d-none" id="groupBulan">
                                             <input type="month" class="form-control form-control-sm mb-1" id="monthFrom">
                                             <input type="month" class="form-control form-control-sm d-none" id="monthTo">
                                         </div>
 
-                                        <!-- Tahun Inputs -->
                                         <div class="filter-inputs-group d-none" id="groupTahun">
                                             <input type="number" class="form-control form-control-sm mb-1" id="yearFrom" value="{{ date('Y') }}" placeholder="Tahun Mulai">
                                             <input type="number" class="form-control form-control-sm d-none" id="yearTo" value="{{ date('Y') }}" placeholder="Tahun Akhir">
@@ -237,9 +226,7 @@
         </div>
     </div>
 
-    <!-- Row 3: Leaderboard & Realtime Report -->
     <div class="row">
-        <!-- Leaderboard -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
@@ -266,7 +253,6 @@
             </div>
         </div>
 
-        <!-- Realtime Validation Report -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
@@ -297,7 +283,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     $(document).ready(function () {
-        // --- 1. Validation Chart ---
         const ctx = document.getElementById('validationChart').getContext('2d');
         let validationChart = null;
 
@@ -349,7 +334,6 @@
             });
         }
 
-        // --- 1.5. Detection Chart ---
         const ctxDetection = document.getElementById('detectionChart').getContext('2d');
         let detectionChart = null;
         let lastDetectionFilterType = 'minggu';
@@ -415,8 +399,6 @@
             });
         }
 
-        // --- Consolidated Calendar Filter Dropdown for Validation Chart ---
-        // Keep dropdown open when interacting inside
         $('#chartFilterDropdown .dropdown-menu').on('click', function (e) {
             e.stopPropagation();
         });
@@ -618,8 +600,6 @@
             $('#applyDetectionChartFilter').click();
         });
 
-
-        // --- 2. Leaderboard ---
         function loadLeaderboard() {
             $.get("{{ route('dashboard.leaderboard') }}", function (data) {
                 let rows = '';
@@ -647,10 +627,8 @@
                 $('#leaderboardTable tbody').html(rows);
             });
         }
-        loadLeaderboard(); // Load once
+        loadLeaderboard();
 
-
-        // --- 3. Realtime Validations ---
         let realtimeInterval;
 
         function loadRealtime(areaId) {
@@ -666,7 +644,6 @@
                         html += `
                             <li class="list-group-item px-3 py-3">
                                 <div class="row w-100 align-items-center m-0">
-                                    <!-- Column 1: Identity (Left) -->
                                     <div class="col-6 p-0 d-flex align-items-center">
                                         <div class="avatar avatar-sm mr-3">
                                             <img src="${avatar}" class="avatar-img rounded-circle">
@@ -678,12 +655,10 @@
                                         </div>
                                     </div>
 
-                                    <!-- Column 2: Timestamp (Center) -->
                                     <div class="col-3 p-0 text-center">
                                         <small class="text-muted font-weight-bold">${item.timestamp}</small>
                                     </div>
 
-                                    <!-- Column 3: Status (Right) -->
                                     <div class="col-3 p-0 text-center">
                                         <span class="badge badge-${badgeColor} badge-pill">${item.status}</span>
                                     </div>
@@ -696,7 +671,6 @@
             });
         }
 
-        // Initial Load & Polling (Every 5 seconds)
         loadRealtime('all');
 
         realtimeInterval = setInterval(() => {

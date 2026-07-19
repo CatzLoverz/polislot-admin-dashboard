@@ -67,7 +67,6 @@
 
 <body>
     <div class="wrapper">
-        {{-- Header --}}
         <div class="main-header">
             <div class="logo-header" data-background-color="dark2">
                 <a href="#" class="logo"> <img src="{{ asset('assets/img/PoliSlot2.png') }}" alt="Polibatam Logo"
@@ -78,7 +77,6 @@
                     <span class="navbar-toggler-icon"><i class="icon-menu"></i></span>
                 </button>
             </div>
-            {{-- Navbar --}}
             <nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark2">
                 <div class="container-fluid">
                     <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
@@ -123,9 +121,7 @@
                 </div>
             </nav>
         </div>
-        {{-- Akhir Header --}}
 
-        {{-- Sidebar --}}
         <div class="sidebar sidebar-style-2">
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
@@ -152,7 +148,6 @@
                             </a>
                         </li>
 
-                        {{-- Menu khusus Admin --}}
                         @can('access-admin-features')
                             <li class="nav-section">
                                 <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
@@ -213,7 +208,6 @@
                                 </a>
                             </li>
                         @endcan
-                        {{-- Akhir menu khusus Admin --}}
 
                         <li class="nav-item">
                             <a href="#" class="btn-logout" data-form-target="#logout-form-sidebar">
@@ -228,9 +222,7 @@
                 </div>
             </div>
         </div>
-        {{-- Akhir Sidebar --}}
 
-        {{-- Main Panel --}}
         <div class="main-panel">
             <div class="content">
                 <div class="panel-header bg-dark-gradient">
@@ -238,9 +230,7 @@
                         <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                             <div>
                                 <h2 class="text-white pb-2 fw-bold">@yield('page_title', 'Dashboard')</h2>
-                                <h5 class="text-white op-7 mb-2">
-                                    @yield('page_subtitle', 'Selamat datang di dashboard Anda.')
-                                </h5>
+                                <h5 class="text-white op-7 mb-2">@yield('page_subtitle', 'Selamat datang di dashboard Anda.')</h5>
                             </div>
                         </div>
                     </div>
@@ -251,8 +241,8 @@
                 <div class="container-fluid" >
                     <div class="copyright ml-auto">
                         Made with <i class="fa fa-heart heart text-danger"></i> by
-                        <a href="https://www.instagram.com/pbl303.trpl/" target="_blank">
-                            PBL-TRPL 303
+                        <a href="https://www.instagram.com/pbl409.trpl/" target="_blank">
+                            PBL-TRPL 409
                         </a>
                     </div>
                 </div>

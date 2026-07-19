@@ -69,7 +69,6 @@
 @section('content')
 <div class="page-inner mt--5">
     <div class="row">
-        {{-- Kolom Peta (Kiri) --}}
         <div class="col-md-9">
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center text-dark" style="border-radius: 15px 15px 0 0;">
@@ -98,7 +97,6 @@
             </div>
         </div>
 
-        {{-- Kolom Daftar Subarea (Kanan) --}}
         <div class="col-md-3">
             <div class="card shadow-sm" style="height: 100%;">
                 <div class="card-header">
@@ -139,12 +137,10 @@
                                             <span class="validation-countdown-val text-info ml-1"></span>
                                         </small>
 
-                                        {{-- Kapasitas Slot (Dynamic) --}}
                                         <small class="mt-1 text-muted subarea-occupancy font-weight-bold" style="font-size: 11px; {{ ($sub->iotDevice && $sub->max_slots > 0 && $sub->iot_status === 'online') ? 'display: block;' : 'display: none;' }}">
                                             <i class="fas fa-car mr-1"></i> Tersedia: <span class="available-count-val">{{ max(0, ($sub->max_slots ?? 0) - ($sub->current_count ?? 0)) }}</span> | Terisi: <span class="current-count-val">{{ $sub->current_count ?? 0 }}</span>
                                         </small>
-                                        
-                                        {{-- Amenities --}}
+
                                         <div class="mt-2 subarea-badges">
                                             @if($sub->iotDevice)
                                                 @if($sub->iot_status === 'online')
@@ -171,40 +167,36 @@
                                     
                                     <div style="width: 15%;" class="d-flex flex-column align-items-center">
                                         @if($sub->iotDevice)
-                                            {{-- Tombol Atur IoT --}}
-                                            <a href="{{ route('admin.iot.index', ['mac' => $sub->iotDevice->device_mac_address]) }}" class="btn btn-icon btn-round btn-secondary btn-xs mb-1" 
+                                            <a href="{{ route('admin.iot.index', ['mac' => $sub->iotDevice->device_mac_address]) }}" class="btn btn-icon btn-round btn-secondary btn-xs mb-1"
                                                 data-toggle="tooltip" title="Atur Konfigurasi IoT">
                                                 <i class="fas fa-microchip"></i>
                                             </a>
                                         @endif
 
-                                        {{-- Tombol Lihat Komentar --}}
-                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mb-1 btn-comment-modal" 
+                                        <button type="button" class="btn btn-icon btn-round btn-info btn-xs position-relative mb-1 btn-comment-modal"
                                             onclick="fetchAndOpenCommentModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}')"
                                             data-toggle="tooltip" title="Lihat Komentar">
                                             <i class="fas fa-comments"></i>
                                             @php $cCount = $sub->subareaComment->count(); @endphp
-                                            <span class="badge badge-notification badge-danger position-absolute comment-count-badge" 
+                                            <span class="badge badge-notification badge-danger position-absolute comment-count-badge"
                                                   style="top: -8px; right: -8px; font-size: 8px; padding: 2px 4px; border-radius: 50%; {{ $cCount > 0 ? '' : 'display: none;' }}">
                                                 {{ $cCount }}
                                             </span>
                                         </button>
 
-                                        {{-- Tombol Edit (Existing) --}}
-                                        <button type="button" class="btn btn-icon btn-round btn-primary btn-xs mb-1" 
+                                        <button type="button" class="btn btn-icon btn-round btn-primary btn-xs mb-1"
                                             onclick="openEditModal({{ $sub->park_subarea_id }}, '{{ $sub->park_subarea_name }}', {{ json_encode($sub->parkAmenity) }}, {{ json_encode($sub->iotDevice) }})"
                                             data-toggle="tooltip" title="Edit Subarea">
                                             <i class="fa fa-edit"></i>
                                         </button>
 
-                                        {{-- Tombol Hapus --}}
-                                        <form action="{{ route('admin.park-subarea.destroy', $sub->park_subarea_id) }}" 
-                                              method="POST" 
+                                        <form action="{{ route('admin.park-subarea.destroy', $sub->park_subarea_id) }}"
+                                              method="POST"
                                               class="d-inline delete-subarea-form"
                                               data-name="{{ $sub->park_subarea_name }}">
-                                            @csrf 
+                                            @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-icon btn-round btn-danger btn-xs" 
+                                            <button type="submit" class="btn btn-icon btn-round btn-danger btn-xs"
                                                 data-toggle="tooltip" title="Hapus Subarea">
                                                 <i class="fa fa-trash"></i>
                                             </button>
@@ -230,7 +222,6 @@
     </div>
 </div>
 
-{{-- Modal Simpan Subarea Baru --}}
 <div class="modal fade" id="modalSubarea" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" style="border-radius: 15px;">
@@ -259,7 +250,6 @@
     </div>
 </div>
 
-{{-- Modal Edit Subarea (Nama & Amenities) --}}
 <div class="modal fade" id="modalEditSubarea" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" style="border-radius: 15px;">
@@ -300,7 +290,6 @@
                             </button>
                         </div>
                     </div>
-                    {{-- Temp List Container --}}
                     <div id="amenities_list_container" style="max-height: 200px; overflow-y: auto;"></div>
                 </div>
                 <input type="hidden" id="edit_subarea_id">
@@ -315,7 +304,6 @@
     </div>
 </div>
 
-{{-- Modal Komentar (FIX BOX + SCROLLABLE) --}}
 <div class="modal fade" id="modalComments" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" style="border-radius: 15px;">
@@ -327,7 +315,6 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            {{-- [PERUBAHAN] Height Fix + Overflow Auto --}}
             <div class="modal-body bg-light" id="comments_container" style="height: 500px; overflow-y: auto;"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-round" data-dismiss="modal">Tutup</button>
@@ -338,7 +325,6 @@
 @endsection
 
 @push('scripts')
-{{-- Google Maps API Async Loader --}}
 <script>
   (function(g){var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
     key: "{{ $mapsApiKey }}",
@@ -961,6 +947,11 @@
                     if (countVal) countVal.innerText = currentCount;
                 } else {
                     occupancySpan.style.display = 'none';
+                    // Reset text agar tidak tampilkan data stale saat IoT online lagi
+                    const availableVal = occupancySpan.querySelector('.available-count-val');
+                    if (availableVal) availableVal.innerText = '—';
+                    const countVal = occupancySpan.querySelector('.current-count-val');
+                    if (countVal) countVal.innerText = '—';
                 }
             }
 
@@ -1126,29 +1117,48 @@
                     .joining((member) => {
                         if (member.type === 'iot_device') {
                             console.log(`✅ IoT Device ONLINE via Presence: ${sub.device_mac}`);
+
+                            // Ambil status & count terbaru dari server ketika device online
+                            fetch(`/admin/park-subarea/${sub.park_subarea_id}/status`)
+                                .then(r => r.json())
+                                .then(res => {
+                                    if (res.status === 'success') {
+                                        existingSubareas.forEach(s => {
+                                            if (s.device_mac !== sub.device_mac) return;
+                                            const subId = s.park_subarea_id;
+                                            if (subareaStates[subId]) {
+                                                subareaStates[subId].iotStatus = 'online';
+                                                subareaStates[subId].status = res.data.status;
+                                                subareaStates[subId].color = res.data.status_color;
+                                                subareaStates[subId].currentCount = res.current_count;
+                                                subareaStates[subId].maxSlots = res.max_slots;
+                                                subareaStates[subId].isValidated = res.data.is_validated;
+                                                subareaStates[subId].hasUserReport = res.data.has_user_report;
+                                                subareaStates[subId].validationExpiresAt = res.data.validation_expires_at;
+                                                subareaStates[subId].lastValidationTime = res.data.last_validation_time;
+
+                                                let remainingSec = res.data.validation_remaining_seconds || 0;
+                                                if (!remainingSec && res.data.validation_expires_at) {
+                                                    const expires = new Date(res.data.validation_expires_at);
+                                                    const diffMs = expires - new Date();
+                                                    remainingSec = Math.max(0, Math.floor(diffMs / 1000));
+                                                }
+                                                subareaStates[subId].validationRemainingSeconds = Math.floor(remainingSec);
+
+                                                updateSubareaUI(subId);
+                                            }
+                                        });
+                                    }
+                                })
+                                .catch(err => console.error("fetch status error:", err));
+
                             updateIotBadgeByMac(sub.device_mac, 'online');
-                            
-                            existingSubareas.forEach(s => {
-                                if (s.device_mac !== sub.device_mac) return;
-                                const subId = s.park_subarea_id;
-                                if (subareaStates[subId]) {
-                                    subareaStates[subId].iotStatus = 'online';
-                                    updateSubareaUI(subId);
-                                }
-                            });
                         }
                     })
                     .leaving((member) => {
                         if (member.type === 'iot_device') {
                             console.log(`❌ IoT Device OFFLINE via Presence: ${sub.device_mac}`);
-
-                            // ── LANGKAH 1: Update badge IoT di sidebar (instan) ──────────────────
                             updateIotBadgeByMac(sub.device_mac, 'offline');
-
-                            // ── LANGKAH 2: Reset visualisasi polygon + status sidebar ke NETRAL ──
-                            // Saat IoT offline tidak ada data ketersediaan → tampilkan netral (biru).
-                            // CATATAN: fallbackStatus TIDAK bisa dipakai di sini karena nilainya
-                            // sama dengan status IoT saat device online (bukan status tanpa IoT).
                             existingSubareas.forEach(s => {
                                 if (s.device_mac !== sub.device_mac) return;
                                 const subId = s.park_subarea_id;
@@ -1157,15 +1167,12 @@
                                 subareaStates[subId].status       = 'netral';
                                 subareaStates[subId].color        = '#1572e8';
                                 subareaStates[subId].currentCount = 0;
+                                subareaStates[subId].maxSlots     = 0;
                                 subareaStates[subId].iotStatus    = 'offline';
                                 updateSubareaUI(subId);
                                 console.log(`🔄 Subarea ${subId} (${s.park_subarea_name}) → netral (IoT offline)`);
                             });
 
-                            // ── LANGKAH 3: Panggil mark-offline ke backend (TANPA delay) ─────────
-                            // Endpoint ini langsung memanggil markDeviceOffline() tanpa
-                            // mengecek Reverb presence (menghindari race condition).
-                            // Efek samping: cache di-set offline + MQTT broadcast ke mobile.
                             fetch('/admin/iot/mark-offline', {
                                 method: 'POST',
                                 headers: {

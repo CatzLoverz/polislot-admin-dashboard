@@ -1,4 +1,4 @@
-@extends('Layouts.auth_layout') {{-- Sesuaikan path jika layout Anda berbeda --}}
+@extends('Layouts.auth_layout')
 
 @section('title', 'Masuk | PoliSlot')
 
@@ -18,14 +18,12 @@
 
                     <div class="divider d-flex align-items-center my-4"></div>
 
-                    {{-- Pesan Error Global --}}
                     @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
                         </div>
                     @endif
-                    {{-- Digunakan untuk menampilkan error 'auth.failed' --}}
-                    @if ($errors->has('auth_error')) 
+                    @if ($errors->has('auth_error'))
                         <div class="alert alert-danger">
                             {{ $errors->first('auth_error') }}
                         </div>
@@ -34,7 +32,7 @@
                     <div class="form-outline mb-4">
                         <label class="form-label" for="email">E-mail</label>
                         <input type="email" id="email" name="email" class="form-control form-control-lg" placeholder="Masukkan e-mail" value="{{ old('email') }}" required autofocus/>
-                        @error('email') {{-- Error spesifik untuk email jika validasi Laravel gagal --}}
+                        @error('email')
                             <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
                     </div>

@@ -21,8 +21,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="card-body">                       
-                        {{-- Menampilkan pesan error validasi umum --}}
+                    <div class="card-body">
                         @if ($errors->any())
                             <div class="alert alert-danger" role="alert">
                                 <strong class="font-weight-bold">Terjadi Kesalahan! Periksa kembali:</strong>
@@ -71,7 +70,6 @@
                     </div>
                 </div>
 
-                {{-- Card untuk Ubah Password --}}
                 <div class="card mt-4">
                     <div class="card-header">
                         <div class="card-title">Ubah Password</div>
@@ -156,7 +154,6 @@
 @endsection
 
 @push('scripts')
-{{-- Style khusus untuk halaman profil --}}
 <style>
 
     /* Style untuk checklist password */

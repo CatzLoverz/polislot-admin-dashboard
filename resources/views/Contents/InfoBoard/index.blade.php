@@ -31,7 +31,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- DataTables Server-side --}}
                             </tbody>
                         </table>
                     </div>
@@ -41,7 +40,6 @@
     </div>
 </div>
 
-{{-- Modal Tambah (Create) --}}
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -72,7 +70,6 @@
     </div>
 </div>
 
-{{-- Modal Edit (Global) --}}
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">

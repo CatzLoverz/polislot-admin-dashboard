@@ -27,7 +27,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Data dimuat via AJAX DataTables --}}
                             </tbody>
                         </table>
                     </div>
@@ -37,7 +36,6 @@
     </div>
 </div>
 
-{{-- Modal Edit Poin --}}
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -64,7 +62,6 @@
                         <small class="form-text text-muted">User akan mendapatkan poin ini setiap kali validasi.</small>
                     </div>
 
-                    {{-- Geofence Toggle --}}
                     <div class="form-group">
                         <label>Batasan Lokasi (Geofencing)</label>
                         <div class="custom-control custom-switch">

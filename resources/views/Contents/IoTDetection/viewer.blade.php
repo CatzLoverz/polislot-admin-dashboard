@@ -105,7 +105,6 @@
 @endpush
 
 <div class="page-inner mt--5">
-    {{-- Pemilihan Device --}}
     <div class="row mb-3">
         <div class="col-md-12">
             <div class="card shadow-sm">
@@ -142,9 +141,7 @@
     </div>
 
     <div class="row">
-        {{-- Panel Kiri: Live Stream / Text Viewer --}}
         <div class="col-md-8">
-            {{-- Panel Utama (Config & Live Feed Gabungan) --}}
             <div class="card shadow-sm border-0">
                 <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center" style="border-radius: 15px 15px 0 0;">
                     <h4 class="card-title font-weight-bold mb-2 mb-md-0 text-dark">
@@ -157,8 +154,7 @@
                     </div>
                 </div>
                 <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
-                    
-                    {{-- Bagian Atas: Mode Menggambar & Hint --}}
+
                     <div class="form-group p-0 text-dark mb-3">
                         <div class="d-flex flex-wrap align-items-center mb-2">
                             <button type="button" class="btn btn-sm btn-outline-primary m-1" id="btn-draw-mode" onclick="toggleDrawMode()">
@@ -174,7 +170,6 @@
                         </div>
                     </div>
 
-                    {{-- Bagian Tengah: Canvas/Live Feed --}}
                     <div class="bg-light d-flex justify-content-center align-items-center mb-4" style="min-height: 400px; border-radius: 8px; border: 1px solid #ebedf2;">
                         <div id="feed-container" class="text-center p-4 w-100 h-100 position-relative d-flex justify-content-center align-items-center">
                             <div id="placeholder-container">
@@ -187,8 +182,7 @@
                             </div>
                         </div>
                     </div>
-                    
-                    {{-- Bagian Bawah: Threshold Config & Simpan --}}
+
                     <div class="row text-dark mb-3">
                         <div class="col-md-3">
                             <div class="form-group p-0">
@@ -199,7 +193,6 @@
                         <div class="col-md-9">
                             <label class="font-weight-bold">Batas Threshold Okupansi</label>
                             <div class="threshold-slider-container">
-                                <!-- Visual labels similar to standard PoliSlot colors -->
                                 <div class="d-flex justify-content-between text-center mb-2">
                                     <div style="flex: 1;">
                                         <div class="status-pill status-pill-banyak">
@@ -221,15 +214,12 @@
                                     </div>
                                 </div>
 
-                                <!-- The Double Range Slider Bar -->
                                 <div class="position-relative" style="height: 10px; margin: 15px 10px 10px 10px;">
                                     <div class="slider-track" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: #dee2e6; border-radius: 5px;"></div>
-                                    <!-- Colored segments representing the 3 regions -->
                                     <div id="segment-banyak" style="position: absolute; top: 0; bottom: 0; left: 0; background-color: #31ce36; border-radius: 5px 0 0 5px;"></div>
                                     <div id="segment-terbatas" style="position: absolute; top: 0; bottom: 0; background-color: #ffad46;"></div>
                                     <div id="segment-penuh" style="position: absolute; top: 0; bottom: 0; right: 0; background-color: #f25961; border-radius: 0 5px 5px 0;"></div>
-                                    
-                                    <!-- Standard HTML5 input ranges overlayed -->
+
                                     <input type="range" id="input-threshold-banyak" min="5" max="95" value="{{ $thresholdBanyak }}" class="double-range-slider">
                                     <input type="range" id="input-threshold-terbatas" min="5" max="95" value="{{ $thresholdTerbatas }}" class="double-range-slider">
                                 </div>
@@ -253,7 +243,6 @@
                 <div class="card-body bg-white" style="border-radius: 0 0 15px 15px;">
                     <div class="row align-items-center mb-3">
                         <div class="col-12 mb-2">
-                            <!-- BLOK 1: Status AI (CV) -->
                             <div class="p-3 mb-3 border rounded bg-light">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-robot mr-1 text-primary"></i> Status AI (CV):</span>
@@ -263,7 +252,7 @@
                                 </div>
                                 <div class="d-flex align-items-center mt-2">
                                     <span id="cv-status-text" class="font-weight-bold text-secondary" style="font-size: 16px;">
-                                        <i class="fas fa-spinner fa-spin mr-1"></i> MENGHITUNG...
+                                        <i class="fas fa-circle-notch fa-spin mr-1"></i> MENGHITUNG...
                                     </span>
                                 </div>
                                 <div class="progress mt-2" style="height: 8px;">
@@ -271,7 +260,6 @@
                                 </div>
                             </div>
 
-                            <!-- BLOK 2: Laporan Validasi -->
                             <div id="val-report-container" class="p-3 border rounded" style="display: none; background-color: #fdfaf3;">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="font-weight-bold text-dark" style="font-size: 13px;"><i class="fas fa-user-edit mr-1 text-warning"></i> Laporan Pengguna:</span>
@@ -312,7 +300,6 @@
             </div>
         </div>
 
-        {{-- Panel Kanan: Log Data Real-time --}}
         <div class="col-md-4">
             <div class="card shadow-sm" style="height: 100%;">
                 <div class="card-header" style="border-radius: 15px 15px 0 0;">
@@ -328,7 +315,6 @@
             </div>
         </div>
 
-        <!-- Panel Snapshot Gallery (Dataset Training) -->
         <div class="col-md-12 mt-4">
             <div class="card shadow-sm" style="border-radius: 15px; border: none; height: 100%;">
                 <div class="card-header d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0;">
@@ -340,11 +326,10 @@
                     </div>
                 </div>
                 <div class="card-body bg-white text-dark p-3" style="border-radius: 0 0 15px 15px;">
-                    <!-- Filter & Batch Action Form -->
                     <form id="download-batch-form" action="{{ route('admin.iot.download-batch') }}" method="POST" target="_blank">
                         @csrf
                         <input type="hidden" name="mac_address" value="{{ $targetMac }}">
-                        
+
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label class="font-weight-bold small mb-1 text-dark">Status Pelatihan:</label>
@@ -388,7 +373,6 @@
                             </div>
                         </div>
 
-                        <!-- Scrollable Capture Grid -->
                         <div id="captures-grid-container" style="max-height: 280px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; background-color: #f8f9fa;">
                             @if(session('error'))
                                 <div class="alert alert-danger py-2 small mb-2">{{ session('error') }}</div>
@@ -407,8 +391,6 @@
 
 @push('scripts')
 <script>
-    // Bug #6: Pending log queue — tangkap log messages sebelum module script ready
-    // Module scripts execute deferred, jadi window.addLog belum tersedia saat regular scripts jalan
     window._pendingLogs = [];
     function safeAddLog(message) {
         if (typeof window.addLog === 'function') {
@@ -481,19 +463,15 @@
         }
     }
 
-    // Cek secara berkala apakah validasi sudah kedaluwarsa (tiap 10 detik)
     setInterval(updateValidationInfoUI, 10000);
-    // Panggil pertama kali
     document.addEventListener('DOMContentLoaded', updateValidationInfoUI);
 
-    // Navigasi ke device lain tanpa reload penuh
     function switchDevice(macAddress) {
         const url = new URL(window.location.href);
         url.searchParams.set('mac', macAddress);
         window.location.href = url.toString();
     }
 
-    // Fungsi untuk mengirim manual validation dan meminta snapshot dari device
     function validateStream(content) {
         const macAddress = "{{ $targetMac }}";
         const btnBanyak = document.getElementById('btn-val-banyak');
@@ -575,14 +553,10 @@
 </script>
 
 <script>
-    // --- LOGIKA CANVAS DRAWING OVERLAY ---
-    // Semua poligon (selesai & in-progress) disimpan dalam KOORDINAT NATURAL piksel gambar
-    // agar konsisten saat hit-testing dan tahan terhadap resize window.
     let completedPolygons = @json($detectionPolygon) || [];
     let currentPoints = [];
     let isDrawingMode = false;
 
-    // State editor (geser/sisip/hapus vertex meniru editor subarea)
     let hoverVertex = null;   // {polyIndex, vertIndex} | null
     let isDragging = false;
     let dragTarget = null;    // {polyIndex, vertIndex}; polyIndex = -1 → currentPoints
@@ -606,8 +580,6 @@
         draw();
     }
 
-    // --- Helper konversi koordinat ---
-    // Posisi event (client) → koordinat natural piksel gambar (integer).
     function toNatural(clientX, clientY) {
         const rect = canvas.getBoundingClientRect();
         const sx = liveImage.naturalWidth / rect.width;
@@ -618,20 +590,17 @@
         ];
     }
 
-    // Titik natural [x,y] → koordinat tampilan {x,y} pada canvas.
     function toCanvas(pt) {
         const sx = canvas.width / liveImage.naturalWidth;
         const sy = canvas.height / liveImage.naturalHeight;
         return { x: pt[0] * sx, y: pt[1] * sy };
     }
 
-    // Posisi event (client) → koordinat piksel canvas (untuk hit-testing).
     function eventToCanvas(e) {
         const rect = canvas.getBoundingClientRect();
         return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     }
 
-    // Jarak titik (px,py) ke segmen a-b (semua dalam koordinat canvas).
     function distToSegment(px, py, a, b) {
         const dx = b.x - a.x;
         const dy = b.y - a.y;
@@ -642,7 +611,6 @@
         return Math.hypot(px - (a.x + t * dx), py - (a.y + t * dy));
     }
 
-    // Cari vertex terdekat (≤ VERTEX_HIT) di semua poligon + currentPoints.
     function hitTestVertex(cx, cy) {
         let best = null;
         let bestDist = VERTEX_HIT;
@@ -661,7 +629,6 @@
         return best;
     }
 
-    // Cari segmen garis terdekat (≤ EDGE_HIT) pada poligon selesai untuk sisip vertex.
     function hitTestEdge(cx, cy) {
         let best = null;
         let bestDist = EDGE_HIT;
@@ -695,7 +662,6 @@
             const { x, y } = eventToCanvas(e);
             didDrag = false;
 
-            // 1) Mulai geser vertex bila menyentuh salah satu.
             const v = hitTestVertex(x, y);
             if (v) {
                 isDragging = true;
@@ -703,7 +669,6 @@
                 return;
             }
 
-            // 2) Sisip vertex di tengah garis poligon selesai lalu langsung geser.
             const edge = hitTestEdge(x, y);
             if (edge) {
                 const poly = completedPolygons[edge.polyIndex];
@@ -759,7 +724,6 @@
             if (didDrag) { didDrag = false; return; }
             if (!isDrawingMode) return;
 
-            // Klik titik pertama (≥3 titik) → tutup poligon.
             if (currentPoints.length >= 3) {
                 const first = toCanvas(currentPoints[0]);
                 const { x, y } = eventToCanvas(e);
@@ -780,7 +744,6 @@
             const v = hitTestVertex(x, y);
             if (!v) return;
 
-            // Vertex pada poligon in-progress → cukup buang titiknya.
             if (v.polyIndex === -1) {
                 currentPoints.splice(v.vertIndex, 1);
                 draw();
@@ -788,8 +751,6 @@
             }
 
             const poly = completedPolygons[v.polyIndex];
-            // Bila poligon tinggal 3 titik, menghapus vertex akan merusaknya →
-            // konfirmasi hapus seluruh zona.
             if (poly.length <= 3) {
                 Swal.fire({
                     title: 'Hapus zona ini?',
@@ -828,7 +789,6 @@
             canvas.style.cursor = 'crosshair';
             safeAddLog('Mode menggambar aktif. Meminta snapshot terbaru dari perangkat IoT...');
 
-            // Pemicu otomatis snapshot dari device IoT
             fetch("{{ route('admin.iot.trigger') }}", {
                 method: 'POST',
                 headers: {
@@ -879,8 +839,7 @@
             });
             return;
         }
-        
-        // currentPoints sudah dalam koordinat natural — cukup salin.
+
         completedPolygons.push([...currentPoints]);
         currentPoints = [];
         draw();
@@ -912,7 +871,6 @@
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw completed polygons (koordinat natural → canvas via toCanvas).
         completedPolygons.forEach((poly, index) => {
             ctx.beginPath();
             poly.forEach((pt, i) => {
@@ -950,7 +908,6 @@
             });
         });
 
-        // Draw current drawing points (juga koordinat natural).
         if (currentPoints.length > 0) {
             ctx.beginPath();
             currentPoints.forEach((pt, i) => {
@@ -1239,10 +1196,9 @@
 
 
 <script type="module">
-    // Hapus titik dua dari MAC address sesuai dengan format channel di Event kita
     const cleanMac = "{{ str_replace(':', '', $targetMac) }}";
     const channelName = `iot.detection.${cleanMac}`;
-    const serverInitialStatus = "{{ $initialStatus }}"; // Bug #3: Hydrate dari server
+    const serverInitialStatus = "{{ $initialStatus }}";
 
     const connectionStatus = document.getElementById('connection-status');
     const logList = document.getElementById('log-list');

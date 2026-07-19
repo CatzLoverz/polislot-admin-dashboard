@@ -282,6 +282,26 @@ class ParkSubareaController extends Controller
     }
 
     /**
+     * Mengambil status real-time subarea tertentu.
+     *
+     * @param  int  $id
+     */
+    public function getStatus($id): JsonResponse
+    {
+        try {
+            $subarea = ParkSubarea::findOrFail($id);
+            return response()->json([
+                'status' => 'success',
+                'data' => $subarea->getLiveStatus(),
+                'current_count' => $subarea->current_count ?? 0,
+                'max_slots' => $subarea->max_slots ?? 0,
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
      * Mengambil daftar komentar terbaru untuk subarea tertentu.
      *
      * @param  int  $id

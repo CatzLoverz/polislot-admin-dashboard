@@ -94,7 +94,6 @@
 </head>
 <body>
     <div class="main-section-wrapper">
-        {{-- Wrapper .container bisa ditambahkan di sini jika umum, atau di yield content jika spesifik per halaman --}}
         <div class="content-wrap @hasSection('use_container') container @endif">
              @yield('content')
         </div>

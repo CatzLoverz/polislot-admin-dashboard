@@ -16,8 +16,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    
-                    {{-- === BAGIAN FILTER === --}}
+
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -50,7 +49,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Diisi oleh DataTables AJAX --}}
                             </tbody>
                         </table>
                     </div>
