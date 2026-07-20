@@ -51,16 +51,37 @@
     {
       "command": "grep -r",
       "description": "Search files recursively"
+    },
+    {
+      "command": "graphify query",
+      "description": "Query the knowledge graph"
+    },
+    {
+      "command": "graphify path",
+      "description": "Find path between concepts in the knowledge graph"
+    },
+    {
+      "command": "graphify explain",
+      "description": "Explain a concept from the knowledge graph"
+    },
+    {
+      "command": "graphify update",
+      "description": "Update the knowledge graph"
     }
   ],
+  "permissions": {
+    "allow": [
+      "Bash(graphify *)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|Grep",
         "hooks": [
           {
             "type": "command",
-            "command": "C:\\Users\\atmaj\\.local\\bin\\graphify.EXE hook-guard search"
+            "command": "C:/Users/atmaj/.local/bin/graphify.EXE hook-guard search"
           }
         ]
       },
@@ -69,7 +90,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "C:\\Users\\atmaj\\.local\\bin\\graphify.EXE hook-guard read"
+            "command": "C:/Users/atmaj/.local/bin/graphify.EXE hook-guard read"
           }
         ]
       }

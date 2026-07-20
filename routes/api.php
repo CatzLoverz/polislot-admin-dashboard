@@ -46,6 +46,7 @@ Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
     Route::post('/forgot-otp-verify', [AuthController::class, 'forgotPasswordOtpVerify']);
     Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend']);
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPasswordByOtp']);
+    Route::post('/reset-pass-token', [AuthController::class, 'resetPassword']);
 
     Route::middleware(['auth:sanctum', 'role:admin,user'])->group(function () {
 

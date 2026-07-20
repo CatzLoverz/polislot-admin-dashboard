@@ -529,17 +529,17 @@ class AuthControllerTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create([
-            'password' => Hash::make('OldPassword'),
-            'otp_code' => '123',
+            'password' => Hash::make('OldPass123!'),
+            'otp_code' => '123456',
+            'otp_expires_at' => now()->addHour(),
             'locked_until' => now()->addHour(), // Test clear lock
-            'reset_token' => 'test-token',
         ]);
 
         $response = $this->postJson('/api/reset-pass-attempt', [
             'email' => $user->email,
             'password' => 'NewPass123!',
             'password_confirmation' => 'NewPass123!',
-            'token' => 'test-token',
+            'token' => '123456',
         ]);
 
         $response->assertStatus(200);
@@ -556,14 +556,15 @@ class AuthControllerTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create([
             'password' => Hash::make('OldPass123!'),
-            'reset_token' => 'test-token',
+            'otp_code' => '123456',
+            'otp_expires_at' => now()->addHour(),
         ]);
 
         $response = $this->postJson('/api/reset-pass-attempt', [
             'email' => $user->email,
             'password' => 'OldPass123!',
             'password_confirmation' => 'OldPass123!',
-            'token' => 'test-token',
+            'token' => '123456',
         ]);
 
         $response->assertStatus(400)

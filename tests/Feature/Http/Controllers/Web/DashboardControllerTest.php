@@ -33,7 +33,7 @@ class DashboardControllerTest extends TestCase
     public function chart_data_returns_json()
     {
         $response = $this->actingAs($this->admin)->get('/dashboard/chart');
-        $response->assertStatus(200)->assertJsonStructure(['labels', 'datasets', 'period']);
+        $response->assertStatus(200)->assertJsonStructure(['labels', 'datasets', 'filter_type']);
     }
 
     #[Test]
@@ -72,20 +72,23 @@ class DashboardControllerTest extends TestCase
         // Gunakan hour saat ini
         $now = now()->startOfHour();
 
-        ParkSubareaHistory::create([
+        // Gunakan insert agar Eloquent timestamps di-bypass
+        ParkSubareaHistory::insert([
             'park_subarea_id' => $sub->park_subarea_id,
             'current_count' => 10,
             'max_slots' => 50,
             'status' => 'banyak',
             'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
-        ParkSubareaHistory::create([
+        ParkSubareaHistory::insert([
             'park_subarea_id' => $sub->park_subarea_id,
             'current_count' => 20,
             'max_slots' => 50,
             'status' => 'banyak',
             'created_at' => $now->copy()->addMinutes(20),
+            'updated_at' => $now->copy()->addMinutes(20),
         ]);
 
         $response = $this->actingAs($this->admin)->get('/dashboard/detection-chart?filter_type=tanggal&date_from=' . $now->toDateString());
@@ -108,22 +111,24 @@ class DashboardControllerTest extends TestCase
 
         $monday = now()->startOfWeek();
 
-        // Seed records on Monday
-        ParkSubareaHistory::create([
+        // Gunakan insert agar timestamps tidak otomatis di-override oleh Eloquent
+        ParkSubareaHistory::insert([
             'park_subarea_id' => $sub->park_subarea_id,
             'current_count' => 10,
             'max_slots' => 50,
             'status' => 'banyak',
             'created_at' => $monday,
+            'updated_at' => $monday,
         ]);
 
         // Seed records on Wednesday
-        ParkSubareaHistory::create([
+        ParkSubareaHistory::insert([
             'park_subarea_id' => $sub->park_subarea_id,
             'current_count' => 35,
             'max_slots' => 50,
             'status' => 'terbatas',
             'created_at' => $monday->copy()->addDays(2),
+            'updated_at' => $monday->copy()->addDays(2),
         ]);
 
         $response = $this->actingAs($this->admin)->get(
