@@ -88,6 +88,11 @@ if [ -L "$LINK_PATH" ]; then
     echo "Symlink created successfully."
 fi
 
+# --- 6. WARMUP OCTANE CACHE ---
+echo "Caching configuration and routes for Octane..."
+php artisan config:cache
+php artisan route:cache
+
 echo "Environment Ready. Executing Command..."
 
 exec "$@"

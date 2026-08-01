@@ -13,6 +13,11 @@
 :80 {
     root * /var/www/html/public
 
+    # Laravel Octane Worker Mode via FrankenPHP
+    frankenphp {
+        worker /var/www/html/public/frankenphp-worker.php
+    }
+
     # Reverse proxy WebSocket /app/* dan HTTP API /apps/* ke Reverb (internal port 8080)
     @websocket {
         path /app/* /apps/*
