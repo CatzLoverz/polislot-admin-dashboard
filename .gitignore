@@ -35,4 +35,4 @@ wsl_terminal_bridge.sh
 .graphify_python
 **/caddy
 frankenphp
-frankenphp-worker.php
+!public/frankenphp-worker.php

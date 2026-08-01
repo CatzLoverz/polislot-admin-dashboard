@@ -62,6 +62,7 @@ COPY --from=composer-stage /build/vendor ./vendor
 
 # D. Copy seluruh source code aplikasi
 COPY . .
+COPY public/frankenphp-worker.php ./public/frankenphp-worker.php
 
 # E. Copy hasil Vite build (public/build) dari stage 2
 COPY --from=node-stage /build/public/build ./public/build

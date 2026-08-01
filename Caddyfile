@@ -1,22 +1,11 @@
 {
-    frankenphp
-    servers {
-        timeouts {
-            read_body 30s
-            read_header 10s
-            write 30s
-            idle 120s
-        }
+    frankenphp {
+        worker /var/www/html/public/frankenphp-worker.php
     }
 }
 
 :80 {
     root * /var/www/html/public
-
-    # Laravel Octane Worker Mode via FrankenPHP
-    frankenphp {
-        worker /var/www/html/public/frankenphp-worker.php
-    }
 
     # Reverse proxy WebSocket /app/* dan HTTP API /apps/* ke Reverb (internal port 8080)
     @websocket {
@@ -31,6 +20,6 @@
         max_size 10MB
     }
 
-    # Serve PHP untuk semua request lainnya
+    # Serve PHP (otomatis menggunakan worker dari global option)
     php_server
 }
