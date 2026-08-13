@@ -81,7 +81,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY Caddyfile /etc/caddy/Caddyfile
 
 # I2. Copy PHP OPcache & JIT tuning untuk Octane / FrankenPHP
-COPY docker/php-octane.ini /usr/local/etc/php/conf.d/php-octane.ini
+COPY php-octane.ini /usr/local/etc/php/conf.d/php-octane.ini
 
 # J. Final Ownership Fix
 RUN chown -R www-data:www-data /var/www/html
