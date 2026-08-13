@@ -1,11 +1,27 @@
 {
     frankenphp {
-        worker /var/www/html/public/frankenphp-worker.php 4
+        worker /var/www/html/public/frankenphp-worker.php {$FRANKENPHP_WORKERS:4}
     }
 }
 
 :80 {
     root * /var/www/html/public
+
+    # Kompresi modern zstd & gzip untuk performa response tinggi
+    encode zstd gzip
+
+    # Cache jangka panjang untuk asset hasil build Vite dan storage publik
+    @static {
+        path /build/* /storage/* *.ico *.css *.js *.woff2 *.svg *.png *.jpg *.jpeg *.gif *.webp
+    }
+    header @static Cache-Control "public, max-age=31536000, immutable"
+
+    # Security Headers dasar di layer web server
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
 
     # Reverse proxy WebSocket /app/* dan HTTP API /apps/* ke Reverb (internal port 8080)
     @websocket {

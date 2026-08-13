@@ -70,7 +70,7 @@
         <div class="main-header">
             <div class="logo-header" data-background-color="dark2">
                 <a href="#" class="logo"> <img src="{{ asset('assets/img/PoliSlot2.png') }}" alt="Polibatam Logo"
-                        class="navbar-brand" style="width: 180px; height: 62px;" />
+                        class="navbar-brand" style="width: 170px; height: 62px;" />
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
                     data-target="#menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
