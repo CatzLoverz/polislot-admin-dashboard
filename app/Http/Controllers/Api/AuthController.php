@@ -617,10 +617,11 @@ class AuthController extends Controller
                 $emailLower = Str::lower($request->email);
                 $cacheKey = "forgot_pass_{$emailLower}";
 
-                $claimed = Cache::pull($cacheKey);
+                // Validasi OTP tanpa mengonsumsinya (Cache::get, bukan pull)
+                $payload = Cache::get($cacheKey);
                 if (
-                    !$claimed
-                    || !hash_equals($claimed['otp_hash'] ?? '', hash('sha256', (string) $request->token))
+                    !$payload
+                    || !hash_equals($payload['otp_hash'] ?? '', hash('sha256', (string) $request->token))
                 ) {
                     Log::warning('OTP reset tidak valid atau kadaluarsa.');
                     return $this->sendError('Kode OTP tidak valid atau sudah kadaluarsa.', 400);
@@ -631,6 +632,13 @@ class AuthController extends Controller
                 if (Hash::check($request->password, $user->password)) {
                     Log::warning('Password baru sama dengan lama.');
                     return $this->sendError('Password baru tidak boleh sama dengan yang lama.', 400);
+                }
+
+                // konsumsi OTP (single-use) setelah validasi berhasil
+                $claimed = Cache::pull($cacheKey);
+                if (!$claimed) {
+                    Log::warning('Race condition: cache OTP sudah di-pull request lain.');
+                    return $this->sendError('Verifikasi sedang diproses atau sudah selesai.', 409);
                 }
 
                 $user->password        = Hash::make($request->password);
