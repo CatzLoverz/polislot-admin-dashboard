@@ -119,4 +119,49 @@ class ProfileController extends Controller
             return $this->sendError('Gagal memperbarui profil.', 500);
         }
     }
+
+    /**
+     * Menghapus akun pengguna secara permanen (hard delete).
+     *
+     * Seluruh data terkait (misi, reward, riwayat, validasi, komentar,
+     * FAQ) turut terhapus via foreign key cascade pada level database.
+     *
+     * @param  Request  $request  Input berisi confirmation (email/nama pengguna)
+     * @return JsonResponse
+     */
+    public function destroy(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'confirmation' => ['required', 'string'],
+        ]);
+
+        $input = strtolower(trim($validated['confirmation']));
+        $matches = hash_equals(strtolower($user->email), $input)
+            || hash_equals(strtolower($user->name), $input);
+
+        if (! $matches) {
+            return $this->sendError('Konfirmasi tidak sesuai.', 422);
+        }
+
+        try {
+            return DB::transaction(function () use ($user) {
+                $user->tokens()->delete();
+
+                if ($user->avatar && $user->avatar !== 'default_avatar.jpg' && Storage::disk('public')->exists($user->avatar)) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+
+                $user->delete();
+                Log::info('Akun berhasil dihapus.', ['user_id' => $user->user_id]);
+
+                return $this->sendSuccess('Akun berhasil dihapus.');
+            });
+        } catch (Exception $e) {
+            Log::error('Gagal menghapus akun. Error: '.$e->getMessage());
+
+            return $this->sendError('Gagal menghapus akun.', 500);
+        }
+    }
 }

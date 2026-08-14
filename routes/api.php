@@ -59,6 +59,7 @@ Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
         // Route Profil
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::match(['put', 'post'], '/profile', [ProfileController::class, 'update']);
+        Route::delete('/profile', [ProfileController::class, 'destroy']);
 
         // Route InfoBoard
         Route::get('/info-board', [InfoBoardController::class, 'index']);

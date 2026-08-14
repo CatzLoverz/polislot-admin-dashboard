@@ -335,7 +335,7 @@ class AuthController extends Controller
                 $user->update([
                     'failed_attempts'        => 0,
                     'locked_until'           => null,
-                    'reset_token'            => $resetToken,
+                    'reset_token'            => hash('sha256', $resetToken),
                 ]);
 
                 // Kirim email notifikasi login (dibatasi 1 email per 5 menit per user untuk mencegah flooding)
@@ -527,7 +527,7 @@ class AuthController extends Controller
                 $user = User::where('email', $request->email)->lockForUpdate()->firstOrFail();
 
                 // Verifikasi token dari kolom reset_token (terpisah dari otp_code)
-                if (!$user->reset_token || !hash_equals($user->reset_token, $request->token)) {
+                if (!$user->reset_token || !hash_equals($user->reset_token, hash('sha256', (string) $request->token))) {
                     Log::warning('Token reset tidak valid.');
                     return $this->sendError('Link pemulihan tidak valid atau sudah kadaluarsa (hanya bisa dipakai sekali).', 400);
                 }
