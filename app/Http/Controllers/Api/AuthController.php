@@ -50,17 +50,14 @@ class AuthController extends Controller
         $user = $request->user();
 
         // === LOGIC MISI LOGIN ===
-        // Key unik: user_id + tanggal hari ini (Y-m-d)
-        $cacheKey = 'daily_login_'.$user->user_id.'_'.now()->format('Y-m-d');
+        // key statis per user, value = tanggal terakhir login
+        $cacheKey = 'last_daily_login_'.$user->user_id;
+        $today = now()->format('Y-m-d');
 
-        // Cek apakah user sudah tercatat login hari ini?
-        if (! Cache::has($cacheKey)) {
-
-            // Jika BELUM, catat progress misi
+        if (Cache::get($cacheKey) !== $today) {
             try {
                 $this->missionService->updateProgress($user->user_id, 'LOGIN_ACTION');
-                // Simpan penanda di cache sampai akhir hari
-                Cache::put($cacheKey, true, now()->endOfDay());
+                Cache::put($cacheKey, $today, now()->addDay());
             } catch (Exception $e) {
                 Log::error('Gagal update misi: '.$e->getMessage());
             }
