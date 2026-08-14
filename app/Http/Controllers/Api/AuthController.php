@@ -509,6 +509,40 @@ class AuthController extends Controller
     }
 
     /**
+     * Memverifikasi validitas link reset password (email dan token) sebelum form disubmit.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function resetPasswordCheck(Request $request): JsonResponse
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email|exists:users,email',
+                'token' => 'required|string',
+            ]);
+
+            $user = User::where('email', $request->email)->first();
+
+            // Verifikasi token dari kolom reset_token (harus terisi dan hash cocok)
+            if (!$user || !$user->reset_token || !hash_equals($user->reset_token, hash('sha256', (string) $request->token))) {
+                Log::warning('Cek validitas link reset: token tidak valid atau kadaluarsa.');
+                return $this->sendError('Link pemulihan tidak valid atau sudah kadaluarsa.', 400);
+            }
+
+            return $this->sendSuccess('Link pemulihan valid.');
+
+        } catch (ValidationException $e) {
+            Log::warning('Cek validitas link reset: validasi error.', ['errors' => $e->errors()]);
+            // Tampilkan pesan error umum ke user mobile untuk alasan keamanan/UX
+            return $this->sendError('Link pemulihan tidak valid.', 400);
+        } catch (Exception $e) {
+            Log::error('Error sistem cek link reset.', ['error' => $e->getMessage()]);
+            return $this->sendError('Terjadi kesalahan pada server.', 500);
+        }
+    }
+
+    /**
      * Memproses penyimpanan password baru.
      *
      * @param Request $request
