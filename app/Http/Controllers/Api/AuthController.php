@@ -274,8 +274,17 @@ class AuthController extends Controller
     {
         $email = $request->input('email');
 
+        $deviceName = $request->input('device_name');
+        $deviceModel = $request->input('device_model');
+        $deviceOs = $request->input('device_os');
+        if ($deviceName || $deviceModel || $deviceOs) {
+            $deviceInfo = trim(implode(' ', array_filter([$deviceName, $deviceModel, $deviceOs])));
+        } else {
+            $deviceInfo = $request->header('User-Agent');
+        }
+
         try {
-            return DB::transaction(function () use ($request, $email) {
+            return DB::transaction(function () use ($request, $email, $deviceInfo) {
                 $credentials = $request->validate([
                     'email' => 'required|string|email',
                     'password' => 'required|string',
@@ -312,8 +321,20 @@ class AuthController extends Controller
 
                     if ($user->failed_attempts >= 4) {
                         $lockMinutes = 10;
-                        $user->update(['locked_until' => now()->addMinutes($lockMinutes), 'failed_attempts' => 0]);
+                        
+                        $resetToken = Str::random(40);
+                        $user->update([
+                            'locked_until' => now()->addMinutes($lockMinutes),
+                            'failed_attempts' => 0,
+                            'reset_token' => hash('sha256', $resetToken)
+                        ]);
                         Log::warning('Password salah, akun dikunci.');
+
+                        $lockoutRateLimitKey = 'lockout_notification_email_' . $user->user_id;
+                        if (!RateLimiter::tooManyAttempts($lockoutRateLimitKey, 1)) {
+                            RateLimiter::hit($lockoutRateLimitKey, 600); // 10 menit
+                            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\AccountLockedMail($user, now()->format('Y-m-d H:i:s'), $request->ip(), $deviceInfo, $resetToken));
+                        }
 
                         return $this->sendError('Email atau Password salah.', 401);
                     }
@@ -340,8 +361,7 @@ class AuthController extends Controller
                 if (!RateLimiter::tooManyAttempts($emailRateLimitKey, 1)) {
                     RateLimiter::hit($emailRateLimitKey, 300); // 5 menit (300 detik)
                     $ipAddress = $request->ip();
-                    $userAgent = $request->header('User-Agent');
-                    Mail::to($user->email)->send(new LoginNotificationMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $userAgent, $resetToken));
+                    Mail::to($user->email)->send(new LoginNotificationMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $deviceInfo, $resetToken));
                 } else {
                     Log::info('Email notifikasi login dilewati (rate limit aktif).', ['user_id' => $user->user_id]);
                 }
