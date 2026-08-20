@@ -10,21 +10,26 @@ Proyek ini menggunakan standar penulisan kode yang bersih dan rapi mengikuti sta
 ## 1. Import (Namespace / `use` Statement)
 - **Gunakan Import di Atas:** DILARANG menggunakan *inline namespace imports* atau nama class secara eksplisit penuh (Fully Qualified Class Name) di dalam baris logika kode (contoh yang salah: `\App\Models\User::find(1)`).
 - **Kerapian:** Selalu letakkan `use` statement di bagian atas file (contoh yang benar: `use App\Models\User;`), lalu panggil nama class-nya saja di dalam kode. Kelompokkan dan urutkan import agar rapi.
+- **Aturan ini juga berlaku di PHPDoc:** Semua class yang sudah di-`use` di atas file HARUS ditulis dengan *short name* (tanpa namespace prefix) di dalam tag `@param`, `@return`, `@throws`, `@var`, dsb. DILARANG menulis FQCN seperti `@return \Illuminate\Http\JsonResponse` jika class `JsonResponse` sudah di-import di atas.
 
 ## 2. PHPDoc (Komentar Fungsi & Class)
-Setiap method/fungsi (terutama pada *Controller*, *Service*, dan *Helper*) yang dibuat WAJIB menyertakan blok PHPDoc yang standar:
+Setiap method/fungsi (terutama pada *Controller*, *Service*, dan *Helper*) WAJIB menyertakan blok PHPDoc yang standar:
 - **Deskripsi Singkat:** Penjelasan ringkas (1-2 kalimat) mengenai tujuan fungsi tersebut.
 - **Parameter (`@param`):** Sebutkan tipe data dan nama variabel (serta deskripsi singkat jika perlu).
-- **Return (`@return`):** Definisikan tipe data yang dikembalikan (misalnya: `\Illuminate\Http\JsonResponse`, `\Illuminate\View\View`, `bool`, `void`, dll).
+- **Return (`@return`):** Definisikan tipe data yang dikembalikan (misalnya: `JsonResponse`, `View`, `bool`, `void`, dll).
 - **Exception (`@throws`):** (Opsional) Jika fungsi secara eksplisit membuang exception tertentu.
 
 *Contoh Format:*
 ```php
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+
 /**
  * Menyimpan data area parkir baru beserta lokasinya ke database.
  *
- * @param \Illuminate\Http\Request $request Data input dari form
- * @return \Illuminate\Http\RedirectResponse Redirect kembali ke index dengan pesan sukses
+ * @param Request $request Data input dari form
+ * @return RedirectResponse Redirect kembali ke index dengan pesan sukses
  */
 ```
 

@@ -81,7 +81,7 @@ return [
         ],
 
         RequestTerminated::class => [
-            // FlushUploadedFiles::class,
+            FlushUploadedFiles::class,
         ],
 
         TaskReceived::class => [
@@ -135,7 +135,7 @@ return [
     ],
 
     'flush' => [
-        //
+        'request_id',
     ],
 
     /*

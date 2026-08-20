@@ -1,9 +1,5 @@
 ---
 trigger: always_on
----
-
----
-trigger: always_on
 description: Membatasi ruang lingkup operasi AI Agent hanya pada folder pengembangan dan mencegah pemindaian file pada folder runtime Docker.
 ---
 

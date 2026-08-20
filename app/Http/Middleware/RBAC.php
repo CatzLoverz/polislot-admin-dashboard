@@ -41,11 +41,18 @@ class RBAC
                 default => config('database.default'),
             };
 
+            $originalConnection = config('database.default');
             config(['database.default' => $connection]);
 
             if (method_exists($user, 'setConnection')) {
                 $user->setConnection($connection);
             }
+
+            // Restore database configuration after the request to prevent config bleeding
+            // in long-running processes like Laravel Octane. Safe for standard PHP-FPM.
+            app()->terminating(function () use ($originalConnection) {
+                config(['database.default' => $originalConnection]);
+            });
         }
 
         // Jika ada parameter role, lakukan pengecekan RBAC
