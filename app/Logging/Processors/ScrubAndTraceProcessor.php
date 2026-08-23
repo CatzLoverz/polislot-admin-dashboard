@@ -2,6 +2,7 @@
 
 namespace App\Logging\Processors;
 
+use App\Services\IpLocationService;
 use Exception;
 use Illuminate\Support\Str;
 use Monolog\LogRecord;
@@ -50,7 +51,8 @@ class ScrubAndTraceProcessor implements ProcessorInterface
             $request = request();
             $extra['environment'] = 'HTTP';
             if ($request) {
-                $extra['ip'] = $request->ip();
+                $ipService = app(IpLocationService::class);
+                $extra['ip'] = $ipService->getRealIp($request);
                 $extra['user_agent'] = $request->userAgent();
                 $extra['url'] = $request->fullUrl();
                 $extra['method'] = $request->method();

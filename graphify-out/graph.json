@@ -2756,7 +2756,7 @@
       "_origin": "ast",
       "id": "app_http_middleware_apiencryption",
       "community": 5,
-      "community_name": "ApiEncryption.php",
+      "community_name": "FeedbackCategory.php",
       "norm_label": "apiencryption.php"
     },
     {
@@ -2862,7 +2862,7 @@
       "label": "TrustProxies",
       "file_type": "code",
       "source_file": "app/Http/Middleware/TrustProxies.php",
-      "source_location": "L8",
+      "source_location": "L7",
       "_origin": "ast",
       "id": "app_http_middleware_trustproxies_trustproxies",
       "community": 26,
@@ -2876,8 +2876,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_logging_customizeformatter",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": "customizeformatter.php"
     },
     {
@@ -2887,8 +2887,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "app_logging_customizeformatter_customizeformatter",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": "customizeformatter"
     },
     {
@@ -2898,8 +2898,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_logging_customizeformatter_customizeformatter_invoke",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": ".__invoke()"
     },
     {
@@ -2909,74 +2909,74 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_logging_processors_scrubandtraceprocessor",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": "scrubandtraceprocessor.php"
     },
     {
       "label": "ScrubAndTraceProcessor",
       "file_type": "code",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L10",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": "scrubandtraceprocessor"
     },
     {
       "label": ".__invoke()",
       "file_type": "code",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L33",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_invoke",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": ".__invoke()"
     },
     {
       "label": ".scrubArray()",
       "file_type": "code",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L97",
+      "source_location": "L99",
       "_origin": "ast",
       "id": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_scrubarray",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": ".scrubarray()"
     },
     {
       "label": ".shouldScrub()",
       "file_type": "code",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L113",
+      "source_location": "L115",
       "_origin": "ast",
       "id": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_shouldscrub",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": ".shouldscrub()"
     },
     {
       "label": ".getRequestId()",
       "file_type": "code",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L128",
+      "source_location": "L130",
       "_origin": "ast",
       "id": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_getrequestid",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": ".getrequestid()"
     },
     {
       "label": ".injectPrefix()",
       "file_type": "code",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L143",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_injectprefix",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": ".injectprefix()"
     },
     {
@@ -3184,8 +3184,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_feedback",
-      "community": 42,
-      "community_name": "FeedbackCategory.php",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": "feedback.php"
     },
     {
@@ -3217,7 +3217,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_feedbackcategory",
-      "community": 42,
+      "community": 5,
       "community_name": "FeedbackCategory.php",
       "norm_label": "feedbackcategory.php"
     },
@@ -3250,8 +3250,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_infoboard",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "infoboard.php"
     },
     {
@@ -3493,7 +3493,7 @@
       "_origin": "ast",
       "id": "app_models_parkarea",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "parkarea.php"
     },
     {
@@ -3680,7 +3680,7 @@
       "_origin": "ast",
       "id": "app_models_reward",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "reward.php"
     },
     {
@@ -3756,8 +3756,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_user",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "user.php"
     },
     {
@@ -4284,8 +4284,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_services_missionservice",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "missionservice.php"
     },
     {
@@ -4460,8 +4460,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "composer_keywords",
-      "community": 206,
-      "community_name": "keywords",
+      "community": 33,
+      "community_name": "composer.json",
       "norm_label": "keywords"
     },
     {
@@ -4471,8 +4471,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "ref_laravel",
-      "community": 206,
-      "community_name": "keywords",
+      "community": 33,
+      "community_name": "composer.json",
       "norm_label": "laravel"
     },
     {
@@ -4482,8 +4482,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "ref_framework",
-      "community": 206,
-      "community_name": "keywords",
+      "community": 33,
+      "community_name": "composer.json",
       "norm_label": "framework"
     },
     {
@@ -4779,8 +4779,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "composer_autoload_dev",
-      "community": 33,
-      "community_name": "composer.json",
+      "community": 194,
+      "community_name": "autoload-dev",
       "norm_label": "autoload-dev"
     },
     {
@@ -4790,8 +4790,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "composer_autoload_dev_psr_4",
-      "community": 33,
-      "community_name": "composer.json",
+      "community": 194,
+      "community_name": "autoload-dev",
       "norm_label": "psr-4"
     },
     {
@@ -4801,8 +4801,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "composer_psr_4_tests",
-      "community": 33,
-      "community_name": "composer.json",
+      "community": 194,
+      "community_name": "autoload-dev",
       "norm_label": "tests\\\\"
     },
     {
@@ -4900,7 +4900,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "composer_scripts_post_create_project_cmd",
-      "community": 194,
+      "community": 206,
       "community_name": "post-create-project-cmd",
       "norm_label": "post-create-project-cmd"
     },
@@ -4911,7 +4911,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "ref_php_artisan_key_generate_ansi",
-      "community": 194,
+      "community": 206,
       "community_name": "post-create-project-cmd",
       "norm_label": "@php artisan key:generate --ansi"
     },
@@ -4922,7 +4922,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "ref_php_r_file_exists_database_database_sqlite_touch_database_database_sqlite",
-      "community": 194,
+      "community": 206,
       "community_name": "post-create-project-cmd",
       "norm_label": "@php -r \\\"file_exists('database/database.sqlite') || touch('database/database.sqlite');\\"
     },
@@ -4933,7 +4933,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "ref_php_artisan_migrate_graceful_ansi",
-      "community": 194,
+      "community": 206,
       "community_name": "post-create-project-cmd",
       "norm_label": "@php artisan migrate --graceful --ansi"
     },
@@ -5208,8 +5208,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "config_logging",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": "logging.php"
     },
     {
@@ -5219,8 +5219,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "config_mail",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "mail.php"
     },
     {
@@ -5879,8 +5879,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "database_seeders_databaseseeder",
-      "community": 42,
-      "community_name": "FeedbackCategory.php",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": "databaseseeder.php"
     },
     {
@@ -5945,8 +5945,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "database_seeders_feedbackseeder",
-      "community": 42,
-      "community_name": "FeedbackCategory.php",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": "feedbackseeder.php"
     },
     {
@@ -7875,8 +7875,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_exampletest",
-      "community": 36,
-      "community_name": "TestCase",
+      "community": 207,
+      "community_name": "ExampleTest",
       "norm_label": "feature/exampletest.php"
     },
     {
@@ -7886,8 +7886,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "tests_feature_exampletest_exampletest",
-      "community": 36,
-      "community_name": "TestCase",
+      "community": 207,
+      "community_name": "ExampleTest",
       "norm_label": "exampletest"
     },
     {
@@ -7897,8 +7897,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "tests_feature_exampletest_exampletest_test_the_application_returns_a_successful_response",
-      "community": 36,
-      "community_name": "TestCase",
+      "community": 207,
+      "community_name": "ExampleTest",
       "norm_label": ".test_the_application_returns_a_successful_response()"
     },
     {
@@ -7908,8 +7908,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_authcontrollertest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "api/authcontrollertest.php"
     },
     {
@@ -8260,7 +8260,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcategorycontrollertest",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "feedbackcategorycontrollertest.php"
     },
@@ -8271,7 +8271,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcategorycontrollertest_feedbackcategorycontrollertest",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "feedbackcategorycontrollertest"
     },
@@ -8294,7 +8294,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcontrollertest",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": "feedbackcontrollertest.php"
     },
     {
@@ -8305,7 +8305,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcontrollertest_feedbackcontrollertest",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": "feedbackcontrollertest"
     },
     {
@@ -8316,7 +8316,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcontrollertest_feedbackcontrollertest_setup",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": ".setup()"
     },
     {
@@ -8348,7 +8348,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_historycontrollertest",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "historycontrollertest.php"
     },
@@ -8359,7 +8359,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_historycontrollertest_historycontrollertest",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "historycontrollertest"
     },
@@ -8381,8 +8381,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_infoboardcontrollertest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "api/infoboardcontrollertest.php"
     },
     {
@@ -8392,8 +8392,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_infoboardcontrollertest_infoboardcontrollertest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "infoboardcontrollertest"
     },
     {
@@ -8414,8 +8414,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotdetectioncontrollertest",
-      "community": 43,
-      "community_name": "IotDetectionControllerTest",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": "iotdetectioncontrollertest.php"
     },
     {
@@ -8513,8 +8513,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest",
-      "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": "iotwebhookcontrollertest.php"
     },
     {
@@ -8524,8 +8524,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest",
-      "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": "iotwebhookcontrollertest"
     },
     {
@@ -8546,8 +8546,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest_it_handles_member_added",
-      "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": ".it_handles_member_added()"
     },
     {
@@ -8557,8 +8557,8 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest_it_handles_member_removed",
-      "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": ".it_handles_member_removed()"
     },
     {
@@ -8568,8 +8568,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest",
-      "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": "iotwsauthcontrollertest.php"
     },
     {
@@ -8579,8 +8579,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest",
-      "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": "iotwsauthcontrollertest"
     },
     {
@@ -8601,8 +8601,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest_authenticate_succeeds_with_valid_credentials",
-      "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": ".authenticate_succeeds_with_valid_credentials()"
     },
     {
@@ -8612,8 +8612,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest_authenticate_fails_with_invalid_mac",
-      "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community": 22,
+      "community_name": "TestCase",
       "norm_label": ".authenticate_fails_with_invalid_mac()"
     },
     {
@@ -8623,7 +8623,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_mapvisualizationcontrollertest",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "mapvisualizationcontrollertest.php"
     },
@@ -8634,7 +8634,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_mapvisualizationcontrollertest_mapvisualizationcontrollertest",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "mapvisualizationcontrollertest"
     },
@@ -8679,7 +8679,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_missioncontrollertest",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": "api/missioncontrollertest.php"
     },
     {
@@ -8690,7 +8690,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_missioncontrollertest_missioncontrollertest",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": "missioncontrollertest"
     },
     {
@@ -8701,7 +8701,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_missioncontrollertest_missioncontrollertest_index_returns_200_and_mission_data",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": ".index_returns_200_and_mission_data()"
     },
     {
@@ -8711,8 +8711,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_profilecontrollertest",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "api/profilecontrollertest.php"
     },
     {
@@ -8822,7 +8822,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_rewardcontrollertest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "api/rewardcontrollertest.php"
     },
     {
@@ -8910,7 +8910,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "subareacommentcontrollertest.php"
     },
     {
@@ -9020,7 +9020,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_userfaqcontrollertest",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": "userfaqcontrollertest.php"
     },
     {
@@ -9031,7 +9031,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_userfaqcontrollertest_userfaqcontrollertest",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": "userfaqcontrollertest"
     },
     {
@@ -9064,7 +9064,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_uservalidationcontrollertest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "uservalidationcontrollertest.php"
     },
     {
@@ -9173,8 +9173,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_authcontrollertest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "web/authcontrollertest.php"
     },
     {
@@ -9449,7 +9449,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_dashboardcontrollertest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "dashboardcontrollertest.php"
     },
     {
@@ -9558,8 +9558,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_infoboardcontrollertest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "web/infoboardcontrollertest.php"
     },
     {
@@ -9635,8 +9635,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_missioncontrollertest",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 42,
+      "community_name": "MissionControllerTest",
       "norm_label": "web/missioncontrollertest.php"
     },
     {
@@ -9646,8 +9646,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 42,
+      "community_name": "MissionControllerTest",
       "norm_label": "missioncontrollertest"
     },
     {
@@ -9657,8 +9657,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_setup",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 42,
+      "community_name": "MissionControllerTest",
       "norm_label": ".setup()"
     },
     {
@@ -9668,8 +9668,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_index_returns_view",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 42,
+      "community_name": "MissionControllerTest",
       "norm_label": ".index_returns_view()"
     },
     {
@@ -9679,8 +9679,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_store_creates_mission",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 42,
+      "community_name": "MissionControllerTest",
       "norm_label": ".store_creates_mission()"
     },
     {
@@ -9690,8 +9690,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_update_modifies_mission",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 42,
+      "community_name": "MissionControllerTest",
       "norm_label": ".update_modifies_mission()"
     },
     {
@@ -9701,8 +9701,8 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_missioncontrollertest_missioncontrollertest_destroy_deletes_mission",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 42,
+      "community_name": "MissionControllerTest",
       "norm_label": ".destroy_deletes_mission()"
     },
     {
@@ -9713,7 +9713,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parkareacontrollertest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "parkareacontrollertest.php"
     },
     {
@@ -9790,7 +9790,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parksubareacontrollertest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "parksubareacontrollertest.php"
     },
     {
@@ -9866,8 +9866,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_profilecontrollertest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "web/profilecontrollertest.php"
     },
     {
@@ -9977,7 +9977,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_rewardcontrollertest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "web/rewardcontrollertest.php"
     },
     {
@@ -10054,7 +10054,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest",
       "community": 5,
-      "community_name": "ApiEncryption.php",
+      "community_name": "FeedbackCategory.php",
       "norm_label": "apiencryptiontest.php"
     },
     {
@@ -10065,7 +10065,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest",
       "community": 5,
-      "community_name": "ApiEncryption.php",
+      "community_name": "FeedbackCategory.php",
       "norm_label": "apiencryptiontest"
     },
     {
@@ -10076,7 +10076,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_ignores_non_api_requests",
       "community": 5,
-      "community_name": "ApiEncryption.php",
+      "community_name": "FeedbackCategory.php",
       "norm_label": ".it_ignores_non_api_requests()"
     },
     {
@@ -10087,7 +10087,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_returns_500_or_400_if_key_or_session_invalid",
       "community": 5,
-      "community_name": "ApiEncryption.php",
+      "community_name": "FeedbackCategory.php",
       "norm_label": ".it_returns_500_or_400_if_key_or_session_invalid()"
     },
     {
@@ -10098,7 +10098,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_blocks_raw_authorization_without_x_auth_token",
       "community": 5,
-      "community_name": "ApiEncryption.php",
+      "community_name": "FeedbackCategory.php",
       "norm_label": ".it_blocks_raw_authorization_without_x_auth_token()"
     },
     {
@@ -10108,8 +10108,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_middleware_rbactest",
-      "community": 36,
-      "community_name": "TestCase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "rbactest.php"
     },
     {
@@ -10174,7 +10174,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_feedbackcategorytest",
-      "community": 42,
+      "community": 5,
       "community_name": "FeedbackCategory.php",
       "norm_label": "feedbackcategorytest.php"
     },
@@ -10240,7 +10240,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_feedbacktest",
-      "community": 42,
+      "community": 5,
       "community_name": "FeedbackCategory.php",
       "norm_label": "feedbacktest.php"
     },
@@ -10306,8 +10306,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_infoboardtest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "infoboardtest.php"
     },
     {
@@ -10505,7 +10505,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_parkareatest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "parkareatest.php"
     },
     {
@@ -10559,7 +10559,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_parksubareatest",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "parksubareatest.php"
     },
@@ -10626,7 +10626,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_rewardtest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "rewardtest.php"
     },
     {
@@ -10681,7 +10681,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_subareacommenttest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "subareacommenttest.php"
     },
     {
@@ -10868,7 +10868,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_userrewardtest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "userrewardtest.php"
     },
     {
@@ -10933,8 +10933,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_usertest",
-      "community": 36,
-      "community_name": "TestCase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "usertest.php"
     },
     {
@@ -11000,7 +11000,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_uservalidationtest",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "uservalidationtest.php"
     },
     {
@@ -11065,7 +11065,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_validationtest",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "validationtest.php"
     },
@@ -11131,8 +11131,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_performance_protectedapiperformancetest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "protectedapiperformancetest.php"
     },
     {
@@ -11143,7 +11143,7 @@
       "_origin": "ast",
       "id": "tests_pest",
       "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community_name": "Pest.php",
       "norm_label": "pest.php"
     },
     {
@@ -11154,7 +11154,7 @@
       "_origin": "ast",
       "id": "tests_pest_stressendpoint",
       "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community_name": "Pest.php",
       "norm_label": "stressendpoint()"
     },
     {
@@ -11165,7 +11165,7 @@
       "_origin": "ast",
       "id": "tests_pest_percentile",
       "community": 123,
-      "community_name": "IotWebhookControllerTest.php",
+      "community_name": "Pest.php",
       "norm_label": "percentile()"
     },
     {
@@ -11208,8 +11208,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_stress_protectedapistresstest",
-      "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "protectedapistresstest.php"
     },
     {
@@ -11220,7 +11220,7 @@
       "_origin": "ast",
       "id": "tests_stress_publicapistresstest",
       "community": 5,
-      "community_name": "ApiEncryption.php",
+      "community_name": "FeedbackCategory.php",
       "norm_label": "publicapistresstest.php"
     },
     {
@@ -11230,7 +11230,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_testcase",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "testcase.php"
     },
@@ -11241,7 +11241,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_testcase_testcase",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "testcase"
     },
@@ -11406,8 +11406,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_service_missionservicetest",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "missionservicetest.php"
     },
     {
@@ -14354,8 +14354,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "monolog_processor_processorinterface",
-      "community": 30,
-      "community_name": "ScrubAndTraceProcessor",
+      "community": 24,
+      "community_name": "Api/AuthController.php",
       "norm_label": "monolog\\processor\\processorinterface"
     },
     {
@@ -14575,7 +14575,7 @@
       "_origin": "ast",
       "id": "illuminate_foundation_testing_refreshdatabase",
       "community": 22,
-      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
+      "community_name": "TestCase",
       "norm_label": "illuminate\\foundation\\testing\\refreshdatabase"
     },
     {
@@ -14586,7 +14586,7 @@
       "_origin": "ast",
       "id": "illuminate_foundation_testing_withoutmiddleware",
       "community": 36,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
       "norm_label": "illuminate\\foundation\\testing\\withoutmiddleware"
     },
     {
@@ -14596,7 +14596,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_foundation_testing_testcase",
-      "community": 36,
+      "community": 22,
       "community_name": "TestCase",
       "norm_label": "illuminate\\foundation\\testing\\testcase"
     },
@@ -26332,7 +26332,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Middleware/TrustProxies.php",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_middleware_trustproxies",
@@ -26355,7 +26355,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "app/Http/Middleware/TrustProxies.php",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_http_middleware_trustproxies_trustproxies",
@@ -26412,7 +26412,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor",
@@ -26424,7 +26424,19 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L8",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "app_logging_processors_scrubandtraceprocessor",
+      "target": "app_services_iplocationservice_iplocationservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor",
@@ -26447,7 +26459,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L128",
+      "source_location": "L130",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor",
@@ -26458,7 +26470,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L143",
+      "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor",
@@ -26469,7 +26481,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor",
@@ -26480,7 +26492,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L97",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor",
@@ -26491,7 +26503,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L113",
+      "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor",
@@ -26502,7 +26514,7 @@
       "relation": "implements",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor",
@@ -26514,7 +26526,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L68",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_invoke",
@@ -26526,7 +26538,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L71",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_invoke",
@@ -26538,7 +26550,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L43",
+      "source_location": "L44",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_invoke",
@@ -26550,7 +26562,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/Logging/Processors/ScrubAndTraceProcessor.php",
-      "source_location": "L102",
+      "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast",
       "source": "app_logging_processors_scrubandtraceprocessor_scrubandtraceprocessor_scrubarray",
@@ -46815,5 +46827,5 @@
       "source_file": "docs/PROJECT_SUMMARY.md"
     }
   ],
-  "built_at_commit": "20147108dc6f91baf5e020ba1b679078c7a4ca2d"
+  "built_at_commit": "374e305008e6ff5cfbbba750467d5fa97ba2b686"
 }
