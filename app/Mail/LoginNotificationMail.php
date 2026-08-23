@@ -2,14 +2,14 @@
 
 namespace App\Mail;
 
+use App\Models\User;
+use App\Services\IpLocationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
-use Illuminate\Support\Facades\Http;
 
 class LoginNotificationMail extends Mailable implements ShouldQueue
 {
@@ -20,6 +20,7 @@ class LoginNotificationMail extends Mailable implements ShouldQueue
     public $ipAddress;
     public $userAgent;
     public $token;
+    public $location;
 
     /**
      * Konstruktor mail notifikasi login.
@@ -51,8 +52,6 @@ class LoginNotificationMail extends Mailable implements ShouldQueue
         );
     }
 
-    public $location;
-
     /**
      * Konfigurasi konten email.
      *
@@ -60,17 +59,8 @@ class LoginNotificationMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
-        $this->location = 'Tidak diketahui';
-        if ($this->ipAddress && $this->ipAddress !== '127.0.0.1' && $this->ipAddress !== '::1') {
-            try {
-                $response = Http::timeout(5)->get("http://ip-api.com/json/{$this->ipAddress}");
-                if ($response->successful() && $response->json('status') === 'success') {
-                    $this->location = $response->json('city') . ', ' . $response->json('country');
-                }
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::warning("Gagal melacak lokasi IP: " . $e->getMessage());
-            }
-        }
+        $ipService = app(IpLocationService::class);
+        $this->location = $ipService->getLocation($this->ipAddress);
 
         return new Content(
             view: 'Emails.login_notification',

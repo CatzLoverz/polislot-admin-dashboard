@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AccountLockedMail;
 use App\Mail\LoginNotificationMail;
 use App\Mail\SendOtpMail;
 use App\Models\User;
+use App\Services\IpLocationService;
 use App\Services\MissionService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -26,15 +28,18 @@ use Laravel\Sanctum\PersonalAccessToken;
 class AuthController extends Controller
 {
     protected $missionService;
+    protected $ipLocationService;
 
     /**
      * Konstruktor.
      *
      * @param MissionService $missionService Service misi
+     * @param IpLocationService $ipLocationService Service lokasi IP
      */
-    public function __construct(MissionService $missionService)
+    public function __construct(MissionService $missionService, IpLocationService $ipLocationService)
     {
         $this->missionService = $missionService;
+        $this->ipLocationService = $ipLocationService;
     }
 
     /**
@@ -333,7 +338,8 @@ class AuthController extends Controller
                         $lockoutRateLimitKey = 'lockout_notification_email_' . $user->user_id;
                         if (!RateLimiter::tooManyAttempts($lockoutRateLimitKey, 1)) {
                             RateLimiter::hit($lockoutRateLimitKey, 600); // 10 menit
-                            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\AccountLockedMail($user, now()->format('Y-m-d H:i:s'), $request->ip(), $deviceInfo, $resetToken));
+                            $ipAddress = $this->ipLocationService->getRealIp($request);
+                            Mail::to($user->email)->send(new AccountLockedMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $deviceInfo, $resetToken));
                         }
 
                         return $this->sendError('Email atau Password salah.', 401);
@@ -360,7 +366,7 @@ class AuthController extends Controller
                 $emailRateLimitKey = 'login_notification_email_' . $user->user_id;
                 if (!RateLimiter::tooManyAttempts($emailRateLimitKey, 1)) {
                     RateLimiter::hit($emailRateLimitKey, 300); // 5 menit (300 detik)
-                    $ipAddress = $request->ip();
+                    $ipAddress = $this->ipLocationService->getRealIp($request);
                     Mail::to($user->email)->send(new LoginNotificationMail($user, now()->format('Y-m-d H:i:s'), $ipAddress, $deviceInfo, $resetToken));
                 } else {
                     Log::info('Email notifikasi login dilewati (rate limit aktif).', ['user_id' => $user->user_id]);
