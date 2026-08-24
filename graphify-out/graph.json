@@ -303,7 +303,7 @@
       "_origin": "ast",
       "id": "app_console_commands_mqttlistenercommand",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "mqttlistenercommand.php"
     },
     {
@@ -313,8 +313,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_console_commands_mqttlistenercommand_mqttlistenercommand",
-      "community": 15,
-      "community_name": "Command",
+      "community": 21,
+      "community_name": "IotDevice",
       "norm_label": "mqttlistenercommand"
     },
     {
@@ -324,8 +324,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "app_console_commands_mqttlistenercommand_mqttlistenercommand_handle",
-      "community": 15,
-      "community_name": "Command",
+      "community": 21,
+      "community_name": "IotDevice",
       "norm_label": ".handle()"
     },
     {
@@ -335,8 +335,8 @@
       "source_location": "L458",
       "_origin": "ast",
       "id": "app_console_commands_mqttlistenercommand_mqttlistenercommand_reconcilewsdevicestatuses",
-      "community": 15,
-      "community_name": "Command",
+      "community": 21,
+      "community_name": "IotDevice",
       "norm_label": ".reconcilewsdevicestatuses()"
     },
     {
@@ -468,7 +468,7 @@
       "_origin": "ast",
       "id": "app_events_iotcommandsent",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotcommandsent.php"
     },
     {
@@ -479,7 +479,7 @@
       "_origin": "ast",
       "id": "app_events_iotcommandsent_iotcommandsent",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotcommandsent"
     },
     {
@@ -490,7 +490,7 @@
       "_origin": "ast",
       "id": "app_events_iotcommandsent_iotcommandsent_construct",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -501,7 +501,7 @@
       "_origin": "ast",
       "id": "app_events_iotcommandsent_iotcommandsent_broadcaston",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcaston()"
     },
     {
@@ -512,7 +512,7 @@
       "_origin": "ast",
       "id": "app_events_iotcommandsent_iotcommandsent_broadcastas",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcastas()"
     },
     {
@@ -523,7 +523,7 @@
       "_origin": "ast",
       "id": "app_events_iotcountupdated",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotcountupdated.php"
     },
     {
@@ -534,7 +534,7 @@
       "_origin": "ast",
       "id": "app_events_iotcountupdated_iotcountupdated",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotcountupdated"
     },
     {
@@ -545,7 +545,7 @@
       "_origin": "ast",
       "id": "app_events_iotcountupdated_iotcountupdated_construct",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -556,7 +556,7 @@
       "_origin": "ast",
       "id": "app_events_iotcountupdated_iotcountupdated_broadcaston",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcaston()"
     },
     {
@@ -567,7 +567,7 @@
       "_origin": "ast",
       "id": "app_events_iotcountupdated_iotcountupdated_broadcastas",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcastas()"
     },
     {
@@ -578,7 +578,7 @@
       "_origin": "ast",
       "id": "app_events_iotdetectionreceived",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotdetectionreceived.php"
     },
     {
@@ -589,7 +589,7 @@
       "_origin": "ast",
       "id": "app_events_iotdetectionreceived_iotdetectionreceived",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotdetectionreceived"
     },
     {
@@ -600,7 +600,7 @@
       "_origin": "ast",
       "id": "app_events_iotdetectionreceived_iotdetectionreceived_construct",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -611,7 +611,7 @@
       "_origin": "ast",
       "id": "app_events_iotdetectionreceived_iotdetectionreceived_broadcaston",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcaston()"
     },
     {
@@ -622,7 +622,7 @@
       "_origin": "ast",
       "id": "app_events_iotdetectionreceived_iotdetectionreceived_broadcastas",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcastas()"
     },
     {
@@ -633,7 +633,7 @@
       "_origin": "ast",
       "id": "app_events_iotdevicestatuschanged",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotdevicestatuschanged.php"
     },
     {
@@ -644,7 +644,7 @@
       "_origin": "ast",
       "id": "app_events_iotdevicestatuschanged_iotdevicestatuschanged",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotdevicestatuschanged"
     },
     {
@@ -655,7 +655,7 @@
       "_origin": "ast",
       "id": "app_events_iotdevicestatuschanged_iotdevicestatuschanged_construct",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -666,7 +666,7 @@
       "_origin": "ast",
       "id": "app_events_iotdevicestatuschanged_iotdevicestatuschanged_broadcaston",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcaston()"
     },
     {
@@ -677,7 +677,7 @@
       "_origin": "ast",
       "id": "app_events_iotdevicestatuschanged_iotdevicestatuschanged_broadcastas",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcastas()"
     },
     {
@@ -688,7 +688,7 @@
       "_origin": "ast",
       "id": "app_events_iotthresholdupdated",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotthresholdupdated.php"
     },
     {
@@ -699,7 +699,7 @@
       "_origin": "ast",
       "id": "app_events_iotthresholdupdated_iotthresholdupdated",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotthresholdupdated"
     },
     {
@@ -710,7 +710,7 @@
       "_origin": "ast",
       "id": "app_events_iotthresholdupdated_iotthresholdupdated_construct",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -721,7 +721,7 @@
       "_origin": "ast",
       "id": "app_events_iotthresholdupdated_iotthresholdupdated_broadcaston",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcaston()"
     },
     {
@@ -732,7 +732,7 @@
       "_origin": "ast",
       "id": "app_events_iotthresholdupdated_iotthresholdupdated_broadcastas",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcastas()"
     },
     {
@@ -743,7 +743,7 @@
       "_origin": "ast",
       "id": "app_events_subareastatusupdated",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "subareastatusupdated.php"
     },
     {
@@ -754,7 +754,7 @@
       "_origin": "ast",
       "id": "app_events_subareastatusupdated_subareastatusupdated",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "subareastatusupdated"
     },
     {
@@ -765,7 +765,7 @@
       "_origin": "ast",
       "id": "app_events_subareastatusupdated_subareastatusupdated_construct",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -776,7 +776,7 @@
       "_origin": "ast",
       "id": "app_events_subareastatusupdated_subareastatusupdated_broadcaston",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcaston()"
     },
     {
@@ -787,7 +787,7 @@
       "_origin": "ast",
       "id": "app_events_subareastatusupdated_subareastatusupdated_broadcastas",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".broadcastas()"
     },
     {
@@ -809,7 +809,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": "authcontroller"
     },
     {
@@ -831,7 +831,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_authcheck",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".authcheck()"
     },
     {
@@ -842,7 +842,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_register",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".register()"
     },
     {
@@ -853,7 +853,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_registerotpverify",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".registerotpverify()"
     },
     {
@@ -864,7 +864,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_registerotpresend",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".registerotpresend()"
     },
     {
@@ -875,7 +875,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_login",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".login()"
     },
     {
@@ -886,7 +886,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_logout",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".logout()"
     },
     {
@@ -897,7 +897,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_forgotpasswordverify",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".forgotpasswordverify()"
     },
     {
@@ -908,7 +908,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_forgotpasswordotpverify",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".forgotpasswordotpverify()"
     },
     {
@@ -919,7 +919,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_forgotpasswordotpresend",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".forgotpasswordotpresend()"
     },
     {
@@ -930,7 +930,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_resetpasswordcheck",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".resetpasswordcheck()"
     },
     {
@@ -941,7 +941,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_resetpassword",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".resetpassword()"
     },
     {
@@ -952,7 +952,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_authcontroller_authcontroller_resetpasswordbyotp",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".resetpasswordbyotp()"
     },
     {
@@ -984,8 +984,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_http_controllers_api_feedbackcategorycontroller_feedbackcategorycontroller_index",
-      "community": 1,
-      "community_name": "Controller",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".index()"
     },
     {
@@ -1017,8 +1017,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "app_http_controllers_api_feedbackcontroller_feedbackcontroller_store",
-      "community": 1,
-      "community_name": "Controller",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".store()"
     },
     {
@@ -1028,7 +1028,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_api_historycontroller",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": "historycontroller.php"
     },
@@ -1039,7 +1039,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "app_http_controllers_api_historycontroller_historycontroller",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": "historycontroller"
     },
@@ -1050,7 +1050,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_http_controllers_api_historycontroller_historycontroller_index",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": ".index()"
     },
@@ -1083,8 +1083,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_http_controllers_api_infoboardcontroller_infoboardcontroller_index",
-      "community": 1,
-      "community_name": "Controller",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".index()"
     },
     {
@@ -1095,7 +1095,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "api/iotdetectioncontroller.php"
     },
     {
@@ -1106,7 +1106,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": "iotdetectioncontroller"
     },
     {
@@ -1117,7 +1117,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_validatemacaddress",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".validatemacaddress()"
     },
     {
@@ -1128,7 +1128,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_receivedetection",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".receivedetection()"
     },
     {
@@ -1139,7 +1139,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_receivesnapshot",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".receivesnapshot()"
     },
     {
@@ -1150,7 +1150,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_receivecount",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".receivecount()"
     },
     {
@@ -1161,7 +1161,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotdetectioncontroller_iotdetectioncontroller_receiveconfigquery",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".receiveconfigquery()"
     },
     {
@@ -1172,7 +1172,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwebhookcontroller",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotwebhookcontroller.php"
     },
     {
@@ -1182,8 +1182,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwebhookcontroller_iotwebhookcontroller",
-      "community": 21,
-      "community_name": ".log",
+      "community": 36,
+      "community_name": "Illuminate\\Http\\Request",
       "norm_label": "iotwebhookcontroller"
     },
     {
@@ -1193,8 +1193,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwebhookcontroller_iotwebhookcontroller_handle",
-      "community": 21,
-      "community_name": ".log",
+      "community": 36,
+      "community_name": "Illuminate\\Http\\Request",
       "norm_label": ".handle()"
     },
     {
@@ -1204,8 +1204,8 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwebhookcontroller_iotwebhookcontroller_updatestatus",
-      "community": 21,
-      "community_name": ".log",
+      "community": 36,
+      "community_name": "Illuminate\\Http\\Request",
       "norm_label": ".updatestatus()"
     },
     {
@@ -1216,7 +1216,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwsauthcontroller",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotwsauthcontroller.php"
     },
     {
@@ -1226,8 +1226,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwsauthcontroller_iotwsauthcontroller",
-      "community": 1,
-      "community_name": "Controller",
+      "community": 36,
+      "community_name": "Illuminate\\Http\\Request",
       "norm_label": "iotwsauthcontroller"
     },
     {
@@ -1237,8 +1237,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "app_http_controllers_api_iotwsauthcontroller_iotwsauthcontroller_authenticate",
-      "community": 21,
-      "community_name": ".log",
+      "community": 36,
+      "community_name": "Illuminate\\Http\\Request",
       "norm_label": ".authenticate()"
     },
     {
@@ -1248,8 +1248,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_api_mapvisualizationcontroller",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": "mapvisualizationcontroller.php"
     },
     {
@@ -1259,8 +1259,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "app_http_controllers_api_mapvisualizationcontroller_mapvisualizationcontroller",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 27,
+      "community_name": "UserValidation",
       "norm_label": "mapvisualizationcontroller"
     },
     {
@@ -1270,8 +1270,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_http_controllers_api_mapvisualizationcontroller_mapvisualizationcontroller_index",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 27,
+      "community_name": "UserValidation",
       "norm_label": ".index()"
     },
     {
@@ -1281,8 +1281,8 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "app_http_controllers_api_mapvisualizationcontroller_mapvisualizationcontroller_show",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 27,
+      "community_name": "UserValidation",
       "norm_label": ".show()"
     },
     {
@@ -1336,7 +1336,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_api_profilecontroller",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": "api/profilecontroller.php"
     },
@@ -1347,7 +1347,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_http_controllers_api_profilecontroller_profilecontroller",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": "profilecontroller"
     },
@@ -1369,7 +1369,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "app_http_controllers_api_profilecontroller_profilecontroller_show",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": ".show()"
     },
@@ -1380,7 +1380,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "app_http_controllers_api_profilecontroller_profilecontroller_update",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": ".update()"
     },
@@ -1391,7 +1391,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "app_http_controllers_api_profilecontroller_profilecontroller_destroy",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": ".destroy()"
     },
@@ -1402,8 +1402,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_api_rewardcontroller",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "api/rewardcontroller.php"
     },
     {
@@ -1413,8 +1413,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_http_controllers_api_rewardcontroller_rewardcontroller",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": "rewardcontroller"
     },
     {
@@ -1424,8 +1424,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "app_http_controllers_api_rewardcontroller_rewardcontroller_construct",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -1435,8 +1435,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "app_http_controllers_api_rewardcontroller_rewardcontroller_index",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".index()"
     },
     {
@@ -1446,8 +1446,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "app_http_controllers_api_rewardcontroller_rewardcontroller_redeem",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".redeem()"
     },
     {
@@ -1457,8 +1457,8 @@
       "source_location": "L142",
       "_origin": "ast",
       "id": "app_http_controllers_api_rewardcontroller_rewardcontroller_history",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".history()"
     },
     {
@@ -1469,7 +1469,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_subareacommentcontroller",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": "subareacommentcontroller.php"
     },
     {
@@ -1480,7 +1480,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": "subareacommentcontroller"
     },
     {
@@ -1491,7 +1491,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller_index",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".index()"
     },
     {
@@ -1502,7 +1502,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller_store",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".store()"
     },
     {
@@ -1513,7 +1513,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller_update",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".update()"
     },
     {
@@ -1524,7 +1524,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_subareacommentcontroller_subareacommentcontroller_destroy",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".destroy()"
     },
     {
@@ -1534,8 +1534,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_api_userfaqcontroller",
-      "community": 2,
-      "community_name": "UserFaq",
+      "community": 1,
+      "community_name": "Controller",
       "norm_label": "api/userfaqcontroller.php"
     },
     {
@@ -1545,8 +1545,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "app_http_controllers_api_userfaqcontroller_userfaqcontroller",
-      "community": 2,
-      "community_name": "UserFaq",
+      "community": 1,
+      "community_name": "Controller",
       "norm_label": "userfaqcontroller"
     },
     {
@@ -1556,8 +1556,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "app_http_controllers_api_userfaqcontroller_userfaqcontroller_index",
-      "community": 2,
-      "community_name": "UserFaq",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".index()"
     },
     {
@@ -1568,7 +1568,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "uservalidationcontroller.php"
     },
     {
@@ -1578,8 +1578,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller_uservalidationcontroller",
-      "community": 64,
-      "community_name": ".store",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": "uservalidationcontroller"
     },
     {
@@ -1589,8 +1589,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller_uservalidationcontroller_construct",
-      "community": 64,
-      "community_name": ".store",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -1600,8 +1600,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller_uservalidationcontroller_store",
-      "community": 64,
-      "community_name": ".store",
+      "community": 27,
+      "community_name": "UserValidation",
       "norm_label": ".store()"
     },
     {
@@ -1611,8 +1611,8 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "app_http_controllers_api_uservalidationcontroller_uservalidationcontroller_calculatedistance",
-      "community": 64,
-      "community_name": ".store",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": ".calculatedistance()"
     },
     {
@@ -1743,8 +1743,8 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "app_http_controllers_web_authcontroller_authcontroller_forgotpasswordform",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".forgotpasswordform()"
     },
     {
@@ -1821,7 +1821,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller",
       "community": 31,
-      "community_name": "DashboardController.php",
+      "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "dashboardcontroller.php"
     },
     {
@@ -1831,8 +1831,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_dashboardcontroller",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 27,
+      "community_name": "UserValidation",
       "norm_label": "dashboardcontroller"
     },
     {
@@ -1842,7 +1842,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_dashboardcontroller_index",
-      "community": 16,
+      "community": 39,
       "community_name": "ParkSubarea",
       "norm_label": ".index()"
     },
@@ -1853,8 +1853,8 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_dashboardcontroller_getchartdata",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 27,
+      "community_name": "UserValidation",
       "norm_label": ".getchartdata()"
     },
     {
@@ -1865,7 +1865,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_dashboardcontroller_getdetectionchartdata",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".getdetectionchartdata()"
     },
     {
@@ -1876,7 +1876,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_dashboardcontroller_getleaderboard",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".getleaderboard()"
     },
     {
@@ -1886,8 +1886,8 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "app_http_controllers_web_dashboardcontroller_dashboardcontroller_getrealtimevalidations",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 27,
+      "community_name": "UserValidation",
       "norm_label": ".getrealtimevalidations()"
     },
     {
@@ -1897,8 +1897,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcategorycontroller",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 1,
+      "community_name": "Controller",
       "norm_label": "web/feedbackcategorycontroller.php"
     },
     {
@@ -1908,8 +1908,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": "feedbackcategorycontroller"
     },
     {
@@ -1919,8 +1919,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller_index",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": ".index()"
     },
     {
@@ -1930,8 +1930,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller_store",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": ".store()"
     },
     {
@@ -1941,8 +1941,8 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller_update",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": ".update()"
     },
     {
@@ -1952,8 +1952,8 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcategorycontroller_feedbackcategorycontroller_destroy",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": ".destroy()"
     },
     {
@@ -1963,8 +1963,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcontroller",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "web/feedbackcontroller.php"
     },
     {
@@ -1974,8 +1974,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcontroller_feedbackcontroller",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": "feedbackcontroller"
     },
     {
@@ -1985,8 +1985,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcontroller_feedbackcontroller_index",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": ".index()"
     },
     {
@@ -1996,8 +1996,8 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "app_http_controllers_web_feedbackcontroller_feedbackcontroller_destroy",
-      "community": 8,
-      "community_name": "Illuminate\\Http\\RedirectResponse",
+      "community": 7,
+      "community_name": "FeedbackCategory",
       "norm_label": ".destroy()"
     },
     {
@@ -2074,7 +2074,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "web/iotdetectioncontroller.php"
     },
     {
@@ -2085,7 +2085,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": "iotdetectioncontroller"
     },
     {
@@ -2095,8 +2095,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_index",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".index()"
     },
     {
@@ -2107,7 +2107,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_generatecommandsignature",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".generatecommandsignature()"
     },
     {
@@ -2118,7 +2118,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_sendcommandtodevice",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".sendcommandtodevice()"
     },
     {
@@ -2129,7 +2129,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_triggersnapshot",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".triggersnapshot()"
     },
     {
@@ -2140,7 +2140,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_savesettings",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".savesettings()"
     },
     {
@@ -2151,7 +2151,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_validatestream",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".validatestream()"
     },
     {
@@ -2162,7 +2162,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_downloadbatch",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".downloadbatch()"
     },
     {
@@ -2173,7 +2173,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_deletebatch",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".deletebatch()"
     },
     {
@@ -2184,7 +2184,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_syncarea",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".syncarea()"
     },
     {
@@ -2195,7 +2195,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_iotdetectioncontroller_iotdetectioncontroller_markoffline",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".markoffline()"
     },
     {
@@ -2282,8 +2282,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkamenitycontroller",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 1,
+      "community_name": "Controller",
       "norm_label": "parkamenitycontroller.php"
     },
     {
@@ -2293,8 +2293,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkamenitycontroller_parkamenitycontroller",
-      "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community": 1,
+      "community_name": "Controller",
       "norm_label": "parkamenitycontroller"
     },
     {
@@ -2305,7 +2305,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_parkamenitycontroller_parkamenitycontroller_store",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".store()"
     },
     {
@@ -2316,7 +2316,7 @@
       "_origin": "ast",
       "id": "app_http_controllers_web_parkamenitycontroller_parkamenitycontroller_destroy",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": ".destroy()"
     },
     {
@@ -2337,8 +2337,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkareacontroller_parkareacontroller",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": "parkareacontroller"
     },
     {
@@ -2348,8 +2348,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkareacontroller_parkareacontroller_index",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".index()"
     },
     {
@@ -2359,8 +2359,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkareacontroller_parkareacontroller_create",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".create()"
     },
     {
@@ -2370,8 +2370,8 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkareacontroller_parkareacontroller_store",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".store()"
     },
     {
@@ -2381,8 +2381,8 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkareacontroller_parkareacontroller_show",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".show()"
     },
     {
@@ -2392,8 +2392,8 @@
       "source_location": "L183",
       "_origin": "ast",
       "id": "app_http_controllers_web_parkareacontroller_parkareacontroller_destroy",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".destroy()"
     },
     {
@@ -2414,8 +2414,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_parksubareacontroller",
-      "community": 198,
-      "community_name": "ParkSubareaController",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": "parksubareacontroller"
     },
     {
@@ -2425,8 +2425,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_parksubareacontroller_store",
-      "community": 198,
-      "community_name": "ParkSubareaController",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".store()"
     },
     {
@@ -2436,8 +2436,8 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_parksubareacontroller_update",
-      "community": 198,
-      "community_name": "ParkSubareaController",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".update()"
     },
     {
@@ -2447,8 +2447,8 @@
       "source_location": "L252",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_parksubareacontroller_destroy",
-      "community": 198,
-      "community_name": "ParkSubareaController",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".destroy()"
     },
     {
@@ -2458,8 +2458,8 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_parksubareacontroller_getstatus",
-      "community": 198,
-      "community_name": "ParkSubareaController",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".getstatus()"
     },
     {
@@ -2469,8 +2469,8 @@
       "source_location": "L309",
       "_origin": "ast",
       "id": "app_http_controllers_web_parksubareacontroller_parksubareacontroller_getcomments",
-      "community": 198,
-      "community_name": "ParkSubareaController",
+      "community": 28,
+      "community_name": ".log",
       "norm_label": ".getcomments()"
     },
     {
@@ -2480,8 +2480,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_web_profilecontroller",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": "web/profilecontroller.php"
     },
     {
@@ -2491,8 +2491,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "app_http_controllers_web_profilecontroller_profilecontroller",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": "profilecontroller"
     },
     {
@@ -2502,8 +2502,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_http_controllers_web_profilecontroller_profilecontroller_edit",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".edit()"
     },
     {
@@ -2513,8 +2513,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "app_http_controllers_web_profilecontroller_profilecontroller_update",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": ".update()"
     },
     {
@@ -2590,8 +2590,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_http_controllers_web_rewardverificationcontroller",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 1,
+      "community_name": "Controller",
       "norm_label": "rewardverificationcontroller.php"
     },
     {
@@ -2601,8 +2601,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "app_http_controllers_web_rewardverificationcontroller_rewardverificationcontroller",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 1,
+      "community_name": "Controller",
       "norm_label": "rewardverificationcontroller"
     },
     {
@@ -2612,8 +2612,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "app_http_controllers_web_rewardverificationcontroller_rewardverificationcontroller_construct",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -2623,8 +2623,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "app_http_controllers_web_rewardverificationcontroller_rewardverificationcontroller_index",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 1,
+      "community_name": "Controller",
       "norm_label": ".index()"
     },
     {
@@ -2634,8 +2634,8 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "app_http_controllers_web_rewardverificationcontroller_rewardverificationcontroller_process",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 15,
+      "community_name": "Command",
       "norm_label": ".process()"
     },
     {
@@ -3184,8 +3184,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_feedback",
-      "community": 7,
-      "community_name": "FeedbackCategory",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "feedback.php"
     },
     {
@@ -3239,8 +3239,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "app_models_feedbackcategory_feedbackcategory_feedbacks",
-      "community": 7,
-      "community_name": "FeedbackCategory",
+      "community": 125,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
       "norm_label": ".feedbacks()"
     },
     {
@@ -3250,8 +3250,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_infoboard",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "infoboard.php"
     },
     {
@@ -3284,7 +3284,7 @@
       "_origin": "ast",
       "id": "app_models_iotcapture",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotcapture.php"
     },
     {
@@ -3294,8 +3294,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "app_models_iotcapture_iotcapture",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 21,
+      "community_name": "IotDevice",
       "norm_label": "iotcapture"
     },
     {
@@ -3305,8 +3305,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "app_models_iotcapture_iotcapture_device",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".device()"
     },
     {
@@ -3316,8 +3316,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "app_models_iotcapture_iotcapture_uservalidation",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".uservalidation()"
     },
     {
@@ -3328,7 +3328,7 @@
       "_origin": "ast",
       "id": "app_models_iotdevice",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "iotdevice.php"
     },
     {
@@ -3339,7 +3339,7 @@
       "_origin": "ast",
       "id": "app_models_iotdevice_iotdevice",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": "iotdevice"
     },
     {
@@ -3350,7 +3350,7 @@
       "_origin": "ast",
       "id": "app_models_iotdevice_iotdevice_booted",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".booted()"
     },
     {
@@ -3361,7 +3361,7 @@
       "_origin": "ast",
       "id": "app_models_iotdevice_iotdevice_getstatus",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".getstatus()"
     },
     {
@@ -3372,7 +3372,7 @@
       "_origin": "ast",
       "id": "app_models_iotdevice_iotdevice_syncstatus",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".syncstatus()"
     },
     {
@@ -3383,7 +3383,7 @@
       "_origin": "ast",
       "id": "app_models_iotdevice_iotdevice_checkreverbpresence",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".checkreverbpresence()"
     },
     {
@@ -3404,8 +3404,8 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "app_models_iotdevice_iotdevice_subarea",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".subarea()"
     },
     {
@@ -3426,8 +3426,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_mission",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 23,
+      "community_name": "Mission",
       "norm_label": "mission.php"
     },
     {
@@ -3481,8 +3481,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "app_models_parkamenity_parkamenity_parksubarea",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 29,
+      "community_name": "ParkAmenity",
       "norm_label": ".parksubarea()"
     },
     {
@@ -3492,8 +3492,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_parkarea",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 31,
+      "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "parkarea.php"
     },
     {
@@ -3504,7 +3504,7 @@
       "_origin": "ast",
       "id": "app_models_parkarea_parkarea",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": "parkarea"
     },
     {
@@ -3525,7 +3525,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_parksubarea",
-      "community": 0,
+      "community": 31,
       "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "parksubarea.php"
     },
@@ -3536,7 +3536,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "app_models_parksubarea_parksubarea",
-      "community": 16,
+      "community": 39,
       "community_name": "ParkSubarea",
       "norm_label": "parksubarea"
     },
@@ -3547,8 +3547,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "app_models_parksubarea_parksubarea_parkarea",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".parkarea()"
     },
     {
@@ -3569,8 +3569,8 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "app_models_parksubarea_parksubarea_uservalidation",
-      "community": 16,
-      "community_name": "ParkSubarea",
+      "community": 21,
+      "community_name": "IotDevice",
       "norm_label": ".uservalidation()"
     },
     {
@@ -3591,7 +3591,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "app_models_parksubarea_parksubarea_iotdevice",
-      "community": 0,
+      "community": 31,
       "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": ".iotdevice()"
     },
@@ -3602,8 +3602,8 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "app_models_parksubarea_parksubarea_getlivestatus",
-      "community": 16,
-      "community_name": "ParkSubarea",
+      "community": 21,
+      "community_name": "IotDevice",
       "norm_label": ".getlivestatus()"
     },
     {
@@ -3614,7 +3614,7 @@
       "_origin": "ast",
       "id": "app_models_parksubarea_parksubarea_evaluatethresholdshift",
       "community": 21,
-      "community_name": ".log",
+      "community_name": "IotDevice",
       "norm_label": ".evaluatethresholdshift()"
     },
     {
@@ -3635,8 +3635,8 @@
       "source_location": "L367",
       "_origin": "ast",
       "id": "app_models_parksubarea_parksubarea_logoccupancy",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 56,
+      "community_name": "DashboardControllerTest",
       "norm_label": ".logoccupancy()"
     },
     {
@@ -3646,7 +3646,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_parksubareahistory",
-      "community": 0,
+      "community": 31,
       "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "parksubareahistory.php"
     },
@@ -3657,8 +3657,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "app_models_parksubareahistory_parksubareahistory",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 56,
+      "community_name": "DashboardControllerTest",
       "norm_label": "parksubareahistory"
     },
     {
@@ -3668,8 +3668,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "app_models_parksubareahistory_parksubareahistory_parksubarea",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 56,
+      "community_name": "DashboardControllerTest",
       "norm_label": ".parksubarea()"
     },
     {
@@ -3679,8 +3679,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_reward",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "reward.php"
     },
     {
@@ -3712,8 +3712,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_subareacomment",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": "subareacomment.php"
     },
     {
@@ -3724,7 +3724,7 @@
       "_origin": "ast",
       "id": "app_models_subareacomment_subareacomment",
       "community": 34,
-      "community_name": "SubareaComment",
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": "subareacomment"
     },
     {
@@ -3734,8 +3734,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "app_models_subareacomment_subareacomment_user",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".user()"
     },
     {
@@ -3745,8 +3745,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "app_models_subareacomment_subareacomment_parksubarea",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".parksubarea()"
     },
     {
@@ -3877,8 +3877,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "app_models_userfaq_userfaq_user",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 2,
+      "community_name": "UserFaq",
       "norm_label": ".user()"
     },
     {
@@ -3921,8 +3921,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_usermission",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 23,
+      "community_name": "Mission",
       "norm_label": "usermission.php"
     },
     {
@@ -3943,8 +3943,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "app_models_usermission_usermission_user",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".user()"
     },
     {
@@ -3954,8 +3954,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "app_models_usermission_usermission_mission",
-      "community": 23,
-      "community_name": "Mission",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".mission()"
     },
     {
@@ -3965,8 +3965,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_userreward",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "userreward.php"
     },
     {
@@ -4010,7 +4010,7 @@
       "_origin": "ast",
       "id": "app_models_uservalidation",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "uservalidation.php"
     },
     {
@@ -4031,8 +4031,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "app_models_uservalidation_uservalidation_user",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".user()"
     },
     {
@@ -4042,8 +4042,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "app_models_uservalidation_uservalidation_parksubarea",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".parksubarea()"
     },
     {
@@ -4053,7 +4053,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "app_models_validation",
-      "community": 0,
+      "community": 31,
       "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "validation.php"
     },
@@ -4196,8 +4196,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "app_services_historyservice_historyservice",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": "historyservice"
     },
     {
@@ -4207,7 +4207,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "app_services_historyservice_historyservice_log",
-      "community": 21,
+      "community": 28,
       "community_name": ".log",
       "norm_label": ".log()"
     },
@@ -4306,8 +4306,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "app_services_missionservice_missionservice_construct",
-      "community": 31,
-      "community_name": "DashboardController.php",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": ".__construct()"
     },
     {
@@ -4460,8 +4460,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "composer_keywords",
-      "community": 33,
-      "community_name": "composer.json",
+      "community": 100,
+      "community_name": "keywords",
       "norm_label": "keywords"
     },
     {
@@ -4471,8 +4471,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "ref_laravel",
-      "community": 33,
-      "community_name": "composer.json",
+      "community": 100,
+      "community_name": "keywords",
       "norm_label": "laravel"
     },
     {
@@ -4482,8 +4482,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "ref_framework",
-      "community": 33,
-      "community_name": "composer.json",
+      "community": 100,
+      "community_name": "keywords",
       "norm_label": "framework"
     },
     {
@@ -4542,21 +4542,10 @@
       "norm_label": "laravel/framework"
     },
     {
-      "label": "laravel/octane",
-      "file_type": "code",
-      "source_file": "composer.json",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "composer_require_laravel_octane",
-      "community": 41,
-      "community_name": "require",
-      "norm_label": "laravel/octane"
-    },
-    {
       "label": "laravel/reverb",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L16",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "composer_require_laravel_reverb",
       "community": 41,
@@ -4567,7 +4556,7 @@
       "label": "laravel/sanctum",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L17",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "composer_require_laravel_sanctum",
       "community": 41,
@@ -4578,7 +4567,7 @@
       "label": "laravel/tinker",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L18",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "composer_require_laravel_tinker",
       "community": 41,
@@ -4589,7 +4578,7 @@
       "label": "php-mqtt/laravel-client",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L19",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "composer_require_php_mqtt_laravel_client",
       "community": 41,
@@ -4600,7 +4589,7 @@
       "label": "yajra/laravel-datatables",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L20",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "composer_require_yajra_laravel_datatables",
       "community": 41,
@@ -4611,7 +4600,7 @@
       "label": "require-dev",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L22",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "composer_require_dev",
       "community": 47,
@@ -4622,7 +4611,7 @@
       "label": "laravel/pail",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L23",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "composer_require_dev_laravel_pail",
       "community": 47,
@@ -4633,7 +4622,7 @@
       "label": "laravel/pint",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L24",
+      "source_location": "L23",
       "_origin": "ast",
       "id": "composer_require_dev_laravel_pint",
       "community": 47,
@@ -4644,7 +4633,7 @@
       "label": "laravel/sail",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L25",
+      "source_location": "L24",
       "_origin": "ast",
       "id": "composer_require_dev_laravel_sail",
       "community": 47,
@@ -4655,7 +4644,7 @@
       "label": "mockery/mockery",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L26",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "composer_require_dev_mockery_mockery",
       "community": 47,
@@ -4666,7 +4655,7 @@
       "label": "nunomaduro/collision",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L27",
+      "source_location": "L26",
       "_origin": "ast",
       "id": "composer_require_dev_nunomaduro_collision",
       "community": 47,
@@ -4677,7 +4666,7 @@
       "label": "pestphp/pest",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L28",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "composer_require_dev_pestphp_pest",
       "community": 47,
@@ -4688,7 +4677,7 @@
       "label": "pestphp/pest-plugin-laravel",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L29",
+      "source_location": "L28",
       "_origin": "ast",
       "id": "composer_require_dev_pestphp_pest_plugin_laravel",
       "community": 47,
@@ -4699,7 +4688,7 @@
       "label": "pestphp/pest-plugin-stressless",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L30",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "composer_require_dev_pestphp_pest_plugin_stressless",
       "community": 47,
@@ -4710,7 +4699,7 @@
       "label": "phpunit/phpunit",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L31",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "composer_require_dev_phpunit_phpunit",
       "community": 47,
@@ -4721,7 +4710,7 @@
       "label": "autoload",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L33",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "composer_autoload",
       "community": 58,
@@ -4732,7 +4721,7 @@
       "label": "psr-4",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L34",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "composer_autoload_psr_4",
       "community": 58,
@@ -4743,7 +4732,7 @@
       "label": "App\\\\",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L35",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "composer_psr_4_app",
       "community": 58,
@@ -4754,7 +4743,7 @@
       "label": "Database\\\\Factories\\\\",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L36",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "composer_psr_4_database_factories",
       "community": 58,
@@ -4765,7 +4754,7 @@
       "label": "Database\\\\Seeders\\\\",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L37",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "composer_psr_4_database_seeders",
       "community": 58,
@@ -4776,40 +4765,40 @@
       "label": "autoload-dev",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L40",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "composer_autoload_dev",
-      "community": 194,
-      "community_name": "autoload-dev",
+      "community": 33,
+      "community_name": "composer.json",
       "norm_label": "autoload-dev"
     },
     {
       "label": "psr-4",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L41",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "composer_autoload_dev_psr_4",
-      "community": 194,
-      "community_name": "autoload-dev",
+      "community": 33,
+      "community_name": "composer.json",
       "norm_label": "psr-4"
     },
     {
       "label": "Tests\\\\",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L42",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "composer_psr_4_tests",
-      "community": 194,
-      "community_name": "autoload-dev",
+      "community": 33,
+      "community_name": "composer.json",
       "norm_label": "tests\\\\"
     },
     {
       "label": "scripts",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L45",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "composer_scripts",
       "community": 25,
@@ -4820,7 +4809,7 @@
       "label": "post-autoload-dump",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L46",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "composer_scripts_post_autoload_dump",
       "community": 25,
@@ -4831,7 +4820,7 @@
       "label": "Illuminate\\\\Foundation\\\\ComposerScripts::postAutoloadDump",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L46",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "ref_illuminate_foundation_composerscripts_postautoloaddump",
       "community": 25,
@@ -4842,7 +4831,7 @@
       "label": "@php artisan package:discover --ansi",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L46",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "ref_php_artisan_package_discover_ansi",
       "community": 25,
@@ -4853,7 +4842,7 @@
       "label": "post-update-cmd",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L50",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "composer_scripts_post_update_cmd",
       "community": 25,
@@ -4864,7 +4853,7 @@
       "label": "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L50",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "ref_php_artisan_vendor_publish_tag_laravel_assets_ansi_force",
       "community": 25,
@@ -4875,7 +4864,7 @@
       "label": "post-root-package-install",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L53",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "composer_scripts_post_root_package_install",
       "community": 25,
@@ -4886,7 +4875,7 @@
       "label": "@php -r \\\"file_exists('.env') || copy('.env.example', '.env');\\",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L53",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "ref_php_r_file_exists_env_copy_env_example_env",
       "community": 25,
@@ -4897,7 +4886,7 @@
       "label": "post-create-project-cmd",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L56",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "composer_scripts_post_create_project_cmd",
       "community": 206,
@@ -4908,7 +4897,7 @@
       "label": "@php artisan key:generate --ansi",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L56",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "ref_php_artisan_key_generate_ansi",
       "community": 206,
@@ -4919,7 +4908,7 @@
       "label": "@php -r \\\"file_exists('database/database.sqlite') || touch('database/database.sqlite');\\",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L56",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "ref_php_r_file_exists_database_database_sqlite_touch_database_database_sqlite",
       "community": 206,
@@ -4930,7 +4919,7 @@
       "label": "@php artisan migrate --graceful --ansi",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L56",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "ref_php_artisan_migrate_graceful_ansi",
       "community": 206,
@@ -4941,7 +4930,7 @@
       "label": "dev",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L61",
+      "source_location": "L60",
       "_origin": "ast",
       "id": "composer_scripts_dev",
       "community": 25,
@@ -4952,7 +4941,7 @@
       "label": "Composer\\\\Config::disableProcessTimeout",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L61",
+      "source_location": "L60",
       "_origin": "ast",
       "id": "ref_composer_config_disableprocesstimeout",
       "community": 25,
@@ -4963,7 +4952,7 @@
       "label": "npx concurrently -c \\\"#93c5fd,#c4b5fd,#fb7185,#fdba74\\\" \\\"php artisan serve\\\" \\\"php artisan queue:listen --tries=1\\\" \\\"php artisan pail --timeout=0\\\" \\\"npm run dev\\\" --names=server,queue,logs,vite --kill-others",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L61",
+      "source_location": "L60",
       "_origin": "ast",
       "id": "ref_npx_concurrently_c_93c5fd_c4b5fd_fb7185_fdba74_php_artisan_serve_php_artisan_queue_listen_tries_1_php_artisan_pail_timeout_0_npm_run_dev_names_server_queue_logs_vite_kill_others",
       "community": 25,
@@ -4974,7 +4963,7 @@
       "label": "test",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L65",
+      "source_location": "L64",
       "_origin": "ast",
       "id": "composer_scripts_test",
       "community": 25,
@@ -4985,7 +4974,7 @@
       "label": "@php artisan config:clear --ansi",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L65",
+      "source_location": "L64",
       "_origin": "ast",
       "id": "ref_php_artisan_config_clear_ansi",
       "community": 25,
@@ -4996,7 +4985,7 @@
       "label": "@php artisan test",
       "file_type": "concept",
       "source_file": "composer.json",
-      "source_location": "L65",
+      "source_location": "L64",
       "_origin": "ast",
       "id": "ref_php_artisan_test",
       "community": 25,
@@ -5007,7 +4996,7 @@
       "label": "extra",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L70",
+      "source_location": "L69",
       "_origin": "ast",
       "id": "composer_extra",
       "community": 65,
@@ -5018,7 +5007,7 @@
       "label": "laravel",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L71",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "composer_extra_laravel",
       "community": 65,
@@ -5029,7 +5018,7 @@
       "label": "dont-discover",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L72",
+      "source_location": "L71",
       "_origin": "ast",
       "id": "composer_laravel_dont_discover",
       "community": 65,
@@ -5040,7 +5029,7 @@
       "label": "config",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L75",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "composer_config",
       "community": 46,
@@ -5051,7 +5040,7 @@
       "label": "optimize-autoloader",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L76",
+      "source_location": "L75",
       "_origin": "ast",
       "id": "composer_config_optimize_autoloader",
       "community": 46,
@@ -5062,7 +5051,7 @@
       "label": "preferred-install",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L77",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "composer_config_preferred_install",
       "community": 46,
@@ -5073,7 +5062,7 @@
       "label": "sort-packages",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L78",
+      "source_location": "L77",
       "_origin": "ast",
       "id": "composer_config_sort_packages",
       "community": 46,
@@ -5084,7 +5073,7 @@
       "label": "allow-plugins",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L79",
+      "source_location": "L78",
       "_origin": "ast",
       "id": "composer_config_allow_plugins",
       "community": 46,
@@ -5095,7 +5084,7 @@
       "label": "pestphp/pest-plugin",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L80",
+      "source_location": "L79",
       "_origin": "ast",
       "id": "composer_allow_plugins_pestphp_pest_plugin",
       "community": 46,
@@ -5106,7 +5095,7 @@
       "label": "php-http/discovery",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L81",
+      "source_location": "L80",
       "_origin": "ast",
       "id": "composer_allow_plugins_php_http_discovery",
       "community": 46,
@@ -5117,7 +5106,7 @@
       "label": "minimum-stability",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L84",
+      "source_location": "L83",
       "_origin": "ast",
       "id": "composer_minimum_stability",
       "community": 33,
@@ -5128,7 +5117,7 @@
       "label": "prefer-stable",
       "file_type": "code",
       "source_file": "composer.json",
-      "source_location": "L85",
+      "source_location": "L84",
       "_origin": "ast",
       "id": "composer_prefer_stable",
       "community": 33,
@@ -5176,7 +5165,7 @@
       "_origin": "ast",
       "id": "config_cache",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "cache.php"
     },
     {
@@ -5233,17 +5222,6 @@
       "community": 132,
       "community_name": "mqtt-client.php",
       "norm_label": "mqtt-client.php"
-    },
-    {
-      "label": "octane.php",
-      "file_type": "code",
-      "source_file": "config/octane.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "config_octane",
-      "community": 100,
-      "community_name": "octane.php",
-      "norm_label": "octane.php"
     },
     {
       "label": "queue.php",
@@ -5879,8 +5857,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "database_seeders_databaseseeder",
-      "community": 7,
-      "community_name": "FeedbackCategory",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "databaseseeder.php"
     },
     {
@@ -5945,8 +5923,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "database_seeders_feedbackseeder",
-      "community": 7,
-      "community_name": "FeedbackCategory",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "feedbackseeder.php"
     },
     {
@@ -6459,17 +6437,6 @@
       "community": 12,
       "community_name": "devDependencies",
       "norm_label": "shell-quote"
-    },
-    {
-      "label": "frankenphp-worker.php",
-      "file_type": "code",
-      "source_file": "public/frankenphp-worker.php",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "public_frankenphp_worker",
-      "community": 101,
-      "community_name": "frankenphp-worker.php",
-      "norm_label": "frankenphp-worker.php"
     },
     {
       "label": "index.php",
@@ -7832,7 +7799,7 @@
       "_origin": "ast",
       "id": "routes_api",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "api.php"
     },
     {
@@ -7875,8 +7842,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_exampletest",
-      "community": 207,
-      "community_name": "ExampleTest",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": "feature/exampletest.php"
     },
     {
@@ -7886,8 +7853,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "tests_feature_exampletest_exampletest",
-      "community": 207,
-      "community_name": "ExampleTest",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": "exampletest"
     },
     {
@@ -7897,8 +7864,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "tests_feature_exampletest_exampletest_test_the_application_returns_a_successful_response",
-      "community": 207,
-      "community_name": "ExampleTest",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": ".test_the_application_returns_a_successful_response()"
     },
     {
@@ -8261,7 +8228,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcategorycontrollertest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "feedbackcategorycontrollertest.php"
     },
     {
@@ -8272,7 +8239,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcategorycontrollertest_feedbackcategorycontrollertest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "feedbackcategorycontrollertest"
     },
     {
@@ -8293,8 +8260,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcontrollertest",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "feedbackcontrollertest.php"
     },
     {
@@ -8304,8 +8271,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcontrollertest_feedbackcontrollertest",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "feedbackcontrollertest"
     },
     {
@@ -8315,8 +8282,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_feedbackcontrollertest_feedbackcontrollertest_setup",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": ".setup()"
     },
     {
@@ -8349,7 +8316,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_historycontrollertest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "historycontrollertest.php"
     },
     {
@@ -8360,7 +8327,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_historycontrollertest_historycontrollertest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "historycontrollertest"
     },
     {
@@ -8381,8 +8348,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_infoboardcontrollertest",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": "api/infoboardcontrollertest.php"
     },
     {
@@ -8392,8 +8359,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_infoboardcontrollertest_infoboardcontrollertest",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": "infoboardcontrollertest"
     },
     {
@@ -8414,8 +8381,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotdetectioncontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 31,
+      "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "iotdetectioncontrollertest.php"
     },
     {
@@ -8436,8 +8403,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotdetectioncontrollertest_iotdetectioncontrollertest_setup",
-      "community": 16,
-      "community_name": "ParkSubarea",
+      "community": 43,
+      "community_name": "IotDetectionControllerTest",
       "norm_label": ".setup()"
     },
     {
@@ -8513,8 +8480,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 0,
+      "community_name": "IotDevice.php",
       "norm_label": "iotwebhookcontrollertest.php"
     },
     {
@@ -8525,7 +8492,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "iotwebhookcontrollertest"
     },
     {
@@ -8535,7 +8502,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest_setup",
-      "community": 16,
+      "community": 39,
       "community_name": "ParkSubarea",
       "norm_label": ".setup()"
     },
@@ -8547,7 +8514,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest_it_handles_member_added",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": ".it_handles_member_added()"
     },
     {
@@ -8558,7 +8525,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwebhookcontrollertest_iotwebhookcontrollertest_it_handles_member_removed",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": ".it_handles_member_removed()"
     },
     {
@@ -8568,8 +8535,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 55,
+      "community_name": "IotWsAuthControllerTest.php",
       "norm_label": "iotwsauthcontrollertest.php"
     },
     {
@@ -8579,8 +8546,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 55,
+      "community_name": "IotWsAuthControllerTest.php",
       "norm_label": "iotwsauthcontrollertest"
     },
     {
@@ -8590,8 +8557,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest_setup",
-      "community": 16,
-      "community_name": "ParkSubarea",
+      "community": 55,
+      "community_name": "IotWsAuthControllerTest.php",
       "norm_label": ".setup()"
     },
     {
@@ -8601,8 +8568,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest_authenticate_succeeds_with_valid_credentials",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 55,
+      "community_name": "IotWsAuthControllerTest.php",
       "norm_label": ".authenticate_succeeds_with_valid_credentials()"
     },
     {
@@ -8612,8 +8579,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_iotwsauthcontrollertest_iotwsauthcontrollertest_authenticate_fails_with_invalid_mac",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 55,
+      "community_name": "IotWsAuthControllerTest.php",
       "norm_label": ".authenticate_fails_with_invalid_mac()"
     },
     {
@@ -8624,7 +8591,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_mapvisualizationcontrollertest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "mapvisualizationcontrollertest.php"
     },
     {
@@ -8635,7 +8602,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_mapvisualizationcontrollertest_mapvisualizationcontrollertest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "mapvisualizationcontrollertest"
     },
     {
@@ -8656,8 +8623,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_mapvisualizationcontrollertest_mapvisualizationcontrollertest_show_returns_200_and_detail_data",
-      "community": 27,
-      "community_name": "UserValidation",
+      "community": 6,
+      "community_name": "Validation",
       "norm_label": ".show_returns_200_and_detail_data()"
     },
     {
@@ -8678,8 +8645,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_missioncontrollertest",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "api/missioncontrollertest.php"
     },
     {
@@ -8689,8 +8656,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_missioncontrollertest_missioncontrollertest",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "missioncontrollertest"
     },
     {
@@ -8700,8 +8667,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_missioncontrollertest_missioncontrollertest_index_returns_200_and_mission_data",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": ".index_returns_200_and_mission_data()"
     },
     {
@@ -8821,8 +8788,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_rewardcontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "api/rewardcontrollertest.php"
     },
     {
@@ -8909,8 +8876,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 39,
+      "community_name": "ParkSubarea",
       "norm_label": "subareacommentcontrollertest.php"
     },
     {
@@ -8921,7 +8888,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": "subareacommentcontrollertest"
     },
     {
@@ -8932,7 +8899,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_setup",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": ".setup()"
     },
     {
@@ -8943,7 +8910,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_index_returns_200_and_list",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": ".index_returns_200_and_list()"
     },
     {
@@ -8965,7 +8932,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_store_comment_returns_201_on_success",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": ".store_comment_returns_201_on_success()"
     },
     {
@@ -8976,7 +8943,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_update_comment_returns_200_on_success",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": ".update_comment_returns_200_on_success()"
     },
     {
@@ -8987,7 +8954,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_destroy_comment_returns_200_on_success",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": ".destroy_comment_returns_200_on_success()"
     },
     {
@@ -8998,7 +8965,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_update_returns_403_if_not_owner",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": ".update_returns_403_if_not_owner()"
     },
     {
@@ -9009,7 +8976,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_subareacommentcontrollertest_subareacommentcontrollertest_destroy_returns_403_if_not_owner",
       "community": 39,
-      "community_name": "ParkArea",
+      "community_name": "ParkSubarea",
       "norm_label": ".destroy_returns_403_if_not_owner()"
     },
     {
@@ -9019,8 +8986,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_userfaqcontrollertest",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "userfaqcontrollertest.php"
     },
     {
@@ -9030,8 +8997,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_userfaqcontrollertest_userfaqcontrollertest",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "userfaqcontrollertest"
     },
     {
@@ -9041,8 +9008,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_userfaqcontrollertest_userfaqcontrollertest_index_returns_200_and_list",
-      "community": 45,
-      "community_name": "User",
+      "community": 2,
+      "community_name": "UserFaq",
       "norm_label": ".index_returns_200_and_list()"
     },
     {
@@ -9063,8 +9030,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_api_uservalidationcontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "uservalidationcontrollertest.php"
     },
     {
@@ -9448,8 +9415,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_dashboardcontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 31,
+      "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "dashboardcontrollertest.php"
     },
     {
@@ -9558,8 +9525,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_infoboardcontrollertest",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "web/infoboardcontrollertest.php"
     },
     {
@@ -9712,8 +9679,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parkareacontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 38,
+      "community_name": "ParkAreaControllerTest",
       "norm_label": "parkareacontrollertest.php"
     },
     {
@@ -9790,7 +9757,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parksubareacontrollertest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "parksubareacontrollertest.php"
     },
     {
@@ -9801,7 +9768,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest",
       "community": 16,
-      "community_name": "ParkSubarea",
+      "community_name": "ParkSubareaControllerTest",
       "norm_label": "parksubareacontrollertest"
     },
     {
@@ -9812,7 +9779,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_setup",
       "community": 16,
-      "community_name": "ParkSubarea",
+      "community_name": "ParkSubareaControllerTest",
       "norm_label": ".setup()"
     },
     {
@@ -9823,7 +9790,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_store_creates_park_subarea",
       "community": 16,
-      "community_name": "ParkSubarea",
+      "community_name": "ParkSubareaControllerTest",
       "norm_label": ".store_creates_park_subarea()"
     },
     {
@@ -9834,7 +9801,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_update_modifies_park_subarea",
       "community": 16,
-      "community_name": "ParkSubarea",
+      "community_name": "ParkSubareaControllerTest",
       "norm_label": ".update_modifies_park_subarea()"
     },
     {
@@ -9845,7 +9812,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_update_with_fewer_than_three_points_deletes_subarea",
       "community": 16,
-      "community_name": "ParkSubarea",
+      "community_name": "ParkSubareaControllerTest",
       "norm_label": ".update_with_fewer_than_three_points_deletes_subarea()"
     },
     {
@@ -9856,7 +9823,7 @@
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_parksubareacontrollertest_parksubareacontrollertest_destroy_deletes_park_subarea",
       "community": 16,
-      "community_name": "ParkSubarea",
+      "community_name": "ParkSubareaControllerTest",
       "norm_label": ".destroy_deletes_park_subarea()"
     },
     {
@@ -9866,8 +9833,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_profilecontrollertest",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "web/profilecontrollertest.php"
     },
     {
@@ -9976,8 +9943,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_controllers_web_rewardcontrollertest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "web/rewardcontrollertest.php"
     },
     {
@@ -10053,8 +10020,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest",
-      "community": 5,
-      "community_name": "FeedbackCategory.php",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": "apiencryptiontest.php"
     },
     {
@@ -10064,8 +10031,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest",
-      "community": 5,
-      "community_name": "FeedbackCategory.php",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": "apiencryptiontest"
     },
     {
@@ -10075,8 +10042,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_ignores_non_api_requests",
-      "community": 5,
-      "community_name": "FeedbackCategory.php",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": ".it_ignores_non_api_requests()"
     },
     {
@@ -10086,8 +10053,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_returns_500_or_400_if_key_or_session_invalid",
-      "community": 5,
-      "community_name": "FeedbackCategory.php",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": ".it_returns_500_or_400_if_key_or_session_invalid()"
     },
     {
@@ -10097,8 +10064,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "tests_feature_http_middleware_apiencryptiontest_apiencryptiontest_it_blocks_raw_authorization_without_x_auth_token",
-      "community": 5,
-      "community_name": "FeedbackCategory.php",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": ".it_blocks_raw_authorization_without_x_auth_token()"
     },
     {
@@ -10108,8 +10075,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_http_middleware_rbactest",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 102,
+      "community_name": "TestCase",
       "norm_label": "rbactest.php"
     },
     {
@@ -10306,8 +10273,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_infoboardtest",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 5,
+      "community_name": "FeedbackCategory.php",
       "norm_label": "infoboardtest.php"
     },
     {
@@ -10505,7 +10472,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_parkareatest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "parkareatest.php"
     },
     {
@@ -10515,8 +10482,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "tests_feature_model_parkareatest_parkareatest",
-      "community": 39,
-      "community_name": "ParkArea",
+      "community": 64,
+      "community_name": "ParkAreaTest",
       "norm_label": "parkareatest"
     },
     {
@@ -10526,8 +10493,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_feature_model_parkareatest_parkareatest_area_parkir_dapat_dibuat",
-      "community": 39,
-      "community_name": "ParkArea",
+      "community": 64,
+      "community_name": "ParkAreaTest",
       "norm_label": ".area_parkir_dapat_dibuat()"
     },
     {
@@ -10537,8 +10504,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "tests_feature_model_parkareatest_parkareatest_area_parkir_dapat_diupdate",
-      "community": 39,
-      "community_name": "ParkArea",
+      "community": 64,
+      "community_name": "ParkAreaTest",
       "norm_label": ".area_parkir_dapat_diupdate()"
     },
     {
@@ -10548,8 +10515,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "tests_feature_model_parkareatest_parkareatest_area_parkir_dapat_dihapus",
-      "community": 39,
-      "community_name": "ParkArea",
+      "community": 64,
+      "community_name": "ParkAreaTest",
       "norm_label": ".area_parkir_dapat_dihapus()"
     },
     {
@@ -10559,8 +10526,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_parksubareatest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 31,
+      "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "parksubareatest.php"
     },
     {
@@ -10570,7 +10537,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "tests_feature_model_parksubareatest_parksubareatest",
-      "community": 16,
+      "community": 39,
       "community_name": "ParkSubarea",
       "norm_label": "parksubareatest"
     },
@@ -10581,7 +10548,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "tests_feature_model_parksubareatest_parksubareatest_subarea_dapat_dibuat_dengan_relasi_area",
-      "community": 16,
+      "community": 39,
       "community_name": "ParkSubarea",
       "norm_label": ".subarea_dapat_dibuat_dengan_relasi_area()"
     },
@@ -10592,7 +10559,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "tests_feature_model_parksubareatest_parksubareatest_subarea_dapat_diupdate",
-      "community": 16,
+      "community": 39,
       "community_name": "ParkSubarea",
       "norm_label": ".subarea_dapat_diupdate()"
     },
@@ -10603,7 +10570,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "tests_feature_model_parksubareatest_parksubareatest_subarea_dapat_dibaca",
-      "community": 16,
+      "community": 39,
       "community_name": "ParkSubarea",
       "norm_label": ".subarea_dapat_dibaca()"
     },
@@ -10614,7 +10581,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "tests_feature_model_parksubareatest_parksubareatest_subarea_dapat_dihapus",
-      "community": 16,
+      "community": 39,
       "community_name": "ParkSubarea",
       "norm_label": ".subarea_dapat_dihapus()"
     },
@@ -10625,7 +10592,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_rewardtest",
-      "community": 22,
+      "community": 102,
       "community_name": "TestCase",
       "norm_label": "rewardtest.php"
     },
@@ -10680,8 +10647,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_subareacommenttest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": "subareacommenttest.php"
     },
     {
@@ -10692,7 +10659,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_subareacommenttest_subareacommenttest",
       "community": 34,
-      "community_name": "SubareaComment",
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": "subareacommenttest"
     },
     {
@@ -10703,7 +10670,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_subareacommenttest_subareacommenttest_comment_dapat_dibuat",
       "community": 34,
-      "community_name": "SubareaComment",
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".comment_dapat_dibuat()"
     },
     {
@@ -10714,7 +10681,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_subareacommenttest_subareacommenttest_comment_dapat_dibaca",
       "community": 34,
-      "community_name": "SubareaComment",
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".comment_dapat_dibaca()"
     },
     {
@@ -10725,7 +10692,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_subareacommenttest_subareacommenttest_comment_dapat_diupdate",
       "community": 34,
-      "community_name": "SubareaComment",
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".comment_dapat_diupdate()"
     },
     {
@@ -10736,7 +10703,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_subareacommenttest_subareacommenttest_comment_dapat_dihapus",
       "community": 34,
-      "community_name": "SubareaComment",
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": ".comment_dapat_dihapus()"
     },
     {
@@ -10867,8 +10834,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_userrewardtest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 30,
+      "community_name": "User.php",
       "norm_label": "userrewardtest.php"
     },
     {
@@ -10933,8 +10900,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_usertest",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "usertest.php"
     },
     {
@@ -10999,8 +10966,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_feature_model_uservalidationtest",
-      "community": 22,
-      "community_name": "TestCase",
+      "community": 39,
+      "community_name": "ParkSubarea",
       "norm_label": "uservalidationtest.php"
     },
     {
@@ -11010,8 +10977,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_feature_model_uservalidationtest_uservalidationtest",
-      "community": 27,
-      "community_name": "UserValidation",
+      "community": 39,
+      "community_name": "ParkSubarea",
       "norm_label": "uservalidationtest"
     },
     {
@@ -11021,8 +10988,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_feature_model_uservalidationtest_uservalidationtest_user_validation_dapat_dibuat",
-      "community": 27,
-      "community_name": "UserValidation",
+      "community": 39,
+      "community_name": "ParkSubarea",
       "norm_label": ".user_validation_dapat_dibuat()"
     },
     {
@@ -11032,8 +10999,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "tests_feature_model_uservalidationtest_uservalidationtest_user_validation_dapat_dibaca",
-      "community": 27,
-      "community_name": "UserValidation",
+      "community": 39,
+      "community_name": "ParkSubarea",
       "norm_label": ".user_validation_dapat_dibaca()"
     },
     {
@@ -11043,8 +11010,8 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "tests_feature_model_uservalidationtest_uservalidationtest_user_validation_dapat_diupdate",
-      "community": 27,
-      "community_name": "UserValidation",
+      "community": 39,
+      "community_name": "ParkSubarea",
       "norm_label": ".user_validation_dapat_diupdate()"
     },
     {
@@ -11054,8 +11021,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "tests_feature_model_uservalidationtest_uservalidationtest_user_validation_dapat_dihapus",
-      "community": 27,
-      "community_name": "UserValidation",
+      "community": 39,
+      "community_name": "ParkSubarea",
       "norm_label": ".user_validation_dapat_dihapus()"
     },
     {
@@ -11066,7 +11033,7 @@
       "_origin": "ast",
       "id": "tests_feature_model_validationtest",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "validationtest.php"
     },
     {
@@ -11142,8 +11109,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_pest",
-      "community": 123,
-      "community_name": "Pest.php",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "pest.php"
     },
     {
@@ -11153,8 +11120,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "tests_pest_stressendpoint",
-      "community": 123,
-      "community_name": "Pest.php",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "stressendpoint()"
     },
     {
@@ -11164,8 +11131,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "tests_pest_percentile",
-      "community": 123,
-      "community_name": "Pest.php",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "percentile()"
     },
     {
@@ -11230,7 +11197,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_testcase",
-      "community": 22,
+      "community": 102,
       "community_name": "TestCase",
       "norm_label": "testcase.php"
     },
@@ -11241,7 +11208,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_testcase_testcase",
-      "community": 22,
+      "community": 102,
       "community_name": "TestCase",
       "norm_label": "testcase"
     },
@@ -11253,7 +11220,7 @@
       "_origin": "ast",
       "id": "tests_unit_exampletest",
       "community": 102,
-      "community_name": "ExampleTest",
+      "community_name": "TestCase",
       "norm_label": "unit/exampletest.php"
     },
     {
@@ -11264,7 +11231,7 @@
       "_origin": "ast",
       "id": "tests_unit_exampletest_exampletest",
       "community": 102,
-      "community_name": "ExampleTest",
+      "community_name": "TestCase",
       "norm_label": "exampletest"
     },
     {
@@ -11275,7 +11242,7 @@
       "_origin": "ast",
       "id": "tests_unit_exampletest_exampletest_test_that_true_is_true",
       "community": 102,
-      "community_name": "ExampleTest",
+      "community_name": "TestCase",
       "norm_label": ".test_that_true_is_true()"
     },
     {
@@ -11286,7 +11253,7 @@
       "_origin": "ast",
       "id": "tests_unit_scrubandtraceprocessortest",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "scrubandtraceprocessortest.php"
     },
     {
@@ -11297,7 +11264,7 @@
       "_origin": "ast",
       "id": "tests_unit_scrubandtraceprocessortest_scrubandtraceprocessortest",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "scrubandtraceprocessortest"
     },
     {
@@ -11308,7 +11275,7 @@
       "_origin": "ast",
       "id": "tests_unit_scrubandtraceprocessortest_scrubandtraceprocessortest_test_it_extracts_method_name_from_closure_backtrace",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".test_it_extracts_method_name_from_closure_backtrace()"
     },
     {
@@ -11319,7 +11286,7 @@
       "_origin": "ast",
       "id": "tests_unit_scrubandtraceprocessortest_scrubandtraceprocessortest_test_it_syncs_mqtt_status_to_offline_due_to_inactivity",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".test_it_syncs_mqtt_status_to_offline_due_to_inactivity()"
     },
     {
@@ -11330,7 +11297,7 @@
       "_origin": "ast",
       "id": "tests_unit_scrubandtraceprocessortest_scrubandtraceprocessortest_test_it_keeps_mqtt_status_online_when_recently_seen",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": ".test_it_keeps_mqtt_status_online_when_recently_seen()"
     },
     {
@@ -11406,8 +11373,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_service_missionservicetest",
-      "community": 30,
-      "community_name": "User.php",
+      "community": 23,
+      "community_name": "Mission",
       "norm_label": "missionservicetest.php"
     },
     {
@@ -14190,7 +14157,7 @@
       "_origin": "ast",
       "id": "illuminate_broadcasting_interactswithsockets",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "illuminate\\broadcasting\\interactswithsockets"
     },
     {
@@ -14201,7 +14168,7 @@
       "_origin": "ast",
       "id": "illuminate_contracts_broadcasting_shouldbroadcastnow",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "illuminate\\contracts\\broadcasting\\shouldbroadcastnow"
     },
     {
@@ -14212,7 +14179,7 @@
       "_origin": "ast",
       "id": "illuminate_foundation_events_dispatchable",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "illuminate\\foundation\\events\\dispatchable"
     },
     {
@@ -14223,7 +14190,7 @@
       "_origin": "ast",
       "id": "illuminate_queue_serializesmodels",
       "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community_name": "IotDevice.php",
       "norm_label": "illuminate\\queue\\serializesmodels"
     },
     {
@@ -14234,7 +14201,7 @@
       "_origin": "ast",
       "id": "illuminate_http_jsonresponse",
       "community": 28,
-      "community_name": "Illuminate\\Http\\Request",
+      "community_name": ".log",
       "norm_label": "illuminate\\http\\jsonresponse"
     },
     {
@@ -14244,7 +14211,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_http_request",
-      "community": 28,
+      "community": 36,
       "community_name": "Illuminate\\Http\\Request",
       "norm_label": "illuminate\\http\\request"
     },
@@ -14310,8 +14277,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_view_view",
-      "community": 55,
-      "community_name": "Illuminate\\View\\View",
+      "community": 8,
+      "community_name": "Illuminate\\Http\\RedirectResponse",
       "norm_label": "illuminate\\view\\view"
     },
     {
@@ -14420,7 +14387,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_database_eloquent_model",
-      "community": 0,
+      "community": 31,
       "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "illuminate\\database\\eloquent\\model"
     },
@@ -14431,8 +14398,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_database_eloquent_relations_belongsto",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 34,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "norm_label": "illuminate\\database\\eloquent\\relations\\belongsto"
     },
     {
@@ -14453,8 +14420,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_database_eloquent_factories_hasfactory",
-      "community": 0,
-      "community_name": "Illuminate\\Database\\Eloquent\\Model",
+      "community": 23,
+      "community_name": "Mission",
       "norm_label": "illuminate\\database\\eloquent\\factories\\hasfactory"
     },
     {
@@ -14464,7 +14431,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_database_eloquent_relations_hasone",
-      "community": 0,
+      "community": 31,
       "community_name": "Illuminate\\Database\\Eloquent\\Model",
       "norm_label": "illuminate\\database\\eloquent\\relations\\hasone"
     },
@@ -14575,7 +14542,7 @@
       "_origin": "ast",
       "id": "illuminate_foundation_testing_refreshdatabase",
       "community": 22,
-      "community_name": "TestCase",
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "illuminate\\foundation\\testing\\refreshdatabase"
     },
     {
@@ -14585,8 +14552,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_foundation_testing_withoutmiddleware",
-      "community": 36,
-      "community_name": "Illuminate\\Foundation\\Testing\\WithoutMiddleware",
+      "community": 22,
+      "community_name": "Illuminate\\Foundation\\Testing\\RefreshDatabase",
       "norm_label": "illuminate\\foundation\\testing\\withoutmiddleware"
     },
     {
@@ -14596,7 +14563,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "illuminate_foundation_testing_testcase",
-      "community": 22,
+      "community": 102,
       "community_name": "TestCase",
       "norm_label": "illuminate\\foundation\\testing\\testcase"
     },
@@ -14608,7 +14575,7 @@
       "_origin": "ast",
       "id": "phpunit_framework_testcase",
       "community": 102,
-      "community_name": "ExampleTest",
+      "community_name": "TestCase",
       "norm_label": "phpunit\\framework\\testcase"
     },
     {
@@ -35252,7 +35219,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L33",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer",
@@ -35263,7 +35230,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L40",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer",
@@ -35274,7 +35241,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L75",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer",
@@ -35296,7 +35263,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L70",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer",
@@ -35329,7 +35296,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L84",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer",
@@ -35351,7 +35318,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L85",
+      "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer",
@@ -35373,7 +35340,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L22",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer",
@@ -35395,7 +35362,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L45",
+      "source_location": "L44",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer",
@@ -35467,7 +35434,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require",
-      "target": "composer_require_laravel_octane",
+      "target": "composer_require_laravel_reverb",
       "confidence_score": 1.0
     },
     {
@@ -35478,17 +35445,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require",
-      "target": "composer_require_laravel_reverb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "composer.json",
-      "source_location": "L17",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "composer_require",
       "target": "composer_require_laravel_sanctum",
       "confidence_score": 1.0
     },
@@ -35496,7 +35452,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require",
@@ -35518,7 +35474,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L19",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require",
@@ -35529,7 +35485,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L20",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require",
@@ -35540,7 +35496,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L23",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35551,7 +35507,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L24",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35562,7 +35518,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L25",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35573,7 +35529,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L26",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35584,7 +35540,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L27",
+      "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35595,7 +35551,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L28",
+      "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35606,7 +35562,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L29",
+      "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35617,7 +35573,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L30",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35628,7 +35584,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L31",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_require_dev",
@@ -35639,7 +35595,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L34",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_autoload",
@@ -35650,7 +35606,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L35",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_autoload_psr_4",
@@ -35661,7 +35617,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L36",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_autoload_psr_4",
@@ -35672,7 +35628,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L37",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_autoload_psr_4",
@@ -35683,7 +35639,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L41",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_autoload_dev",
@@ -35694,7 +35650,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L42",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_autoload_dev_psr_4",
@@ -35705,7 +35661,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L61",
+      "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_scripts",
@@ -35716,7 +35672,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L46",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_scripts",
@@ -35727,7 +35683,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L56",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_scripts",
@@ -35738,7 +35694,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L53",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_scripts",
@@ -35749,7 +35705,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L50",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_scripts",
@@ -35760,7 +35716,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L65",
+      "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_scripts",
@@ -35771,7 +35727,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L46",
+      "source_location": "L45",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35783,7 +35739,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L46",
+      "source_location": "L45",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35795,7 +35751,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L50",
+      "source_location": "L49",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35807,7 +35763,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L53",
+      "source_location": "L52",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35819,7 +35775,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L56",
+      "source_location": "L55",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35831,7 +35787,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L56",
+      "source_location": "L55",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35843,7 +35799,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L56",
+      "source_location": "L55",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35855,7 +35811,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L61",
+      "source_location": "L60",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35867,7 +35823,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L61",
+      "source_location": "L60",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35879,7 +35835,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L65",
+      "source_location": "L64",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35891,7 +35847,7 @@
       "relation": "extends",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L65",
+      "source_location": "L64",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -35903,7 +35859,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L71",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_extra",
@@ -35914,7 +35870,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L72",
+      "source_location": "L71",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_extra_laravel",
@@ -35925,7 +35881,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L79",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_config",
@@ -35936,7 +35892,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L76",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_config",
@@ -35947,7 +35903,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L77",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_config",
@@ -35958,7 +35914,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L78",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_config",
@@ -35969,7 +35925,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L80",
+      "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_config_allow_plugins",
@@ -35980,7 +35936,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "composer.json",
-      "source_location": "L81",
+      "source_location": "L80",
       "weight": 1.0,
       "_origin": "ast",
       "source": "composer_config_allow_plugins",
@@ -46827,5 +46783,5 @@
       "source_file": "docs/PROJECT_SUMMARY.md"
     }
   ],
-  "built_at_commit": "374e305008e6ff5cfbbba750467d5fa97ba2b686"
+  "built_at_commit": "f1b1bf7b42dd4c2b8df41607dfed84daff1182e5"
 }
