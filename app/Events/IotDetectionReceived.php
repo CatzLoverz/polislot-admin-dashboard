@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\IotDevice;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -36,7 +37,7 @@ class IotDetectionReceived implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('iot.detection.'.str_replace(':', '', $this->macAddress)),
+            new Channel('iot.detection.'.IotDevice::normalizeMac($this->macAddress)),
         ];
     }
 

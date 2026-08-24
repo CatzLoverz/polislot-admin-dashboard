@@ -185,7 +185,13 @@ class IotDetectionController extends Controller
         ]);
 
         $mac = $request->mac_address;
-        $device = IotDevice::where('device_mac_address', $mac)->first();
+        $cleanMac = IotDevice::normalizeMac($mac);
+        $formattedMac = IotDevice::formatMac($mac);
+
+        $device = IotDevice::where('device_mac_address', $formattedMac)
+            ->orWhere('device_mac_address', $mac)
+            ->orWhere('device_mac_address', $cleanMac)
+            ->first();
 
         if (! $device || ! $device->subarea) {
             Log::warning('Gagal menyimpan settings: perangkat atau subarea tidak ditemukan', ['mac' => $mac]);
@@ -241,9 +247,14 @@ class IotDetectionController extends Controller
         ]);
 
         $mac = $request->mac_address;
+        $cleanMac = IotDevice::normalizeMac($mac);
+        $formattedMac = IotDevice::formatMac($mac);
         $content = $request->validation_content;
 
-        $device = IotDevice::where('device_mac_address', $mac)->first();
+        $device = IotDevice::where('device_mac_address', $formattedMac)
+            ->orWhere('device_mac_address', $mac)
+            ->orWhere('device_mac_address', $cleanMac)
+            ->first();
         if (! $device || ! $device->subarea) {
             Log::warning('Validasi stream gagal: Perangkat atau subarea tidak ditemukan', ['mac' => $mac]);
 
@@ -285,10 +296,10 @@ class IotDetectionController extends Controller
         }
 
         // Simpan validation content ke Cache agar saat snapshot datang kita bisa menyimpannya ke user_validations
-        $cleanMac = str_replace(':', '', $mac);
+        $cleanMac = IotDevice::normalizeMac($mac);
         Cache::put("pending_validation_{$cleanMac}", [
             'content' => $content,
-            'user_id' => auth()->user()->user_id ?? 1, // pastikan admin user id tersimpan
+            'user_id' => auth()->user()->user_id ?? auth()->user()->id ?? 1, // pastikan admin user id tersimpan
         ], 120); // 2 menit timeout
 
         // Kirim perintah snapshot ke device
@@ -486,8 +497,13 @@ class IotDetectionController extends Controller
         ]);
 
         $macAddress = $request->mac_address;
+        $cleanMac = IotDevice::normalizeMac($macAddress);
+        $formattedMac = IotDevice::formatMac($macAddress);
 
-        $isRegistered = IotDevice::where('device_mac_address', $macAddress)->exists();
+        $isRegistered = IotDevice::where('device_mac_address', $formattedMac)
+            ->orWhere('device_mac_address', $macAddress)
+            ->orWhere('device_mac_address', $cleanMac)
+            ->exists();
 
         if (! $isRegistered) {
             Log::warning('markOffline rejected: Unregistered MAC', ['mac' => $macAddress]);
@@ -495,7 +511,7 @@ class IotDetectionController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Device not registered.'], 403);
         }
 
-        $currentStatus = Cache::get("iot_status_{$macAddress}", 'offline');
+        $currentStatus = IotDevice::getStatus($macAddress);
         if ($currentStatus === 'offline') {
             return response()->json(['status' => 'success', 'message' => 'Device already offline.']);
         }

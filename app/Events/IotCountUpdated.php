@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\IotDevice;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -30,7 +31,7 @@ class IotCountUpdated implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        $cleanMac = str_replace(':', '', $this->macAddress);
+        $cleanMac = IotDevice::normalizeMac($this->macAddress);
 
         return [
             new Channel('iot.detection.'.$cleanMac),

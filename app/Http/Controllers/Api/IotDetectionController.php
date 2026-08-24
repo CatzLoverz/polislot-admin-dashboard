@@ -29,11 +29,17 @@ class IotDetectionController extends Controller
      */
     private function validateMacAddress(string $macAddress): bool
     {
-        $cacheKey = "iot_device_valid:{$macAddress}";
+        $cleanMac = IotDevice::normalizeMac($macAddress);
+        $formattedMac = IotDevice::formatMac($macAddress);
+        $cacheKey = "iot_device_valid:{$cleanMac}";
         $isRegistered = Cache::get($cacheKey);
 
         if ($isRegistered === null) {
-            $isRegistered = IotDevice::where('device_mac_address', $macAddress)->exists();
+            $isRegistered = IotDevice::where('device_mac_address', $formattedMac)
+                ->orWhere('device_mac_address', $macAddress)
+                ->orWhere('device_mac_address', $cleanMac)
+                ->exists();
+
             if ($isRegistered) {
                 Cache::put($cacheKey, true, 60);
             }
@@ -224,12 +230,21 @@ class IotDetectionController extends Controller
 
         // Auto-promote: Jika device mengirim data snapshot yang valid,
         // artinya device hidup — set ke online jika belum
-        $status = Cache::get("iot_status_{$macAddress}", 'offline');
+        $cleanMac = IotDevice::normalizeMac($macAddress);
+        $formattedMac = IotDevice::formatMac($macAddress);
+
+        $status = IotDevice::getStatus($macAddress);
         if ($status !== 'online') {
             Log::info("🔄 Auto-promote (WS): Device {$macAddress} mengirim snapshot tapi status={$status}. Mempromosikan ke ONLINE.");
+            Cache::forever("iot_status_{$cleanMac}", 'online');
             Cache::forever("iot_status_{$macAddress}", 'online');
+            Cache::forever("iot_status_{$formattedMac}", 'online');
+            Cache::forever("iot_connection_type_{$cleanMac}", 'ws');
             Cache::forever("iot_connection_type_{$macAddress}", 'ws');
-            broadcast(new IotDeviceStatusChanged($macAddress, 'online'));
+            broadcast(new IotDeviceStatusChanged($cleanMac, 'online'));
+            if ($formattedMac !== $cleanMac) {
+                broadcast(new IotDeviceStatusChanged($formattedMac, 'online'));
+            }
         }
 
         // 3. DEKRIPSI AES-256-CBC
@@ -244,7 +259,10 @@ class IotDetectionController extends Controller
         }
 
         // 4. SIMPAN KE STORAGE + DATABASE (kondisional berdasarkan parameter save_image)
-        $device = IotDevice::where('device_mac_address', $macAddress)->first();
+        $device = IotDevice::where('device_mac_address', $formattedMac)
+            ->orWhere('device_mac_address', $macAddress)
+            ->orWhere('device_mac_address', $cleanMac)
+            ->first();
 
         $saveImage = true;
         if ($request->has('save_image')) {
@@ -387,16 +405,28 @@ class IotDetectionController extends Controller
 
         // Auto-promote: Jika device mengirim data count yang valid,
         // artinya device hidup — set ke online jika belum
-        $status = Cache::get("iot_status_{$macAddress}", 'offline');
+        $cleanMac = IotDevice::normalizeMac($macAddress);
+        $formattedMac = IotDevice::formatMac($macAddress);
+
+        $status = IotDevice::getStatus($macAddress);
         if ($status !== 'online') {
             Log::info("🔄 Auto-promote (WS): Device {$macAddress} mengirim count tapi status={$status}. Mempromosikan ke ONLINE.");
+            Cache::forever("iot_status_{$cleanMac}", 'online');
             Cache::forever("iot_status_{$macAddress}", 'online');
+            Cache::forever("iot_status_{$formattedMac}", 'online');
+            Cache::forever("iot_connection_type_{$cleanMac}", 'ws');
             Cache::forever("iot_connection_type_{$macAddress}", 'ws');
-            broadcast(new IotDeviceStatusChanged($macAddress, 'online'));
+            broadcast(new IotDeviceStatusChanged($cleanMac, 'online'));
+            if ($formattedMac !== $cleanMac) {
+                broadcast(new IotDeviceStatusChanged($formattedMac, 'online'));
+            }
         }
 
         // Update database
-        $device = IotDevice::where('device_mac_address', $macAddress)->first();
+        $device = IotDevice::where('device_mac_address', $formattedMac)
+            ->orWhere('device_mac_address', $macAddress)
+            ->orWhere('device_mac_address', $cleanMac)
+            ->first();
         if ($device && $device->subarea) {
             $subarea = $device->subarea;
             $subarea->current_count = (int) $request->count;
