@@ -144,7 +144,12 @@ class IotDetectionController extends Controller
         // 3. BROADCAST FRAME
         // ============================================================
         try {
-            broadcast(new IotDetectionReceived($macAddress, $request->frame, false));
+            $frame = $request->frame;
+            if (! str_starts_with($frame, 'data:image') && ! str_starts_with($frame, 'http')) {
+                $frame = 'data:image/jpeg;base64,'.$frame;
+            }
+
+            broadcast(new IotDetectionReceived($macAddress, $frame, false));
 
             return response()->json([
                 'status' => 'success',

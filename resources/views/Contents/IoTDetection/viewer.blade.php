@@ -1251,13 +1251,19 @@
             streamChannel = window.Echo.channel(channelName)
                 .listen('.iot.detection.received', (e) => {
                     let frameData = e.frameData;
-                    
-                    if(frameData.startsWith('data:image')) {
+
+                    if(frameData && frameData.startsWith('data:image')) {
                         liveImage.src = frameData;
                         liveImage.classList.remove('d-none');
+
+                        const placeholder = document.getElementById('placeholder-container');
+                        const container = document.getElementById('canvas-container');
+                        if (placeholder) placeholder.classList.add('d-none');
+                        if (container) container.classList.remove('d-none');
                         if (feedPlaceholder) feedPlaceholder.style.display = 'none';
                         if (feedContainerIcon) feedContainerIcon.style.display = 'none';
-                        
+
+                        if (typeof initCanvas === 'function') setTimeout(initCanvas, 50);
                         addLog('Menerima frame gambar snapshot.');
 
                         // Silent refresh the gallery grid ONLY if it is a saved validation snapshot
