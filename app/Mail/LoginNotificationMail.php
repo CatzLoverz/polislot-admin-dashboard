@@ -2,14 +2,16 @@
 
 namespace App\Mail;
 
+use App\Models\User;
+use App\Services\IpLocationService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
 
-class LoginNotificationMail extends Mailable
+class LoginNotificationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -18,6 +20,7 @@ class LoginNotificationMail extends Mailable
     public $ipAddress;
     public $userAgent;
     public $token;
+    public $location;
 
     /**
      * Konstruktor mail notifikasi login.
@@ -56,8 +59,14 @@ class LoginNotificationMail extends Mailable
      */
     public function content(): Content
     {
+        $ipService = app(IpLocationService::class);
+        $this->location = $ipService->getLocation($this->ipAddress);
+
         return new Content(
             view: 'Emails.login_notification',
+            with: [
+                'location' => $this->location,
+            ]
         );
     }
 

@@ -45,6 +45,7 @@ Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
     Route::post('/forgot-attempt', [AuthController::class, 'forgotPasswordVerify']);
     Route::post('/forgot-otp-verify', [AuthController::class, 'forgotPasswordOtpVerify']);
     Route::post('/forgot-otp-resend', [AuthController::class, 'forgotPasswordOtpResend']);
+    Route::post('/reset-pass-check', [AuthController::class, 'resetPasswordCheck']);
     Route::post('/reset-pass-attempt', [AuthController::class, 'resetPasswordByOtp']);
     Route::post('/reset-pass-token', [AuthController::class, 'resetPassword']);
 
@@ -59,6 +60,7 @@ Route::middleware(['encryptApi', 'throttle:api'])->group(function () {
         // Route Profil
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::match(['put', 'post'], '/profile', [ProfileController::class, 'update']);
+        Route::delete('/profile', [ProfileController::class, 'destroy']);
 
         // Route InfoBoard
         Route::get('/info-board', [InfoBoardController::class, 'index']);

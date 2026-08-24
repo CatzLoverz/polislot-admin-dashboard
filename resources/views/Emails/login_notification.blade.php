@@ -12,6 +12,7 @@
         <ul style="background-color: #f8f9fa; padding: 15px 30px; border-radius: 5px; list-style-type: none;">
             <li><strong>Waktu:</strong> {{ $loginTime }}</li>
             <li><strong>Alamat IP:</strong> {{ $ipAddress }}</li>
+            <li><strong>Lokasi:</strong> {{ $location }}</li>
             <li><strong>Perangkat/Browser:</strong> {{ $userAgent }}</li>
         </ul>
         <p>Jika ini adalah Anda, maka Anda dapat mengabaikan email ini.</p>

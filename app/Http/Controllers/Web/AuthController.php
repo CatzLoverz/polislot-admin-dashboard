@@ -10,10 +10,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -159,24 +161,27 @@ class AuthController extends Controller
     public function forgotPasswordVerify(Request $request): RedirectResponse
     {
         try {
-            return DB::transaction(function () use ($request) {
-                $request->validate(['email' => 'required|email|exists:users,email']);
-                $validatedData = $request->only('email');
-                $user = User::where('email', $validatedData['email'])->first();
-                $otpCode = random_int(100000, 999999);
+            $request->validate(['email' => 'required|email|exists:users,email']);
+            $validatedData = $request->only('email');
 
-                $user->otp_code = $otpCode;
-                $user->otp_expires_at = Carbon::now()->addMinutes(10);
-                $user->save();
+            $emailLower = Str::lower($validatedData['email']);
+            $otpCode = random_int(100000, 999999);
 
-                Mail::to($user->email)->send(new SendOtpMail($otpCode, 'Emails.reset_password_otp', 'Kode Reset Password Anda'));
+            Cache::put(
+                "forgot_pass_{$emailLower}",
+                ['otp_hash' => hash('sha256', (string) $otpCode)],
+                now()->addMinutes(10)
+            );
 
-                $request->session()->put('email_for_password_reset', $user->email);
+            Mail::to($validatedData['email'])->send(
+                new SendOtpMail($otpCode, 'Emails.reset_password_otp', 'Kode Reset Password Anda')
+            );
 
-                Log::info('OTP reset password dikirim.', ['user_id' => $user->user_id]);
+            $request->session()->put('email_for_password_reset', $validatedData['email']);
 
-                return redirect()->route('forgot_otp.form')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
-            });
+            Log::info('OTP reset password dikirim.');
+
+            return redirect()->route('forgot_otp.form')->with('swal_success_crud', 'Kode OTP telah dikirim ke email Anda.');
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
 
@@ -206,19 +211,23 @@ class AuthController extends Controller
         $request->validate(['otp' => 'required|numeric|digits:6']);
         $email = session('email_for_password_reset');
         try {
-            return DB::transaction(function () use ($request, $email) {
-                $user = User::where('email', $email)->firstOrFail();
-                if ($user->otp_code !== $request->otp || Carbon::now()->gt($user->otp_expires_at)) {
-                    Log::warning('OTP salah atau kedaluwarsa.');
+            $emailLower = Str::lower((string) $email);
+            $payload = Cache::get("forgot_pass_{$emailLower}");
 
-                    return back()->with('swal_error_crud', 'Kode OTP salah atau telah kedaluwarsa.');
-                }
-                session()->put('otp_verified', true);
+            if (
+                !$payload
+                || !hash_equals($payload['otp_hash'] ?? '', hash('sha256', (string) $request->otp))
+            ) {
+                Log::warning('OTP salah atau kedaluwarsa.');
 
-                Log::info('OTP valid.', ['user_id' => $user->user_id]);
+                return back()->with('swal_error_crud', 'Kode OTP salah atau telah kedaluwarsa.');
+            }
 
-                return redirect()->route('reset_pass.form')->with('swal_success_crud', 'OTP berhasil diverifikasi!');
-            });
+            session()->put('otp_verified', true);
+
+            Log::info('OTP valid.');
+
+            return redirect()->route('reset_pass.form')->with('swal_success_crud', 'OTP berhasil diverifikasi!');
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
 
@@ -236,19 +245,22 @@ class AuthController extends Controller
             return redirect()->route('forgot.form')->with('swal_error_crud', 'Sesi OTP Anda sudah berakhir.');
         }
         try {
-            return DB::transaction(function () use ($email) {
-                $user = User::where('email', $email)->firstOrFail();
-                $newOtpCode = random_int(100000, 999999);
-                $user->otp_code = $newOtpCode;
-                $user->otp_expires_at = Carbon::now()->addMinutes(10);
-                $user->save();
+            $emailLower = Str::lower($email);
+            $newOtpCode = random_int(100000, 999999);
 
-                Mail::to($user->email)->send(new SendOtpMail($newOtpCode, 'Emails.reset_password_otp', 'Kode Reset Password Anda'));
+            Cache::put(
+                "forgot_pass_{$emailLower}",
+                ['otp_hash' => hash('sha256', (string) $newOtpCode)],
+                now()->addMinutes(10)
+            );
 
-                Log::info('OTP reset baru dikirim.', ['user_id' => $user->user_id]);
+            Mail::to($email)->send(
+                new SendOtpMail($newOtpCode, 'Emails.reset_password_otp', 'Kode Reset Password Anda')
+            );
 
-                return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim ke email Anda.');
-            });
+            Log::info('OTP reset baru dikirim.');
+
+            return back()->with('swal_success_crud', 'Kode OTP baru telah dikirim ke email Anda.');
         } catch (Exception $e) {
             Log::error('Error sistem.', ['error' => $e->getMessage()]);
 
@@ -300,11 +312,11 @@ class AuthController extends Controller
                 }
 
                 $user->password = Hash::make($request->password);
-                $user->otp_code = null;
-                $user->otp_expires_at = null;
                 $user->failed_attempts = 0;
                 $user->locked_until = null;
                 $user->save();
+
+                Cache::forget("forgot_pass_" . Str::lower($email));
                 session()->forget(['email_for_password_reset', 'otp_verified']);
 
                 Log::info('Password direset.', ['user_id' => $user->user_id]);

@@ -9,9 +9,9 @@ use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -115,7 +115,9 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJson(['status' => 'success']);
 
-        $this->assertDatabaseHas('users', ['email' => 'new@example.com']);
+        // User BELUM tercipta di DB — hanya tersimpan di cache
+        $this->assertDatabaseMissing('users', ['email' => 'new@example.com']);
+        $this->assertTrue(Cache::has('reg_pending_new@example.com'));
         Mail::assertSent(SendOtpMail::class);
     }
 
@@ -123,10 +125,13 @@ class AuthControllerTest extends TestCase
     public function register_attempt_returns_201_overwriting_unverified_user()
     {
         Mail::fake();
-        // User lama yg belum verif
-        User::factory()->unverified()->create([
+        // Payload cache lama — simulasikan pendaftaran sebelumnya yang belum diverifikasi
+        Cache::put('reg_pending_duplicate@example.com', [
+            'name' => 'Old Owner',
             'email' => 'duplicate@example.com',
-        ]);
+            'password' => Hash::make('OldPass123!'),
+            'otp_hash' => hash('sha256', '000000'),
+        ], now()->addMinutes(10));
 
         $data = [
             'name' => 'New Owner',
@@ -139,12 +144,10 @@ class AuthControllerTest extends TestCase
 
         $response->assertStatus(201);
 
-        // Pastikan user di DB cuma 1 dan namanya terupdate
-        $this->assertEquals(1, User::where('email', 'duplicate@example.com')->count());
-        $this->assertDatabaseHas('users', [
-            'email' => 'duplicate@example.com',
-            'name' => 'New Owner',
-        ]);
+        // Payload cache sudah tertimpa
+        $payload = Cache::get('reg_pending_duplicate@example.com');
+        $this->assertEquals('New Owner', $payload['name']);
+        $this->assertNotEquals(hash('sha256', '000000'), $payload['otp_hash']);
     }
 
     #[Test]
@@ -162,7 +165,7 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function register_attempt_returns_500_on_system_error()
     {
-        DB::shouldReceive('transaction')->andThrow(new Exception('DB Error'));
+        Cache::shouldReceive('put')->andThrow(new Exception('Cache Error'));
 
         $response = $this->postJson('/api/register-attempt', [
             'name' => 'Test',
@@ -182,23 +185,25 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function register_otp_verify_returns_200_on_success()
     {
-        /** @var User $user */
-        $user = User::factory()->unverified()->create([
-            'otp_code' => '123456',
-            'otp_expires_at' => now()->addMinutes(10),
-        ]);
+        Cache::put('reg_pending_new@example.com', [
+            'name' => 'New User',
+            'email' => 'new@example.com',
+            'password' => Hash::make('Password123!'),
+            'otp_hash' => hash('sha256', '123456'),
+        ], now()->addMinutes(10));
 
         $response = $this->postJson('/api/register-otp-verify', [
-            'email' => $user->email,
+            'email' => 'new@example.com',
             'otp' => '123456',
         ]);
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data' => ['access_token']]);
 
-        $user->refresh();
+        $this->assertDatabaseHas('users', ['email' => 'new@example.com']);
+        $user = User::where('email', 'new@example.com')->first();
         $this->assertNotNull($user->email_verified_at);
-        $this->assertNull($user->otp_code);
+        $this->assertFalse(Cache::has('reg_pending_new@example.com'));
     }
 
     #[Test]
@@ -219,15 +224,26 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function register_otp_verify_returns_422_if_otp_invalid_or_expired()
     {
-        /** @var User $user */
-        $user = User::factory()->unverified()->create([
-            'otp_code' => '123456',
-            'otp_expires_at' => now()->subMinute(), // Expired
+        // Cache kosong simulasikan sesi sudah expired
+        $response = $this->postJson('/api/register-otp-verify', [
+            'email' => 'ghost@example.com',
+            'otp' => '123456',
         ]);
 
+        $response->assertStatus(422)
+            ->assertJson(['message' => 'Kode OTP salah atau telah kedaluwarsa.']);
+
+        // OTP salah
+        Cache::put('reg_pending_wrong@example.com', [
+            'name' => 'Wrong OTP',
+            'email' => 'wrong@example.com',
+            'password' => Hash::make('Password123!'),
+            'otp_hash' => hash('sha256', '123456'),
+        ], now()->addMinutes(10));
+
         $response = $this->postJson('/api/register-otp-verify', [
-            'email' => $user->email,
-            'otp' => '123456',
+            'email' => 'wrong@example.com',
+            'otp' => '999999',
         ]);
 
         $response->assertStatus(422)
@@ -242,16 +258,23 @@ class AuthControllerTest extends TestCase
     public function register_otp_resend_returns_200_on_success()
     {
         Mail::fake();
-        /** @var User $user */
-        $user = User::factory()->unverified()->create();
+        Cache::put('reg_pending_resend@example.com', [
+            'name' => 'Resend User',
+            'email' => 'resend@example.com',
+            'password' => Hash::make('Password123!'),
+            'otp_hash' => hash('sha256', '000000'),
+        ], now()->addMinutes(10));
 
         $response = $this->postJson('/api/register-otp-resend', [
-            'email' => $user->email,
+            'email' => 'resend@example.com',
         ]);
 
         $response->assertStatus(200)
             ->assertJson(['status' => 'success']);
 
+        // OTP hash di cache harus berubah
+        $payload = Cache::get('reg_pending_resend@example.com');
+        $this->assertNotEquals(hash('sha256', '000000'), $payload['otp_hash']);
         Mail::assertSent(SendOtpMail::class);
     }
 
@@ -272,11 +295,13 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function register_otp_resend_returns_422_if_email_missing()
     {
+        // Tidak ada payload cache → sesi registrasi tidak ditemukan
         $response = $this->postJson('/api/register-otp-resend', [
             'email' => 'ghost@example.com',
         ]);
 
-        $response->assertStatus(422); // Validation error
+        $response->assertStatus(422)
+            ->assertJson(['message' => 'Sesi registrasi tidak ditemukan, silakan daftar ulang.']);
     }
 
     // =========================================================================
@@ -433,8 +458,8 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJson(['status' => 'success']);
 
-        $user->refresh();
-        $this->assertNotNull($user->otp_code);
+        // OTP tersimpan di cache (bukan di DB)
+        $this->assertTrue(Cache::has('forgot_pass_' . Str::lower($user->email)));
         Mail::assertSent(SendOtpMail::class);
     }
 
@@ -457,34 +482,49 @@ class AuthControllerTest extends TestCase
     public function forgot_otp_verify_returns_200_on_success()
     {
         /** @var User $user */
-        $user = User::factory()->create([
-            'otp_code' => '654321',
-            'otp_expires_at' => now()->addMinutes(5),
-        ]);
+        $user = User::factory()->create();
+
+        // Simpan OTP yang valid di cache
+        Cache::put('forgot_pass_' . Str::lower($user->email), [
+            'otp_hash' => hash('sha256', '654321'),
+        ], now()->addMinutes(10));
 
         $response = $this->postJson('/api/forgot-otp-verify', [
             'email' => $user->email,
             'otp' => '654321',
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+            ->assertJson(['message' => 'OTP valid. Silakan reset password.']);
     }
 
     #[Test]
     public function forgot_otp_verify_returns_400_if_invalid_or_expired()
     {
         /** @var User $user */
-        $user = User::factory()->create([
-            'otp_code' => '654321',
-            'otp_expires_at' => now()->subMinutes(1),
-        ]);
+        $user = User::factory()->create();
 
+        // Test 1: Cache kosong (expired)
         $response = $this->postJson('/api/forgot-otp-verify', [
             'email' => $user->email,
             'otp' => '654321',
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(400)
+            ->assertJson(['message' => 'Kode OTP salah atau telah kedaluwarsa.']);
+
+        // Test 2: OTP salah
+        Cache::put('forgot_pass_' . Str::lower($user->email), [
+            'otp_hash' => hash('sha256', '123456'),
+        ], now()->addMinutes(10));
+
+        $response = $this->postJson('/api/forgot-otp-verify', [
+            'email' => $user->email,
+            'otp' => '999999',
+        ]);
+
+        $response->assertStatus(400)
+            ->assertJson(['message' => 'Kode OTP salah atau telah kedaluwarsa.']);
     }
 
     // =========================================================================
@@ -509,7 +549,7 @@ class AuthControllerTest extends TestCase
     #[Test]
     public function forgot_otp_resend_returns_500_on_system_error()
     {
-        DB::shouldReceive('transaction')->andThrow(new Exception('Error'));
+        Cache::shouldReceive('put')->andThrow(new Exception('Error'));
         /** @var User $user */
         $user = User::factory()->create();
 
@@ -530,10 +570,13 @@ class AuthControllerTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create([
             'password' => Hash::make('OldPass123!'),
-            'otp_code' => '123456',
-            'otp_expires_at' => now()->addHour(),
             'locked_until' => now()->addHour(), // Test clear lock
         ]);
+
+        $emailLower = Str::lower($user->email);
+        Cache::put("forgot_pass_{$emailLower}", [
+            'otp_hash' => hash('sha256', '123456'),
+        ], now()->addMinutes(10));
 
         $response = $this->postJson('/api/reset-pass-attempt', [
             'email' => $user->email,
@@ -547,7 +590,9 @@ class AuthControllerTest extends TestCase
         $user->refresh();
         $this->assertTrue(Hash::check('NewPass123!', $user->password));
         $this->assertNull($user->locked_until);
-        $this->assertNull($user->otp_code);
+
+        // Pastikan cache sudah dibersihkan
+        $this->assertFalse(Cache::has("forgot_pass_{$emailLower}"));
     }
 
     #[Test]
@@ -556,9 +601,12 @@ class AuthControllerTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create([
             'password' => Hash::make('OldPass123!'),
-            'otp_code' => '123456',
-            'otp_expires_at' => now()->addHour(),
         ]);
+
+        $emailLower = Str::lower($user->email);
+        Cache::put("forgot_pass_{$emailLower}", [
+            'otp_hash' => hash('sha256', '123456'),
+        ], now()->addMinutes(10));
 
         $response = $this->postJson('/api/reset-pass-attempt', [
             'email' => $user->email,

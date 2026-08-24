@@ -1,0 +1,1342 @@
+{
+  "app/Console/Commands/BackupAuto.php": {
+    "mtime": 1784042592.10682,
+    "ast_hash": "c98d8746295c06a3928613628600343d",
+    "semantic_hash": ""
+  },
+  "app/Console/Commands/BackupClean.php": {
+    "mtime": 1784042592.3702898,
+    "ast_hash": "13dd44f6ca1544e8dbf574f728031d26",
+    "semantic_hash": ""
+  },
+  "app/Console/Commands/BackupDatabase.php": {
+    "mtime": 1784042581.5945885,
+    "ast_hash": "2a53f6a3fdc93238081a734b88a12ee9",
+    "semantic_hash": ""
+  },
+  "app/Console/Commands/DbList.php": {
+    "mtime": 1784042577.199471,
+    "ast_hash": "5b2b250883b92e2474ca0402621d8236",
+    "semantic_hash": ""
+  },
+  "app/Console/Commands/DbRestore.php": {
+    "mtime": 1784042591.9274983,
+    "ast_hash": "a91b04aca96c3b8c666dc0c1888ad931",
+    "semantic_hash": ""
+  },
+  "app/Console/Commands/MqttListenerCommand.php": {
+    "mtime": 1784406381.3045843,
+    "ast_hash": "975adebb48cafee01a796e21321bbb18",
+    "semantic_hash": ""
+  },
+  "app/Console/Commands/SetupDatabaseAdmin.php": {
+    "mtime": 1784042591.770131,
+    "ast_hash": "c55b3dfac1e5d76b22d88afe3d1bc0b8",
+    "semantic_hash": ""
+  },
+  "app/Console/Commands/SetupDatabaseUser.php": {
+    "mtime": 1784042592.227344,
+    "ast_hash": "78e2a659d14e87bf0e2e53c3a7fcc9b0",
+    "semantic_hash": ""
+  },
+  "app/Console/Traits/LoggableOutput.php": {
+    "mtime": 1767879404.0,
+    "ast_hash": "604e800eb7a3d3b02ae5cf73c384dda8",
+    "semantic_hash": "604e800eb7a3d3b02ae5cf73c384dda8"
+  },
+  "app/Events/IotCommandSent.php": {
+    "mtime": 1781286904.5311453,
+    "ast_hash": "469717d13460457f0349413c682a8424",
+    "semantic_hash": "469717d13460457f0349413c682a8424"
+  },
+  "app/Events/IotCountUpdated.php": {
+    "mtime": 1781286904.533024,
+    "ast_hash": "f759a62e12dbfdd98feff35bb454d542",
+    "semantic_hash": "f759a62e12dbfdd98feff35bb454d542"
+  },
+  "app/Events/IotDetectionReceived.php": {
+    "mtime": 1781286904.533024,
+    "ast_hash": "b198e264824571c9408f1428598f076f",
+    "semantic_hash": "b198e264824571c9408f1428598f076f"
+  },
+  "app/Events/IotDeviceStatusChanged.php": {
+    "mtime": 1781286904.5340304,
+    "ast_hash": "33d57bd4258e13327d637e17f887d11c",
+    "semantic_hash": "33d57bd4258e13327d637e17f887d11c"
+  },
+  "app/Events/IotThresholdUpdated.php": {
+    "mtime": 1781286904.5350354,
+    "ast_hash": "64eb8665e242a0732cb5a9b3f234298f",
+    "semantic_hash": "64eb8665e242a0732cb5a9b3f234298f"
+  },
+  "app/Events/SubareaStatusUpdated.php": {
+    "mtime": 1784459122.2658114,
+    "ast_hash": "b123271b8abc576e94b1b76317a40294",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/AuthController.php": {
+    "mtime": 1786676405.2113783,
+    "ast_hash": "48f1dada55f84caf9e0666241fcb5bde",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/FeedbackCategoryController.php": {
+    "mtime": 1784042959.4203062,
+    "ast_hash": "27cbe19e039b6b61616cf07701e8ad7e",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/FeedbackController.php": {
+    "mtime": 1784042960.0335097,
+    "ast_hash": "18f9c6e43ca41735ca2fb58326790c7c",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/HistoryController.php": {
+    "mtime": 1784042960.7632556,
+    "ast_hash": "f859f808dce45712e548854a4a9de773",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/InfoBoardController.php": {
+    "mtime": 1784042961.458494,
+    "ast_hash": "64c60613d9c3813f11e632c4461870e0",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/IotDetectionController.php": {
+    "mtime": 1784406385.3897603,
+    "ast_hash": "8b8bdd6a3b8e1ac08197f49b4243b223",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/IotWebhookController.php": {
+    "mtime": 1784202817.0902205,
+    "ast_hash": "5f86a8304a47cc13d1291725edd30444",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/IotWsAuthController.php": {
+    "mtime": 1784202817.0996108,
+    "ast_hash": "ebde7a7a506b2bfb8f1c805a71627bec",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/MapVisualizationController.php": {
+    "mtime": 1784042963.5279982,
+    "ast_hash": "96f2bc511a62e8981a8352740a45c277",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/MissionController.php": {
+    "mtime": 1784042965.019624,
+    "ast_hash": "7ef95f5fae81626282f6b784f4a114ba",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/ProfileController.php": {
+    "mtime": 1784043080.591159,
+    "ast_hash": "7eefc596da88683b3da4d4fb94399b83",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/RewardController.php": {
+    "mtime": 1784043080.9797206,
+    "ast_hash": "aebbdfe06c611cb19c0f7935937b3feb",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/SubareaCommentController.php": {
+    "mtime": 1784202758.9295921,
+    "ast_hash": "ccd38e54add5a6d80639d9d4c7fbaa2b",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/UserFaqController.php": {
+    "mtime": 1784043080.1884224,
+    "ast_hash": "7ca54e7f524153bb02cb656cd55f3132",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Api/UserValidationController.php": {
+    "mtime": 1784043080.3030202,
+    "ast_hash": "6c13a9b7ccfad96d8d34422b81b921bb",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Controller.php": {
+    "mtime": 1782643532.4135044,
+    "ast_hash": "2ca53b78cbdadf9887f1827dc788cdc9",
+    "semantic_hash": "2ca53b78cbdadf9887f1827dc788cdc9"
+  },
+  "app/Http/Controllers/Web/AuthController.php": {
+    "mtime": 1786676416.5864692,
+    "ast_hash": "2545b4617d3e8975e41d679265990f18",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Web/DashboardController.php": {
+    "mtime": 1784433323.356896,
+    "ast_hash": "f01f0aca8fb3b0bbd027d4512c47f943",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Web/FeedbackCategoryController.php": {
+    "mtime": 1783604620.5907383,
+    "ast_hash": "d33362d1583efd7b7c4fd4fbf3e8301d",
+    "semantic_hash": "d33362d1583efd7b7c4fd4fbf3e8301d"
+  },
+  "app/Http/Controllers/Web/FeedbackController.php": {
+    "mtime": 1782643532.4192498,
+    "ast_hash": "f8c5232d343eeca006f665d1d7745d87",
+    "semantic_hash": "f8c5232d343eeca006f665d1d7745d87"
+  },
+  "app/Http/Controllers/Web/InfoBoardController.php": {
+    "mtime": 1783604616.8990486,
+    "ast_hash": "eef56c9505c7d08a7191153cf7145f67",
+    "semantic_hash": "eef56c9505c7d08a7191153cf7145f67"
+  },
+  "app/Http/Controllers/Web/IotDetectionController.php": {
+    "mtime": 1782643532.4212482,
+    "ast_hash": "3ace2700ba10aad9c465428f866f28a4",
+    "semantic_hash": "3ace2700ba10aad9c465428f866f28a4"
+  },
+  "app/Http/Controllers/Web/MissionController.php": {
+    "mtime": 1784202390.8709068,
+    "ast_hash": "171e469fc194c8baae27879cb0f47d3a",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Web/ParkAmenityController.php": {
+    "mtime": 1782643532.4232476,
+    "ast_hash": "46ead2d5f038ee7d986f1d605df0dd87",
+    "semantic_hash": "46ead2d5f038ee7d986f1d605df0dd87"
+  },
+  "app/Http/Controllers/Web/ParkAreaController.php": {
+    "mtime": 1782643532.4242535,
+    "ast_hash": "8cbb6d2e009344b6be5d57d412518c84",
+    "semantic_hash": "8cbb6d2e009344b6be5d57d412518c84"
+  },
+  "app/Http/Controllers/Web/ParkSubareaController.php": {
+    "mtime": 1784453484.6378882,
+    "ast_hash": "199358d10c08a3079219fbd16022e36d",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Web/ProfileController.php": {
+    "mtime": 1782643532.426248,
+    "ast_hash": "c4de7aeb0ea16292cca8a495dadf1d55",
+    "semantic_hash": "c4de7aeb0ea16292cca8a495dadf1d55"
+  },
+  "app/Http/Controllers/Web/RewardController.php": {
+    "mtime": 1782643532.4272473,
+    "ast_hash": "514cbddd3294a4fa8b07ce43f9b574d8",
+    "semantic_hash": "514cbddd3294a4fa8b07ce43f9b574d8"
+  },
+  "app/Http/Controllers/Web/RewardVerificationController.php": {
+    "mtime": 1784042714.327549,
+    "ast_hash": "644d287e63ac33efd6efc0327604f81a",
+    "semantic_hash": ""
+  },
+  "app/Http/Controllers/Web/UserFaqController.php": {
+    "mtime": 1783604612.0213583,
+    "ast_hash": "a7c0c840f8dfd279cc9156bfb6b9100f",
+    "semantic_hash": "a7c0c840f8dfd279cc9156bfb6b9100f"
+  },
+  "app/Http/Controllers/Web/ValidationController.php": {
+    "mtime": 1783604624.3021445,
+    "ast_hash": "b52a510998829dd4b3e11df1e5efc04c",
+    "semantic_hash": "b52a510998829dd4b3e11df1e5efc04c"
+  },
+  "app/Http/Middleware/ApiEncryption.php": {
+    "mtime": 1782643532.4320898,
+    "ast_hash": "30ac20171f76c547be8a646772fc4389",
+    "semantic_hash": "30ac20171f76c547be8a646772fc4389"
+  },
+  "app/Http/Middleware/RBAC.php": {
+    "mtime": 1782643532.4320898,
+    "ast_hash": "c1056c32861e002015d21372d62e6016",
+    "semantic_hash": "c1056c32861e002015d21372d62e6016"
+  },
+  "app/Http/Middleware/TrustProxies.php": {
+    "mtime": 1782643532.4331007,
+    "ast_hash": "2c1cddd10a58565afc96e75bad24c185",
+    "semantic_hash": "2c1cddd10a58565afc96e75bad24c185"
+  },
+  "app/Logging/CustomizeFormatter.php": {
+    "mtime": 1782643532.434617,
+    "ast_hash": "bd8d2677c9fe2a2ebe51c37320959b55",
+    "semantic_hash": "bd8d2677c9fe2a2ebe51c37320959b55"
+  },
+  "app/Logging/Processors/ScrubAndTraceProcessor.php": {
+    "mtime": 1782643532.435632,
+    "ast_hash": "3afa77c59f29ff9a2f53aabc56ea6cf6",
+    "semantic_hash": "3afa77c59f29ff9a2f53aabc56ea6cf6"
+  },
+  "app/Mail/SendOtpMail.php": {
+    "mtime": 1784043345.50247,
+    "ast_hash": "298be65afbcd2b76dc7a5abb8c7dc165",
+    "semantic_hash": ""
+  },
+  "app/Models/Feedback.php": {
+    "mtime": 1782643532.437627,
+    "ast_hash": "438ebbd6afd8ab072e7625ea7ec74ae3",
+    "semantic_hash": "438ebbd6afd8ab072e7625ea7ec74ae3"
+  },
+  "app/Models/FeedbackCategory.php": {
+    "mtime": 1782643532.438628,
+    "ast_hash": "5958d556b21a6f158c4fc0a3e2c55db7",
+    "semantic_hash": "5958d556b21a6f158c4fc0a3e2c55db7"
+  },
+  "app/Models/InfoBoard.php": {
+    "mtime": 1782643532.439631,
+    "ast_hash": "2f04b610d2813cce2e157515dbe1bf86",
+    "semantic_hash": "2f04b610d2813cce2e157515dbe1bf86"
+  },
+  "app/Models/IotCapture.php": {
+    "mtime": 1782643532.4406261,
+    "ast_hash": "90b1bf2a42d7ea6ccc49397d249415de",
+    "semantic_hash": "90b1bf2a42d7ea6ccc49397d249415de"
+  },
+  "app/Models/IotDevice.php": {
+    "mtime": 1782643532.441785,
+    "ast_hash": "00a83a558e0c731a0f34cfcb0e0fe6ad",
+    "semantic_hash": "00a83a558e0c731a0f34cfcb0e0fe6ad"
+  },
+  "app/Models/Mission.php": {
+    "mtime": 1782643532.4427934,
+    "ast_hash": "8e32f27d4f460f8f2e6bcdbcaa29aa74",
+    "semantic_hash": "8e32f27d4f460f8f2e6bcdbcaa29aa74"
+  },
+  "app/Models/ParkAmenity.php": {
+    "mtime": 1782643532.4437926,
+    "ast_hash": "04d1720f595b45bc29f9b670e1b6ba1b",
+    "semantic_hash": "04d1720f595b45bc29f9b670e1b6ba1b"
+  },
+  "app/Models/ParkArea.php": {
+    "mtime": 1782643532.4437926,
+    "ast_hash": "d00ad100a72c9c53bb83bc11c7341222",
+    "semantic_hash": "d00ad100a72c9c53bb83bc11c7341222"
+  },
+  "app/Models/ParkSubarea.php": {
+    "mtime": 1784406376.653528,
+    "ast_hash": "8243fbab40d4d4c4f0deb111992563d7",
+    "semantic_hash": ""
+  },
+  "app/Models/Reward.php": {
+    "mtime": 1782643532.4462557,
+    "ast_hash": "ac67c865ad2d963ed1979eb9bee10102",
+    "semantic_hash": "ac67c865ad2d963ed1979eb9bee10102"
+  },
+  "app/Models/SubareaComment.php": {
+    "mtime": 1782643532.4472656,
+    "ast_hash": "18eb365b1d629d31066e821b8237468e",
+    "semantic_hash": "18eb365b1d629d31066e821b8237468e"
+  },
+  "app/Models/User.php": {
+    "mtime": 1786674557.2834976,
+    "ast_hash": "f683592a993e7aedef0d11a525b99bd5",
+    "semantic_hash": ""
+  },
+  "app/Models/UserFaq.php": {
+    "mtime": 1782643532.4482625,
+    "ast_hash": "a75597ea9f280a869b3cb65caf84bc50",
+    "semantic_hash": "a75597ea9f280a869b3cb65caf84bc50"
+  },
+  "app/Models/UserHistory.php": {
+    "mtime": 1782643532.4482625,
+    "ast_hash": "e3adb6f50aa6d1dcc552c121ff4e9fce",
+    "semantic_hash": "e3adb6f50aa6d1dcc552c121ff4e9fce"
+  },
+  "app/Models/UserMission.php": {
+    "mtime": 1784042628.930851,
+    "ast_hash": "ba60365583c5a1376184e7cb38c83d2b",
+    "semantic_hash": ""
+  },
+  "app/Models/UserReward.php": {
+    "mtime": 1782643532.4502618,
+    "ast_hash": "7bed2c3e540623f995165c8c083761e0",
+    "semantic_hash": "7bed2c3e540623f995165c8c083761e0"
+  },
+  "app/Models/UserValidation.php": {
+    "mtime": 1782643532.4511516,
+    "ast_hash": "cc315777dd45b6d9b0d06101a9a02e85",
+    "semantic_hash": "cc315777dd45b6d9b0d06101a9a02e85"
+  },
+  "app/Models/Validation.php": {
+    "mtime": 1766557862.0,
+    "ast_hash": "cb8140804a0ffa0834fccab57e6e397d",
+    "semantic_hash": "cb8140804a0ffa0834fccab57e6e397d"
+  },
+  "app/Providers/AppServiceProvider.php": {
+    "mtime": 1782643532.4516609,
+    "ast_hash": "14c4aacbbb874357eb925f5b2bce6155",
+    "semantic_hash": "14c4aacbbb874357eb925f5b2bce6155"
+  },
+  "app/Providers/AuthServiceProvider.php": {
+    "mtime": 1782643532.4527898,
+    "ast_hash": "6ced5aeddae3574b96be9fbf8e252c4d",
+    "semantic_hash": "6ced5aeddae3574b96be9fbf8e252c4d"
+  },
+  "app/Rules/NotCurrentPassword.php": {
+    "mtime": 1782643532.4537973,
+    "ast_hash": "a00ef1cb5c6daf16e3927f170f410dc4",
+    "semantic_hash": "a00ef1cb5c6daf16e3927f170f410dc4"
+  },
+  "app/Services/HistoryService.php": {
+    "mtime": 1782643532.4547966,
+    "ast_hash": "f4a647db3c6a5b8510644649cc9329a4",
+    "semantic_hash": "f4a647db3c6a5b8510644649cc9329a4"
+  },
+  "app/Services/MissionService.php": {
+    "mtime": 1784042713.4429505,
+    "ast_hash": "e4d8b3fdf35ccb520c2fea44c01c16bb",
+    "semantic_hash": ""
+  },
+  "artisan": {
+    "mtime": 1764129484.0,
+    "ast_hash": "e66bb13691f6184c762c196427d8e685",
+    "semantic_hash": "e66bb13691f6184c762c196427d8e685"
+  },
+  "bootstrap/app.php": {
+    "mtime": 1782643532.455796,
+    "ast_hash": "36e733afe3a7d1d2d8e27c42c94af390",
+    "semantic_hash": "36e733afe3a7d1d2d8e27c42c94af390"
+  },
+  "bootstrap/providers.php": {
+    "mtime": 1782643532.456797,
+    "ast_hash": "831c5b8a3faaab5757cb82d19c48ce0c",
+    "semantic_hash": "831c5b8a3faaab5757cb82d19c48ce0c"
+  },
+  "composer.json": {
+    "mtime": 1785574940.728917,
+    "ast_hash": "09fd9a342e4fd3ec25732e24ba6fcc9d",
+    "semantic_hash": ""
+  },
+  "config/app.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "3c026898e43af5a658ca6d7b77f85368",
+    "semantic_hash": "3c026898e43af5a658ca6d7b77f85368"
+  },
+  "config/auth.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "74dec5ff7ad634dc226fd424f2414585",
+    "semantic_hash": "74dec5ff7ad634dc226fd424f2414585"
+  },
+  "config/broadcasting.php": {
+    "mtime": 1777010352.0,
+    "ast_hash": "2bc2c256d444913daaf9cdf3ef3c75dd",
+    "semantic_hash": "2bc2c256d444913daaf9cdf3ef3c75dd"
+  },
+  "config/cache.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "52938e090edbc480544e085de0f4f276",
+    "semantic_hash": "52938e090edbc480544e085de0f4f276"
+  },
+  "config/database.php": {
+    "mtime": 1782643532.456797,
+    "ast_hash": "ffe60971b15d458e5267c7d839cc67d0",
+    "semantic_hash": "ffe60971b15d458e5267c7d839cc67d0"
+  },
+  "config/filesystems.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "717e65d7bb8f32a4f298ea769891734a",
+    "semantic_hash": "717e65d7bb8f32a4f298ea769891734a"
+  },
+  "config/logging.php": {
+    "mtime": 1782643532.4582796,
+    "ast_hash": "339c34d513382c8780c1f3bdf2f019d7",
+    "semantic_hash": "339c34d513382c8780c1f3bdf2f019d7"
+  },
+  "config/mail.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "56b14578a660ef83c41fa599620bef6b",
+    "semantic_hash": "56b14578a660ef83c41fa599620bef6b"
+  },
+  "config/mqtt-client.php": {
+    "mtime": 1781286904.619261,
+    "ast_hash": "f1b90a714ff33a163ff4c1ae2f52194d",
+    "semantic_hash": "f1b90a714ff33a163ff4c1ae2f52194d"
+  },
+  "config/queue.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "fa588a4871790fca01d6a90af9208d15",
+    "semantic_hash": "fa588a4871790fca01d6a90af9208d15"
+  },
+  "config/reverb.php": {
+    "mtime": 1782643532.4592872,
+    "ast_hash": "bc94896f53e66bde7683dab6a7e37ddc",
+    "semantic_hash": "bc94896f53e66bde7683dab6a7e37ddc"
+  },
+  "config/sanctum.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "0f7183664f0fc6112214161d374c7bc1",
+    "semantic_hash": "0f7183664f0fc6112214161d374c7bc1"
+  },
+  "config/services.php": {
+    "mtime": 1777063192.0,
+    "ast_hash": "1ce9592066aff7b7299df26247282115",
+    "semantic_hash": "1ce9592066aff7b7299df26247282115"
+  },
+  "config/session.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "2ae417e81eee13089f9a23878557ca94",
+    "semantic_hash": "2ae417e81eee13089f9a23878557ca94"
+  },
+  "database/factories/UserFactory.php": {
+    "mtime": 1782643532.4592872,
+    "ast_hash": "a497449efdf5e9b47f2b98d0bbb94b3c",
+    "semantic_hash": "a497449efdf5e9b47f2b98d0bbb94b3c"
+  },
+  "database/migrations/0001_01_01_000000_create_users_table.php": {
+    "mtime": 1786674547.5913966,
+    "ast_hash": "8047b36a64a3acef1e5450782fd86f64",
+    "semantic_hash": ""
+  },
+  "database/migrations/0001_01_01_000001_create_cache_table.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "6803c10a1aa695d40633ec8bea5576d5",
+    "semantic_hash": "6803c10a1aa695d40633ec8bea5576d5"
+  },
+  "database/migrations/0001_01_01_000002_create_jobs_table.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "ead9cce2650b36345454f85e8c0214a0",
+    "semantic_hash": "ead9cce2650b36345454f85e8c0214a0"
+  },
+  "database/migrations/2025_10_03_011549_create_info_boards_table.php": {
+    "mtime": 1764786102.0,
+    "ast_hash": "7ccb680e187581766eda9007a06975be",
+    "semantic_hash": "7ccb680e187581766eda9007a06975be"
+  },
+  "database/migrations/2025_11_21_103711_create_feedbacks_table.php": {
+    "mtime": 1782643532.4623032,
+    "ast_hash": "6280761f0e4a407f5d30ca23bf88ccbf",
+    "semantic_hash": "6280761f0e4a407f5d30ca23bf88ccbf"
+  },
+  "database/migrations/2025_12_07_185238_create_missions_table.php": {
+    "mtime": 1782643532.4633029,
+    "ast_hash": "ff262f80d690491fb3dcd8cd624fa3e6",
+    "semantic_hash": "ff262f80d690491fb3dcd8cd624fa3e6"
+  },
+  "database/migrations/2025_12_11_215950_create_rewards_table.php": {
+    "mtime": 1765465270.0,
+    "ast_hash": "045270b825199e98e2a854c0bc060037",
+    "semantic_hash": "045270b825199e98e2a854c0bc060037"
+  },
+  "database/migrations/2025_12_14_105407_create_user_histories_table.php": {
+    "mtime": 1782643532.464303,
+    "ast_hash": "fb7cf1836e8ed814bafb83b6b09b7490",
+    "semantic_hash": "fb7cf1836e8ed814bafb83b6b09b7490"
+  },
+  "database/migrations/2025_12_14_183526_create_park_areas_table.php": {
+    "mtime": 1782643532.465317,
+    "ast_hash": "7b8e3486f74f4b07b98a91f08d0ae067",
+    "semantic_hash": "7b8e3486f74f4b07b98a91f08d0ae067"
+  },
+  "database/migrations/2025_12_14_214256_create_validations_table.php": {
+    "mtime": 1782643532.466456,
+    "ast_hash": "804f2a92cd720ea6a9a91c452b6f1b80",
+    "semantic_hash": "804f2a92cd720ea6a9a91c452b6f1b80"
+  },
+  "database/migrations/2026_04_20_000000_create_iot_devices_table.php": {
+    "mtime": 1777065238.0,
+    "ast_hash": "b3e9bafaf11acb13acf19570396a2949",
+    "semantic_hash": "b3e9bafaf11acb13acf19570396a2949"
+  },
+  "database/migrations/2026_04_20_000001_create_iot_captures_table.php": {
+    "mtime": 1781286904.6208713,
+    "ast_hash": "d0a4b05edaddb03b31defbeb154aab7c",
+    "semantic_hash": "d0a4b05edaddb03b31defbeb154aab7c"
+  },
+  "database/migrations/2026_04_23_202454_create_user_faq_table.php": {
+    "mtime": 1782643532.4674659,
+    "ast_hash": "90daa5dd11ebc65c1299aa5fdf981859",
+    "semantic_hash": "90daa5dd11ebc65c1299aa5fdf981859"
+  },
+  "database/seeders/DatabaseSeeder.php": {
+    "mtime": 1782643532.468463,
+    "ast_hash": "19178252f86e5b6de734b71ebd874e59",
+    "semantic_hash": "19178252f86e5b6de734b71ebd874e59"
+  },
+  "database/seeders/FeedbackCategorySeeder.php": {
+    "mtime": 1782643532.468463,
+    "ast_hash": "151b9177c391182c5e303a9d65c5065e",
+    "semantic_hash": "151b9177c391182c5e303a9d65c5065e"
+  },
+  "database/seeders/FeedbackSeeder.php": {
+    "mtime": 1782643532.4694636,
+    "ast_hash": "750fc9eb42ebdca3f3a2c07043bcaf38",
+    "semantic_hash": "750fc9eb42ebdca3f3a2c07043bcaf38"
+  },
+  "database/seeders/UserSeeder.php": {
+    "mtime": 1786674565.620953,
+    "ast_hash": "f1015bed9a46b8905fd97ab01be36c50",
+    "semantic_hash": ""
+  },
+  "database/seeders/ValidationSeeder.php": {
+    "mtime": 1782643532.4719372,
+    "ast_hash": "5872fc40fd7e5e99ee7ba34d5f28441c",
+    "semantic_hash": "5872fc40fd7e5e99ee7ba34d5f28441c"
+  },
+  "docker-entrypoint.sh": {
+    "mtime": 1785577750.316847,
+    "ast_hash": "d2141ea77904f0fbad2aca9ef41c6106",
+    "semantic_hash": ""
+  },
+  "docker/logrotate-entrypoint.sh": {
+    "mtime": 1782643532.47503,
+    "ast_hash": "1637df86b5b64e7971c069063f2f9dd9",
+    "semantic_hash": "1637df86b5b64e7971c069063f2f9dd9"
+  },
+  "lang/id/auth.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "4be8b878be99fbeb2b4d0c73fb70b054",
+    "semantic_hash": "4be8b878be99fbeb2b4d0c73fb70b054"
+  },
+  "lang/id/pagination.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "8c490ce6e34beb29a18e0a2f85383aa0",
+    "semantic_hash": "8c490ce6e34beb29a18e0a2f85383aa0"
+  },
+  "lang/id/validation.php": {
+    "mtime": 1782643532.4915993,
+    "ast_hash": "50085f4d5267d89d5b5a0197e9e64d08",
+    "semantic_hash": "50085f4d5267d89d5b5a0197e9e64d08"
+  },
+  "package.json": {
+    "mtime": 1781286904.6393971,
+    "ast_hash": "74cd5af04a877059bbf65ffe0c127426",
+    "semantic_hash": "74cd5af04a877059bbf65ffe0c127426"
+  },
+  "public/index.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "d8eda274115af5fd2aaa8230af329ef7",
+    "semantic_hash": "d8eda274115af5fd2aaa8230af329ef7"
+  },
+  "python/parking_detector_mqtt.py": {
+    "mtime": 1784099573.3648293,
+    "ast_hash": "fe5fe196f047684dbe3f33cb37f50c24",
+    "semantic_hash": ""
+  },
+  "python/parking_detector_mqtt_preview.py": {
+    "mtime": 1784099655.001681,
+    "ast_hash": "966c0dc66e211b3d5a2ebdcc5ab6479f",
+    "semantic_hash": ""
+  },
+  "python/parking_detector_ws.py": {
+    "mtime": 1784099968.0537105,
+    "ast_hash": "51f8665fd7c3e60f849aa3a6081e6f22",
+    "semantic_hash": ""
+  },
+  "python/parking_detector_ws_preview.py": {
+    "mtime": 1784099978.0902047,
+    "ast_hash": "09d147605876c05e82e70125a8d3f28a",
+    "semantic_hash": ""
+  },
+  "resources/js/app.js": {
+    "mtime": 1776693906.0,
+    "ast_hash": "1ccf2b9101110f40ecaab1608a6f91cf",
+    "semantic_hash": "1ccf2b9101110f40ecaab1608a6f91cf"
+  },
+  "resources/js/bootstrap.js": {
+    "mtime": 1777010354.0,
+    "ast_hash": "e493bfc41c1dbf72bc9027ace5310979",
+    "semantic_hash": "e493bfc41c1dbf72bc9027ace5310979"
+  },
+  "resources/js/echo.js": {
+    "mtime": 1781286904.64843,
+    "ast_hash": "6ffef237166ce5b810d922156ca7ce5c",
+    "semantic_hash": "6ffef237166ce5b810d922156ca7ce5c"
+  },
+  "resources/views/Contents/Auth/ForgotPass/forgot_form.blade.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "26670e246b42f5a72380a88d5e0af775",
+    "semantic_hash": "26670e246b42f5a72380a88d5e0af775"
+  },
+  "resources/views/Contents/Auth/ForgotPass/forgot_new_pass.blade.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "1832a6bbb0523fc02f414da984fd9497",
+    "semantic_hash": "1832a6bbb0523fc02f414da984fd9497"
+  },
+  "resources/views/Contents/Auth/ForgotPass/forgot_otp.blade.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "2b96e0a2364d543f7a37ce9efabb200d",
+    "semantic_hash": "2b96e0a2364d543f7a37ce9efabb200d"
+  },
+  "resources/views/Contents/Auth/login.blade.php": {
+    "mtime": 1784455283.9498837,
+    "ast_hash": "471b8f33ee1be59843717802f5495f89",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/Auth/register.blade.php": {
+    "mtime": 1784455289.9366398,
+    "ast_hash": "da9189bcfb01cc65102d70195db8ba93",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/Dashboard/index.blade.php": {
+    "mtime": 1784456209.6512332,
+    "ast_hash": "a8182670328ac081e6a45d7ce9e41354",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/FeedbackCategory/index.blade.php": {
+    "mtime": 1784455374.6687615,
+    "ast_hash": "a8de8a53e7156f146ea752432b05b95a",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/Feedback/index.blade.php": {
+    "mtime": 1784455361.6262941,
+    "ast_hash": "23262a9c9d2ffd2fe066c4989e791a99",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/InfoBoard/index.blade.php": {
+    "mtime": 1784455354.7002282,
+    "ast_hash": "09bc7145169830565a33488dccb06726",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/IoTDetection/partials/captures_grid.blade.php": {
+    "mtime": 1781459529.0901098,
+    "ast_hash": "2be3d50182ba3ca4a63ca40f7da93109",
+    "semantic_hash": "2be3d50182ba3ca4a63ca40f7da93109"
+  },
+  "resources/views/Contents/IoTDetection/viewer.blade.php": {
+    "mtime": 1784455951.8981378,
+    "ast_hash": "201fa1545a4bff3566376286c17e519e",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/Missions/index.blade.php": {
+    "mtime": 1784455658.7368493,
+    "ast_hash": "0f3bc8cba6f0826ddb1e5f7c18d6cad1",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/ParkArea/create.blade.php": {
+    "mtime": 1784455569.4727666,
+    "ast_hash": "8e8d98b60c11961af98547a6ffdd1b81",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/ParkArea/index.blade.php": {
+    "mtime": 1766985764.0,
+    "ast_hash": "d31e9b8913d07ac46d9581e94410a0c7",
+    "semantic_hash": "d31e9b8913d07ac46d9581e94410a0c7"
+  },
+  "resources/views/Contents/ParkArea/show.blade.php": {
+    "mtime": 1784459152.9541795,
+    "ast_hash": "60036538395439c5203bdfbf3ede14c7",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/Profile/index.blade.php": {
+    "mtime": 1784455310.3570955,
+    "ast_hash": "b7b488b427a359d4d3c12bc1119d229a",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/Rewards/index.blade.php": {
+    "mtime": 1766985764.0,
+    "ast_hash": "054d209acbcc4681adab22f473e5abee",
+    "semantic_hash": "054d209acbcc4681adab22f473e5abee"
+  },
+  "resources/views/Contents/Rewards/verify.blade.php": {
+    "mtime": 1765635178.0,
+    "ast_hash": "fc50c368f9a78da669eb9e4e3b66c7bf",
+    "semantic_hash": "fc50c368f9a78da669eb9e4e3b66c7bf"
+  },
+  "resources/views/Contents/UserFaq/index.blade.php": {
+    "mtime": 1784455430.519238,
+    "ast_hash": "a73cbf4715355052db0875ce7c82ab0f",
+    "semantic_hash": ""
+  },
+  "resources/views/Contents/Validation/index.blade.php": {
+    "mtime": 1784455338.6082742,
+    "ast_hash": "9c8518cc26ef9e46c1c9c0c309f46cc3",
+    "semantic_hash": ""
+  },
+  "resources/views/Emails/registration_otp.blade.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "2837fd5d628126d479da1e27977454fb",
+    "semantic_hash": "2837fd5d628126d479da1e27977454fb"
+  },
+  "resources/views/Layouts/auth_layout.blade.php": {
+    "mtime": 1784455571.7782762,
+    "ast_hash": "d442587e825a8062a8fdafb813c58722",
+    "semantic_hash": ""
+  },
+  "resources/views/Layouts/content_layout.blade.php": {
+    "mtime": 1786663078.3987036,
+    "ast_hash": "ef60e5908caba8ca0b20bff1ca26293c",
+    "semantic_hash": ""
+  },
+  "resources/views/welcome.blade.php": {
+    "mtime": 1784456292.4641585,
+    "ast_hash": "fd22e127f041538ff0daf2fcfe280516",
+    "semantic_hash": ""
+  },
+  "routes/api.php": {
+    "mtime": 1784531925.217896,
+    "ast_hash": "f7c89c089b5cfeaf3767b8ce968d1a26",
+    "semantic_hash": ""
+  },
+  "routes/channels.php": {
+    "mtime": 1782643532.505448,
+    "ast_hash": "38ea1b0abc5638dd7452d3b9b7dec6ed",
+    "semantic_hash": "38ea1b0abc5638dd7452d3b9b7dec6ed"
+  },
+  "routes/console.php": {
+    "mtime": 1782643532.5066512,
+    "ast_hash": "39f5b3292a5bccb1501eadca8cfc341e",
+    "semantic_hash": "39f5b3292a5bccb1501eadca8cfc341e"
+  },
+  "routes/web.php": {
+    "mtime": 1784453479.6125252,
+    "ast_hash": "69f2d50d1df47f9be5b7f20c801d56ec",
+    "semantic_hash": ""
+  },
+  "tests/Feature/ExampleTest.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "0f4d91c9c5bbcd4e2f46cf885acb7fb6",
+    "semantic_hash": "0f4d91c9c5bbcd4e2f46cf885acb7fb6"
+  },
+  "tests/Feature/Http/Controllers/Api/AuthControllerTest.php": {
+    "mtime": 1786675047.6869724,
+    "ast_hash": "79f0eb02592ad29db3f09e5831f815a8",
+    "semantic_hash": ""
+  },
+  "tests/Feature/Http/Controllers/Api/FeedbackCategoryControllerTest.php": {
+    "mtime": 1766239728.0,
+    "ast_hash": "4d9072b5dbaab35a4cc2bd8856cd0588",
+    "semantic_hash": "4d9072b5dbaab35a4cc2bd8856cd0588"
+  },
+  "tests/Feature/Http/Controllers/Api/FeedbackControllerTest.php": {
+    "mtime": 1782643532.5096617,
+    "ast_hash": "628b8af6a68ddd543c51c634492444f8",
+    "semantic_hash": "628b8af6a68ddd543c51c634492444f8"
+  },
+  "tests/Feature/Http/Controllers/Api/HistoryControllerTest.php": {
+    "mtime": 1782643532.5096617,
+    "ast_hash": "efd9288beca7186b5adb71ce80f851c7",
+    "semantic_hash": "efd9288beca7186b5adb71ce80f851c7"
+  },
+  "tests/Feature/Http/Controllers/Api/InfoBoardControllerTest.php": {
+    "mtime": 1782643532.5110528,
+    "ast_hash": "a5cdcb4653d80b866de6b0e1e56cecdf",
+    "semantic_hash": "a5cdcb4653d80b866de6b0e1e56cecdf"
+  },
+  "tests/Feature/Http/Controllers/Api/IotDetectionControllerTest.php": {
+    "mtime": 1784406507.0869756,
+    "ast_hash": "ed23c83a9b3691cf08b6e3a52776253f",
+    "semantic_hash": ""
+  },
+  "tests/Feature/Http/Controllers/Api/IotWebhookControllerTest.php": {
+    "mtime": 1782646941.9541795,
+    "ast_hash": "38ab8e1228f2e9deb72083f29b8b23dd",
+    "semantic_hash": "38ab8e1228f2e9deb72083f29b8b23dd"
+  },
+  "tests/Feature/Http/Controllers/Api/IotWsAuthControllerTest.php": {
+    "mtime": 1782643532.5140524,
+    "ast_hash": "2518127669b57f5219af5a172453afcf",
+    "semantic_hash": "2518127669b57f5219af5a172453afcf"
+  },
+  "tests/Feature/Http/Controllers/Api/MapVisualizationControllerTest.php": {
+    "mtime": 1782643532.5150523,
+    "ast_hash": "d426cbb630d3f3e18b2ebf18bba9ff8d",
+    "semantic_hash": "d426cbb630d3f3e18b2ebf18bba9ff8d"
+  },
+  "tests/Feature/Http/Controllers/Api/MissionControllerTest.php": {
+    "mtime": 1782643532.5150523,
+    "ast_hash": "3d4b6357b5fa86d01041f7f1dc42d005",
+    "semantic_hash": "3d4b6357b5fa86d01041f7f1dc42d005"
+  },
+  "tests/Feature/Http/Controllers/Api/ProfileControllerTest.php": {
+    "mtime": 1782643532.5160525,
+    "ast_hash": "f00dcdc9dc2959d82162ba04d295cc73",
+    "semantic_hash": "f00dcdc9dc2959d82162ba04d295cc73"
+  },
+  "tests/Feature/Http/Controllers/Api/RewardControllerTest.php": {
+    "mtime": 1782643532.5160525,
+    "ast_hash": "7549593dbc5c4ed176db668a85269ba6",
+    "semantic_hash": "7549593dbc5c4ed176db668a85269ba6"
+  },
+  "tests/Feature/Http/Controllers/Api/SubareaCommentControllerTest.php": {
+    "mtime": 1784037754.4816463,
+    "ast_hash": "eec15e517bd792ce83c0631b65fe0435",
+    "semantic_hash": ""
+  },
+  "tests/Feature/Http/Controllers/Api/UserFaqControllerTest.php": {
+    "mtime": 1782643532.5180535,
+    "ast_hash": "b570e1fc57857383561e3e554e59e6df",
+    "semantic_hash": "b570e1fc57857383561e3e554e59e6df"
+  },
+  "tests/Feature/Http/Controllers/Api/UserValidationControllerTest.php": {
+    "mtime": 1782643532.5190542,
+    "ast_hash": "e130f85ec3b80ec7882802250ba02b3d",
+    "semantic_hash": "e130f85ec3b80ec7882802250ba02b3d"
+  },
+  "tests/Feature/Http/Controllers/Web/AuthControllerTest.php": {
+    "mtime": 1786674676.0834997,
+    "ast_hash": "fbdd4df2c0464af6d589088bbf0629d6",
+    "semantic_hash": ""
+  },
+  "tests/Feature/Http/Controllers/Web/DashboardControllerTest.php": {
+    "mtime": 1784531008.746975,
+    "ast_hash": "6fd4d9f1ce2fc6bf7dfe98d1ad764a8f",
+    "semantic_hash": ""
+  },
+  "tests/Feature/Http/Controllers/Web/InfoBoardControllerTest.php": {
+    "mtime": 1782643532.5210516,
+    "ast_hash": "60a1248f38bdf9d7c12204ebf3632fc9",
+    "semantic_hash": "60a1248f38bdf9d7c12204ebf3632fc9"
+  },
+  "tests/Feature/Http/Controllers/Web/MissionControllerTest.php": {
+    "mtime": 1782646645.1636786,
+    "ast_hash": "b48663bbe081c2737033cf21a6085288",
+    "semantic_hash": "b48663bbe081c2737033cf21a6085288"
+  },
+  "tests/Feature/Http/Controllers/Web/ParkAreaControllerTest.php": {
+    "mtime": 1781286904.671255,
+    "ast_hash": "56ca59ebf12a2f45b4a68eb280b08b4a",
+    "semantic_hash": "56ca59ebf12a2f45b4a68eb280b08b4a"
+  },
+  "tests/Feature/Http/Controllers/Web/ParkSubareaControllerTest.php": {
+    "mtime": 1783682390.8292453,
+    "ast_hash": "27d81220292aecf2eaf8aa607cec82bb",
+    "semantic_hash": "27d81220292aecf2eaf8aa607cec82bb"
+  },
+  "tests/Feature/Http/Controllers/Web/ProfileControllerTest.php": {
+    "mtime": 1782643532.5220525,
+    "ast_hash": "066d136e41a754268ff956588891b07f",
+    "semantic_hash": "066d136e41a754268ff956588891b07f"
+  },
+  "tests/Feature/Http/Controllers/Web/RewardControllerTest.php": {
+    "mtime": 1782643532.5240538,
+    "ast_hash": "daa6bac8927b4427f6040cf6229323bc",
+    "semantic_hash": "daa6bac8927b4427f6040cf6229323bc"
+  },
+  "tests/Feature/Http/Middleware/ApiEncryptionTest.php": {
+    "mtime": 1782643532.5250554,
+    "ast_hash": "15e278d12baa23cf2d9bd93f4037f6cb",
+    "semantic_hash": "15e278d12baa23cf2d9bd93f4037f6cb"
+  },
+  "tests/Feature/Http/Middleware/RBACTest.php": {
+    "mtime": 1782643532.5260556,
+    "ast_hash": "0214758cc22dfa4039e983fca40ec17d",
+    "semantic_hash": "0214758cc22dfa4039e983fca40ec17d"
+  },
+  "tests/Feature/Model/FeedbackCategoryTest.php": {
+    "mtime": 1784003006.1959803,
+    "ast_hash": "d46cbaf96a519bbcf238c0089ce26627",
+    "semantic_hash": "d46cbaf96a519bbcf238c0089ce26627"
+  },
+  "tests/Feature/Model/FeedbackTest.php": {
+    "mtime": 1784003006.1959803,
+    "ast_hash": "2c72785286b47f17af4dbbc9907455d7",
+    "semantic_hash": "2c72785286b47f17af4dbbc9907455d7"
+  },
+  "tests/Feature/Model/InfoBoardTest.php": {
+    "mtime": 1784003006.2145584,
+    "ast_hash": "b010b262d6c1f1568fd4ec041a999a78",
+    "semantic_hash": "b010b262d6c1f1568fd4ec041a999a78"
+  },
+  "tests/Feature/Model/MissionTest.php": {
+    "mtime": 1784003006.2155876,
+    "ast_hash": "7c6d2f31054740fbbd85ea8820fd1c09",
+    "semantic_hash": "7c6d2f31054740fbbd85ea8820fd1c09"
+  },
+  "tests/Feature/Model/ParkAmenityTest.php": {
+    "mtime": 1784003006.2155876,
+    "ast_hash": "2dc153155a7e4638d7c4253b6b55cdda",
+    "semantic_hash": "2dc153155a7e4638d7c4253b6b55cdda"
+  },
+  "tests/Feature/Model/ParkAreaTest.php": {
+    "mtime": 1784003006.2155876,
+    "ast_hash": "00b037e3b2e242d8e1da8872e38e06df",
+    "semantic_hash": "00b037e3b2e242d8e1da8872e38e06df"
+  },
+  "tests/Feature/Model/ParkSubareaTest.php": {
+    "mtime": 1784003006.2155876,
+    "ast_hash": "49d6720095b4c2e903ca333ec24ff912",
+    "semantic_hash": "49d6720095b4c2e903ca333ec24ff912"
+  },
+  "tests/Feature/Model/RewardTest.php": {
+    "mtime": 1784003006.2155876,
+    "ast_hash": "c65c436613b2fc8df8911032322d6a60",
+    "semantic_hash": "c65c436613b2fc8df8911032322d6a60"
+  },
+  "tests/Feature/Model/SubareaCommentTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "e36e3584e4663b8b519379cde61f765b",
+    "semantic_hash": "e36e3584e4663b8b519379cde61f765b"
+  },
+  "tests/Feature/Model/UserHistoryTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "d1710b3236084d445763e5f3afb0403d",
+    "semantic_hash": "d1710b3236084d445763e5f3afb0403d"
+  },
+  "tests/Feature/Model/UserMissionTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "f62b1ee5620ae44e314053356a045cc7",
+    "semantic_hash": "f62b1ee5620ae44e314053356a045cc7"
+  },
+  "tests/Feature/Model/UserRewardTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "e5bf9a7f3c7daeb4adb489569dfe1de3",
+    "semantic_hash": "e5bf9a7f3c7daeb4adb489569dfe1de3"
+  },
+  "tests/Feature/Model/UserTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "2f87c85ed4c47512e33666255c32de6a",
+    "semantic_hash": "2f87c85ed4c47512e33666255c32de6a"
+  },
+  "tests/Feature/Model/UserValidationTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "b0126000a3f756e17fafb88169cb8bbc",
+    "semantic_hash": "b0126000a3f756e17fafb88169cb8bbc"
+  },
+  "tests/Feature/Model/ValidationTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "58eccc24e4654ebc55a40da8dbbd19a8",
+    "semantic_hash": "58eccc24e4654ebc55a40da8dbbd19a8"
+  },
+  "tests/TestCase.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "7e567dc27e68d5b57bae16af07f68907",
+    "semantic_hash": "7e567dc27e68d5b57bae16af07f68907"
+  },
+  "tests/Unit/ExampleTest.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "3f679e9508c834f0ad95943455fcd836",
+    "semantic_hash": "3f679e9508c834f0ad95943455fcd836"
+  },
+  "tests/Unit/ScrubAndTraceProcessorTest.php": {
+    "mtime": 1782643532.5349977,
+    "ast_hash": "82a3e7d834ffe76b743996c4bc73ac06",
+    "semantic_hash": "82a3e7d834ffe76b743996c4bc73ac06"
+  },
+  "tests/Unit/Service/HistoryServiceTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "4838140dbd8a68020f5e9ea0a0f5697d",
+    "semantic_hash": "4838140dbd8a68020f5e9ea0a0f5697d"
+  },
+  "tests/Unit/Service/MissionServiceTest.php": {
+    "mtime": 1784003006.2165883,
+    "ast_hash": "f339dd8b27308ef477f697aba9fe7358",
+    "semantic_hash": "f339dd8b27308ef477f697aba9fe7358"
+  },
+  "vite.config.js": {
+    "mtime": 1777029818.0,
+    "ast_hash": "9319874750422f1a573a0678ba8cdb0d",
+    "semantic_hash": "9319874750422f1a573a0678ba8cdb0d"
+  },
+  ".agents/rules/coding_standards.md": {
+    "mtime": 1781286904.5077393,
+    "ast_hash": "282ce3f94f6b3de7352e70110faacff5",
+    "semantic_hash": "282ce3f94f6b3de7352e70110faacff5"
+  },
+  ".agents/rules/environment_isolation.md": {
+    "mtime": 1781286904.508294,
+    "ast_hash": "0837d684df397dceee85d122e6852d4d",
+    "semantic_hash": "0837d684df397dceee85d122e6852d4d"
+  },
+  ".agents/rules/graphify.md": {
+    "mtime": 1781286904.5091205,
+    "ast_hash": "f1e53ecc9194573d3c28fc116c743a2e",
+    "semantic_hash": "f1e53ecc9194573d3c28fc116c743a2e"
+  },
+  ".agents/workflows/development_cycle.md": {
+    "mtime": 1781286904.5116427,
+    "ast_hash": "5458c7146eaf0c1cc449eaf9c402c6f5",
+    "semantic_hash": "5458c7146eaf0c1cc449eaf9c402c6f5"
+  },
+  ".agents/workflows/graphify.md": {
+    "mtime": 1781286904.5116427,
+    "ast_hash": "0bc020d491fca99550c1ea3de0a5f862",
+    "semantic_hash": "0bc020d491fca99550c1ea3de0a5f862"
+  },
+  "README.md": {
+    "mtime": 1783013143.85474,
+    "ast_hash": "03268bfe34cad174c6fa1d363df67542",
+    "semantic_hash": "03268bfe34cad174c6fa1d363df67542"
+  },
+  "docker/docker-compose.yml": {
+    "mtime": 1782643532.4739375,
+    "ast_hash": "3bdadace576d6f87a332c4635c769c7e",
+    "semantic_hash": "3bdadace576d6f87a332c4635c769c7e"
+  },
+  "docker/docker-installation-files.txt": {
+    "mtime": 1781286904.6218894,
+    "ast_hash": "0c88a6a88f48c5c1aba6aab4b20b34b3",
+    "semantic_hash": "0c88a6a88f48c5c1aba6aab4b20b34b3"
+  },
+  "docs/INSTALLATION_DOCKER.md": {
+    "mtime": 1783666929.7653155,
+    "ast_hash": "f970530b7d119e0c1947a3b76955b16b",
+    "semantic_hash": "f970530b7d119e0c1947a3b76955b16b"
+  },
+  "docs/INSTALLATION_MANUAL.md": {
+    "mtime": 1783600223.1630633,
+    "ast_hash": "cb3c5e30d0586e3152a24acf478e8be9",
+    "semantic_hash": "cb3c5e30d0586e3152a24acf478e8be9"
+  },
+  "public/robots.txt": {
+    "mtime": 1766985764.0,
+    "ast_hash": "f71d20196d4caf35b6a670db8c70b03d",
+    "semantic_hash": "f71d20196d4caf35b6a670db8c70b03d"
+  },
+  "python/requirements.txt": {
+    "mtime": 1782643532.499411,
+    "ast_hash": "9194a217e1518899e79ba72a893a205e",
+    "semantic_hash": "9194a217e1518899e79ba72a893a205e"
+  },
+  "pint.json": {
+    "mtime": 1781286904.6419811,
+    "ast_hash": "0f63db93d12066570af1f10944ad76ea",
+    "semantic_hash": "0f63db93d12066570af1f10944ad76ea"
+  },
+  "tests/selenium/feedbackCategory/test_01_tambah_feedback.py": {
+    "mtime": 1781286904.6742601,
+    "ast_hash": "3b09228d5648e5b033827cc3ba1af3cb",
+    "semantic_hash": "3b09228d5648e5b033827cc3ba1af3cb"
+  },
+  "tests/selenium/feedbackCategory/test_02_ubah_feedback.py": {
+    "mtime": 1781286904.6742601,
+    "ast_hash": "bc795857e0764f60ea954d04b9fbe4d8",
+    "semantic_hash": "bc795857e0764f60ea954d04b9fbe4d8"
+  },
+  "tests/selenium/feedbackCategory/test_03_hapus_feedback.py": {
+    "mtime": 1781286904.6742601,
+    "ast_hash": "a440aa9160c19c99cb8a59556e56d13b",
+    "semantic_hash": "a440aa9160c19c99cb8a59556e56d13b"
+  },
+  "tests/selenium/infoBoard/test_01_tambah_infoboard.py": {
+    "mtime": 1781286904.6742601,
+    "ast_hash": "0fd06449b616e03b9c1e0fec66cc242d",
+    "semantic_hash": "0fd06449b616e03b9c1e0fec66cc242d"
+  },
+  "tests/selenium/infoBoard/test_02_ubah_infoboard.py": {
+    "mtime": 1781286904.6757655,
+    "ast_hash": "a0096f3403fc34deb24e3c92ff91d4a6",
+    "semantic_hash": "a0096f3403fc34deb24e3c92ff91d4a6"
+  },
+  "tests/selenium/infoBoard/test_03_hapus_infoboard.py": {
+    "mtime": 1781286904.6779075,
+    "ast_hash": "26efebe0653596ce46a6a4d335d154af",
+    "semantic_hash": "26efebe0653596ce46a6a4d335d154af"
+  },
+  "tests/selenium/login/test_login_ui.py": {
+    "mtime": 1781286904.6784115,
+    "ast_hash": "dde9bd44f8dbbf6137994d0b3a8a8eb1",
+    "semantic_hash": "dde9bd44f8dbbf6137994d0b3a8a8eb1"
+  },
+  "tests/selenium/mission/test_01_tambah_misi.py": {
+    "mtime": 1781286904.6784115,
+    "ast_hash": "1ec65db8981aec7836268d215aa9134c",
+    "semantic_hash": "1ec65db8981aec7836268d215aa9134c"
+  },
+  "tests/selenium/mission/test_02_ubah_misi.py": {
+    "mtime": 1781286904.679419,
+    "ast_hash": "b4cda6e78e03d3effe2d84a2ab32e0c3",
+    "semantic_hash": "b4cda6e78e03d3effe2d84a2ab32e0c3"
+  },
+  "tests/selenium/mission/test_03_hapus_misi.py": {
+    "mtime": 1781286904.679419,
+    "ast_hash": "23618ddf3755c5a813d268600b2db2c7",
+    "semantic_hash": "23618ddf3755c5a813d268600b2db2c7"
+  },
+  "tests/selenium/profil/test_01_view_profil.py": {
+    "mtime": 1781286904.679419,
+    "ast_hash": "54c3b9631808a315009c0dda4ebce77f",
+    "semantic_hash": "54c3b9631808a315009c0dda4ebce77f"
+  },
+  "tests/selenium/profil/test_02_ubah_profil.py": {
+    "mtime": 1781286904.679419,
+    "ast_hash": "b8f156bf261ff0fe018b2d7423e0203f",
+    "semantic_hash": "b8f156bf261ff0fe018b2d7423e0203f"
+  },
+  "tests/selenium/reward/test_01_tambah_reward.py": {
+    "mtime": 1781286904.6809268,
+    "ast_hash": "f050af3721a1183bb9e78df09e09582e",
+    "semantic_hash": "f050af3721a1183bb9e78df09e09582e"
+  },
+  "tests/selenium/reward/test_02_ubah_reward.py": {
+    "mtime": 1781286904.6809268,
+    "ast_hash": "f141ecdf26d89bff603b4a77a03de521",
+    "semantic_hash": "f141ecdf26d89bff603b4a77a03de521"
+  },
+  "tests/selenium/reward/test_03_hapus_reward.py": {
+    "mtime": 1781286904.6829343,
+    "ast_hash": "079a8ca0cd9c195ea8026adefa05b985",
+    "semantic_hash": "079a8ca0cd9c195ea8026adefa05b985"
+  },
+  "tests/selenium/reward/test_04_view_verify.py": {
+    "mtime": 1781286904.683444,
+    "ast_hash": "e0296802c2baa891ba1482e852f3c9ba",
+    "semantic_hash": "e0296802c2baa891ba1482e852f3c9ba"
+  },
+  "tests/selenium/userFAQ/test_01_tambah_faq.py": {
+    "mtime": 1781286904.683444,
+    "ast_hash": "18fb7b451b7804c4b5c04a3f92aa3174",
+    "semantic_hash": "18fb7b451b7804c4b5c04a3f92aa3174"
+  },
+  "tests/selenium/userFAQ/test_02_ubah_faq.py": {
+    "mtime": 1781286904.683444,
+    "ast_hash": "ff1f2143a2aa8278b2b1e645c667fc80",
+    "semantic_hash": "ff1f2143a2aa8278b2b1e645c667fc80"
+  },
+  "tests/selenium/userFAQ/test_03_hapus_faq.py": {
+    "mtime": 1781286904.6844504,
+    "ast_hash": "ac10f5898a68578166504032fc460565",
+    "semantic_hash": "ac10f5898a68578166504032fc460565"
+  },
+  "docs/PROJECT_SUMMARY.md": {
+    "mtime": 1783599835.5018713,
+    "ast_hash": "1557534d4b5a1401831afd2bb067063b",
+    "semantic_hash": "1557534d4b5a1401831afd2bb067063b"
+  },
+  "database/migrations/2025_09_30_040549_create_personal_access_tokens_table.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "eb77af89d184f92ec893eff344c34999",
+    "semantic_hash": "eb77af89d184f92ec893eff344c34999"
+  },
+  "resources/views/Emails/reset_password_otp.blade.php": {
+    "mtime": 1764129484.0,
+    "ast_hash": "c211fcb72ec8e62f7eda7946c6e088a8",
+    "semantic_hash": "c211fcb72ec8e62f7eda7946c6e088a8"
+  },
+  "app/Mail/LoginNotificationMail.php": {
+    "mtime": 1784043345.7984874,
+    "ast_hash": "a2eb24645f1cc649c559227a176e3355",
+    "semantic_hash": ""
+  },
+  "docker/wsl-port-forward.ps1": {
+    "mtime": 1782643532.4767354,
+    "ast_hash": "cc80c785e2f9ad6a1ffe6368a542cad3",
+    "semantic_hash": "cc80c785e2f9ad6a1ffe6368a542cad3"
+  },
+  "resources/views/Emails/login_notification.blade.php": {
+    "mtime": 1782925972.2505686,
+    "ast_hash": "33fe97be8fa97f1fe0f07cb49189c478",
+    "semantic_hash": "33fe97be8fa97f1fe0f07cb49189c478"
+  },
+  "resources/views/redirect_app.blade.php": {
+    "mtime": 1782925992.3300507,
+    "ast_hash": "235ba27a4a9c0e975f6190e166cb5e57",
+    "semantic_hash": "235ba27a4a9c0e975f6190e166cb5e57"
+  },
+  "python/models/best3_ncnn_model/model_ncnn.py": {
+    "mtime": 1782661373.070927,
+    "ast_hash": "4000991ad0a2730848002d17b711a9dc",
+    "semantic_hash": "4000991ad0a2730848002d17b711a9dc"
+  },
+  "docs/INSTALLATION_IOT_EDGE.md": {
+    "mtime": 1783013471.5447166,
+    "ast_hash": "c1e3c9bd00fb1988d500ff1fecfe3859",
+    "semantic_hash": "c1e3c9bd00fb1988d500ff1fecfe3859"
+  },
+  "python/models/best3_ncnn_model/metadata.yaml": {
+    "mtime": 1782661376.1681466,
+    "ast_hash": "d7926a4c6ed72e53ebcfc1ff69c1c7a0",
+    "semantic_hash": "d7926a4c6ed72e53ebcfc1ff69c1c7a0"
+  },
+  "python/models/best3_openvino_model/metadata.yaml": {
+    "mtime": 1782663567.6031659,
+    "ast_hash": "ced75d02c9e252d3bd7f1da694d74efc",
+    "semantic_hash": "ced75d02c9e252d3bd7f1da694d74efc"
+  },
+  "lang/id/passwords.php": {
+    "mtime": 1782643532.4905994,
+    "ast_hash": "3200cddd1dcd16c661478da9b78f1287",
+    "semantic_hash": "3200cddd1dcd16c661478da9b78f1287"
+  },
+  ".claude/settings.json": {
+    "mtime": 1785404668.520394,
+    "ast_hash": "c577d3d3636d2fdc92e07fad521919f8",
+    "semantic_hash": ""
+  },
+  ".claude/skills/laravel-coding/run.sh": {
+    "mtime": 1784041902.9416153,
+    "ast_hash": "4071b86744d18344398037591cd066ac",
+    "semantic_hash": ""
+  },
+  "tests/Performance/ProtectedApiPerformanceTest.php": {
+    "mtime": 1784050779.0602703,
+    "ast_hash": "0156f45b7d56101fef8d00f559c55b56",
+    "semantic_hash": ""
+  },
+  "tests/Pest.php": {
+    "mtime": 1784050134.8200672,
+    "ast_hash": "25b7e5e220757bb2b87b3c62e528496a",
+    "semantic_hash": ""
+  },
+  "tests/Stress/API_STRESS_MAP.php": {
+    "mtime": 1784044293.9555902,
+    "ast_hash": "47662104e218b151bbecba6c40a38f43",
+    "semantic_hash": ""
+  },
+  "tests/Stress/IotApiStressTest.php": {
+    "mtime": 1784050611.4483905,
+    "ast_hash": "e8739a040baa2528dbb89cd081d255fb",
+    "semantic_hash": ""
+  },
+  "tests/Stress/ProtectedApiStressTest.php": {
+    "mtime": 1784050606.5682125,
+    "ast_hash": "37cf50e1d81cd1601babba25b8f0bb45",
+    "semantic_hash": ""
+  },
+  "tests/Stress/PublicApiStressTest.php": {
+    "mtime": 1784050588.8886988,
+    "ast_hash": "46192fa4e071443e5bda462499d665f7",
+    "semantic_hash": ""
+  },
+  ".claude/CLAUDE.md": {
+    "mtime": 1784043468.9315073,
+    "ast_hash": "b2cf578497bdf16e03ee227b1d3cc3d6",
+    "semantic_hash": ""
+  },
+  ".claude/skills/laravel-coding/SKILL.md": {
+    "mtime": 1784041353.2819612,
+    "ast_hash": "b7488a512b99ddce257127915eb20be9",
+    "semantic_hash": ""
+  },
+  "app/Models/ParkSubareaHistory.php": {
+    "mtime": 1784406356.2901523,
+    "ast_hash": "cdca442585ad71c6164b026d696a0746",
+    "semantic_hash": ""
+  },
+  "config/octane.php": {
+    "mtime": 1786663888.0565767,
+    "ast_hash": "9d6e2c4dd66a6be36de79c5174055554",
+    "semantic_hash": ""
+  },
+  "database/migrations/2026_07_19_000000_create_park_subarea_histories_table.php": {
+    "mtime": 1784406350.318753,
+    "ast_hash": "7b0a4ae49261871c91c091bd53294cb2",
+    "semantic_hash": ""
+  },
+  "public/frankenphp-worker.php": {
+    "mtime": 1785574949.9911792,
+    "ast_hash": "5a3232d6139e3b2297a47c886454a56e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/SKILL.md": {
+    "mtime": 1785404668.5028577,
+    "ast_hash": "62aa0f6529a7784d9542c575a87d7077",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/add-watch.md": {
+    "mtime": 1785348446.448516,
+    "ast_hash": "d59d027fe449f06aa03905a01184e779",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/exports.md": {
+    "mtime": 1785348446.4515853,
+    "ast_hash": "9da2a2152e60a22f07f05fed5158f287",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/extraction-spec.md": {
+    "mtime": 1785348446.4802268,
+    "ast_hash": "42fef56a01698118f7fd722acdadea34",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/github-and-merge.md": {
+    "mtime": 1785348446.502263,
+    "ast_hash": "cde13df085e4c492aeb7ba298a996d0d",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/hooks.md": {
+    "mtime": 1785348446.5212288,
+    "ast_hash": "3f545db6ce646650bb9de588f5512a27",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/query.md": {
+    "mtime": 1785348446.6664703,
+    "ast_hash": "3c46f8ad006874260614ed8657d02307",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/transcribe.md": {
+    "mtime": 1785348446.7381732,
+    "ast_hash": "67b6a5fa6c0974e18f60db9f8932fbd8",
+    "semantic_hash": ""
+  },
+  ".claude/skills/graphify/references/update.md": {
+    "mtime": 1785348446.7574582,
+    "ast_hash": "9378bd03d56baaf78bd738ab3848f142",
+    "semantic_hash": ""
+  }
+}

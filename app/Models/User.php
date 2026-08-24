@@ -24,8 +24,6 @@ class User extends Authenticatable
         'role',
         'name',
         'avatar',
-        'otp_code',
-        'otp_expires_at',
         'reset_token',
         'failed_attempts',
         'locked_until',
@@ -48,7 +46,6 @@ class User extends Authenticatable
         return [
             'email_verified_at'      => 'datetime',
             'locked_until'           => 'datetime',
-            'otp_expires_at'         => 'datetime',
             'password'               => 'hashed',
         ];
     }

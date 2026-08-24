@@ -88,6 +88,11 @@ if [ -L "$LINK_PATH" ]; then
     echo "Symlink created successfully."
 fi
 
+# --- 5b. FIX CADDY STORAGE PERMISSIONS ---
+mkdir -p /data/caddy /config/caddy
+chown -R www-data:www-data /data/caddy /config/caddy 2>/dev/null || true
+
+
 echo "Environment Ready. Executing Command..."
 
 exec "$@"

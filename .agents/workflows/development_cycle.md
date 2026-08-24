@@ -1,8 +1,4 @@
 ---
-description: Alur kerja untuk modifikasi kode sumber pada host OS dengan pemisahan tahapan *build* 
----
-
----
 name: development_cycle
 description: Alur kerja untuk modifikasi kode sumber pada host OS dengan pemisahan tahapan *build* Docker secara manual.
 ---

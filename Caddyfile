@@ -13,6 +13,13 @@
 :80 {
     root * /var/www/html/public
 
+    # Security Headers dasar di layer web server
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
     # Reverse proxy WebSocket /app/* dan HTTP API /apps/* ke Reverb (internal port 8080)
     @websocket {
         path /app/* /apps/*
@@ -26,6 +33,6 @@
         max_size 10MB
     }
 
-    # Serve PHP untuk semua request lainnya
+    # Serve PHP (otomatis menggunakan worker dari global option)
     php_server
 }

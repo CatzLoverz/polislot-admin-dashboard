@@ -6,9 +6,11 @@ use App\Mail\SendOtpMail;
 use App\Models\User;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -257,9 +259,8 @@ class AuthControllerTest extends TestCase
         // Cek session
         $this->assertEquals('forgetful@test.com', session('email_for_password_reset'));
 
-        // Cek DB & Mail
-        $user->refresh();
-        $this->assertNotNull($user->otp_code);
+        // Cek Cache & Mail
+        $this->assertTrue(Cache::has('forgot_pass_' . Str::lower($user->email)));
         Mail::assertSent(SendOtpMail::class);
     }
 
@@ -291,11 +292,11 @@ class AuthControllerTest extends TestCase
     public function otp_verify_sukses_redirect_ke_reset_password()
     {
         /** @var User $user */
-        $user = User::factory()->create([
-            'email' => 'otp@test.com',
-            'otp_code' => '123456',
-            'otp_expires_at' => now()->addMinutes(10),
-        ]);
+        $user = User::factory()->create(['email' => 'otp@test.com']);
+
+        Cache::put('forgot_pass_otp@test.com', [
+            'otp_hash' => hash('sha256', '123456'),
+        ], now()->addMinutes(10));
 
         // Simulasi session dari langkah sebelumnya
         session()->put('email_for_password_reset', 'otp@test.com');
@@ -312,11 +313,11 @@ class AuthControllerTest extends TestCase
     public function otp_verify_gagal_otp_salah()
     {
         /** @var User $user */
-        $user = User::factory()->create([
-            'email' => 'otp@test.com',
-            'otp_code' => '123456',
-            'otp_expires_at' => now()->addMinutes(10),
-        ]);
+        $user = User::factory()->create(['email' => 'otp@test.com']);
+
+        Cache::put('forgot_pass_otp@test.com', [
+            'otp_hash' => hash('sha256', '123456'),
+        ], now()->addMinutes(10));
 
         session()->put('email_for_password_reset', 'otp@test.com');
 
@@ -333,12 +334,9 @@ class AuthControllerTest extends TestCase
     public function otp_verify_gagal_otp_expired()
     {
         /** @var User $user */
-        $user = User::factory()->create([
-            'email' => 'otp@test.com',
-            'otp_code' => '123456',
-            'otp_expires_at' => now()->subMinute(), // Expired
-        ]);
+        $user = User::factory()->create(['email' => 'otp@test.com']);
 
+        // Tidak seed cache → simulasikan OTP sudah expired/hilang
         session()->put('email_for_password_reset', 'otp@test.com');
 
         $response = $this->post(route('forgot_otp.verify'), [
@@ -354,6 +352,9 @@ class AuthControllerTest extends TestCase
         Mail::fake();
         /** @var User $user */
         $user = User::factory()->create(['email' => 'otp@test.com']);
+        Cache::put('forgot_pass_otp@test.com', [
+            'otp_hash' => hash('sha256', '000000'),
+        ], now()->addMinutes(10));
         session()->put('email_for_password_reset', 'otp@test.com');
 
         $response = $this->post(route('forgot_otp.resend'));
@@ -361,8 +362,9 @@ class AuthControllerTest extends TestCase
         $response->assertRedirect(); // Back
         $response->assertSessionHas('swal_success_crud', 'Kode OTP baru telah dikirim ke email Anda.');
 
-        $user->refresh();
-        $this->assertNotNull($user->otp_code);
+        // Cache OTP harus berubah
+        $payload = Cache::get('forgot_pass_otp@test.com');
+        $this->assertNotEquals(hash('sha256', '000000'), $payload['otp_hash']);
         Mail::assertSent(SendOtpMail::class);
     }
 
@@ -390,9 +392,12 @@ class AuthControllerTest extends TestCase
         $user = User::factory()->create([
             'email' => 'reset@test.com',
             'password' => Hash::make('OldPassword'),
-            'otp_code' => '123456',
             'locked_until' => now()->addHour(), // Simulasi sedang terlock
         ]);
+
+        Cache::put('forgot_pass_reset@test.com', [
+            'otp_hash' => hash('sha256', '123456'),
+        ], now()->addMinutes(10));
 
         session()->put('email_for_password_reset', 'reset@test.com');
         session()->put('otp_verified', true);
@@ -410,13 +415,15 @@ class AuthControllerTest extends TestCase
         // Verifikasi DB
         $user->refresh();
         $this->assertTrue(Hash::check($newPassword, $user->password));
-        $this->assertNull($user->otp_code);
         $this->assertNull($user->locked_until); // Lock harus direset
         $this->assertEquals(0, $user->failed_attempts);
 
         // Verifikasi Session dihapus
         $this->assertFalse(session()->has('email_for_password_reset'));
         $this->assertFalse(session()->has('otp_verified'));
+
+        // Verifikasi Cache OTP dibersihkan
+        $this->assertFalse(Cache::has('forgot_pass_reset@test.com'));
     }
 
     #[Test]

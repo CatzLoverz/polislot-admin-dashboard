@@ -90,7 +90,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "C:/Users/atmaj/.local/bin/graphify.EXE hook-guard read"
+            "command": "C:/Users/atmaj/.local/bin/graphify.EXE hook-guard read --strict"
           }
         ]
       }
