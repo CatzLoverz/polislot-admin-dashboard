@@ -62,7 +62,6 @@ COPY --from=composer-stage /build/vendor ./vendor
 
 # D. Copy seluruh source code aplikasi
 COPY . .
-COPY public/frankenphp-worker.php ./public/frankenphp-worker.php
 
 # E. Copy hasil Vite build (public/build) dari stage 2
 COPY --from=node-stage /build/public/build ./public/build
@@ -79,9 +78,6 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # I. Copy Caddyfile — proxy WebSocket /app/* ke Reverb internal
 COPY Caddyfile /etc/caddy/Caddyfile
-
-# I2. Copy PHP OPcache & JIT tuning untuk Octane / FrankenPHP
-COPY php-octane.ini /usr/local/etc/php/conf.d/php-octane.ini
 
 # J. Final Ownership Fix
 RUN chown -R www-data:www-data /var/www/html

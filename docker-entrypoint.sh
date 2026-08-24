@@ -92,10 +92,6 @@ fi
 mkdir -p /data/caddy /config/caddy
 chown -R www-data:www-data /data/caddy /config/caddy 2>/dev/null || true
 
-# --- 6. WARMUP OCTANE CACHE ---
-echo "Caching configuration and routes for Octane..."
-php artisan config:cache
-php artisan route:cache
 
 echo "Environment Ready. Executing Command..."
 

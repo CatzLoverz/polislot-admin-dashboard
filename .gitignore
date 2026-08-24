@@ -33,6 +33,3 @@ graphify-out/cache/
 windows_terminal_bridge.ps1
 wsl_terminal_bridge.sh
 .graphify_python
-**/caddy
-frankenphp
-!public/frankenphp-worker.php

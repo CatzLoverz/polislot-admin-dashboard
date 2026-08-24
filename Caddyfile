@@ -1,20 +1,17 @@
 {
-    frankenphp {
-        worker /var/www/html/public/frankenphp-worker.php {$FRANKENPHP_WORKERS:4}
+    frankenphp
+    servers {
+        timeouts {
+            read_body 30s
+            read_header 10s
+            write 30s
+            idle 120s
+        }
     }
 }
 
 :80 {
     root * /var/www/html/public
-
-    # Kompresi modern zstd & gzip untuk performa response tinggi
-    encode zstd gzip
-
-    # Cache jangka panjang untuk asset hasil build Vite dan storage publik
-    @static {
-        path /build/* /storage/* *.ico *.css *.js *.woff2 *.svg *.png *.jpg *.jpeg *.gif *.webp
-    }
-    header @static Cache-Control "public, max-age=31536000, immutable"
 
     # Security Headers dasar di layer web server
     header {
