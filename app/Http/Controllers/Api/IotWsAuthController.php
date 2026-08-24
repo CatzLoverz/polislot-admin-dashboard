@@ -105,9 +105,8 @@ class IotWsAuthController extends Controller
         $socketId = $request->socket_id;
 
         // Data member untuk presence channel
-        $cleanMac = str_replace(':', '', strtolower($macAddress));
         $channelData = json_encode([
-            'user_id' => $cleanMac,
+            'user_id' => $macAddress,
             'user_info' => [
                 'type' => 'iot_device',
                 'mac' => $macAddress,
