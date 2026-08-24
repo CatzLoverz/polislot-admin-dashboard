@@ -20,27 +20,6 @@ class IotDevice extends Model
     use HasFactory;
 
     /**
-     * Helper: Normalisasi MAC Address ke format clean lowercase tanpa titik dua (misal: "001a2b3c4d5e").
-     */
-    public static function normalizeMac(string $mac): string
-    {
-        return str_replace(':', '', strtolower(trim($mac)));
-    }
-
-    /**
-     * Helper: Format MAC Address ke format standar uppercase dengan titik dua (misal: "00:1A:2B:3C:4D:5E").
-     */
-    public static function formatMac(string $mac): string
-    {
-        $clean = static::normalizeMac($mac);
-        if (strlen($clean) !== 12) {
-            return strtoupper(trim($mac));
-        }
-
-        return strtoupper(implode(':', str_split($clean, 2)));
-    }
-
-    /**
      * Boot the model.
      * Menghapus cache validasi MAC address saat device dihapus dari database,
      * agar stream langsung ditolak tanpa menunggu cache expire.
@@ -49,12 +28,11 @@ class IotDevice extends Model
     {
         // Saat device dihapus → invalidasi cache MAC address
         static::deleted(function (IotDevice $device) {
-            $cleanMac = static::normalizeMac($device->device_mac_address);
-            Cache::forget("iot_device_valid:{$cleanMac}");
-            Cache::forget("iot_device_valid:{$device->device_mac_address}");
+            $cacheKey = "iot_device_valid:{$device->device_mac_address}";
+            Cache::forget($cacheKey);
             Log::info('Cache invalidated on delete', [
                 'mac' => $device->device_mac_address,
-                'clean_mac' => $cleanMac,
+                'cache_key' => $cacheKey,
             ]);
         });
 
@@ -62,9 +40,8 @@ class IotDevice extends Model
         static::updating(function (IotDevice $device) {
             if ($device->isDirty('device_mac_address')) {
                 $oldMac = $device->getOriginal('device_mac_address');
-                $oldCleanMac = static::normalizeMac($oldMac);
-                Cache::forget("iot_device_valid:{$oldCleanMac}");
-                Cache::forget("iot_device_valid:{$oldMac}");
+                $cacheKey = "iot_device_valid:{$oldMac}";
+                Cache::forget($cacheKey);
                 Log::info('Cache invalidated on MAC change', [
                     'old_mac' => $oldMac,
                     'new_mac' => $device->device_mac_address,
@@ -82,9 +59,7 @@ class IotDevice extends Model
      */
     public static function getStatus(string $mac): string
     {
-        $cleanMac = static::normalizeMac($mac);
-
-        return Cache::get("iot_status_{$cleanMac}", Cache::get("iot_status_{$mac}", 'offline'));
+        return Cache::get("iot_status_{$mac}", 'offline');
     }
 
     /**
@@ -98,9 +73,8 @@ class IotDevice extends Model
      */
     public static function syncStatus(string $mac): string
     {
-        $cleanMac = static::normalizeMac($mac);
-        $status = static::getStatus($mac);
-        $connectionType = Cache::get("iot_connection_type_{$cleanMac}", Cache::get("iot_connection_type_{$mac}", 'ws'));
+        $status = Cache::get("iot_status_{$mac}", 'offline');
+        $connectionType = Cache::get("iot_connection_type_{$mac}", 'ws');
 
         if ($status !== 'online') {
             return $status;
@@ -111,7 +85,7 @@ class IotDevice extends Model
         if ($connectionType === 'ws') {
             $shouldGoOffline = static::checkReverbPresence($mac);
         } elseif ($connectionType === 'mqtt') {
-            $lastSeen = Cache::get("iot_last_seen_{$cleanMac}", Cache::get("iot_last_seen_{$mac}"));
+            $lastSeen = Cache::get("iot_last_seen_{$mac}");
             if (! $lastSeen || (time() - $lastSeen) > 60) {
                 Log::info("MQTT sync: Device {$mac} inactive for more than 60 seconds. Setting to offline.");
                 $shouldGoOffline = true;
@@ -134,7 +108,7 @@ class IotDevice extends Model
     private static function checkReverbPresence(string $mac): bool
     {
         try {
-            $cleanMac = static::normalizeMac($mac);
+            $cleanMac = str_replace(':', '', $mac);
             $channelName = "presence-iot.device.{$cleanMac}";
 
             $pusher = Broadcast::connection('reverb')->getPusher();
@@ -143,7 +117,7 @@ class IotDevice extends Model
             if (is_array($response) && isset($response['users'])) {
                 $users = $response['users'];
                 foreach ($users as $user) {
-                    if (isset($user['id']) && static::normalizeMac((string) $user['id']) === $cleanMac) {
+                    if (isset($user['id']) && str_replace(':', '', strtolower($user['id'])) === strtolower($cleanMac)) {
                         return false; // Device ditemukan, JANGAN set offline
                     }
                 }
@@ -178,32 +152,20 @@ class IotDevice extends Model
      */
     public static function markDeviceOffline(string $mac): void
     {
-        $cleanMac = static::normalizeMac($mac);
-        $formattedMac = static::formatMac($mac);
-
-        // Update cache (simpan di kedua key untuk kompatibilitas)
-        Cache::forever("iot_status_{$cleanMac}", 'offline');
+        // Update cache
         Cache::forever("iot_status_{$mac}", 'offline');
-        Cache::forever("iot_status_{$formattedMac}", 'offline');
 
-        // Broadcast status offline (menggunakan cleanMac agar event listener Reverb tepat)
-        broadcast(new IotDeviceStatusChanged($cleanMac, 'offline'));
-        if ($formattedMac !== $cleanMac) {
-            broadcast(new IotDeviceStatusChanged($formattedMac, 'offline'));
-        }
+        // Broadcast status offline
+        broadcast(new IotDeviceStatusChanged($mac, 'offline'));
 
         // Reset database subarea count to 0
-        $device = static::where('device_mac_address', $formattedMac)
-            ->orWhere('device_mac_address', $mac)
-            ->orWhere('device_mac_address', $cleanMac)
-            ->first();
-
+        $device = static::where('device_mac_address', $mac)->first();
         if ($device && $device->subarea) {
             $subarea = $device->subarea;
             $subarea->current_count = 0;
             $subarea->save();
 
-            broadcast(new IotCountUpdated($cleanMac, 0));
+            broadcast(new IotCountUpdated($mac, 0));
             broadcast(new SubareaStatusUpdated($subarea));
         }
     }

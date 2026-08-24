@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\IotDevice;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -51,7 +50,7 @@ class IotCommandSent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('iot.device.'.IotDevice::normalizeMac($this->macAddress)),
+            new PresenceChannel('iot.device.'.str_replace(':', '', $this->macAddress)),
         ];
     }
 
