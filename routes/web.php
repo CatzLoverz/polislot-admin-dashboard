@@ -105,9 +105,9 @@ Route::middleware(['auth', 'role:admin,user'])->group(function () {
         // Route User_Faq
         Route::resource('user-faq', UserFaqController::class)->only(['index', 'store', 'update', 'destroy']);
 
-        // Route konfigurasi deteksi IoT (No-cache agar tidak tertahan browser/Octane cache)
+        // Route konfigurasi deteksi IoT
         Route::prefix('iot')->as('iot.')->controller(IotDetectionController::class)->group(function () {
-            Route::get('/', 'index')->middleware('cache.headers:no_store;no_cache;must_revalidate')->name('index');
+            Route::get('/', 'index')->name('index');
             Route::post('/trigger', 'triggerSnapshot')->name('trigger');
             Route::post('/save-settings', 'saveSettings')->name('save-settings');
             Route::post('/validate', 'validateStream')->name('validate');

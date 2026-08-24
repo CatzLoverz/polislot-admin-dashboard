@@ -105,8 +105,7 @@ class IotWsAuthController extends Controller
         $socketId = $request->socket_id;
 
         // Data member untuk presence channel
-        $cleanMac = IotDevice::normalizeMac($macAddress);
-        $formattedMac = IotDevice::formatMac($macAddress);
+        $cleanMac = str_replace(':', '', strtolower($macAddress));
         $channelData = json_encode([
             'user_id' => $cleanMac,
             'user_info' => [
@@ -129,22 +128,11 @@ class IotWsAuthController extends Controller
         // ============================================================
         // 4. UPDATE STATUS CACHE (Instant Online)
         // ============================================================
-        Cache::forever("iot_status_{$cleanMac}", 'online');
         Cache::forever("iot_status_{$macAddress}", 'online');
-        Cache::forever("iot_status_{$formattedMac}", 'online');
-        Cache::forever("iot_connection_type_{$cleanMac}", 'ws');
         Cache::forever("iot_connection_type_{$macAddress}", 'ws');
-        Cache::forever("iot_connection_type_{$formattedMac}", 'ws');
+        broadcast(new IotDeviceStatusChanged($macAddress, 'online'));
 
-        broadcast(new IotDeviceStatusChanged($cleanMac, 'online'));
-        if ($formattedMac !== $cleanMac) {
-            broadcast(new IotDeviceStatusChanged($formattedMac, 'online'));
-        }
-
-        $device = IotDevice::where('device_mac_address', $formattedMac)
-            ->orWhere('device_mac_address', $macAddress)
-            ->orWhere('device_mac_address', $cleanMac)
-            ->first();
+        $device = IotDevice::where('device_mac_address', $macAddress)->first();
         if ($device && $device->subarea) {
             broadcast(new SubareaStatusUpdated($device->subarea));
         }

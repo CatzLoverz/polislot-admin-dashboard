@@ -1362,8 +1362,7 @@
                 .listen('.device.status', (e) => {
                     console.log("📡 Status Received (MQTT/WS):", e);
                     const selectedMac = "{{ $targetMac }}";
-                    const incomingCleanMac = e.macAddress ? e.macAddress.toLowerCase().replace(/:/g, '') : '';
-                    if (incomingCleanMac === cleanMac || e.macAddress.toLowerCase() === selectedMac.toLowerCase()) {
+                    if (e.macAddress.toLowerCase() === selectedMac.toLowerCase()) {
                         updateStatusUI(e.status);
                         addLog(`📡 Status ${e.status.toUpperCase()} diterima via MQTT/WS`);
                     }
