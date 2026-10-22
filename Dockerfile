@@ -11,7 +11,7 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # ============================================================
 # Stage 2: Node — Build Vite Assets
 # ============================================================
-FROM node:25-alpine AS node-stage
+FROM node:alpine AS node-stage
 
 WORKDIR /build
 
@@ -29,7 +29,7 @@ RUN npm run build
 # ============================================================
 # Stage 3: Final — FrankenPHP Production Image
 # ============================================================
-FROM dunglas/frankenphp:php8.4
+FROM dunglas/frankenphp:latest
 
 WORKDIR /var/www/html
 
