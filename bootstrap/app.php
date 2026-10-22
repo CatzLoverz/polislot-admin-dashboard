@@ -2,12 +2,13 @@
 
 use App\Http\Middleware\ApiEncryption;
 use App\Http\Middleware\RBAC;
+use App\Http\Middleware\TrustProxies;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Middleware\TrustProxies;
+use Illuminate\Http\Middleware\TrustProxies as FrameworkTrustProxies;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->append(TrustProxies::class);
+        $middleware->replace(FrameworkTrustProxies::class, TrustProxies::class);
         $middleware->alias([
             // Default Laravel Middleware
             'auth' => Authenticate::class,

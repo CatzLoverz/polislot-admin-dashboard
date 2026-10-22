@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\IpLocationService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,12 +30,15 @@ class AppServiceProvider extends ServiceProvider
         }
 
         RateLimiter::for('api', function (Request $request) {
+            $ipService = app(IpLocationService::class);
+            $realIp = $ipService->getRealIp($request);
+
             return Limit::perMinute(100)
-                ->by($request->user()?->id ?: $request->ip())
-                ->response(function () use ($request) {
+                ->by($request->user()?->id ?: $realIp)
+                ->response(function () use ($request, $realIp) {
 
                     Log::warning('API rate limit exceeded', [
-                        'ip' => $request->ip(),
+                        'ip' => $realIp,
                         'user_id' => $request->user()?->id,
                         'path' => $request->path(),
                         'method' => $request->method(),

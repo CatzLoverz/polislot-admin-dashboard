@@ -11,6 +11,7 @@ use App\Models\IotCapture;
 use App\Models\IotDevice;
 use App\Models\UserValidation;
 use App\Models\Validation;
+use App\Services\IpLocationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,8 +25,7 @@ class IotDetectionController extends Controller
     /**
      * Helper: Validasi MAC Address terdaftar (cache-aware).
      *
-     * @param  string $macAddress MAC address perangkat
-     * @return bool
+     * @param  string  $macAddress  MAC address perangkat
      */
     private function validateMacAddress(string $macAddress): bool
     {
@@ -50,9 +50,6 @@ class IotDetectionController extends Controller
      * 1. MAC Address divalidasi terhadap database (harus terdaftar)
      * 2. Request di-sign dengan HMAC-SHA256 menggunakan API secret
      * 3. Timestamp dalam signature mencegah replay attack (±5 menit)
-     *
-     * @param  Request $request
-     * @return JsonResponse
      */
     public function receiveDetection(Request $request): JsonResponse
     {
@@ -87,7 +84,7 @@ class IotDetectionController extends Controller
         if (! $isRegistered) {
             Log::warning('Rejected: Unregistered MAC Address', [
                 'mac' => $macAddress,
-                'ip' => $request->ip(),
+                'ip' => app(IpLocationService::class)->getRealIp($request),
             ]);
 
             // Response 403 — agar device tahu ditolak dan bisa stop/retry
@@ -130,7 +127,7 @@ class IotDetectionController extends Controller
             if (! hash_equals($expectedSignature, $request->signature)) {
                 Log::warning('Rejected: Invalid HMAC signature', [
                     'mac' => $macAddress,
-                    'ip' => $request->ip(),
+                    'ip' => app(IpLocationService::class)->getRealIp($request),
                 ]);
 
                 return response()->json([
@@ -165,9 +162,6 @@ class IotDetectionController extends Controller
      * Padanan HTTP dari MQTT topic "polislot/device/{MAC}/snapshot".
      *
      * Flow: Device capture → AES encrypt → HTTP POST → Decrypt → Save DB → Broadcast Reverb
-     *
-     * @param  Request $request
-     * @return JsonResponse
      */
     public function receiveSnapshot(Request $request): JsonResponse
     {
@@ -342,9 +336,6 @@ class IotDetectionController extends Controller
 
     /**
      * Endpoint untuk menerima hitungan (count) kendaraan dari IoT device.
-     *
-     * @param  Request $request
-     * @return JsonResponse
      */
     public function receiveCount(Request $request): JsonResponse
     {
@@ -410,9 +401,6 @@ class IotDetectionController extends Controller
 
     /**
      * Endpoint untuk memberikan konfigurasi terbaru ke IoT device pada saat startup.
-     *
-     * @param  Request $request
-     * @return JsonResponse
      */
     public function receiveConfigQuery(Request $request): JsonResponse
     {

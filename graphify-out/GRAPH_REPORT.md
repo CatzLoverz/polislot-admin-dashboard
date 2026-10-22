@@ -1,62 +1,64 @@
-# Graph Report - polislot-admin-dashboard  (2026-08-25)
+# Graph Report - polislot-admin-dashboard  (2026-09-30)
 
 ## Corpus Check
-- 276 files · ~117,323 words
+- 277 files · ~117,568 words
 - Verdict: corpus is large enough that graph structure adds value.
+- Unclassified: 25 file(s) not represented in the graph (top: (none) 12, .conf 2, .xml 2)
 
 ## Summary
-- 1354 nodes · 2740 edges · 203 communities (120 shown, 83 thin omitted)
-- Extraction: 83% EXTRACTED · 17% INFERRED · 0% AMBIGUOUS · INFERRED: 478 edges (avg confidence: 0.79)
+- 1425 nodes · 3212 edges · 181 communities (50 shown, 86 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 126 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f1b1bf7b`
+- Built from commit: `34bd76da`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- IotDevice.php
+- IotDevice
 - Controller
-- UserFaq
+- Illuminate\Database\Eloquent\Model
 - AuthControllerTest
 - What You Must Do When Invoked
+- AuthControllerTest
 - Validation
 - FeedbackCategory
 - Illuminate\Http\RedirectResponse
 - graphify reference: extra exports and benchmark
 - What You Must Do When Invoked
 - InfoBoard
-- devDependencies
+- package.json
 - Reward
-- AuthControllerTest
-- Command
-- ParkSubareaControllerTest
+- ParkSubareaController.php
+- Illuminate\Console\Command
+- .store
 - parking_detector_mqtt.py
 - parking_detector_mqtt_preview.py
 - parking_detector_ws.py
 - parking_detector_ws_preview.py
-- IotDevice
-- Illuminate\Foundation\Testing\RefreshDatabase
+- SubareaStatusUpdated
+- TestCase
 - Mission
-- Api/AuthController.php
+- IpLocationService
 - scripts
-- RBAC.php
-- UserValidation
-- .log
-- ParkAmenity
-- Illuminate\Database\Eloquent\Model
+- ApiEncryption
+- IotWebhookControllerTest.php
+- Illuminate\Http\Request
+- MapVisualizationControllerTest.php
+- Exception
+- DashboardControllerTest
 - Claude Code — Project Instructions
 - composer.json
 - Illuminate\Database\Eloquent\Relations\BelongsTo
 - graphify reference: extra exports and benchmark
-- Illuminate\Http\Request
+- RewardControllerTest
 - graphify reference: query, path, explain
 - ParkAreaControllerTest
 - ParkSubarea
-- AppServiceProvider
+- autoload-dev
 - require
-- MissionControllerTest
-- IotDetectionControllerTest
+- IotDetectionControllerTest.php
 - graphify reference: add a URL and watch a folder
 - User
 - config
@@ -68,15 +70,13 @@
 - 🚗 PoliSlot — Perangkat Edge IoT Deteksi Parkir
 - graphify reference: GitHub clone and cross-repo merge
 - graphify reference: transcribe video and audio
-- IotWsAuthControllerTest.php
-- DashboardControllerTest
+- UserFaq
 - PoliSlotLoginTest
 - psr-4
-- RBACTest
+- UserTest
 - Laravel Coding Standards Enforcer
-- UserHistory.php
-- ProfileControllerTest
-- ParkAreaTest
+- ExampleTest
+- Illuminate\Support\Facades\Schema
 - extra
 - test_01_tambah_feedback.py
 - test_02_ubah_feedback.py
@@ -97,8 +97,7 @@
 - test_02_ubah_faq.py
 - test_03_hapus_faq.py
 - extraction-spec.md
-- keywords
-- TestCase
+- ExampleTest
 - Contents.IoTDetection.partials.captures_grid
 - App Service (Laravel/Reverb/Queue)
 - docker-entrypoint.sh
@@ -120,6 +119,9 @@
 - Graphify Pipeline Workflow
 - run.sh
 - Illuminate\Database\Eloquent\Relations\HasMany
+- ScrubAndTraceProcessor
+- mqtt-client.php
+- sanctum.php
 - DB Service (MariaDB)
 - Logrotate Sidecar Service
 - Mosquitto MQTT Broker Service
@@ -139,6 +141,9 @@
 - Custom Artisan Utility Commands
 - Database Backup & Restore Feature
 - Database RBAC (Privilege Separation)
+- IotDevice.php
+- Illuminate\Support\Facades\Schedule
+- IotApiStressTest.php
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native CLAUDE.md integration
 - graphify reference: incremental update and cluster-only
@@ -147,31 +152,30 @@
 - Workflow: Laravel Coding Standards
 - .agents/skills/graphify/references/extraction-spec.md
 - run.sh script
-- post-create-project-cmd
 
 ## God Nodes (most connected - your core abstractions)
-1. `User` - 154 edges
+1. `User` - 200 edges
 2. `TestCase` - 93 edges
 3. `ParkSubarea` - 77 edges
-4. `Controller` - 68 edges
-5. `ParkArea` - 53 edges
-6. `IotDevice` - 34 edges
-7. `AuthControllerTest` - 34 edges
-8. `Mission` - 33 edges
-9. `AuthControllerTest` - 26 edges
-10. `Validation` - 25 edges
+4. `ParkArea` - 73 edges
+5. `Controller` - 68 edges
+6. `IotDevice` - 45 edges
+7. `Validation` - 36 edges
+8. `FeedbackCategory` - 34 edges
+9. `AuthControllerTest` - 34 edges
+10. `Mission` - 33 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Robots Disallow-All Policy` --conceptually_related_to--> `Production Security Checklist`  [INFERRED]
   public/robots.txt → docs/PROJECT_SUMMARY.md
-- `main()` --indirect_call--> `start_websocket_thread()`  [INFERRED]
-  python/parking_detector_ws.py → python/parking_detector_ws_preview.py
+- `IpLocationServiceTest` --references--> `IpLocationService`  [EXTRACTED]
+  tests/Unit/Service/IpLocationServiceTest.php → app/Services/IpLocationService.php
 - `AuthController` --inherits--> `Controller`  [EXTRACTED]
   app/Http/Controllers/Api/AuthController.php → app/Http/Controllers/Controller.php
-- `HistoryController` --inherits--> `Controller`  [EXTRACTED]
-  app/Http/Controllers/Api/HistoryController.php → app/Http/Controllers/Controller.php
 - `IotDetectionController` --inherits--> `Controller`  [EXTRACTED]
   app/Http/Controllers/Api/IotDetectionController.php → app/Http/Controllers/Controller.php
+- `ProfileController` --inherits--> `Controller`  [EXTRACTED]
+  app/Http/Controllers/Api/ProfileController.php → app/Http/Controllers/Controller.php
 
 ## Import Cycles
 - None detected.
@@ -181,31 +185,35 @@
 - **IoT Parking Detection Pipeline** — docs_project_summary_edge_iot_parking_detector, docker_docker_compose_mosquitto_service, docs_project_summary_hmac_shared_secret, python_requirements_python_iot_dependencies [INFERRED 0.80]
 - **PoliSlot Three-Component Architecture** — docker_docker_compose_app_service, docs_project_summary_mobile_app_flutter, docs_project_summary_edge_iot_parking_detector [INFERRED 0.85]
 
-## Communities (203 total, 83 thin omitted)
+## Communities (181 total, 86 thin omitted)
 
-### Community 0 - "IotDevice.php"
-Cohesion: 0.08
-Nodes (13): IotCommandSent, IotCountUpdated, IotDetectionReceived, IotDeviceStatusChanged, IotThresholdUpdated, SubareaStatusUpdated, UserValidationController, HistoryService (+5 more)
+### Community 0 - "IotDevice"
+Cohesion: 0.06
+Nodes (23): MqttListenerCommand, IotCommandSent, IotCountUpdated, IotDetectionReceived, IotDeviceStatusChanged, IotThresholdUpdated, IotDetectionController, IotDevice (+15 more)
 
 ### Community 1 - "Controller"
-Cohesion: 0.10
-Nodes (12): FeedbackCategoryController, FeedbackController, InfoBoardController, UserFaqController, Controller, ParkAmenityController, RewardVerificationController, ValidationController (+4 more)
+Cohesion: 0.12
+Nodes (14): FeedbackCategoryController, FeedbackController, HistoryController, InfoBoardController, IotWebhookController, IotWsAuthController, MapVisualizationController, MissionController (+6 more)
+
+### Community 2 - "Illuminate\Database\Eloquent\Model"
+Cohesion: 0.15
+Nodes (4): ParkSubareaHistory, Illuminate\Database\Eloquent\Factories\HasFactory, Illuminate\Database\Eloquent\Model, Illuminate\Database\Eloquent\Relations\HasOne
 
 ### Community 4 - "What You Must Do When Invoked"
 Cohesion: 0.07
 Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
 
 ### Community 6 - "Validation"
-Cohesion: 0.21
-Nodes (3): Validation, UserValidationControllerTest, ValidationTest
+Cohesion: 0.14
+Nodes (6): Validation, Mockery, PhpMqtt\Client\Contracts\MqttClient, UserValidationControllerTest, UserValidationTest, ValidationTest
 
 ### Community 7 - "FeedbackCategory"
-Cohesion: 0.07
-Nodes (16): FeedbackCategoryController, FeedbackController, Feedback, FeedbackCategory, UserFactory, DatabaseSeeder, FeedbackCategorySeeder, FeedbackSeeder (+8 more)
+Cohesion: 0.10
+Nodes (11): Feedback, FeedbackCategory, DatabaseSeeder, FeedbackCategorySeeder, FeedbackSeeder, UserSeeder, ValidationSeeder, Faker\Factory (+3 more)
 
 ### Community 8 - "Illuminate\Http\RedirectResponse"
-Cohesion: 0.10
-Nodes (6): AuthController, MissionController, ParkAreaController, ProfileController, Illuminate\Http\RedirectResponse, Illuminate\View\View
+Cohesion: 0.06
+Nodes (13): AuthController, FeedbackCategoryController, FeedbackController, InfoBoardController, MissionController, ParkAmenityController, ParkAreaController, ProfileController (+5 more)
 
 ### Community 9 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
@@ -216,104 +224,104 @@ Cohesion: 0.07
 Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
 
 ### Community 11 - "InfoBoard"
-Cohesion: 0.15
-Nodes (4): InfoBoardController, InfoBoard, InfoBoardControllerTest, InfoBoardTest
+Cohesion: 0.16
+Nodes (3): InfoBoard, InfoBoardControllerTest, InfoBoardTest
 
-### Community 12 - "devDependencies"
-Cohesion: 0.08
-Nodes (25): axios, concurrently, laravel-echo, laravel-vite-plugin, devDependencies, axios, concurrently, laravel-echo (+17 more)
+### Community 12 - "package.json"
+Cohesion: 0.07
+Nodes (25): devDependencies, axios, concurrently, laravel-echo, laravel-vite-plugin, pusher-js, tailwindcss, @tailwindcss/vite (+17 more)
 
 ### Community 13 - "Reward"
-Cohesion: 0.10
-Nodes (7): RewardController, Reward, UserReward, RewardControllerTest, RewardControllerTest, RewardTest, UserRewardTest
+Cohesion: 0.18
+Nodes (5): Reward, UserReward, RewardControllerTest, RewardTest, UserRewardTest
 
-### Community 15 - "Command"
-Cohesion: 0.15
-Nodes (11): BackupAuto, BackupClean, BackupDatabase, DbList, DbRestore, SetupDatabaseAdmin, SetupDatabaseUser, error() (+3 more)
+### Community 15 - "Illuminate\Console\Command"
+Cohesion: 0.11
+Nodes (13): BackupAuto, BackupClean, BackupDatabase, DbList, DbRestore, SetupDatabaseAdmin, SetupDatabaseUser, LoggableOutput (+5 more)
 
 ### Community 17 - "parking_detector_mqtt.py"
-Cohesion: 0.19
+Cohesion: 0.18
 Nodes (15): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_bbox_in_any_polygon(), is_bbox_in_polygon(), load_local_config(), main() (+7 more)
 
 ### Community 18 - "parking_detector_mqtt_preview.py"
-Cohesion: 0.19
+Cohesion: 0.18
 Nodes (15): CameraStream, encrypt_image_aes(), generate_hmac_signature(), get_aes_key(), is_bbox_in_any_polygon(), is_bbox_in_polygon(), load_local_config(), main() (+7 more)
 
 ### Community 19 - "parking_detector_ws.py"
-Cohesion: 0.19
-Nodes (15): CameraStream, detector_loop(), encrypt_image_aes(), fetch_remote_config(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command() (+7 more)
+Cohesion: 0.15
+Nodes (16): CameraStream, detector_loop(), encrypt_image_aes(), fetch_remote_config(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command() (+8 more)
 
 ### Community 20 - "parking_detector_ws_preview.py"
-Cohesion: 0.19
+Cohesion: 0.16
 Nodes (15): CameraStream, encrypt_image_aes(), fetch_remote_config(), generate_auth_signature(), generate_hmac_signature(), get_aes_key(), handle_command(), is_bbox_in_any_polygon() (+7 more)
 
-### Community 21 - "IotDevice"
-Cohesion: 0.13
-Nodes (5): MqttListenerCommand, IotDetectionController, IotDetectionController, IotCapture, IotDevice
+### Community 21 - "SubareaStatusUpdated"
+Cohesion: 0.16
+Nodes (4): SubareaStatusUpdated, UserValidationController, IotDetectionController, ZipArchive
 
-### Community 22 - "Illuminate\Foundation\Testing\RefreshDatabase"
-Cohesion: 0.11
-Nodes (9): Illuminate\Foundation\Testing\RefreshDatabase, Illuminate\Foundation\Testing\WithoutMiddleware, FeedbackCategoryControllerTest, FeedbackControllerTest, HistoryControllerTest, IotWebhookControllerTest, MapVisualizationControllerTest, MissionControllerTest (+1 more)
+### Community 22 - "TestCase"
+Cohesion: 0.13
+Nodes (12): Illuminate\Foundation\Testing\RefreshDatabase, Illuminate\Foundation\Testing\TestCase, Illuminate\Foundation\Testing\WithoutMiddleware, Illuminate\Http\UploadedFile, PHPUnit\Framework\Attributes\Test, FeedbackCategoryControllerTest, FeedbackControllerTest, HistoryControllerTest (+4 more)
 
 ### Community 23 - "Mission"
-Cohesion: 0.12
-Nodes (8): MissionController, Mission, UserMission, MissionService, Illuminate\Database\Eloquent\Factories\HasFactory, MissionTest, UserMissionTest, MissionServiceTest
+Cohesion: 0.08
+Nodes (9): Mission, UserMission, HistoryService, MissionService, MissionControllerTest, MissionTest, UserMissionTest, HistoryServiceTest (+1 more)
 
-### Community 24 - "Api/AuthController.php"
-Cohesion: 0.09
-Nodes (12): CustomizeFormatter, ScrubAndTraceProcessor, AccountLockedMail, LoginNotificationMail, SendOtpMail, IpLocationService, Illuminate\Bus\Queueable, Illuminate\Contracts\Queue\ShouldQueue (+4 more)
+### Community 24 - "IpLocationService"
+Cohesion: 0.05
+Nodes (23): AccountLockedMail, Content, Envelope, LoginNotificationMail, Content, Envelope, Content, Envelope (+15 more)
 
 ### Community 25 - "scripts"
-Cohesion: 0.14
-Nodes (14): scripts, dev, post-autoload-dump, post-root-package-install, post-update-cmd, test, Composer\\Config::disableProcessTimeout, Illuminate\\Foundation\\ComposerScripts::postAutoloadDump (+6 more)
-
-### Community 26 - "RBAC.php"
-Cohesion: 0.14
-Nodes (9): ApiEncryption, RBAC, TrustProxies, NotCurrentPassword, Closure, Illuminate\Contracts\Validation\ValidationRule, Illuminate\Foundation\Configuration\Middleware, Illuminate\Http\Middleware\TrustProxies (+1 more)
-
-### Community 27 - "UserValidation"
 Cohesion: 0.29
-Nodes (3): MapVisualizationController, DashboardController, UserValidation
+Nodes (7): scripts, dev, post-autoload-dump, post-create-project-cmd, post-root-package-install, post-update-cmd, test
 
-### Community 28 - ".log"
+### Community 26 - "ApiEncryption"
+Cohesion: 0.08
+Nodes (16): ApiEncryption, RBAC, TrustProxies, NotCurrentPassword, Closure, Illuminate\Auth\Middleware\Authenticate, Illuminate\Auth\Middleware\RedirectIfAuthenticated, Illuminate\Contracts\Validation\ValidationRule (+8 more)
+
+### Community 28 - "Illuminate\Http\Request"
 Cohesion: 0.12
-Nodes (5): AuthController, RewardController, SubareaCommentController, ParkSubareaController, Illuminate\Http\JsonResponse
+Nodes (7): AuthController, ProfileController, SubareaCommentController, DashboardController, SendOtpMail, Illuminate\Http\JsonResponse, Illuminate\Http\Request
+
+### Community 30 - "Exception"
+Cohesion: 0.15
+Nodes (19): UserValidation, Carbon\Carbon, Exception, Illuminate\Support\Carbon, Illuminate\Support\Facades\Auth, Illuminate\Support\Facades\Cache, Illuminate\Support\Facades\DB, Illuminate\Support\Facades\Hash (+11 more)
 
 ### Community 32 - "Claude Code — Project Instructions"
 Cohesion: 0.20
 Nodes (9): 1. Import (Namespace / `use` Statement), 2. PHPDoc (Komentar Fungsi & Class), 3. Konvensi Penulisan Model (Eloquent), 4. Best Practices Laravel, Claude Code — Project Instructions, Development Cycle Workflow, Environment Isolation (Pemisahan Pengembangan dan Runtime), Graphify Knowledge Graph (+1 more)
 
 ### Community 33 - "composer.json"
-Cohesion: 0.18
-Nodes (10): autoload-dev, psr-4, description, license, minimum-stability, name, prefer-stable, Tests\\ (+2 more)
+Cohesion: 0.22
+Nodes (8): description, keywords, license, minimum-stability, name, prefer-stable, $schema, type
 
 ### Community 34 - "Illuminate\Database\Eloquent\Relations\BelongsTo"
-Cohesion: 0.14
-Nodes (3): SubareaComment, Illuminate\Database\Eloquent\Relations\BelongsTo, SubareaCommentTest
+Cohesion: 0.12
+Nodes (3): IotCapture, SubareaComment, Illuminate\Database\Eloquent\Relations\BelongsTo
 
 ### Community 35 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
 Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7a - FalkorDB export (only if --falkordb or --falkordb-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
-
-### Community 36 - "Illuminate\Http\Request"
-Cohesion: 0.20
-Nodes (5): HistoryController, IotWebhookController, IotWsAuthController, ProfileController, Illuminate\Http\Request
 
 ### Community 37 - "graphify reference: query, path, explain"
 Cohesion: 0.33
 Nodes (5): For /graphify explain, For /graphify path, graphify reference: query, path, explain, Step 0 — Constrained query expansion (REQUIRED before traversal), Step 1 — Traversal
 
 ### Community 39 - "ParkSubarea"
-Cohesion: 0.18
-Nodes (5): ParkArea, ParkSubarea, SubareaCommentControllerTest, ParkSubareaTest, UserValidationTest
+Cohesion: 0.12
+Nodes (8): ParkAmenity, ParkArea, ParkSubarea, SubareaCommentControllerTest, ParkSubareaControllerTest, ParkAmenityTest, ParkSubareaTest, SubareaCommentTest
 
-### Community 40 - "AppServiceProvider"
-Cohesion: 0.22
-Nodes (4): AppServiceProvider, AuthServiceProvider, Illuminate\Foundation\Support\Providers\AuthServiceProvider, Illuminate\Support\ServiceProvider
+### Community 40 - "autoload-dev"
+Cohesion: 0.67
+Nodes (3): autoload-dev, psr-4, Tests\\
 
 ### Community 41 - "require"
 Cohesion: 0.22
 Nodes (9): require, fakerphp/faker, laravel/framework, laravel/reverb, laravel/sanctum, laravel/tinker, php, php-mqtt/laravel-client (+1 more)
+
+### Community 43 - "IotDetectionControllerTest.php"
+Cohesion: 0.13
+Nodes (4): Illuminate\Support\Facades\Config, Illuminate\Support\Facades\Event, IotDetectionControllerTest, IotWsAuthControllerTest
 
 ### Community 44 - "graphify reference: add a URL and watch a folder"
 Cohesion: 0.50
@@ -321,7 +329,7 @@ Nodes (3): For /graphify add, For --watch, graphify reference: add a URL and wat
 
 ### Community 45 - "User"
 Cohesion: 0.11
-Nodes (6): User, Illuminate\Foundation\Auth\User, Illuminate\Notifications\Notifiable, Laravel\Sanctum\HasApiTokens, ProfileControllerTest, UserTest
+Nodes (6): User, Illuminate\Foundation\Auth\User, Illuminate\Notifications\Notifiable, Laravel\Sanctum\HasApiTokens, ProfileControllerTest, ProfileControllerTest
 
 ### Community 46 - "config"
 Cohesion: 0.29
@@ -351,21 +359,21 @@ Nodes (18): 1. Salin Folder `python/` ke Perangkat Edge, 2. Buat Virtual Environ
 Cohesion: 0.40
 Nodes (5): autoload, psr-4, App\\, Database\\Factories\\, Database\\Seeders\\
 
+### Community 62 - "Illuminate\Support\Facades\Schema"
+Cohesion: 0.07
+Nodes (3): Illuminate\Database\Migrations\Migration, Illuminate\Database\Schema\Blueprint, Illuminate\Support\Facades\Schema
+
 ### Community 65 - "extra"
 Cohesion: 0.67
 Nodes (3): extra, laravel, dont-discover
 
-### Community 100 - "keywords"
-Cohesion: 0.67
-Nodes (3): keywords, framework, laravel
-
-### Community 102 - "TestCase"
-Cohesion: 0.13
-Nodes (7): Illuminate\Foundation\Testing\TestCase, PHPUnit\Framework\TestCase, ExampleTest, InfoBoardControllerTest, ApiEncryptionTest, TestCase, ExampleTest
-
 ### Community 108 - "graphify reference: query, path, explain"
 Cohesion: 0.33
 Nodes (5): For /graphify explain, For /graphify path, graphify reference: query, path, explain, Step 0 — Constrained query expansion (REQUIRED before traversal), Step 1 — Traversal
+
+### Community 130 - "ScrubAndTraceProcessor"
+Cohesion: 0.11
+Nodes (11): CustomizeFormatter, ScrubAndTraceProcessor, Illuminate\Log\Logger, Illuminate\Support\Str, Monolog\Formatter\LineFormatter, Monolog\Handler\NullHandler, Monolog\Handler\StreamHandler, Monolog\Handler\SyslogUdpHandler (+3 more)
 
 ### Community 195 - "graphify reference: add a URL and watch a folder"
 Cohesion: 0.50
@@ -379,29 +387,25 @@ Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 206 - "post-create-project-cmd"
-Cohesion: 0.50
-Nodes (4): post-create-project-cmd, @php artisan key:generate --ansi, @php artisan migrate --graceful --ansi, @php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\
-
 ## Knowledge Gaps
-- **209 isolated node(s):** `run.sh script`, `run.sh script`, `$schema`, `name`, `type` (+204 more)
-  These have ≤1 connection - possible missing edges or undocumented components.
-- **83 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **206 isolated node(s):** `run.sh script`, `run.sh script`, `$schema`, `name`, `type` (+201 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 509 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **86 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `User` connect `User` to `UserFaq`, `AuthControllerTest`, `Validation`, `FeedbackCategory`, `Illuminate\Http\RedirectResponse`, `InfoBoard`, `Reward`, `AuthControllerTest`, `ParkSubareaControllerTest`, `Illuminate\Foundation\Testing\RefreshDatabase`, `Mission`, `.log`, `User.php`, `Illuminate\Database\Eloquent\Relations\BelongsTo`, `ParkAreaControllerTest`, `ParkSubarea`, `MissionControllerTest`, `UserHistory`, `DashboardControllerTest`, `RBACTest`, `UserHistory.php`, `ProfileControllerTest`, `Illuminate\Database\Eloquent\Relations\HasMany`?**
-  _High betweenness centrality (0.072) - this node is a cross-community bridge._
-- **Why does `TestCase` connect `TestCase` to `IotDevice.php`, `AuthControllerTest`, `FeedbackCategory.php`, `Validation`, `FeedbackCategory`, `InfoBoard`, `Reward`, `AuthControllerTest`, `ParkSubareaControllerTest`, `Illuminate\Foundation\Testing\RefreshDatabase`, `Mission`, `ParkAmenity`, `User.php`, `Illuminate\Database\Eloquent\Model`, `Illuminate\Database\Eloquent\Relations\BelongsTo`, `ParkAreaControllerTest`, `ParkSubarea`, `MissionControllerTest`, `IotDetectionControllerTest`, `User`, `UserHistory`, `IotWsAuthControllerTest.php`, `DashboardControllerTest`, `RBACTest`, `UserHistory.php`, `ProfileControllerTest`, `ParkAreaTest`?**
-  _High betweenness centrality (0.039) - this node is a cross-community bridge._
-- **Why does `ParkSubarea` connect `ParkSubarea` to `IotDevice.php`, `Controller`, `Illuminate\Database\Eloquent\Relations\BelongsTo`, `Validation`, `IotDetectionControllerTest`, `ParkSubareaControllerTest`, `ParkAmenity`, `IotDevice`, `Illuminate\Foundation\Testing\RefreshDatabase`, `IotWsAuthControllerTest.php`, `DashboardControllerTest`, `UserValidation`, `.log`, `Illuminate\Database\Eloquent\Relations\HasMany`, `User.php`, `Illuminate\Database\Eloquent\Model`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Are the 142 inferred relationships involving `User` (e.g. with `.login()` and `.register()`) actually correct?**
-  _`User` has 142 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `User` connect `User` to `Illuminate\Database\Eloquent\Model`, `AuthControllerTest`, `AuthControllerTest`, `Validation`, `FeedbackCategory`, `Illuminate\Http\RedirectResponse`, `InfoBoard`, `Reward`, `TestCase`, `Mission`, `IpLocationService`, `ApiEncryption`, `Illuminate\Http\Request`, `MapVisualizationControllerTest.php`, `Exception`, `DashboardControllerTest`, `RewardControllerTest`, `ParkAreaControllerTest`, `ParkSubarea`, `UserHistory`, `UserFaq`, `UserTest`, `Illuminate\Database\Eloquent\Relations\HasMany`?**
+  _High betweenness centrality (0.114) - this node is a cross-community bridge._
+- **Why does `TestCase` connect `TestCase` to `IotDevice`, `AuthControllerTest`, `AuthControllerTest`, `Validation`, `FeedbackCategory`, `InfoBoard`, `Reward`, `Mission`, `IpLocationService`, `ApiEncryption`, `IotWebhookControllerTest.php`, `MapVisualizationControllerTest.php`, `Exception`, `DashboardControllerTest`, `RewardControllerTest`, `ParkAreaControllerTest`, `ParkSubarea`, `IotDetectionControllerTest.php`, `User`, `UserHistory`, `UserTest`, `ExampleTest`?**
+  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+- **Why does `Controller` connect `Controller` to `IotDevice`, `Illuminate\Http\RedirectResponse`, `ParkSubareaController.php`, `.store`, `SubareaStatusUpdated`, `Illuminate\Http\Request`, `Exception`?**
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **What connects `run.sh script`, `run.sh script`, `$schema` to the rest of the system?**
-  _209 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `IotDevice.php` be split into smaller, more focused modules?**
-  _Cohesion score 0.07831677381648158 - nodes in this community are weakly interconnected._
+  _206 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `IotDevice` be split into smaller, more focused modules?**
+  _Cohesion score 0.06196291270918137 - nodes in this community are weakly interconnected._
 - **Should `Controller` be split into smaller, more focused modules?**
-  _Cohesion score 0.10037878787878787 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1225071225071225 - nodes in this community are weakly interconnected._
+- **Should `AuthControllerTest` be split into smaller, more focused modules?**
+  _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
